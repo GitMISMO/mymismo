@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: The dashboard shows every tile, in one set order, for everyone (no choosing, no Edit). Each sponsor's panel shows a small picture of their website's home page in a browser frame; tap it to open the site.
 - Nov 25, 2026: Alerts (a bell in the top bar: turn alerts on, and the alerts sent so far) and presentation slides for signed-in attendees, both shown once relay request 14 is live. Mic'd Up redone (player up top, tap any episode to play it there), mismo.org redone as a hub of tiles, Certifications redone (counts that climb, programs as bars, a timeline of recent certifications, certified professionals). The S is centered. The relay's answers are never served from the phone's saved copy.
 - Nov 25, 2026: Floor map: the hotel's map from Summit HQ with the summit's rooms pinned, by floor, with zoom. Find Your Way on Explore, and Find on Map on every session panel takes you to its room.
 - Nov 25, 2026: Speakers: a View Bio button on each speaker's panel, shown once the agenda feed carries the speaker's bio.

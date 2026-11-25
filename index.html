@@ -448,34 +448,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-idea{background:linear-gradient(160deg, color-mix(in srgb, #f0b93a 18%, var(--surface)), var(--surface) 60%)}
 .w-idea .w-head svg{color:#c99a2e}
 .wd.solo{min-height:120px}
-.w-empty{border-style:dashed; align-items:center; justify-content:center; text-align:center}
 @media (min-width:760px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .w-summit.wide{grid-column:span 4} .wd.solo{grid-column:span 2} }
 @media (orientation:landscape) and (max-height:540px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .wd.solo{grid-column:span 2} }
-
-/* ---------- First-run chooser ---------- */
-#choose{position:fixed; inset:0; z-index:60; background:var(--ground); overflow-y:auto; -webkit-overflow-scrolling:touch; opacity:0; transform:translateY(24px); transition:opacity .26s, transform .26s cubic-bezier(.2,.8,.2,1)}
-#choose.on{opacity:1; transform:none}
-.ch-in{max-width:640px; margin:0 auto; padding:calc(18px + env(safe-area-inset-top)) 18px 130px}
-.ch-top{display:flex; justify-content:space-between; align-items:center}
-.ch-s{width:64px; height:64px; border-radius:16px; background:#0d314c; display:grid; place-items:center; box-shadow:0 10px 30px rgba(13,49,76,.3)}
-.ch-s svg{width:52px; height:52px; color:var(--sky)}
-#choose h1{font-family:var(--cond); font-size:clamp(34px, 10vw, 48px); line-height:1; margin-top:18px; letter-spacing:-.02em}
-.ch-sub{color:var(--ink-2); font-size:15.5px; margin:10px 0 18px}
-.ch-list{display:grid; gap:10px}
-.ch-opt{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; text-align:left; background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:12px 14px; cursor:pointer; color:var(--ink); font:inherit}
-.ch-opt .ic{width:44px; height:44px; border-radius:11px; display:grid; place-items:center; background:var(--surface-3); color:var(--link)}
-.ch-opt .ic svg{width:24px; height:24px}
-.ch-opt[data-pick="summit"] .ic svg{width:34px; height:34px}
-.ch-opt .tx b{display:block; font-size:16px}
-.ch-opt .tx span{color:var(--ink-2); font-size:13.5px; line-height:1.35}
-.ch-opt .box{width:28px; height:28px; border-radius:7px; border:2px solid var(--border-strong); display:grid; place-items:center; font-weight:700; font-size:14px}
-.ch-opt[aria-pressed="true"]{border-color:#1a8fe3; background:var(--sel)}
-.ch-opt[aria-pressed="true"] .ic{background:#0d314c; color:var(--sky)}
-.ch-opt[aria-pressed="true"] .box{background:#1a8fe3; border-color:#1a8fe3; color:#fff; animation:pop .25s}
-@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.15)}100%{transform:none}}
-.ch-bar{position:fixed; left:0; right:0; bottom:0; padding:12px 18px calc(14px + env(safe-area-inset-bottom)); background:var(--bar-bg); -webkit-backdrop-filter:saturate(1.6) blur(14px); backdrop-filter:saturate(1.6) blur(14px); border-top:1px solid var(--border)}
-.ch-bar > *{max-width:604px; margin-left:auto; margin-right:auto}
-.ch-hint{color:var(--ink-2); font-size:13px; text-align:center; margin-bottom:8px}
 
 /* ---------- Explore ---------- */
 .postcard{position:relative; overflow:hidden; isolation:isolate; border-radius:20px; color:#fff; background:#071d2e; min-height:360px; display:flex; flex-direction:column; justify-content:flex-end}
@@ -791,6 +765,23 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .pro span span{color:var(--ink-2); font-size:12.5px}
 @media (prefers-reduced-motion: reduce){ .cert-seal:after,.sparkle:after,.site-tile{animation:none} .bar .bt i{transition:none} }
 
+/* Sponsor's home page, small */
+.sitepeek{display:block; margin-top:16px; border-radius:12px; overflow:hidden; border:1px solid var(--border-strong); background:var(--surface); box-shadow:0 12px 30px rgba(6,32,47,.18); text-decoration:none; color:var(--ink)}
+.pk-bar{display:flex; align-items:center; gap:6px; padding:8px 10px; background:var(--surface-3); border-bottom:1px solid var(--border)}
+.pk-bar i{width:10px; height:10px; border-radius:50%; background:#e0533f}
+.pk-bar i:nth-child(2){background:#eda100}
+.pk-bar i:nth-child(3){background:#1baf7a}
+.pk-url{flex:1; display:flex; align-items:center; gap:5px; margin-left:8px; background:var(--surface); border-radius:6px; padding:3px 9px; font-size:12.5px; color:var(--ink-2); overflow:hidden; white-space:nowrap}
+.pk-url svg{width:12px; height:12px; flex:none}
+.pk-shot{position:relative; display:block; aspect-ratio:4/3; overflow:hidden; background:#fff}
+.pk-shot img{display:block; width:100%; height:100%; object-fit:cover; object-position:top; opacity:0; transition:opacity .5s, transform 8s ease}
+.sitepeek.ready .pk-shot img{opacity:1}
+.sitepeek:hover .pk-shot img{transform:translateY(-6%)}
+.pk-wait{position:absolute; inset:0; background:linear-gradient(100deg, var(--surface-2) 30%, var(--surface-3) 50%, var(--surface-2) 70%); background-size:200% 100%; animation:shimmer 1.4s linear infinite}
+.sitepeek.ready .pk-wait{display:none}
+@keyframes shimmer{to{background-position:-200% 0}}
+@media (prefers-reduced-motion: reduce){ .pk-wait{animation:none} .pk-shot img{transition:none} }
+
 /* Speaker bio */
 .bio-btn{margin:0 0 4px}
 .bio{font-size:15.5px; line-height:1.6; margin-top:12px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:10px; animation:bio-in .28s ease}
@@ -1062,7 +1053,6 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
   </div>
 </nav>
 
-<div id="choose" role="dialog" aria-modal="true" aria-label="Choose Your Dashboard" hidden></div>
 <div class="sheet-back" id="sheet-back" hidden></div>
 <div id="sheets"></div>
 
@@ -1759,7 +1749,7 @@ var DASH = [
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' }
 ];
-function dashPicks() { var p = load('dash', null); return Array.isArray(p) ? p.filter(function (id) { return DASH.some(function (d) { return d.id === id; }); }) : null; }
+function dashPicks() { return DASH.map(function (d) { return d.id; }); }
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
 function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
 function calBlock(iso) { var p = dparts(iso); return '<span class="cal"><i>' + MON[p.m - 1] + '</i><b>' + p.d + '</b></span>'; }
@@ -1807,36 +1797,13 @@ function widget(id) {
 function renderDash() {
   var picks = dashPicks() || [], n = new Date();
   var name = A.me && A.me.first ? ', ' + esc(A.me.first) : '';
-  var h = '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + name + '</h1></div><button type="button" class="btn small" data-choose>' + icon('i-grid') + 'Edit</button></div>';
+  var h = '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + name + '</h1></div></div>';
   var ws = picks.map(widget).filter(Boolean);
-  if (!ws.length) h += '<button type="button" class="wd w-empty wide" data-choose><span class="w-t">Choose what you want to see</span><span class="w-sub">Summits, webinars, Mic\'d Up, MISMO Matters and more</span></button>';
-  /* squares come in pairs; a square left on its own goes full width so there's no gap */
+    /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
   if (sq % 2 === 1) { for (var i = ws.length - 1; i >= 0; i--) if (ws[i].indexOf(' wide') < 0) { ws[i] = ws[i].replace(/class="wd /, 'class="wd wide solo '); break; } }
   h += '<div class="dash-grid">' + ws.join('') + '</div>';
   return h;
-}
-function chooser(first) {
-  var picked = (dashPicks() || (first ? ['summit'] : [])).slice();
-  var el = $('#choose');
-  function paint() {
-    el.innerHTML = '<div class="ch-in"><div class="ch-top"><span class="ch-s">' + icon('i-s') + '</span>' + (first ? '' : '<button type="button" class="iconbtn" data-ch-cancel aria-label="Cancel">' + icon('i-x') + '</button>') + '</div>' +
-      '<h1>' + (first ? 'Make MyMISMO Yours' : 'Your Dashboard') + '</h1><p class="ch-sub">Pick what you want on your dashboard. Tap anything there to open it. You can change this any time.</p>' +
-      '<div class="ch-list">' + DASH.map(function (d) {
-        var on = picked.indexOf(d.id) >= 0, pos = picked.indexOf(d.id) + 1;
-        return '<button type="button" class="ch-opt" data-pick="' + d.id + '" aria-pressed="' + on + '"><span class="ic">' + icon(d.icon) + '</span><span class="tx"><b>' + esc(d.name) + '</b><span>' + esc(d.desc) + '</span></span><span class="box">' + (on ? pos : '') + '</span></button>';
-      }).join('') + '</div></div>' +
-      '<div class="ch-bar"><div class="ch-hint">' + (picked.length ? 'They\'ll show in the order you picked them.' : 'Pick at least one.') + '</div><button type="button" class="btn primary big" data-ch-done' + (picked.length ? '' : ' disabled') + '>' + (picked.length ? 'Show My Dashboard' : 'Done') + '</button></div>';
-  }
-  el.onclick = function (e) {
-    var t = e.target.closest('button'); if (!t) return;
-    if (t.hasAttribute('data-pick')) { var id = t.getAttribute('data-pick'), i = picked.indexOf(id); if (i >= 0) picked.splice(i, 1); else picked.push(id); if (navigator.vibrate) try { navigator.vibrate(8); } catch (x) {} var y = el.scrollTop; paint(); el.scrollTop = y; return; }
-    if (t.hasAttribute('data-ch-done') && picked.length) { save('dash', picked); closeChooser(); show('dash'); return; }
-    if (t.hasAttribute('data-ch-cancel')) closeChooser();
-  };
-  paint(); el.hidden = false; document.body.style.overflow = 'hidden';
-  requestAnimationFrame(function () { el.classList.add('on'); });
-  if (window.MismoBack) MismoBack.check();
 }
 /* an alert tapped on the phone opens the session it names (?open=<session id>) */
 function openFromLink() {
@@ -1849,8 +1816,6 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('mess
   closeSheet(true); if (S.summit) show('home');
   if (m) sessionSheet(decodeURIComponent(m[1])); else if (PUSH.ready) alertsSheet();
 });
-function closeChooser() { var el = $('#choose'); el.classList.remove('on'); setTimeout(function () { el.hidden = true; }, 260); if (!stack.length) document.body.style.overflow = ''; if (window.MismoBack) MismoBack.check(); }
-function chooserOpen() { return !$('#choose').hidden && !!dashPicks(); }
 
 /* ---------- Webinars, MISMO Matters, Certifications, pages in the app ---------- */
 function webSummary(t) { return String(t || '').replace(/\s*Date and Time\s*:.*$/i, ''); }
@@ -2114,11 +2079,35 @@ function speakerSheet(key) {
   if (gsx) h += '<div class="d-actions" style="margin-top:14px"><button type="button" class="btn" data-open="s:' + esc(gsx.id) + '">' + icon('i-agenda') + 'General Sessions Running Order</button></div>';
   openSheet(p.name, h + '</div>', { color: '#14486e' });
 }
+/* A small live picture of a sponsor's home page, framed like a browser window. The picture comes from a public
+   screenshot service; while it's still being made the service shows its own placeholder, so the app asks again
+   a few seconds later, and if no picture comes the frame is taken away (no empty box). */
+function peekSrc(url, n) { return 'https://s0.wp.com/mshots/v1/' + encodeURIComponent(url) + '?w=1200&h=900' + (n ? '&r=' + n : ''); }
+function sitePeek(url) {
+  var host = ''; try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+  return '<a class="sitepeek" href="' + esc(url) + '" target="_blank" rel="noopener" aria-label="' + esc(host) + ' home page"><span class="pk-bar"><i></i><i></i><i></i><span class="pk-url">' + icon('i-lock') + esc(host) + '</span></span>' +
+    '<span class="pk-shot"><img data-peek="' + esc(url) + '" src="' + esc(peekSrc(url)) + '" alt="' + esc(host) + ' home page" loading="lazy"><span class="pk-wait"></span></span></a>';
+}
+function watchPeeks(root) {
+  root.querySelectorAll('img[data-peek]').forEach(function (img) {
+    var tries = 0, url = img.getAttribute('data-peek'), box = img.closest('.sitepeek');
+    function check() {
+      if (!img.isConnected) return;
+      if (img.complete && img.naturalWidth >= 600) { box.classList.add('ready'); return; }
+      if (++tries > 6) { if (!(img.naturalWidth >= 600)) box.remove(); return; }
+      if (img.complete) img.src = peekSrc(url, tries);
+      setTimeout(check, 3500);
+    }
+    img.addEventListener('load', function () { if (img.naturalWidth >= 600) box.classList.add('ready'); });
+    img.addEventListener('error', function () { box.remove(); });
+    setTimeout(check, 1500);
+  });
+}
 function sponsorSheet(key) {
   var sp = S.sponsors.concat(partners()).filter(function (s) { return slug(s.name) === key; })[0]; if (!sp) return;
   var h = '<div class="cover sp-cover" style="padding-bottom:22px"><span class="k">' + esc(sp.tier ? sp.tier + ' Sponsor' : (sp.label || 'Sponsor')) + '</span><h2>' + esc(sp.name) + '</h2>' +
     '<div class="big-logo halo shine" style="margin-top:16px">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="' + esc(sp.name) + '">' : '<b style="color:#0d314c;font-size:22px">' + esc(sp.name) + '</b>') + '</div></div><div class="sheet-pad">';
-  if (sp.url) h += '<div class="d-actions"><a class="btn primary" href="' + esc(sp.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Visit Website</a></div>';
+  if (sp.url) h += '<div class="d-actions"><a class="btn primary" href="' + esc(sp.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Visit Website</a></div>' + sitePeek(sp.url);
   var theirs = S.sessions.filter(function (x) { return sponsorFor(x).some(function (s) { return s.name === sp.name; }); });
   var gsTheirs = S.gs ? S.gs.items.filter(function (g) { return g.sponsor && coKey(g.sponsor) === coKey(sp.name); }) : [];
   var loose = unplaced(sp);
@@ -2128,7 +2117,8 @@ function sponsorSheet(key) {
     if (theirs.length) h += '<div class="list">' + theirs.map(sessCard).join('') + '</div>';
     if (gsTheirs.length) h += '<div class="ro" style="margin-top:8px">' + gsTheirs.map(function (g) { var cp = clockParts(g.a); return '<div class="ro-item"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + ', ' + esc((S.gs.day || '').slice(0, 3)) + '</span></div><div><div class="k">' + typeTag(g.kind || 'General Session') + '</div><div class="tt">' + esc(g.title) + '</div></div></div>'; }).join('') + '</div>';
   }
-  openSheet(sp.name, h + '</div>', { color: TIER_COLOR[sp.tier] ? '#14486e' : '#14486e' });
+  var pel = openSheet(sp.name, h + '</div>', { color: TIER_COLOR[sp.tier] ? '#14486e' : '#14486e' });
+  watchPeeks(pel);
 }
 
 /* ---------- attendees (relay request 13) ---------- */
@@ -2452,7 +2442,6 @@ document.addEventListener('click', function (e) {
   var t = e.target.closest('button, a'); if (!t) return;
   if (t.id === 'dash-btn') { closeSheet(true); show('dash'); return; }
   if (t.hasAttribute('data-hq')) { show(t.getAttribute('data-hq')); return; }
-  if (t.hasAttribute('data-choose')) { chooser(false); return; }
   if (t.id === 'bell-btn') { alertsSheet(); return; }
   if (t.hasAttribute('data-alerts-on')) { turnOnAlerts(t); return; }
   if (t.hasAttribute('data-alerts-off')) { turnOffAlerts(); return; }
@@ -2516,7 +2505,6 @@ document.addEventListener('input', function (e) {
   if (e.target.id === 'chat-text') { e.target.style.height = 'auto'; e.target.style.height = Math.min(140, e.target.scrollHeight) + 'px'; }
 });
 
-if (window.MismoBack) MismoBack.layer({ isOpen: chooserOpen, close: closeChooser });
 if (window.MismoBack) [1, 2, 3, 4, 5].forEach(function (depth) { MismoBack.layer({ isOpen: function () { return stack.length >= depth; }, close: function () { closeSheet(false); } }); });
 
 (function theme() {
@@ -2540,7 +2528,6 @@ function start() {
     if (S.summit) badge();
     var want = (/[?&]page=(\w+)/.exec(location.search) || [])[1] || 'dash';
     show(want);
-    if (!dashPicks() && S.page === 'dash') setTimeout(function () { chooser(true); }, 500);
     installHint();
     setTimeout(function () { $('#loading').classList.add('done'); setTimeout(function () { $('#loading').hidden = true; }, 450); }, Math.max(0, 800 - (Date.now() - T0)));
     if (S.summit) { checkReady(); checkPush(); checkSlides(); }
