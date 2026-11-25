@@ -114,10 +114,12 @@ h1,h2,h3{letter-spacing:-.012em; margin:0}
 /* ---------- Masthead ---------- */
 .mast{position:sticky; top:0; z-index:20; background:var(--navy); color:#fff; padding-top:env(safe-area-inset-top)}
 .mast-in{display:flex; align-items:center; gap:10px; padding:9px 14px; max-width:1240px; margin:0 auto}
-.plate{position:relative; background:#fff; border-radius:5px; padding:7px 10px; display:flex; align-items:center; line-height:0}
-.plate .wordmark{height:19px; width:auto}
-.plate .santa{position:absolute; display:none; pointer-events:none; left:-9px; top:-12px; width:28px; height:28px}
-html[data-season="december"] .plate .santa{display:block}
+.lplate{position:relative; background:#fff; border:0; border-radius:5px; padding:7px 10px; display:flex; align-items:center; line-height:0; font:inherit; cursor:pointer; transition:transform .15s ease}
+body.dash .lplate{cursor:default}
+body:not(.dash) .lplate:active{transform:scale(.95)}
+.lplate .wordmark{height:19px; width:auto}
+.lplate .santa{position:absolute; display:none; pointer-events:none; left:-9px; top:-12px; width:28px; height:28px}
+html[data-season="december"] .lplate .santa{display:block}
 html[data-season="december"] .mast-in{padding-top:16px}
 .vrule{width:1px; align-self:stretch; background:rgba(116,191,235,.4)}
 .appname{color:var(--sky-soft); font-weight:500; font-size:16px; white-space:nowrap}
@@ -366,9 +368,6 @@ button,a,.wd,.plc,.spc{touch-action:manipulation}
 .smark svg:first-child{width:34px; height:34px; color:#50a4db}
 .smark .santa{position:absolute; display:none; pointer-events:none; left:-10px; top:-13px; width:28px; height:28px}
 html[data-season="december"] .smark .santa{display:block}
-body:not(.dash) .smark{display:grid}
-body:not(.dash) .plate, body:not(.dash) .vrule{display:none}
-body:not(.dash) .appname{display:block !important; color:#fff; font-family:var(--cond); font-weight:700; font-size:20px; letter-spacing:-.01em}
 body.dash nav.tabbar{display:none}
 body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 
@@ -419,6 +418,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 @media (min-width:640px){ .wl-btns{grid-template-columns:repeat(3, max-content)} .wl-reg{grid-column:auto} .wl-btns .btn{padding-left:20px; padding-right:20px} }
 
 /* ---------- My Dashboard ---------- */
+.w-new{display:block; margin-top:6px; font-size:12.5px; color:var(--ink-2)}
+.w-new b{color:var(--good); font-weight:700}
 .dash-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:8px 0 16px}
 .dh-date{color:var(--ink-2); font-weight:600; font-size:13.5px}
 .dash-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); line-height:1; letter-spacing:-.02em; margin-top:3px}
@@ -632,6 +633,24 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .ha-run path{opacity:0} .radar .dot .pn{opacity:.92} .w-logos img:first-child{opacity:1}
 }
 
+/* Settings */
+.set .d-h:first-child{margin-top:4px}
+.set-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden}
+.set-row{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; padding:12px 14px; border-top:1px solid var(--border); color:var(--ink); text-decoration:none}
+.set-row:first-child{border-top:0}
+.set-ic{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; background:var(--surface-3); color:var(--link)}
+.set-ic svg{width:18px; height:18px}
+.set-tx b{display:block; font-size:15px}
+.set-tx span{display:block; color:var(--ink-2); font-size:13px; line-height:1.4; margin-top:2px}
+.set-row.link > svg{width:16px; height:16px; color:var(--ink-3)}
+.btn.small.danger{background:var(--bad); border-color:var(--bad); color:#fff}
+.tgl{width:50px; height:30px; border-radius:15px; border:0; background:var(--border-strong); position:relative; cursor:pointer; flex:none; transition:background .2s ease}
+.tgl i{position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(6,32,47,.35); transition:transform .2s ease}
+.tgl.on{background:var(--good)}
+.tgl.on i{transform:translateX(20px)}
+#rs-account[hidden]{display:none}
+#rs-account{display:inline-flex; align-items:center}
+
 /* My Schedule, before anything is added */
 .empty-sched{display:grid; justify-items:center; text-align:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:28px 20px 24px; margin-top:6px}
 .es-star{width:64px; height:64px; border-radius:50%; display:grid; place-items:center; background:color-mix(in srgb, var(--star) 22%, transparent); color:var(--star)}
@@ -639,35 +658,22 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .empty-sched b{font-family:var(--cond); font-size:22px}
 .empty-sched p{color:var(--ink-2); max-width:34ch; margin:0 0 8px}
 
-/* Sponsor band (foot of Home and Explore) */
-.spband{position:relative; overflow:hidden; isolation:isolate; margin:28px 0 8px; border-radius:20px; color:#fff; background:#071d2e; padding:22px 0 18px; box-shadow:0 18px 40px -22px rgba(6,32,47,.7)}
+/* Sponsor band (foot of Home and Explore): one scrolling row of logos, each with its level */
+.spband{position:relative; overflow:hidden; isolation:isolate; margin:28px 0 8px; border-radius:20px; color:#fff; background:#071d2e; padding:24px 0 22px; box-shadow:0 18px 40px -22px rgba(6,32,47,.7)}
 .spband > .hero-art{z-index:-1; opacity:.9}
-.sb-in{padding:0 16px}
-.sb-eye{display:flex; align-items:center; gap:7px; color:var(--sky); font-weight:700; font-size:13.5px}
-.sb-eye svg{width:17px; height:17px}
-.spband h2{font-family:var(--cond); font-size:clamp(28px, 8vw, 40px); line-height:1; letter-spacing:-.015em; margin:6px 0 6px}
-.spband p{color:rgba(255,255,255,.82); margin:0 0 14px; font-size:14.5px}
-.sb-tick{margin:0 0 16px; background:rgba(255,255,255,.06); border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12)}
-.sb-tick .tk{border-color:transparent}
-.sb-tier{display:flex; align-items:center; gap:8px; font-family:var(--cond); font-weight:700; font-size:18px; margin-bottom:8px}
-.sb-tier .medal{width:20px; height:20px}
-.sb-tier em{font-style:normal; font-family:var(--sans, inherit); font-size:12px; font-weight:700; color:rgba(255,255,255,.75); background:rgba(255,255,255,.12); border-radius:5px; padding:1px 6px}
-.sb-cards{display:grid; gap:8px; grid-template-columns:repeat(var(--n), 1fr)}
-.sb-cards .spc{padding:8px; gap:8px}
-.sb-cards .spc-tx b{font-size:13.5px; line-height:1.2}
-.sb-cards .spc-tx span{font-size:11.5px}
-.sb-cards .spc{border-top-color:var(--tierc); background:rgba(255,255,255,.97)}
-.sb-cards .spc-logo{height:70px; padding:6px}
-@media (min-width:640px){ .sb-cards .spc-logo{height:96px} .sb-cards .spc{padding:12px} }
-.sb-row{margin-top:14px; --tierc:var(--sky)}
-.sb-logos{display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(96px, 1fr))}
-.sb-logo{display:grid; place-items:center; height:58px; background:#fff; border:0; border-bottom:3px solid var(--tierc); border-radius:10px; padding:7px 9px; cursor:pointer; transition:transform .15s ease}
-.sb-logo:active{transform:scale(.96)}
-.sb-logo{overflow:hidden}
-.sb-logo img{max-width:100%; max-height:42px; object-fit:contain}
-.sb-logo b{color:#0d314c; font-size:12px}
-.sb-all{width:100%; justify-content:center; margin-top:16px; background:var(--sky); color:#06202f; border-color:var(--sky); font-weight:700}
-.sb-all svg{width:17px; height:17px}
+.spband h2{font-family:var(--cond); font-size:clamp(26px, 7.5vw, 38px); line-height:1.05; letter-spacing:-.015em; text-align:center; margin:0 16px 18px}
+.sb-run{overflow:hidden; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)}
+.sb-run .run{display:flex; width:max-content}
+.sbt{margin-right:14px}
+.sb-run.go .run{animation:tick var(--dur) linear infinite}
+.sb-run.go:hover .run, .sb-run.go:focus-within .run{animation-play-state:paused}
+.sbt{flex:none; display:grid; gap:8px; justify-items:center; background:none; border:0; padding:0; cursor:pointer; color:#fff; font:inherit}
+.sbt-logo{width:190px; height:96px; display:grid; place-items:center; background:#fff; border-radius:12px; padding:12px 16px; border-bottom:4px solid var(--tierc); box-shadow:0 10px 22px -14px rgba(0,0,0,.6)}
+.sbt-logo img{max-width:100%; max-height:66px; object-fit:contain}
+.sbt-logo b{color:#0d314c; font-size:15px}
+.sbt-tier{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:rgba(255,255,255,.9)}
+.sbt-tier i{width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff, var(--tierc) 60%)}
+@media (prefers-reduced-motion: reduce){ .sb-run .run{animation:none !important} .sb-run{overflow-x:auto} }
 
 /* Floor map */
 .mapcard{display:grid; grid-template-columns:120px 1fr auto; gap:14px; align-items:center; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:10px; cursor:pointer; color:var(--ink); font:inherit; box-shadow:var(--shadow)}
@@ -977,8 +983,8 @@ nav.tabbar .badge.on{display:grid}
 #loading{position:fixed; inset:0; z-index:100; background:var(--navy-deep); display:grid; place-items:center; transition:opacity .35s}
 #loading.done{opacity:0; pointer-events:none}
 #loading .in{display:grid; gap:18px; justify-items:center}
-#loading .plate{padding:calc(min(300px, 62vmin) * .06) calc(min(300px, 62vmin) * .09); border-radius:6px}
-#loading .plate .wordmark{width:min(300px, 62vmin); height:auto}
+#loading .lplate{padding:calc(min(300px, 62vmin) * .06) calc(min(300px, 62vmin) * .09); border-radius:6px}
+#loading .lplate .wordmark{width:min(300px, 62vmin); height:auto}
 #loading .in{position:relative}
 #loading .bar{position:absolute; left:50%; top:calc(100% + 26px); transform:translateX(-50%)}
 #loading .lbl{color:var(--sky-soft); font-weight:500; font-size:15px}
@@ -1108,13 +1114,14 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 <symbol id="i-hotel" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 10h4a1 1 0 0 1 1 1v10M3 21h18M8 8h3M8 12h3M8 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></g></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c.8-4.3 4-6.6 8-6.6s7.2 2.3 8 6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-handshake" viewBox="0 0 24 24"><path d="M2.5 11.5 6 8l3 1 3-2.5 3 1 3.5-.5 3 3.5M2.5 11.5l3.5 4 2 .5 3 2.5c.8.6 1.8.4 2.3-.4l3.2-4.6M21.5 11l-3 3.6M9 9l-2.5 3.5c-.5.8.2 1.9 1.2 1.7L12 13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
 
 <div id="loading" role="status" aria-live="polite">
   <div class="in">
-    <div class="plate"><svg class="wordmark" role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg></div>
+    <div class="lplate"><svg class="wordmark" role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg></div>
     <div class="bar"><i></i></div>
     <div class="errtxt" id="loaderr"></div>
   </div>
@@ -1122,14 +1129,15 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 
 <header class="mast">
   <div class="mast-in">
-    <button type="button" class="smark" id="dash-btn" data-back-page="dash" aria-label="My Dashboard"><svg aria-hidden="true"><use href="#i-s"/></svg><svg class="santa" viewBox="0 0 100 100" aria-hidden="true"><use href="#mismo-hat"/></svg></button>
-    <div class="plate"><svg class="wordmark" role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg><svg class="santa" viewBox="0 0 100 100" aria-hidden="true"><use href="#mismo-hat"/></svg></div>
+    <button type="button" class="lplate" id="dash-btn" aria-label="My Dashboard"><svg class="wordmark" role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg><svg class="santa" viewBox="0 0 100 100" aria-hidden="true"><use href="#mismo-hat"/></svg></button>
     <div class="vrule" aria-hidden="true"></div>
     <div class="appname" id="appname">MyMISMO</div>
     <div class="mast-right">
       <button class="mast-icon" id="bell-btn" type="button" aria-label="Alerts" hidden><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="dot" id="bell-dot"></span></button>
       <button class="mast-icon" id="msg-btn" type="button" aria-label="Messages" hidden><svg aria-hidden="true"><use href="#i-chat"/></svg><span class="dot" id="msg-dot"></span></button>
       <button class="mast-icon" id="acct-btn" type="button" aria-label="Sign in" hidden><svg aria-hidden="true"><use href="#i-user"/></svg></button>
+      <div id="rs-account" hidden></div>
+      <button class="mast-icon" id="set-btn" type="button" aria-label="Settings"><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
       <button class="theme-btn" id="theme-btn" type="button">Dark</button>
     </div>
   </div>
@@ -1163,6 +1171,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <div class="sheet-back" id="sheet-back" hidden></div>
 <div id="sheets"></div>
 
+<script src="/assets/session.js"></script>
 <script>
 (function () {
 'use strict';
@@ -1182,6 +1191,7 @@ var FEED_AGENDA = '/summit-agenda/agenda.json';
 var FEED_SPONSORS = function (slug) { return '/sponsors/' + slug + '.json'; };
 var RELAY = 'https://rgvdi67cg27o5kcmiytcqbqnrm0hmztx.lambda-url.us-east-1.on.aws';   /* the same save relay as /assets/session.js */
 var STORE = 'tools:mymismo:';
+var APP_VERSION = '2026.11.25';
 /* Each summit's city and time zone, by its venue, so "now" and calendar entries use the summit's clock. */
 var PLACES = [[/new orleans/i, 'America/Chicago', 'New Orleans'], [/salt lake/i, 'America/Denver', 'Salt Lake City'], [/bethesda/i, 'America/New_York', 'Bethesda'],
   [/washington/i, 'America/New_York', 'Washington'], [/arlington/i, 'America/New_York', 'Arlington']];
@@ -1417,7 +1427,7 @@ function renderHome() {
   } else {
     flip = '<div class="unit"><div class="state">Thank You</div><div class="lbl">for joining us in ' + esc(S.place) + '</div></div>';
   }
-  var h = '<div class="pass">' + heroArt() +
+  var h = greetHead() + '<div class="pass">' + heroArt() +
     '<div><div class="summit">' + esc(s.name) + '</div><div class="city">' + esc(S.place) + '</div>' +
       '<div class="when"><span>' + icon('i-agenda') + esc(s.dates || '') + '</span>' + (s.city ? '<span>' + icon('i-pin') + esc(s.city) + '</span>' : '') + '</div></div>' +
     '<div class="flip" id="flip">' + flip + '</div>' +
@@ -1608,23 +1618,14 @@ function renderAttendees() {
 /* The sponsor band at the foot of Home and Explore: a smaller sibling of the Sponsors page */
 function sponsorBand() {
   var tiers = sponsorTiers(); if (!tiers.length) return '';
-  var run = S.sponsors.filter(function (sp) { return sp.logo; }), top = tiers[0];
-  var h = '<section class="spband" aria-label="Sponsors">' + heroArt() + '<div class="sb-in"><div class="sb-eye">' + icon('i-sponsor') + 'Summit Sponsors</div><h2>Thank You to Our Sponsors</h2>' +
-    '<p>' + S.sponsors.length + (S.sponsors.length === 1 ? ' company' : ' companies') + ' making the ' + esc(S.summit.name) + ' happen.</p></div>';
-  if (run.length > 3) h += '<div class="ticker sb-tick" aria-hidden="true"><div class="run" style="--dur:' + Math.max(22, run.length * 3.5) + 's">' + run.concat(run).map(function (sp) { return '<span class="tk"><img src="' + esc(sp.logo) + '" alt=""></span>'; }).join('') + '</div></div>';
-  h += '<div class="sb-in"><div class="sb-top" style="--tierc:' + (TIER_COLOR[top.tier] || 'var(--sky)') + '"><div class="sb-tier"><span class="medal" aria-hidden="true"></span>' + esc(top.tier) + '</div><div class="sb-cards" style="--n:' + Math.min(top.list.length, 3) + '">' +
-    top.list.map(function (sp, i) {
-      var what = spWhat(sp);
-      return '<button type="button" class="spc shine" style="--sd:' + (i * 0.9) + 's" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '"><span class="spc-logo">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</span>' +
-        '<span class="spc-tx"><b>' + esc(sp.name) + '</b>' + (what.length ? '<span>' + icon('i-star') + esc(what[0]) + (what.length > 1 ? ' +' + (what.length - 1) : '') + '</span>' : '') + '</span></button>';
-    }).join('') + '</div></div>' +
-    tiers.slice(1).map(function (t) {
-      return '<div class="sb-row" style="--tierc:' + (TIER_COLOR[t.tier] || 'var(--sky)') + '"><div class="sb-tier"><span class="medal" aria-hidden="true"></span>' + esc(t.tier) + '<em>' + t.list.length + '</em></div><div class="sb-logos">' + t.list.map(function (sp) {
-        return '<button type="button" class="sb-logo" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</button>';
-      }).join('') + '</div></div>';
-    }).join('') +
-    '<button type="button" class="btn sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></div></section>';
-  return h;
+  var list = []; tiers.forEach(function (t) { t.list.forEach(function (sp) { list.push({ sp: sp, tier: t.tier }); }); });
+  var tile = function (x) {
+    return '<button type="button" class="sbt" style="--tierc:' + (TIER_COLOR[x.tier] || 'var(--sky)') + '" data-open="sp:' + esc(slug(x.sp.name)) + '" aria-label="' + esc(x.sp.name + ', ' + x.tier) + '">' +
+      '<span class="sbt-logo">' + (x.sp.logo ? '<img src="' + esc(x.sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(x.sp.name) + '</b>') + '</span><span class="sbt-tier"><i></i>' + esc(x.tier) + '</span></button>';
+  };
+  var run = list.length > 2 ? list.concat(list) : list;
+  return '<section class="spband" aria-label="Sponsors">' + heroArt() + '<h2>Thank You to Our Sponsors</h2>' +
+    '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '"><div class="run" style="--dur:' + Math.max(26, list.length * 4.5) + 's">' + run.map(tile).join('') + '</div></div></section>';
 }
 function sponsorTiers() {
   var groups = {};
@@ -1655,12 +1656,12 @@ function renderSponsors() {
       t.list.map(function (sp) {
         var what = spWhat(sp);
         return '<button type="button" class="spc shine" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '"><span class="spc-logo">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</span>' +
-          (i === 0 || what.length ? '<span class="spc-tx"><b>' + esc(sp.name) + '</b>' + (what.length ? '<span>' + icon('i-star') + esc(what[0]) + (what.length > 1 ? ' +' + (what.length - 1) : '') + '</span>' : '') + '</span>' : '') + '</button>';
+          '</button>';
       }).join('') + '</div></section>';
   });
   if (pts.length) h += '<section class="tier2" style="--tierc:var(--sky)"><div class="t2-h"><span class="medal" aria-hidden="true"></span><h2>Also Powering the Summit</h2></div><div class="t2-grid">' + pts.map(function (sp) {
     var t = ((TAGS && TAGS.tags) || []).filter(function (x) { return coKey(x.name) === coKey(sp.name); });
-    return '<button type="button" class="spc shine" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '"><span class="spc-logo">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</span><span class="spc-tx"><b>' + esc(sp.name) + '</b>' + (t[0] ? '<span>' + esc(t[0].label + ' ' + t[0].title) + (t.length > 1 ? ', ' + t.length + ' times' : '') + '</span>' : '') + '</span></button>';
+    return '<button type="button" class="spc shine" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '"><span class="spc-logo">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</span></button>';
   }).join('') + '</div></section>';
   return h;
 }
@@ -1678,7 +1679,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -1745,6 +1746,7 @@ function loadExtras() {
   getJSON('/certified/new-certifications.json').then(function (c) { CERT = c; again(['dash']); }).catch(function () {});
   getJSON('/certified/individuals.json').then(function (c) { PROS = c; }).catch(function () {});
   getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
+  getJSON('data/peeks/index.json').then(function (p) { PEEKS = p; }).catch(function () {});
   getJSON('data/programs.json').then(function (p) { PRG = p; again(['dash']); }).catch(function () {});
 }
 function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
@@ -1890,6 +1892,16 @@ var DASH = [
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' }
 ];
 function dashPicks() { return DASH.map(function (d) { return d.id; }); }
+/* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
+function staffSession() { try { return window.ResourcesSession && ResourcesSession.current(); } catch (e) { return null; } }
+function firstName() {
+  var st = staffSession(); if (st && st.name) return String(st.name).split(/\s+/)[0];
+  return A.me && A.me.first ? A.me.first : '';
+}
+function greetHead() {
+  var n = new Date(), f = firstName();
+  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1></div></div>';
+}
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
 function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
 function calBlock(iso) { var p = dparts(iso); return '<span class="cal"><i>' + MON[p.m - 1] + '</i><b>' + p.d + '</b></span>'; }
@@ -1922,8 +1934,14 @@ function widget(id) {
     return '<button type="button" class="wd w-mat" data-matters>' + head() + (ed ? '<span class="w-ed">' + esc(ed.label) + '</span>' + (ed.vieauxPoint ? '<span class="w-t">' + esc(ed.vieauxPoint.title) + '</span>' : '<span class="w-sub">The latest edition</span>') : '<span class="w-sub">The monthly newsletter</span>') + '</button>';
   }
   if (id === 'certs') {
-    var pg = (PRG && PRG.programs) || [], held = pg.reduce(function (n, p) { return n + p.members.length; }, 0);
-    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="w-num"><b>' + (held || '') + '</b></span><span class="w-sub">' + (held ? 'Certifications held across ' + pg.length + ' programs' : 'Certified products and professionals') + '</span></button>';
+    var pg = (PRG && PRG.programs) || [], orgs = {}, ppl = 0, now = new Date(), ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+    pg.forEach(function (p) { p.members.forEach(function (m) { orgs[m.slug] = 1; }); });
+    if (PROS && PROS.programs) Object.keys(PROS.programs).forEach(function (k) { ppl += PROS.programs[k].count || 0; });
+    var no = Object.keys(orgs).length, all = no + ppl;
+    var fresh = ((CERT && CERT.certifications) || []).filter(function (c) { return String(c.certifiedOn || '').slice(0, 7) === ym && !/^renewal/i.test(c.type || ''); });
+    var fo = []; fresh.forEach(function (c) { if (fo.indexOf(c.org) < 0) fo.push(c.org); });
+    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="w-num"><b>' + (all || '') + '</b></span><span class="w-sub">' + (all ? 'Certified: ' + no + ' organizations and ' + ppl + ' professionals' : 'Certified products and professionals') + '</span>' +
+      (CERT ? '<span class="w-new"><b>' + fresh.length + '</b> new in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
   if (id === 'sponsors') {
     if (!S.sponsors.length) return '';
@@ -1935,9 +1953,8 @@ function widget(id) {
   return '';
 }
 function renderDash() {
-  var picks = dashPicks() || [], n = new Date();
-  var name = A.me && A.me.first ? ', ' + esc(A.me.first) : '';
-  var h = '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + name + '</h1></div></div>';
+  var picks = dashPicks() || [];
+  var h = greetHead();
   var ws = picks.map(widget).filter(Boolean);
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
@@ -2143,7 +2160,6 @@ function show(p, opts) {
   if (p !== 'dash' && !S.summit) p = 'dash';
   S.page = p;
   document.body.classList.toggle('dash', p === 'dash');
-  $('#appname').textContent = p === 'dash' ? 'MyMISMO' : 'MISMO Summit';
   var db = $('#dash-btn'); if (p === 'dash') db.setAttribute('aria-current', 'page'); else db.removeAttribute('aria-current');
   $$('.page').forEach(function (el) { el.classList.toggle('on', el.id === 'pg-' + p); });
   $$('nav.tabbar button[data-hq]').forEach(function (b) { if (b.getAttribute('data-hq') === p) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
@@ -2198,6 +2214,7 @@ function sessionSheet(id) {
   if (x.type === 'General Session' && liveWindow(x)) h += liveCard(x);
   h += slidesBlock(x);
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
+  if (/MISMO Link/i.test(x.title)) h += '<div class="d-h">MISMO Link</div>' + sitePeek(SITE + '/standards-resources/mismo-link', 'mismo-link');
   var gv = groupVideo(x);
   if (gv) h += '<div class="d-h">Meet the Group</div>' + player(gv.youtube, x.title);
   if (x.type === 'General Session' && S.gs && S.gs.items.length) {
@@ -2220,6 +2237,7 @@ function sessionSheet(id) {
   var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type); });
   if (also.length && also.length < 12) h += '<div class="d-h">Also at This Time</div><div class="list">' + also.map(sessCard).join('') + '</div>';
   var sel = openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });
+  watchPeeks(sel);
   if (SLIDES[x.id] && A.token) paintSlides(sel, x.id);
 }
 function speakerSheet(key) {
@@ -2243,29 +2261,22 @@ function speakerSheet(key) {
 /* A small live picture of a sponsor's home page, framed like a browser window. The picture comes from a public
    screenshot service; while it's still being made the service shows its own placeholder, so the app asks again
    a few seconds later, and if no picture comes the frame is taken away (no empty box). */
-function peekSrc(url, n) { return 'https://s0.wp.com/mshots/v1/' + encodeURIComponent(url) + '?w=1200&h=900' + (n ? '&r=' + n : ''); }
 function homeOf(url) { try { return new URL(url).origin + '/'; } catch (e) { return url; } }
-function sitePeek(url) {
-  var host = ''; try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
-  return '<a class="sitepeek" href="' + esc(url) + '" target="_blank" rel="noopener" aria-label="' + esc(host) + ' home page"><span class="pk-bar"><i></i><i></i><i></i><span class="pk-url">' + icon('i-lock') + esc(host) + '</span></span>' +
-    '<span class="pk-shot"><img data-peek="' + esc(url) + '" src="data/peeks/' + esc(host) + '.jpg" alt="' + esc(host) + ' home page"><span class="pk-wait"></span></span></a>';
+function sitePeek(url, name) {
+  var host = ''; try { host = name || new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+  if (!PEEKS || typeof PEEKS[host] !== 'number') return '';   /* no checked picture of this site */
+  var shown = name ? url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : host;
+  return '<a class="sitepeek" href="' + esc(url) + '" target="_blank" rel="noopener" aria-label="' + esc(shown) + '"><span class="pk-bar"><i></i><i></i><i></i><span class="pk-url">' + icon('i-lock') + esc(shown) + '</span></span>' +
+    '<span class="pk-shot"><img data-peek="' + esc(url) + '" src="data/peeks/' + esc(host) + '.jpg" alt="' + esc(shown) + '"><span class="pk-wait"></span></span></a>';
 }
 function watchPeeks(root) {
+  /* every picture is made and checked ahead of time by the guide job (a bot check or error page is never shown) */
   root.querySelectorAll('img[data-peek]').forEach(function (img) {
-    var tries = 0, url = img.getAttribute('data-peek'), box = img.closest('.sitepeek'), remote = false;
-    function check() {
-      if (!img.isConnected) return;
-      if (img.complete && img.naturalWidth >= 600) { box.classList.add('ready'); return; }
-      if (++tries > 8) { box.remove(); return; }
-      if (img.complete) img.src = peekSrc(url, tries);
-      setTimeout(check, 2000);
-    }
-    img.addEventListener('load', function () { if (img.naturalWidth >= 590) box.classList.add('ready'); });
-    img.addEventListener('error', function () {
-      if (!remote) { remote = true; img.src = peekSrc(url); setTimeout(check, 1500); }   /* no saved picture yet: ask the service */
-      else box.remove();
-    });
-    if (img.complete && img.naturalWidth >= 590) box.classList.add('ready');
+    var box = img.closest('.sitepeek');
+    function ok() { if (img.naturalWidth >= 590) box.classList.add('ready'); else box.remove(); }
+    img.addEventListener('load', ok);
+    img.addEventListener('error', function () { box.remove(); });
+    if (img.complete && img.naturalWidth) ok();
   });
 }
 function sponsorSheet(key) {
@@ -2360,6 +2371,67 @@ function alertsSheet() {
   }).join('') + '</div>' : '<div class="note">No alerts yet. The MISMO team sends them during the summit.</div>');
   openSheet('Alerts', h + '</div>', { plain: true });
 }
+
+/* ---------- Settings ---------- */
+function setRow(icn, title, sub, right) { return '<div class="set-row"><span class="set-ic">' + icon(icn) + '</span><div class="set-tx"><b>' + title + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>' + (right || '') + '</div>'; }
+function settingsSheet() {
+  var st = staffSession(), dark = document.documentElement.getAttribute('data-theme') === 'dark' || (!document.documentElement.getAttribute('data-theme') && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  var h = '<div class="sheet-pad set">';
+  h += '<div class="d-h">Account</div><div class="set-card">';
+  if (S.summit && A.ready) h += A.token && A.me ? setRow('i-user', esc(A.me.name || 'Signed in'), 'Signed in as a summit attendee', '<button type="button" class="btn small" data-set="profile">Profile</button>') :
+    setRow('i-user', 'Summit Attendees', 'Sign in with your registration email to message other attendees and get presentations.', '<button type="button" class="btn small primary" data-set="att-in">Sign In</button>');
+  h += st ? setRow('i-lock', esc(st.name || st.email), 'Signed in as MISMO staff' + (st.email ? ', ' + esc(st.email) : ''), '<button type="button" class="btn small" data-set="staff-out">Sign Out</button>') :
+    setRow('i-lock', 'MISMO Staff and Contractors', 'Sign in with your MISMO Resources account.', '<button type="button" class="btn small" data-set="staff-in">Sign In</button>');
+  h += '</div>';
+  h += '<div class="d-h">Notifications</div><div class="set-card">';
+  if (!S.summit) h += setRow('i-bell', 'Summit Alerts', 'Room changes and news from the MISMO team during a summit. You can turn them on once the summit is in the app.');
+  else if (PUSH.on) h += setRow('i-bell', 'Summit Alerts', 'On. Room changes and news from the MISMO team during the ' + esc(S.summit.name) + '.', '<button type="button" class="tgl on" data-set="alerts-off" aria-pressed="true" aria-label="Turn off alerts"><i></i></button>');
+  else if (!PUSH.ready) h += setRow('i-bell', 'Summit Alerts', 'Alerts open here when the MISMO team turns them on for the ' + esc(S.summit.name) + '.');
+  else if (IOS && !standalone()) h += setRow('i-bell', 'Summit Alerts', 'On iPhone, add MyMISMO to your Home Screen first (tap Share, then Add to Home Screen), then turn alerts on from there.');
+  else if (!pushSupported()) h += setRow('i-bell', 'Summit Alerts', 'This browser can\'t get alerts. Open MyMISMO in Chrome or Safari, or install it on your phone.');
+  else if (window.Notification && Notification.permission === 'denied') h += setRow('i-bell', 'Summit Alerts', 'Blocked in your phone\'s settings. Allow notifications for MyMISMO there, then come back.');
+  else h += setRow('i-bell', 'Summit Alerts', 'Off. Turn on for room changes and news from the MISMO team. Nothing else.', '<button type="button" class="tgl" data-set="alerts-on" aria-pressed="false" aria-label="Turn on alerts"><i></i></button>');
+  h += setRow('i-cal', 'Session Reminders', 'Add to Calendar on a session (or Add All on My Schedule) puts it in your phone\'s calendar with a reminder before it starts.');
+  h += '</div>';
+  h += '<div class="d-h">Appearance</div><div class="set-card">' + setRow('i-sun', 'Dark Mode', dark ? 'On' : 'Off', '<button type="button" class="tgl' + (dark ? ' on' : '') + '" data-set="theme" aria-pressed="' + dark + '" aria-label="Dark mode"><i></i></button>') + '</div>';
+  if (S.summit) {
+    var n = mine().filter(sessionById).length;
+    h += '<div class="d-h">My Schedule</div><div class="set-card">' + setRow('i-star', n + (n === 1 ? ' session' : ' sessions') + ' starred', 'Saved on this phone for the ' + esc(S.summit.name) + '.',
+      n ? '<button type="button" class="btn small" data-set="clear-sched">Clear</button>' : '') + '</div>';
+  }
+  h += '<div class="d-h">Privacy</div><div class="set-card">' + setRow('i-lock', 'What MyMISMO keeps', 'Your schedule and settings stay on this phone. MyMISMO doesn\'t track what you do or share it with anyone. Signing in as an attendee lists you in the attendee directory only if you choose to be listed.') +
+    setRow('i-file', 'Clear Saved Data', 'Signs you out and removes your schedule and settings from this phone.', '<button type="button" class="btn small" data-set="clear-all">Clear</button>') + '</div>';
+  h += '<div class="d-h">About</div><div class="set-card">' + setRow('i-s', 'MyMISMO', 'Version ' + esc(APP_VERSION) + (S.updated ? '. Agenda updated ' + esc(stamp(S.updated)) : '') + '.') +
+    (standalone() ? '' : setRow('i-link', 'Install MyMISMO', IOS ? 'Tap Share, then Add to Home Screen, to open it like an app.' : 'Use Install in your browser\'s menu to open it like an app.')) +
+    '<a class="set-row link" href="mailto:info@mismo.org?subject=MyMISMO"><span class="set-ic">' + icon('i-mail') + '</span><div class="set-tx"><b>Contact MISMO</b><span>info@mismo.org</span></div>' + icon('i-chev') + '</a>' +
+    '<a class="set-row link" href="https://www.mismo.org" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-globe') + '</span><div class="set-tx"><b>mismo.org</b><span>The MISMO website</span></div>' + icon('i-chev') + '</a></div>';
+  var el = openSheet('Settings', h + '</div>', { plain: true });
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-set]'); if (!b) return; var k = b.getAttribute('data-set');
+    function again() { closeSheet(false); settingsSheet(); }
+    if (k === 'theme') { $('#theme-btn').click(); again(); }
+    else if (k === 'alerts-on') { turnOnAlerts(b); setTimeout(again, 2500); }
+    else if (k === 'alerts-off') { turnOffAlerts(); setTimeout(again, 1200); }
+    else if (k === 'staff-in') { closeSheet(false); ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); }
+    else if (k === 'staff-out') { ResourcesSession.signOut(); paintStaff(); again(); }
+    else if (k === 'att-in') { closeSheet(false); signInSheet(); }
+    else if (k === 'profile') { closeSheet(false); profileSheet(false); }
+    else if (k === 'clear-sched') {
+      if (b.getAttribute('data-sure')) { save('schedule:' + S.sid, []); badge(); renderPage(S.page); again(); }
+      else { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); }
+    } else if (k === 'clear-all') {
+      if (b.getAttribute('data-sure')) {
+        try { Object.keys(localStorage).forEach(function (key) { if (key.indexOf(STORE) === 0) localStorage.removeItem(key); }); } catch (x) {}
+        try { if (window.ResourcesSession) ResourcesSession.signOut(); } catch (x) {}
+        location.reload();
+      } else { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); }
+    }
+  });
+}
+/* The staff chip shows only when someone is signed in (attendees never see a staff Sign In button in the top bar) */
+function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; if (rerender !== false && (S.page === 'dash' || S.page === 'home')) renderPage(S.page); }
+if (window.ResourcesSession) { try { ResourcesSession.onChange(function () { paintStaff(); }); } catch (e) {} }
+paintStaff(false);
 
 /* ---------- Presentation slides (relay request 14): signed-in attendees only ---------- */
 var SLIDES = {};
@@ -2657,6 +2729,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-sheet-back')) { closeSheet(false); return; }
   if (t.hasAttribute('data-day')) { S.day = t.getAttribute('data-day'); S.q = ''; renderPage('agenda'); return; }
   if (t.hasAttribute('data-type')) { S.type = t.getAttribute('data-type'); renderPage('agenda'); return; }
+  if (t.id === 'set-btn') { settingsSheet(); return; }
   if (t.id === 'acct-btn') { if (A.token) profileSheet(false); else signInSheet(); return; }
   if (t.id === 'msg-btn') { inboxSheet(); return; }
   if (t.id === 'install-x') { save('install-dismissed', true); $('#install').classList.remove('on'); return; }

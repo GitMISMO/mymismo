@@ -16,7 +16,7 @@
 A page or picture that can't be read keeps its last good copy. Run by .github/workflows/guide.yml.
 Usage: python3 tools/build_providers.py [--provider-html saved.html]   (the second form only checks the parser)
 """
-import io, json, os, re, sys, time, urllib.parse, urllib.request
+import io, json, os, re, shutil, subprocess, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timezone
 sys.path.insert(0, os.path.dirname(__file__))
 from build_guide import Tree, clean_url, write  # noqa: E402
@@ -107,12 +107,42 @@ def host_of(url):
         return ''
 
 
-def peek(url, out_dir, index):
-    """Save a 600x450 picture of url's home page; True when saved (or already fresh, under a week old)."""
-    host = host_of(url)
+PAGES = [('mismo-link', 'https://www.mismo.org/standards-resources/mismo-link')]
+BAD_PAGE = re.compile(r'security verification|forbidden|access denied|been blocked|seeing this page|not a bot|network appears|'
+                      r'security check|just a moment|attention required|page not found|\b404\b|enable javascript|unusual traffic', re.I)
+
+
+def bad_picture(im):
+    """True when the picture is a bot check, an error page, or a blank or still-loading page rather than the home page.
+    Reads the words on it (tesseract, when the machine has it) and how much of it is plain white."""
+    g = im.convert('L').resize((60, 45))
+    px = list(g.getdata())
+    white = sum(1 for p in px if p > 242) / float(len(px))
+    words = ''
+    if shutil.which('tesseract'):
+        try:
+            buf = io.BytesIO(); im.convert('RGB').save(buf, 'PNG')
+            words = subprocess.run(['tesseract', 'stdin', 'stdout'], input=buf.getvalue(), capture_output=True, timeout=60).stdout.decode('utf-8', 'ignore')
+            words = re.sub(r'\s+', ' ', words).strip()
+        except Exception:
+            words = ''
+        if BAD_PAGE.search(words):
+            return True
+        return len(words) < 12 and white > 0.85
+    return white > 0.97
+
+
+def peek(url, out_dir, index, name=None):
+    """Save a 600x450 picture of url's home page; True when saved (or already fresh, under a week old).
+    A site that shows a bot check or an error instead of its home page is recorded in index['_blocked'] and gets no
+    picture (the app shows none for it); it's tried again after a week."""
+    host = name or host_of(url)   # a page other than a home page is saved under its own name
     if not host or not re.match(r'^[a-z0-9.-]+$', host):
         return False
+    blocked = index.setdefault('_blocked', {})
     path = os.path.join(out_dir, host + '.jpg')
+    if host in blocked and time.time() - blocked[host] < 7 * 86400:
+        return False
     if os.path.exists(path) and time.time() - index.get(host, 0) < 7 * 86400:
         return True
     from PIL import Image
@@ -122,6 +152,13 @@ def peek(url, out_dir, index):
             b = get(src + ('&r=%d' % n if n else ''), timeout=40, raw=True)
             im = Image.open(io.BytesIO(b))
             if im.width >= 1000:
+                if bad_picture(im):
+                    print('  not the home page (bot check or error):', host)
+                    blocked[host] = int(time.time()); index.pop(host, None)
+                    if os.path.exists(path):
+                        os.remove(path)
+                    return False
+                blocked.pop(host, None)
                 im = im.convert('RGB').resize((600, 450), Image.LANCZOS)
                 os.makedirs(out_dir, exist_ok=True)
                 im.save(path, 'JPEG', quality=78, optimize=True, progressive=True)
@@ -131,6 +168,23 @@ def peek(url, out_dir, index):
             print('  picture try', n, host, e)
         time.sleep(5)
     return False
+
+
+def recheck(out_dir, index):
+    """Check the pictures already saved (made before this check existed) and drop any that aren't a home page."""
+    from PIL import Image
+    blocked = index.setdefault('_blocked', {})
+    for f in sorted(os.listdir(out_dir)) if os.path.isdir(out_dir) else []:
+        if not f.endswith('.jpg'):
+            continue
+        host = f[:-4]
+        try:
+            bad = bad_picture(Image.open(os.path.join(out_dir, f)))
+        except Exception:
+            bad = True
+        if bad:
+            print('  dropped (not the home page):', host)
+            os.remove(os.path.join(out_dir, f)); index.pop(host, None); blocked[host] = int(time.time())
 
 
 def main(argv):
@@ -225,6 +279,8 @@ def main(argv):
         index = json.load(open('data/peeks/index.json', encoding='utf-8'))
     except Exception:
         index = {}
+    if not index.get('_checked'):
+        recheck('data/peeks', index); index['_checked'] = 1
     seen = set(); made = 0
     for u in sites:
         h = host_of(u)
@@ -232,6 +288,10 @@ def main(argv):
             continue
         seen.add(h)
         if peek(u, 'data/peeks', index):
+            made += 1
+    # pages the app shows beside sessions (MISMO Link Office Hours shows the MISMO Link page)
+    for name, u in PAGES:
+        if peek(u, 'data/peeks', index, name):
             made += 1
     os.makedirs('data/peeks', exist_ok=True)
     with open('data/peeks/index.json', 'w', encoding='utf-8') as f:

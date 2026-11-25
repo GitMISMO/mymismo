@@ -32,6 +32,7 @@ jobs:
       - name: Read the certified providers' pages and make the home-page pictures
         run: |
           pip install --quiet pillow
+          sudo apt-get install -y -qq tesseract-ocr > /dev/null || echo "No tesseract: pictures are checked by how blank they are only"
           python3 tools/build_providers.py || echo "GUIDE_FAILED=1" >> "$GITHUB_ENV"
       - name: Save
         run: |

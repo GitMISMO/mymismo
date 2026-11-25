@@ -2,7 +2,7 @@
    The app's own files are kept on the phone so it opens without a connection.
    The agenda and sponsor feeds are fetched fresh whenever there is a connection,
    and the last copy is used when there isn't. Pictures (headshots, logos) are kept once seen. */
-var VERSION = 'mymismo-2026-11-25z';
+var VERSION = 'mymismo-2026-11-26b';
 var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', '/assets/back.js'];
 
 self.addEventListener('install', function (e) {
@@ -23,7 +23,7 @@ self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
-  var feed = url.origin === location.origin && /\.json$/.test(url.pathname);
+  var feed = url.origin === location.origin && (/\.json$/.test(url.pathname) || url.pathname.indexOf('/assets/') === 0);   /* feeds, and the shared sign-in file */
   var page = req.mode === 'navigate';
   /* the save relay (sign-in, messages, alerts, slides) and anything else from elsewhere that isn't a picture or font
      always goes to the network: never a kept copy */
