@@ -1543,20 +1543,6 @@
    "level": 3
   },
   {
-   "id": "q111",
-   "cat": "Life of Loan",
-   "q": "Which Life of Loan process was renamed from \"Perform ESG Activities\"?",
-   "choices": [
-    "Consider Hazard Risk",
-    "Address Housing Emerging Risks and Opportunities",
-    "Evaluate Loss Mitigation Waterfall",
-    "Perform Delivery"
-   ],
-   "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
-  },
-  {
    "id": "q112",
    "cat": "Life of Loan",
    "q": "Which of these Life of Loan processes covers title work?",
@@ -1571,34 +1557,6 @@
    "level": 3
   },
   {
-   "id": "q113",
-   "cat": "Life of Loan",
-   "q": "Life of Loan's Version 2026.01 added a new page for which part of the business?",
-   "choices": [
-    "Loan Servicing",
-    "Secondary Marketing / Capital Markets",
-    "Commercial Lending",
-    "Home Equity"
-   ],
-   "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
-  },
-  {
-   "id": "q114",
-   "cat": "Life of Loan",
-   "q": "Which Life of Loan process was copied into Complete Loan Application in Version 2026.01?",
-   "choices": [
-    "Order Credit Report",
-    "Validate Title/Settlement Agent(s)",
-    "Trade MBS",
-    "Utilize SMART Docs"
-   ],
-   "answer": 0,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
-  },
-  {
    "id": "q115",
    "cat": "Life of Loan",
    "q": "Which process mentions MISMO's SMART Doc standard in Life of Loan?",
@@ -1607,20 +1565,6 @@
     "Consider Hazard Risk",
     "Order Credit Report",
     "Perform Delivery"
-   ],
-   "answer": 0,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
-  },
-  {
-   "id": "q116",
-   "cat": "Life of Loan",
-   "q": "The notation Life of Loan uses, BPMN, stands for what?",
-   "choices": [
-    "Business Process Model and Notation",
-    "Borrower Payment Management Network",
-    "Basic Process Mapping Notes",
-    "Business Product Mortgage Navigator"
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
