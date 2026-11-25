@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: The installed app updates itself: it checks for a new version whenever it's opened or brought back, always asks the server for the newest page (no 10-minute-old copy), and reloads to the new version as soon as no panel is open.
 - Nov 25, 2026: Settings: Reviewer Code. Entering MISMO's reviewer code turns on early features (the Trivia Test Run) in the installed app, with no reinstall.
 - Nov 25, 2026: MISMO Trivia Test Run: MISMO staff signed in (or a link with ?trivia=test) can play 10-question rounds of the 48 draft questions: a 20-second clock, points for right answers and speed, a streak bonus, results by category, and the answers with their sources. Test scores stay on the phone; the public still sees Coming Soon.
 - Nov 25, 2026: Anyone can have their name in the greeting: Add Your Name under the greeting (or Your Name in Settings), kept on the phone. Staff and attendees who sign in get theirs from their account.

@@ -2441,6 +2441,7 @@ function closeSheet(all) {
   } while (all && stack.length);
   if (!stack.length) { var back = $('#sheet-back'); back.classList.remove('on'); setTimeout(function () { if (!stack.length) back.hidden = true; }, 220); document.body.style.overflow = ''; }
   if (window.MismoBack) MismoBack.check();
+  if (!stack.length && RELOAD_WAITING) setTimeout(function () { location.reload(); }, 300);
 }
 function topSheet() { return stack[stack.length - 1] || null; }
 
@@ -3035,7 +3036,18 @@ function start() {
 }
 start();
 setInterval(function () { if (S.summit && (S.page === 'home' || S.page === 'agenda' || S.page === 'dash') && !stack.length && !(document.activeElement && document.activeElement.matches('input,textarea'))) renderPage(S.page); }, 60000);
-if ('serviceWorker' in navigator && location.protocol === 'https:') window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+/* Keep the installed app current: check for a new version whenever it's opened or brought back, and when one
+   arrives, reload (right away if nothing is open, otherwise as soon as the open panels are closed). */
+var RELOAD_WAITING = false;
+function reloadWhenFree() { if (!stack.length) location.reload(); else RELOAD_WAITING = true; }
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  var hadSW = !!navigator.serviceWorker.controller;
+  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadSW) reloadWhenFree(); hadSW = true; });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.update(); }).catch(function () {});
+  });
+}
 })();
 </script>
 </body>

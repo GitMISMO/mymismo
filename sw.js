@@ -2,7 +2,7 @@
    The app's own files are kept on the phone so it opens without a connection.
    The agenda and sponsor feeds are fetched fresh whenever there is a connection,
    and the last copy is used when there isn't. Pictures (headshots, logos) are kept once seen. */
-var VERSION = 'mymismo-2026-11-26i';
+var VERSION = 'mymismo-2026-11-26j';
 var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', '/assets/back.js'];
 
 self.addEventListener('install', function (e) {
@@ -14,7 +14,9 @@ self.addEventListener('activate', function (e) {
   }).then(function () { return self.clients.claim(); }));
 });
 function fresh(req) {
-  return fetch(req).then(function (res) {
+  /* ask the server every time (the browser's own copy can be up to 10 minutes old), so a new version shows at once */
+  var ask = req.mode === 'navigate' ? fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }) : fetch(req, { cache: 'no-cache' });
+  return ask.then(function (res) {
     if (res && (res.ok || res.type === 'opaque')) { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); }
     return res;
   });
