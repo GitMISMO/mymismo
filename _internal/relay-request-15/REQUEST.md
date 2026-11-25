@@ -1,8 +1,7 @@
 # Relay Request 15: MyMISMO Trivia Leaderboard and Quarterly Championship (for Perry)
 
 Requested by Jonna, Nov 25, 2026. Builds on relay requests 13 and 14 (the same `mymismo` entry in projects.json and the
-same private `GitMISMO/mymismo-data`). This is the plan; the patch and its tests follow the same pattern as request 14
-once the one open question below is answered.
+same private `GitMISMO/mymismo-data`). The patch and its tests follow the same pattern as request 14.
 
 ## What Jonna Decided
 
@@ -27,7 +26,7 @@ leaderboard: anyone could read the answers or replay a round. For ranked rounds 
 ## Routes
 
 All under `/mymismo/trivia/`. Every route answers 404 until projects.json's `mymismo` entry has `"trivia": true`.
-"Player" means a signed-in person (see the open question for who that is).
+"Player" means someone signed in with an emailed code.
 
 | Route | Sign-in | What it does |
 | --- | --- | --- |
@@ -36,6 +35,9 @@ All under `/mymismo/trivia/`. Every route answers 404 until projects.json's `mym
 | `POST /trivia/next` | player | `{ round }` → the next question `{ n, cat, q, choices }` with the choices shuffled on the server. Records when it was handed out. |
 | `POST /trivia/answer` | player | `{ round, n, choice }` → `{ right, answer, points, streak, total }`. Time = now minus when the question was handed out; past 15 seconds scores 0. A question can be answered once. |
 | `GET  /trivia/board?month=` | none | Top 25 for the month: `{ rank, name, score, right }`, name shown as first name and last initial. With a player token, also `me: { rank, score }`. |
+| `POST /trivia/code` | none | Emails a six-digit sign-in code to the address given (always the same answer, so it never says whether an address is known). |
+| `POST /trivia/verify` | none | `{ email, code, first, last }` → a player token (180 days) and the name shown. |
+| `POST /trivia/delete` | player | Deletes the player's account (see below). |
 | `GET  /trivia/champ` | none | The quarter's three finalists (names as above), the window, and after it closes the final standings. |
 | `POST /trivia/champ/start` | finalist | Only during the window, only once. Starts the clock (`minutes` from projects.json, e.g. 15). Returns the board: 6 categories × 5 values (200 to 1000), no questions yet. |
 | `POST /trivia/champ/pick` | finalist | `{ cell }` → that square's question `{ q, choices }`. |
@@ -43,7 +45,7 @@ All under `/mymismo/trivia/`. Every route answers 404 until projects.json's `mym
 
 ## Scoring (the same as the app's test round)
 
-A right answer is worth `floor((1 - (elapsed / 15) / 2) × 1000 × 2)` on Hard (between 1,000 and 2,000); two or more
+A right answer is worth `floor((1 - (elapsed / 15) / 2) × 1000 × 2)`, with one second allowed for the network, on Hard (between 1,000 and 2,000); two or more
 right in a row add 200; a wrong or late answer is 0. Championship squares are worth their face value.
 
 ## Where Things Live (all in the private `mymismo-data`)
@@ -68,10 +70,29 @@ right in a row add 200; a wrong or late answer is 0. Championship squares are wo
 
 Rounds: 30 an hour per player. Answers: 600 an hour per player. Board reads: 600 an hour from one address.
 
-## One Question for Jonna Before the Build
+## Who Can Play (decided by Jonna, Nov 25, 2026)
 
-**Who can play ranked rounds?** Today MyMISMO only knows two kinds of signed-in people: MISMO staff and contractors
-(MISMO Resources accounts) and summit attendees (request 13, only around a summit). For a year-round monthly board,
-anyone in the MISMO community should be able to sign in. The simplest way is the same emailed six-digit code the
-attendee sign-in uses (the code email Jonna already approved for MyMISMO), for any email address, with the name they give
-shown as first name and last initial.
+**Anyone.** MyMISMO is for anyone to download, and it will be in the Apple App Store and Google Play. What's public on
+mismo.org stays public in the app, and what needs a website sign-in today still needs one in the app. Trivia is new to
+the app, so: practice rounds are open to everyone, and ranked rounds (the monthly board and the championship) need a
+quick sign-in with a six-digit code emailed to the player. The board shows the name they give as first name and last
+initial. No email address is kept anywhere except the code's hash for 15 minutes.
+
+## Deleting an Account
+
+Apple and Google require any app that lets people make an account to let them delete it from inside the app.
+`POST /trivia/delete` (player) removes their name, their scores from the last 12 months and their question history.
+
+## What's Here
+
+- `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
+  block (all names start `mm15`) and one routing line. Nothing shared is changed.
+- `test-mymismo15.mjs`: 57 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+  `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
+
+## To Switch It On
+
+1. Deploy the patch. Nothing changes until step 3.
+2. Put the approved Hard questions in `mymismo-data/trivia/questions.json` (MyMISMO's Claude does this from Jonna's review doc).
+3. Add `"trivia": true` to the `mymismo` entry in projects.json. Add `triviaChamp` once the first championship's window is set.
+4. Tell MyMISMO's Claude it's live (a Change Notice for MyMISMO) so the app switches from the test round to ranked rounds.

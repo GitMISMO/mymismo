@@ -37,3 +37,4 @@
 - Nov 25, 2026: Sponsors show logos only.
 - Nov 25, 2026: First draft of the summit section: Home, Agenda, My Schedule, Speakers, Sponsors, Add to Calendar, offline, installable.
 - Nov 25, 2026: MISMO Trivia: 55 more Hard questions (151 in all, 85 Hard) for the monthly leaderboard; relay request 15 plan written for Perry.
+- Nov 25, 2026: Relay request 15 for Perry is complete (patch and 57 checks): ranked Trivia rounds, monthly board, Quarterly Championship, emailed-code sign-in for anyone, delete my account.
