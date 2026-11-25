@@ -80,7 +80,9 @@ def parse_directory(html):
     h1s = [h for h in root.find_all(lambda x: x.tag == 'h1') if h.text()]
     title = h1s[1].text() if len(h1s) > 1 else (h1s[0].text() if h1s else '')
     members = []
-    for a in root.find_all(lambda x: x.tag == 'a' and 'mismo-provider-card' in x.classes()):
+    # cards are a.mismo-provider-card on most pages; FRAME's page has the same card without the class
+    for a in root.find_all(lambda x: x.tag == 'a' and ('mismo-provider-card' in x.classes() or (
+            x.find(lambda y: y.tag == 'img') is not None and 'view profile' in x.text().lower()))):
         spans = [x for x in a.elems() if x.tag == 'span']
         name = next((x.text() for x in spans if x.text() and not x.text().lower().startswith('view profile')), '')
         img = a.find(lambda x: x.tag == 'img')
