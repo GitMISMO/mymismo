@@ -1,6 +1,6 @@
 {
  "status": "draft",
- "note": "Draft questions for review (Nov 25, 2026). Shown only in Test Run: to MISMO staff signed in, or with ?trivia=test. Not on the leaderboard.",
+ "note": "Draft questions for review (Nov 25, 2026). Shown only in Test Run: to MISMO staff signed in, or with ?trivia=test. Not on the leaderboard. Each question has a level: 1 Easy, 2 Medium, 3 Hard.",
  "questions": [
   {
    "id": "q01",
@@ -13,7 +13,8 @@
     "An appraisal form"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/emortgage-standards-and-specifications"
+   "source": "https://www.mismo.org/standards-resources/emortgage-standards-and-specifications",
+   "level": 1
   },
   {
    "id": "q02",
@@ -26,7 +27,8 @@
     "Standard"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components"
+   "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components",
+   "level": 2
   },
   {
    "id": "q03",
@@ -39,7 +41,8 @@
     "Transferable"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components"
+   "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components",
+   "level": 2
   },
   {
    "id": "q04",
@@ -52,7 +55,8 @@
     "The flood certificate"
    ],
    "answer": 0,
-   "source": "https://singlefamily.fanniemae.com/media/22241/display"
+   "source": "https://singlefamily.fanniemae.com/media/22241/display",
+   "level": 2
   },
   {
    "id": "q05",
@@ -65,7 +69,8 @@
     "In MISMO Link"
    ],
    "answer": 2,
-   "source": "https://singlefamily.fanniemae.com/media/6536/display"
+   "source": "https://singlefamily.fanniemae.com/media/6536/display",
+   "level": 2
   },
   {
    "id": "q06",
@@ -78,7 +83,8 @@
     "The HMDA register"
    ],
    "answer": 1,
-   "source": "https://sf.freddiemac.com/faqs/umdp-faq"
+   "source": "https://sf.freddiemac.com/faqs/umdp-faq",
+   "level": 2
   },
   {
    "id": "q07",
@@ -91,7 +97,8 @@
     "Uniform Credit Dataset (UCRD)"
    ],
    "answer": 3,
-   "source": "https://www.fhfa.gov/blog/insights/standardizing-mortgage-data-through-the-umdp"
+   "source": "https://www.fhfa.gov/blog/insights/standardizing-mortgage-data-through-the-umdp",
+   "level": 3
   },
   {
    "id": "q08",
@@ -104,7 +111,8 @@
     "Loan Closing Advisor"
    ],
    "answer": 0,
-   "source": "https://sf.freddiemac.com/faqs/umdp-faq"
+   "source": "https://sf.freddiemac.com/faqs/umdp-faq",
+   "level": 3
   },
   {
    "id": "q09",
@@ -117,7 +125,8 @@
     "JSON"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 2
   },
   {
    "id": "q10",
@@ -130,7 +139,8 @@
     "The Appraisal Institute"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
   },
   {
    "id": "q11",
@@ -143,7 +153,8 @@
     "The Board of Directors"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/get-involved/workgroup/business-process-model-cop"
+   "source": "https://www.mismo.org/get-involved/workgroup/business-process-model-cop",
+   "level": 3
   },
   {
    "id": "q12",
@@ -156,7 +167,8 @@
     "The CFPB's Ask CFPB pages"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 1
   },
   {
    "id": "q13",
@@ -169,7 +181,8 @@
     "Assess Environmental Factors"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
   },
   {
    "id": "q14",
@@ -182,7 +195,8 @@
     "Order Flood Certificate"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 2
   },
   {
    "id": "q15",
@@ -195,7 +209,8 @@
     "Open Title and Closing Order"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
   },
   {
    "id": "q16",
@@ -208,7 +223,8 @@
     "Home Equity"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
   },
   {
    "id": "q17",
@@ -221,7 +237,8 @@
     "Over 50,000"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/standards-resources/business-glossary"
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 2
   },
   {
    "id": "q18",
@@ -234,7 +251,8 @@
     "None; terms are grouped only by Focus Area"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/standards-resources/business-glossary"
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 3
   },
   {
    "id": "q19",
@@ -247,7 +265,8 @@
     "Wikipedia"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/standards-resources/business-glossary"
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 1
   },
   {
    "id": "q20",
@@ -260,7 +279,8 @@
     "Edit the definitions"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/standards-resources/business-glossary"
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 2
   },
   {
    "id": "q21",
@@ -273,7 +293,8 @@
     "The Standards Governance Committee"
    ],
    "answer": 0,
-   "source": "https://mismo.org/get-involved/workgroup/business-glossary"
+   "source": "https://mismo.org/get-involved/workgroup/business-glossary",
+   "level": 1
   },
   {
    "id": "q22",
@@ -286,7 +307,8 @@
     "Lien Title Verification"
    ],
    "answer": 1,
-   "source": "https://files-prod.consumerfinance.gov/f/documents/201508_cfpb_compliance-bulletin_private-mortgage-insurance-cancellation-and-te_jpbfQUl.pdf"
+   "source": "https://files-prod.consumerfinance.gov/f/documents/201508_cfpb_compliance-bulletin_private-mortgage-insurance-cancellation-and-te_jpbfQUl.pdf",
+   "level": 1
   },
   {
    "id": "q23",
@@ -299,7 +321,8 @@
     "Property Maintenance Inspection"
    ],
    "answer": 2,
-   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/"
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
+   "level": 1
   },
   {
    "id": "q24",
@@ -312,7 +335,8 @@
     "Unified Loan Disclosure Data"
    ],
    "answer": 0,
-   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet"
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
+   "level": 2
   },
   {
    "id": "q25",
@@ -325,7 +349,8 @@
     "Mortgage Information Standards and Methods Office"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/about-mismo"
+   "source": "https://www.mismo.org/about-mismo",
+   "level": 1
   },
   {
    "id": "q26",
@@ -338,7 +363,8 @@
     "The American Land Title Association"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/about-mismo"
+   "source": "https://www.mismo.org/about-mismo",
+   "level": 1
   },
   {
    "id": "q27",
@@ -351,7 +377,8 @@
     "2015"
    ],
    "answer": 1,
-   "source": "https://nationalmortgageprofessional.com/news/mismo-25-honoring-past-building-foundation-future"
+   "source": "https://nationalmortgageprofessional.com/news/mismo-25-honoring-past-building-foundation-future",
+   "level": 2
   },
   {
    "id": "q28",
@@ -364,7 +391,8 @@
     "By the largest lender each year"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/about-mismo"
+   "source": "https://www.mismo.org/about-mismo",
+   "level": 1
   },
   {
    "id": "q29",
@@ -377,7 +405,8 @@
     "A Certification of Proficiency group"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment"
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
+   "level": 1
   },
   {
    "id": "q30",
@@ -390,7 +419,8 @@
     "A permanent governance board"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment"
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
+   "level": 2
   },
   {
    "id": "q31",
@@ -403,7 +433,8 @@
     "Anyone, member or not"
    ],
    "answer": 3,
-   "source": "https://www.mismo.org/get-involved/workgroup/data-governance-and-management"
+   "source": "https://www.mismo.org/get-involved/workgroup/data-governance-and-management",
+   "level": 1
   },
   {
    "id": "q32",
@@ -416,7 +447,8 @@
     "The Secondary CoP"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/about-MISMO/mismo-leadership/information-management"
+   "source": "https://www.mismo.org/about-MISMO/mismo-leadership/information-management",
+   "level": 3
   },
   {
    "id": "q33",
@@ -429,7 +461,8 @@
     "eVault Certification"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process"
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
+   "level": 1
   },
   {
    "id": "q34",
@@ -442,7 +475,8 @@
     "A self-paced video course"
    ],
    "answer": 2,
-   "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp"
+   "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp",
+   "level": 2
   },
   {
    "id": "q35",
@@ -455,7 +489,8 @@
     "100"
    ],
    "answer": 2,
-   "source": "https://www.mba.org/conferences-and-education/event/2026/11/16/default-calendar/mismo-boot-camp-november-2026-online-82058"
+   "source": "https://www.mba.org/conferences-and-education/event/2026/11/16/default-calendar/mismo-boot-camp-november-2026-online-82058",
+   "level": 3
   },
   {
    "id": "q36",
@@ -468,7 +503,8 @@
     "Four hours"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 3
   },
   {
    "id": "q37",
@@ -481,7 +517,8 @@
     "85%"
    ],
    "answer": 2,
-   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 2
   },
   {
    "id": "q38",
@@ -494,7 +531,8 @@
     "A take-home essay"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 2
   },
   {
    "id": "q39",
@@ -507,7 +545,8 @@
     "Never"
    ],
    "answer": 1,
-   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process"
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
+   "level": 2
   },
   {
    "id": "q40",
@@ -520,7 +559,8 @@
     "None"
    ],
    "answer": 0,
-   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process"
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
+   "level": 3
   },
   {
    "id": "q41",
@@ -533,7 +573,8 @@
     "At closing"
    ],
    "answer": 1,
-   "source": "https://www.consumerfinance.gov/ask-cfpb/slug-en-181"
+   "source": "https://www.consumerfinance.gov/ask-cfpb/slug-en-181",
+   "level": 1
   },
   {
    "id": "q42",
@@ -546,7 +587,8 @@
     "30 days"
    ],
    "answer": 1,
-   "source": "https://consumerfinance.gov/ask-cfpb/what-should-i-do-if-i-do-not-get-a-closing-disclosure-three-days-before-my-mortgage-closing-en-1911"
+   "source": "https://consumerfinance.gov/ask-cfpb/what-should-i-do-if-i-do-not-get-a-closing-disclosure-three-days-before-my-mortgage-closing-en-1911",
+   "level": 1
   },
   {
    "id": "q43",
@@ -559,7 +601,8 @@
     "Seven"
    ],
    "answer": 1,
-   "source": "https://www.consumerfinance.gov/about-us/blog/loan-estimate-and-closing-disclosure-choose-right-home-loans"
+   "source": "https://www.consumerfinance.gov/about-us/blog/loan-estimate-and-closing-disclosure-choose-right-home-loans",
+   "level": 2
   },
   {
    "id": "q44",
@@ -572,7 +615,8 @@
     "90%"
    ],
    "answer": 1,
-   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/"
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
+   "level": 3
   },
   {
    "id": "q45",
@@ -585,7 +629,8 @@
     "1970"
    ],
    "answer": 1,
-   "source": "https://www.britannica.com/topic/Fannie-Mae"
+   "source": "https://www.britannica.com/topic/Fannie-Mae",
+   "level": 2
   },
   {
    "id": "q46",
@@ -598,7 +643,8 @@
     "1989"
    ],
    "answer": 2,
-   "source": "https://www.britannica.com/topic/Fannie-Mae"
+   "source": "https://www.britannica.com/topic/Fannie-Mae",
+   "level": 3
   },
   {
    "id": "q47",
@@ -611,7 +657,8 @@
     "The FHA"
    ],
    "answer": 2,
-   "source": "https://www.ginniemae.gov/about_us/who_we_are/pages/our_history.aspx"
+   "source": "https://www.ginniemae.gov/about_us/who_we_are/pages/our_history.aspx",
+   "level": 2
   },
   {
    "id": "q48",
@@ -624,7 +671,8 @@
     "The Federal Reserve"
    ],
    "answer": 2,
-   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program"
+   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program",
+   "level": 2
   }
  ]
 }

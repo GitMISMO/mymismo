@@ -695,6 +695,19 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .sp-sess .d-actions{margin:12px 0 0}
 
 /* Trivia test round */
+.tv-pick-h{font-size:12.5px; font-weight:800; color:rgba(255,255,255,.7); margin:16px 0 8px}
+.tv-catpick{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; max-width:520px; margin:0 auto}
+.tv-cp{display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:8px; padding:7px 11px; color:#fff; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer}
+.tv-cp i{width:10px; height:10px; border-radius:50%; background:var(--oc)}
+.tv-cp.on{border-color:var(--oc); background:color-mix(in srgb, var(--oc) 22%, transparent)}
+.tv-levels{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin:0 auto; max-width:420px}
+.tv-lv{display:grid; gap:2px; justify-items:center; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:12px; padding:10px 6px; color:#fff; font:inherit; cursor:pointer; transition:transform .15s ease, border-color .15s ease, background .15s ease}
+.tv-lv b{font-family:var(--cond); font-size:20px}
+.tv-lv span{font-size:12px; color:rgba(255,255,255,.7)}
+.tv-lv em{font-style:normal; font-size:12px; font-weight:800; color:var(--lc)}
+.tv-lv.on{border-color:var(--lc); background:color-mix(in srgb, var(--lc) 22%, transparent); transform:translateY(-2px); box-shadow:0 10px 24px -12px var(--lc)}
+.tg-lvl{display:inline-block; margin-right:6px; font-weight:800; font-size:12px; color:#06202f; background:var(--lc); padding:4px 10px; border-radius:5px}
+.tv-tplayed{color:var(--ink-2); font-size:13px; margin:8px 0 0; text-align:center}
 .tv-go{display:inline-flex; align-items:center; gap:8px; margin-top:16px; background:linear-gradient(90deg, #74bfeb, #2477b8); color:#06202f; border:0; border-radius:10px; padding:14px 22px; font:inherit; font-weight:800; font-size:17px; cursor:pointer; box-shadow:0 10px 30px -10px rgba(116,191,235,.9); animation:tv-bob 2.4s ease-in-out infinite}
 .tv-go svg{width:18px; height:18px}
 .tv-tnote{display:block; margin-top:10px; font-size:12.5px; color:rgba(255,255,255,.65)}
@@ -2064,7 +2077,9 @@ function triviaOrbit(big) {
 function triviaSheet() {
   var test = triviaTester(), ts = load('trivia-test', { best: 0, games: 0 });
   var h = '<section class="tv-hero">' + triviaOrbit(true) + '<div class="tv-hin"><span class="tv-soon">' + (test ? 'Test Run' : 'Coming Soon') + '</span><h2>MISMO Trivia</h2><p>How well do you know MISMO? Test yourself, then take on your colleagues.</p>' +
-    (test ? '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote">Draft questions under review. Scores stay on this phone and never reach the leaderboard.</span>' : '') + '</div></section><div class="sheet-pad tv">';
+    (test ? '<div class="tv-pick-h">Questions From</div><div class="tv-catpick" role="radiogroup" aria-label="Category">' + [['', 'Mixed', '#74bfeb']].concat(TRIVIA_CATS).map(function (c) { var on = (load('trivia-cat', '') === c[0]); return '<button type="button" class="tv-cp' + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + '"><i></i>' + esc(c[1] && c[0] ? c[0] : c[1]) + '</button>'; }).join('') + '</div>' +
+      '<div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + l.secs + ' seconds</span><em>' + l.mult + '&times; points</em></button>'; }).join('') + '</div>' +
+      '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote">Draft questions under review. Scores stay on this phone and never reach the leaderboard.</span>' : '') + '</div></section><div class="sheet-pad tv">';
   h += '<div class="tv-modes">' +
     '<div class="tv-mode" style="--mc:#74bfeb"><span class="tv-mi">' + icon('i-star') + '</span><b>Solo</b><span>Play on your own, keep score and beat your best.</span><em>' + icon('i-lock') + 'Opens Soon</em></div>' +
     '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone. Same questions, one winner.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
@@ -2072,11 +2087,17 @@ function triviaSheet() {
   h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
       return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
     '</div><p>The leaderboard opens with the first game: top scores this month and of all time.</p></div>';
-  h += test && ts.games ? '<div class="d-h">Your Test Runs</div><div class="tv-stats"><div><b>' + ts.best + '</b><span>Best Score</span></div><div><b>' + ts.games + '</b><span>Rounds Played</span></div><div><b>' + (ts.bestRight || 0) + '/10</b><span>Most Right</span></div></div>' :
+  h += test && ts.games ? '<div class="d-h">Your Test Runs</div><div class="tv-stats">' + TV_LEVELS.map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b || '&mdash;') + '</b><span>Best ' + l.name + '</span></div>'; }).join('') + '</div><p class="tv-tplayed">' + ts.games + (ts.games === 1 ? ' round' : ' rounds') + ' played, most right ' + (ts.bestRight || 0) + ' of 10</p>' :
     '<div class="d-h">Your Scores</div><div class="tv-stats"><div><b>&mdash;</b><span>Best Score</span></div><div><b>&mdash;</b><span>Games Played</span></div><div><b>&mdash;</b><span>Head to Head Wins</span></div></div>';
   h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions. Trivia opens here once they\'re in.</div></div>';
   var el = openSheet('MISMO Trivia', h, { plain: true });
-  el.addEventListener('click', function (e) { if (e.target.closest('[data-tv-play]')) triviaPlay(); });
+  el.addEventListener('click', function (e) {
+    var lv = e.target.closest('[data-tv-level]');
+    var cp = e.target.closest('[data-tv-cat]');
+    if (cp) { save('trivia-cat', cp.getAttribute('data-tv-cat')); el.querySelectorAll('[data-tv-cat]').forEach(function (b) { var on = b === cp; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); return; }
+    if (lv) { save('trivia-level', +lv.getAttribute('data-tv-level')); el.querySelectorAll('[data-tv-level]').forEach(function (b) { var on = b === lv; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); return; }
+    if (e.target.closest('[data-tv-play]')) triviaPlay();
+  });
 }
 /* Test Run: MISMO staff signed in, or a link with ?trivia=test. Draft questions only; nothing leaves the phone. */
 function triviaTester() {
@@ -2084,17 +2105,35 @@ function triviaTester() {
   return !!staffSession() || load('trivia-tester', false);
 }
 var TQ = null, TV_LEN = 10, TV_SECS = 20;
+/* Easy: easy questions, more time. Medium: a mix. Hard: the toughest questions, less time, double points. */
+var TV_LEVELS = [
+  { name: 'Easy', secs: 25, mult: 1, c: '#1baf7a', want: [1, 2] },
+  { name: 'Medium', secs: 20, mult: 1.5, c: '#eda100', want: [2, 1, 3] },
+  { name: 'Hard', secs: 15, mult: 2, c: '#eb6834', want: [3, 2] }
+];
 function triviaPlay() {
   (TQ ? Promise.resolve(TQ) : getJSON('data/trivia-draft.json').then(function (d) { TQ = d; return d; })).then(function (d) { triviaRound(d.questions || []); })
     .catch(function () { openSheet('MISMO Trivia', '<div class="sheet-pad"><div class="note">The questions couldn\'t be loaded. Check your connection and try again.</div></div>', { plain: true }); });
 }
 function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 function triviaRound(all) {
-  /* ten questions, spread across the categories, choices shuffled */
-  var byCat = {}; all.forEach(function (q) { (byCat[q.cat] = byCat[q.cat] || []).push(q); });
-  var cats = shuffle(Object.keys(byCat)), pools = {}, pick = [], i = 0;
-  cats.forEach(function (c) { pools[c] = shuffle(byCat[c]); });
-  while (pick.length < Math.min(TV_LEN, all.length)) { var c = cats[i++ % cats.length]; if (pools[c].length) pick.push(pools[c].pop()); }
+  /* ten questions spread across the categories, from the level's own questions first (then the next level if it runs short), choices shuffled */
+  var lvl = TV_LEVELS[load('trivia-level', 1)] || TV_LEVELS[1], TV_SECS = lvl.secs, pick = [], only = load('trivia-cat', '');
+  if (only && !all.some(function (q) { return q.cat === only; })) only = '';
+  /* rotate: questions you haven't had yet come first, and once you've seen every question that fits, the cycle starts over */
+  var seen = load('trivia-seen', []), fits = all.filter(function (q) { return !only || q.cat === only; });
+  if (fits.every(function (q) { return seen.indexOf(q.id) >= 0; })) { seen = seen.filter(function (id) { return !fits.some(function (q) { return q.id === id; }); }); save('trivia-seen', seen); }
+  var fresh = all.filter(function (q) { return seen.indexOf(q.id) < 0; }), again = all.filter(function (q) { return seen.indexOf(q.id) >= 0; });
+  /* order of preference: new questions at this level, ones you've had at this level, then (a short category) any level */
+  [[fresh, lvl.want], [again, lvl.want], [fresh, [1, 2, 3]], [again, [1, 2, 3]]].forEach(function (pass) { var src = pass[0]; pass[1].forEach(function (w) {
+    if (pick.length >= TV_LEN) return;
+    var byCat = {}; src.forEach(function (q) { if ((q.level || 2) === w && pick.indexOf(q) < 0 && (!only || q.cat === only)) (byCat[q.cat] = byCat[q.cat] || []).push(q); });
+    var cats = shuffle(Object.keys(byCat)), pools = {}, i = 0, left = 0;
+    cats.forEach(function (c) { pools[c] = shuffle(byCat[c]); left += pools[c].length; });
+    while (pick.length < TV_LEN && left > 0) { var c = cats[i++ % cats.length]; if (pools[c].length) { pick.push(pools[c].pop()); left--; } }
+  }); });
+  pick = shuffle(pick);
+  save('trivia-seen', seen.concat(pick.map(function (q) { return q.id; })).filter(function (v, n, a) { return a.indexOf(v) === n; }));
   var game = pick.map(function (q) { var order = shuffle([0, 1, 2, 3]); return { q: q, choices: order.map(function (k) { return q.choices[k]; }), right: order.indexOf(q.answer) }; });
   var st = { n: 0, score: 0, streak: 0, bestStreak: 0, right: 0, log: [] }, timer = null, t0 = 0, locked = false;
   var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }), box = el.querySelector('#tg');
@@ -2105,7 +2144,7 @@ function triviaRound(all) {
     box.innerHTML = '<div class="tg-top"><div class="tg-dots">' + game.map(function (x, k) { var r = st.log[k]; return '<i class="' + (r ? (r.ok ? 'ok' : 'no') : k === st.n ? 'now' : '') + '"></i>'; }).join('') + '</div>' +
       '<div class="tg-score"><span>Score</span><b id="tg-sc">' + st.score + '</b></div></div>' +
       '<div class="tg-mid"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + TV_SECS + '</b></div>' +
-      '<div class="tg-card" style="--cc:' + col + '"><span class="tg-cat"><i></i>' + esc(g.q.cat) + '</span><span class="tg-qn">Question ' + (st.n + 1) + ' of ' + game.length + '</span><h3>' + esc(g.q.q) + '</h3></div>' +
+      '<div class="tg-card" style="--cc:' + col + '"><span class="tg-cat"><i></i>' + esc(g.q.cat) + '</span><span class="tg-qn">' + lvl.name + ', ' + (st.n + 1) + ' of ' + game.length + '</span><h3>' + esc(g.q.q) + '</h3></div>' +
       '<div class="tg-ans">' + g.choices.map(function (c, k) { return '<button type="button" class="tg-a" data-a="' + k + '" style="--d:' + (k * 70) + 'ms"><span class="tg-l">' + 'ABCD'[k] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div>' +
       (st.streak >= 2 ? '<div class="tg-streak">' + icon('i-star') + st.streak + ' in a row</div>' : '');
     locked = false; t0 = performance.now(); tick();
@@ -2121,7 +2160,7 @@ function triviaRound(all) {
   function answer(k) {
     if (locked) return; locked = true; cancelAnimationFrame(timer);
     var g = game[st.n], left = Math.max(0, TV_SECS - (performance.now() - t0) / 1000), ok = k === g.right, pts = 0, bonus = 0;
-    if (ok) { st.streak++; st.right++; st.bestStreak = Math.max(st.bestStreak, st.streak); pts = 100 + Math.round(left / TV_SECS * 100); if (st.streak >= 3) bonus = 50; }
+    if (ok) { st.streak++; st.right++; st.bestStreak = Math.max(st.bestStreak, st.streak); pts = Math.round((100 + Math.round(left / TV_SECS * 100)) * lvl.mult); if (st.streak >= 3) bonus = Math.round(50 * lvl.mult); }
     else st.streak = 0;
     st.score += pts + bonus; st.log.push({ q: g.q, ok: ok, pick: k >= 0 ? g.choices[k] : '', right: g.choices[g.right], pts: pts + bonus });
     box.querySelectorAll('.tg-a').forEach(function (b, n) { b.disabled = true; if (n === g.right) b.classList.add('right'); else if (n === k) b.classList.add('wrong'); else b.classList.add('dim'); });
@@ -2132,11 +2171,12 @@ function triviaRound(all) {
     setTimeout(function () { st.n++; if (st.n < game.length) paint(); else end(); }, ok ? 1300 : 2200);
   }
   function end() {
-    var ts = load('trivia-test', { best: 0, games: 0 }), newBest = st.score > (ts.best || 0);
-    ts.games = (ts.games || 0) + 1; ts.best = Math.max(ts.best || 0, st.score); ts.bestRight = Math.max(ts.bestRight || 0, st.right); save('trivia-test', ts);
+    var ts = load('trivia-test', { best: 0, games: 0 }); ts.byLevel = ts.byLevel || {};
+    var newBest = st.score > (ts.byLevel[lvl.name] || 0);
+    ts.games = (ts.games || 0) + 1; ts.best = Math.max(ts.best || 0, st.score); ts.bestRight = Math.max(ts.bestRight || 0, st.right); ts.byLevel[lvl.name] = Math.max(ts.byLevel[lvl.name] || 0, st.score); save('trivia-test', ts);
     var byCat = {}; st.log.forEach(function (r) { var c = byCat[r.q.cat] = byCat[r.q.cat] || { n: 0, ok: 0 }; c.n++; if (r.ok) c.ok++; });
     box.innerHTML = '<div class="tg-end">' + (newBest ? '<div class="tg-confetti" aria-hidden="true">' + Array.apply(null, Array(28)).map(function (x, n) { return '<i style="--x:' + (Math.random() * 100).toFixed(1) + '%;--d:' + (Math.random() * 0.8).toFixed(2) + 's;--c:' + TRIVIA_CATS[n % 6][2] + '"></i>'; }).join('') + '</div>' : '') +
-      '<span class="tv-soon">' + (newBest ? 'New Best!' : 'Round Complete') + '</span><div class="tg-big" data-count="' + st.score + '">' + st.score + '</div><p>' + st.right + ' of ' + st.log.length + ' right' + (st.bestStreak >= 3 ? ', best streak ' + st.bestStreak : '') + '</p>' +
+      '<span class="tg-lvl" style="--lc:' + lvl.c + '">' + lvl.name + '</span><span class="tv-soon">' + (newBest ? 'New ' + lvl.name + ' Best!' : 'Round Complete') + '</span><div class="tg-big" data-count="' + st.score + '">' + st.score + '</div><p>' + st.right + ' of ' + st.log.length + ' right' + (st.bestStreak >= 3 ? ', best streak ' + st.bestStreak : '') + '</p>' +
       '<div class="tg-cats">' + Object.keys(byCat).map(function (c) { return '<div style="--cc:' + catColor(c) + '"><i></i><b>' + esc(c) + '</b><span>' + byCat[c].ok + '/' + byCat[c].n + '</span></div>'; }).join('') + '</div>' +
       '<div class="tg-btns"><button type="button" class="btn primary" data-tv-again>' + icon('i-play') + 'Play Again</button><button type="button" class="btn" data-tv-review>See the Answers</button></div>' +
       '<div class="tg-review" id="tg-review" hidden>' + st.log.map(function (r, n) { return '<div class="tg-r ' + (r.ok ? 'ok' : 'no') + '"><b>' + (n + 1) + '. ' + esc(r.q.q) + '</b><span>' + (r.ok ? 'You got it: ' : (r.pick ? 'You said ' + esc(r.pick) + '. ' : 'No answer. ') + 'Answer: ') + esc(r.right) + '</span><a href="' + esc(r.q.source) + '" target="_blank" rel="noopener">Source' + icon('i-link') + '</a></div>'; }).join('') + '</div></div>';
