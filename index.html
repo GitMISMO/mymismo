@@ -688,6 +688,12 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-stats span{font-size:12px; color:var(--ink-2); font-weight:600}
 @media (prefers-reduced-motion: reduce){ .tv-orbit *, .tv-cat{animation:none !important} }
 
+.sp-sess{background:var(--surface); border:1px solid var(--border); border-left:5px solid var(--sky); border-radius:14px; padding:14px; box-shadow:var(--shadow)}
+.sp-sess > b{display:block; font-family:var(--cond); font-size:20px}
+.sp-sess > span{display:flex; align-items:center; gap:6px; color:var(--ink-2); font-size:14px; margin-top:4px}
+.sp-sess > span svg{width:15px; height:15px}
+.sp-sess .d-actions{margin:12px 0 0}
+
 /* Settings */
 .set .d-h:first-child{margin-top:4px}
 .set-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden}
@@ -2339,7 +2345,10 @@ function speakerSheet(key) {
     h += '<button type="button" class="btn bio-btn" data-bio="bio-' + esc(p.key) + '" aria-expanded="false" aria-controls="bio-' + esc(p.key) + '">' + icon('i-user') + 'View Bio</button>' +
       '<div class="bio" id="bio-' + esc(p.key) + '" hidden>' + bp.map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + '</div>';
   }
-  h += '<div class="d-h" style="margin-top:4px">Speaking At</div><div class="ro">' + p.parts.map(function (pt) {
+  if (gsx) h += '<div class="d-h" style="margin-top:4px">Their Session</div><div class="sp-sess"><b>' + esc(gsx.title) + '</b><span>' + icon('i-agenda') + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + (gsx.room ? '</span><span>' + icon('i-pin') + esc(gsx.room) : '') + '</span>' +
+    '<div class="d-actions two"><button type="button" class="btn primary' + (isMine(gsx.id) ? ' on-mine' : '') + '" data-mine-btn="' + esc(gsx.id) + '" data-toggle-mine="' + esc(gsx.id) + '">' + mineBtnHtml(gsx.id) + '</button>' +
+    '<button type="button" class="btn" data-ics="' + esc(gsx.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div></div>';
+  h += '<div class="d-h">Speaking At</div><div class="ro">' + p.parts.map(function (pt) {
     var g = pt.gs, cp = clockParts(g.a);
     return '<div class="ro-item"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + ', ' + esc((S.gs.day || '').slice(0, 3)) + '</span></div><div>' + (pt.role ? '<div class="k"><span class="tag">' + esc(pt.role) + '</span></div>' : '') +
       '<div class="tt">' + esc(g.title) + '</div>' + (g.desc ? '<div class="ds">' + esc(g.desc) + '</div>' : '') + '</div></div>';
