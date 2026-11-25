@@ -656,6 +656,13 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .ha-run path{opacity:0} .radar .dot .pn{opacity:.92} .w-logos img:first-child{opacity:1}
 }
 
+/* Speaker bio */
+.bio-btn{margin:0 0 4px}
+.bio{font-size:15.5px; line-height:1.6; margin-top:12px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:10px; animation:bio-in .28s ease}
+.bio p{margin:0 0 10px}
+.bio p:last-child{margin:0}
+@keyframes bio-in{from{opacity:0; transform:translateY(-6px)}}
+
 /* Notes and banners */
 .note{background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:8px; padding:12px 14px; color:var(--ink-2); font-size:14px}
 .note b{color:var(--ink)}
@@ -1044,8 +1051,9 @@ function build(feed, spons) {
   if (S.gs) S.gs.items.forEach(function (g) {
     g.people.forEach(function (p) {
       var k = slug(p.name); if (!k) return;
-      var cur = byName[k] || (byName[k] = { key: k, name: p.name, title: p.title || '', company: p.company || '', photo: p.photo || '', parts: [] });
+      var cur = byName[k] || (byName[k] = { key: k, name: p.name, title: p.title || '', company: p.company || '', photo: p.photo || '', bio: p.bio || '', parts: [] });
       if (!cur.photo && p.photo) cur.photo = p.photo;
+      if (!cur.bio && p.bio) cur.bio = p.bio;
       if (!cur.title && p.title) cur.title = p.title;
       cur.parts.push({ role: p.role || '', gs: g });
     });
@@ -1849,6 +1857,11 @@ function speakerSheet(key) {
   var gsx = gsSession();
   var h = '<div class="cover person-cover">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="">' : '<span class="avatar">' + esc(initials(p.name)) + '</span>') +
     '<div><span class="k">Speaker</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">';
+  if (p.bio) {
+    var bp = String(p.bio).split(/\n\s*\n|\r\n\r\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+    h += '<button type="button" class="btn bio-btn" data-bio="bio-' + esc(p.key) + '" aria-expanded="false" aria-controls="bio-' + esc(p.key) + '">' + icon('i-user') + 'View Bio</button>' +
+      '<div class="bio" id="bio-' + esc(p.key) + '" hidden>' + bp.map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + '</div>';
+  }
   h += '<div class="d-h" style="margin-top:4px">Speaking At</div><div class="ro">' + p.parts.map(function (pt) {
     var g = pt.gs, cp = clockParts(g.a);
     return '<div class="ro-item"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + ', ' + esc((S.gs.day || '').slice(0, 3)) + '</span></div><div>' + (pt.role ? '<div class="k"><span class="tag">' + esc(pt.role) + '</span></div>' : '') +
@@ -2102,6 +2115,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-certs')) { certsSheet(); return; }
   if (t.hasAttribute('data-web')) { webSheet(t.getAttribute('data-web'), t.getAttribute('data-web-title') || ''); return; }
   if (t.hasAttribute('data-web-ics')) { var wb = upcomingWebinars().filter(function (w) { return w.id === t.getAttribute('data-web-ics'); })[0]; if (wb) webinarIcs(wb); return; }
+  if (t.hasAttribute('data-bio')) { var bb = document.getElementById(t.getAttribute('data-bio')); if (bb) { bb.hidden = !bb.hidden; t.innerHTML = icon('i-user') + (bb.hidden ? 'View Bio' : 'Hide Bio'); t.setAttribute('aria-expanded', String(!bb.hidden)); } return; }
   if (t.hasAttribute('data-more')) { var mb = $('#' + t.getAttribute('data-more')); if (mb) { mb.hidden = !mb.hidden; t.textContent = mb.hidden ? 'Read More' : 'Show Less'; t.setAttribute('aria-expanded', String(!mb.hidden)); } return; }
   if (t.hasAttribute('data-go-agenda')) { S.day = t.getAttribute('data-day'); S.q = ''; closeSheet(true); show('agenda'); return; }
   if (t.hasAttribute('data-go')) { if (t.hasAttribute('data-ptab-go')) S.peopleTab = t.getAttribute('data-ptab-go'); closeSheet(true); show(t.getAttribute('data-go')); return; }
