@@ -1,0 +1,630 @@
+{
+ "status": "draft",
+ "note": "Draft questions for review (Nov 25, 2026). Shown only in Test Run: to MISMO staff signed in, or with ?trivia=test. Not on the leaderboard.",
+ "questions": [
+  {
+   "id": "q01",
+   "cat": "MISMO Standards",
+   "q": "What is a MISMO SMART Doc?",
+   "choices": [
+    "A credit scoring model",
+    "An electronic document that locks together data and presentation to ensure integrity",
+    "A paper closing checklist",
+    "An appraisal form"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/emortgage-standards-and-specifications"
+  },
+  {
+   "id": "q02",
+   "cat": "MISMO Standards",
+   "q": "In \"SMART Doc,\" what does the S stand for?",
+   "choices": [
+    "Searchable",
+    "Signed",
+    "Securable",
+    "Standard"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components"
+  },
+  {
+   "id": "q03",
+   "cat": "MISMO Standards",
+   "q": "Which of these is NOT one of the five words behind SMART?",
+   "choices": [
+    "Manageable",
+    "Readable",
+    "Archivable",
+    "Transferable"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components"
+  },
+  {
+   "id": "q04",
+   "cat": "MISMO Standards",
+   "q": "Which SMART Doc has the industry done the most work on?",
+   "choices": [
+    "The eNote",
+    "The appraisal report",
+    "The Loan Estimate",
+    "The flood certificate"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/media/22241/display"
+  },
+  {
+   "id": "q05",
+   "cat": "MISMO Standards",
+   "q": "Fannie Mae and Freddie Mac require every eNote to be registered where?",
+   "choices": [
+    "With the county recorder",
+    "With the CFPB",
+    "On the MERS eRegistry",
+    "In MISMO Link"
+   ],
+   "answer": 2,
+   "source": "https://singlefamily.fanniemae.com/media/6536/display"
+  },
+  {
+   "id": "q06",
+   "cat": "MISMO Standards",
+   "q": "The GSEs' Uniform Closing Dataset (UCD) supports which CFPB form?",
+   "choices": [
+    "The Loan Estimate",
+    "The Closing Disclosure",
+    "The Uniform Residential Loan Application",
+    "The HMDA register"
+   ],
+   "answer": 1,
+   "source": "https://sf.freddiemac.com/faqs/umdp-faq"
+  },
+  {
+   "id": "q07",
+   "cat": "MISMO Standards",
+   "q": "Which of these is NOT a Uniform Mortgage Data Program dataset?",
+   "choices": [
+    "Uniform Appraisal Dataset (UAD)",
+    "Uniform Closing Dataset (UCD)",
+    "Uniform Loan Delivery Dataset (ULDD)",
+    "Uniform Credit Dataset (UCRD)"
+   ],
+   "answer": 3,
+   "source": "https://www.fhfa.gov/blog/insights/standardizing-mortgage-data-through-the-umdp"
+  },
+  {
+   "id": "q08",
+   "cat": "MISMO Standards",
+   "q": "Lenders deliver appraisal data that conforms to the UAD through which portal?",
+   "choices": [
+    "The Uniform Collateral Data Portal (UCDP)",
+    "MISMO Connect",
+    "The MERS eRegistry",
+    "Loan Closing Advisor"
+   ],
+   "answer": 0,
+   "source": "https://sf.freddiemac.com/faqs/umdp-faq"
+  },
+  {
+   "id": "q09",
+   "cat": "Life of Loan",
+   "q": "The Life of Loan Business Process Model is built with which notation?",
+   "choices": [
+    "UML",
+    "BPMN (Business Process Model and Notation)",
+    "DMN (Decision Model and Notation)",
+    "JSON"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q10",
+   "cat": "Life of Loan",
+   "q": "BPMN, the notation behind Life of Loan, is a standard from which organization?",
+   "choices": [
+    "The Object Management Group",
+    "The CFPB",
+    "The W3C",
+    "The Appraisal Institute"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q11",
+   "cat": "Life of Loan",
+   "q": "Which MISMO group maintains Life of Loan?",
+   "choices": [
+    "Information Management",
+    "The Origination Community of Practice",
+    "The Business Process Model Community of Practice",
+    "The Board of Directors"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/get-involved/workgroup/business-process-model-cop"
+  },
+  {
+   "id": "q12",
+   "cat": "Life of Loan",
+   "q": "Each process in Life of Loan links to its definition where?",
+   "choices": [
+    "The MISMO Business Glossary",
+    "The Fannie Mae Selling Guide",
+    "The MBA website",
+    "The CFPB's Ask CFPB pages"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q13",
+   "cat": "Life of Loan",
+   "q": "In Life of Loan Version 2026.01, \"Perform ESG Activities\" was renamed what?",
+   "choices": [
+    "Manage Climate Risk",
+    "Address Housing Emerging Risks and Opportunities",
+    "Perform Sustainability Review",
+    "Assess Environmental Factors"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q14",
+   "cat": "Life of Loan",
+   "q": "In Version 2026.01, \"Consider Flood Risk\" became what?",
+   "choices": [
+    "Consider Hazard Risk",
+    "Consider Property Risk",
+    "Evaluate Flood Zone",
+    "Order Flood Certificate"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q15",
+   "cat": "Life of Loan",
+   "q": "Which process was added to Life of Loan in Version 2026.01?",
+   "choices": [
+    "Order Credit Report",
+    "Utilize SMART Docs",
+    "Evaluate Loss Mitigation Waterfall",
+    "Open Title and Closing Order"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q16",
+   "cat": "Life of Loan",
+   "q": "Which new page did Version 2026.01 add to Life of Loan?",
+   "choices": [
+    "Servicing Transfers",
+    "Secondary Marketing / Capital Markets",
+    "Default Management",
+    "Home Equity"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "q17",
+   "cat": "Business Glossary",
+   "q": "About how many terms are in the MISMO Business Glossary?",
+   "choices": [
+    "About 800",
+    "About 2,000",
+    "Over 8,000",
+    "Over 50,000"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/standards-resources/business-glossary"
+  },
+  {
+   "id": "q18",
+   "cat": "Business Glossary",
+   "q": "Each Business Glossary term belongs to how many Term Types?",
+   "choices": [
+    "Exactly one",
+    "Two",
+    "Up to five",
+    "None; terms are grouped only by Focus Area"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/business-glossary"
+  },
+  {
+   "id": "q19",
+   "cat": "Business Glossary",
+   "q": "Which of these is one of the Business Glossary's sources?",
+   "choices": [
+    "Merriam-Webster",
+    "The MBA Glossary",
+    "Black's Law Dictionary",
+    "Wikipedia"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/business-glossary"
+  },
+  {
+   "id": "q20",
+   "cat": "Business Glossary",
+   "q": "What can non-members do with the Business Glossary?",
+   "choices": [
+    "Nothing; it's members only",
+    "Download the full version",
+    "Search the term list on mismo.org",
+    "Edit the definitions"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/standards-resources/business-glossary"
+  },
+  {
+   "id": "q21",
+   "cat": "Business Glossary",
+   "q": "Which group was created because a glossary would reduce complexity and widen the use of MISMO terms?",
+   "choices": [
+    "The Business Glossary Community of Practice",
+    "Information Management",
+    "The API Community of Practice",
+    "The Standards Governance Committee"
+   ],
+   "answer": 0,
+   "source": "https://mismo.org/get-involved/workgroup/business-glossary"
+  },
+  {
+   "id": "q22",
+   "cat": "Business Glossary",
+   "q": "What does LTV stand for?",
+   "choices": [
+    "Lender Transfer Value",
+    "Loan-to-Value",
+    "Long-Term Variable",
+    "Lien Title Verification"
+   ],
+   "answer": 1,
+   "source": "https://files-prod.consumerfinance.gov/f/documents/201508_cfpb_compliance-bulletin_private-mortgage-insurance-cancellation-and-te_jpbfQUl.pdf"
+  },
+  {
+   "id": "q23",
+   "cat": "Business Glossary",
+   "q": "What does PMI stand for?",
+   "choices": [
+    "Principal Mortgage Interest",
+    "Primary Market Index",
+    "Private Mortgage Insurance",
+    "Property Maintenance Inspection"
+   ],
+   "answer": 2,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/"
+  },
+  {
+   "id": "q24",
+   "cat": "Business Glossary",
+   "q": "What does ULDD stand for?",
+   "choices": [
+    "Uniform Loan Delivery Dataset",
+    "Universal Lender Data Dictionary",
+    "Uniform Lien Document Directory",
+    "Unified Loan Disclosure Data"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet"
+  },
+  {
+   "id": "q25",
+   "cat": "How MISMO Works",
+   "q": "What does MISMO stand for?",
+   "choices": [
+    "Mortgage Information Systems Management Organization",
+    "Mortgage Industry Standards Maintenance Organization",
+    "Mortgage Industry Software and Messaging Organization",
+    "Mortgage Information Standards and Methods Office"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/about-mismo"
+  },
+  {
+   "id": "q26",
+   "cat": "How MISMO Works",
+   "q": "MISMO is a wholly owned subsidiary of which organization?",
+   "choices": [
+    "Fannie Mae",
+    "The Federal Housing Finance Agency",
+    "The Mortgage Bankers Association",
+    "The American Land Title Association"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/about-mismo"
+  },
+  {
+   "id": "q27",
+   "cat": "How MISMO Works",
+   "q": "In what year did the Mortgage Bankers Association create MISMO?",
+   "choices": [
+    "1989",
+    "1999",
+    "2008",
+    "2015"
+   ],
+   "answer": 1,
+   "source": "https://nationalmortgageprofessional.com/news/mismo-25-honoring-past-building-foundation-future"
+  },
+  {
+   "id": "q28",
+   "cat": "How MISMO Works",
+   "q": "How are MISMO standards developed?",
+   "choices": [
+    "By regulators, then handed to the industry",
+    "By MISMO staff alone",
+    "Through a voluntary, consensus-based, open process",
+    "By the largest lender each year"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/about-mismo"
+  },
+  {
+   "id": "q29",
+   "cat": "How MISMO Works",
+   "q": "A workgroup with \"CoP\" in its name is what?",
+   "choices": [
+    "A Community of Practice: a permanent group",
+    "A Committee of Presidents",
+    "A short-term project team",
+    "A Certification of Proficiency group"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment"
+  },
+  {
+   "id": "q30",
+   "cat": "How MISMO Works",
+   "q": "What is a DWG?",
+   "choices": [
+    "A Data Warehouse Group that stores loan files",
+    "A Development Workgroup created for a discrete mission, overseen by its aligned CoP",
+    "A Document Writing Guild for the Business Glossary",
+    "A permanent governance board"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment"
+  },
+  {
+   "id": "q31",
+   "cat": "How MISMO Works",
+   "q": "Who may take part in a MISMO workgroup?",
+   "choices": [
+    "Only MISMO staff",
+    "Only Champion members",
+    "Only CMSPs",
+    "Anyone, member or not"
+   ],
+   "answer": 3,
+   "source": "https://www.mismo.org/get-involved/workgroup/data-governance-and-management"
+  },
+  {
+   "id": "q32",
+   "cat": "How MISMO Works",
+   "q": "Which group keeps the Reference Model's data structures consistent and reviews each community's completed work?",
+   "choices": [
+    "Information Management",
+    "The Board of Directors",
+    "The Business Glossary CoP",
+    "The Secondary CoP"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/about-MISMO/mismo-leadership/information-management"
+  },
+  {
+   "id": "q33",
+   "cat": "Bootcamp and Certification",
+   "q": "Completing Boot Camp and passing its exam makes you eligible for which certification?",
+   "choices": [
+    "CMSP",
+    "AMSP",
+    "RON Certification",
+    "eVault Certification"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process"
+  },
+  {
+   "id": "q34",
+   "cat": "Bootcamp and Certification",
+   "q": "How is MISMO Boot Camp taught?",
+   "choices": [
+    "One eight-hour day",
+    "Ten weekly webinars",
+    "Four 90-minute lessons",
+    "A self-paced video course"
+   ],
+   "answer": 2,
+   "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp"
+  },
+  {
+   "id": "q35",
+   "cat": "Bootcamp and Certification",
+   "q": "How many CMSP education points does completing Boot Camp earn?",
+   "choices": [
+    "10",
+    "25",
+    "50",
+    "100"
+   ],
+   "answer": 2,
+   "source": "https://www.mba.org/conferences-and-education/event/2026/11/16/default-calendar/mismo-boot-camp-november-2026-online-82058"
+  },
+  {
+   "id": "q36",
+   "cat": "Bootcamp and Certification",
+   "q": "How long is the CMSP exam?",
+   "choices": [
+    "60 minutes",
+    "90 minutes",
+    "150 minutes",
+    "Four hours"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+  },
+  {
+   "id": "q37",
+   "cat": "Bootcamp and Certification",
+   "q": "What score passes the CMSP exam?",
+   "choices": [
+    "65%",
+    "70%",
+    "75%",
+    "85%"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+  },
+  {
+   "id": "q38",
+   "cat": "Bootcamp and Certification",
+   "q": "The CMSP exam is:",
+   "choices": [
+    "Closed book, proctored in person",
+    "Open book",
+    "An oral interview",
+    "A take-home essay"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+  },
+  {
+   "id": "q39",
+   "cat": "Bootcamp and Certification",
+   "q": "How often must an AMSP renew?",
+   "choices": [
+    "Every year",
+    "Every two years",
+    "Every five years",
+    "Never"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process"
+  },
+  {
+   "id": "q40",
+   "cat": "Bootcamp and Certification",
+   "q": "How many AMSP participation points does attending a MISMO Summit earn?",
+   "choices": [
+    "1 point per day",
+    "5 points per Summit",
+    "10 points per Summit",
+    "None"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process"
+  },
+  {
+   "id": "q41",
+   "cat": "Mortgage Industry",
+   "q": "How soon after an application must a lender send the Loan Estimate?",
+   "choices": [
+    "Within 24 hours",
+    "Within three business days",
+    "Within ten days",
+    "At closing"
+   ],
+   "answer": 1,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/slug-en-181"
+  },
+  {
+   "id": "q42",
+   "cat": "Mortgage Industry",
+   "q": "A borrower must receive the Closing Disclosure at least how long before closing?",
+   "choices": [
+    "One day",
+    "Three business days",
+    "One week",
+    "30 days"
+   ],
+   "answer": 1,
+   "source": "https://consumerfinance.gov/ask-cfpb/what-should-i-do-if-i-do-not-get-a-closing-disclosure-three-days-before-my-mortgage-closing-en-1911"
+  },
+  {
+   "id": "q43",
+   "cat": "Mortgage Industry",
+   "q": "How many pages long is the Loan Estimate?",
+   "choices": [
+    "One",
+    "Three",
+    "Five",
+    "Seven"
+   ],
+   "answer": 1,
+   "source": "https://www.consumerfinance.gov/about-us/blog/loan-estimate-and-closing-disclosure-choose-right-home-loans"
+  },
+  {
+   "id": "q44",
+   "cat": "Mortgage Industry",
+   "q": "Under federal law, PMI generally ends automatically when the balance is scheduled to reach what share of the home's original value?",
+   "choices": [
+    "50%",
+    "78%",
+    "80%",
+    "90%"
+   ],
+   "answer": 1,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/"
+  },
+  {
+   "id": "q45",
+   "cat": "Mortgage Industry",
+   "q": "In what year was Fannie Mae created?",
+   "choices": [
+    "1934",
+    "1938",
+    "1968",
+    "1970"
+   ],
+   "answer": 1,
+   "source": "https://www.britannica.com/topic/Fannie-Mae"
+  },
+  {
+   "id": "q46",
+   "cat": "Mortgage Industry",
+   "q": "In what year was Freddie Mac created?",
+   "choices": [
+    "1938",
+    "1968",
+    "1970",
+    "1989"
+   ],
+   "answer": 2,
+   "source": "https://www.britannica.com/topic/Fannie-Mae"
+  },
+  {
+   "id": "q47",
+   "cat": "Mortgage Industry",
+   "q": "Which organization issued the first mortgage-backed security, in 1970?",
+   "choices": [
+    "Fannie Mae",
+    "Freddie Mac",
+    "Ginnie Mae",
+    "The FHA"
+   ],
+   "answer": 2,
+   "source": "https://www.ginniemae.gov/about_us/who_we_are/pages/our_history.aspx"
+  },
+  {
+   "id": "q48",
+   "cat": "Mortgage Industry",
+   "q": "Fannie Mae and Freddie Mac run the Uniform Mortgage Data Program at the direction of which agency?",
+   "choices": [
+    "The CFPB",
+    "HUD",
+    "The Federal Housing Finance Agency (FHFA)",
+    "The Federal Reserve"
+   ],
+   "answer": 2,
+   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program"
+  }
+ ]
+}
