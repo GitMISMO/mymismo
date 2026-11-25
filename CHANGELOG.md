@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Trivia scoring like Kahoot: a right answer is worth up to 1,000 points (times the level), less the slower it comes but never below half; two or more right in a row adds a 100-point streak bonus (times the level). New Study level: no clock and no points, the answer and its source after each question, and Next when you're ready.
 - Nov 25, 2026: MISMO Trivia Test Run: pick Mixed or one category, then Easy (25 seconds), Medium (20 seconds, 1.5x points) or Hard (15 seconds, double points). Rounds rotate through the questions: ones you haven't had come first, and the cycle starts over once you've seen them all. Best score kept per level.
 - Nov 25, 2026: The installed app updates itself: it checks for a new version whenever it's opened or brought back, always asks the server for the newest page (no 10-minute-old copy), and reloads to the new version as soon as no panel is open.
 - Nov 25, 2026: Settings: Reviewer Code. Entering MISMO's reviewer code turns on early features (the Trivia Test Run) in the installed app, with no reinstall.
