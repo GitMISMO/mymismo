@@ -1927,7 +1927,7 @@ function loadExtras() {
   getJSON('/marketing-hq/matters/editions.json').then(function (m) { MM = m; again(['dash']); }).catch(function () {});
   getJSON('/webinars/webinars.json').then(function (w) { WEB = w; again(['dash']); }).catch(function () {});
   getJSON('/certified/new-certifications.json').then(function (c) { CERT = c; again(['dash']); }).catch(function () {});
-  getJSON('/certified/individuals.json').then(function (c) { PROS = c; }).catch(function () {});
+  getJSON('/certified/individuals.json').then(function (c) { PROS = c; again(['dash']); }).catch(function () {});
   getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
   getJSON('data/peeks/index.json').then(function (p) { PEEKS = p; }).catch(function () {});
   getJSON('data/programs.json').then(function (p) { PRG = p; again(['dash']); }).catch(function () {});
