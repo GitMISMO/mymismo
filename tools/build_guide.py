@@ -83,6 +83,8 @@ class Tree(HTMLParser):
 
 def clean_url(u):
     u = (u or '').strip()
+    if u.startswith('/') and not u.startswith('//'):
+        u = 'https://www.mismo.org' + u
     return u if re.match(r'^https://[^\s"<>]+$', u) else ''
 
 
@@ -226,7 +228,8 @@ def build_event(html):
             else:
                 for p in ps:
                     # a paragraph that is only a link (the "Will you join us?" line) is the Register button in the app
-                    if p.find(lambda x: x.tag == 'a') is not None and p.find(lambda x: x.tag == 'a').text() == p.text():
+                    a = p.find(lambda x: x.tag == 'a')
+                    if a is not None and (a.text() == p.text() or (len(p.text()) < 90 and p.text().endswith('?'))):
                         continue
                     paras.append(p.text())
         ev['paragraphs'] = paras
