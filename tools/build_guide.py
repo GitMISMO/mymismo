@@ -85,7 +85,7 @@ def clean_url(u, base='https://www.mismo.org/events/'):
     u = (u or '').strip()
     if u and not re.match(r'^[a-z]+:', u, re.I) and not u.startswith('#'):
         u = urllib.parse.urljoin(base, u)
-    return u if re.match(r'^https://[^\s"<>]+$', u) else ''
+    return u if re.match(r'^https://[^\s"<>]+$', u) else '' if re.match(r'^https://[^\s"<>]+$', u) else ''
 
 
 def card(n):
