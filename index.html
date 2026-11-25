@@ -1608,12 +1608,14 @@ function usedRooms() {
   S.sessions.forEach(function (x) { if (x.room && !seen[x.room]) { seen[x.room] = 1; var pin = roomPin(x.room); if (pin) out.push({ room: x.room, pin: pin, n: S.sessions.filter(function (y) { return y.room === x.room; }).length }); } });
   return out.sort(function (a, b) { return b.pin.floor - a.pin.floor || b.n - a.n; });
 }
-function floorView(f, fl, pick) {
+function floorView(f, fl, pick, thumb) {
   var band = fl.y1 - fl.y0, used = usedRooms().filter(function (u) { return u.pin.floor === fl.floor; });
   var pins = used.map(function (u) {
     var on = pick && rkey(pick) === rkey(u.room);
-    return '<button type="button" class="fpin' + (on ? ' on' : '') + '" data-fpin="' + esc(u.room) + '" style="left:' + (u.pin.x / f.width * 100).toFixed(2) + '%;top:' + ((u.pin.y - fl.y0) / band * 100).toFixed(2) + '%"><i></i><span>' + esc(u.room) + '</span></button>';
-  }).join('') + (f.landmarks || []).filter(function (l) { return l.floor === fl.floor; }).map(function (l) {
+    // the thumbnail sits inside a button, so its pins are plain dots (a button can't hold another button)
+    var pos = 'style="left:' + (u.pin.x / f.width * 100).toFixed(2) + '%;top:' + ((u.pin.y - fl.y0) / band * 100).toFixed(2) + '%"';
+    return thumb ? '<span class="fpin" ' + pos + '><i></i></span>' : '<button type="button" class="fpin' + (on ? ' on' : '') + '" data-fpin="' + esc(u.room) + '" ' + pos + '><i></i><span>' + esc(u.room) + '</span></button>';
+  }).join('') + (thumb ? [] : (f.landmarks || [])).filter(function (l) { return l.floor === fl.floor; }).map(function (l) {
     return '<span class="fmark" style="left:' + (l.x / f.width * 100).toFixed(2) + '%;top:' + ((l.y - fl.y0) / band * 100).toFixed(2) + '%">' + esc(l.label) + '</span>';
   }).join('');
   return '<div class="fband" style="aspect-ratio:' + f.width + '/' + band + '"><img src="' + esc(f.image) + '" alt="' + esc(f.venue + ', ' + fl.label) + '" style="margin-top:-' + (fl.y0 / f.width * 100).toFixed(3) + '%" draggable="false">' + pins + '</div>';
@@ -1770,7 +1772,7 @@ function renderExplore() {
       return '<div class="infocard" role="listitem"><span class="ic">' + icon(infoIcon(c.name, c.text)) + '</span><b>' + esc(c.name) + '</b>' + noBelow(c.text).split(/\n\n/).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
     }).join('') + '</div>';
     var fm = floorMap();
-    if (fm) h += '<div class="section-h"><h2>Find Your Way</h2></div><button type="button" class="mapcard" data-map><span class="mc-art">' + floorView(fm, fm.floors[0], '') + '</span><span class="mc-tx"><b>Floor Map</b><span>' + usedRooms().length + ' rooms on ' + fm.floors.filter(function (x) { return usedRooms().some(function (u) { return u.pin.floor === x.floor; }); }).length + ' floors. Tap a room to see where it is.</span></span>' + icon('i-chev') + '</button>';
+    if (fm) h += '<div class="section-h"><h2>Find Your Way</h2></div><button type="button" class="mapcard" data-map><span class="mc-art">' + floorView(fm, fm.floors[0], '', true) + '</span><span class="mc-tx"><b>Floor Map</b><span>' + usedRooms().length + ' rooms on ' + fm.floors.filter(function (x) { return usedRooms().some(function (u) { return u.pin.floor === x.floor; }); }).length + ' floors. Tap a room to see where it is.</span></span>' + icon('i-chev') + '</button>';
     var all = places('all');
     if (all.length) {
       var cat = S.xcat || 'all';
