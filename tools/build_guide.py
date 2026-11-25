@@ -14,7 +14,11 @@ subtitle (The Next Chapter Starts in New Orleans; New Orleans. New Ideas. Lastin
 them, At a Glance and the Register Now link, into data/event.json. Each page is checked on its own; one that can't
 be read keeps its last good copy.
 
-Usage: python3 tools/build_guide.py [--html saved.html] [--out data/guide.json] [--summit-html saved.html] [--event-out data/event.json]
+And it reads https://www.mismo.org/events/agenda for the logos the website shows on sessions ("Sponsored by",
+"Presented by", "Powered by"), with each one's day, start time and title, into data/agenda-tags.json, so the app
+tags the same sessions the website does (MISMO Link Office Hours, sponsored workgroups and breaks).
+
+Usage: python3 tools/build_guide.py [--html saved.html] [--out data/guide.json] [--summit-html saved.html] [--event-out data/event.json] [--agenda-html saved.html] [--tags-out data/agenda-tags.json]
 """
 import json, os, re, sys, urllib.parse, urllib.request
 from datetime import datetime, timezone
@@ -22,6 +26,7 @@ from html.parser import HTMLParser
 
 URL = 'https://www.mismo.org/events/hotel'
 SUMMIT_URL = 'https://www.mismo.org/events/summit'
+AGENDA_URL = 'https://www.mismo.org/events/agenda'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
@@ -239,6 +244,65 @@ def build_event(html):
     return ev
 
 
+def logo_name(src):
+    """viant-eye-logo_viant-eye-primary-logo….png -> Viant Eye; cotality-logo.png -> Cotality; xactus_logo_color….png -> Xactus"""
+    f = src.rsplit('/', 1)[-1].split('?')[0]
+    base = re.split(r'[-_]logo', f, maxsplit=1, flags=re.I)[0]
+    base = re.sub(r'\.[a-z]+$', '', base, flags=re.I)
+    return ' '.join(w.capitalize() for w in re.split(r'[-_\s]+', base) if w)
+
+
+def build_tags(html):
+    """The website agenda's "Sponsored by" / "Presented by" plates, each with its day, start time and session title."""
+    t = Tree()
+    t.feed(html)
+    root = t.root
+    out = {'source': AGENDA_URL, 'tags': []}
+    day, cards = None, 0
+    def walk(n):
+        nonlocal day, cards
+        for k in n.elems():
+            cls = k.classes()
+            if 'agd-dayhead' in cls:
+                m = re.search(MONTH + r' (\d{1,2}), (\d{4})', k.text())
+                if m:
+                    mon = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].index(m.group(1)) + 1
+                    day = '%s-%02d-%02d' % (m.group(3), mon, int(m.group(2)))
+                continue
+            if 'agd-card' in cls or 'agd-break' in cls:
+                cards += 1
+                plate = k.find(lambda x: 'agd-sp' in x.classes() or 'agd-bsp' in x.classes())
+                if plate is not None and day:
+                    if 'agd-card' in cls:
+                        h3 = k.find(lambda x: x.tag == 'h3')
+                        title = h3.text() if h3 is not None else ''
+                        tm = k.find(lambda x: 'agd-time' in x.classes())
+                        when = tm.text() if tm is not None else ''
+                    else:
+                        st = k.find(lambda x: x.tag == 'strong')
+                        title = st.text() if st is not None else ''
+                        b = k.find(lambda x: x.tag == 'b')
+                        when = b.text() if b is not None else ''
+                    lab = plate.find(lambda x: x.tag == 'span')
+                    label = lab.text() if lab is not None else 'Sponsored by'
+                    pw = re.search(r',?\s*Powered by (.+)$', title)
+                    a = plate.find(lambda x: x.tag == 'a')
+                    img = plate.find(lambda x: x.tag == 'img')
+                    logo = clean_url(img.attrs.get('src')) if img is not None else ''
+                    tag = {'date': day, 'start': (re.match(r'\d{1,2}:\d{2}\s*[AP]M', when.strip()) or [''])[0],
+                           'title': title[:pw.start()].strip() if pw else title,
+                           'label': 'Powered by' if pw else label,
+                           'name': pw.group(1).strip() if pw else logo_name(logo),
+                           'url': clean_url(a.attrs.get('href')) if a is not None else '', 'logo': logo}
+                    if tag['title'] and tag['logo']:
+                        out['tags'].append(tag)
+                continue
+            walk(k)
+    walk(root)
+    out['cards'] = cards
+    return out
+
+
 def good_event(e):
     return bool(e.get('title') and e.get('subtitle') and e.get('dates') and e.get('paragraphs'))
 
@@ -266,7 +330,7 @@ def write(out, g, what):
 
 def main(argv):
     opts = dict(zip(argv[::2], argv[1::2]))
-    only_files = '--html' in opts or '--summit-html' in opts
+    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts
     failed = 0
     if '--html' in opts or not only_files:
         html = open(opts['--html'], encoding='utf-8').read() if '--html' in opts else fetch(URL)
@@ -285,6 +349,15 @@ def main(argv):
         else:
             print('The Summit page did not have its title, subtitle, dates and paragraphs; nothing written.', file=sys.stderr)
             print(json.dumps(e, indent=1)[:2000], file=sys.stderr)
+            failed = 1
+    if '--agenda-html' in opts or not only_files:
+        html = open(opts['--agenda-html'], encoding='utf-8').read() if '--agenda-html' in opts else fetch(AGENDA_URL)
+        tg = build_tags(html)
+        if tg.get('cards', 0) >= 4:
+            tg.pop('cards')
+            write(opts.get('--tags-out', 'data/agenda-tags.json'), tg, 'Agenda sponsor tags')
+        else:
+            print('The Agenda page did not have its day and session cards; nothing written.', file=sys.stderr)
             failed = 1
     return failed
 
