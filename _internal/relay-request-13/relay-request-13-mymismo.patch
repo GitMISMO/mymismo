@@ -1,0 +1,331 @@
+--- index.orig.mjs	2026-11-25 12:18:32.304175760 -0700
++++ index.mjs	2026-11-25 12:21:48.542883314 -0700
+@@ -2409,6 +2409,308 @@
+   return respond(200, { ok: true });
+ }
+ 
++/* =====================================================================================
++ * MYMISMO: SUMMIT ATTENDEES (relay request 13; Jonna Critchley, Nov 2026)
++ * MyMISMO (resources.mismo.org/mymismo/) is MISMO's own app, replacing the MBA Events app at MISMO's summits.
++ * Its agenda, speakers and sponsors are public files. This adds what needs to know who someone is: a summit's
++ * registered attendees sign in with their registration email and a one-time code, choose whether to be listed in
++ * the attendee directory, see the others who chose to be listed, and message them in the app.
++ *
++ * Who may sign in: only the people on the attendee list Summit HQ publishes (the project's attendeeFeed, in Summit
++ * HQ's PRIVATE data repository): { updated, summits: { <summit id>: { name, first, last,
++ *   people: [{ e (email, lower case), first, last, company, title }] } } }.
++ * Nobody else gets a code, and the answer never says whether an address is registered.
++ *
++ * Routes, none behind the staff sign-in (an attendee has no MISMO Resources account):
++ *   GET  /mymismo/att/ready                           -> { ok, summits: [{ id, name }] } (the summits sign-in is open for)
++ *   POST /mymismo/att/code    { email, summit, startedAt, website }   -> { ok: true } always (a code is emailed if listed)
++ *   POST /mymismo/att/verify  { email, summit, code }   -> { token, me, expiresAt }
++ * and, with that token (Authorization: Bearer):
++ *   GET  /mymismo/att/me                              -> { me }
++ *   PUT  /mymismo/att/profile { listed, title, company, about, linkedin }   -> { me }   (only the caller's own entry)
++ *   GET  /mymismo/att/directory                       -> { people: [...] }   listed attendees only, never an email
++ *   GET  /mymismo/att/messages                        -> { threads: [...] }  only the caller's own conversations
++ *   POST /mymismo/att/message { to, text }            -> { ok, thread }
++ *   POST /mymismo/att/block   { id, on }              -> { me }   a blocked person can no longer message the caller
++ *
++ * An attendee token is signed with a key derived from AUTH_SECRET for this purpose only, so it can never pass the staff
++ * sign-in (authenticate), and a staff token can never pass here. It names the attendee's id and summit, and lasts until
++ * three days after the summit's last day (45 days at most).
++ *
++ * Where things live (the project's own PRIVATE data repository, outside its writable and readable folders, so no page
++ * can read or write them except through these routes):
++ *   att/codes.json               { docs: { <attendee id>: { h (sha-256 of the code), exp, tries, sent: [times] } } }
++ *   att/<summit>/people.json     { docs: { <attendee id>: { name, title, company, about, linkedin, listed, blocked, joined, at } } }
++ *   att/<summit>/messages.json   { docs: { <thread id>: { p: [id, id], m: [{ f, t, at }], at } } }
++ * An attendee id is the first 16 hex characters of sha-256("mymismo:<summit>:<email>"): no email is stored in
++ * people.json or messages.json, and none is ever returned except the caller's own.
++ *
++ * Against misuse, as the other public routes: Origin must be the project's site; a hidden field and a 3-second minimum
++ * on /code; per running copy, codes: 5 an hour from one address, 3 an hour to one email, 300 an hour in all; verify: 20
++ * an hour from one address, and a code is spent after 5 wrong tries; messages: 60 an hour from one attendee, 1,000
++ * characters each, and only to someone listed or already in a conversation with the sender who hasn't blocked them;
++ * profile saves: 30 an hour; reads: 900 an hour each (the app checks for messages about once a minute while open).
++ * The only email sent is the sign-in code, to the person who asked for it (kind mymismo-code, through the same Power
++ * Automate mail flow). Nothing else is ever emailed.
++ * SWITCHED OFF until the mymismo entry in projects.json says "attendees": true; until then every route here answers
++ * 404 NOT_FOUND, exactly as a relay without them does.
++ * ===================================================================================== */
++const MM_PROJECT = 'mymismo', MM_CODES = 'att/codes.json';
++const MM_SUMMIT = /^[a-z0-9][a-z0-9-]{0,30}$/, MM_ID = /^[0-9a-f]{16}$/;
++const MM_CODE_TTL_MS = 15 * 60_000, MM_CODE_TRIES = 5, MM_MIN_MS = 3000, MM_MAX_BYTES = 16_000;
++const MM_LIMITS = { code: 5, codeEmail: 3, codeAll: 300, verify: 20, msg: 60, profile: 30, read: 900 };
++const mmSeen = new Map();   /* "<kind>:<who>" -> [times], per running copy */
++function mmAllowed(kind, who, cap, now) {
++  const hour = now - 3_600_000, key = kind + ':' + who, mine = (mmSeen.get(key) || []).filter(t => t > hour);
++  if (mine.length >= cap) { mmSeen.set(key, mine); return false; }
++  mine.push(now); mmSeen.set(key, mine);
++  if (mmSeen.size > 20_000) for (const [k, v] of mmSeen) if (!v.some(t => t > hour)) mmSeen.delete(k);
++  return true;
++}
++/* The mymismo entry in projects.json: 'attendees': true switches the routes on (only for this project), and
++ * 'attendeeFeed' {repo, branch, path} names Summit HQ's attendee list, in a repository of the same owner, under data/,
++ * ending .json. Off unless both are right. Read here rather than in projectConfig so this request touches nothing shared. */
++async function mmConfig(proj) {
++  if (!proj || proj.key !== MM_PROJECT) return null;
++  const raw = (await projects())[MM_PROJECT];
++  if (!raw || raw.attendees !== true) return null;
++  const feed = feedOf(raw.attendeeFeed);
++  return feed ? { ...proj, attendeeFeed: feed } : null;
++}
++/* where MyMISMO's attendee list is read from, or null */
++function feedOf(f) {
++  if (!f || typeof f !== 'object' || Array.isArray(f)) return null;
++  if (typeof f.repo !== 'string' || !/^[^/]+\/[^/]+$/.test(f.repo) || !sameOwner(f.repo, process.env.PROJECTS_REPO)) return null;
++  if (typeof f.path !== 'string' || !/^data\/[A-Za-z0-9._-]+(\/[A-Za-z0-9._-]+)*\.json$/.test(f.path) || f.path.includes('..')) return null;
++  return { repo: f.repo, branch: typeof f.branch === 'string' && /^[A-Za-z0-9._\/-]{1,60}$/.test(f.branch) ? f.branch : 'main', path: f.path };
++}
++
++export function __resetMyMismoLimits() { mmSeen.clear(); mmFeedCache.at = 0; mmFeedCache.value = null; }
++const mmSecret = () => createHmac('sha256', process.env.AUTH_SECRET || '').update('mymismo-attendee-token-v1').digest('hex');
++const mmIdOf = (summit, email) => createHash('sha256').update(`mymismo:${summit}:${email}`).digest('hex').slice(0, 16);
++const mmHash = code => createHash('sha256').update('mymismo-code:' + String(code)).digest('hex');
++const mmStr = (v, max) => String(v ?? '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').replace(/\r\n?/g, '\n').trim().slice(0, max);
++const mmIp = event => (event.requestContext && event.requestContext.http && event.requestContext.http.sourceIp) || 'unknown';
++const mmEmailOk = e => /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/.test(e);
++const mmPeoplePath = s => `att/${s}/people.json`, mmMsgPath = s => `att/${s}/messages.json`;
++const mmThreadId = (a, b) => [a, b].sort().join('-');
++
++/* Summit HQ's attendee list, cached for a minute so a burst of sign-ins costs one read */
++const mmFeedCache = { at: 0, value: null };
++async function mmFeed(proj) {
++  const now = Date.now();
++  if (mmFeedCache.value && now - mmFeedCache.at < 60_000) return mmFeedCache.value;
++  const f = proj.attendeeFeed; if (!f) return { error: true };
++  const r = await readFile(f.repo, f.branch, f.path);
++  if (r.status !== 200 || !r.data || typeof r.data !== 'object') return mmFeedCache.value || { error: true };
++  const summits = {};
++  for (const [id, s] of Object.entries(r.data.summits || {})) {
++    if (!MM_SUMMIT.test(id) || !s || typeof s !== 'object') continue;
++    const people = new Map();
++    for (const p of Array.isArray(s.people) ? s.people : []) {
++      const e = mmStr(p && p.e, 254).toLowerCase(); if (!mmEmailOk(e)) continue;
++      people.set(e, { first: mmStr(p.first, 60), last: mmStr(p.last, 60), company: mmStr(p.company, 120), title: mmStr(p.title, 120) });
++    }
++    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people };
++  }
++  mmFeedCache.at = now; mmFeedCache.value = { summits };
++  return mmFeedCache.value;
++}
++/* sign-in is open for a summit from when it is listed until three days after its last day */
++function mmOpen(s, now) {
++  const end = Date.parse(s.last + 'T00:00:00Z');
++  return !Number.isFinite(end) || now < end + 4 * 86_400_000;
++}
++function mmPre(event, proj, headers) {
++  if (headers['origin'] !== proj.origin) return { error: respond(403, { error: 'ORIGIN', message: 'MyMISMO only works from MISMO’s own site.' }) };
++  if (String(event.body || '').length > MM_MAX_BYTES) return { error: respond(413, { error: 'TOO_LARGE' }) };
++  const parsed = parseBody(event, MM_MAX_BYTES); if (parsed.error) return { error: parsed.error };
++  return { body: parsed.body && typeof parsed.body === 'object' && !Array.isArray(parsed.body) ? parsed.body : {} };
++}
++function mmWho(headers) {
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  if (!auth.startsWith('Bearer ') || !process.env.AUTH_SECRET) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
++  const t = verifyToken(auth.slice(7).trim(), mmSecret());
++  if (t.error || t.kind !== 'mymismo-attendee' || !MM_ID.test(String(t.sub)) || !MM_SUMMIT.test(String(t.s))) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
++  return { id: t.sub, summit: t.s, email: t.e, name: t.n };
++}
++function mmPublic(id, p) {
++  return { id, name: mmStr(p.name, 120), title: mmStr(p.title, 120), company: mmStr(p.company, 120), about: mmStr(p.about, 600), linkedin: mmStr(p.linkedin, 200) };
++}
++function mmMe(id, p, email) {
++  return { ...mmPublic(id, p), email, listed: p.listed === true, blocked: Array.isArray(p.blocked) ? p.blocked.filter(x => MM_ID.test(x)) : [] };
++}
++async function mmReadPeople(proj, summit) {
++  const r = await readFile(proj.repo, proj.branch || 'main', mmPeoplePath(summit));
++  if (r.status !== 200 && r.status !== 404) return { error: true };
++  return { docs: (r.data && r.data.docs && typeof r.data.docs === 'object') ? r.data.docs : {} };
++}
++
++async function mmCode(event, proj, headers) {
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, now = Date.now(), started = Number(b.startedAt);
++  const fine = respond(200, { ok: true });
++  if (String(b.website || '').trim() || !Number.isFinite(started) || now - started < MM_MIN_MS) return fine;   /* a robot: as if sent, nothing sent */
++  const email = mmStr(b.email, 254).toLowerCase(), summit = mmStr(b.summit, 31);
++  if (!mmEmailOk(email)) return respond(400, { error: 'INVALID', problems: ['That email address doesn’t look right.'] });
++  if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID', problems: ['Pick the summit you’re registered for.'] });
++  if (!mmAllowed('code', mmIp(event), MM_LIMITS.code, now) || !mmAllowed('codeAll', 'all', MM_LIMITS.codeAll, now))
++    return respond(429, { error: 'TOO_MANY', message: 'Too many codes asked for from here. Please wait a few minutes.' });
++  const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
++  const s = feed.summits[summit], person = s && s.people.get(email);
++  if (!s || !person || !mmOpen(s, now)) return fine;   /* the same answer whether or not the address is registered */
++  if (!mmAllowed('codeEmail', email, MM_LIMITS.codeEmail, now)) return fine;
++  const id = mmIdOf(summit, email), code = String(randomInt(0, 1_000_000)).padStart(6, '0');
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM_CODES, d => {
++    d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++    for (const [k, v] of Object.entries(d.docs)) if (!v || !(v.exp > now - 86_400_000)) delete d.docs[k];   /* tidy: a day after expiry */
++    d.docs[id] = { h: mmHash(code), exp: now + MM_CODE_TTL_MS, tries: 0, s: summit };
++    return d;
++  }, 'MyMISMO sign-in code');
++  if (!w || w.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
++  const first = person.first || 'there';
++  const t = `Hello ${first},\n\nYour MyMISMO sign-in code is ${code}. It works once, for 15 minutes.\n\nIf you didn’t ask for it, you can ignore this email.\n\nMISMO`;
++  await sendMail({ kind: 'mymismo-code', to: email, subject: `${code} is your MyMISMO sign-in code`, text: t, html: htmlOf(t) }).catch(e => console.warn('mymismo code mail:', e && e.message));
++  return fine;
++}
++
++async function mmVerify(event, proj, headers) {
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, now = Date.now();
++  if (!mmAllowed('verify', mmIp(event), MM_LIMITS.verify, now)) return respond(429, { error: 'TOO_MANY', message: 'Too many tries from here. Please wait a few minutes.' });
++  const email = mmStr(b.email, 254).toLowerCase(), summit = mmStr(b.summit, 31), code = mmStr(b.code, 12).replace(/\s+/g, '');
++  const wrong = respond(401, { error: 'WRONG_CODE', message: 'That code isn’t right, or it has expired. Ask for a new one.' });
++  if (!mmEmailOk(email) || !MM_SUMMIT.test(summit) || !/^\d{6}$/.test(code)) return wrong;
++  const id = mmIdOf(summit, email);
++  let good = false, refused = null;
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM_CODES, d => {
++    d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++    const c = d.docs[id];
++    if (!c || !(c.exp > now) || c.tries >= MM_CODE_TRIES || c.s !== summit) { refused = wrong; throw new Error('stop'); }
++    if (hashesMatch(c.h, mmHash(code))) { good = true; delete d.docs[id]; }   /* a code works once */
++    else c.tries = (c.tries || 0) + 1;
++    return d;
++  }, 'MyMISMO sign-in').catch(() => (refused ? { refused: true } : { error: 'THROWN' }));
++  if (refused) return refused;
++  if (!w || w.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
++  if (!good) return wrong;
++  const feed = await mmFeed(proj); const s = !feed.error && feed.summits[summit], person = s && s.people.get(email);
++  if (!person) return wrong;
++  /* first sign-in makes their entry, from the registration; never listed until they say so */
++  const p = await updateRepoJson(proj.repo, proj.branch || 'main', mmPeoplePath(summit), d => {
++    d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++    if (!d.docs[id]) d.docs[id] = { name: `${person.first} ${person.last}`.trim(), title: person.title, company: person.company, about: '', linkedin: '', listed: false, blocked: [], joined: now, at: now };
++    return d;
++  }, 'MyMISMO attendee signed in');
++  if (!p || p.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
++  const end = Date.parse(s.last + 'T00:00:00Z'), exp = Math.floor(Math.min(Number.isFinite(end) ? end + 4 * 86_400_000 : now + 45 * 86_400_000, now + 45 * 86_400_000) / 1000);
++  const me = p.data.docs[id];
++  const token = signToken({ kind: 'mymismo-attendee', sub: id, s: summit, e: email, n: me.name, iat: Math.floor(now / 1000), exp }, mmSecret());
++  return respond(200, { token, me: mmMe(id, me, email), expiresAt: new Date(exp * 1000).toISOString() });
++}
++
++async function mmSigned(method, subPath, event, proj, headers) {
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN', message: 'MyMISMO only works from MISMO’s own site.' });
++  const who = mmWho(headers); if (who.error) return who.error;
++  const now = Date.now(), branch = proj.branch || 'main';
++  if (method === 'GET') {
++    if (!mmAllowed('read', who.id, MM_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a minute.' });
++    const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'UNAVAILABLE' });
++    const mine = ppl.docs[who.id];
++    if (!mine) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
++    if (subPath === '/att/me') return respond(200, { me: mmMe(who.id, mine, who.email) });
++    if (subPath === '/att/directory') {
++      const people = Object.entries(ppl.docs).filter(([id, p]) => p && p.listed === true && id !== who.id).map(([id, p]) => mmPublic(id, p))
++        .sort((a, c) => a.name.localeCompare(c.name));
++      return respond(200, { people, listed: mine.listed === true });
++    }
++    if (subPath === '/att/messages') {
++      const r = await readFile(proj.repo, branch, mmMsgPath(who.summit)); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++      const docs = (r.data && r.data.docs) || {}, blocked = new Set(Array.isArray(mine.blocked) ? mine.blocked : []);
++      const threads = [];
++      for (const [tid, t] of Object.entries(docs)) {
++        if (!t || !Array.isArray(t.p) || !t.p.includes(who.id)) continue;
++        const other = t.p.find(x => x !== who.id); if (!other) continue;
++        const op = ppl.docs[other] || {};
++        threads.push({ id: tid, with: { ...mmPublic(other, op), blocked: blocked.has(other) }, at: t.at || 0,
++          m: (Array.isArray(t.m) ? t.m : []).slice(-200).map(x => ({ mine: x.f === who.id, t: mmStr(x.t, 1000), at: x.at })) });
++      }
++      threads.sort((a, c) => c.at - a.at);
++      return respond(200, { threads });
++    }
++    return respond(404, { error: 'NOT_FOUND' });
++  }
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body;
++  if (method === 'PUT' && subPath === '/att/profile') {
++    if (!mmAllowed('profile', who.id, MM_LIMITS.profile, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a few minutes.' });
++    const linkedin = mmStr(b.linkedin, 200);
++    if (linkedin && !/^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/[^\s<>"']+$/i.test(linkedin)) return respond(400, { error: 'INVALID', problems: ['The LinkedIn address should start with https://www.linkedin.com/'] });
++    let out = null, gone = false;
++    const w = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++      const p = d.docs[who.id]; if (!p) { gone = true; throw new Error('stop'); }
++      if ('listed' in b) p.listed = b.listed === true;
++      if ('title' in b) p.title = mmStr(b.title, 120);
++      if ('company' in b) p.company = mmStr(b.company, 120);
++      if ('about' in b) p.about = mmStr(b.about, 600);
++      if ('linkedin' in b) p.linkedin = linkedin;
++      p.at = now; out = p; return d;
++    }, 'MyMISMO attendee updated their profile').catch(() => (gone ? { gone: true } : { error: 'THROWN' }));
++    if (gone) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
++    if (!w || w.error) return respond(502, { error: 'NOT_SAVED', message: 'Your changes couldn’t be saved just now. Please try again.' });
++    return respond(200, { me: mmMe(who.id, out, who.email) });
++  }
++  if (method === 'POST' && subPath === '/att/block') {
++    if (!MM_ID.test(String(b.id)) || b.id === who.id) return respond(400, { error: 'INVALID' });
++    let out = null;
++    const w = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++      const p = d.docs[who.id]; if (!p) throw new Error('stop');
++      const set = new Set(Array.isArray(p.blocked) ? p.blocked : []);
++      if (b.on === false) set.delete(b.id); else set.add(b.id);
++      p.blocked = [...set].slice(0, 500); out = p; return d;
++    }, 'MyMISMO attendee blocked someone').catch(() => ({ error: 'THROWN' }));
++    if (!w || w.error) return respond(502, { error: 'NOT_SAVED' });
++    return respond(200, { me: mmMe(who.id, out, who.email) });
++  }
++  if (method === 'POST' && subPath === '/att/message') {
++    const text = mmStr(b.text, 2000), to = String(b.to || '');
++    if (!MM_ID.test(to) || to === who.id) return respond(400, { error: 'INVALID', problems: ['Pick who to message.'] });
++    if (!text) return respond(400, { error: 'INVALID', problems: ['Write a message first.'] });
++    if (text.length > 1000) return respond(400, { error: 'INVALID', problems: ['Messages are 1,000 characters at most.'] });
++    if (!mmAllowed('msg', who.id, MM_LIMITS.msg, now)) return respond(429, { error: 'TOO_MANY', message: 'You’ve sent a lot of messages. Please wait a few minutes.' });
++    const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'NOT_SENT', message: 'Your message couldn’t be sent just now. Please try again.' });
++    const me = ppl.docs[who.id], them = ppl.docs[to];
++    if (!me) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
++    const tid = mmThreadId(who.id, to);
++    const blockedByThem = them && Array.isArray(them.blocked) && them.blocked.includes(who.id);
++    const blockedByMe = Array.isArray(me.blocked) && me.blocked.includes(to);
++    if (!them || blockedByThem || blockedByMe) return respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' });
++    let reply = null;
++    const w = await updateRepoJson(proj.repo, branch, mmMsgPath(who.summit), d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++      const t = d.docs[tid];
++      if (!t && them.listed !== true) { reply = respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' }); throw new Error('stop'); }
++      const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
++      th.m = Array.isArray(th.m) ? th.m : [];
++      th.m.push({ f: who.id, t: text, at: now });
++      if (th.m.length > 500) th.m = th.m.slice(-500);
++      th.at = now; return d;
++    }, 'MyMISMO message').catch(() => (reply ? { refused: true } : { error: 'THROWN' }));
++    if (reply) return reply;
++    if (!w || w.error) return respond(502, { error: 'NOT_SENT', message: 'Your message couldn’t be sent just now. Please try again.' });
++    return respond(200, { ok: true, thread: tid });
++  }
++  return respond(404, { error: 'NOT_FOUND' });
++}
++async function mmReady(proj) {
++  const feed = await mmFeed(proj), now = Date.now();
++  const summits = feed.error ? [] : Object.entries(feed.summits).filter(([, s]) => mmOpen(s, now)).map(([id, s]) => ({ id, name: s.name, first: s.first, last: s.last }));
++  return respond(200, { ok: true, summits });
++}
++
++
+ export async function handler(event, context) {
+   currentContext = context || null;
+   const method = (event.requestContext?.http?.method || 'GET').toUpperCase();
+@@ -2477,6 +2779,19 @@
+     if (method !== 'POST') return respond(405, { error: 'METHOD' });
+     return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
+   }
++  if (subPath.startsWith('/att/')) {   /* relay request 13: MyMISMO's summit attendees, no staff sign-in */
++    const mm = await mmConfig(proj).catch(() => null);
++    if (!mm) return respond(404, { error: 'NOT_FOUND' });
++    proj = mm;
++    if (!process.env.AUTH_SECRET) return respond(500, { error: 'NO_AUTH_SECRET' });
++    if (subPath === '/att/ready') return method === 'GET' ? mmReady(proj) : respond(405, { error: 'METHOD' });
++    if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
++    if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
++    const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST' }[subPath];
++    if (!ok) return respond(404, { error: 'NOT_FOUND' });
++    if (method !== ok) return respond(405, { error: 'METHOD' });
++    return mmSigned(method, subPath, event, proj, headers);
++  }
+   if (method === 'POST' && subPath === '/auth/code') {   /* relay request 10: the emailed code */
+     if (!proj) return respond(404, { error: 'UNKNOWN_PROJECT' });
+     if (!process.env.AUTH_SECRET) return respond(500, { error: 'NO_AUTH_SECRET', message: 'AUTH_SECRET is not set on the function.' });
