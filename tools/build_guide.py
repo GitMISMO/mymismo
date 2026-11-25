@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build MyMISMO's Hotel and Travel guide from the website.
+"""Build MyMISMO's Hotel and Travel guide, and the summit's welcome, from the website.
 
 Reads the public page https://www.mismo.org/events/hotel (kept by the website's Claude in Higher Logic) and writes
 data/guide.json, so the app always says exactly what the website says: the venue, the room block and its booking
@@ -9,13 +9,19 @@ Run by .github/workflows/guide.yml every morning, on any change to this file, an
 If the page can't be read, or comes back without its venue and cards, nothing is written: the app keeps the last
 good guide and the job fails, so the Failure Watcher sees it.
 
-Usage: python3 tools/build_guide.py [--html saved.html] [--out data/guide.json]
+It also reads https://www.mismo.org/events/summit for the summit's welcome on MyMISMO's summit Home: the title and
+subtitle (The Next Chapter Starts in New Orleans; New Orleans. New Ideas. Lasting Change.), the paragraphs under
+them, At a Glance and the Register Now link, into data/event.json. Each page is checked on its own; one that can't
+be read keeps its last good copy.
+
+Usage: python3 tools/build_guide.py [--html saved.html] [--out data/guide.json] [--summit-html saved.html] [--event-out data/event.json]
 """
 import json, os, re, sys, urllib.request
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 
 URL = 'https://www.mismo.org/events/hotel'
+SUMMIT_URL = 'https://www.mismo.org/events/summit'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
@@ -169,37 +175,114 @@ def good(g):
     return bool(g.get('venue') and g.get('dates') and g.get('book') and n >= 8)
 
 
-def main(argv):
-    src, out = None, 'data/guide.json'
-    for k, v in zip(argv[::2], argv[1::2]):
-        if k == '--html':
-            src = v
-        elif k == '--out':
-            out = v
-    if src:
-        html = open(src, encoding='utf-8').read()
-    else:
-        req = urllib.request.Request(URL, headers={'User-Agent': 'Mozilla/5.0 (MyMISMO guide; +https://resources.mismo.org/mymismo/)', 'Accept': 'text/html'})
-        html = urllib.request.urlopen(req, timeout=30).read().decode('utf-8', 'replace')
-    g = build(html)
-    if not good(g):
-        print('The Hotel and Travel page did not have its venue, booking link and cards; nothing written.', file=sys.stderr)
-        print(json.dumps(g, indent=1)[:2000], file=sys.stderr)
-        return 1
+MONTH = r'(January|February|March|April|May|June|July|August|September|October|November|December)'
+
+
+def build_event(html):
+    """The summit page: the hero (name, dates, venue, Register Now) and the welcome section under it."""
+    t = Tree()
+    t.feed(html)
+    root = t.root
+    ev = {'source': SUMMIT_URL}
+    heroes = [h.parent for h in root.find_all(lambda x: x.tag == 'h1')
+              if any(p.tag == 'p' and re.search(MONTH + r' \d', p.text()) for p in h.parent.elems())]
+    if heroes:
+        hero = heroes[0]
+        ev['name'] = hero.find(lambda x: x.tag == 'h1').text()
+        ps = [p for p in hero.elems() if p.tag == 'p' and p.text()]
+        m = re.match(MONTH + r' [\d\u2013\-, ]+\d{4}', ps[0].text())
+        if m:
+            ev['dates'] = m.group(0).strip()
+            ev['venue'] = ps[0].text()[m.end():].strip()
+        if len(ps) > 1:
+            ev['tagline'] = ps[1].text()
+    reg = root.find(lambda x: x.tag == 'a' and x.text().lower().startswith('register now'))
+    if reg is not None:
+        ev['register'] = clean_url(reg.attrs.get('href'))
+    for h2 in root.find_all(lambda x: x.tag == 'h2'):
+        sibs = h2.parent.elems()
+        i = sibs.index(h2)
+        after = sibs[i + 1:]
+        body = next((d for d in after if d.tag == 'div' and len(d.find_all(lambda x: x.tag == 'p')) >= 3), None)
+        if body is None:
+            continue
+        ev['eyebrow'] = sibs[i - 1].text().title() if i > 0 and sibs[i - 1].tag == 'p' else ''
+        ev['title'] = h2.text()
+        sub = next((p for p in after if p.tag == 'p' and p.text()), None)
+        ev['subtitle'] = sub.text() if sub is not None else ''
+        cols = body.elems()
+        paras, glance = [], []
+        for col in cols:
+            ps = [p for p in col.find_all(lambda x: x.tag == 'p') if p.text()]
+            if ps and ps[0].text().strip().lower() == 'at a glance':
+                rest = [p.text() for p in ps[1:]]
+                k = 0
+                while k < len(rest):
+                    if re.match(MONTH + r' \d', rest[k]) and k + 1 < len(rest) and not re.match(MONTH + r' \d', rest[k + 1]):
+                        glance.append({'when': rest[k], 'what': rest[k + 1]})
+                        k += 2
+                    else:
+                        k += 1
+            else:
+                for p in ps:
+                    # a paragraph that is only a link (the "Will you join us?" line) is the Register button in the app
+                    if p.find(lambda x: x.tag == 'a') is not None and p.find(lambda x: x.tag == 'a').text() == p.text():
+                        continue
+                    paras.append(p.text())
+        ev['paragraphs'] = paras
+        ev['glance'] = glance
+        break
+    return ev
+
+
+def good_event(e):
+    return bool(e.get('title') and e.get('subtitle') and e.get('dates') and e.get('paragraphs'))
+
+
+def fetch(url):
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (MyMISMO guide; +https://resources.mismo.org/mymismo/)', 'Accept': 'text/html'})
+    return urllib.request.urlopen(req, timeout=30).read().decode('utf-8', 'replace')
+
+
+def write(out, g, what):
     try:
         prev = json.load(open(out, encoding='utf-8'))
     except Exception:
         prev = None
     if prev and {k: v for k, v in prev.items() if k != 'updated'} == g:
-        print('No change.')
-        return 0
+        print(what + ': no change.')
+        return
     g = {'updated': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), **g}
     os.makedirs(os.path.dirname(out) or '.', exist_ok=True)
     with open(out, 'w', encoding='utf-8') as f:
         json.dump(g, f, indent=1, ensure_ascii=False)
         f.write('\n')
-    print('Wrote', out, sum(len(s['cards']) for s in g['sections']), 'cards')
-    return 0
+    print(what + ': wrote', out)
+
+
+def main(argv):
+    opts = dict(zip(argv[::2], argv[1::2]))
+    only_files = '--html' in opts or '--summit-html' in opts
+    failed = 0
+    if '--html' in opts or not only_files:
+        html = open(opts['--html'], encoding='utf-8').read() if '--html' in opts else fetch(URL)
+        g = build(html)
+        if good(g):
+            write(opts.get('--out', 'data/guide.json'), g, 'Hotel and Travel')
+        else:
+            print('The Hotel and Travel page did not have its venue, booking link and cards; nothing written.', file=sys.stderr)
+            print(json.dumps(g, indent=1)[:2000], file=sys.stderr)
+            failed = 1
+    if '--summit-html' in opts or not only_files:
+        html = open(opts['--summit-html'], encoding='utf-8').read() if '--summit-html' in opts else fetch(SUMMIT_URL)
+        e = build_event(html)
+        if good_event(e):
+            write(opts.get('--event-out', 'data/event.json'), e, 'Summit welcome')
+        else:
+            print('The Summit page did not have its title, subtitle, dates and paragraphs; nothing written.', file=sys.stderr)
+            print(json.dumps(e, indent=1)[:2000], file=sys.stderr)
+            failed = 1
+    return failed
 
 
 if __name__ == '__main__':
