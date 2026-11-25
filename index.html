@@ -783,6 +783,24 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 @keyframes shimmer{to{background-position:-200% 0}}
 @media (prefers-reduced-motion: reduce){ .pk-wait{animation:none} .pk-shot img{transition:none} }
 
+/* Certified provider */
+button.tl-c{width:100%; text-align:left; cursor:pointer; color:var(--ink); font:inherit}
+button.tl-c:hover{border-color:var(--border-strong)}
+.tl-go{margin-left:auto; color:var(--ink-3); display:inline-flex}
+.tl-go svg{width:16px; height:16px}
+.pv-tag{color:rgba(255,255,255,.85); margin-top:4px}
+.pv-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
+.pv-tags span{font-size:12px; font-weight:700; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); border-radius:4px; padding:3px 8px}
+.cover .k svg{width:13px; height:13px; vertical-align:-2px; margin-right:5px}
+.badges{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px}
+.badge-c{display:grid; justify-items:center; text-align:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 10px; text-decoration:none; color:var(--ink); animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 70ms)}
+.badge-c img{width:86px; height:86px; object-fit:contain; filter:drop-shadow(0 6px 12px rgba(6,32,47,.2))}
+.badge-c b{font-size:14px; line-height:1.25}
+.badge-c span{color:var(--link); font-size:12.5px; font-weight:600}
+.list .row .tag{margin-left:auto}
+.list .row em{font-style:normal; color:var(--ink-3); font-size:12.5px; font-weight:600}
+.pv-about p{font-size:15px; line-height:1.6; margin:0 0 10px}
+
 /* Speaker bio */
 .bio-btn{margin:0 0 4px}
 .bio{font-size:15.5px; line-height:1.6; margin-top:12px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:10px; animation:bio-in .28s ease}
@@ -1540,7 +1558,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -1604,6 +1622,7 @@ function loadExtras() {
   getJSON('/webinars/webinars.json').then(function (w) { WEB = w; again(['dash']); }).catch(function () {});
   getJSON('/certified/new-certifications.json').then(function (c) { CERT = c; again(['dash']); }).catch(function () {});
   getJSON('/certified/individuals.json').then(function (c) { PROS = c; }).catch(function () {});
+  getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
 }
 function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
 function guide() { return G && S.summit && norm(G.dates) === norm(S.summit.dates) ? G : null; }
@@ -1879,8 +1898,9 @@ function certsSheet() {
     h += '<div class="d-h">Recently Certified</div><div class="tl">' + months.map(function (m) {
       var p = m.split('-');
       return '<div class="tl-m"><div class="tl-h">' + esc(MONTH[(+p[1] || 1) - 1] + ' ' + p[0]) + '<span>' + seen[m].length + '</span></div>' + seen[m].map(function (c) {
-        return '<div class="tl-i" style="--c:' + pc[c.program] + '"><span class="tl-dot"></span><div class="tl-c"><div class="tl-top"><b>' + esc(c.org) + '</b><em>' + esc(shortDate(c.certifiedOn)) + '</em></div>' + (c.product ? '<span class="tl-p">' + esc(c.product) + '</span>' : '') +
-          '<div class="tl-tags"><span class="tag" style="--tagc:' + pc[c.program] + '">' + esc(c.program) + '</span>' + (c.newProvider ? '<span class="sparkle">New Provider</span>' : c.first ? '<span class="tag" style="--tagc:var(--good)">First in Program</span>' : '') + '</div></div></div>';
+        var pv = PRV && PRV.providers && PRV.providers[c.slug];
+        return '<div class="tl-i" style="--c:' + pc[c.program] + '"><span class="tl-dot"></span><' + (pv ? 'button type="button" data-prov="' + esc(c.slug) + '"' : 'div') + ' class="tl-c"><div class="tl-top"><b>' + esc(c.org) + '</b><em>' + esc(shortDate(c.certifiedOn)) + '</em></div>' + (c.product ? '<span class="tl-p">' + esc(c.product) + '</span>' : '') +
+          '<div class="tl-tags"><span class="tag" style="--tagc:' + pc[c.program] + '">' + esc(c.program) + '</span>' + (c.newProvider ? '<span class="sparkle">New Provider</span>' : c.first ? '<span class="tag" style="--tagc:var(--good)">First in Program</span>' : '') + (pv ? '<span class="tl-go">' + icon('i-chev') + '</span>' : '') + '</div></' + (pv ? 'button' : 'div') + '></div>';
       }).join('') + '</div>';
     }).join('') + '</div>';
   }
@@ -1901,6 +1921,24 @@ function certsSheet() {
     el.addEventListener('click', function (e) { var b = e.target.closest('[data-pro]'); if (!b) return; cur = b.getAttribute('data-pro'); el.querySelectorAll('[data-pro]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); paintPros(); });
     paintPros();
   }
+}
+/* A certified provider's own page: the same as the website's, from MyMISMO's copy of it */
+function providerSheet(slug) {
+  var p = PRV && PRV.providers && PRV.providers[slug]; if (!p) return;
+  var recent = ((CERT && CERT.certifications) || []).filter(function (c) { return c.slug === slug; });
+  var h = '<div class="cover prov-cover"><span class="k">' + icon('i-cert') + 'MISMO Certified Provider</span><h2>' + esc(p.name) + '</h2>' + (p.tagline ? '<div class="pv-tag">' + esc(p.tagline) + '</div>' : '') +
+    (p.tags && p.tags.length ? '<div class="pv-tags">' + p.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' : '') +
+    (p.logo ? '<div class="big-logo halo shine" style="margin-top:16px"><img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '"></div>' : '') + '</div><div class="sheet-pad">' +
+    '<div class="d-actions">' + (p.website ? '<a class="btn primary" href="' + esc(p.website) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Visit Website</a>' : '') +
+    '<a class="btn" href="' + SITE + '/standards-resources/' + encodeURIComponent(slug) + '" target="_blank" rel="noopener">' + icon('i-globe') + 'On mismo.org</a></div>';
+  if (p.certs && p.certs.length) h += '<div class="d-h">Certifications Held</div><div class="badges">' + p.certs.map(function (c, i) {
+    return '<a class="badge-c" href="' + esc(c.url || (SITE + '/standards-resources/certification')) + '" target="_blank" rel="noopener" style="--i:' + i + '">' + (c.badge ? '<img src="' + esc(c.badge) + '" alt="">' : icon('i-cert')) + '<b>' + esc(c.title) + '</b><span>About this certification</span></a>';
+  }).join('') + '</div>';
+  if (recent.length) h += '<div class="d-h">Recently Certified</div><div class="list">' + recent.map(function (c) { return '<div class="row"><b>' + esc(c.product || c.program) + '</b><span class="tag">' + esc(c.program) + '</span><em>' + esc(shortDate(c.certifiedOn)) + '</em></div>'; }).join('') + '</div>';
+  if (p.about && p.about.length) h += '<div class="d-h">' + esc(p.aboutTitle || ('About ' + p.name)) + '</div><div class="pv-about">' + p.about.map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + '</div>';
+  if (p.website) h += sitePeek(p.website);
+  var el = openSheet(p.name, h + '</div>', { color: '#14486e' });
+  watchPeeks(el);
 }
 function stamp(iso) { var d = new Date(iso); if (isNaN(d)) return ''; var h = d.getHours(), ap = h >= 12 ? 'PM' : 'AM'; return MONTH[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ', ' + (h % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + ap; }
 function webSheet(url, title) {
@@ -2087,21 +2125,24 @@ function peekSrc(url, n) { return 'https://s0.wp.com/mshots/v1/' + encodeURIComp
 function sitePeek(url) {
   var host = ''; try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
   return '<a class="sitepeek" href="' + esc(url) + '" target="_blank" rel="noopener" aria-label="' + esc(host) + ' home page"><span class="pk-bar"><i></i><i></i><i></i><span class="pk-url">' + icon('i-lock') + esc(host) + '</span></span>' +
-    '<span class="pk-shot"><img data-peek="' + esc(url) + '" src="' + esc(peekSrc(url)) + '" alt="' + esc(host) + ' home page" loading="lazy"><span class="pk-wait"></span></span></a>';
+    '<span class="pk-shot"><img data-peek="' + esc(url) + '" src="data/peeks/' + esc(host) + '.jpg" alt="' + esc(host) + ' home page"><span class="pk-wait"></span></span></a>';
 }
 function watchPeeks(root) {
   root.querySelectorAll('img[data-peek]').forEach(function (img) {
-    var tries = 0, url = img.getAttribute('data-peek'), box = img.closest('.sitepeek');
+    var tries = 0, url = img.getAttribute('data-peek'), box = img.closest('.sitepeek'), remote = false;
     function check() {
       if (!img.isConnected) return;
       if (img.complete && img.naturalWidth >= 600) { box.classList.add('ready'); return; }
-      if (++tries > 6) { if (!(img.naturalWidth >= 600)) box.remove(); return; }
+      if (++tries > 8) { box.remove(); return; }
       if (img.complete) img.src = peekSrc(url, tries);
-      setTimeout(check, 3500);
+      setTimeout(check, 2000);
     }
-    img.addEventListener('load', function () { if (img.naturalWidth >= 600) box.classList.add('ready'); });
-    img.addEventListener('error', function () { box.remove(); });
-    setTimeout(check, 1500);
+    img.addEventListener('load', function () { if (img.naturalWidth >= 590) box.classList.add('ready'); });
+    img.addEventListener('error', function () {
+      if (!remote) { remote = true; img.src = peekSrc(url); setTimeout(check, 1500); }   /* no saved picture yet: ask the service */
+      else box.remove();
+    });
+    if (img.complete && img.naturalWidth >= 590) box.classList.add('ready');
   });
 }
 function sponsorSheet(key) {
@@ -2447,6 +2488,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-alerts-on')) { turnOnAlerts(t); return; }
   if (t.hasAttribute('data-alerts-off')) { turnOffAlerts(); return; }
   if (t.hasAttribute('data-slide')) { downloadSlide(t); return; }
+  if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-play')) { playIn(t.closest('.player'), t.getAttribute('data-play')); return; }
   if (t.hasAttribute('data-live')) { liveSheet(); return; }

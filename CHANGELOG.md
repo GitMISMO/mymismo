@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Certifications: tap a provider for its page (logo, certifications held with their badges, About, Visit Website, a picture of its home page), copied from its page on mismo.org. Home-page pictures for sponsors and providers are now made ahead of time, so they show at once.
 - Nov 25, 2026: Webinars: the date block stays beside the title, and the description runs the full width below.
 - Nov 25, 2026: The dashboard shows every tile, in one set order, for everyone (no choosing, no Edit). Each sponsor's panel shows a small picture of their website's home page in a browser frame; tap it to open the site.
 - Nov 25, 2026: Alerts (a bell in the top bar: turn alerts on, and the alerts sent so far) and presentation slides for signed-in attendees, both shown once relay request 14 is live. Mic'd Up redone (player up top, tap any episode to play it there), mismo.org redone as a hub of tiles, Certifications redone (counts that climb, programs as bars, a timeline of recent certifications, certified professionals). The S is centered. The relay's answers are never served from the phone's saved copy.
