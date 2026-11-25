@@ -388,19 +388,35 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .pass:has(.hero-art) .flip, .pass:has(.hero-art) > div{z-index:1}
 
 /* ---------- Summit welcome (Home) ---------- */
-.welcome{margin-top:22px; background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); overflow:hidden; position:relative}
-.welcome:before{content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:linear-gradient(180deg, var(--sky), #1a8fe3)}
-.wl-in{padding:22px 20px 20px 24px}
+.welcome{margin-top:22px; background:var(--surface); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); overflow:hidden}
+.wl-head{padding:20px 20px 18px; background:linear-gradient(135deg, var(--sky-wash, #e4f2fb), var(--surface) 70%); border-bottom:1px solid var(--border)}
+.wl-eye{display:flex; align-items:center; gap:6px; color:var(--link); font-weight:700; font-size:13.5px; margin-bottom:8px}
+.wl-eye svg{width:15px; height:15px; color:var(--star)}
 .wl-title{font-family:var(--cond); font-size:clamp(30px, 8vw, 48px); line-height:1; letter-spacing:-.02em; color:var(--ink); text-wrap:balance}
 .wl-sub{margin:10px 0 0; font-size:clamp(17px, 4.4vw, 22px); font-weight:600; color:var(--link)}
-.wl-cols{display:grid; gap:18px; margin-top:16px}
+.wl-body{padding:16px 20px 14px}
 .wl-body p{margin:0 0 10px; font-size:15.5px; line-height:1.6}
-.wl-glance{display:grid; gap:0; border-top:1px solid var(--border)}
-.wl-glance .g{display:grid; gap:2px; padding:12px 0; border-bottom:1px solid var(--border)}
-.wl-glance b{font-family:var(--cond); font-size:18px}
-.wl-glance span{color:var(--ink-2); font-size:14px}
-.wl-closer{font-family:var(--cond); font-weight:700; font-size:21px; margin:18px 0 12px; color:var(--ink)}
-@media (min-width:760px){ .wl-cols{grid-template-columns:1.6fr 1fr; gap:28px} .wl-glance{border-top:0; border-left:1px solid var(--border); padding-left:20px} }
+.wl-lede{font-size:16.5px !important}
+.wl-glance{display:grid; gap:10px; margin-top:12px}
+@media (min-width:640px){ .wl-glance{grid-template-columns:repeat(auto-fit, minmax(240px,1fr))} }
+.wl-g{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--border); border-left:5px solid var(--wc); border-radius:14px; padding:12px 14px; box-shadow:var(--shadow); animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 80ms)}
+.wl-cal{display:flex; gap:5px}
+.wl-cal .cal{display:grid; flex:none; width:46px; border-radius:8px; overflow:hidden; background:var(--surface); border:1px solid var(--border); text-align:center; box-shadow:0 2px 6px -3px rgba(6,32,47,.35)}
+.wl-cal .cal i{font-style:normal; font-size:10.5px; font-weight:700; color:#fff; background:var(--wc); padding:2px 0}
+.wl-cal .cal b{font-family:var(--cond); font-size:22px; line-height:1.25; color:var(--ink)}
+.wl-cal .cal.wide{width:auto; padding:6px 10px}
+.wl-g.multi{grid-template-columns:1fr; gap:10px}
+.wl-gtx b{display:block; font-family:var(--cond); font-size:18px}
+.wl-gtx span{color:var(--ink-2); font-size:14px; line-height:1.4}
+.wl-cta{position:relative; overflow:hidden; isolation:isolate; margin-top:12px; border-radius:16px; background:#071d2e; color:#fff}
+.wl-cta > .hero-art{z-index:-1; opacity:.85}
+.wl-cta-in{padding:22px 20px 20px}
+.wl-closer{font-family:var(--cond); font-weight:700; font-size:clamp(24px, 6.6vw, 32px); line-height:1.08; margin:0 0 16px; color:#fff; max-width:18ch}
+.wl-btns{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.wl-btns .btn{justify-content:center; margin:0}
+.wl-reg{grid-column:1 / -1; background:var(--sky); border-color:var(--sky); color:#06202f; font-weight:700}
+.wl-ghost{background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.35); color:#fff}
+@media (min-width:640px){ .wl-btns{grid-template-columns:repeat(3, max-content)} .wl-reg{grid-column:auto} .wl-btns .btn{padding-left:20px; padding-right:20px} }
 
 /* ---------- My Dashboard ---------- */
 .dash-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:8px 0 16px}
@@ -1460,17 +1476,29 @@ function heroArt(opts) {
 }
 var EV = null;
 function eventInfo() { return EV && S.summit && norm(EV.dates) === norm(S.summit.dates) ? EV : null; }
+var WL_TONE = ['#1a8fe3', '#1baf7a', '#eda100', '#e87ba4'];
+function glanceDays(when) {
+  var m = /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(.+)$/.exec(String(when || '').trim());
+  if (!m) return null;
+  var days = m[2].replace(/,?\s*\d{4}$/, '').split(/\s*(?:,|and|&)\s*/).filter(function (d) { return /^\d{1,2}$/.test(d); });
+  return days.length ? { mon: m[1].slice(0, 3), days: days } : null;
+}
 function welcomeCard() {
   var e = eventInfo(); if (!e) return '<div class="section-h"><h2>Your Week</h2><button type="button" class="linkbtn" data-go="agenda">Full Agenda</button></div>' + weekStrip();
   var ps = e.paragraphs || [], gl = (e.glance || []).filter(function (g) { return norm(g.when) !== norm(e.dates); });
-  return '<section class="welcome" aria-label="' + esc(e.title) + '"><div class="wl-in">' +
-    '<h2 class="wl-title">' + esc(e.title) + '</h2><p class="wl-sub">' + esc(e.subtitle) + '</p>' +
-    '<div class="wl-cols"><div class="wl-body">' + (ps[0] ? '<p>' + esc(ps[0]) + '</p>' : '') +
-      (ps.length > 1 ? '<div class="wl-more" id="wl-more" hidden>' + ps.slice(1).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div><button type="button" class="linkbtn" data-more="wl-more" aria-expanded="false">Read More</button>' : '') + '</div>' +
-      (gl.length ? '<div class="wl-glance">' + gl.map(function (g) { return '<div class="g"><b>' + esc(g.when) + '</b><span>' + esc(g.what) + '</span></div>'; }).join('') + '</div>' : '') + '</div>' +
-    (e.closer ? '<p class="wl-closer">' + esc(e.closer) + '</p>' : '') +
-    '<div class="d-actions">' + (e.register ? '<a class="btn primary" href="' + esc(e.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register Now</a>' : '') +
-    '<button type="button" class="btn" data-go="agenda">' + icon('i-agenda') + 'Full Agenda</button><button type="button" class="btn" data-go="explore">' + icon('i-hotel') + 'Hotel and Travel</button></div></div></section>';
+  var h = '<section class="welcome" aria-label="' + esc(e.title) + '"><div class="wl-head">' + (e.eyebrow ? '<div class="wl-eye">' + icon('i-star') + esc(e.eyebrow) + '</div>' : '') +
+    '<h2 class="wl-title">' + esc(e.title) + '</h2><p class="wl-sub">' + esc(e.subtitle) + '</p></div>' +
+    '<div class="wl-body">' + (ps[0] ? '<p class="wl-lede">' + esc(ps[0]) + '</p>' : '') +
+    (ps.length > 1 ? '<div class="wl-more" id="wl-more" hidden>' + ps.slice(1).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div><button type="button" class="linkbtn" data-more="wl-more" aria-expanded="false">Read More</button>' : '') + '</div></section>';
+  if (gl.length) h += '<div class="wl-glance">' + gl.map(function (g, i) {
+    var d = glanceDays(g.when), tone = WL_TONE[i % WL_TONE.length];
+    return '<div class="wl-g' + (d && d.days.length > 1 ? ' multi' : '') + '" style="--wc:' + tone + ';--i:' + i + '"><div class="wl-cal">' + (d ? d.days.map(function (n) { return '<span class="cal"><i>' + esc(d.mon) + '</i><b>' + esc(n) + '</b></span>'; }).join('') : '<span class="cal wide"><b>' + esc(g.when) + '</b></span>') + '</div>' +
+      '<div class="wl-gtx"><b>' + esc(g.when) + '</b><span>' + esc(g.what) + '</span></div></div>';
+  }).join('') + '</div>';
+  h += '<section class="wl-cta">' + heroArt() + '<div class="wl-cta-in">' + (e.closer ? '<p class="wl-closer">' + esc(e.closer) + '</p>' : '') +
+    '<div class="wl-btns">' + (e.register ? '<a class="btn wl-reg" href="' + esc(e.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register Now</a>' : '') +
+    '<button type="button" class="btn wl-ghost" data-go="agenda">' + icon('i-agenda') + 'Full Agenda</button><button type="button" class="btn wl-ghost" data-go="explore">' + icon('i-hotel') + 'Hotel and Travel</button></div></div></section>';
+  return h;
 }
 function flipUnit(v, label) {
   var digits = String(v).padStart(2, '0').split('');
@@ -2162,7 +2190,7 @@ function sessionSheet(id) {
     '<div class="w"><div>' + icon('i-agenda') + esc(longDate(x.date)) + '</div><div>' + icon('i-clock') + esc(span(x.a, x.b)) + '</div>' +
     (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + '</div>' : '') +
     (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div>' +
-    '<div class="cv-foot">' + (sp.length ? '<div class="spline"><span class="spons">' + esc(spLabel(x)) + '</span>' + spChips(sp) + '</div>' : (x.type === 'General Session' && gsSponsors().length ? '<div class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</div>' : '')) +
+    '<div class="cv-foot">' +
     (x.room && roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">' + icon('i-pin') + 'Find on Map</button>' : '') + '</div>' +
     '</div><div class="sheet-pad">';
   h += '<div class="d-actions two"><button type="button" class="btn primary' + (isMine(x.id) ? ' on-mine' : '') + '" data-mine-btn="' + esc(x.id) + '" data-toggle-mine="' + esc(x.id) + '">' + mineBtnHtml(x.id) + '</button>' +

@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Summit Home's welcome is broken into parts: the title card, a calendar tile for each part of the week (General Sessions day, workgroup days), and a dark skyline band with Will You Join Us and the buttons. A session's header no longer repeats its sponsor (it's in Sponsored By below).
 - Nov 25, 2026: The sponsors at the foot of Summit Home and Explore are now a dark skyline band with scrolling logos, the top tier as cards and every other tier as logo rows, and See All Sponsors. My Schedule starts empty (with Browse the Agenda) instead of showing the first day. Each restaurant and thing to do on Explore shows a picture of its website's home page.
 - Nov 25, 2026: Fixed the Floor Map card on Explore: its room labels were spilling over the hotel card and its arrow showed huge.
 - Nov 25, 2026: Certifications is now a tile for each certification (RON, eClose, eVault, Product, Certified Consultant, FRAME Advisory Partner, CMSP, AMSP), each with its count and everyone who holds it; tap a company for its page. The lists come from the website's directory pages twice a day. The bars and the recent timeline are gone.
