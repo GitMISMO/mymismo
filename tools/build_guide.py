@@ -16,7 +16,8 @@ be read keeps its last good copy.
 
 And it reads https://www.mismo.org/events/agenda for the logos the website shows on sessions ("Sponsored by",
 "Presented by", "Powered by"), with each one's day, start time and title, into data/agenda-tags.json, so the app
-tags the same sessions the website does (MISMO Link Office Hours, sponsored workgroups and breaks).
+tags the same sessions the website does (MISMO Link Office Hours, sponsored workgroups and breaks), plus each
+group's "Learn More About This Group" video, which the app plays in place.
 
 Usage: python3 tools/build_guide.py [--html saved.html] [--out data/guide.json] [--summit-html saved.html] [--event-out data/event.json] [--agenda-html saved.html] [--tags-out data/agenda-tags.json]
 """
@@ -257,8 +258,15 @@ def build_tags(html):
     t = Tree()
     t.feed(html)
     root = t.root
-    out = {'source': AGENDA_URL, 'tags': []}
+    out = {'source': AGENDA_URL, 'tags': [], 'videos': []}
     day, cards = None, 0
+    # "Learn More About This Group" opens a pop-up (div.agd-vid#vid-…) holding the group's YouTube video
+    vids = {}
+    for v in root.find_all(lambda x: 'agd-vid' in x.classes() and x.attrs.get('id')):
+        fr = v.find(lambda x: x.tag == 'iframe')
+        m = re.search(r'(?:embed/|youtu\.be/|v=)([\w-]{11})', fr.attrs.get('src', '')) if fr is not None else None
+        if m:
+            vids[v.attrs['id']] = m.group(1)
     def walk(n):
         nonlocal day, cards
         for k in n.elems():
@@ -271,6 +279,12 @@ def build_tags(html):
                 continue
             if 'agd-card' in cls or 'agd-break' in cls:
                 cards += 1
+                learn = k.find(lambda x: 'agd-learn' in x.classes())
+                if learn is not None:
+                    vid = vids.get(learn.attrs.get('href', '').lstrip('#'))
+                    h3 = k.find(lambda x: x.tag == 'h3')
+                    if vid and h3 is not None and not any(v['title'] == h3.text() for v in out['videos']):
+                        out['videos'].append({'title': h3.text(), 'youtube': vid})
                 plate = k.find(lambda x: 'agd-sp' in x.classes() or 'agd-bsp' in x.classes())
                 if plate is not None and day:
                     if 'agd-card' in cls:
