@@ -1345,6 +1345,832 @@
    "answer": 1,
    "source": "https://chicagoagentmagazine.com/?p=108854",
    "level": 2
+  },
+  {
+   "id": "q097",
+   "cat": "MISMO Standards",
+   "q": "When Fannie Mae and Freddie Mac updated their eNote requirements, what was the original eNote specification version they had mandated?",
+   "choices": [
+    "1.0",
+    "1.02",
+    "2.1",
+    "3.0"
+   ],
+   "answer": 1,
+   "source": "https://singlefamily.fanniemae.com/media/6536/display",
+   "level": 3
+  },
+  {
+   "id": "q098",
+   "cat": "MISMO Standards",
+   "q": "In Aug. 2023, MISMO's consumer home equity first-lien eNote mapping was based on which standard note?",
+   "choices": [
+    "The 3200 Standard Fixed Rate Note",
+    "The 1003 Loan Application",
+    "The HUD-1 Note",
+    "The 4506-C Note"
+   ],
+   "answer": 0,
+   "source": "https://mba.org/news-and-research/newsroom/news/2023/08/24/MISMO-releases-the-consumer-home-equity-smart-doc-standardized-mapping-and-updated-implementation-guide",
+   "level": 3
+  },
+  {
+   "id": "q099",
+   "cat": "MISMO Standards",
+   "q": "When did MISMO publish its eVault Standards and SMART Doc Validation Rules?",
+   "choices": [
+    "November 2023",
+    "March 2019",
+    "June 2021",
+    "January 2026"
+   ],
+   "answer": 0,
+   "source": "https://mba.org/news-and-research/newsroom/news/2023/11/28/mismo-publishes-evault-standards-and-smart-doc-validation-rules",
+   "level": 3
+  },
+  {
+   "id": "q100",
+   "cat": "MISMO Standards",
+   "q": "The eMortgage CoP co-chair quoted on the July 2026 SMART Doc guide, Charlie Epperson, is with which company?",
+   "choices": [
+    "Snapdocs",
+    "FundingShield",
+    "DocMagic",
+    "Docusign"
+   ],
+   "answer": 1,
+   "source": "https://nationalmortgageprofessional.com/news/mismo-updates-enote-standard-digital-mortgage-adoption-tops-32m-registered-loans",
+   "level": 3
+  },
+  {
+   "id": "q101",
+   "cat": "MISMO Standards",
+   "q": "Fannie Mae receives the Uniform Closing Dataset (UCD) through which tool?",
+   "choices": [
+    "The UCD Collection Solution",
+    "Loan Closing Advisor",
+    "Desktop Originator",
+    "The MERS eRegistry"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
+   "level": 3
+  },
+  {
+   "id": "q102",
+   "cat": "MISMO Standards",
+   "q": "In what year did the GSEs begin phasing in the Uniform Loan Delivery Dataset (ULDD)?",
+   "choices": [
+    "2004",
+    "2012",
+    "2019",
+    "2024"
+   ],
+   "answer": 1,
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
+   "level": 3
+  },
+  {
+   "id": "q103",
+   "cat": "MISMO Standards",
+   "q": "Fannie Mae and Freddie Mac have been working on data standardization under UMDP since when?",
+   "choices": [
+    "May 2010",
+    "January 2001",
+    "October 2015",
+    "March 2020"
+   ],
+   "answer": 0,
+   "source": "https://www.fhfa.gov/Media/Blog/Pages/standardizing-mortgage-data-through-the-UMDP.aspx",
+   "level": 3
+  },
+  {
+   "id": "q104",
+   "cat": "MISMO Standards",
+   "q": "In July 2026, MISMO updated its mortgage insurance data standards to support which credit scores?",
+   "choices": [
+    "FICO 8 and VantageScore 3.0",
+    "VantageScore 4.0 and FICO 10T",
+    "FICO 5 and FICO 2",
+    "Only FICO 9"
+   ],
+   "answer": 1,
+   "source": "https://www.housingwire.com/tag/mismo/",
+   "level": 3
+  },
+  {
+   "id": "q105",
+   "cat": "MISMO Standards",
+   "q": "In September 2026, the GSEs offered a policy exception for sellers needing more time to implement which dataset version?",
+   "choices": [
+    "UAD 3.6",
+    "ULDD 1.0",
+    "UCD 1.0",
+    "URLA 2.0"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program/umdp-announcements",
+   "level": 3
+  },
+  {
+   "id": "q106",
+   "cat": "MISMO Standards",
+   "q": "The redesigned Uniform Appraisal Dataset brings a new appraisal form. What is it called?",
+   "choices": [
+    "The Uniform Residential Appraisal Report (URAR)",
+    "The Closing Disclosure",
+    "The Uniform Loan Application",
+    "The Property Data Report"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program/umdp-announcements?page=2",
+   "level": 3
+  },
+  {
+   "id": "q107",
+   "cat": "Life of Loan",
+   "q": "How long was the public comment period for the 2024 version of the Life of Loan Process Model?",
+   "choices": [
+    "30 days",
+    "60 days",
+    "90 days",
+    "One year"
+   ],
+   "answer": 1,
+   "source": "https://mismo.org/about-MISMO/news-and-accomplishments/news/3",
+   "level": 3
+  },
+  {
+   "id": "q108",
+   "cat": "Life of Loan",
+   "q": "Which group does the Business Process Model CoP work with to provide new terms and definitions?",
+   "choices": [
+    "The Business Glossary Community of Practice",
+    "Information Management",
+    "The Board of Directors",
+    "The API CoP"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/get-involved/workgroup/business-reference-model",
+   "level": 3
+  },
+  {
+   "id": "q109",
+   "cat": "Life of Loan",
+   "q": "Which of these is a Life of Loan process that changed in Version 2026.01?",
+   "choices": [
+    "Perform AVM Model Due Diligence",
+    "Run Payroll",
+    "File Quarterly Taxes",
+    "Renew Office Lease"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q110",
+   "cat": "Life of Loan",
+   "q": "Which of these is one of Life of Loan's supporting materials anyone can download?",
+   "choices": [
+    "Narratives",
+    "A rate lock form",
+    "A servicing transfer letter",
+    "An escrow analysis"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q111",
+   "cat": "Life of Loan",
+   "q": "Which Life of Loan process was renamed from \"Perform ESG Activities\"?",
+   "choices": [
+    "Consider Hazard Risk",
+    "Address Housing Emerging Risks and Opportunities",
+    "Evaluate Loss Mitigation Waterfall",
+    "Perform Delivery"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q112",
+   "cat": "Life of Loan",
+   "q": "Which of these Life of Loan processes covers title work?",
+   "choices": [
+    "Open Title and Closing Order",
+    "Order Credit Report",
+    "Trade MBS",
+    "Perform AVM Model Due Diligence"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q113",
+   "cat": "Life of Loan",
+   "q": "Life of Loan's Version 2026.01 added a new page for which part of the business?",
+   "choices": [
+    "Loan Servicing",
+    "Secondary Marketing / Capital Markets",
+    "Commercial Lending",
+    "Home Equity"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q114",
+   "cat": "Life of Loan",
+   "q": "Which Life of Loan process was copied into Complete Loan Application in Version 2026.01?",
+   "choices": [
+    "Order Credit Report",
+    "Validate Title/Settlement Agent(s)",
+    "Trade MBS",
+    "Utilize SMART Docs"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q115",
+   "cat": "Life of Loan",
+   "q": "Which process mentions MISMO's SMART Doc standard in Life of Loan?",
+   "choices": [
+    "Utilize SMART Docs",
+    "Consider Hazard Risk",
+    "Order Credit Report",
+    "Perform Delivery"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q116",
+   "cat": "Life of Loan",
+   "q": "The notation Life of Loan uses, BPMN, stands for what?",
+   "choices": [
+    "Business Process Model and Notation",
+    "Borrower Payment Management Network",
+    "Basic Process Mapping Notes",
+    "Business Product Mortgage Navigator"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/life-of-loan",
+   "level": 3
+  },
+  {
+   "id": "q117",
+   "cat": "Business Glossary",
+   "q": "Which of these is one of the Business Glossary's eleven listed sources?",
+   "choices": [
+    "The Artificial Intelligence Glossary",
+    "The Federal Register index",
+    "A banking textbook",
+    "The FDIC call report"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 3
+  },
+  {
+   "id": "q118",
+   "cat": "Business Glossary",
+   "q": "The Business Glossary covers business processes, events, terms, calculations, documents and what else?",
+   "choices": [
+    "Forms",
+    "Salaries",
+    "Stock symbols",
+    "Weather events"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 3
+  },
+  {
+   "id": "q119",
+   "cat": "Business Glossary",
+   "q": "Who does MISMO invite to send comments, edits and suggestions on the Business Glossary?",
+   "choices": [
+    "Its users",
+    "Only Board members",
+    "Only the GSEs",
+    "Only regulators"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/standards-resources/business-glossary",
+   "level": 3
+  },
+  {
+   "id": "q120",
+   "cat": "Business Glossary",
+   "q": "What does UMDP stand for?",
+   "choices": [
+    "Uniform Mortgage Data Program",
+    "Universal Mortgage Delivery Process",
+    "Uniform Market Disclosure Policy",
+    "Unified Mortgage Document Portal"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
+   "level": 3
+  },
+  {
+   "id": "q121",
+   "cat": "Business Glossary",
+   "q": "What does UCDP stand for?",
+   "choices": [
+    "Uniform Collateral Data Portal",
+    "Universal Closing Document Program",
+    "Uniform Credit Disclosure Process",
+    "Unified Collateral Delivery Platform"
+   ],
+   "answer": 0,
+   "source": "https://singlefamily.fanniemae.com/node/2811",
+   "level": 3
+  },
+  {
+   "id": "q122",
+   "cat": "Business Glossary",
+   "q": "In MISMO's workgroup names, what does DWG stand for?",
+   "choices": [
+    "Data Warehouse Group",
+    "Development Workgroup",
+    "Document Writing Guild",
+    "Digital Workflow Gateway"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
+   "level": 3
+  },
+  {
+   "id": "q123",
+   "cat": "Business Glossary",
+   "q": "What does HPA, the 1998 law on PMI cancellation, stand for?",
+   "choices": [
+    "Housing Price Act",
+    "Homeowners Protection Act",
+    "Home Purchase Assistance",
+    "Housing Policy Amendment"
+   ],
+   "answer": 1,
+   "source": "https://files-prod.consumerfinance.gov/f/documents/201508_cfpb_compliance-bulletin_private-mortgage-insurance-cancellation-and-te_jpbfQUl.pdf",
+   "level": 3
+  },
+  {
+   "id": "q124",
+   "cat": "Business Glossary",
+   "q": "For PMI rules, \"original value\" usually means which of these?",
+   "choices": [
+    "The lower of the sales price or the appraised value at purchase",
+    "The current market value",
+    "The tax-assessed value",
+    "The loan amount"
+   ],
+   "answer": 0,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/what-is-a-secured-loan-en-202/",
+   "level": 3
+  },
+  {
+   "id": "q125",
+   "cat": "Business Glossary",
+   "q": "After a refinance, what is the \"original value\" used for PMI?",
+   "choices": [
+    "The original purchase price",
+    "The appraised value at the time of the refinance",
+    "The tax-assessed value",
+    "The loan amount"
+   ],
+   "answer": 1,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/what-is-a-tax-levy-en-202/",
+   "level": 3
+  },
+  {
+   "id": "q126",
+   "cat": "How MISMO Works",
+   "q": "At its 1999 announcement, MISMO's name was slightly different. What was it?",
+   "choices": [
+    "Mortgage Industry Data Standards Maintenance Organization",
+    "Mortgage Internet Standards Organization",
+    "Mortgage Information Systems Management Office",
+    "Mortgage Industry Software Messaging Organization"
+   ],
+   "answer": 0,
+   "source": "https://www.coverpages.org/mbaaXMLWG19991012.html",
+   "level": 3
+  },
+  {
+   "id": "q127",
+   "cat": "How MISMO Works",
+   "q": "Where did MBA announce MISMO in October 1999?",
+   "choices": [
+    "At its 86th Annual Convention in Boston",
+    "At a Senate hearing",
+    "At the White House",
+    "At a GSE board meeting"
+   ],
+   "answer": 0,
+   "source": "https://www.coverpages.org/mbaaXMLWG19991012.html",
+   "level": 3
+  },
+  {
+   "id": "q128",
+   "cat": "How MISMO Works",
+   "q": "Which company ran MISMO's day-to-day operations from February 2009 until MBA took them back in December 2010?",
+   "choices": [
+    "Merscorp",
+    "Fannie Mae",
+    "Freddie Mac",
+    "Ellie Mae"
+   ],
+   "answer": 0,
+   "source": "https://www.nationalmortgagenews.com/dailybriefing/2010_437/mba-mismo-mers-1026675-1.html?site=default_tech",
+   "level": 3
+  },
+  {
+   "id": "q129",
+   "cat": "How MISMO Works",
+   "q": "In what year did MISMO become a not-for-profit subsidiary of MBA?",
+   "choices": [
+    "1999",
+    "2004",
+    "2010",
+    "2015"
+   ],
+   "answer": 1,
+   "source": "https://www.guidestar.org/profile/51-0502943",
+   "level": 3
+  },
+  {
+   "id": "q130",
+   "cat": "How MISMO Works",
+   "q": "Which committees oversee MISMO's standards development process, as noted in the Bylaws?",
+   "choices": [
+    "The Residential and Commercial Standards Governance Committees",
+    "The CFPB and FHFA",
+    "The Business Glossary CoP",
+    "The API CoP"
+   ],
+   "answer": 0,
+   "source": "https://newslink.mba.org/mba-newslinks/2024/october/mba-newslink-monday-oct-7-2024/mismo-seeks-nominations-for-standards-governance-committee-members-deadline-oct-7",
+   "level": 3
+  },
+  {
+   "id": "q131",
+   "cat": "How MISMO Works",
+   "q": "Who may serve on MISMO's Standards Governance Committees?",
+   "choices": [
+    "Anyone",
+    "Only MISMO members",
+    "Only MBA staff",
+    "Only regulators"
+   ],
+   "answer": 1,
+   "source": "https://newslink.mba.org/mba-newslinks/2024/october/mba-newslink-monday-oct-7-2024/mismo-seeks-nominations-for-standards-governance-committee-members-deadline-oct-7",
+   "level": 3
+  },
+  {
+   "id": "q132",
+   "cat": "How MISMO Works",
+   "q": "Which members-only exchange tells you how \"E\" your loan can be with each of your counterparties?",
+   "choices": [
+    "The E-Eligibility Exchange",
+    "MISMO Link",
+    "The MERS eRegistry",
+    "The UCD Collection Solution"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/membership/join-mismo",
+   "level": 3
+  },
+  {
+   "id": "q133",
+   "cat": "How MISMO Works",
+   "q": "Which company powers MISMO's Artificial Intelligence (AI) Community of Practice?",
+   "choices": [
+    "Cotality",
+    "Fannie Mae",
+    "Viant Eye",
+    "Experian"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/get-involved/workgroup/artificial-intelligence-(ai)-community-of-practice-(cop)",
+   "level": 3
+  },
+  {
+   "id": "q134",
+   "cat": "How MISMO Works",
+   "q": "The Secondary CoP works on secondary market topics such as loan acquisition and delivery and which kind of reporting?",
+   "choices": [
+    "Regulatory reporting (HMDA, etc.)",
+    "Payroll reporting",
+    "Tax reporting",
+    "Sales reporting"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/get-involved/workgroup/secondary",
+   "level": 3
+  },
+  {
+   "id": "q135",
+   "cat": "How MISMO Works",
+   "q": "The Origination CoP focuses on which three key process areas?",
+   "choices": [
+    "Application, Underwriting and Closing",
+    "Servicing, Default and REO",
+    "Marketing, Sales and Billing",
+    "Appraisal, Title and Flood"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/get-involved/workgroup/origination",
+   "level": 3
+  },
+  {
+   "id": "q136",
+   "cat": "Bootcamp and Certification",
+   "q": "How long do you have to finish the Boot Camp exam once you start?",
+   "choices": [
+    "30 minutes",
+    "60 minutes",
+    "90 minutes",
+    "Three hours"
+   ],
+   "answer": 2,
+   "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp",
+   "level": 3
+  },
+  {
+   "id": "q137",
+   "cat": "Bootcamp and Certification",
+   "q": "What do the CMSP exam fees cost for MISMO members and non-members?",
+   "choices": [
+    "$100 and $200",
+    "$200 and $400",
+    "$400 and $800",
+    "$500 and $1,000"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 3
+  },
+  {
+   "id": "q138",
+   "cat": "Bootcamp and Certification",
+   "q": "After a second unsuccessful CMSP exam attempt, how long must a candidate wait?",
+   "choices": [
+    "30 days",
+    "90 days",
+    "Six months",
+    "Two years"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 3
+  },
+  {
+   "id": "q139",
+   "cat": "Bootcamp and Certification",
+   "q": "What does it cost MISMO members to retest for the CMSP exam?",
+   "choices": [
+    "$50",
+    "$100",
+    "$200",
+    "Nothing"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 3
+  },
+  {
+   "id": "q140",
+   "cat": "Bootcamp and Certification",
+   "q": "Which federal document on voluntary consensus standards is CMSP preparation material?",
+   "choices": [
+    "OMB Circular A-119",
+    "Regulation Z",
+    "The Dodd-Frank Act",
+    "FHA Handbook 4000.1"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
+   "level": 3
+  },
+  {
+   "id": "q141",
+   "cat": "Bootcamp and Certification",
+   "q": "How many AMSP participation points does attending a workgroup earn per year (at least 33% of its meetings)?",
+   "choices": [
+    "1",
+    "3",
+    "5",
+    "10"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
+   "level": 3
+  },
+  {
+   "id": "q142",
+   "cat": "Bootcamp and Certification",
+   "q": "How many AMSP participation points does serving as a MISMO Boot Camp instructor earn?",
+   "choices": [
+    "1",
+    "2",
+    "5",
+    "10"
+   ],
+   "answer": 2,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
+   "level": 3
+  },
+  {
+   "id": "q143",
+   "cat": "Bootcamp and Certification",
+   "q": "What is the AMSP renewal fee for MISMO members?",
+   "choices": [
+    "$25",
+    "$75",
+    "$150",
+    "$200"
+   ],
+   "answer": 1,
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
+   "level": 3
+  },
+  {
+   "id": "q144",
+   "cat": "Bootcamp and Certification",
+   "q": "How many complimentary Boot Camp enrollments a year do MISMO Chair Champion members receive?",
+   "choices": [
+    "1",
+    "3",
+    "5",
+    "10"
+   ],
+   "answer": 3,
+   "source": "https://newslink.mba.org/mba-newslinks/2026/february/mismo-boot-camp-online-feb-23-24/",
+   "level": 3
+  },
+  {
+   "id": "q145",
+   "cat": "Bootcamp and Certification",
+   "q": "Besides online classes, where was MISMO's August 2026 in-person Boot Camp held?",
+   "choices": [
+    "Reston, VA",
+    "Dallas, TX",
+    "New Orleans, LA",
+    "Chicago, IL"
+   ],
+   "answer": 0,
+   "source": "https://www.mismo.org/detail-pages/event/2026/08/26/default-calendar/mismo-boot-camp-august-2026-reston-va-82057",
+   "level": 3
+  },
+  {
+   "id": "q146",
+   "cat": "Mortgage Industry",
+   "q": "On what date did the Loan Estimate and Closing Disclosure (Know Before You Owe) rule take effect for most mortgages?",
+   "choices": [
+    "January 1, 2014",
+    "October 3, 2015",
+    "July 21, 2011",
+    "March 15, 2020"
+   ],
+   "answer": 1,
+   "source": "https://www.consumerfinance.gov/archive/blog/know-before-you-owe-new-mortgage-disclosures-new-rule/",
+   "level": 3
+  },
+  {
+   "id": "q147",
+   "cat": "Mortgage Industry",
+   "q": "How many overlapping disclosure forms did the Loan Estimate and Closing Disclosure replace?",
+   "choices": [
+    "Two",
+    "Three",
+    "Four",
+    "Six"
+   ],
+   "answer": 2,
+   "source": "https://www.consumerfinance.gov/archive/blog/know-before-you-owe-making-the-mortgage-process-easier-for-you/",
+   "level": 3
+  },
+  {
+   "id": "q148",
+   "cat": "Mortgage Industry",
+   "q": "The federal PMI cancellation rights described by the CFPB apply to single-family principal residences closed on or after what date?",
+   "choices": [
+    "July 29, 1999",
+    "January 1, 2008",
+    "October 3, 2015",
+    "July 21, 2010"
+   ],
+   "answer": 0,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
+   "level": 3
+  },
+  {
+   "id": "q149",
+   "cat": "Mortgage Industry",
+   "q": "To have PMI canceled at 80%, which of these must a borrower be able to certify?",
+   "choices": [
+    "There are no junior liens on the home",
+    "They have a second home",
+    "They refinanced in the last year",
+    "They have no other loans of any kind"
+   ],
+   "answer": 0,
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
+   "level": 3
+  },
+  {
+   "id": "q150",
+   "cat": "Mortgage Industry",
+   "q": "On what date was the Housing and Urban Development Act signed, creating Ginnie Mae?",
+   "choices": [
+    "August 1, 1968",
+    "July 4, 1970",
+    "October 1, 1938",
+    "December 1, 1971"
+   ],
+   "answer": 0,
+   "source": "https://www.ginniemae.gov/newsroom/HAPS/Pages/Post.aspx?PostID=68",
+   "level": 3
+  },
+  {
+   "id": "q151",
+   "cat": "Mortgage Industry",
+   "q": "Since 1970, Ginnie Mae has guaranteed about how much in mortgage-backed securities overall?",
+   "choices": [
+    "$97 billion",
+    "$970 billion",
+    "More than $9.7 trillion",
+    "$97 trillion"
+   ],
+   "answer": 2,
+   "source": "https://www.ginniemae.gov/newsroom/HAPS/Pages/Post.aspx?PostID=68",
+   "level": 3
+  },
+  {
+   "id": "q152",
+   "cat": "Mortgage Industry",
+   "q": "In what year did Freddie Mac issue the first conventional loan mortgage-backed security?",
+   "choices": [
+    "1968",
+    "1971",
+    "1981",
+    "1992"
+   ],
+   "answer": 1,
+   "source": "https://www.mortgagecalculator.org/resources/history-of-the-government-sponsored-enterprises.pdf",
+   "level": 3
+  },
+  {
+   "id": "q153",
+   "cat": "Mortgage Industry",
+   "q": "Which law created Freddie Mac in July 1970?",
+   "choices": [
+    "The Emergency Home Finance Act of 1970",
+    "The National Housing Act",
+    "The Dodd-Frank Act",
+    "The Fair Housing Act"
+   ],
+   "answer": 0,
+   "source": "https://www.heritage.org/node/11578",
+   "level": 3
+  },
+  {
+   "id": "q154",
+   "cat": "Mortgage Industry",
+   "q": "In Ginnie Mae's model, the Ginnie Mae guaranty sits in which loss position, behind the borrower, the federal insurer and the issuer?",
+   "choices": [
+    "First",
+    "Second",
+    "Third",
+    "Fourth"
+   ],
+   "answer": 3,
+   "source": "https://ginniemae.gov/about_us/what_we_do/Annual_Reports/annual_report11.pdf",
+   "level": 3
+  },
+  {
+   "id": "q155",
+   "cat": "Mortgage Industry",
+   "q": "Which section of the National Housing Act pledges the full faith and credit of the United States to Ginnie Mae's guaranty?",
+   "choices": [
+    "Section 8",
+    "Section 203(b)",
+    "Section 306(g)",
+    "Section 502"
+   ],
+   "answer": 2,
+   "source": "https://www.ginniemae.gov/issuers/program_guidelines/Lists/MBSGuideAPMsLib/Attachments/173/App%20IV-04%2011717.pdf",
+   "level": 3
   }
  ]
 }
