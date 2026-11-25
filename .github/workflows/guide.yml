@@ -38,7 +38,7 @@ jobs:
           git config user.name "MyMISMO Guide"
           git config user.email "jcritchley@mismo.org"
           git add -A data/
-          if git diff --cached --quiet; then echo "No change."; else git commit -m "Hotel and Travel guide, summit welcome, agenda logos, certified providers and home-page pictures" && git push; fi
+          if git diff --cached --quiet; then echo "No change."; else git commit -m "Hotel and Travel guide, summit welcome, agenda logos, certified providers and home-page pictures" && for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 5; done; fi
       - name: Fail if a page couldn't be read (the other was still saved)
         if: env.GUIDE_FAILED == '1'
         run: exit 1
