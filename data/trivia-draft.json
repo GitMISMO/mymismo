@@ -1055,15 +1055,15 @@
   {
    "id": "q76",
    "cat": "How MISMO Works",
-   "q": "Who may vote on proposed MISMO standards?",
+   "q": "Which of these is a benefit of MISMO membership?",
    "choices": [
-    "Anyone who attends a meeting",
-    "Only MISMO members",
-    "Only MISMO staff",
-    "Only regulators"
+    "A seat on the CFPB board",
+    "The ability to vote within MISMO's 30+ workgroups",
+    "A discount on mortgage rates",
+    "An automatic CMSP certification"
    ],
    "answer": 1,
-   "source": "https://en.wikipedia.org/wiki/MISMO",
+   "source": "https://www.mismo.org/membership/join-mismo",
    "level": 2
   },
   {
@@ -1329,7 +1329,7 @@
     "Every bank's"
    ],
    "answer": 2,
-   "source": "https://en.wikipedia.org/wiki/Government_National_Mortgage_Association",
+   "source": "https://ginniemae.gov/about_us/who_we_are",
    "level": 3
   },
   {
