@@ -684,6 +684,11 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-cat span{color:var(--ink-2); font-size:12px; line-height:1.3}
 .tv-board{background:linear-gradient(180deg, #0d314c, #071d2e); border-radius:16px; padding:18px 14px 14px; color:#fff; text-align:center}
 .tv-board p{color:rgba(255,255,255,.75); font-size:13.5px; margin:12px 0 0}
+.tv-facts{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; margin-top:12px}
+.tv-facts span{display:grid; justify-items:center; align-content:start; gap:5px; padding:9px 4px; border-radius:10px; background:rgba(255,255,255,.08); color:#fff; font-size:12px; font-weight:700; line-height:1.25; text-align:center}
+.tv-facts svg{width:18px; height:18px; color:#74bfeb}
+.tv-champ .tv-facts{margin:0 0 10px}
+.tv-champ .tv-facts svg{color:#e2b33c}
 .tv-podium{display:flex; justify-content:center; align-items:flex-end; gap:8px}
 .tv-step{display:grid; justify-items:center; gap:6px; width:30%}
 .tv-av{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.1); border:2px dashed var(--pc); color:var(--pc); font-weight:800; font-size:18px}
@@ -727,10 +732,10 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-cp i{width:10px; height:10px; border-radius:50%; background:var(--oc)}
 .tv-cp.on{border-color:var(--oc); background:color-mix(in srgb, var(--oc) 22%, transparent)}
 .tv-levels{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin:0 auto; max-width:420px}
-.tv-lv{display:grid; gap:2px; justify-items:center; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:12px; padding:10px 6px; color:#fff; font:inherit; cursor:pointer; transition:transform .15s ease, border-color .15s ease, background .15s ease}
+.tv-lv{display:grid; gap:2px; justify-items:center; align-content:start; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:12px; padding:10px 6px; color:#fff; font:inherit; cursor:pointer; transition:transform .15s ease, border-color .15s ease, background .15s ease}
 .tv-lv b{font-family:var(--cond); font-size:20px}
 .tv-lv span{font-size:12px; color:rgba(255,255,255,.7)}
-.tv-lv em{font-style:normal; font-size:12px; font-weight:800; color:var(--lc)}
+.tv-lv em{font-style:normal; font-size:15px; font-weight:800; color:var(--lc)}
 .tv-lv.on{border-color:var(--lc); background:color-mix(in srgb, var(--lc) 22%, transparent); transform:translateY(-2px); box-shadow:0 10px 24px -12px var(--lc)}
 .tg-lvl{display:inline-block; margin-right:6px; font-weight:800; font-size:12px; color:#06202f; background:var(--lc); padding:4px 10px; border-radius:5px}
 .tg-study{display:flex; align-items:center; justify-content:center; gap:8px; color:#74bfeb; font-weight:800}
@@ -745,7 +750,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-tplayed{color:var(--ink-2); font-size:13px; margin:8px 0 0; text-align:center}
 .tv-go{display:inline-flex; align-items:center; gap:8px; margin-top:16px; background:linear-gradient(90deg, #74bfeb, #2477b8); color:#06202f; border:0; border-radius:10px; padding:14px 22px; font:inherit; font-weight:800; font-size:17px; cursor:pointer; box-shadow:0 10px 30px -10px rgba(116,191,235,.9); animation:tv-bob 2.4s ease-in-out infinite}
 .tv-go svg{width:18px; height:18px}
-.tv-tnote{display:block; margin-top:10px; font-size:12.5px; color:rgba(255,255,255,.65)}
+.tv-tnote{display:block; margin-top:10px; font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.65)}
+.tv-counts{display:flex; width:max-content; margin:0 auto 6px; align-items:center; gap:6px; padding:4px 10px; border-radius:6px; background:rgba(27,175,122,.18); border:1px solid rgba(27,175,122,.55); color:#4fc79b; font-size:12px; font-weight:800}
+.tv-counts svg{width:14px; height:14px; flex:none}
 .tg-sheet .sheet-body{background:radial-gradient(130% 90% at 50% 0%, #14486e 0%, #071d2e 55%, #040f18 100%)}
 .tg{color:#fff; padding:14px 16px 28px; min-height:calc(100vh - 120px); display:flex; flex-direction:column; gap:14px}
 .tg-top{display:flex; align-items:center; justify-content:space-between; gap:12px}
@@ -2117,7 +2124,7 @@ function triviaSheet() {
       var on = load('trivia-cat', '') === c[0];
       return '<button type="button" class="tv-cat' + (c[0] ? '' : ' mixed') + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0] || c[1]) + '</b><span>' + esc(c[0] ? c[1] : c[3]) + '</span>' + icon('i-check') + '</button>';
     }).join('') + '</div>' +
-    '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.secs + ' seconds') + '</span><em>' + (l.study ? 'Learn as you go' : l.mult + '&times; points') + '</em></button>'; }).join('') + '</div>' +
+    '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.secs + ' sec') + '</span><em>' + (l.study ? 'Learn' : l.mult + '&times;') + '</em></button>'; }).join('') + '</div>' +
     '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote" id="tv-lbnote"></span></div>' :
     '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
   h += '<div class="tv-modes">' +
@@ -2125,11 +2132,11 @@ function triviaSheet() {
     '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone. Same questions, one winner.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
   h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
       return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
-    '</div><p>A fresh leaderboard every month: it starts over on the 1st. It ranks each player\'s single best Hard round of Mixed questions, and the month\'s top scorer earns a spot in the Quarterly Championship. If a champion has already qualified that quarter, the month\'s next-highest scorer takes the spot.</p></div>';
+    '</div><div class="tv-facts"><span>' + icon('i-cal') + 'New Every Month</span><span>' + icon('i-star') + 'Your Best Round</span><span>' + icon('i-grid') + 'Hard, Mixed</span></div></div>';
   var shortCat = ['Standards', 'Life of Loan', 'Glossary', 'MISMO', 'Certs', 'Mortgage'];
   h += '<div class="d-h">Quarterly Championship</div><section class="tv-champ"><div class="tc-head">' + icon('i-cert') + '<div><b>The Championship Board</b><span>Three monthly champions. One tougher board. One winner.</span></div></div>' +
     '<div class="tc-board" aria-hidden="true">' + shortCat.map(function (c, k) { return '<div class="tc-col" style="--k:' + k + '"><span class="tc-cat">' + esc(c) + '</span>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<span class="tc-cell" style="--r:' + r + '">' + v + '</span>'; }).join('') + '</div>'; }).join('') + '</div>' +
-    '<p>Each quarter, the three monthly champions face off on a special board of harder questions. Each plays the board on their own phone during the championship window, and once you start, the clock runs until you finish. The highest score is recognized at the next MISMO Summit and takes home a prize.</p><em>' + icon('i-lock') + 'Opens Soon</em></section>';
+    '<div class="tv-facts"><span>' + icon('i-people') + '3 Monthly Champs</span><span>' + icon('i-clock') + 'One Timed Try</span><span>' + icon('i-cert') + 'Prize at the Summit</span></div><em>' + icon('i-lock') + 'Opens Soon</em></section>';
   h += test && ts.games ? '<div class="d-h">Your Test Runs</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b || '&mdash;') + '</b><span>Best ' + l.name + '</span></div>'; }).join('') + '</div><p class="tv-tplayed">' + ts.games + (ts.games === 1 ? ' round' : ' rounds') + ' played, most right ' + (ts.bestRight || 0) + ' of 10</p>' :
     '<div class="d-h">Your Scores</div><div class="tv-stats"><div><b>&mdash;</b><span>Best Score</span></div><div><b>&mdash;</b><span>Games Played</span></div><div><b>&mdash;</b><span>Head to Head Wins</span></div></div>';
   h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions. Trivia opens here once they\'re in.</div></div>';
@@ -2137,7 +2144,7 @@ function triviaSheet() {
   function lbNote() {
     var n = el.querySelector('#tv-lbnote'); if (!n) return;
     var counts = load('trivia-level', 1) === 2 && !load('trivia-cat', '');
-    n.innerHTML = (counts ? icon('i-star') + 'Hard and Mixed: this kind of round will count for the leaderboard.' : 'Only Hard rounds of Mixed questions will count for the leaderboard.') + ' Test scores stay on this phone.';
+    n.innerHTML = counts ? '<span class="tv-counts">' + icon('i-check') + 'Counts for the Leaderboard</span>' : 'Only Hard rounds of Mixed questions count for the leaderboard.';
   }
   lbNote();
   el.addEventListener('click', function (e) {

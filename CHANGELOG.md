@@ -38,3 +38,4 @@
 - Nov 25, 2026: First draft of the summit section: Home, Agenda, My Schedule, Speakers, Sponsors, Add to Calendar, offline, installable.
 - Nov 25, 2026: MISMO Trivia: 55 more Hard questions (151 in all, 85 Hard) for the monthly leaderboard; relay request 15 plan written for Perry.
 - Nov 25, 2026: Relay request 15 for Perry is complete (patch and 57 checks): ranked Trivia rounds, monthly board, Quarterly Championship, emailed-code sign-in for anyone, delete my account.
+- Nov 25, 2026: MISMO Trivia: the leaderboard and championship explain themselves with three short tiles each instead of paragraphs; Hard plus Mixed shows a Counts for the Leaderboard tag (the oversized star is gone); difficulty cards read 25 sec / 1× so nothing wraps.
