@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Sponsors page: every logo is centered and fits inside its box, including square logos like ICE and Crittora.
 - Nov 25, 2026: MISMO Trivia: the leaderboard starts over every month, and a new Quarterly Championship section shows the plan (the three monthly champions play a tougher Championship Board; the winner is recognized at the next MISMO Summit and wins a prize). Both open with the game.
 - Nov 25, 2026: Trivia Test Run: you pick your questions by tapping a category card (or Mixed) under Pick Your Questions, then the difficulty and Play in the panel below it. The header no longer has a category picker.
 - Nov 25, 2026: MISMO Trivia Test Run has 96 draft questions (16 per category; 27 Easy, 39 Medium, 30 Hard), each checked against a public source.

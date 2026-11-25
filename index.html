@@ -616,7 +616,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .spc{position:relative; overflow:hidden; display:flex; flex-direction:column; gap:10px; align-items:stretch; text-align:left; border:1px solid var(--border); border-top:4px solid var(--tierc); border-radius:14px; background:var(--surface); padding:12px; cursor:pointer; color:var(--ink); font:inherit; box-shadow:var(--shadow)}
 .spc-logo{display:grid; place-items:center; height:78px; background:#fff; border-radius:10px; padding:10px}
 .tier2.top .spc-logo{height:120px}
-.spc-logo img{max-width:100%; max-height:100%; object-fit:contain}
+.spc-logo img{display:block; width:100%; height:100%; min-height:0; object-fit:contain; object-position:center}   /* fills the box and stays centered, whatever the logo's shape */
 .spc-logo b{color:#0d314c}
 .spc-tx b{display:block; font-size:15px}
 .spc-tx span{display:block; color:var(--ink-2); font-size:12.5px; line-height:1.35; margin-top:3px}
