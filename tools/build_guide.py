@@ -106,9 +106,11 @@ def build(html):
     t.feed(html)
     root = t.root
     out = {'source': URL}
-    h1 = root.find(lambda x: x.tag == 'h1')
-    if h1 is not None:
-        hero = h1.parent
+    # The site's own header can carry an h1 of its own, so the hero is the h1 whose box holds the dates and venue line.
+    heroes = [h.parent for h in root.find_all(lambda x: x.tag == 'h1')
+              if h.parent.find(lambda x: x.tag == 'span' and x.parent.tag == 'p')]
+    if heroes:
+        hero = heroes[0]
         ps = [p for p in hero.elems() if p.tag == 'p']
         if ps:
             out['summit'] = ps[0].text()
@@ -145,6 +147,19 @@ def build(html):
         if cards or sec.get('roomBlock'):
             sections.append(sec)
     out['sections'] = sections
+    # If the hero couldn't be read, the room block names the hotel and the dates.
+    rb = next((x['roomBlock'] for x in sections if x.get('roomBlock')), None)
+    venue = next((x for x in sections if x['id'] == 'the-venue'), None)
+    if venue and not out.get('venue'):
+        out['venue'] = venue['title']
+    if not out.get('address'):
+        hit = root.find(lambda x: x.tag == 'p' and re.fullmatch(r'\d+ [^,]+, [^,]+, [A-Z]{2} \d{5}', x.text() or ''))
+        if hit is not None:
+            out['address'] = hit.text()
+    if rb and not out.get('dates'):
+        m = re.search(r'([A-Z][a-z]+ \d{1,2}\s*[\u2013-]\s*\d{1,2}, \d{4})', rb['text'])
+        if m:
+            out['dates'] = m.group(1)
     return out
 
 
