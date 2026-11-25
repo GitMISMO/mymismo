@@ -2632,6 +2632,8 @@ function settingsSheet() {
     '<input type="text" id="set-name" class="set-input" maxlength="30" autocomplete="given-name" placeholder="First name" value="' + esc(load('myname', '')) + '"></div></div>';
   h += st ? setRow('i-lock', esc(st.name || st.email), 'Signed in as MISMO staff' + (st.email ? ', ' + esc(st.email) : ''), '<button type="button" class="btn small" data-set="staff-out">Sign Out</button>') :
     setRow('i-lock', 'MISMO Staff and Contractors', 'Sign in with your MISMO Resources account.', '<button type="button" class="btn small" data-set="staff-in">Sign In</button>');
+  if (!st) h += '<div class="set-row"><span class="set-ic">' + icon('i-star') + '</span><div class="set-tx"><b>Reviewer Code</b><span>' + (load('trivia-tester', false) ? 'Reviewer access is on: MISMO Trivia shows Play a Test Round.' : 'If MISMO gave you a reviewer code, enter it to try features before they open.') + '</span>' +
+    (load('trivia-tester', false) ? '' : '<input type="text" id="set-code" class="set-input" maxlength="20" autocomplete="off" autocapitalize="characters" placeholder="Code">') + '</div></div>';
   h += '</div>';
   h += '<div class="d-h">Notifications</div><div class="set-card">';
   if (!S.summit) h += setRow('i-bell', 'Summit Alerts', 'Room changes and news from the MISMO team during a summit. You can turn them on once the summit is in the app.');
@@ -2658,6 +2660,8 @@ function settingsSheet() {
   var el = openSheet('Settings', h + '</div>', { plain: true });
   var nm = el.querySelector('#set-name');
   if (nm) nm.addEventListener('input', function () { var v = nm.value.trim().split(/\s+/)[0] || ''; if (v) save('myname', v); else drop('myname'); if (S.page === 'dash' || S.page === 'home') renderPage(S.page); });
+  var cd = el.querySelector('#set-code');
+  if (cd) cd.addEventListener('input', function () { if (cd.value.trim().toUpperCase() === 'TRIVIA') { save('trivia-tester', true); closeSheet(false); settingsSheet(); } });
   if (nm && S.focusName) { S.focusName = false; setTimeout(function () { nm.focus(); }, 350); }
   el.addEventListener('click', function (e) {
     var b = e.target.closest('[data-set]'); if (!b) return; var k = b.getAttribute('data-set');
