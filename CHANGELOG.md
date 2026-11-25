@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Anyone can have their name in the greeting: Add Your Name under the greeting (or Your Name in Settings), kept on the phone. Staff and attendees who sign in get theirs from their account.
 - Nov 25, 2026: Speaker panels: Their Session card (the General Sessions, with day, time and room) with Add to Schedule and Add to Calendar.
 - Nov 25, 2026: Dark mode moved into Settings (no Dark button in the top bar). The Settings gear sits before the sign-in chip, at the same size.
 - Nov 25, 2026: MISMO Trivia, coming soon: a dashboard tile and a page with Solo and Head to Head, the six categories, the leaderboard and your scores, all waiting on the questions. No sample questions or scores.

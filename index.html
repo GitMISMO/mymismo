@@ -695,6 +695,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .sp-sess .d-actions{margin:12px 0 0}
 
 /* Settings */
+.set-input{display:block; width:100%; margin-top:8px; font:inherit; font-size:16px; color:var(--ink); background:var(--surface-2); border:1px solid var(--border-strong); border-radius:8px; padding:9px 11px}
+.set-input:focus{outline:2px solid var(--sky); outline-offset:1px}
+.dh-name{display:block; margin-top:6px; font-size:14px}
 .set .d-h:first-child{margin-top:4px}
 .set-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden}
 .set-row{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; padding:12px 14px; border-top:1px solid var(--border); color:var(--ink); text-decoration:none}
@@ -1958,11 +1961,12 @@ function dashPicks() { return DASH.map(function (d) { return d.id; }); }
 function staffSession() { try { return window.ResourcesSession && ResourcesSession.current(); } catch (e) { return null; } }
 function firstName() {
   var st = staffSession(); if (st && st.name) return String(st.name).split(/\s+/)[0];
-  return A.me && A.me.first ? A.me.first : '';
+  if (A.me && A.me.first) return A.me.first;
+  return load('myname', '');   /* anyone else: the name they gave in Settings, kept on this phone */
 }
 function greetHead() {
   var n = new Date(), f = firstName();
-  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1></div></div>';
+  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1>' + (f ? '' : '<button type="button" class="linkbtn dh-name" data-myname>Add Your Name</button>') + '</div></div>';
 }
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
 function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
@@ -2478,6 +2482,8 @@ function settingsSheet() {
   h += '<div class="d-h">Account</div><div class="set-card">';
   if (S.summit && A.ready) h += A.token && A.me ? setRow('i-user', esc(A.me.name || 'Signed in'), 'Signed in as a summit attendee', '<button type="button" class="btn small" data-set="profile">Profile</button>') :
     setRow('i-user', 'Summit Attendees', 'Sign in with your registration email to message other attendees and get presentations.', '<button type="button" class="btn small primary" data-set="att-in">Sign In</button>');
+  if (!st && !(A.me && A.me.first)) h += '<div class="set-row"><span class="set-ic">' + icon('i-user') + '</span><div class="set-tx"><b>Your Name</b><span>For your greeting. Kept on this phone only.</span>' +
+    '<input type="text" id="set-name" class="set-input" maxlength="30" autocomplete="given-name" placeholder="First name" value="' + esc(load('myname', '')) + '"></div></div>';
   h += st ? setRow('i-lock', esc(st.name || st.email), 'Signed in as MISMO staff' + (st.email ? ', ' + esc(st.email) : ''), '<button type="button" class="btn small" data-set="staff-out">Sign Out</button>') :
     setRow('i-lock', 'MISMO Staff and Contractors', 'Sign in with your MISMO Resources account.', '<button type="button" class="btn small" data-set="staff-in">Sign In</button>');
   h += '</div>';
@@ -2504,6 +2510,9 @@ function settingsSheet() {
     '<a class="set-row link" href="mailto:info@mismo.org?subject=MyMISMO"><span class="set-ic">' + icon('i-mail') + '</span><div class="set-tx"><b>Contact MISMO</b><span>info@mismo.org</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="https://www.mismo.org" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-globe') + '</span><div class="set-tx"><b>mismo.org</b><span>The MISMO website</span></div>' + icon('i-chev') + '</a></div>';
   var el = openSheet('Settings', h + '</div>', { plain: true });
+  var nm = el.querySelector('#set-name');
+  if (nm) nm.addEventListener('input', function () { var v = nm.value.trim().split(/\s+/)[0] || ''; if (v) save('myname', v); else drop('myname'); if (S.page === 'dash' || S.page === 'home') renderPage(S.page); });
+  if (nm && S.focusName) { S.focusName = false; setTimeout(function () { nm.focus(); }, 350); }
   el.addEventListener('click', function (e) {
     var b = e.target.closest('[data-set]'); if (!b) return; var k = b.getAttribute('data-set');
     function again() { closeSheet(false); settingsSheet(); }
@@ -2829,6 +2838,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-day')) { S.day = t.getAttribute('data-day'); S.q = ''; renderPage('agenda'); return; }
   if (t.hasAttribute('data-type')) { S.type = t.getAttribute('data-type'); renderPage('agenda'); return; }
   if (t.id === 'set-btn') { settingsSheet(); return; }
+  if (t.hasAttribute('data-myname')) { S.focusName = true; settingsSheet(); return; }
   if (t.id === 'acct-btn') { if (A.token) profileSheet(false); else signInSheet(); return; }
   if (t.id === 'msg-btn') { inboxSheet(); return; }
   if (t.id === 'install-x') { save('install-dismissed', true); $('#install').classList.remove('on'); return; }
