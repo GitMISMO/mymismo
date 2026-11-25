@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Find on Map always sits in the bottom-right corner of the session panel's header, with a pin.
 - Nov 25, 2026: Certifications: tap a provider for its page (logo, certifications held with their badges, About, Visit Website, a picture of its home page), copied from its page on mismo.org. Home-page pictures for sponsors and providers are now made ahead of time, so they show at once.
 - Nov 25, 2026: Webinars: the date block stays beside the title, and the description runs the full width below.
 - Nov 25, 2026: The dashboard shows every tile, in one set order, for everyone (no choosing, no Edit). Each sponsor's panel shows a small picture of their website's home page in a browser frame; tap it to open the site.

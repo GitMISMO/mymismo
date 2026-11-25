@@ -646,7 +646,11 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .roomrow .fl{width:28px; height:28px; border-radius:7px; display:grid; place-items:center; background:#c99a2e; color:#fff; font-family:var(--cond); font-weight:700}
 .roomrow > span:not(.fl){color:var(--ink-2); font-size:13px}
 .roomrow svg{width:17px; height:17px; color:var(--ink-3)}
-.findmap{margin-left:auto; border:1px solid rgba(255,255,255,.4); background:rgba(255,255,255,.14); color:#fff; border-radius:5px; padding:3px 9px; font-size:12.5px; font-weight:700; cursor:pointer}
+.cv-foot{display:flex; align-items:flex-end; gap:10px 12px; flex-wrap:wrap; margin-top:14px}
+.cv-foot:empty{display:none}
+.cv-foot .spline{margin-top:0}
+.findmap{margin-left:auto; display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.4); background:rgba(255,255,255,.14); color:#fff; border-radius:6px; padding:6px 11px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap}
+.findmap svg{width:15px; height:15px}
 @media (prefers-reduced-motion: reduce){ .fpin.on i{animation:none} }
 
 /* Alerts and slides */
@@ -2067,9 +2071,10 @@ function sessionSheet(id) {
   var sp = sponsorFor(x);
   var h = '<div class="cover"><span class="k">' + esc(x.type) + '</span>' + (isLive(x) ? ' <span class="livetag">NOW</span>' : '') + '<h2>' + esc(x.title) + '</h2>' +
     '<div class="w"><div>' + icon('i-agenda') + esc(longDate(x.date)) + '</div><div>' + icon('i-clock') + esc(span(x.a, x.b)) + '</div>' +
-    (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + (roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">Find on Map</button>' : '') + '</div>' : '') +
+    (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + '</div>' : '') +
     (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div>' +
-    (sp.length ? '<div class="spline"><span class="spons">' + esc(spLabel(x)) + '</span>' + spChips(sp) + '</div>' : (x.type === 'General Session' && gsSponsors().length ? '<div class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</div>' : '')) +
+    '<div class="cv-foot">' + (sp.length ? '<div class="spline"><span class="spons">' + esc(spLabel(x)) + '</span>' + spChips(sp) + '</div>' : (x.type === 'General Session' && gsSponsors().length ? '<div class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</div>' : '')) +
+    (x.room && roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">' + icon('i-pin') + 'Find on Map</button>' : '') + '</div>' +
     '</div><div class="sheet-pad">';
   h += '<div class="d-actions two"><button type="button" class="btn primary' + (isMine(x.id) ? ' on-mine' : '') + '" data-mine-btn="' + esc(x.id) + '" data-toggle-mine="' + esc(x.id) + '">' + mineBtnHtml(x.id) + '</button>' +
     '<button type="button" class="btn" data-ics="' + esc(x.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div>';

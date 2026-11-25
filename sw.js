@@ -2,7 +2,7 @@
    The app's own files are kept on the phone so it opens without a connection.
    The agenda and sponsor feeds are fetched fresh whenever there is a connection,
    and the last copy is used when there isn't. Pictures (headshots, logos) are kept once seen. */
-var VERSION = 'mymismo-2026-11-25s';
+var VERSION = 'mymismo-2026-11-25t';
 var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', '/assets/back.js'];
 
 self.addEventListener('install', function (e) {
