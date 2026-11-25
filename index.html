@@ -126,8 +126,9 @@ html[data-season="december"] .mast-in{padding-top:16px}
 .mast-right{margin-left:auto; display:flex; align-items:center; gap:6px}
 .theme-btn{background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; border-radius:5px; padding:5px 10px; font-size:11.5px; cursor:pointer; font-family:inherit; white-space:nowrap}
 .theme-btn:hover{background:rgba(255,255,255,.18)}
-.mast-icon{position:relative; width:36px; height:32px; display:grid; place-items:center; border-radius:5px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.1); color:#fff; cursor:pointer}
-.mast-icon svg{width:18px; height:18px}
+.mast-icon{position:relative; width:40px; height:40px; display:grid; place-items:center; border-radius:4px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.1); color:#fff; cursor:pointer}
+.mast-icon svg{width:20px; height:20px}
+.theme-btn[hidden]{display:none !important}   /* dark mode lives in Settings */
 .mast-icon .ini-chip{font-size:12px; font-weight:700; letter-spacing:.02em}
 .mast-icon .dot{position:absolute; top:-5px; right:-5px; min-width:18px; height:18px; padding:0 5px; border-radius:9px; background:var(--star); color:#06202f; font-size:10.5px; font-weight:700; display:none; place-items:center}
 .mast-icon .dot.on{display:grid}
@@ -1190,9 +1191,9 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
       <button class="mast-icon" id="bell-btn" type="button" aria-label="Alerts" hidden><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="dot" id="bell-dot"></span></button>
       <button class="mast-icon" id="msg-btn" type="button" aria-label="Messages" hidden><svg aria-hidden="true"><use href="#i-chat"/></svg><span class="dot" id="msg-dot"></span></button>
       <button class="mast-icon" id="acct-btn" type="button" aria-label="Sign in" hidden><svg aria-hidden="true"><use href="#i-user"/></svg></button>
-      <div id="rs-account" hidden></div>
       <button class="mast-icon" id="set-btn" type="button" aria-label="Settings"><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
-      <button class="theme-btn" id="theme-btn" type="button">Dark</button>
+      <div id="rs-account" hidden></div>
+      <button class="theme-btn" id="theme-btn" type="button" hidden>Dark</button>
     </div>
   </div>
 </header>
