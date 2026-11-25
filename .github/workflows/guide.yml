@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/build_guide.py', '.github/workflows/guide.yml', 'tests/guide-page.html', 'tests/summit-page.html', 'tests/agenda-page.html', 'tests/provider-page.html', 'tools/build_providers.py']
+    paths: ['tools/build_guide.py', '.github/workflows/guide.yml', 'tests/guide-page.html', 'tests/summit-page.html', 'tests/agenda-page.html', 'tests/provider-page.html', 'tests/directory-page.html', 'tools/build_providers.py']
 permissions:
   contents: write
 concurrency:
@@ -26,7 +26,7 @@ jobs:
       - name: The parser still reads the three pages' layouts
         run: python3 tools/build_guide.py --html tests/guide-page.html --out /tmp/check.json --summit-html tests/summit-page.html --event-out /tmp/event.json --agenda-html tests/agenda-page.html --tags-out /tmp/tags.json
       - name: The provider page parser still reads the website's layout
-        run: python3 tools/build_providers.py --provider-html tests/provider-page.html > /dev/null
+        run: python3 tools/build_providers.py --provider-html tests/provider-page.html > /dev/null && python3 tools/build_providers.py --directory-html tests/directory-page.html > /dev/null
       - name: Read the website's Hotel and Travel, Summit and Agenda pages
         run: python3 tools/build_guide.py || echo "GUIDE_FAILED=1" >> "$GITHUB_ENV"
       - name: Read the certified providers' pages and make the home-page pictures

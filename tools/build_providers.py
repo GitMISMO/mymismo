@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""MyMISMO's certified provider pages and home-page pictures.
+"""MyMISMO's certification programs, certified provider pages and home-page pictures.
+
+0. Programs: each organization certification's directory page on the website (eClose, RON, eVault, Product, FRAME
+   Advisory Partner, Certified Consultant) lists who holds it, with logo and profile page. Written to
+   data/programs.json, so the app's Certifications page shows every program with everyone certified in it.
 
 1. Providers: for every company in the certification feeds (resources.mismo.org/certified/new-certifications.json and
    providers.json, published by the Certification Management System), reads its page on the website
@@ -19,6 +23,13 @@ from build_guide import Tree, clean_url, write  # noqa: E402
 
 UA = {'User-Agent': 'Mozilla/5.0 (MyMISMO; +https://resources.mismo.org/mymismo/)'}
 FEEDS = 'https://resources.mismo.org/certified/'
+SR = 'https://www.mismo.org/standards-resources/'
+OC = SR + 'certification/organization-certifications/'
+# key, the directory page that lists who holds it, the page about the certification
+PROGRAMS = [('ron', 'ron-certified-providers', 'ron'), ('eclose', 'eclosing-certified-providers', 'eclose'),
+            ('evault', 'evault-certified-providers', 'evault'), ('product', 'certified-product-providers', 'product'),
+            ('frame-advisory-partner', 'frame-advisory-partners', 'frame-advisory-partner'),
+            ('certified-consultant', 'certified-consultants', 'certified-consultant')]
 
 
 def get(url, timeout=30, raw=False):
@@ -63,6 +74,30 @@ def parse_provider(html, slug):
     return p
 
 
+def parse_directory(html):
+    """A directory page: its title, and each a.mismo-provider-card (logo, name, profile slug)."""
+    t = Tree(); t.feed(html); root = t.root
+    h1s = [h for h in root.find_all(lambda x: x.tag == 'h1') if h.text()]
+    title = h1s[1].text() if len(h1s) > 1 else (h1s[0].text() if h1s else '')
+    members = []
+    for a in root.find_all(lambda x: x.tag == 'a' and 'mismo-provider-card' in x.classes()):
+        spans = [x for x in a.elems() if x.tag == 'span']
+        name = next((x.text() for x in spans if x.text() and not x.text().lower().startswith('view profile')), '')
+        img = a.find(lambda x: x.tag == 'img')
+        slug = (a.attrs.get('href') or '').split('?')[0].rstrip('/').rsplit('/', 1)[-1]
+        if name and re.match(r'^[a-z0-9-]+$', slug):
+            members.append({'name': name, 'slug': slug, 'logo': clean_url(img.attrs.get('src'), SR) if img is not None else ''})
+    return {'title': re.sub(r'\s+', ' ', title), 'members': members}
+
+
+def program_blurb(html):
+    t = Tree(); t.feed(html); root = t.root
+    h1s = [h for h in root.find_all(lambda x: x.tag == 'h1') if h.text()]
+    title = h1s[1].text() if len(h1s) > 1 else (h1s[0].text() if h1s else '')
+    p = next((x.text() for x in root.find_all(lambda x: x.tag == 'p') if len(x.text()) > 70), '')
+    return re.sub(r'\s+', ' ', title), p
+
+
 def host_of(url):
     try:
         return urllib.parse.urlparse(url).hostname.replace('www.', '') if url else ''
@@ -98,6 +133,10 @@ def peek(url, out_dir, index):
 
 def main(argv):
     opts = dict(zip(argv[::2], argv[1::2]))
+    if '--directory-html' in opts:
+        d = parse_directory(open(opts['--directory-html'], encoding='utf-8').read())
+        print(json.dumps(d, indent=1))
+        return 0 if len(d['members']) >= 3 and d['title'] else 1
     if '--provider-html' in opts:
         p = parse_provider(open(opts['--provider-html'], encoding='utf-8').read(), 'test')
         ok = p and p['name'] and p['website'] and p['certs'] and p['about']
@@ -111,6 +150,32 @@ def main(argv):
         s = c.get('slug')
         if s and re.match(r'^[a-z0-9-]+$', s) and s not in slugs:
             slugs.append(s)
+    # the programs and everyone in them
+    try:
+        prevp = {p['key']: p for p in json.load(open('data/programs.json', encoding='utf-8')).get('programs', [])}
+    except Exception:
+        prevp = {}
+    progs = []
+    for key, directory, about in PROGRAMS:
+        try:
+            d = parse_directory(get(SR + directory))
+            ttl, blurb = program_blurb(get(OC + about))
+            if not d['members']:
+                raise ValueError('no members')
+            progs.append({'key': key, 'title': ttl or d['title'], 'blurb': blurb, 'about': OC + about, 'directory': SR + directory, 'members': d['members']})
+        except Exception as e:
+            print('program', key, e)
+            if key in prevp:
+                progs.append(prevp[key])
+        time.sleep(0.5)
+    if len(progs) >= 4:
+        write('data/programs.json', {'source': SR + 'certification', 'programs': progs}, 'Certification programs')
+    else:
+        print('Fewer than 4 certification programs could be read; nothing written.', file=sys.stderr); failed = 1
+    for pg in progs:
+        for m in pg['members']:
+            if m['slug'] not in slugs:
+                slugs.append(m['slug'])
     try:
         prev = json.load(open('data/providers.json', encoding='utf-8')).get('providers', {})
     except Exception:
@@ -126,10 +191,10 @@ def main(argv):
         elif s in prev:
             out[s] = prev[s]
         time.sleep(0.5)
-    if len(out) >= 5:
+    if len(out) >= 10:
         write('data/providers.json', {'source': 'https://www.mismo.org/standards-resources/', 'providers': out}, 'Certified providers')
     else:
-        print('Fewer than 5 provider pages could be read; nothing written.', file=sys.stderr); failed = 1
+        print('Fewer than 10 provider pages could be read; nothing written.', file=sys.stderr); failed = 1
     # pictures: sponsors of every summit in the agenda, and the providers' websites
     sites = [p.get('website') for p in out.values() if p.get('website')]
     try:
