@@ -16,7 +16,7 @@ be read keeps its last good copy.
 
 Usage: python3 tools/build_guide.py [--html saved.html] [--out data/guide.json] [--summit-html saved.html] [--event-out data/event.json]
 """
-import json, os, re, sys, urllib.request
+import json, os, re, sys, urllib.parse, urllib.request
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 
@@ -81,10 +81,10 @@ class Tree(HTMLParser):
             self.cur.kids.append(data)
 
 
-def clean_url(u):
+def clean_url(u, base='https://www.mismo.org/events/'):
     u = (u or '').strip()
-    if u.startswith('/') and not u.startswith('//'):
-        u = 'https://www.mismo.org' + u
+    if u and not re.match(r'^[a-z]+:', u, re.I) and not u.startswith('#'):
+        u = urllib.parse.urljoin(base, u)
     return u if re.match(r'^https://[^\s"<>]+$', u) else ''
 
 
@@ -228,8 +228,9 @@ def build_event(html):
             else:
                 for p in ps:
                     # a paragraph that is only a link (the "Will you join us?" line) is the Register button in the app
-                    a = p.find(lambda x: x.tag == 'a')
-                    if a is not None and (a.text() == p.text() or (len(p.text()) < 90 and p.text().endswith('?'))):
+                    # the short closing question ("Will you join us to create lasting change?") leads into Register Now
+                    if len(p.text()) < 90 and p.text().endswith('?'):
+                        ev['closer'] = p.text()
                         continue
                     paras.append(p.text())
         ev['paragraphs'] = paras
