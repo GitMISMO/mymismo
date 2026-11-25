@@ -4,7 +4,7 @@ const ORIGIN = 'https://resources.example';
 Object.assign(process.env, { GITHUB_TOKEN: 'ghp_test', AUTH_SECRET: 'mymismo-test-secret', PROJECTS_REPO: 'Org/Config', DIRECTORY_REPO: 'Org/Accounts', MAIL_FLOW_URL: 'https://flow.example/mail' });
 let N = 100; const sha = () => (N++).toString(16).padEnd(40, 'c'); const repo = {};
 const put = (key, data, message = 'seed') => { (repo[key] = repo[key] || []).push({ sha: sha(), data, message }); };
-let T = Date.parse('2027-01-20T15:00:00Z'); const realNow = Date.now; Date.now = () => T;
+const realNow = Date.now; let T = Date.parse('2027-01-20T15:00:00Z'); Date.now = () => T;
 const ENTRY = { repo: 'Org/MyMismoData', origin: ORIGIN, writable: [] };
 const setProjects = entry => { put('Org/Config:projects.json', { mymismo: entry }); __resetProjectsCache(); };
 put('Org/Accounts:access.json', { people: {} });
@@ -195,5 +195,53 @@ ok('delete: name and scores removed', r.statusCode === 200 && samGone);
 /* nothing secret in the repository files a page could read */
 const all = JSON.stringify(Object.fromEntries(Object.entries(repo).filter(([k]) => k.startsWith('Org/MyMismoData:trivia/') && !k.endsWith('questions.json')).map(([k, v]) => [k, v.at(-1).data])));
 ok('no email address saved anywhere', !all.includes('@example.org'));
+
+/* app store rules for attendees: report, delete, word filter (Apple 1.2 and 5.1.1(v), Google Play user data policy) */
+T = realNow();
+const FIRST = new Date(T + 17 * 86400000).toISOString().slice(0, 10), LAST = new Date(T + 20 * 86400000).toISOString().slice(0, 10);
+put('Org/SummitData:data/feed-mymismo-attendees.json', { updated: new Date(T).toISOString(), summits: { nola: { name: '2027 Winter Summit', first: FIRST, last: LAST, people: [
+  { e: 'pat@lender.example', first: 'Pat', last: 'Lee', company: 'Lender Co', title: 'CTO' }, { e: 'alex@vendor.example', first: 'Alex', last: 'Kim', company: 'Vendor LLC', title: 'Engineer' }] } } });
+setProjects({ ...ENTRY, trivia: true, attendees: true, attendeeFeed: { repo: 'Org/SummitData', path: 'data/feed-mymismo-attendees.json' }, blockedWords: ['frobnicate'] });
+__resetMyMismoLimits();
+async function attIn(email, ip) {
+  await call('POST', '/mymismo/att/code', { body: { email, summit: 'nola', startedAt: T - 9000 }, ip });
+  return J(await call('POST', '/mymismo/att/verify', { body: { email, summit: 'nola', code: codeFor(email) }, ip }));
+}
+const ap = await attIn('pat@lender.example', '203.0.113.60'), aa = await attIn('alex@vendor.example', '203.0.113.61');
+ok('attendees signed in', !!(ap.token && aa.token), [ap, aa]);
+await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { listed: true } });
+await call('PUT', '/mymismo/att/profile', { tok: aa.token, body: { listed: true } });
+r = await call('POST', '/mymismo/att/message', { tok: ap.token, body: { to: aa.me.id, text: 'Good to meet you at the panel.' } });
+ok('message: ordinary words go through', r.statusCode === 200, J(r));
+r = await call('POST', '/mymismo/att/message', { tok: aa.token, body: { to: ap.me.id, text: 'What the F-U-C-K, fuck this' } });
+ok('filter: profanity in a message is refused', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS', J(r));
+r = await call('PUT', '/mymismo/att/profile', { tok: aa.token, body: { about: 'I frobnicate loans.' } });
+ok('filter: MISMO’s own blockedWords apply to profiles', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS', J(r));
+r = await call('PUT', '/mymismo/att/profile', { tok: aa.token, body: { about: 'Scunthorpe classic assessment' } });
+ok('filter: whole words only (no false alarms inside other words)', r.statusCode === 200, J(r));
+r = await call('POST', '/mymismo/att/report', { tok: ap.token, body: { id: aa.me.id, reason: 'harassment', note: 'Rude messages' } });
+const reps = file('att/nola/reports.json');
+ok('report: kept for the MISMO team', r.statusCode === 200 && reps.reports.length === 1 && reps.reports[0].reason === 'harassment' && reps.reports[0].status === 'open', reps);
+r = await call('POST', '/mymismo/att/report', { tok: ap.token, body: { id: ap.me.id } }); ok('report: can’t report yourself', r.statusCode === 400);
+await call('POST', '/mymismo/att/block', { tok: ap.token, body: { id: aa.me.id, on: true } });
+r = await call('POST', '/mymismo/att/delete', { tok: aa.token, body: {} });
+const ppl = file('att/nola/people.json').docs, msgs = file('att/nola/messages.json').docs;
+ok('delete: directory entry, conversations and blocks naming them are gone', r.statusCode === 200 && !ppl[aa.me.id] && Object.values(msgs).every(t => !t.p.includes(aa.me.id)) && !(ppl[ap.me.id].blocked || []).includes(aa.me.id), { ppl, msgs });
+r = await call('GET', '/mymismo/att/me', { tok: aa.token }); ok('delete: their old sign-in no longer works', r.statusCode === 401);
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'z@example.org', code: '123456', first: 'Fuck', last: 'X' } });
+ok('filter: trivia names too', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS');
+
+/* the MISMO team sees reports (staff sign-in, alertSenders only) */
+put('Org/Accounts:access.json', { people: { 'jc@example.org': { name: 'Jonna C', access: { mymismo: 'admin' }, group: 'staff' } } });
+setProjects({ ...ENTRY, trivia: true, attendees: true, attendeeFeed: { repo: 'Org/SummitData', path: 'data/feed-mymismo-attendees.json' }, alertSenders: ['jc@example.org'] });
+const { createHmac: hm } = await import('node:crypto');
+const b64u = x => Buffer.from(x).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const staffTok = email => { const now = Math.floor(T / 1000) + 5; const head = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })), bd = b64u(JSON.stringify({ sub: email, name: 'X', iat: now, exp: now + 3600 }));
+  return head + '.' + bd + '.' + b64u(hm('sha256', process.env.AUTH_SECRET).update(head + '.' + bd).digest()); };
+r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: ap.token }); ok('reports: an attendee can’t read them', r.statusCode === 403);
+r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: staffTok('jc@example.org') }); d = J(r);
+ok('reports: the MISMO team sees them with names (a deleted account says so)', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].byName === 'Pat Lee' && d.reports[0].aboutName === 'Deleted account', d);
+r = await call('POST', '/mymismo/staff/reports', { tok: staffTok('jc@example.org'), body: { summit: 'nola', id: d.reports[0].id, status: 'closed', action: 'Spoke with both.' } });
+ok('reports: closing one is saved', r.statusCode === 200 && file('att/nola/reports.json').reports[0].status === 'closed');
 Date.now = realNow;
 console.log(`\n${passed} passed, ${failed} failed`); process.exit(failed ? 1 : 0);

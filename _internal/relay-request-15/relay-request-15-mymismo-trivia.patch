@@ -1,6 +1,16 @@
 --- a/_dev/aws/index.mjs
 +++ b/_dev/aws/index.mjs
-@@ -2914,6 +2914,394 @@
+@@ -2642,6 +2642,9 @@
+   }
+   const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
+   const b = pre.body;
++  if (method === 'POST' && (subPath === '/att/report' || subPath === '/att/delete')) return mm15AttExtra(subPath, proj, who, b, now);   /* relay request 15 */
++  if ((subPath === '/att/message' || subPath === '/att/profile') && mm15Bad([b.text, b.about, b.title, b.company].filter(x => typeof x === 'string').join(' '), await mm15Words().catch(() => [])))
++    return respond(400, { error: 'NOT_ALLOWED_WORDS', problems: ['Please keep it professional: that has words MyMISMO doesn’t allow.'] });   /* relay request 15: App Store rule 1.2 */
+   if (method === 'PUT' && subPath === '/att/profile') {
+     if (!mmAllowed('profile', who.id, MM_LIMITS.profile, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a few minutes.' });
+     const linkedin = mmStr(b.linkedin, 200);
+@@ -2914,6 +2917,483 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -32,8 +42,8 @@
 + *   POST /mymismo/trivia/champ/start                  -> { cats, values, deadline }                 (finalist, once)
 + *   POST /mymismo/trivia/champ/pick   { cell }        -> { cell, cat, value, q, choices, left }     (finalist)
 + *   POST /mymismo/trivia/champ/answer { cell, choice } -> { right, answer, points, total, left, done } (finalist)
-+ *   POST /mymismo/trivia/delete                       -> { ok }   (player: removes their name, scores from the last 12
-+ *                                                        months and question history; the app stores need this for
++ *   POST /mymismo/trivia/delete                       -> { ok }   (player: removes their name, every score they ever
++ *                                                        posted and their question history; the app stores need this for
 + *                                                        any app that lets people make an account)
 + *
 + * Where things live (mymismo-data, outside its writable and readable folders):
@@ -131,6 +141,7 @@
 +  const b = pre.body, now = Date.now();
 +  if (!mmAllowed('t-verify', mmIp(event), MM15_LIMITS.verify, now)) return respond(429, { error: 'TOO_MANY', message: 'Too many tries from here. Please wait a few minutes.' });
 +  const email = mmStr(b.email, 254).toLowerCase(), code = mmStr(b.code, 12).replace(/\s+/g, ''), name = mm15Show(b.first, b.last);
++  if (mm15Bad(name, await mm15Words().catch(() => []))) return respond(400, { error: 'NOT_ALLOWED_WORDS', problems: ['Please use your real name.'] });
 +  const wrong = respond(401, { error: 'WRONG_CODE', message: 'That code isn’t right, or it has expired. Ask for a new one.' });
 +  if (!mmEmailOk(email) || !/^\d{6}$/.test(code)) return wrong;
 +  const id = mm15IdOf(email);
@@ -239,6 +250,9 @@
 +    const docs = mm15Docs(d), list = Array.isArray(docs[who.id]) ? docs[who.id].filter(x => !done.ids.includes(x)) : [];
 +    docs[who.id] = [...list, ...done.ids].slice(-400); return d;
 +  }, 'MyMISMO Trivia questions seen').catch(() => null);
++  await updateRepoJson(proj.repo, proj.branch || 'main', MM15.players, d => {   /* the months played, so deleting an account finds every board */
++    const p = mm15Docs(d)[who.id]; if (p) p.months = [...new Set([...(Array.isArray(p.months) ? p.months : []), month])].filter(m => MM15_MONTH.test(m)).slice(-120); return d;
++  }, 'MyMISMO Trivia month played').catch(() => null);
 +  if (!bw || bw.error) return respond(200, { ...res, done: true, saved: false, month });
 +  return respond(200, { ...res, done: true, saved: true, month, best, newBest: done.total >= best && done.total > 0 });
 +}
@@ -356,9 +370,12 @@
 +    const w = await updateRepoJson(proj.repo, branch, path, d => { delete mm15Docs(d)[who.id]; return d; }, msg).catch(() => null);
 +    return !!(w && !w.error);
 +  };
-+  const months = []; for (let i = 0; i < 12; i++) { const t = new Date(now); t.setUTCDate(15); t.setUTCMonth(t.getUTCMonth() - i); months.push(mm15Month(t.getTime())); }
-+  let ok = await drop(MM15.players, 'MyMISMO Trivia player deleted their account') && await drop(MM15.seen, 'MyMISMO Trivia player deleted their account');
++  const pr = await readFile(proj.repo, branch, MM15.players), played = pr.data && pr.data.docs && pr.data.docs[who.id] && pr.data.docs[who.id].months;
++  const months = Array.isArray(played) ? played.filter(m => MM15_MONTH.test(m)) : []; for (let i = 0; i < 12; i++) { const t = new Date(now); t.setUTCDate(15); t.setUTCMonth(t.getUTCMonth() - i); const m = mm15Month(t.getTime()); if (!months.includes(m)) months.push(m); }
++  /* boards go first and the player record last, so a retry after a failure still knows every month */
++  let ok = true;
 +  for (const m of months) ok = (await drop(mm15Board(m), 'MyMISMO Trivia player deleted their account')) && ok;
++  ok = ok && await drop(MM15.seen, 'MyMISMO Trivia player deleted their account') && await drop(MM15.players, 'MyMISMO Trivia player deleted their account');
 +  const r = await updateRepoJson(proj.repo, branch, MM15.rounds, d => { const docs = mm15Docs(d); for (const [k, v] of Object.entries(docs)) if (v && v.p === who.id) delete docs[k]; return d; }, 'MyMISMO Trivia player deleted their account').catch(() => null);
 +  if (!ok || !r || r.error) return mm15Busy();
 +  return respond(200, { ok: true });
@@ -390,16 +407,112 @@
 +  if (subPath === '/trivia/delete') return mm15Delete(event, proj, headers, who);
 +  return mm15ChampPlay(event, proj, headers, raw, who, subPath.slice('/trivia/champ/'.length));
 +}
++/* --- App store rules for the attendee features (relay request 15, Nov 25, 2026) ---
++ * Apple (App Review Guideline 1.2 and 5.1.1(v)) and Google Play require, for any app where people make an account and
++ * can message each other: a way to delete the account inside the app, a way to report offensive content, a way to block
++ * (request 13 has it) and a filter that keeps objectionable words out.
++ *   POST /mymismo/att/delete                          -> { ok }   (attendee: removes their directory entry and every
++ *                                                        conversation they were in, for that summit)
++ *   POST /mymismo/att/report { id, reason, note }     -> { ok }   (attendee: kept in att/<summit>/reports.json for the
++ *                                                        MISMO team, who see it in Summit HQ; reason is one of
++ *                                                        harassment, spam, inappropriate, other)
++ * The filter: messages and profile words are checked against a short built-in list of profanity, plus any words in
++ * projects.json's mymismo entry "blockedWords": [...] (MISMO adds its own there without a code change). */
++const MM15_WORDS = ['fuck', 'fucking', 'shit', 'bullshit', 'cunt', 'bitch', 'asshole', 'motherfucker', 'dickhead', 'bastard', 'whore', 'slut', 'retard'];
++const MM15_REASONS = ['harassment', 'spam', 'inappropriate', 'other'];
++function mm15Bad(text, extra) {
++  const words = MM15_WORDS.concat((Array.isArray(extra) ? extra : []).map(w => String(w).toLowerCase().trim()).filter(w => /^[a-z0-9' -]{2,40}$/.test(w)));
++  const t = ' ' + String(text || '').toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
++  return words.some(w => t.includes(' ' + w + ' ') || t.includes(' ' + w + 's '));
++}
++async function mm15Words() { const raw = (await projects())[MM_PROJECT]; return raw && Array.isArray(raw.blockedWords) ? raw.blockedWords : []; }
++async function mm15AttExtra(subPath, proj, who, b, now) {
++  const branch = proj.branch || 'main';
++  if (subPath === '/att/report') {
++    if (!MM_ID.test(String(b.id)) || b.id === who.id) return respond(400, { error: 'INVALID' });
++    const reason = MM15_REASONS.includes(b.reason) ? b.reason : 'other', note = mmStr(b.note, 500);
++    if (!mmAllowed('report', who.id, 20, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a few minutes.' });
++    const w = await updateRepoJson(proj.repo, branch, `att/${who.summit}/reports.json`, d => {
++      d.reports = Array.isArray(d.reports) ? d.reports : [];
++      d.reports.push({ id: 'RP' + now.toString(36), about: b.id, by: who.id, reason, note, at: now, status: 'open' });
++      if (d.reports.length > 2000) d.reports = d.reports.slice(-2000);
++      return d;
++    }, 'MyMISMO: an attendee reported someone').catch(() => null);
++    if (!w || w.error) return respond(502, { error: 'NOT_SAVED', message: 'Your report couldn’t be sent just now. Please try again.' });
++    return respond(200, { ok: true });
++  }
++  /* delete: the directory entry, every conversation they were in, and blocks that name them */
++  if (!mmAllowed('profile', who.id, MM_LIMITS.profile, now)) return respond(429, { error: 'TOO_MANY' });
++  const a = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
++    const docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; d.docs = docs;
++    delete docs[who.id];
++    for (const p of Object.values(docs)) if (p && Array.isArray(p.blocked)) p.blocked = p.blocked.filter(x => x !== who.id);
++    return d;
++  }, 'MyMISMO: an attendee deleted their account').catch(() => null);
++  const m = await updateRepoJson(proj.repo, branch, mmMsgPath(who.summit), d => {
++    const docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; d.docs = docs;
++    for (const [k, t] of Object.entries(docs)) if (!t || !Array.isArray(t.p) || t.p.includes(who.id)) delete docs[k];
++    return d;
++  }, 'MyMISMO: an attendee deleted their account').catch(() => null);
++  if (!a || a.error || !m || m.error) return respond(502, { error: 'NOT_SAVED', message: 'That couldn’t be finished just now. Please try again.' });
++  return respond(200, { ok: true });
++}
++/* For the MISMO team (staff sign-in, the people in alertSenders): the reports, newest first, with names, and closing one.
++ *   GET  /mymismo/staff/reports?summit=<id>   -> { reports: [{ id, about, aboutName, byName, reason, note, at, status }] }
++ *   POST /mymismo/staff/reports { summit, id, status: 'closed' | 'open', action }   -> { ok }
++ * Summit HQ shows these (CN-040). Nothing is emailed. */
++async function mm15Staff(method, event, proj, headers) {
++  const raw = (await projects())[MM_PROJECT] || {};
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  const t = auth.startsWith('Bearer ') && process.env.AUTH_SECRET ? verifyToken(auth.slice(7).trim(), process.env.AUTH_SECRET) : { error: 'NO' };
++  const staff = (Array.isArray(raw.alertSenders) ? raw.alertSenders : []).map(x => String(x).toLowerCase());
++  if (t.error || !t.sub || t.kind || !staff.includes(String(t.sub).toLowerCase())) return respond(403, { error: 'NOT_ALLOWED' });
++  const dir = await loadAccess();
++  if (dir.error || !personByEmail(dir.people, t.sub) || tokenIsStale(t, personByEmail(dir.people, t.sub))) return respond(401, { error: 'SIGN_IN' });
++  const branch = proj.branch || 'main';
++  if (method === 'GET') {
++    const summit = mmStr((event.queryStringParameters || {}).summit, 31); if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID' });
++    const r = await readFile(proj.repo, branch, `att/${summit}/reports.json`), ppl = await mmReadPeople(proj, summit);
++    if ((r.status !== 200 && r.status !== 404) || ppl.error) return respond(502, { error: 'UNAVAILABLE' });
++    const name = id => (ppl.docs[id] && mmStr(ppl.docs[id].name, 120)) || 'Deleted account';
++    const reports = ((r.data && r.data.reports) || []).slice().reverse().map(x => ({ id: x.id, about: x.about, aboutName: name(x.about), byName: name(x.by), reason: x.reason, note: mmStr(x.note, 500), at: x.at, status: x.status === 'closed' ? 'closed' : 'open', action: mmStr(x.action, 300) }));
++    return respond(200, { reports });
++  }
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, summit = mmStr(b.summit, 31), id = mmStr(b.id, 20);
++  if (!MM_SUMMIT.test(summit) || !/^RP[0-9a-z]+$/.test(id)) return respond(400, { error: 'INVALID' });
++  const w = await updateRepoJson(proj.repo, branch, `att/${summit}/reports.json`, d => {
++    const x = (Array.isArray(d.reports) ? d.reports : []).find(y => y.id === id); if (!x) throw new Error('none');
++    x.status = b.status === 'open' ? 'open' : 'closed'; x.action = mmStr(b.action, 300); x.by_staff = String(t.sub).toLowerCase(); x.closedAt = Date.now(); return d;
++  }, 'MyMISMO: the MISMO team handled a report').catch(() => null);
++  if (!w || w.error) return respond(502, { error: 'NOT_SAVED' });
++  return respond(200, { ok: true });
++}
 +export function __resetMyMismo15() { mm15BankCache.at = 0; mm15BankCache.value = null; }
 +
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3372,7 @@
+@@ -2984,6 +3464,12 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
 +  if (subPath.startsWith('/trivia/')) return mm15Route(method, subPath, event, proj, headers);   /* relay request 15: MyMISMO Trivia */
++  if (subPath === '/staff/reports') {   /* relay request 15: attendee reports for the MISMO team */
++    const mm = await mmConfig(proj).catch(() => null); if (!mm) return respond(404, { error: 'NOT_FOUND' });
++    if (method !== 'GET' && method !== 'POST') return respond(405, { error: 'METHOD' });
++    return mm15Staff(method, event, mm, headers);
++  }
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
+@@ -3006,7 +3492,7 @@
+     if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
+     if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
+     if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */
+-    const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST' }[subPath];
++    const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST', '/att/report': 'POST', '/att/delete': 'POST' }[subPath];
+     if (!ok) return respond(404, { error: 'NOT_FOUND' });
+     if (method !== ok) return respond(405, { error: 'METHOD' });
+     return mmSigned(method, subPath, event, proj, headers);

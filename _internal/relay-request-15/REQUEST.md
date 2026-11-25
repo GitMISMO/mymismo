@@ -1,4 +1,4 @@
-# Relay Request 15: MyMISMO Trivia Leaderboard and Quarterly Championship (for Perry)
+# Relay Request 15: MyMISMO Trivia, and App Store Rules for Attendees (for Perry)
 
 Requested by Jonna, Nov 25, 2026. Builds on relay requests 13 and 14 (the same `mymismo` entry in projects.json and the
 same private `GitMISMO/mymismo-data`). The patch and its tests follow the same pattern as request 14.
@@ -83,11 +83,29 @@ initial. No email address is kept anywhere except the code's hash for 15 minutes
 Apple and Google require any app that lets people make an account to let them delete it from inside the app.
 `POST /trivia/delete` (player) removes their name, their scores from the last 12 months and their question history.
 
+## App Store and Google Play Rules for the Attendee Features (added Nov 25, 2026)
+
+MyMISMO is going to the Apple App Store and Google Play. Both require, for an app where people make an account and
+message each other (Apple App Review Guidelines 1.2 and 5.1.1(v); Google Play's User Data policy):
+
+| Route | Sign-in | What it does |
+| --- | --- | --- |
+| `POST /att/delete` | attendee | Deletes the attendee's account: their directory entry, every conversation they were in, and blocks naming them. |
+| `POST /att/report` | attendee | `{ id, reason, note }` → kept in `att/<summit>/reports.json` for the MISMO team. Reasons: harassment, spam, inappropriate, other. |
+| `GET  /staff/reports?summit=` | staff (alertSenders) | The reports, newest first, with names. Summit HQ shows them (CN-040). |
+| `POST /staff/reports` | staff (alertSenders) | `{ summit, id, status, action }` closes or reopens a report with a note of what was done. |
+
+**A word filter** now checks messages, profile fields and trivia names against a short built-in list of profanity plus
+any words in the `mymismo` entry's `"blockedWords": [...]` in projects.json (MISMO can add words without a code change).
+Whole words only, so ordinary words that contain them aren't caught.
+
+Nothing is emailed by any of these. The checks are in the same test file (70 in all).
+
 ## What's Here
 
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
-- `test-mymismo15.mjs`: 57 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+- `test-mymismo15.mjs`: 70 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
   `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
 
 ## To Switch It On

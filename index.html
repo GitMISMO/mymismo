@@ -750,6 +750,13 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-tplayed{color:var(--ink-2); font-size:13px; margin:8px 0 0; text-align:center}
 .tv-go{display:inline-flex; align-items:center; gap:8px; margin-top:16px; background:linear-gradient(90deg, #74bfeb, #2477b8); color:#06202f; border:0; border-radius:10px; padding:14px 22px; font:inherit; font-weight:800; font-size:17px; cursor:pointer; box-shadow:0 10px 30px -10px rgba(116,191,235,.9); animation:tv-bob 2.4s ease-in-out infinite}
 .tv-go svg{width:18px; height:18px}
+.rp{display:grid; gap:8px}
+.rp-o{display:flex; align-items:center; gap:10px; padding:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); cursor:pointer}
+.rp-o input{width:18px; height:18px; accent-color:var(--navy-mid)}
+.rp textarea{width:100%; border:1px solid var(--border-strong); border-radius:10px; padding:10px; font:inherit; background:var(--surface); color:var(--ink)}
+.rp .ok{color:var(--good); font-weight:700}
+.chat-who{align-self:flex-start; display:inline-flex; align-items:center; gap:6px; margin-bottom:8px; border:1px solid var(--border); background:var(--surface); color:var(--ink-2); border-radius:8px; padding:6px 10px; font:inherit; font-size:12.5px; font-weight:700; cursor:pointer}
+.chat-who svg{width:14px; height:14px}
 .tv-tnote{display:block; margin-top:10px; font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.65)}
 .tv-counts{display:flex; width:max-content; margin:0 auto 6px; align-items:center; gap:6px; padding:4px 10px; border-radius:6px; background:rgba(27,175,122,.18); border:1px solid rgba(27,175,122,.55); color:#4fc79b; font-size:12px; font-weight:800}
 .tv-counts svg{width:14px; height:14px; flex:none}
@@ -866,6 +873,26 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .sbt-logo b{color:#0d314c; font-size:15px}
 .sbt-tier{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:rgba(255,255,255,.9)}
 .sbt-tier i{width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff, var(--tierc) 60%)}
+/* each level dressed a step up from the one below: Bronze a colored edge, Silver a full silver frame, Gold a gold frame
+   with a warm glow and a star, Platinum (and anything above) a polished platinum frame, a glow, a star and a slow shine */
+.sbt-logo{position:relative; overflow:hidden}
+.sbt-silver .sbt-logo{border:3px solid transparent; border-bottom-width:3px; background:linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #e9eef2, #9aa6b1 45%, #f4f7f9 60%, #8c98a3) border-box}
+.sbt-gold .sbt-logo{border:4px solid transparent; background:linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #f7dc8a, #c99a2e 40%, #fff1c2 55%, #a87a1c) border-box;
+  box-shadow:0 0 0 1px rgba(255,214,120,.35), 0 12px 28px -12px rgba(233,178,60,.75)}
+.sbt-platinum .sbt-logo, .sbt-diamond .sbt-logo, .sbt-presenting .sbt-logo, .sbt-title .sbt-logo{border:4px solid transparent;
+  background:linear-gradient(#fff, #fff) padding-box, conic-gradient(from 210deg, #f6f9fc, #a9b8c6, #ffffff, #74bfeb, #e3eaf0, #8ea2b5, #f6f9fc) border-box;
+  box-shadow:0 0 0 1px rgba(255,255,255,.5), 0 0 22px -2px rgba(169,216,243,.55), 0 14px 30px -12px rgba(116,191,235,.8)}
+.sbt-platinum .sbt-logo:after, .sbt-diamond .sbt-logo:after, .sbt-presenting .sbt-logo:after, .sbt-title .sbt-logo:after{content:""; position:absolute; top:-20%; bottom:-20%; width:38%; left:-60%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.75), transparent); transform:skewX(-18deg); animation:sbt-shine 5.5s ease-in-out infinite; pointer-events:none}
+@keyframes sbt-shine{0%, 62%{left:-60%} 100%{left:130%}}
+.sbt-mark{position:absolute; top:5px; right:6px; width:20px; height:20px; display:grid; place-items:center; border-radius:50%}
+.sbt-mark svg{width:13px; height:13px; --star-fill:currentColor}
+.sbt-gold .sbt-mark{background:#fff4d6; color:#b8860b}
+.sbt-platinum .sbt-mark, .sbt-diamond .sbt-mark, .sbt-presenting .sbt-mark, .sbt-title .sbt-mark{background:#e9f2f9; color:#5f7f9c}
+.sbt-platinum .sbt-tier, .sbt-gold .sbt-tier{font-weight:800}
+.sbt-platinum .sbt-tier{color:#e9f4fb}
+.sbt-gold .sbt-tier{color:#f7dc8a}
+@media (prefers-reduced-motion: reduce){ .sbt-logo:after{animation:none !important; display:none} }
 @media (prefers-reduced-motion: reduce){ .sb-run .run{animation:none !important} .sb-run{overflow-x:auto} }
 
 /* Floor map */
@@ -1812,9 +1839,10 @@ function renderAttendees() {
 function sponsorBand() {
   var tiers = sponsorTiers(); if (!tiers.length) return '';
   var list = []; tiers.forEach(function (t) { t.list.forEach(function (sp) { list.push({ sp: sp, tier: t.tier }); }); });
+  var mark = { Title: 'i-star', Presenting: 'i-star', Diamond: 'i-star', Platinum: 'i-star', Gold: 'i-star' };
   var tile = function (x) {
-    return '<button type="button" class="sbt" style="--tierc:' + (TIER_COLOR[x.tier] || 'var(--sky)') + '" data-open="sp:' + esc(slug(x.sp.name)) + '" aria-label="' + esc(x.sp.name + ', ' + x.tier) + '">' +
-      '<span class="sbt-logo">' + (x.sp.logo ? '<img src="' + esc(x.sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(x.sp.name) + '</b>') + '</span><span class="sbt-tier"><i></i>' + esc(x.tier) + '</span></button>';
+    return '<button type="button" class="sbt sbt-' + esc(String(x.tier).toLowerCase().replace(/[^a-z]/g, '')) + '" style="--tierc:' + (TIER_COLOR[x.tier] || 'var(--sky)') + '" data-open="sp:' + esc(slug(x.sp.name)) + '" aria-label="' + esc(x.sp.name + ', ' + x.tier) + '">' +
+      '<span class="sbt-logo">' + (mark[x.tier] ? '<span class="sbt-mark" aria-hidden="true">' + icon(mark[x.tier]) + '</span>' : '') + (x.sp.logo ? '<img src="' + esc(x.sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(x.sp.name) + '</b>') + '</span><span class="sbt-tier"><i></i>' + esc(x.tier) + '</span></button>';
   };
   var run = list.length > 2 ? list.concat(list) : list;
   return '<section class="spband" aria-label="Sponsors">' + heroArt() + '<h2>Thank You to Our Sponsors</h2>' +
@@ -2086,7 +2114,7 @@ var DASH = [
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' }
 ];
-function dashPicks() { return DASH.map(function (d) { return d.id; }); }
+function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
 function staffSession() { try { return window.ResourcesSession && ResourcesSession.current(); } catch (e) { return null; } }
 function firstName() {
@@ -2161,7 +2189,12 @@ function triviaSheet() {
   });
 }
 /* Test Run: MISMO staff signed in, or a link with ?trivia=test. Draft questions only; nothing leaves the phone. */
+/* App store builds: Apple (2.1, 2.3.1) and Google reject placeholder features and features hidden behind codes. Set
+   STORE_RELEASE to true in the build sent to the stores: anything not live yet is left out for everyone, and the
+   reviewer code and test link stop working. TRIVIA_LIVE turns true once relay request 15 is live. */
+var STORE_RELEASE = false, TRIVIA_LIVE = false;
 function triviaTester() {
+  if (STORE_RELEASE) return false;
   if (/[?&]trivia=test\b/.test(location.search)) save('trivia-tester', true);   /* the test link is remembered on this phone */
   return !!staffSession() || load('trivia-tester', false);
 }
@@ -2741,11 +2774,12 @@ function settingsSheet() {
   h += '<div class="d-h">Account</div><div class="set-card">';
   if (S.summit && A.ready) h += A.token && A.me ? setRow('i-user', esc(A.me.name || 'Signed in'), 'Signed in as a summit attendee', '<button type="button" class="btn small" data-set="profile">Profile</button>') :
     setRow('i-user', 'Summit Attendees', 'Sign in with your registration email to message other attendees and get presentations.', '<button type="button" class="btn small primary" data-set="att-in">Sign In</button>');
+  if (S.summit && A.ready && A.token && A.me) h += setRow('i-x', 'Delete My Attendee Account', 'Removes you from the attendee list and deletes your messages. You can sign in again later as a new account.', '<button type="button" class="btn small" data-set="att-delete">Delete</button>');
   if (!st && !(A.me && A.me.first)) h += '<div class="set-row"><span class="set-ic">' + icon('i-user') + '</span><div class="set-tx"><b>Your Name</b><span>For your greeting. Kept on this phone only.</span>' +
     '<input type="text" id="set-name" class="set-input" maxlength="30" autocomplete="given-name" placeholder="First name" value="' + esc(load('myname', '')) + '"></div></div>';
   h += st ? setRow('i-lock', esc(st.name || st.email), 'Signed in as MISMO staff' + (st.email ? ', ' + esc(st.email) : ''), '<button type="button" class="btn small" data-set="staff-out">Sign Out</button>') :
     setRow('i-lock', 'MISMO Staff and Contractors', 'Sign in with your MISMO Resources account.', '<button type="button" class="btn small" data-set="staff-in">Sign In</button>');
-  if (!st) h += '<div class="set-row"><span class="set-ic">' + icon('i-star') + '</span><div class="set-tx"><b>Reviewer Code</b><span>' + (load('trivia-tester', false) ? 'Reviewer access is on: MISMO Trivia shows Play a Test Round.' : 'If MISMO gave you a reviewer code, enter it to try features before they open.') + '</span>' +
+  if (!st && !STORE_RELEASE) h += '<div class="set-row"><span class="set-ic">' + icon('i-star') + '</span><div class="set-tx"><b>Reviewer Code</b><span>' + (load('trivia-tester', false) ? 'Reviewer access is on: MISMO Trivia shows Play a Test Round.' : 'If MISMO gave you a reviewer code, enter it to try features before they open.') + '</span>' +
     (load('trivia-tester', false) ? '' : '<input type="text" id="set-code" class="set-input" maxlength="20" autocomplete="off" autocapitalize="characters" placeholder="Code">') + '</div></div>';
   h += '</div>';
   h += '<div class="d-h">Notifications</div><div class="set-card">';
@@ -2765,9 +2799,12 @@ function settingsSheet() {
       n ? '<button type="button" class="btn small" data-set="clear-sched">Clear</button>' : '') + '</div>';
   }
   h += '<div class="d-h">Privacy</div><div class="set-card">' + setRow('i-lock', 'What MyMISMO keeps', 'Your schedule and settings stay on this phone. MyMISMO doesn\'t track what you do or share it with anyone. Signing in as an attendee lists you in the attendee directory only if you choose to be listed.') +
-    setRow('i-file', 'Clear Saved Data', 'Signs you out and removes your schedule and settings from this phone.', '<button type="button" class="btn small" data-set="clear-all">Clear</button>') + '</div>';
+    setRow('i-file', 'Clear Saved Data', 'Signs you out and removes your schedule and settings from this phone.', '<button type="button" class="btn small" data-set="clear-all">Clear</button>') +
+    '<a class="set-row link" href="privacy/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-lock') + '</span><div class="set-tx"><b>Privacy Policy</b><span>What MyMISMO collects, why, and how to delete it</span></div>' + icon('i-chev') + '</a>' +
+    '<a class="set-row link" href="delete-account/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-x') + '</span><div class="set-tx"><b>Delete Your Data</b><span>How to delete a MyMISMO account and its data</span></div>' + icon('i-chev') + '</a></div>';
   h += '<div class="d-h">About</div><div class="set-card">' + setRow('i-s', 'MyMISMO', 'Version ' + esc(APP_VERSION) + (S.updated ? '. Agenda updated ' + esc(stamp(S.updated)) : '') + '.') +
     (standalone() ? '' : setRow('i-link', 'Install MyMISMO', IOS ? 'Tap Share, then Add to Home Screen, to open it like an app.' : 'Use Install in your browser\'s menu to open it like an app.')) +
+    '<a class="set-row link" href="support/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-chat') + '</span><div class="set-tx"><b>Help and Support</b><span>Answers to common questions</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="mailto:info@mismo.org?subject=MyMISMO"><span class="set-ic">' + icon('i-mail') + '</span><div class="set-tx"><b>Contact MISMO</b><span>info@mismo.org</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="https://www.mismo.org" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-globe') + '</span><div class="set-tx"><b>mismo.org</b><span>The MISMO website</span></div>' + icon('i-chev') + '</a></div>';
   var el = openSheet('Settings', h + '</div>', { plain: true });
@@ -2786,6 +2823,14 @@ function settingsSheet() {
     else if (k === 'staff-out') { ResourcesSession.signOut(); paintStaff(); again(); }
     else if (k === 'att-in') { closeSheet(false); signInSheet(); }
     else if (k === 'profile') { closeSheet(false); profileSheet(false); }
+    else if (k === 'att-delete') {
+      if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); return; }
+      b.disabled = true; b.textContent = 'Deleting';
+      rq('POST', 'delete', {}).then(function (r) {
+        if (!r.ok) { b.disabled = false; b.textContent = 'Try Again'; return; }
+        signOutLocal(false); closeSheet(true); openSheet('Account Deleted', '<div class="sheet-pad"><p style="margin-top:0">Your attendee account, your entry in the attendee list and your messages have been deleted.</p></div>', { plain: true });
+      });
+    }
     else if (k === 'clear-sched') {
       if (b.getAttribute('data-sure')) { save('schedule:' + S.sid, []); badge(); renderPage(S.page); again(); }
       else { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); }
@@ -2940,8 +2985,27 @@ function attendeeSheet(id) {
     (p.about ? '<div class="d-desc" style="margin-top:0">' + esc(p.about) + '</div>' : '') +
     '<div class="d-actions" style="margin-top:14px">' + (blocked ? '' : '<button type="button" class="btn primary" data-chat="' + esc(id) + '">' + icon('i-chat') + 'Message</button>') +
     (p.linkedin ? '<a class="btn" href="' + esc(p.linkedin) + '" target="_blank" rel="noopener">' + icon('i-link') + 'LinkedIn</a>' : '') +
-    '<button type="button" class="btn quiet" data-block="' + esc(id) + '" data-on="' + (blocked ? '0' : '1') + '">' + (blocked ? 'Unblock' : 'Block') + '</button></div></div>';
+    '<button type="button" class="btn quiet" data-block="' + esc(id) + '" data-on="' + (blocked ? '0' : '1') + '">' + (blocked ? 'Unblock' : 'Block') + '</button>' +
+    '<button type="button" class="btn quiet" data-report="' + esc(id) + '">' + icon('i-file') + 'Report</button></div></div>';
   openSheet(p.name, h, { color: '#14486e' });
+}
+/* App Store rule 1.2: anyone can report another attendee to the MISMO team */
+function reportSheet(id) {
+  var p = A.people.filter(function (x) { return x.id === id; })[0] || (threadWith(id) || {}).with || { name: 'this attendee' };
+  var rs = [['harassment', 'Harassment or bullying'], ['spam', 'Spam or selling'], ['inappropriate', 'Offensive or inappropriate'], ['other', 'Something else']];
+  var h = '<div class="sheet-pad"><p class="d-desc" style="margin-top:0">Tell the MISMO team what\'s wrong. ' + esc(p.name) + ' won\'t see who reported them.</p><form id="rp-form" class="rp">' +
+    rs.map(function (r, i) { return '<label class="rp-o"><input type="radio" name="rp" value="' + r[0] + '"' + (i ? '' : ' checked') + '><span>' + r[1] + '</span></label>'; }).join('') +
+    '<label class="sr" for="rp-note">Details</label><textarea id="rp-note" maxlength="500" rows="3" placeholder="Details (optional)"></textarea>' +
+    '<button type="submit" class="btn primary">Send Report</button><div id="rp-msg" role="status"></div></form></div>';
+  var el = openSheet('Report ' + p.name, h, { plain: true });
+  $('#rp-form', el).addEventListener('submit', function (e) {
+    e.preventDefault(); var btn = this.querySelector('button'); btn.disabled = true;
+    rq('POST', 'report', { id: id, reason: (this.querySelector('input[name=rp]:checked') || {}).value, note: $('#rp-note', el).value }).then(function (r) {
+      btn.disabled = false;
+      $('#rp-msg', el).innerHTML = r.ok ? '<div class="ok">Thank you. The MISMO team will look at it.</div>' : '<div class="err">' + esc(r.j.message || 'That didn\'t send. Please try again.') + '</div>';
+      if (r.ok) btn.hidden = true;
+    });
+  });
 }
 
 /* messages */
@@ -2978,7 +3042,7 @@ function paintInbox(el) {
 }
 function chatSheet(id) {
   var who = (threadWith(id) || {}).with || A.people.filter(function (x) { return x.id === id; })[0] || { id: id, name: 'Attendee' };
-  var h = '<div class="sheet-pad" style="display:flex;flex-direction:column;min-height:100%"><div class="chat" id="chat" style="flex:1"></div>' +
+  var h = '<div class="sheet-pad" style="display:flex;flex-direction:column;min-height:100%"><button type="button" class="chat-who" data-who="' + esc(id) + '">' + icon('i-user') + 'Profile, Block or Report</button><div class="chat" id="chat" style="flex:1"></div>' +
     '<form class="compose" id="compose"><label class="sr" for="chat-text">Message</label><textarea id="chat-text" rows="1" maxlength="1000" placeholder="Write a message"></textarea><button class="btn primary" type="submit">Send</button></form><div id="chat-msg" role="status"></div></div>';
   var el = openSheet(who.name, h, { plain: true, key: 'chat:' + id, focus: '#chat-text' });
   paintChat(el, id);
@@ -3089,6 +3153,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-signin')) { closeSheet(true); signInSheet(); return; }
   if (t.hasAttribute('data-profile')) { profileSheet(false); return; }
   if (t.hasAttribute('data-chat')) { chatSheet(t.getAttribute('data-chat')); return; }
+  if (t.hasAttribute('data-report')) { reportSheet(t.getAttribute('data-report')); return; }
+  if (t.hasAttribute('data-who')) { attendeeSheet(t.getAttribute('data-who')); return; }
   if (t.hasAttribute('data-block')) {
     var id = t.getAttribute('data-block'), on = t.getAttribute('data-on') === '1';
     t.disabled = true;
