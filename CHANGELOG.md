@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: MISMO Trivia: the leaderboard starts over every month, and a new Quarterly Championship section shows the plan (the three monthly champions play a tougher Championship Board; the winner is recognized at the next MISMO Summit and wins a prize). Both open with the game.
 - Nov 25, 2026: Trivia Test Run: you pick your questions by tapping a category card (or Mixed) under Pick Your Questions, then the difficulty and Play in the panel below it. The header no longer has a category picker.
 - Nov 25, 2026: MISMO Trivia Test Run has 96 draft questions (16 per category; 27 Easy, 39 Medium, 30 Hard), each checked against a public source.
 - Nov 25, 2026: Trivia scoring like Kahoot: a right answer is worth up to 1,000 points (times the level), less the slower it comes but never below half; two or more right in a row adds a 100-point streak bonus (times the level). New Study level: no clock and no points, the answer and its source after each question, and Next when you're ready.
