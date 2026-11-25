@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: MISMO Trivia, coming soon: a dashboard tile and a page with Solo and Head to Head, the six categories, the leaderboard and your scores, all waiting on the questions. No sample questions or scores.
 - Nov 25, 2026: Settings (the gear in the top bar): staff and contractor sign-in, attendee sign-in, summit alerts on or off, dark mode, clear My Schedule, what MyMISMO keeps, clear saved data, version and contact. MISMO staff and contractors sign in with their MISMO Resources account (the same sign-in as the other tools); once signed in their chip shows in the top bar, and attendees never see a staff Sign In there. The top bar is the same in the summit as on the dashboard (the MISMO logo, which takes you back to the dashboard), and Summit Home opens with the date and Good Morning/Afternoon/Evening and your first name.
 - Nov 25, 2026: The sponsors at the foot of Summit Home and Explore are one scrolling row of bigger logos, each with its level, under a centered Thank You to Our Sponsors. The Sponsors page shows logos only.
 - Nov 25, 2026: Certifications tile: everyone certified (organizations and professionals), and the new certifications in the current month.

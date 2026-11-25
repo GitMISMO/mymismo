@@ -633,6 +633,60 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .ha-run path{opacity:0} .radar .dot .pn{opacity:.92} .w-logos img:first-child{opacity:1}
 }
 
+/* MISMO Trivia */
+.w-trivia{position:relative; overflow:hidden; isolation:isolate; min-height:190px; border:0; color:#fff; background:radial-gradient(120% 140% at 85% 30%, #14486e 0%, #071d2e 55%, #040f18 100%); justify-content:center; padding-right:46%}
+.w-trivia .w-head{color:#a9d8f3}
+.w-trivia .tv-orbit{position:absolute; right:-6%; top:50%; width:58%; max-width:300px; transform:translateY(-50%); z-index:-1}
+.tv-wt{display:block; font-family:var(--cond); font-weight:700; font-size:clamp(24px, 6.6vw, 34px); line-height:1.02; margin-top:8px; letter-spacing:-.01em}
+.tv-ws{display:block; color:rgba(255,255,255,.75); font-size:13.5px; margin-top:6px}
+.tv-soon{display:inline-block; margin-top:12px; align-self:flex-start; background:linear-gradient(90deg, #eda100, #eb6834); color:#06202f; font-weight:800; font-size:12px; letter-spacing:.02em; padding:4px 10px; border-radius:5px; box-shadow:0 6px 18px -6px rgba(235,104,52,.8)}
+.tv-orbit .tv-ring{fill:none; stroke:rgba(169,216,243,.28); stroke-width:1.5; stroke-dasharray:3 6}
+.tv-orbit .tv-ring.in{stroke-dasharray:none; stroke:rgba(169,216,243,.14)}
+.tv-orbit .tv-glow{animation:tv-breathe 4s ease-in-out infinite; transform-origin:center; transform-box:fill-box}
+.tv-orbit .tv-spin{transform-origin:150px 150px; animation:tv-spin 26s linear infinite}
+.tv-orb .halo{fill:var(--oc); opacity:.22; animation:tv-pulse 2.4s ease-in-out infinite; animation-delay:var(--d); transform-box:fill-box; transform-origin:center}
+.tv-orb .core{fill:var(--oc); stroke:rgba(255,255,255,.85); stroke-width:2.5}
+.tv-hex polygon{fill:#0d314c; stroke:#74bfeb; stroke-width:3; filter:drop-shadow(0 0 10px rgba(116,191,235,.7))}
+.tv-hex{transform-origin:150px 150px; animation:tv-bob 3.2s ease-in-out infinite}
+.tv-hex text{font-family:var(--cond); font-weight:800; font-size:60px; fill:#fff}
+@keyframes tv-spin{to{transform:rotate(360deg)}}
+@keyframes tv-pulse{0%,100%{transform:scale(1); opacity:.22}50%{transform:scale(1.45); opacity:.05}}
+@keyframes tv-breathe{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes tv-bob{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.tv-hero{position:relative; overflow:hidden; isolation:isolate; color:#fff; background:radial-gradient(120% 120% at 50% 20%, #14486e 0%, #071d2e 60%, #040f18 100%); padding:22px 20px 26px; text-align:center}
+.tv-hero .tv-orbit{width:min(260px, 70vw); display:block; margin:0 auto -6px}
+.tv-hero h2{font-family:var(--cond); font-size:clamp(38px, 11vw, 60px); line-height:.95; letter-spacing:-.02em; margin:8px 0 8px; background:linear-gradient(180deg, #fff, #a9d8f3); -webkit-background-clip:text; background-clip:text; color:transparent}
+.tv-hero p{color:rgba(255,255,255,.82); max-width:30ch; margin:0 auto}
+.tv-hero .tv-soon{margin-top:0}
+.tv-modes{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.tv-mode{position:relative; overflow:hidden; display:grid; gap:4px; align-content:start; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--mc); border-radius:14px; padding:14px; box-shadow:var(--shadow)}
+.tv-mi{width:42px; height:42px; border-radius:11px; display:grid; place-items:center; background:color-mix(in srgb, var(--mc) 20%, transparent); color:var(--mc); margin-bottom:6px}
+.tv-mi svg{width:22px; height:22px}
+.tv-mode b{font-family:var(--cond); font-size:21px}
+.tv-mode > span:not(.tv-mi){color:var(--ink-2); font-size:13.5px; line-height:1.4}
+.tv-mode em{display:inline-flex; align-items:center; gap:5px; font-style:normal; font-weight:700; font-size:12.5px; color:var(--ink-3); margin-top:8px}
+.tv-mode em svg{width:13px; height:13px}
+.tv-cats{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.tv-cat{display:grid; grid-template-columns:auto 1fr; column-gap:10px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 60ms)}
+.tv-cat i{grid-row:span 2; width:16px; height:16px; border-radius:50%; background:var(--oc); box-shadow:0 0 0 4px color-mix(in srgb, var(--oc) 25%, transparent)}
+.tv-cat b{font-size:14px; line-height:1.2}
+.tv-cat span{color:var(--ink-2); font-size:12px; line-height:1.3}
+.tv-board{background:linear-gradient(180deg, #0d314c, #071d2e); border-radius:16px; padding:18px 14px 14px; color:#fff; text-align:center}
+.tv-board p{color:rgba(255,255,255,.75); font-size:13.5px; margin:12px 0 0}
+.tv-podium{display:flex; justify-content:center; align-items:flex-end; gap:8px}
+.tv-step{display:grid; justify-items:center; gap:6px; width:30%}
+.tv-av{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.1); border:2px dashed var(--pc); color:var(--pc); font-weight:800; font-size:18px}
+.tv-ped{width:100%; display:grid; place-items:center; background:linear-gradient(180deg, var(--pc), color-mix(in srgb, var(--pc) 45%, #06202f)); border-radius:8px 8px 0 0}
+.tv-ped b{font-family:var(--cond); font-size:28px; color:#06202f}
+.tv-step.s1 .tv-ped{height:92px}
+.tv-step.s2 .tv-ped{height:66px}
+.tv-step.s3 .tv-ped{height:48px}
+.tv-stats{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px}
+.tv-stats div{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 8px; text-align:center}
+.tv-stats b{display:block; font-family:var(--cond); font-size:28px; color:var(--ink-3)}
+.tv-stats span{font-size:12px; color:var(--ink-2); font-weight:600}
+@media (prefers-reduced-motion: reduce){ .tv-orbit *, .tv-cat{animation:none !important} }
+
 /* Settings */
 .set .d-h:first-child{margin-top:4px}
 .set-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden}
@@ -1888,6 +1942,7 @@ var DASH = [
   { id: 'matters', name: 'MISMO Matters', desc: 'The monthly newsletter and The Vieaux Point', icon: 'i-mail' },
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'sponsors', name: 'Summit Sponsors', desc: 'The companies supporting the summit', icon: 'i-sponsor' },
+  { id: 'trivia', name: 'MISMO Trivia', desc: 'Solo and head-to-head MISMO trivia with a leaderboard', icon: 'i-star' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' }
 ];
@@ -1905,6 +1960,38 @@ function greetHead() {
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
 function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
 function calBlock(iso) { var p = dparts(iso); return '<span class="cal"><i>' + MON[p.m - 1] + '</i><b>' + p.d + '</b></span>'; }
+/* ---------- MISMO Trivia (coming soon: waiting on the questions) ---------- */
+var TRIVIA_CATS = [
+  ['MISMO Standards', 'The data standards and how they fit together', '#2477b8'],
+  ['Life of Loan', 'The mortgage process, start to finish', '#eb6834'],
+  ['Business Glossary', 'The terms the industry runs on', '#1baf7a'],
+  ['How MISMO Works', 'Governance and how a standard gets made', '#eda100'],
+  ['Bootcamp and Certification', 'Bootcamp, AMSP and CMSP', '#e87ba4'],
+  ['Mortgage Industry', 'The wider world of mortgage lending', '#74bfeb']
+];
+function triviaOrbit(big) {
+  var n = TRIVIA_CATS.length, R = 104, orbs = TRIVIA_CATS.map(function (c, i) {
+    var a = (i / n) * Math.PI * 2 - Math.PI / 2, x = (150 + R * Math.cos(a)).toFixed(1), y = (150 + R * Math.sin(a)).toFixed(1);
+    return '<g class="tv-orb" style="--oc:' + c[2] + ';--d:' + (i * 0.35).toFixed(2) + 's"><circle cx="' + x + '" cy="' + y + '" r="22" class="halo"/><circle cx="' + x + '" cy="' + y + '" r="14" class="core"/></g>';
+  }).join('');
+  return '<svg class="tv-orbit' + (big ? ' big' : '') + '" viewBox="0 0 300 300" aria-hidden="true"><defs><radialGradient id="tvg' + (big ? 'b' : 's') + '"><stop offset="0" stop-color="#74bfeb" stop-opacity=".55"/><stop offset="1" stop-color="#74bfeb" stop-opacity="0"/></radialGradient></defs>' +
+    '<circle cx="150" cy="150" r="140" fill="url(#tvg' + (big ? 'b' : 's') + ')" class="tv-glow"/><circle cx="150" cy="150" r="104" class="tv-ring"/><circle cx="150" cy="150" r="66" class="tv-ring in"/>' +
+    '<g class="tv-spin">' + orbs + '</g>' +
+    '<g class="tv-hex"><polygon points="150,104 190,127 190,173 150,196 110,173 110,127"/><text x="150" y="168" text-anchor="middle">?</text></g></svg>';
+}
+function triviaSheet() {
+  var h = '<section class="tv-hero">' + triviaOrbit(true) + '<div class="tv-hin"><span class="tv-soon">Coming Soon</span><h2>MISMO Trivia</h2><p>How well do you know MISMO? Test yourself, then take on your colleagues.</p></div></section><div class="sheet-pad tv">';
+  h += '<div class="tv-modes">' +
+    '<div class="tv-mode" style="--mc:#74bfeb"><span class="tv-mi">' + icon('i-star') + '</span><b>Solo</b><span>Play on your own, keep score and beat your best.</span><em>' + icon('i-lock') + 'Opens Soon</em></div>' +
+    '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone. Same questions, one winner.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
+  h += '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
+  h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
+      return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
+    '</div><p>The leaderboard opens with the first game: top scores this month and of all time.</p></div>';
+  h += '<div class="d-h">Your Scores</div><div class="tv-stats"><div><b>&mdash;</b><span>Best Score</span></div><div><b>&mdash;</b><span>Games Played</span></div><div><b>&mdash;</b><span>Head to Head Wins</span></div></div>';
+  h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions. Trivia opens here once they\'re in.</div></div>';
+  openSheet('MISMO Trivia', h, { plain: true });
+}
 function widget(id) {
   var d = DASH.filter(function (x) { return x.id === id; })[0], h;
   var head = function (lbl) { return '<span class="w-head">' + icon(d.icon) + '<span>' + esc(lbl || d.name) + '</span></span>'; };
@@ -1933,6 +2020,7 @@ function widget(id) {
     var ed = MM && MM.editions && MM.editions[0];
     return '<button type="button" class="wd w-mat" data-matters>' + head() + (ed ? '<span class="w-ed">' + esc(ed.label) + '</span>' + (ed.vieauxPoint ? '<span class="w-t">' + esc(ed.vieauxPoint.title) + '</span>' : '<span class="w-sub">The latest edition</span>') : '<span class="w-sub">The monthly newsletter</span>') + '</button>';
   }
+  if (id === 'trivia') return '<button type="button" class="wd w-trivia wide" data-trivia>' + triviaOrbit(false) + '<span class="w-head">' + icon('i-star') + '<span>MISMO Trivia</span></span><span class="tv-wt">How well do you know MISMO?</span><span class="tv-ws">Solo and head to head, with a leaderboard</span><span class="tv-soon">Coming Soon</span></button>';
   if (id === 'certs') {
     var pg = (PRG && PRG.programs) || [], orgs = {}, ppl = 0, now = new Date(), ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
     pg.forEach(function (p) { p.members.forEach(function (m) { orgs[m.slug] = 1; }); });
@@ -2692,6 +2780,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-webinars')) { webinarsSheet(); return; }
   if (t.hasAttribute('data-matters')) { mattersSheet(); return; }
   if (t.hasAttribute('data-certs')) { certsSheet(); return; }
+  if (t.hasAttribute('data-trivia')) { triviaSheet(); return; }
   if (t.hasAttribute('data-web')) { webSheet(t.getAttribute('data-web'), t.getAttribute('data-web-title') || ''); return; }
   if (t.hasAttribute('data-web-ics')) { var wb = upcomingWebinars().filter(function (w) { return w.id === t.getAttribute('data-web-ics'); })[0]; if (wb) webinarIcs(wb); return; }
   if (t.hasAttribute('data-bio')) { var bb = document.getElementById(t.getAttribute('data-bio')); if (bb) { bb.hidden = !bb.hidden; t.innerHTML = icon('i-user') + (bb.hidden ? 'View Bio' : 'Hide Bio'); t.setAttribute('aria-expanded', String(!bb.hidden)); } return; }
