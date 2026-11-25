@@ -556,11 +556,12 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 
 /* ---------- Webinars, MISMO Matters, Certifications, pages in the app ---------- */
 .webs{display:grid; gap:12px}
-.web{display:grid; grid-template-columns:auto 1fr; gap:14px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px}
+.web{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px}
+.web-top{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start}
 .web .cal{width:58px}
 .web .wt{font-family:var(--cond); font-size:21px; font-weight:700; line-height:1.12}
 .web .wm{color:var(--ink-2); font-size:13.5px; margin-top:4px; font-weight:600}
-.web p{font-size:14.5px; margin:8px 0 12px}
+.web p{font-size:14.5px; margin:12px 0 14px}
 .mat-hero{position:relative; overflow:hidden; border-radius:16px; padding:20px; color:#fff; background:linear-gradient(150deg, #14486e, #06202f 70%)}
 .mat-hero:after{content:""; position:absolute; right:-60px; top:-60px; width:200px; height:200px; border-radius:50%; background:radial-gradient(closest-side, rgba(116,191,235,.45), transparent); animation:ha-drift 9s ease-in-out infinite alternate}
 .mh-lbl{font-weight:700; color:var(--sky-soft); font-size:13px}
@@ -1832,9 +1833,9 @@ function webinarsSheet() {
   var up = upcomingWebinars();
   var h = '<div class="sheet-pad"><p class="lede">MISMO\'s webinars cover new standards, initiatives and the industry topics that matter to members. They\'re free.</p>' +
     (up.length ? '<div class="webs">' + up.map(function (w) {
-      return '<article class="web">' + calBlock(w.date) + '<div class="wb"><div class="wt">' + esc(w.title) + '</div><div class="wm">' + esc(longDate(w.date)) + ', ' + esc(w.start || '') + (w.end ? ' to ' + esc(w.end) : '') + ' ET</div>' +
+      return '<article class="web"><div class="web-top">' + calBlock(w.date) + '<div class="wb"><div class="wt">' + esc(w.title) + '</div><div class="wm">' + esc(longDate(w.date)) + ', ' + esc(w.start || '') + (w.end ? ' to ' + esc(w.end) : '') + ' ET</div></div></div>' +
         (w.summary ? '<p>' + esc(webSummary(w.summary)) + '</p>' : '') + '<div class="d-actions">' + (w.register ? '<a class="btn primary" href="' + esc(w.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register</a>' : '') +
-        '<button type="button" class="btn" data-web-ics="' + esc(w.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div></div></article>';
+        '<button type="button" class="btn" data-web-ics="' + esc(w.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div></article>';
     }).join('') + '</div>' : '<div class="note">No MISMO webinars are scheduled right now. New ones show up here as soon as they\'re announced.</div>') +
     '<div class="d-actions" style="margin-top:16px"><a class="btn" href="' + SITE + '/events/education" target="_blank" rel="noopener">' + icon('i-link') + 'Education and Past Webinars</a></div></div>';
   openSheet('Webinars', h, { plain: true });
