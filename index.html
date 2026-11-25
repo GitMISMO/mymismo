@@ -363,7 +363,7 @@ button,a,.wd,.plc,.spc{touch-action:manipulation}
 
 /* ---------- Masthead: the S goes back to the dashboard ---------- */
 .smark{position:relative; display:none; width:40px; height:40px; border-radius:9px; border:0; background:#fff; place-items:center; cursor:pointer; padding:0; flex:none; box-shadow:0 0 0 1px rgba(255,255,255,.2)}
-.smark svg:first-child{width:46px; height:46px; color:#50a4db}
+.smark svg:first-child{width:34px; height:34px; color:#50a4db}
 .smark .santa{position:absolute; display:none; pointer-events:none; left:-10px; top:-13px; width:28px; height:28px}
 html[data-season="december"] .smark .santa{display:block}
 body:not(.dash) .smark{display:grid}
@@ -417,7 +417,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-sub{color:var(--ink-2); font-size:13px; line-height:1.35; margin-top:auto}
 .w-summit{min-height:230px; background:#071d2e; border:0; color:#fff}
 .w-summit .w-head{color:var(--sky-soft)}
-.w-summit .w-head svg{color:var(--sky); width:30px; height:30px; margin:-6px -4px -6px -6px}
+.w-summit .w-head svg{color:var(--sky); width:22px; height:22px}
 .w-summit .w-head svg.go{width:18px; height:18px; margin:0 0 0 auto}
 .w-city{font-family:var(--cond); font-weight:700; font-size:clamp(46px, 14vw, 84px); line-height:.86; letter-spacing:-.025em; margin-top:10px}
 .w-name{color:rgba(255,255,255,.82); font-weight:600; font-size:14px}
@@ -458,14 +458,14 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .ch-in{max-width:640px; margin:0 auto; padding:calc(18px + env(safe-area-inset-top)) 18px 130px}
 .ch-top{display:flex; justify-content:space-between; align-items:center}
 .ch-s{width:64px; height:64px; border-radius:16px; background:#0d314c; display:grid; place-items:center; box-shadow:0 10px 30px rgba(13,49,76,.3)}
-.ch-s svg{width:76px; height:76px; color:var(--sky)}
+.ch-s svg{width:52px; height:52px; color:var(--sky)}
 #choose h1{font-family:var(--cond); font-size:clamp(34px, 10vw, 48px); line-height:1; margin-top:18px; letter-spacing:-.02em}
 .ch-sub{color:var(--ink-2); font-size:15.5px; margin:10px 0 18px}
 .ch-list{display:grid; gap:10px}
 .ch-opt{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; text-align:left; background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:12px 14px; cursor:pointer; color:var(--ink); font:inherit}
 .ch-opt .ic{width:44px; height:44px; border-radius:11px; display:grid; place-items:center; background:var(--surface-3); color:var(--link)}
 .ch-opt .ic svg{width:24px; height:24px}
-.ch-opt[data-pick="summit"] .ic svg{width:44px; height:44px}
+.ch-opt[data-pick="summit"] .ic svg{width:34px; height:34px}
 .ch-opt .tx b{display:block; font-size:16px}
 .ch-opt .tx span{color:var(--ink-2); font-size:13.5px; line-height:1.35}
 .ch-opt .box{width:28px; height:28px; border-radius:7px; border:2px solid var(--border-strong); display:grid; place-items:center; font-weight:700; font-size:14px}
@@ -596,21 +596,6 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .mat-hero .btn.primary{background:var(--sky); border-color:var(--sky); color:#06202f}
 .list .row{display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 14px; color:var(--ink); text-decoration:none; cursor:pointer; font:inherit; width:100%}
 .list .row svg{width:18px; height:18px; color:var(--ink-3)}
-.cstats{display:grid; grid-template-columns:repeat(auto-fit, minmax(110px,1fr)); gap:10px}
-.cstats div{background:linear-gradient(150deg, #14486e, #06202f); color:#fff; border-radius:14px; padding:14px}
-.cstats b{display:block; font-family:var(--cond); font-size:38px; line-height:1; color:var(--sky)}
-.cstats span{font-size:12.5px; font-weight:600; color:rgba(255,255,255,.85)}
-.certs{display:grid; gap:8px}
-.cert{display:grid; gap:6px; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--pc); border-radius:10px; padding:11px 13px}
-.cert .ct b{display:block}
-.cert .ct span{color:var(--ink-2); font-size:13.5px}
-.cert .cm{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
-.cert .cm em{margin-left:auto; font-style:normal; color:var(--ink-3); font-size:12.5px; font-weight:600}
-.pros{display:grid; gap:6px; margin-top:10px; max-height:420px; overflow-y:auto}
-.pro{display:flex; gap:10px; align-items:center; padding:6px 2px}
-.pro .ini{width:38px; height:38px; font-size:13px}
-.pro b{display:block; font-size:14.5px}
-.pro span span{color:var(--ink-2); font-size:13px}
 .sheet.full .sheet-body{display:flex}
 .webframe{flex:1; display:flex}
 .webframe iframe{flex:1; width:100%; border:0; background:#fff; min-height:calc(100vh - 90px)}
@@ -689,6 +674,123 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .findmap{margin-left:auto; border:1px solid rgba(255,255,255,.4); background:rgba(255,255,255,.14); color:#fff; border-radius:5px; padding:3px 9px; font-size:12.5px; font-weight:700; cursor:pointer}
 @media (prefers-reduced-motion: reduce){ .fpin.on i{animation:none} }
 
+/* Alerts and slides */
+.al-state{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px}
+.al-state > svg{width:28px; height:28px; color:#1a8fe3}
+.al-state b{display:block; font-size:16px}
+.al-state span{color:var(--ink-2); font-size:14px}
+.al-state .btn{grid-column:1 / -1}
+.al-state.on{border-left:4px solid var(--good)}
+.al-state.on > svg{color:var(--good)}
+.alerts{display:grid; gap:8px}
+.al{background:var(--surface); border:1px solid var(--border); border-left:4px solid #eb6834; border-radius:10px; padding:12px 14px}
+.al-t{display:flex; justify-content:space-between; gap:10px; align-items:baseline}
+.al-t em{font-style:normal; color:var(--ink-3); font-size:12px; white-space:nowrap}
+.al p{margin:4px 0 6px; font-size:14.5px}
+.problem{color:var(--bad); font-size:13.5px; grid-column:1 / -1; margin:4px 0 0}
+.slides-lock{display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:center; background:var(--surface); border:1px dashed var(--border-strong); border-radius:12px; padding:12px 14px}
+.slides-lock > svg{width:26px; height:26px; color:var(--link)}
+.slides-lock b{display:block}
+.slides-lock span{color:var(--ink-2); font-size:13.5px}
+.slides-lock .btn{grid-column:1 / -1}
+.slides{display:grid; gap:8px}
+.slide{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; cursor:pointer; color:var(--ink); font:inherit}
+.slide > svg{width:24px; height:24px; color:#b3372c}
+.slide b{display:block; font-size:14.5px}
+.slide span span{color:var(--ink-2); font-size:12.5px}
+.slide em{font-style:normal; font-weight:700; color:var(--link); font-size:13px}
+
+
+/* ---------- Mic'd Up ---------- */
+.mic-hero{position:relative; isolation:isolate; overflow:hidden; background:#071d2e; color:#fff; padding:14px 16px 18px}
+.mic-hero > .hero-art{z-index:-1; opacity:.8}
+.mic-brand{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px}
+.mic-brand b{font-family:var(--cond); font-size:22px; letter-spacing:.01em}
+.mic-brand span{font-size:12.5px; font-weight:600; color:var(--sky-soft)}
+.mic-now{margin-top:12px; animation:bio-in .3s ease}
+.mic-stage .plbl{display:none}
+.mic-k{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#06202f; background:var(--sky); border-radius:4px; padding:3px 8px}
+.mic-k svg{width:11px; height:11px}
+.mic-now h2{font-family:var(--cond); font-size:24px; line-height:1.1; margin:8px 0 4px}
+.mic-d{color:rgba(255,255,255,.8); font-size:13.5px}
+.eps{display:grid; gap:10px}
+.ep{display:grid; grid-template-columns:132px 1fr; gap:12px; align-items:center; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:8px; cursor:pointer; color:var(--ink); font:inherit}
+.ep .th{position:relative; display:block; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:#06202f}
+.ep .th img{width:100%; height:100%; object-fit:cover; display:block}
+.ep .th em{position:absolute; right:5px; bottom:5px; background:rgba(6,32,47,.85); color:#fff; font-style:normal; font-size:11px; font-weight:600; padding:1px 5px; border-radius:3px}
+.ep .th i{position:absolute; inset:0; display:grid; place-items:center; color:#fff; background:rgba(6,32,47,.25); opacity:0; transition:opacity .2s}
+.ep .th i svg{width:26px; height:26px}
+.ep:hover .th i{opacity:1}
+.ep-tx b{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; font-size:14.5px; line-height:1.3}
+.ep-tx span{color:var(--ink-2); font-size:12.5px}
+.ep.on{border-color:#1a8fe3; box-shadow:0 0 0 1px #1a8fe3}
+.ep.on .th i{opacity:1; background:rgba(26,143,227,.45)}
+
+/* ---------- mismo.org ---------- */
+.site-hero{position:relative; isolation:isolate; overflow:hidden; background:#071d2e; color:#fff; padding:24px 18px 22px}
+.site-hero > .hero-art{z-index:-1}
+.site-k{display:inline-flex; gap:7px; align-items:center; font-weight:700; font-size:13px; color:var(--sky-soft)}
+.site-k svg{width:16px; height:16px; color:var(--sky)}
+.site-hero h2{font-family:var(--cond); font-size:clamp(28px, 8vw, 40px); line-height:1; margin:8px 0 8px; max-width:14ch}
+.site-hero p{color:rgba(255,255,255,.85); margin:0; max-width:34ch; font-size:14.5px}
+.site-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.site-tile{position:relative; display:flex; flex-direction:column; gap:4px; min-height:150px; padding:14px; border-radius:16px; text-decoration:none; color:var(--ink); background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden;
+  animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 45ms)}
+.site-tile:before{content:""; position:absolute; right:-30px; top:-30px; width:110px; height:110px; border-radius:50%; background:var(--c); opacity:.12}
+.st-ic{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:var(--c); color:#fff; margin-bottom:8px}
+.st-ic svg{width:22px; height:22px}
+.site-tile b{font-family:var(--cond); font-size:18px; line-height:1.1}
+.site-tile > span:not(.st-ic):not(.st-go){color:var(--ink-2); font-size:13px; line-height:1.3}
+.st-go{position:absolute; right:12px; bottom:12px; color:var(--ink-3)}
+.st-go svg{width:15px; height:15px}
+@keyframes tile-in{from{opacity:0; transform:translateY(12px) scale(.98)}}
+@media (min-width:640px){ .site-grid{grid-template-columns:repeat(4,1fr)} }
+
+/* ---------- Certifications ---------- */
+.cert-hero{position:relative; isolation:isolate; overflow:hidden; background:#071d2e; color:#fff; padding:22px 18px 20px}
+.cert-hero > .hero-art{z-index:-1}
+.cert-seal{position:relative; width:58px; height:58px; border-radius:50%; display:grid; place-items:center; background:radial-gradient(circle at 35% 30%, #ffd98a, #c99a2e 60%, #8a6414); color:#fff; box-shadow:0 0 0 4px rgba(201,154,46,.25)}
+.cert-seal:after{content:""; position:absolute; inset:-10px; border-radius:50%; border:2px dashed rgba(240,185,58,.5); animation:bsSpin 18s linear infinite}
+@keyframes bsSpin{to{transform:rotate(360deg)}}
+.cert-seal svg{width:30px; height:30px}
+.cert-hero h2{font-family:var(--cond); font-size:clamp(32px, 9vw, 46px); line-height:1; margin:14px 0 6px}
+.cert-hero p{color:rgba(255,255,255,.85); margin:0 0 16px; max-width:34ch; font-size:14.5px}
+.cert-nums{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.cert-nums div:last-child:nth-child(odd){grid-column:1 / -1}
+@media (min-width:640px){ .cert-nums{grid-template-columns:repeat(4,1fr)} .cert-nums div:last-child:nth-child(odd){grid-column:auto} }
+.cert-nums div{background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:10px 12px; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
+.cert-nums b{display:block; font-family:var(--cond); font-size:36px; line-height:1; color:var(--sky)}
+.cert-nums span{font-size:12px; font-weight:600; color:rgba(255,255,255,.85)}
+.bars{display:grid; gap:8px}
+.bar{display:grid; grid-template-columns:minmax(90px, 32%) 1fr auto; gap:10px; align-items:center}
+.bar .bl{font-weight:600; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bar .bt{height:14px; border-radius:7px; background:var(--surface-3); overflow:hidden}
+.bar .bt i{display:block; height:100%; width:0; border-radius:7px; background:linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 70%, #fff)); transition:width 1s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--i) * 80ms)}
+.sheet.go .bar .bt i{width:var(--w)}
+.bar b{font-family:var(--cond); font-size:17px; min-width:24px; text-align:right}
+.tl{display:grid; gap:14px}
+.tl-h{display:flex; align-items:center; gap:8px; font-family:var(--cond); font-weight:700; font-size:17px; margin-bottom:8px}
+.tl-h span{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; font-weight:700; background:var(--surface-3); color:var(--ink-2); border-radius:4px; padding:1px 6px}
+.tl-m{position:relative}
+.tl-i{position:relative; display:grid; grid-template-columns:18px 1fr; gap:10px; padding-bottom:8px}
+.tl-i:before{content:""; position:absolute; left:8px; top:14px; bottom:-6px; width:2px; background:var(--border)}
+.tl-i:last-child:before{display:none}
+.tl-dot{width:18px; height:18px; border-radius:50%; background:var(--c); border:3px solid var(--ground); box-shadow:0 0 0 2px var(--c); margin-top:10px; position:relative; z-index:1}
+.tl-c{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px}
+.tl-top{display:flex; justify-content:space-between; gap:10px; align-items:baseline}
+.tl-top em{font-style:normal; color:var(--ink-3); font-size:12px; font-weight:600; white-space:nowrap}
+.tl-p{display:block; color:var(--ink-2); font-size:13.5px}
+.tl-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px}
+.sparkle{position:relative; overflow:hidden; display:inline-block; font-size:11.5px; font-weight:700; color:#5b4210; background:linear-gradient(135deg, #ffe39a, #f0b93a); border-radius:3px; padding:2px 7px}
+.sparkle:after{content:""; position:absolute; top:-40%; left:-80%; width:45%; height:180%; transform:rotate(18deg); background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.8), rgba(255,255,255,0)); animation:sweep 3.5s ease-in-out infinite}
+.seg .sc{font-size:11.5px; opacity:.75; margin-left:4px}
+.pros{display:grid; gap:8px; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); margin-top:10px; max-height:440px; overflow-y:auto}
+.pro{display:flex; gap:10px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:8px 10px}
+.pro .ini{width:38px; height:38px; flex:none; border-radius:50%; display:grid; place-items:center; font-size:13px; font-weight:700; color:#fff; background:linear-gradient(135deg, hsl(var(--h) 55% 45%), hsl(calc(var(--h) + 40) 55% 32%))}
+.pro b{display:block; font-size:14px}
+.pro span span{color:var(--ink-2); font-size:12.5px}
+@media (prefers-reduced-motion: reduce){ .cert-seal:after,.sparkle:after,.site-tile{animation:none} .bar .bt i{transition:none} }
+
 /* Speaker bio */
 .bio-btn{margin:0 0 4px}
 .bio{font-size:15.5px; line-height:1.6; margin-top:12px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:10px; animation:bio-in .28s ease}
@@ -735,7 +837,7 @@ nav.tabbar .badge.on{display:grid}
 .sheet-head .iconbtn.close{margin-left:auto}
 .sheet:not(.plain) .sheet-head{position:absolute; left:0; right:0; top:0}
 .sheet:not(.plain) .iconbtn{background:rgba(6,32,47,.35); border-color:rgba(255,255,255,.25); color:#fff}
-.sheet-body{overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch}
+.sheet-body{overflow-y:auto; overflow-x:hidden; flex:1; -webkit-overflow-scrolling:touch}
 .sheet-pad{padding:16px 16px calc(28px + env(safe-area-inset-bottom))}
 .cover{color:#fff; padding:64px 18px 20px; background:var(--tagc, var(--navy)); position:relative; overflow:hidden}
 .cover:before{content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(6,32,47,.15), rgba(6,32,47,.7))}
@@ -744,7 +846,7 @@ nav.tabbar .badge.on{display:grid}
 .cover .k{display:inline-block; font-size:12.5px; font-weight:700; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:4px; padding:3px 8px}
 .cover h2{font-family:var(--cond); font-size:30px; line-height:1.05; margin-top:10px; letter-spacing:-.01em}
 .cover .w{margin-top:12px; display:grid; gap:5px; color:rgba(255,255,255,.92); font-size:14.5px}
-.cover .w div{display:flex; gap:8px; align-items:center}
+.cover .w div{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 .cover .w svg{width:16px; height:16px; flex:none; opacity:.85}
 .cover.person-cover{display:flex; gap:16px; align-items:flex-end}
 .cover.person-cover img,.cover.person-cover .avatar{width:104px; height:104px; border-radius:12px; object-fit:cover; object-position:50% 22%; border:2px solid rgba(255,255,255,.4); font-size:34px; background:rgba(255,255,255,.12); color:#fff}
@@ -807,6 +909,7 @@ nav.tabbar .badge.on{display:grid}
   .flip{gap:10px}
 }
 @media (max-width:440px){ .appname{display:none} .vrule{display:none} }
+@media (max-width:420px){ body:not(.dash) .theme-btn{display:none} }
 /* Landscape phones: the tab bar becomes a rail down the left so the screen keeps its height */
 @media (orientation:landscape) and (max-height:540px){
   :root{--rail-w:calc(84px + env(safe-area-inset-left)); --tabbar-h:0px}
@@ -880,7 +983,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M8 7.5l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="i-s" viewBox="0 0 512 512"><g transform="translate(-346.79007637096436,151.22590491040148) scale(1.9582330878058811)"><g transform="translate(0.000000,108.000000) scale(0.100000,-0.100000)" fill="currentColor"><path d="M2485 1046 c-44 -20 -111 -94 -136 -151 -27 -60 -37 -198 -20 -263
+<symbol id="i-s" viewBox="64 64 400 400"><g transform="translate(-346.79007637096436,151.22590491040148) scale(1.9582330878058811)"><g transform="translate(0.000000,108.000000) scale(0.100000,-0.100000)" fill="currentColor"><path d="M2485 1046 c-44 -20 -111 -94 -136 -151 -27 -60 -37 -198 -20 -263
 13 -48 68 -115 114 -138 64 -34 162 -43 562 -55 239 -6 405 -15 413 -21 19
 -16 15 -66 -7 -78 -26 -13 -563 -13 -612 0 -20 6 -44 19 -54 30 -17 19 -31 20
 -222 20 l-203 0 0 -49 c0 -81 34 -172 86 -230 78 -87 31 -81 672 -81 l568 0
@@ -895,6 +998,8 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 2v1.5M2 9h1.5M4 4l1 1M14 4l-1 1M4 14l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 20h8.5a3.5 3.5 0 0 0 .3-7 5 5 0 0 0-9.4 1A3 3 0 0 0 10 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-fork" viewBox="0 0 24 24"><path d="M7 3v7M4.5 3v5a2.5 2.5 0 0 0 5 0V3M7 10v11M17 21V3c-2.2 1-3.5 3.6-3.5 7v4H17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
 <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 8.5-2 5-5 2 2-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
@@ -924,6 +1029,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
     <div class="vrule" aria-hidden="true"></div>
     <div class="appname" id="appname">MyMISMO</div>
     <div class="mast-right">
+      <button class="mast-icon" id="bell-btn" type="button" aria-label="Alerts" hidden><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="dot" id="bell-dot"></span></button>
       <button class="mast-icon" id="msg-btn" type="button" aria-label="Messages" hidden><svg aria-hidden="true"><use href="#i-chat"/></svg><span class="dot" id="msg-dot"></span></button>
       <button class="mast-icon" id="acct-btn" type="button" aria-label="Sign in" hidden><svg aria-hidden="true"><use href="#i-user"/></svg></button>
       <button class="theme-btn" id="theme-btn" type="button">Dark</button>
@@ -1174,6 +1280,7 @@ function sessCard(x) {
     extra += '<span class="faces">' + ppl.slice(0, 6).map(face).join('') + '</span><span class="spons">' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' sessions, ' + ppl.length + ' speakers</span>';
   }
   if (groupVideo(x)) extra += '<span class="vchip">' + icon('i-play') + 'Group Video</span>';
+  if (SLIDES[x.id]) extra += '<span class="vchip">' + icon('i-file') + 'Slides</span>';
   if (sp.length) extra += '<span class="spline"><span class="spons">' + esc(spLabel(x)) + '</span>' + spChips(sp) + '</span>';
   else if (x.type === 'General Session' && gsSponsors().length) extra += '<span class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</span>';
   return '<div class="sess' + (live ? ' live' : '') + '" style="--tagc:' + tc(x.type) + '"><span class="bar"></span>' +
@@ -1731,6 +1838,17 @@ function chooser(first) {
   requestAnimationFrame(function () { el.classList.add('on'); });
   if (window.MismoBack) MismoBack.check();
 }
+/* an alert tapped on the phone opens the session it names (?open=<session id>) */
+function openFromLink() {
+  var m = /[?&]open=([^&]+)/.exec(location.search); if (m && S.summit) { var x = sessionById(decodeURIComponent(m[1])); if (x) setTimeout(function () { sessionSheet(x.id); }, 600); }
+  if (/[?&]alert=/.test(location.search) && PUSH) setTimeout(function () { if (PUSH.ready) alertsSheet(); }, 1200);
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', function (e) {
+  var u = e.data && e.data.alertUrl; if (!u) return;
+  var m = /[?&]open=([^&]+)/.exec(u); loadAlerts && loadAlerts();
+  closeSheet(true); if (S.summit) show('home');
+  if (m) sessionSheet(decodeURIComponent(m[1])); else if (PUSH.ready) alertsSheet();
+});
 function closeChooser() { var el = $('#choose'); el.classList.remove('on'); setTimeout(function () { el.hidden = true; }, 260); if (!stack.length) document.body.style.overflow = ''; if (window.MismoBack) MismoBack.check(); }
 function chooserOpen() { return !$('#choose').hidden && !!dashPicks(); }
 
@@ -1768,26 +1886,49 @@ function mattersSheet() {
     '<div class="d-actions" style="margin-top:16px"><a class="btn" href="' + SITE + '/about-mismo/mismo-matters" target="_blank" rel="noopener">' + icon('i-link') + 'Subscribe on mismo.org</a></div></div>';
   openSheet('MISMO Matters', h, { plain: true });
 }
-var PROG_COLOR = ['#2477b8', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'];
+var PROG_COLOR = ['#2477b8', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#74bfeb', '#7f93a6'];
+function countUp(root) {
+  root.querySelectorAll('[data-count]').forEach(function (el) {
+    var to = +el.getAttribute('data-count'), t0 = null, dur = 1100;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = to; return; }
+    function step(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e); if (k < 1) requestAnimationFrame(step); }
+    el.textContent = '0'; requestAnimationFrame(step);
+  });
+}
 function certsSheet() {
   var cl = (CERT && CERT.certifications) || [], progs = PROS && PROS.programs ? Object.keys(PROS.programs) : [];
-  var pc = {}; cl.forEach(function (c) { if (!(c.program in pc)) pc[c.program] = PROG_COLOR[Object.keys(pc).length % PROG_COLOR.length]; });
-  var h = '<div class="sheet-pad"><div class="cstats"><div><b>' + cl.length + '</b><span>New Certifications, Last 6 Months</span></div>' +
-    progs.map(function (k) { return '<div><b>' + PROS.programs[k].count + '</b><span>' + esc(PROS.programs[k].title.replace(/^Current /, '')) + '</span></div>'; }).join('') + '</div>';
-  if (cl.length) h += '<div class="section-h"><h2>Recently Certified</h2></div><div class="certs">' + cl.slice(0, 40).map(function (c) {
-    return '<div class="cert" style="--pc:' + pc[c.program] + '"><div class="ct"><b>' + esc(c.org) + '</b><span>' + esc(c.product || '') + '</span></div><div class="cm"><span class="tag" style="--tagc:' + pc[c.program] + '">' + esc(c.program) + '</span>' +
-      (c.newProvider ? '<span class="tag" style="--tagc:var(--star)">New Provider</span>' : c.first ? '<span class="tag" style="--tagc:var(--good)">First in Program</span>' : '') + '<em>' + esc(shortDate(c.certifiedOn)) + '</em></div></div>';
+  var byProg = {}; cl.forEach(function (c) { byProg[c.program] = (byProg[c.program] || 0) + 1; });
+  var order = Object.keys(byProg).sort(function (a, b) { return byProg[b] - byProg[a]; }), pc = {};
+  order.forEach(function (k, i) { pc[k] = PROG_COLOR[i % PROG_COLOR.length]; });
+  var max = order.length ? byProg[order[0]] : 1, newProv = cl.filter(function (c) { return c.newProvider; }).length;
+  var h = '<section class="cert-hero">' + heroArt() + '<div class="ch-in2"><span class="cert-seal">' + icon('i-cert') + '</span><h2>MISMO Certified</h2><p>Products and people that have proven they work to the MISMO standards.</p>' +
+    '<div class="cert-nums"><div><b data-count="' + cl.length + '">' + cl.length + '</b><span>New in 6 Months</span></div>' + (newProv ? '<div><b data-count="' + newProv + '">' + newProv + '</b><span>New Providers</span></div>' : '') +
+    progs.map(function (k) { return '<div><b data-count="' + PROS.programs[k].count + '">' + PROS.programs[k].count + '</b><span>' + esc(k) + 's</span></div>'; }).join('') + '</div></div></section><div class="sheet-pad">';
+  if (order.length) h += '<div class="d-h" style="margin-top:4px">By Program</div><div class="bars">' + order.map(function (k, i) {
+    return '<div class="bar" style="--c:' + pc[k] + ';--w:' + Math.max(6, Math.round(byProg[k] / max * 100)) + '%;--i:' + i + '"><span class="bl">' + esc(k) + '</span><span class="bt"><i></i></span><b>' + byProg[k] + '</b></div>';
   }).join('') + '</div>';
-  if (progs.length) h += '<div class="section-h"><h2>Certified Professionals</h2></div><div class="seg">' + progs.map(function (k, i) { return '<button type="button" data-pro="' + esc(k) + '" aria-pressed="' + (i === 0) + '">' + esc(k) + '</button>'; }).join('') + '</div>' +
-    '<label class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="search" id="pro-q" placeholder="Search by name or company" autocomplete="off"></label><div class="pros" id="pros"></div>';
-  h += '<div class="d-actions" style="margin-top:16px"><a class="btn" href="' + SITE + '/standards-resources/certification" target="_blank" rel="noopener">' + icon('i-link') + 'About MISMO Certification</a></div></div>';
+  if (cl.length) {
+    var months = [], seen = {};
+    cl.forEach(function (c) { var m = String(c.certifiedOn || '').slice(0, 7); if (!seen[m]) { seen[m] = []; months.push(m); } seen[m].push(c); });
+    h += '<div class="d-h">Recently Certified</div><div class="tl">' + months.map(function (m) {
+      var p = m.split('-');
+      return '<div class="tl-m"><div class="tl-h">' + esc(MONTH[(+p[1] || 1) - 1] + ' ' + p[0]) + '<span>' + seen[m].length + '</span></div>' + seen[m].map(function (c) {
+        return '<div class="tl-i" style="--c:' + pc[c.program] + '"><span class="tl-dot"></span><div class="tl-c"><div class="tl-top"><b>' + esc(c.org) + '</b><em>' + esc(shortDate(c.certifiedOn)) + '</em></div>' + (c.product ? '<span class="tl-p">' + esc(c.product) + '</span>' : '') +
+          '<div class="tl-tags"><span class="tag" style="--tagc:' + pc[c.program] + '">' + esc(c.program) + '</span>' + (c.newProvider ? '<span class="sparkle">New Provider</span>' : c.first ? '<span class="tag" style="--tagc:var(--good)">First in Program</span>' : '') + '</div></div></div>';
+      }).join('') + '</div>';
+    }).join('') + '</div>';
+  }
+  if (progs.length) h += '<div class="d-h">Certified Professionals</div><div class="seg">' + progs.map(function (k, i) { return '<button type="button" data-pro="' + esc(k) + '" aria-pressed="' + (i === 0) + '">' + esc(k) + 's <span class="sc">' + PROS.programs[k].count + '</span></button>'; }).join('') + '</div>' +
+    '<label class="search">' + icon('i-search') + '<input type="search" id="pro-q" placeholder="Search by name or company" autocomplete="off"></label><div class="pros" id="pros"></div>';
+  h += '<div class="d-actions" style="margin-top:18px"><a class="btn" href="' + SITE + '/standards-resources/certification" target="_blank" rel="noopener">' + icon('i-link') + 'About MISMO Certification</a></div></div>';
   var el = openSheet('Certifications', h, { plain: true });
+  setTimeout(function () { countUp(el); el.classList.add('go'); }, 250);
   var cur = progs[0];
   function paintPros() {
     var box = el.querySelector('#pros'); if (!box) return;
     var q = (el.querySelector('#pro-q').value || '').toLowerCase().trim();
     var list = PROS.programs[cur].people.filter(function (p) { return !q || (p.name + ' ' + p.company).toLowerCase().indexOf(q) >= 0; });
-    box.innerHTML = list.length ? list.map(function (p) { return '<div class="pro"><span class="ini">' + esc(initials(p.name)) + '</span><span><b>' + esc(p.name) + '</b><span>' + esc(p.company || '') + '</span></span></div>'; }).join('') : '<div class="note">No one matches that.</div>';
+    box.innerHTML = list.length ? list.map(function (p, i) { return '<div class="pro" style="--h:' + ((p.name.charCodeAt(0) * 37 + p.name.length * 11) % 360) + '"><span class="ini">' + esc(initials(p.name)) + '</span><span><b>' + esc(p.name) + '</b><span>' + esc(p.company || '') + '</span></span></div>'; }).join('') : '<div class="note">No one matches that.</div>';
   }
   if (progs.length) {
     el.querySelector('#pro-q').addEventListener('input', paintPros);
@@ -1831,25 +1972,38 @@ function liveSheet() {
 }
 function ytThumb(id) { return 'https://i.ytimg.com/vi/' + encodeURIComponent(id) + '/hqdefault.jpg'; }
 function epDate(iso) { var d = new Date(iso); return isNaN(d) ? '' : MON[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
-function micdupSheet() {
+function epRow(e, on) {
+  return '<button type="button" class="ep' + (on ? ' on' : '') + '" data-ep="' + esc(e.id) + '"><span class="th"><img src="' + esc(ytThumb(e.id)) + '" alt="" loading="lazy">' + (e.duration ? '<em>' + esc(e.duration) + '</em>' : '') + '<i>' + icon('i-play') + '</i></span>' +
+    '<span class="ep-tx"><b>' + esc(e.title) + '</b><span>' + esc(epDate(e.published)) + '</span></span></button>';
+}
+function micdupSheet(startId) {
   var eps = (MU && MU.episodes) || [];
-  var h = '<div class="sheet-pad">' + (eps.length ? '<div class="eps">' + eps.map(function (e) {
-    return '<button type="button" class="ep" data-episode="' + esc(e.id) + '"><span class="th"><img src="' + esc(ytThumb(e.id)) + '" alt="" loading="lazy"><i>' + icon('i-play') + '</i>' + (e.duration ? '<em>' + esc(e.duration) + '</em>' : '') + '</span><span class="ep-tx"><b>' + esc(e.title) + '</b><span>' + esc(epDate(e.published)) + '</span></span></button>';
-  }).join('') + '</div>' : '<div class="note">The episode list couldn\'t be loaded just now. Try again in a minute.</div>') + '</div>';
-  openSheet('MISMO Mic\'d Up', h, { plain: true });
+  if (!eps.length) { openSheet('MISMO Mic\'d Up', '<div class="sheet-pad"><div class="note">The episodes couldn\'t be loaded just now. Try again in a minute.</div></div>', { plain: true }); return; }
+  var cur = eps.filter(function (e) { return e.id === startId; })[0] || eps[0];
+  function now(e) { return '<div class="mic-now"><span class="mic-k">' + icon('i-play') + (e === eps[0] ? 'Latest Episode' : 'Now Playing') + '</span><h2>' + esc(e.title) + '</h2><span class="mic-d">' + esc(epDate(e.published)) + (e.duration ? ', ' + esc(e.duration) : '') + '</span></div>'; }
+  var h = '<section class="mic-hero">' + heroArt() + '<div class="mic-brand"><b>MISMO Mic\'d Up</b><span>' + eps.length + ' episodes</span></div>' +
+    '<div class="mic-stage">' + player(cur.id, cur.title) + '</div><div id="mic-now">' + now(cur) + '</div></section>' +
+    '<div class="sheet-pad"><div class="d-h" style="margin-top:4px">All Episodes</div><div class="eps" id="eps">' + eps.map(function (e) { return epRow(e, e === cur); }).join('') + '</div></div>';
+  var el = openSheet('MISMO Mic\'d Up', h, { plain: true });
+  el.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-ep]'); if (!b) return;
+    var e = eps.filter(function (x) { return x.id === b.getAttribute('data-ep'); })[0]; if (!e) return;
+    var st = el.querySelector('.mic-stage'); st.innerHTML = player(e.id, e.title); playIn(st.querySelector('.player'), e.id);
+    el.querySelector('#mic-now').innerHTML = now(e);
+    el.querySelectorAll('[data-ep]').forEach(function (x) { x.classList.toggle('on', x === b); });
+    el.querySelector('.sheet-body').scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  if (startId) setTimeout(function () { var pl = el.querySelector('.mic-stage .player'); if (pl) playIn(pl, cur.id); }, 320);
 }
-function episodeSheet(id) {
-  var e = ((MU && MU.episodes) || []).filter(function (x) { return x.id === id; })[0] || { id: id, title: 'MISMO Mic\'d Up' };
-  var h = '<div class="sheet-pad">' + player(id, e.title) +
-    '<div class="d-title" style="font-family:var(--cond);font-size:24px;font-weight:700;margin-top:14px;line-height:1.15">' + esc(e.title) + '</div><div style="color:var(--ink-2);margin-top:4px">' + esc(epDate(e.published)) + (e.duration ? ', ' + esc(e.duration) : '') + '</div>' +
-    '<div class="d-actions" style="margin-top:14px"><a class="btn" href="https://www.youtube.com/watch?v=' + encodeURIComponent(id) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Watch on YouTube</a></div></div>';
-  var el = openSheet(e.title, h, { plain: true });
-  setTimeout(function () { var b = el.querySelector('.player'); if (b) playIn(b, id); }, 320);
-}
+function episodeSheet(id) { micdupSheet(id); }
+var SITE_ICON = { '/standards-resources': ['i-file', '#2477b8'], '/mismolibraries': ['i-agenda', '#1baf7a'], '/glossary': ['i-search', '#eda100'], '/standards-resources/certification': ['i-cert', '#eb6834'], '/standards-resources/mismo-link': ['i-bulb', '#74bfeb'], '/get-involved/workgroups': ['i-people', '#e87ba4'], '/membership': ['i-handshake', '#008300'], '/about-mismo/news': ['i-mail', '#7f93a6'] };
 function siteSheet() {
-  openSheet('mismo.org', '<div class="sheet-pad"><div class="list">' + SITE_LINKS.map(function (l) {
-    return '<a class="sitelink" href="' + SITE + l[1] + '" target="_blank" rel="noopener"><b>' + esc(l[0]) + '</b><span>' + esc(l[2]) + '</span>' + icon('i-link') + '</a>';
-  }).join('') + '</div></div>', { plain: true });
+  var h = '<section class="site-hero">' + heroArt() + '<div class="site-in"><span class="site-k">' + icon('i-globe') + 'www.mismo.org</span><h2>Everything MISMO, One Tap Away</h2><p>The standards, the library, the glossary and how to get involved.</p></div></section>' +
+    '<div class="sheet-pad"><div class="site-grid">' + SITE_LINKS.map(function (l, i) {
+      var ic = SITE_ICON[l[1]] || ['i-link', '#2477b8'];
+      return '<a class="site-tile" href="' + SITE + l[1] + '" target="_blank" rel="noopener" style="--c:' + ic[1] + ';--i:' + i + '"><span class="st-ic">' + icon(ic[0]) + '</span><b>' + esc(l[0]) + '</b><span>' + esc(l[2]) + '</span><span class="st-go">' + icon('i-link') + '</span></a>';
+    }).join('') + '</div></div>';
+  openSheet('mismo.org', h, { plain: true });
 }
 
 var RENDER = { dash: renderDash, home: renderHome, agenda: renderAgenda, mine: renderMine, people: renderPeople, explore: renderExplore };
@@ -1916,6 +2070,7 @@ function sessionSheet(id) {
   h += '<div class="d-actions two"><button type="button" class="btn primary' + (isMine(x.id) ? ' on-mine' : '') + '" data-mine-btn="' + esc(x.id) + '" data-toggle-mine="' + esc(x.id) + '">' + mineBtnHtml(x.id) + '</button>' +
     '<button type="button" class="btn" data-ics="' + esc(x.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div>';
   if (x.type === 'General Session' && liveWindow(x)) h += liveCard(x);
+  h += slidesBlock(x);
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
   var gv = groupVideo(x);
   if (gv) h += '<div class="d-h">Meet the Group</div>' + player(gv.youtube, x.title);
@@ -1938,7 +2093,8 @@ function sessionSheet(id) {
   }).join('') + '</div>';
   var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type); });
   if (also.length && also.length < 12) h += '<div class="d-h">Also at This Time</div><div class="list">' + also.map(sessCard).join('') + '</div>';
-  openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });
+  var sel = openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });
+  if (SLIDES[x.id] && A.token) paintSlides(sel, x.id);
 }
 function speakerSheet(key) {
   var p = S.speakers.filter(function (s) { return s.key === key; })[0]; if (!p) return;
@@ -1986,6 +2142,109 @@ function rq(method, path, body) {
     }); })
     .catch(function () { return { status: 0, ok: false, j: { message: navigator.onLine === false ? 'You\'re offline. Try again once you\'re connected.' : 'MyMISMO couldn\'t reach MISMO just now. Try again in a minute.' } }; });
 }
+/* ---------- Alerts (relay request 14) ---------- */
+var PUSH = { ready: false, key: '', alerts: [], on: false };
+function rp(method, path, body) {
+  return fetch(RELAY + '/mymismo/' + path, { method: method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined })
+    .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
+    .catch(function () { return { ok: false, status: 0, j: {} }; });
+}
+function pushSupported() { return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+function standalone() { return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+function keyBytes(b64) { var s = (b64 + '===='.slice(b64.length % 4 || 4)).replace(/-/g, '+').replace(/_/g, '/'), raw = atob(s), out = new Uint8Array(raw.length); for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; }
+function checkPush() {
+  if (!S.sid) return;
+  rp('GET', 'push/ready').then(function (r) {
+    PUSH.ready = !!(r.ok && r.j && r.j.publicKey && (r.j.summits || []).indexOf(S.sid) >= 0); PUSH.key = PUSH.ready ? r.j.publicKey : '';
+    $('#bell-btn').hidden = !PUSH.ready;
+    if (!PUSH.ready) return;
+    loadAlerts();
+    if (pushSupported()) navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) { PUSH.on = !!sub; }).catch(function () {});
+  });
+}
+function loadAlerts() {
+  return rp('GET', 'push/alerts?summit=' + encodeURIComponent(S.sid)).then(function (r) {
+    if (!r.ok) return; PUSH.alerts = r.j.alerts || [];
+    var seen = load('alerts-seen:' + S.sid, 0), fresh = PUSH.alerts.filter(function (a) { return a.at > seen; }).length, dot = $('#bell-dot');
+    dot.textContent = fresh; dot.classList.toggle('on', fresh > 0);
+  });
+}
+function turnOnAlerts(btn) {
+  if (!pushSupported()) return;
+  btn.disabled = true;
+  Notification.requestPermission().then(function (perm) {
+    if (perm !== 'granted') throw new Error('denied');
+    return navigator.serviceWorker.ready;
+  }).then(function (reg) {
+    return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(PUSH.key) });
+  }).then(function (sub) {
+    return rp('POST', 'push/subscribe', { summit: S.sid, sub: sub.toJSON() });
+  }).then(function (r) {
+    if (!r.ok) throw new Error('save');
+    PUSH.on = true; closeSheet(false); alertsSheet();
+  }).catch(function (e) {
+    btn.disabled = false;
+    var n = btn.parentNode.querySelector('.problem') || btn.parentNode.appendChild(document.createElement('p')); n.className = 'problem';
+    n.textContent = e && e.message === 'denied' ? 'Alerts are blocked for MyMISMO. Turn them on in your phone\'s settings, then try again.' : 'Alerts couldn\'t be turned on just now. Try again in a minute.';
+  });
+}
+function turnOffAlerts() {
+  navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+    if (!sub) return; var ep = sub.endpoint; return sub.unsubscribe().then(function () { return rp('POST', 'push/unsubscribe', { endpoint: ep }); });
+  }).then(function () { PUSH.on = false; closeSheet(false); alertsSheet(); });
+}
+function alertsSheet() {
+  save('alerts-seen:' + S.sid, Date.now()); $('#bell-dot').classList.remove('on');
+  var h = '<div class="sheet-pad">';
+  if (PUSH.on) h += '<div class="al-state on">' + icon('i-bell') + '<div><b>Alerts are on</b><span>You\'ll get room changes and news from the MISMO team during the summit.</span></div><button type="button" class="btn small" data-alerts-off>Turn Off</button></div>';
+  else if (IOS && !standalone()) h += '<div class="al-state">' + icon('i-bell') + '<div><b>Get alerts on your iPhone</b><span>Add MyMISMO to your Home Screen first: tap Share, then Add to Home Screen. Open it from there and turn alerts on.</span></div></div>';
+  else if (pushSupported()) h += '<div class="al-state">' + icon('i-bell') + '<div><b>Turn on alerts</b><span>Room changes and news from the MISMO team, right on your phone. Nothing else.</span></div><button type="button" class="btn primary" data-alerts-on>Turn On Alerts</button></div>';
+  h += '<div class="d-h">Alerts</div>' + (PUSH.alerts.length ? '<div class="alerts">' + PUSH.alerts.map(function (a) {
+    var x = a.session && sessionById(a.session);
+    return '<article class="al"><div class="al-t"><b>' + esc(a.title) + '</b><em>' + esc(stamp(new Date(a.at).toISOString())) + '</em></div><p>' + esc(a.body) + '</p>' + (x ? '<button type="button" class="linkbtn" data-open="s:' + esc(x.id) + '">' + esc(x.title) + '</button>' : '') + '</article>';
+  }).join('') + '</div>' : '<div class="note">No alerts yet. The MISMO team sends them during the summit.</div>');
+  openSheet('Alerts', h + '</div>', { plain: true });
+}
+
+/* ---------- Presentation slides (relay request 14): signed-in attendees only ---------- */
+var SLIDES = {};
+function checkSlides() { if (!S.sid) return; rp('GET', 'slides/have?summit=' + encodeURIComponent(S.sid)).then(function (r) { if (r.ok && r.j.sessions) { SLIDES = r.j.sessions; if (!stack.length && (S.page === 'agenda' || S.page === 'home' || S.page === 'mine')) renderPage(S.page); } }); }
+function slidesBlock(x) {
+  var n = SLIDES[x.id]; if (!n) return '';
+  if (!A.token) return '<div class="d-h">Presentation Slides</div><div class="slides-lock">' + icon('i-file') + '<div><b>' + n + (n === 1 ? ' file' : ' files') + ' for this session</b><span>Sign in with your registration email to download the slides.</span></div><button type="button" class="btn primary" data-signin>Sign In</button></div>';
+  return '<div class="d-h">Presentation Slides</div><div class="slides" data-slides="' + esc(x.id) + '"><div class="note">Getting the files…</div></div>';
+}
+function paintSlides(el, id) {
+  var box = el.querySelector('[data-slides]'); if (!box) return;
+  rq('GET', 'slides?session=' + encodeURIComponent(id)).then(function (r) {
+    if (!r.ok) { box.innerHTML = '<div class="note">The slides couldn\'t be loaded just now.</div>'; return; }
+    box.innerHTML = (r.j.files || []).map(function (f) {
+      return '<button type="button" class="slide" data-slide="' + esc(id) + '" data-n="' + f.n + '" data-parts="' + (f.parts || 1) + '">' + icon('i-file') + '<span><b>' + esc(f.name) + '</b><span>' + (f.size ? Math.max(1, Math.round(f.size / 1024 / 102.4) / 10) + ' MB' : '') + '</span></span><em>Download</em></button>';
+    }).join('');
+  });
+}
+function downloadSlide(btn) {
+  var id = btn.getAttribute('data-slide'), n = btn.getAttribute('data-n'), parts = +btn.getAttribute('data-parts') || 1, got = [], em = btn.querySelector('em');
+  btn.disabled = true;
+  function next(k) {
+    em.textContent = parts > 1 ? 'Downloading ' + Math.round(k / parts * 100) + '%' : 'Downloading…';
+    return rq('GET', 'slide?session=' + encodeURIComponent(id) + '&n=' + n + '&part=' + k).then(function (r) {
+      if (!r.ok) throw new Error('part');
+      got.push(r.j.s);
+      return k + 1 < (r.j.parts || parts) ? next(k + 1) : r.j;
+    });
+  }
+  next(0).then(function (meta) {
+    var url = got.join(''), m = /^data:([^;,]+)?(;base64)?,(.*)$/.exec(url); if (!m) throw new Error('bad');
+    var raw = m[2] ? atob(m[3]) : decodeURIComponent(m[3]), bytes = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+    var blob = new Blob([bytes], { type: m[1] || meta.type || 'application/octet-stream' }), href = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = href; a.download = meta.name || 'slides'; document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(href); a.remove(); }, 4000);
+    em.textContent = 'Downloaded'; btn.disabled = false;
+  }).catch(function () { em.textContent = 'Try Again'; btn.disabled = false; });
+}
+
 function checkReady() {
   return rq('GET', 'ready').then(function (r) {
     A.ready = !!(r.ok && r.j && Array.isArray(r.j.summits) && r.j.summits.some(function (s) { return s.id === S.sid; }));
@@ -2194,6 +2453,10 @@ document.addEventListener('click', function (e) {
   if (t.id === 'dash-btn') { closeSheet(true); show('dash'); return; }
   if (t.hasAttribute('data-hq')) { show(t.getAttribute('data-hq')); return; }
   if (t.hasAttribute('data-choose')) { chooser(false); return; }
+  if (t.id === 'bell-btn') { alertsSheet(); return; }
+  if (t.hasAttribute('data-alerts-on')) { turnOnAlerts(t); return; }
+  if (t.hasAttribute('data-alerts-off')) { turnOffAlerts(); return; }
+  if (t.hasAttribute('data-slide')) { downloadSlide(t); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-play')) { playIn(t.closest('.player'), t.getAttribute('data-play')); return; }
   if (t.hasAttribute('data-live')) { liveSheet(); return; }
@@ -2222,7 +2485,7 @@ document.addEventListener('click', function (e) {
     return;
   }
   if (t.hasAttribute('data-sponsors')) { if (S.summit) openSheet('Sponsors', '<div class="sheet-pad sp-page">' + renderSponsors() + '</div>', { plain: true }); return; }
-  if (t.hasAttribute('data-episode')) { episodeSheet(t.getAttribute('data-episode')); return; }
+  if (t.hasAttribute('data-episode')) { micdupSheet(t.getAttribute('data-episode')); return; }
   if (t.hasAttribute('data-micdup')) { micdupSheet(); return; }
   if (t.hasAttribute('data-sitelinks')) { siteSheet(); return; }
   if (t.hasAttribute('data-signin')) { closeSheet(true); signInSheet(); return; }
@@ -2280,7 +2543,8 @@ function start() {
     if (!dashPicks() && S.page === 'dash') setTimeout(function () { chooser(true); }, 500);
     installHint();
     setTimeout(function () { $('#loading').classList.add('done'); setTimeout(function () { $('#loading').hidden = true; }, 450); }, Math.max(0, 800 - (Date.now() - T0)));
-    if (S.summit) checkReady();
+    if (S.summit) { checkReady(); checkPush(); checkSlides(); }
+    openFromLink();
     loadExtras();
   });
 }

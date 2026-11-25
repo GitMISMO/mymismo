@@ -1,0 +1,251 @@
+--- a/_dev/aws/index.mjs	2026-11-25 14:12:11.155770967 -0700
++++ b/_dev/aws/index.mjs	2026-11-25 14:12:11.157111863 -0700
+@@ -62,7 +62,7 @@
+  * No AWS services are called and no data is stored here.
+  */
+ 
+-import { createHash, createHmac, timingSafeEqual, pbkdf2Sync, randomBytes, randomInt } from 'node:crypto';
++import { createHash, createHmac, timingSafeEqual, pbkdf2Sync, randomBytes, randomInt, createPrivateKey, createECDH, createCipheriv, sign as cryptoSign } from 'node:crypto';
+ import { readFileSync } from 'node:fs';
+ import { fileURLToPath } from 'node:url';
+ 
+@@ -2710,6 +2710,211 @@
+   return respond(200, { ok: true, summits });
+ }
+ 
++/* =====================================================================================
++ * MYMISMO: ALERTS AND PRESENTATION SLIDES (relay request 14; Jonna Critchley, Nov 25, 2026)
++ * Builds on relay request 13 (the same mymismo entry in projects.json and the same private mymismo-data).
++ *
++ * ALERTS. People using MyMISMO can turn on alerts on their phone (Web Push; on iPhone once MyMISMO is on the Home
++ * Screen). MISMO staff write an alert in Summit HQ and only the people named in the project's alertSenders can send it.
++ *   GET  /mymismo/push/ready                          -> { ok, publicKey, summits: [ids] }   (no sign-in)
++ *   POST /mymismo/push/subscribe   { summit, sub: { endpoint, keys: { p256dh, auth } } }   -> { ok }   (no sign-in)
++ *   POST /mymismo/push/unsubscribe { endpoint }       -> { ok }   (no sign-in)
++ *   GET  /mymismo/push/alerts?summit=<id>             -> { alerts: [{ id, title, body, session, at }] }   (no sign-in; the
++ *                                                        same words everyone with alerts on already received)
++ *   POST /mymismo/push/send  { summit, title, body, session }   (STAFF sign-in, alertSenders only)
++ *                                                     -> { ok, id, sent, failed, removed }
++ * A subscription is an address the phone's own push service gives out; it names no person. Kept in
++ * push/subs.json { docs: { <sha-256 of endpoint, 16 hex>: { endpoint, keys, summit, at } } }; an address the push
++ * service says is gone (404/410) is removed when the next alert is sent. Alerts sent are kept in push/alerts.json.
++ * The push message is encrypted for each phone (RFC 8291, aes128gcm) and signed with the VAPID key pair in the
++ * function's environment: MYMISMO_VAPID_PUBLIC (uncompressed P-256 point, base64url) and MYMISMO_VAPID_PRIVATE
++ * (the private scalar d, base64url). No library is needed.
++ *
++ * SLIDES. Presentation slides for a session, uploaded by the MISMO team in Summit HQ, for signed-in attendees only.
++ *   GET  /mymismo/slides/have?summit=<id>             -> { sessions: { <session id>: <count> } }   (no sign-in: counts only)
++ *   GET  /mymismo/att/slides?session=<id>             -> { files: [{ n, name, type, size, parts }] }   (attendee token)
++ *   GET  /mymismo/att/slide?session=<id>&n=<i>&part=<k>   -> { name, type, part, parts, s }   (attendee token; s is part k
++ *                                                        of the file's data: URL, joined in order by the app)
++ * Summit HQ publishes the list (the project's slidesFeed, in its PRIVATE data repository):
++ *   { updated, summits: { <summit id>: { sessions: { <session id>: [{ name, type, size, file, parts }] } } } }
++ * where file is the data/ path of the stored file (Summit HQ's chunked format: { chunked: { ver, n } } with parts at
++ * <file>--<ver>-<i>.json each holding { s }). Only files listed there can be read, only by an attendee of that summit.
++ *
++ * SWITCHED OFF piece by piece in projects.json's mymismo entry: "push": true (plus alertSenders: [emails]) turns on
++ * alerts, and "slidesFeed": { repo, branch, path } turns on slides; until then those routes answer 404 NOT_FOUND.
++ * ===================================================================================== */
++const MM14_SUBS = 'push/subs.json', MM14_ALERTS = 'push/alerts.json';
++const MM14_PUSH_HOSTS = /^https:\/\/(fcm\.googleapis\.com|updates\.push\.services\.mozilla\.com|[a-z0-9.-]*\.push\.apple\.com|web\.push\.apple\.com|[a-z0-9.-]*\.notify\.windows\.com|[a-z0-9.-]*\.push\.services\.mozilla\.com)\//;
++const MM14_LIMITS = { sub: 30, send: 30, have: 600, slides: 600 };
++const mm14b64u = b => Buffer.from(b).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
++const mm14unb64u = s => Buffer.from(String(s).replace(/-/g, '+').replace(/_/g, '/'), 'base64');
++const mm14key = endpoint => createHash('sha256').update('mymismo-push:' + endpoint).digest('hex').slice(0, 16);
++
++/* --- Web Push, by hand: RFC 8291 (message encryption) and RFC 8292 (VAPID) --- */
++function mm14vapid() {
++  const pub = process.env.MYMISMO_VAPID_PUBLIC || '', d = process.env.MYMISMO_VAPID_PRIVATE || '';
++  const p = mm14unb64u(pub);
++  if (p.length !== 65 || p[0] !== 4 || mm14unb64u(d).length !== 32) return null;
++  return { pub, key: createPrivateKey({ key: { kty: 'EC', crv: 'P-256', d, x: mm14b64u(p.subarray(1, 33)), y: mm14b64u(p.subarray(33)) }, format: 'jwk' }) };
++}
++function mm14jwt(audience, v, now) {
++  const head = mm14b64u(JSON.stringify({ typ: 'JWT', alg: 'ES256' }));
++  const body = mm14b64u(JSON.stringify({ aud: audience, exp: Math.floor(now / 1000) + 12 * 3600, sub: 'mailto:jcritchley@mismo.org' }));
++  const sig = cryptoSign('sha256', Buffer.from(head + '.' + body), { key: v.key, dsaEncoding: 'ieee-p1363' });
++  return head + '.' + body + '.' + mm14b64u(sig);
++}
++const mm14hmac = (key, data) => createHmac('sha256', key).update(data).digest();
++export function mm14encrypt(payload, p256dh, authSecret, salt = randomBytes(16), eph = null) {
++  const ua = mm14unb64u(p256dh), auth = mm14unb64u(authSecret);
++  const ecdh = eph || createECDH('prime256v1'); if (!eph) ecdh.generateKeys();
++  const asPub = ecdh.getPublicKey();
++  const shared = ecdh.computeSecret(ua);
++  const prkKey = mm14hmac(auth, shared);
++  const ikm = mm14hmac(prkKey, Buffer.concat([Buffer.from('WebPush: info\0'), ua, asPub, Buffer.from([1])]));
++  const prk = mm14hmac(salt, ikm);
++  const cek = mm14hmac(prk, Buffer.concat([Buffer.from('Content-Encoding: aes128gcm\0'), Buffer.from([1])])).subarray(0, 16);
++  const nonce = mm14hmac(prk, Buffer.concat([Buffer.from('Content-Encoding: nonce\0'), Buffer.from([1])])).subarray(0, 12);
++  const c = createCipheriv('aes-128-gcm', cek, nonce);
++  const ct = Buffer.concat([c.update(Buffer.concat([Buffer.from(payload), Buffer.from([2])])), c.final(), c.getAuthTag()]);
++  const rs = Buffer.alloc(4); rs.writeUInt32BE(4096);
++  return Buffer.concat([salt, rs, Buffer.from([65]), asPub, ct]);
++}
++async function mm14push(sub, payload, v, now) {
++  const aud = new URL(sub.endpoint).origin;
++  const body = mm14encrypt(payload, sub.keys.p256dh, sub.keys.auth);
++  try {
++    const r = await fetch(sub.endpoint, { method: 'POST', body, headers: {
++      Authorization: `vapid t=${mm14jwt(aud, v, now)}, k=${v.pub}`, 'Content-Encoding': 'aes128gcm', 'Content-Type': 'application/octet-stream', TTL: '86400', Urgency: 'high' } });
++    return r.status;
++  } catch (e) { return 0; }
++}
++
++function mm14pushOn(raw) { return raw && raw.push === true && !!mm14vapid(); }
++async function mm14raw() { return (await projects())[MM_PROJECT] || null; }
++async function mm14ready(proj) {
++  const raw = await mm14raw(); if (!mm14pushOn(raw)) return respond(404, { error: 'NOT_FOUND' });
++  const feed = await mmFeed(proj).catch(() => ({ error: true })), now = Date.now();
++  const summits = feed.error ? [] : Object.entries(feed.summits).filter(([, s]) => mmOpen(s, now)).map(([id]) => id);
++  return respond(200, { ok: true, publicKey: process.env.MYMISMO_VAPID_PUBLIC, summits });
++}
++async function mm14subscribe(event, proj, headers, on) {
++  const raw = await mm14raw(); if (!mm14pushOn(raw)) return respond(404, { error: 'NOT_FOUND' });
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, now = Date.now();
++  if (!mmAllowed('sub', mmIp(event), MM14_LIMITS.sub, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a few minutes.' });
++  const endpoint = mmStr(on ? b.sub && b.sub.endpoint : b.endpoint, 1000);
++  if (!MM14_PUSH_HOSTS.test(endpoint)) return respond(400, { error: 'INVALID', problems: ['That isn’t a push address this app can use.'] });
++  let entry = null;
++  if (on) {
++    const k = b.sub.keys || {}, summit = mmStr(b.summit, 31);
++    if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID' });
++    if (!/^[A-Za-z0-9_-]{80,100}$/.test(String(k.p256dh || '')) || !/^[A-Za-z0-9_-]{16,32}$/.test(String(k.auth || ''))) return respond(400, { error: 'INVALID' });
++    if (mm14unb64u(k.p256dh).length !== 65 || mm14unb64u(k.auth).length !== 16) return respond(400, { error: 'INVALID' });
++    entry = { endpoint, keys: { p256dh: k.p256dh, auth: k.auth }, summit, at: now };
++  }
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM14_SUBS, d => {
++    d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++    if (entry) {
++      if (Object.keys(d.docs).length >= 20_000 && !d.docs[mm14key(endpoint)]) throw new Error('full');
++      d.docs[mm14key(endpoint)] = entry;
++    } else delete d.docs[mm14key(endpoint)];
++    return d;
++  }, on ? 'MyMISMO: alerts turned on on a phone' : 'MyMISMO: alerts turned off on a phone').catch(() => ({ error: 'THROWN' }));
++  if (!w || w.error) return respond(502, { error: 'NOT_SAVED', message: 'That couldn’t be saved just now. Please try again.' });
++  return respond(200, { ok: true });
++}
++async function mm14alerts(event, proj, headers) {
++  const raw = await mm14raw(); if (!mm14pushOn(raw)) return respond(404, { error: 'NOT_FOUND' });
++  if (headers['origin'] && headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  if (!mmAllowed('have', mmIp(event), MM14_LIMITS.have, Date.now())) return respond(429, { error: 'TOO_MANY' });
++  const summit = mmStr((event.queryStringParameters || {}).summit, 31); if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID' });
++  const r = await readFile(proj.repo, proj.branch || 'main', MM14_ALERTS); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++  const alerts = ((r.data && r.data.alerts) || []).filter(a => a && a.summit === summit).slice(-100).reverse()
++    .map(a => ({ id: a.id, title: mmStr(a.title, 80), body: mmStr(a.body, 300), session: mmStr(a.session, 60), at: a.at }));
++  return respond(200, { alerts });
++}
++async function mm14send(event, proj, headers) {
++  const raw = await mm14raw(); if (!mm14pushOn(raw)) return respond(404, { error: 'NOT_FOUND' });
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  const t = auth.startsWith('Bearer ') && process.env.AUTH_SECRET ? verifyToken(auth.slice(7).trim(), process.env.AUTH_SECRET) : { error: 'NO' };
++  const senders = (Array.isArray(raw.alertSenders) ? raw.alertSenders : []).map(x => String(x).toLowerCase());
++  if (t.error || !t.sub || !senders.includes(String(t.sub).toLowerCase())) return respond(403, { error: 'NOT_ALLOWED', message: 'Only the people Jonna named can send MyMISMO alerts.' });
++  const dir = await loadAccess();
++  if (dir.error || !personByEmail(dir.people, t.sub) || tokenIsStale(t, personByEmail(dir.people, t.sub))) return respond(401, { error: 'SIGN_IN' });
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, now = Date.now();
++  if (!mmAllowed('send', t.sub, MM14_LIMITS.send, now)) return respond(429, { error: 'TOO_MANY', message: 'That’s a lot of alerts in an hour. Please wait.' });
++  const summit = mmStr(b.summit, 31), title = mmStr(b.title, 80), text = mmStr(b.body, 300), session = mmStr(b.session, 60);
++  if (!MM_SUMMIT.test(summit) || !title || !text) return respond(400, { error: 'INVALID', problems: ['An alert needs a summit, a title and a message.'] });
++  const v = mm14vapid();
++  const subs = await readFile(proj.repo, proj.branch || 'main', MM14_SUBS); if (subs.status !== 200 && subs.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++  const list = Object.entries((subs.data && subs.data.docs) || {}).filter(([, s]) => s && s.summit === summit && MM14_PUSH_HOSTS.test(s.endpoint));
++  const id = 'A' + now.toString(36);
++  const payload = JSON.stringify({ id, title, body: text, url: '/mymismo/?page=home' + (session ? '&open=' + encodeURIComponent(session) : '') + '&alert=' + id });
++  let sent = 0, failed = 0; const gone = [];
++  for (let i = 0; i < list.length; i += 50) {
++    const res = await Promise.all(list.slice(i, i + 50).map(([k, s]) => mm14push(s, payload, v, now).then(st => [k, st])));
++    for (const [k, st] of res) { if (st >= 200 && st < 300) sent++; else { failed++; if (st === 404 || st === 410) gone.push(k); } }
++  }
++  if (gone.length) await updateRepoJson(proj.repo, proj.branch || 'main', MM14_SUBS, d => { d.docs = d.docs || {}; gone.forEach(k => delete d.docs[k]); return d; }, 'MyMISMO: removed phones that turned alerts off').catch(() => null);
++  await updateRepoJson(proj.repo, proj.branch || 'main', MM14_ALERTS, d => {
++    d.alerts = Array.isArray(d.alerts) ? d.alerts : [];
++    d.alerts.push({ id, summit, title, body: text, session, at: now, by: String(t.sub).toLowerCase(), sent, failed });
++    if (d.alerts.length > 1000) d.alerts = d.alerts.slice(-1000);
++    return d;
++  }, 'MyMISMO alert sent').catch(() => null);
++  return respond(200, { ok: true, id, sent, failed, removed: gone.length });
++}
++
++/* --- slides --- */
++function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
++const mm14slideCache = { at: 0, value: null };
++async function mm14slideList(raw) {
++  const f = mm14slidesFeed(raw); if (!f) return null;
++  const now = Date.now(); if (mm14slideCache.value && now - mm14slideCache.at < 60_000) return mm14slideCache.value;
++  const r = await readFile(f.repo, f.branch, f.path);
++  if (r.status !== 200 || !r.data) return mm14slideCache.value || { error: true };
++  mm14slideCache.at = now; mm14slideCache.value = { repo: f.repo, branch: f.branch, summits: r.data.summits || {} };
++  return mm14slideCache.value;
++}
++const mm14files = (list, summit, session) => {
++  const s = list.summits[summit]; const arr = s && s.sessions && Array.isArray(s.sessions[session]) ? s.sessions[session] : [];
++  return arr.filter(x => x && typeof x.file === 'string' && /^data\/[A-Za-z0-9._-]+\.json$/.test(x.file) && !x.file.includes('..'));
++};
++async function mm14have(event, proj, headers) {
++  const raw = await mm14raw(), list = await mm14slideList(raw); if (!list) return respond(404, { error: 'NOT_FOUND' });
++  if (list.error) return respond(502, { error: 'UNAVAILABLE' });
++  if (headers['origin'] && headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  if (!mmAllowed('have', mmIp(event), MM14_LIMITS.have, Date.now())) return respond(429, { error: 'TOO_MANY' });
++  const summit = mmStr((event.queryStringParameters || {}).summit, 31); if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID' });
++  const out = {}, s = list.summits[summit];
++  if (s && s.sessions) for (const id of Object.keys(s.sessions)) { const n = mm14files(list, summit, id).length; if (n) out[mmStr(id, 60)] = n; }
++  return respond(200, { sessions: out });
++}
++async function mm14slides(event, proj, headers, subPath) {
++  const raw = await mm14raw(), list = await mm14slideList(raw); if (!list) return respond(404, { error: 'NOT_FOUND' });
++  if (list.error) return respond(502, { error: 'UNAVAILABLE' });
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  const who = mmWho(headers); if (who.error) return who.error;
++  if (!mmAllowed('slides', who.id, MM14_LIMITS.slides, Date.now())) return respond(429, { error: 'TOO_MANY' });
++  const q = event.queryStringParameters || {}, session = mmStr(q.session, 60);
++  const files = mm14files(list, who.summit, session);
++  if (subPath === '/att/slides') return respond(200, { files: files.map((x, n) => ({ n, name: mmStr(x.name, 160), type: mmStr(x.type, 80), size: Number(x.size) || 0, parts: Number(x.parts) || 1 })) });
++  const n = Number(q.n), part = Number(q.part || 0), x = files[n];
++  if (!x || !Number.isInteger(part) || part < 0) return respond(404, { error: 'NOT_FOUND' });
++  const head = await readFile(list.repo, list.branch, x.file);
++  if (head.status !== 200 || !head.data) return respond(502, { error: 'UNAVAILABLE' });
++  const c = head.data.chunked;
++  if (!c) { if (part !== 0) return respond(404, { error: 'NOT_FOUND' }); return respond(200, { name: x.name, type: x.type, part: 0, parts: 1, s: String(head.data.s || head.data.src || '') }); }
++  if (!/^[A-Za-z0-9]{1,20}$/.test(String(c.ver)) || !(part < Number(c.n))) return respond(404, { error: 'NOT_FOUND' });
++  const p = await readFile(list.repo, list.branch, x.file.replace(/\.json$/, '') + '--' + c.ver + '-' + part + '.json');
++  if (p.status !== 200 || !p.data) return respond(502, { error: 'UNAVAILABLE' });
++  return respond(200, { name: mmStr(x.name, 160), type: mmStr(x.type, 80), part, parts: Number(c.n), s: String(p.data.s || '') });
++}
++export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
++
++
+ 
+ export async function handler(event, context) {
+   currentContext = context || null;
+@@ -2779,6 +2984,19 @@
+     if (method !== 'POST') return respond(405, { error: 'METHOD' });
+     return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
+   }
++  if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
++    const mm = await mmConfig(proj).catch(() => null);
++    if (!mm) return respond(404, { error: 'NOT_FOUND' });
++    proj = mm;
++    const want = { '/push/ready': 'GET', '/push/alerts': 'GET', '/slides/have': 'GET', '/push/subscribe': 'POST', '/push/unsubscribe': 'POST', '/push/send': 'POST' }[subPath];
++    if (!want) return respond(404, { error: 'NOT_FOUND' });
++    if (method !== want) return respond(405, { error: 'METHOD' });
++    if (subPath === '/push/ready') return mm14ready(proj);
++    if (subPath === '/push/alerts') return mm14alerts(event, proj, headers);
++    if (subPath === '/slides/have') return mm14have(event, proj, headers);
++    if (subPath === '/push/send') return mm14send(event, proj, headers);
++    return mm14subscribe(event, proj, headers, subPath === '/push/subscribe');
++  }
+   if (subPath.startsWith('/att/')) {   /* relay request 13: MyMISMO's summit attendees, no staff sign-in */
+     const mm = await mmConfig(proj).catch(() => null);
+     if (!mm) return respond(404, { error: 'NOT_FOUND' });
+@@ -2787,6 +3005,7 @@
+     if (subPath === '/att/ready') return method === 'GET' ? mmReady(proj) : respond(405, { error: 'METHOD' });
+     if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
+     if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
++    if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */
+     const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST' }[subPath];
+     if (!ok) return respond(404, { error: 'NOT_FOUND' });
+     if (method !== ok) return respond(405, { error: 'METHOD' });
