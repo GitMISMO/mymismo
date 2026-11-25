@@ -26,6 +26,7 @@ Nothing is typed into this app. It reads only public feeds already on resources.
 - `/podcast/micdup.json`: MISMO Media's Mic'd Up episode list (YouTube ids, titles, dates).
 - `data/event.json`: the Summit page's welcome (www.mismo.org/events/summit): title, subtitle, paragraphs, At a Glance, Register Now. Same job as the guide.
 - `data/agenda-tags.json`: the website agenda's session logos (Sponsored by, Presented by, Powered by) and each group's Learn More video. Same job as the guide.
+- `data/programs.json`: each organization certification and everyone who holds it, from the website's directory pages (eClose, RON, eVault, Product, FRAME Advisory Partner, Certified Consultant). `data/providers.json`: each certified company's page (logo, About, certifications held, website). `data/peeks/`: pictures of sponsors' and providers' home pages. All made by `tools/build_providers.py` in the same job; a page that can't be read keeps its last good copy.
 - `/webinars/webinars.json` (upcoming MISMO webinars), `/marketing-hq/matters/editions.json` (MISMO Matters editions), `/certified/new-certifications.json` and `/certified/individuals.json` (certifications): read only, for the dashboard.
 - The General Sessions live stream plays MISMO's YouTube channel's live stream in the app, from 30 minutes before the General Sessions until they end.
 

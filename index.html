@@ -805,6 +805,37 @@ button.tl-c:hover{border-color:var(--border-strong)}
 .list .row em{font-style:normal; color:var(--ink-3); font-size:12.5px; font-weight:600}
 .pv-about p{font-size:15px; line-height:1.6; margin:0 0 10px}
 
+/* Certification tiles */
+.ctiles{display:grid; gap:12px}
+@media (min-width:640px){ .ctiles{grid-template-columns:1fr 1fr} .ctile.wide{grid-column:1 / -1} }
+.ctile{position:relative; overflow:hidden; background:var(--surface); border:1px solid var(--border); border-top:5px solid var(--c); border-radius:16px; padding:14px; box-shadow:var(--shadow); animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 60ms)}
+.ctile:before{content:""; position:absolute; right:-40px; top:-40px; width:130px; height:130px; border-radius:50%; background:var(--c); opacity:.08}
+.ct-h{display:flex; gap:12px; align-items:center}
+.ct-ic{width:46px; height:46px; flex:none; border-radius:12px; display:grid; place-items:center; color:#fff; background:linear-gradient(140deg, var(--c), color-mix(in srgb, var(--c) 55%, #06202f))}
+.ct-ic svg{width:24px; height:24px}
+.ct-h b{display:block; font-family:var(--cond); font-size:20px; line-height:1.1}
+.ct-h > div > span{color:var(--ink-2); font-size:13px; font-weight:600}
+.ct-h em{font-style:normal; font-family:var(--cond); font-size:20px; font-weight:700; color:var(--c)}
+.ct-b{font-size:13.5px; color:var(--ink-2); margin:10px 0 4px}
+.ct-list{display:grid; gap:6px; margin-top:10px}
+.ct-m{display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; width:100%; text-align:left; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:4px 10px 4px 4px; cursor:pointer; color:var(--ink); font:inherit; text-decoration:none}
+.ct-m:hover{border-color:var(--c)}
+.ct-logo{width:60px; height:32px; border-radius:6px; background:#fff; display:grid; place-items:center; padding:3px 5px; border:1px solid var(--border)}
+.ct-logo img{max-width:100%; max-height:100%; object-fit:contain}
+.ct-logo img + i, .ct-logo.no img{display:none}
+.ct-logo.no i{display:block}
+.ct-logo i{font-style:normal; font-weight:700; font-size:12px; color:#0d314c}
+.ct-n{font-weight:600; font-size:14px}
+.ct-m > svg{width:16px; height:16px; color:var(--ink-3)}
+.ct-list .ct-m.more, .ct-people .pro.more{display:none}
+.ct-list.all .ct-m.more, .ct-people.all .pro.more{display:grid}
+.ct-people.all .pro.more{display:flex}
+.ct-all{margin-top:8px; width:100%; border:1px dashed var(--border-strong); background:none; border-radius:8px; padding:8px; font-weight:700; color:var(--link); cursor:pointer; font:inherit; font-weight:700}
+.ct-about{display:inline-flex; align-items:center; gap:5px; margin-top:10px; font-size:13px; font-weight:600; color:var(--link); text-decoration:none}
+.ct-about svg{width:13px; height:13px}
+.ctile .search{margin-top:10px}
+.ct-people{display:grid; gap:6px; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); margin-top:10px}
+
 /* Speaker bio */
 .bio-btn{margin:0 0 4px}
 .bio{font-size:15.5px; line-height:1.6; margin-top:12px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:10px; animation:bio-in .28s ease}
@@ -1562,7 +1593,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -1627,6 +1658,7 @@ function loadExtras() {
   getJSON('/certified/new-certifications.json').then(function (c) { CERT = c; again(['dash']); }).catch(function () {});
   getJSON('/certified/individuals.json').then(function (c) { PROS = c; }).catch(function () {});
   getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
+  getJSON('data/programs.json').then(function (p) { PRG = p; again(['dash']); }).catch(function () {});
 }
 function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
 function guide() { return G && S.summit && norm(G.dates) === norm(S.summit.dates) ? G : null; }
@@ -1806,8 +1838,8 @@ function widget(id) {
     return '<button type="button" class="wd w-mat" data-matters>' + head() + (ed ? '<span class="w-ed">' + esc(ed.label) + '</span>' + (ed.vieauxPoint ? '<span class="w-t">' + esc(ed.vieauxPoint.title) + '</span>' : '<span class="w-sub">The latest edition</span>') : '<span class="w-sub">The monthly newsletter</span>') + '</button>';
   }
   if (id === 'certs') {
-    var cl = (CERT && CERT.certifications) || [];
-    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="w-num"><b>' + (cl.length || '') + '</b></span><span class="w-sub">' + (cl.length ? 'New in the last 6 months' + (cl[0] ? ', latest ' + esc(cl[0].org) : '') : 'Certified products and professionals') + '</span></button>';
+    var pg = (PRG && PRG.programs) || [], held = pg.reduce(function (n, p) { return n + p.members.length; }, 0);
+    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="w-num"><b>' + (held || '') + '</b></span><span class="w-sub">' + (held ? 'Certifications held across ' + pg.length + ' programs' : 'Certified products and professionals') + '</span></button>';
   }
   if (id === 'sponsors') {
     if (!S.sponsors.length) return '';
@@ -1884,47 +1916,48 @@ function countUp(root) {
     el.textContent = '0'; requestAnimationFrame(step);
   });
 }
+var PROG_ICON = { ron: 'i-cert', eclose: 'i-file', evault: 'i-lock', product: 'i-grid', 'frame-advisory-partner': 'i-bulb', 'certified-consultant': 'i-people' };
 function certsSheet() {
-  var cl = (CERT && CERT.certifications) || [], progs = PROS && PROS.programs ? Object.keys(PROS.programs) : [];
-  var byProg = {}; cl.forEach(function (c) { byProg[c.program] = (byProg[c.program] || 0) + 1; });
-  var order = Object.keys(byProg).sort(function (a, b) { return byProg[b] - byProg[a]; }), pc = {};
-  order.forEach(function (k, i) { pc[k] = PROG_COLOR[i % PROG_COLOR.length]; });
-  var max = order.length ? byProg[order[0]] : 1, newProv = cl.filter(function (c) { return c.newProvider; }).length;
-  var h = '<section class="cert-hero">' + heroArt() + '<div class="ch-in2"><span class="cert-seal">' + icon('i-cert') + '</span><h2>MISMO Certified</h2><p>Products and people that have proven they work to the MISMO standards.</p>' +
-    '<div class="cert-nums"><div><b data-count="' + cl.length + '">' + cl.length + '</b><span>New in 6 Months</span></div>' + (newProv ? '<div><b data-count="' + newProv + '">' + newProv + '</b><span>New Providers</span></div>' : '') +
-    progs.map(function (k) { return '<div><b data-count="' + PROS.programs[k].count + '">' + PROS.programs[k].count + '</b><span>' + esc(k) + 's</span></div>'; }).join('') + '</div></div></section><div class="sheet-pad">';
-  if (order.length) h += '<div class="d-h" style="margin-top:4px">By Program</div><div class="bars">' + order.map(function (k, i) {
-    return '<div class="bar" style="--c:' + pc[k] + ';--w:' + Math.max(6, Math.round(byProg[k] / max * 100)) + '%;--i:' + i + '"><span class="bl">' + esc(k) + '</span><span class="bt"><i></i></span><b>' + byProg[k] + '</b></div>';
+  var progs = (PRG && PRG.programs) || [], ppl = PROS && PROS.programs ? Object.keys(PROS.programs) : [];
+  var orgs = {}; progs.forEach(function (p) { p.members.forEach(function (m) { orgs[m.slug] = 1; }); });
+  var held = progs.reduce(function (n, p) { return n + p.members.length; }, 0);
+  var h = '<section class="cert-hero">' + heroArt() + '<div class="ch-in2"><span class="cert-seal">' + icon('i-cert') + '</span><h2>MISMO Certified</h2><p>Products, firms and people that have proven they work to the MISMO standards.</p>' +
+    '<div class="cert-nums">' + (progs.length ? '<div><b data-count="' + held + '">' + held + '</b><span>Certifications Held</span></div><div><b data-count="' + Object.keys(orgs).length + '">' + Object.keys(orgs).length + '</b><span>Organizations</span></div>' : '') +
+    ppl.map(function (k) { return '<div><b data-count="' + PROS.programs[k].count + '">' + PROS.programs[k].count + '</b><span>' + esc(k) + 's</span></div>'; }).join('') + '</div></div></section><div class="sheet-pad">';
+  if (!progs.length && !ppl.length) h += '<div class="note">The certification lists couldn\'t be loaded just now. Try again in a minute.</div>';
+  h += '<div class="ctiles">' + progs.map(function (p, i) {
+    var c = PROG_COLOR[i % PROG_COLOR.length], show = p.members.length > 8 ? 6 : 99;
+    return '<section class="ctile" style="--c:' + c + ';--i:' + i + '"><div class="ct-h"><span class="ct-ic">' + icon(PROG_ICON[p.key] || 'i-cert') + '</span><div><b>' + esc(p.title) + '</b><span><em data-count="' + p.members.length + '">' + p.members.length + '</em> Certified</span></div></div>' +
+      (p.blurb ? '<p class="ct-b">' + esc(p.blurb) + '</p>' : '') +
+      '<div class="ct-list" id="ctl-' + i + '">' + p.members.map(function (m, k) {
+        var pv = PRV && PRV.providers && PRV.providers[m.slug];
+        return '<' + (pv ? 'button type="button" data-prov="' + esc(m.slug) + '"' : 'a href="' + esc(SITE + '/standards-resources/' + m.slug) + '" target="_blank" rel="noopener"') + ' class="ct-m' + (k >= show ? ' more' : '') + '">' +
+          '<span class="ct-logo">' + (m.logo ? '<img src="' + esc(m.logo) + '" alt="" loading="lazy">' : '') + '<i>' + esc(initials(m.name)) + '</i></span><span class="ct-n">' + esc(m.name) + '</span>' + icon('i-chev') + '</' + (pv ? 'button' : 'a') + '>';
+      }).join('') + '</div>' +
+      (p.members.length > show ? '<button type="button" class="ct-all" data-ctall="ctl-' + i + '">Show All ' + p.members.length + '</button>' : '') +
+      '<a class="ct-about" href="' + esc(p.about) + '" target="_blank" rel="noopener">About this certification' + icon('i-link') + '</a></section>';
+  }).join('') + ppl.map(function (k, n) {
+    var pr = PROS.programs[k], i = progs.length + n, c = PROG_COLOR[i % PROG_COLOR.length];
+    return '<section class="ctile wide" style="--c:' + c + ';--i:' + i + '"><div class="ct-h"><span class="ct-ic">' + icon('i-people') + '</span><div><b>' + esc(pr.title.replace(/^Current /, '')) + '</b><span><em data-count="' + pr.count + '">' + pr.count + '</em> Certified Professionals</span></div></div>' +
+      '<label class="search">' + icon('i-search') + '<input type="search" data-proq="' + esc(k) + '" placeholder="Search by name or company" autocomplete="off"></label>' +
+      '<div class="ct-people" id="ctp-' + esc(k) + '">' + pr.people.map(function (p, x) { return '<div class="pro' + (x >= 12 ? ' more' : '') + '" style="--h:' + ((p.name.charCodeAt(0) * 37 + p.name.length * 11) % 360) + '"><span class="ini">' + esc(initials(p.name)) + '</span><span><b>' + esc(p.name) + '</b><span>' + esc(p.company || '') + '</span></span></div>'; }).join('') + '</div>' +
+      (pr.people.length > 12 ? '<button type="button" class="ct-all" data-ctall="ctp-' + esc(k) + '">Show All ' + pr.count + '</button>' : '') + '</section>';
   }).join('') + '</div>';
-  if (cl.length) {
-    var months = [], seen = {};
-    cl.forEach(function (c) { var m = String(c.certifiedOn || '').slice(0, 7); if (!seen[m]) { seen[m] = []; months.push(m); } seen[m].push(c); });
-    h += '<div class="d-h">Recently Certified</div><div class="tl">' + months.map(function (m) {
-      var p = m.split('-');
-      return '<div class="tl-m"><div class="tl-h">' + esc(MONTH[(+p[1] || 1) - 1] + ' ' + p[0]) + '<span>' + seen[m].length + '</span></div>' + seen[m].map(function (c) {
-        var pv = PRV && PRV.providers && PRV.providers[c.slug];
-        return '<div class="tl-i" style="--c:' + pc[c.program] + '"><span class="tl-dot"></span><' + (pv ? 'button type="button" data-prov="' + esc(c.slug) + '"' : 'div') + ' class="tl-c"><div class="tl-top"><b>' + esc(c.org) + '</b><em>' + esc(shortDate(c.certifiedOn)) + '</em></div>' + (c.product ? '<span class="tl-p">' + esc(c.product) + '</span>' : '') +
-          '<div class="tl-tags"><span class="tag" style="--tagc:' + pc[c.program] + '">' + esc(c.program) + '</span>' + (c.newProvider ? '<span class="sparkle">New Provider</span>' : c.first ? '<span class="tag" style="--tagc:var(--good)">First in Program</span>' : '') + (pv ? '<span class="tl-go">' + icon('i-chev') + '</span>' : '') + '</div></' + (pv ? 'button' : 'div') + '></div>';
-      }).join('') + '</div>';
-    }).join('') + '</div>';
-  }
-  if (progs.length) h += '<div class="d-h">Certified Professionals</div><div class="seg">' + progs.map(function (k, i) { return '<button type="button" data-pro="' + esc(k) + '" aria-pressed="' + (i === 0) + '">' + esc(k) + 's <span class="sc">' + PROS.programs[k].count + '</span></button>'; }).join('') + '</div>' +
-    '<label class="search">' + icon('i-search') + '<input type="search" id="pro-q" placeholder="Search by name or company" autocomplete="off"></label><div class="pros" id="pros"></div>';
-  h += '<div class="d-actions" style="margin-top:18px"><a class="btn" href="' + SITE + '/standards-resources/certification" target="_blank" rel="noopener">' + icon('i-link') + 'About MISMO Certification</a></div></div>';
+  h += '<div class="d-actions" style="margin-top:18px"><a class="btn" href="' + SITE + '/standards-resources/certification" target="_blank" rel="noopener">' + icon('i-link') + 'MISMO Certification on mismo.org</a></div></div>';
   var el = openSheet('Certifications', h, { plain: true });
   setTimeout(function () { countUp(el); el.classList.add('go'); }, 250);
-  var cur = progs[0];
-  function paintPros() {
-    var box = el.querySelector('#pros'); if (!box) return;
-    var q = (el.querySelector('#pro-q').value || '').toLowerCase().trim();
-    var list = PROS.programs[cur].people.filter(function (p) { return !q || (p.name + ' ' + p.company).toLowerCase().indexOf(q) >= 0; });
-    box.innerHTML = list.length ? list.map(function (p, i) { return '<div class="pro" style="--h:' + ((p.name.charCodeAt(0) * 37 + p.name.length * 11) % 360) + '"><span class="ini">' + esc(initials(p.name)) + '</span><span><b>' + esc(p.name) + '</b><span>' + esc(p.company || '') + '</span></span></div>'; }).join('') : '<div class="note">No one matches that.</div>';
-  }
-  if (progs.length) {
-    el.querySelector('#pro-q').addEventListener('input', paintPros);
-    el.addEventListener('click', function (e) { var b = e.target.closest('[data-pro]'); if (!b) return; cur = b.getAttribute('data-pro'); el.querySelectorAll('[data-pro]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); paintPros(); });
-    paintPros();
-  }
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ctall]'); if (!b) return;
+    var box = el.querySelector('#' + b.getAttribute('data-ctall')); box.classList.add('all'); b.remove();
+  });
+  // a logo that won't load shows the company's initials instead of an empty box
+  el.addEventListener('error', function (e) { var lg = e.target.closest && e.target.closest('.ct-logo'); if (lg) lg.classList.add('no'); }, true);
+  el.querySelectorAll('.ct-logo img').forEach(function (im) { if (im.complete && !im.naturalWidth) im.parentNode.classList.add('no'); });
+  el.addEventListener('input', function (e) {
+    var q = e.target.getAttribute && e.target.getAttribute('data-proq'); if (!q) return;
+    var v = e.target.value.toLowerCase().trim(), box = el.querySelector('#ctp-' + q); box.classList.toggle('all', !!v);
+    box.querySelectorAll('.pro').forEach(function (r) { r.hidden = !!v && r.textContent.toLowerCase().indexOf(v) < 0; });
+  });
 }
 /* A certified provider's own page: the same as the website's, from MyMISMO's copy of it */
 function providerSheet(slug) {
