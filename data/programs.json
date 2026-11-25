@@ -1,0 +1,296 @@
+{
+ "updated": "2026-11-25T21:41:15Z",
+ "source": "https://www.mismo.org/standards-resources/certification",
+ "programs": [
+  {
+   "key": "ron",
+   "title": "Remote Online Notarization Certification",
+   "blurb": "MISMO independently verifies that your platform’s functions, procedures and policies meet the MISMO RON Standards. Show the market proof, not promises.",
+   "about": "https://www.mismo.org/standards-resources/certification/organization-certifications/ron",
+   "directory": "https://www.mismo.org/standards-resources/ron-certified-providers",
+   "members": [
+    {
+     "name": "Aven",
+     "slug": "aven",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/aven.png"
+    },
+    {
+     "name": "Black Knight",
+     "slug": "black-knight",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/black-knight-logo-300x77.png"
+    },
+    {
+     "name": "Blue Notary",
+     "slug": "blue-notary",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/utf-8primary_logo_royal_blue_rich_black.png"
+    },
+    {
+     "name": "DocMagic",
+     "slug": "docmagic",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/1_dm_logo_horizontal.png"
+    },
+    {
+     "name": "Docusign",
+     "slug": "docusign",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/thumbnail_image004.png"
+    },
+    {
+     "name": "Docutech",
+     "slug": "docutech",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/fa_docutech-r_horz_1clr-4x.png"
+    },
+    {
+     "name": "Eltropy",
+     "slug": "eltropy",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/eltopy-logo-dark.svg"
+    },
+    {
+     "name": "eNotary On Call",
+     "slug": "enotary-on-call",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/enotary_on_call_logo.jpg"
+    },
+    {
+     "name": "nCino",
+     "slug": "ncino",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/ncino-logo-color-rgb.png"
+    },
+    {
+     "name": "Notary Launchpad",
+     "slug": "notary-launchpad",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notary-launchpad-logo.png"
+    },
+    {
+     "name": "NotaryCam",
+     "slug": "notarycam",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notarycam.png"
+    },
+    {
+     "name": "NotaryHub",
+     "slug": "notaryhub",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notaryhub1.png"
+    },
+    {
+     "name": "NotaryLive",
+     "slug": "notarylive",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notarylive.png"
+    },
+    {
+     "name": "OneNotary",
+     "slug": "onenotary",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/onenotary.png"
+    },
+    {
+     "name": "Online Notary Center",
+     "slug": "online-notary-center",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/online-notary-center_1_.jpg"
+    },
+    {
+     "name": "PandaDoc",
+     "slug": "pandadoc",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/pd-logo_green_pd_black.png"
+    },
+    {
+     "name": "ProNotary",
+     "slug": "pronotary",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/pronotary_logo_3x.png"
+    },
+    {
+     "name": "Proof",
+     "slug": "proof",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notarize.png"
+    },
+    {
+     "name": "Qualia",
+     "slug": "qualia",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/qualia.png"
+    },
+    {
+     "name": "Remote Notarez",
+     "slug": "remote-notarez",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/remotenotarez.png"
+    },
+    {
+     "name": "Rocket Close",
+     "slug": "rocket-close",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/logos_rocketclose-web-padded.png"
+    },
+    {
+     "name": "Secured Signing",
+     "slug": "secured-signing",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/securedsigning.png"
+    },
+    {
+     "name": "SIGNiX",
+     "slug": "signix",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/signix.png"
+    },
+    {
+     "name": "Simplifile",
+     "slug": "simplifile",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/simplifile-icon-logotype.svg"
+    },
+    {
+     "name": "Simply Secure Sign",
+     "slug": "simply-secure-sign",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/simply-secure-sign.png"
+    },
+    {
+     "name": "Snapdocs",
+     "slug": "snapdocs",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/snapdocs-fulllogo-main.png"
+    },
+    {
+     "name": "Stavvy",
+     "slug": "stavvy",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/stavvyab484cd651e64150ab837b20206e6160.jpg"
+    },
+    {
+     "name": "USA Notary Services",
+     "slug": "usa-notary",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/usa-notary-logo.png"
+    }
+   ]
+  },
+  {
+   "key": "eclose",
+   "title": "eClosing System Certification",
+   "blurb": "The process reviews the documentation you submit and a live demonstration of your eClose platform.",
+   "about": "https://www.mismo.org/standards-resources/certification/organization-certifications/eclose",
+   "directory": "https://www.mismo.org/standards-resources/eclosing-certified-providers",
+   "members": [
+    {
+     "name": "DocMagic",
+     "slug": "docmagic",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/1_dm_logo_horizontal.png"
+    },
+    {
+     "name": "Docutech",
+     "slug": "docutech",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/fa_docutech-r_horz_1clr-4x.png"
+    },
+    {
+     "name": "ICE Mortgage Technology",
+     "slug": "ice",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/ice-mortgage-technology-logo-png_seeklogo-433206-3227872744.png"
+    },
+    {
+     "name": "nCino",
+     "slug": "ncino",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/ncino-logo-color-rgb.png"
+    },
+    {
+     "name": "Rocket Close",
+     "slug": "rocket-close",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/logos_rocketclose-web-padded.png"
+    },
+    {
+     "name": "Snapdocs",
+     "slug": "snapdocs",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/snapdocs-fulllogo-main.png"
+    },
+    {
+     "name": "Wolters Kluwer",
+     "slug": "wolters-kluwer",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/wolters-kluwer-logo.png"
+    }
+   ]
+  },
+  {
+   "key": "evault",
+   "title": "eVault System Certification",
+   "blurb": "The process reviews the documentation you submit and a live demonstration of your eVault System.",
+   "about": "https://www.mismo.org/standards-resources/certification/organization-certifications/evault",
+   "directory": "https://www.mismo.org/standards-resources/evault-certified-providers",
+   "members": [
+    {
+     "name": "DocMagic",
+     "slug": "docmagic",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/1_dm_logo_horizontal.png"
+    },
+    {
+     "name": "Snapdocs",
+     "slug": "snapdocs",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/snapdocs-fulllogo-main.png"
+    },
+    {
+     "name": "Wolters Kluwer",
+     "slug": "wolters-kluwer",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/wolters-kluwer-logo.png"
+    }
+   ]
+  },
+  {
+   "key": "product",
+   "title": "Product Certification",
+   "blurb": "Verify that an interface, data exchange, or API complies with MISMO standards.",
+   "about": "https://www.mismo.org/standards-resources/certification/organization-certifications/product",
+   "directory": "https://www.mismo.org/standards-resources/certified-product-providers",
+   "members": [
+    {
+     "name": "Actualize Consulting",
+     "slug": "actualize-consulting",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/actualize-new-logo-small.jpg"
+    },
+    {
+     "name": "FundingShield",
+     "slug": "fundingshield",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/funding-shield.png"
+    },
+    {
+     "name": "Stellar Innovations",
+     "slug": "stellar-innovations",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/stellar-innovative-solutions-corp-logo.png"
+    },
+    {
+     "name": "Take Three Technologies",
+     "slug": "take-three-technologies",
+     "logo": "https://resources.mismo.org/certification/logos/take-three-technologies.png"
+    },
+    {
+     "name": "Viant Eye",
+     "slug": "viant-eye",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/viant-eye-logo_viant-eye-primary-logo2e801ac23df44d9eaae6b544ae232e2f.png"
+    }
+   ]
+  },
+  {
+   "key": "certified-consultant",
+   "title": "MISMO Certified Consultants",
+   "blurb": "Organizations of varying scale, size, and with different areas of MISMO expertise may become a MISMO Certified Consultant.",
+   "about": "https://www.mismo.org/standards-resources/certification/organization-certifications/certified-consultant",
+   "directory": "https://www.mismo.org/standards-resources/certified-consultants",
+   "members": [
+    {
+     "name": "Actualize Consulting",
+     "slug": "actualize-consulting",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/actualize-new-logo-small.jpg"
+    },
+    {
+     "name": "Falcon Capital Advisors",
+     "slug": "falcon-capital-advisors",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/falcon-capital.png"
+    },
+    {
+     "name": "Guidehouse",
+     "slug": "guidehouse",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/gh-logo_rgb.png"
+    },
+    {
+     "name": "PhoenixTeam",
+     "slug": "phoenixteam",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/phoenixteam-logo.png"
+    },
+    {
+     "name": "Tidgewell Results eXperience",
+     "slug": "tidgewell",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/trex-logo.png"
+    },
+    {
+     "name": "Viant Eye",
+     "slug": "viant-eye",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/viant-eye-logo_viant-eye-primary-logo2e801ac23df44d9eaae6b544ae232e2f.png"
+    }
+   ]
+  }
+ ]
+}

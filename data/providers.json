@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T21:28:51Z",
+ "updated": "2026-11-25T21:42:26Z",
  "source": "https://www.mismo.org/standards-resources/",
  "providers": {
   "docutech": {
@@ -591,6 +591,346 @@
     "This combination saves customers time and money for a clear competitive advantage. Snapdocs makes mortgage a snap. For more information, please visit www.snapdocs.com."
    ],
    "aboutTitle": "About Snapdocs"
+  },
+  "blue-notary": {
+   "slug": "blue-notary",
+   "name": "Blue Notary",
+   "tagline": "",
+   "website": "https://bluenotaryonline.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/utf-8primary_logo_royal_blue_rich_black.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Blue Notary is a dynamic and innovative company dedicated to revolutionizing the notary services industry. Specializing in online notarizations, Blue Notary leverages cutting-edge technology to provide efficient, secure, and convenient solutions for individuals and businesses."
+   ],
+   "aboutTitle": "About Blue Notary"
+  },
+  "enotary-on-call": {
+   "slug": "enotary-on-call",
+   "name": "eNotary On Call",
+   "tagline": "",
+   "website": "https://www.enotaryoncall.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/enotary_on_call_logo.jpg",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Offers a Remote Online Notarization platform where users can seamlessly access a user-friendly platform for secure online notarization from anywhere. There are real-time document checks, digital signatures, biometric identification and KBA verification. This platform provides an environment that helps Notaries adhere to legal requirements, ensuring a streamlined, secure, and trusted notarization process."
+   ],
+   "aboutTitle": "About eNotary On Call"
+  },
+  "ncino": {
+   "slug": "ncino",
+   "name": "nCino",
+   "tagline": "",
+   "website": "https://www.ncino.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/ncino-logo-color-rgb.png",
+   "tags": [
+    "RON Certification",
+    "eClose Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    },
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    }
+   ],
+   "about": [
+    "Through its single software-as-a-service (SaaS) platform, nCino helps financial institutions serving corporate and commercial, small business, consumer, and mortgage customers modernize and more effectively onboard clients, make loans, manage the loan lifecycle, and open accounts."
+   ],
+   "aboutTitle": "About nCino"
+  },
+  "notary-launchpad": {
+   "slug": "notary-launchpad",
+   "name": "Notary Launchpad",
+   "tagline": "",
+   "website": "https://www.notarylaunchpad.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notary-launchpad-logo.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Your notary and document services business. Fully operational. Today. Everything you need to run a document services business - RON, mobile notary, courier, apostille, and field inspections - under your own brand."
+   ],
+   "aboutTitle": "About Notary Launchpad"
+  },
+  "notarycam": {
+   "slug": "notarycam",
+   "name": "NotaryCam",
+   "tagline": "",
+   "website": "https://www.notarycam.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notarycam.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "NotaryCam set out to master the electronic real estate and mortgage ecosystem. Their platform connects all parties and documents in a virtual closing room. NotaryCam provides a secure, verifiable and independent witnessing service for high-valued business transactions, offering irrefutable evidence to any oral or written contract or agreement or ceremony."
+   ],
+   "aboutTitle": "About NotaryCam"
+  },
+  "pandadoc": {
+   "slug": "pandadoc",
+   "name": "PandaDoc, Inc",
+   "tagline": "",
+   "website": "https://www.pandadoc.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/pd-logo_green_pd_black.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "PandaDoc helps businesses of every size achieve more with software designed to make the average workday easier. What started as an idea between two college friends has grown into a purpose-driven software company that spans the globe, now trusted by tens of thousands of companies. PandaDoc is committed to delivering transformative technology that simplifies the way companies of any size operate and win."
+   ],
+   "aboutTitle": "About PandaDoc, Inc"
+  },
+  "proof": {
+   "slug": "proof",
+   "name": "Proof (formerly Notarize)",
+   "tagline": "",
+   "website": "https://www.notarize.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notarize.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Proof℠ is the world's first identity-assured transaction management platform. Developed by the same market leaders and experts who brought notarization online with Notarize℠, Proof offers trust in a digital world by verifying identities and securing transactions to protect your business and its customers."
+   ],
+   "aboutTitle": "About Proof (formerly Notarize)"
+  },
+  "qualia": {
+   "slug": "qualia",
+   "name": "Qualia",
+   "tagline": "",
+   "website": "https://www.qualia.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/qualia.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Qualia is the connected title, escrow and closing technology infrastructure built for real estate and mortgage professionals. The platform makes buying and selling a home a simple, secure and enjoyable experience by bringing together homebuyers and sellers, mortgage lenders, title and escrow agents, and real estate agents onto a single shared closing system."
+   ],
+   "aboutTitle": "About Qualia"
+  },
+  "remote-notarez": {
+   "slug": "remote-notarez",
+   "name": "Remote Notarez",
+   "tagline": "",
+   "website": "https://remotenotarez.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/remotenotarez.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "The Remote NotarEZ online notary service features all Virginia notaries, equipped with comprehensive knowledge and tools to comfortably navigate you through the electronic notary process. Remote NotarEZ offers you the convenience of a Virginia online notary solution in the comfort of your chosen location. They're not just about notarization; they're about making the process smooth, professional, and reliable."
+   ],
+   "aboutTitle": "About Remote Notarez"
+  },
+  "usa-notary": {
+   "slug": "usa-notary",
+   "name": "USA Notary Services LLC",
+   "tagline": "",
+   "website": "https://www.usanotary.net",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/usa-notary-logo.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "USA Notary provides remote online notarization: a commissioned notary public notarizes a document over a live, recorded video call rather than in person. The company serves signers in all 50 states, 24/7, with most sessions finished in 15 to 30 minutes. No account, appointment or travel is required."
+   ],
+   "aboutTitle": "About USA Notary Services LLC"
+  },
+  "ice": {
+   "slug": "ice",
+   "name": "ICE Mortgage",
+   "tagline": "",
+   "website": "https://www.icemortgagetechnology.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/ice_logo_rgbb13ccdce-6334-42f1-94f9-93f57d9d26c9.svg",
+   "tags": [
+    "eClose Certification"
+   ],
+   "certs": [
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    }
+   ],
+   "about": [
+    "ICE Mortgage technology solutions are developed to help customers navigate changing regulations, complex workflows, and thinning margins in order to close loans quickly, maximize profit, and stand out in today's competitive marketplace. The ICE Mortgage Technology Platform and their robust ecosystem provide the innovative technology, network, and across-the-board support to make it possible to deliver the American Dream of homeownership."
+   ],
+   "aboutTitle": "About ICE Mortgage"
+  },
+  "wolters-kluwer": {
+   "slug": "wolters-kluwer",
+   "name": "Wolters Kluwer",
+   "tagline": "",
+   "website": "https://www.wolterskluwer.com/en/solutions/eoriginal",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/wolters-kluwer-logo.png",
+   "tags": [
+    "eClose Certification",
+    "eVault Certification"
+   ],
+   "certs": [
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    },
+    {
+     "title": "eVault Certified System",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-evault-system.png",
+     "url": "https://www.mismo.org/standards-resources/evault"
+    }
+   ],
+   "about": [
+    "Wolters Kluwer offers one of the industry's most trusted Digital Lending solutions which simplifies digital lending from doc prep to secondary market. Wolters Kluwer eOriginal eAsset Management Platform enables lenders, investors and their partners to create, manage and monetize their digital loan assets.",
+    "The Platform's MISMO certified eVault provides assurance that digital loans are assigned in full accordance with all compliance standards for the eMortgage industry, and maintaining the highest level of legal enforceability throughout a digital loan's lifecycle. Integrated to the also MISMO certified, eOriginal ClosingCenter solution, enabling eNote closings anywhere in any format, including an in-person or remote eNotary."
+   ],
+   "aboutTitle": "About Wolters Kluwer"
+  },
+  "stellar-innovations": {
+   "slug": "stellar-innovations",
+   "name": "Stellar Innovations",
+   "tagline": "",
+   "website": "https://www.stellaripl.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/stellar-innovative-solutions-corp-logo.png",
+   "tags": [
+    "Certified Product"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Product",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/badge-product-integration-640.png",
+     "url": "https://www.mismo.org/standards-resources/product"
+    }
+   ],
+   "about": [
+    "AI-powered mortgage loan review and document intelligence platform designed to automate quality control, validate loan file integrity, identify defects, and enhance compliance across origination, servicing, and secondary market workflows. Data extraction tool - exists within CLARAA."
+   ],
+   "aboutTitle": "About Stellar Innovations"
+  },
+  "falcon-capital-advisors": {
+   "slug": "falcon-capital-advisors",
+   "name": "Falcon Capital Advisors",
+   "tagline": "",
+   "website": "https://falconcapitaladvisors.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/falcon-capital.png",
+   "tags": [
+    "Certified Consultant",
+    "FRAME Advisory Partner"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Consultant",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-consultant.png",
+     "url": "https://www.mismo.org/standards-resources/certified-consultant"
+    },
+    {
+     "title": "FRAME Advisory Partner",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-frame-advisory-partner.png",
+     "url": "https://www.mismo.org/standards-resources/frame"
+    }
+   ],
+   "about": [
+    "Falcon Capital Advisors is a full-service management consulting firm that helps private and public sector clients develop strategy and execute on their eMortgage, business transformation, data analytics, public policy, loan operations, regulatory and MERS compliance, CDFI, and affordable housing program initiatives. Our expertise spans all mortgage industry domains including origination, servicing, and secondary market, both in the residential and multifamily contexts."
+   ],
+   "aboutTitle": "About Falcon Capital Advisors"
+  },
+  "tidgewell": {
+   "slug": "tidgewell",
+   "name": "Tidgewell Results eXperience",
+   "tagline": "",
+   "website": "https://tidgewell.net",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/trex-logo.png",
+   "tags": [
+    "Certified Consultant",
+    "FRAME Advisory Partner"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Consultant",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-consultant.png",
+     "url": "https://www.mismo.org/standards-resources/certified-consultant"
+    },
+    {
+     "title": "FRAME Advisory Partner",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-frame-advisory-partner.png",
+     "url": "https://www.mismo.org/standards-resources/frame"
+    }
+   ],
+   "about": [
+    "Tidgewell Results eXperience is focused on transforming mortgage operations. We offer expert consulting tailored to streamline processes, maximize efficiency, and ensure compliance. Partner with us to thrive in the digital age of lending."
+   ],
+   "aboutTitle": "About Tidgewell Results eXperience"
   }
  }
 }
