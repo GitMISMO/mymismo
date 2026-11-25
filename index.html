@@ -230,6 +230,15 @@ main{max-width:1240px; margin:0 auto; padding:14px 14px 28px}
 .sess .extra{margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; align-items:center}
 .sess .spons{font-size:12.5px; color:var(--ink-2)}
 .sess .spons b{color:var(--ink); font-weight:600}
+.spline{display:flex; align-items:center; gap:8px; flex-wrap:wrap; flex-basis:100%}
+.spchips{display:inline-flex; gap:6px; flex-wrap:wrap}
+.spchip{display:inline-grid; place-items:center; background:#fff; border:1px solid var(--border); border-radius:5px; height:30px; padding:3px 8px; min-width:52px}
+.spchip img{max-height:22px; max-width:96px; object-fit:contain; display:block}
+.spchip b{font-size:12px; color:#0d314c}
+.cover .spline{margin-top:14px}
+.cover .spons{color:rgba(255,255,255,.85); font-size:13px; font-weight:600}
+.cover .spchip{height:36px; border-color:transparent}
+.cover .spchip img{max-height:26px; max-width:120px}
 .sess.live{border-color:var(--good); box-shadow:0 0 0 1px var(--good)}
 .livetag{background:var(--good); color:#fff; border-radius:3px; padding:2px 6px; font-size:11px; font-weight:700; letter-spacing:.03em}
 .star{align-self:center; margin-right:6px; width:42px; height:42px; border-radius:50%; border:0; background:transparent; cursor:pointer; display:grid; place-items:center; color:var(--ink-3)}
@@ -339,6 +348,58 @@ html[data-season="december"] .days{top:calc(61px + env(safe-area-inset-top))}
 .strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(104px,1fr)); gap:8px}
 .strip .logo{min-height:76px}
 .strip .logo img{max-height:44px}
+
+/* Explore */
+.trip{position:relative; overflow:hidden; border-radius:14px; color:#fff; background:linear-gradient(160deg,#14486e,#06202f 75%); padding:20px}
+.trip:after{content:""; position:absolute; inset:0; opacity:.14; pointer-events:none; background-image:linear-gradient(rgba(116,191,235,.55) 1px, transparent 1px), linear-gradient(90deg, rgba(116,191,235,.55) 1px, transparent 1px); background-size:28px 28px; mask-image:linear-gradient(200deg,#000,transparent 75%); -webkit-mask-image:linear-gradient(200deg,#000,transparent 75%)}
+.trip-tx{position:relative; z-index:1}
+.trip .summit{font-weight:600; color:var(--sky-soft)}
+.trip-name{font-family:var(--cond); font-weight:700; font-size:clamp(30px, 7vw, 46px); line-height:1; margin-top:4px}
+.trip .when{display:flex; flex-wrap:wrap; gap:4px 16px; margin-top:10px; color:rgba(255,255,255,.9); font-size:14.5px}
+.trip .when span{display:inline-flex; gap:7px; align-items:center}
+.trip .when svg{width:16px; height:16px; color:var(--sky)}
+.trip-rb{color:rgba(255,255,255,.9); margin:14px 0 14px; font-size:14.5px}
+.trip-rb b{color:#fff}
+.btn.sky{background:var(--sky); border-color:var(--sky); color:#06202f}
+.btn.ghost{background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.35); color:#fff}
+.info{display:grid; gap:10px; grid-template-columns:repeat(auto-fit, minmax(240px,1fr))}
+.infocard{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; box-shadow:var(--shadow); border-top:4px solid var(--sky)}
+.infocard b{font-family:var(--cond); font-size:19px}
+.infocard p{margin:6px 0 0; color:var(--ink-2); font-size:14.5px}
+.sec-intro{color:var(--ink-2); margin:-4px 0 12px}
+.places{display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(260px,1fr))}
+.place{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow)}
+.pl-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.dist{display:inline-flex; gap:4px; align-items:center; color:var(--ink-2); font-size:12.5px; font-weight:600; white-space:nowrap}
+.dist svg{width:15px; height:15px}
+.pl-name{font-family:var(--cond); font-size:21px; font-weight:700; line-height:1.1}
+.pl-addr{display:flex; gap:5px; align-items:center; color:var(--ink-2); font-size:13px}
+.pl-addr svg{width:14px; height:14px; color:var(--ink-3)}
+.pl-text{font-size:14.5px; flex:1}
+.pl-act{display:flex; gap:8px; margin-top:4px}
+.pl-act .btn{padding:8px 12px; font-size:13px}
+.tiles{display:grid; gap:10px; grid-template-columns:repeat(auto-fit, minmax(150px,1fr))}
+.tile{display:grid; gap:4px; align-content:start; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; cursor:pointer; color:var(--ink); text-decoration:none; box-shadow:var(--shadow)}
+.tile:hover{border-color:var(--border-strong)}
+@media (max-width:520px){ .tiles{grid-template-columns:1fr 1fr} .tiles > :last-child:nth-child(odd){grid-column:1 / -1} }
+.tile .ti{width:40px; height:40px; border-radius:9px; display:grid; place-items:center; background:var(--navy); color:var(--sky); margin-bottom:6px}
+.tile .ti svg{width:22px; height:22px}
+.tile b{font-size:15px}
+.tile > span:last-child{color:var(--ink-2); font-size:13px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.eps{display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(260px,1fr))}
+.ep{display:grid; gap:8px; border:0; background:none; padding:0; cursor:pointer; text-align:left; color:var(--ink)}
+.ep .th{position:relative; display:block; border-radius:10px; overflow:hidden; aspect-ratio:16/9; background:var(--navy)}
+.ep .th img{width:100%; height:100%; object-fit:cover; display:block}
+.ep .th i{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:52px; height:52px; border-radius:50%; background:rgba(6,32,47,.7); display:grid; place-items:center; color:#fff}
+.ep .th i svg{width:26px; height:26px}
+.ep .th em{position:absolute; right:8px; bottom:8px; background:rgba(6,32,47,.85); color:#fff; font-style:normal; font-size:12px; font-weight:600; padding:2px 6px; border-radius:4px}
+.ep-tx b{display:block; line-height:1.3}
+.ep-tx span{color:var(--ink-2); font-size:13px}
+.video{position:relative; aspect-ratio:16/9; border-radius:10px; overflow:hidden; background:#000}
+.video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.sitelink{display:grid; grid-template-columns:1fr auto; gap:2px 10px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px; color:var(--ink); text-decoration:none}
+.sitelink span{color:var(--ink-2); font-size:13px; grid-column:1}
+.sitelink svg{grid-row:1 / span 2; grid-column:2; width:18px; height:18px; color:var(--ink-3)}
 
 /* Notes and banners */
 .note{background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:8px; padding:12px 14px; color:var(--ink-2); font-size:14px}
@@ -523,6 +584,13 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M8 7.5l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 8.5-2 5-5 2 2-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 21l2-6 3 3v3M8 12l2-4 4 1 2 4M12 15l-1-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+<symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+<symbol id="i-hotel" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 10h4a1 1 0 0 1 1 1v10M3 21h18M8 8h3M8 12h3M8 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c.8-4.3 4-6.6 8-6.6s7.2 2.3 8 6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-handshake" viewBox="0 0 24 24"><path d="M2.5 11.5 6 8l3 1 3-2.5 3 1 3.5-.5 3 3.5M2.5 11.5l3.5 4 2 .5 3 2.5c.8.6 1.8.4 2.3-.4l3.2-4.6M21.5 11l-3 3.6M9 9l-2.5 3.5c-.5.8.2 1.9 1.2 1.7L12 13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -560,7 +628,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
   <section class="page" id="pg-agenda" aria-label="Agenda"></section>
   <section class="page" id="pg-mine" aria-label="My Schedule"></section>
   <section class="page" id="pg-people" aria-label="People"></section>
-  <section class="page" id="pg-sponsors" aria-label="Sponsors"></section>
+  <section class="page" id="pg-explore" aria-label="Explore"></section>
 </main>
 
 <nav class="tabbar" aria-label="MyMISMO">
@@ -569,7 +637,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
     <button type="button" data-hq="agenda"><svg aria-hidden="true"><use href="#i-agenda"/></svg>Agenda</button>
     <button type="button" data-hq="mine"><svg aria-hidden="true"><use href="#i-star"/></svg>My Schedule<span class="badge" id="mine-badge"></span></button>
     <button type="button" data-hq="people"><svg aria-hidden="true"><use href="#i-people"/></svg>People</button>
-    <button type="button" data-hq="sponsors"><svg aria-hidden="true"><use href="#i-sponsor"/></svg>Sponsors</button>
+    <button type="button" data-hq="explore"><svg aria-hidden="true"><use href="#i-compass"/></svg>Explore</button>
   </div>
 </nav>
 
@@ -715,11 +783,27 @@ function sponsorFor(x) {
   var out = [], names = x.sponsor ? x.sponsor.split(/\s*(?:,|&| and )\s*/) : [];
   S.sponsors.forEach(function (sp) {
     var hit = names.some(function (n) { return n && coKey(n) === coKey(sp.name); });
-    if (!hit) hit = sp.placements.some(function (p) { return p && p.match && (!p.day || p.day === x.day) && (!p.type || p.type === x.type) && x.title.toLowerCase().indexOf(String(p.match).toLowerCase()) >= 0; });
+    if (!hit) hit = sp.placements.some(function (p) { return placementFits(p, x); });
     if (hit) out.push(sp);
   });
   if (!out.length && names.length) names.forEach(function (n) { if (n) out.push({ name: n, tier: '', url: '', logo: '', placements: [] }); });
   return out;
+}
+/* A placement fits a session on its day when the session's title is the placement's title or match exactly, or contains
+   the match and is the same kind of session (a Break placement fits breakfasts, lunches and snack breaks). */
+var KIND_FITS = { 'Break': /^(break|breakfast|lunch|snack)/i, 'Networking': /^(networking|reception)/i };
+function placementFits(p, x) {
+  if (!p || !p.match || (p.day && p.day !== x.day)) return false;
+  var t = x.title.toLowerCase(), m = String(p.match).toLowerCase(), pt = String(p.title || '').toLowerCase();
+  if (t === m || t === pt) return true;
+  if (t.indexOf(m) < 0) return false;
+  return !p.type || p.type === x.type || (KIND_FITS[p.type] && KIND_FITS[p.type].test(x.type));
+}
+/* placements no session on the Schedule carries yet (for example a snack break), shown on the sponsor's panel */
+function unplaced(sp) { return sp.placements.filter(function (p) { return !S.sessions.some(function (x) { return placementFits(p, x); }); }); }
+function gsSponsors() { var out = []; if (S.gs) S.gs.items.forEach(function (g) { if (g.sponsor) { var sp = sponsorByName(g.sponsor) || { name: g.sponsor, logo: '', tier: '', placements: [] }; if (!out.some(function (o) { return o.name === sp.name; })) out.push(sp); } }); return out; }
+function spChips(list) {
+  return '<span class="spchips">' + list.map(function (s) { return '<span class="spchip" title="' + esc(s.name) + '">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '" loading="lazy">' : '<b>' + esc(s.name) + '</b>') + '</span>'; }).join('') + '</span>';
 }
 function sponsorByName(n) { for (var i = 0; i < S.sponsors.length; i++) if (coKey(S.sponsors[i].name) === coKey(n)) return S.sponsors[i]; return null; }
 function gsSession() { return S.sessions.filter(function (x) { return x.type === 'General Session'; })[0] || null; }
@@ -753,7 +837,8 @@ function sessCard(x) {
     var ppl = gsPeople();
     extra += '<span class="faces">' + ppl.slice(0, 6).map(face).join('') + '</span><span class="spons">' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' sessions, ' + ppl.length + ' speakers</span>';
   }
-  if (sp.length) extra += '<span class="spons">Sponsored by <b>' + esc(sp.map(function (s) { return s.name; }).join(', ')) + '</b></span>';
+  if (sp.length) extra += '<span class="spline"><span class="spons">Sponsored by</span>' + spChips(sp) + '</span>';
+  else if (x.type === 'General Session' && gsSponsors().length) extra += '<span class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</span>';
   return '<div class="sess' + (live ? ' live' : '') + '" style="--tagc:' + tc(x.type) + '"><span class="bar"></span>' +
     '<button type="button" class="body" data-open="s:' + esc(x.id) + '">' +
       '<div class="t">' + esc(x.title) + '</div>' +
@@ -798,7 +883,7 @@ function renderHome() {
     '<div class="pass-figs">' +
       '<button type="button" data-go="agenda"><b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
       '<button type="button" data-go="people"><b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
-      '<button type="button" data-go="sponsors"><b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
+      '<button type="button" data-sponsors><b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
       '<button type="button" data-go="mine"><b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
     '</div></div>';
 
@@ -825,7 +910,7 @@ function renderHome() {
   }
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   var top = sponsorTiers()[0];
-  if (top) h += '<div class="section-h"><h2>Thank You to Our ' + esc(top.tier) + ' Sponsors</h2><button type="button" class="linkbtn" data-go="sponsors">All Sponsors&nbsp;→</button></div><div class="strip">' + top.list.map(logoTile).join('') + '</div>';
+  if (top) h += '<div class="section-h"><h2>Thank You to Our ' + esc(top.tier) + ' Sponsors</h2><button type="button" class="linkbtn" data-sponsors>All Sponsors&nbsp;→</button></div><div class="strip">' + top.list.map(logoTile).join('') + '</div>';
   if (S.updated) h += '<div class="foot">Agenda from Summit HQ, updated ' + esc(fmtStamp(S.updated)) + '. Sponsors from the Sponsorship Portal.</div>';
   return h;
 }
@@ -951,7 +1036,89 @@ function renderSponsors() {
   return h;
 }
 
-var RENDER = { home: renderHome, agenda: renderAgenda, mine: renderMine, people: renderPeople, sponsors: renderSponsors };
+/* ---------- Explore: hotel and travel (from the website's Hotel and Travel page), sponsors, Mic'd Up, MISMO Matters, Submit an Idea, mismo.org ---------- */
+var G = null, MU = null;
+var SITE = 'https://www.mismo.org';
+var SITE_LINKS = [
+  ['Standards and Resources', '/standards-resources', 'The MISMO standards and how to use them'],
+  ['Resource Library', '/mismolibraries', 'Work products and downloads'],
+  ['Business Glossary', '/glossary', 'Terms used across the mortgage industry'],
+  ['Certifications', '/standards-resources/certification', 'Certified providers and how to apply'],
+  ['MISMO Link', '/standards-resources/mismo-link', 'MISMO’s AI for the standards'],
+  ['Communities and Workgroups', '/get-involved/workgroups', 'Where the standards are built'],
+  ['Membership', '/membership', 'Benefits, levels and joining'],
+  ['News', '/about-mismo/news', 'MISMO in the news and announcements']
+];
+function loadExtras() {
+  getJSON('data/guide.json').then(function (g) { G = g; if (S.page === 'explore' || S.page === 'home') renderPage(S.page); }).catch(function () {});
+  getJSON('/podcast/micdup.json').then(function (m) { MU = m; if (S.page === 'explore') renderPage('explore'); }).catch(function () {});
+}
+function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+function guide() { return G && S.summit && norm(G.dates) === norm(S.summit.dates) ? G : null; }
+function gsec(id) { var g = guide(); return g ? (g.sections || []).filter(function (x) { return x.id === id; })[0] || null : null; }
+function noBelow(t) { return String(t || '').split(/\n\n/).filter(function (p) { return !/link below/i.test(p); }).join('\n\n'); }
+function mapUrl(name, address) {
+  var city = guide() && guide().address ? guide().address.replace(/^[^,]*,\s*/, '') : S.place;
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent([name, address, city].filter(Boolean).join(', '));
+}
+function placeCard(c) {
+  return '<div class="place"><div class="pl-top">' + (c.kind ? '<span class="tag" style="--tagc:var(--sky)">' + esc(c.kind) + '</span>' : '') +
+    (c.distance ? '<span class="dist">' + icon('i-walk') + esc(c.distance) + '</span>' : '') + '</div>' +
+    '<div class="pl-name">' + esc(c.name) + '</div>' + (c.address ? '<div class="pl-addr">' + icon('i-pin') + esc(c.address) + '</div>' : '') +
+    (c.text ? '<div class="pl-text">' + esc(c.text) + '</div>' : '') +
+    '<div class="pl-act">' + (c.url ? '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Website</a>' : '') +
+    '<a class="btn" href="' + esc(mapUrl(c.name, c.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div>';
+}
+function renderExplore() {
+  var g = guide(), h = '<div class="pagehead"><h1>Explore</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
+  if (g) {
+    var v = gsec('the-venue'), rb = v && v.roomBlock;
+    h += '<div class="trip"><div class="trip-tx"><div class="summit">Where We\'re Meeting</div><div class="trip-name">' + esc(g.venue) + '</div>' +
+      '<div class="when"><span>' + icon('i-pin') + esc(g.address || '') + '</span><span>' + icon('i-agenda') + esc(g.dates) + '</span></div>' +
+      (rb ? '<p class="trip-rb"><b>' + esc(rb.title) + '.</b> ' + esc(rb.text) + '</p>' : '') +
+      '<div class="d-actions">' + (g.book ? '<a class="btn primary sky" href="' + esc(g.book) + '" target="_blank" rel="noopener">' + icon('i-hotel') + 'Book Your Room</a>' : '') +
+      '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></div>';
+    if (v && v.cards.length) h += '<div class="section-h"><h2>Getting Here and Around</h2></div><div class="info">' + v.cards.map(function (c) {
+      return '<div class="infocard"><b>' + esc(c.name) + '</b>' + noBelow(c.text).split(/\n\n/).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
+    }).join('') + '</div>';
+  }
+  h += '<div class="section-h"><h2>More From MISMO</h2></div><div class="tiles">' +
+    (S.sponsors.length ? '<button type="button" class="tile" data-sponsors><span class="ti">' + icon('i-sponsor') + '</span><b>Sponsors</b><span>' + S.sponsors.length + ' supporting this summit</span></button>' : '') +
+    '<button type="button" class="tile" data-micdup><span class="ti">' + icon('i-play') + '</span><b>MISMO Mic\'d Up</b><span>' + (MU && MU.episodes && MU.episodes[0] ? esc(MU.episodes[0].title) : 'The weekly video show') + '</span></button>' +
+    '<a class="tile" href="' + SITE + '/about-mismo/mismo-matters" target="_blank" rel="noopener"><span class="ti">' + icon('i-mail') + '</span><b>MISMO Matters</b><span>The monthly newsletter</span></a>' +
+    '<a class="tile" href="/submit-an-idea/" target="_blank" rel="noopener"><span class="ti">' + icon('i-bulb') + '</span><b>Submit an Idea</b><span>Suggest a standard or improvement</span></a>' +
+    '<button type="button" class="tile" data-sitelinks><span class="ti">' + icon('i-globe') + '</span><b>mismo.org</b><span>Standards, library, membership</span></button></div>';
+  ['where-to-eat', 'what-to-see'].forEach(function (id) {
+    var sec = gsec(id); if (!sec || !sec.cards.length) return;
+    h += '<div class="section-h"><h2>' + esc(sec.title) + '</h2></div>' + (sec.intro ? '<p class="sec-intro">' + esc(sec.intro) + '</p>' : '') +
+      '<div class="places">' + sec.cards.map(placeCard).join('') + '</div>' + (sec.note ? '<div class="foot" style="margin-top:10px;text-align:left">' + esc(sec.note) + '</div>' : '');
+  });
+  if (g) h += '<div class="foot">From the Hotel and Travel page on mismo.org, checked ' + esc(fmtStamp(g.updated)) + '.</div>';
+  return h;
+}
+function ytThumb(id) { return 'https://i.ytimg.com/vi/' + encodeURIComponent(id) + '/hqdefault.jpg'; }
+function epDate(iso) { var d = new Date(iso); return isNaN(d) ? '' : MON[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+function micdupSheet() {
+  var eps = (MU && MU.episodes) || [];
+  var h = '<div class="sheet-pad">' + (eps.length ? '<div class="eps">' + eps.map(function (e) {
+    return '<button type="button" class="ep" data-episode="' + esc(e.id) + '"><span class="th"><img src="' + esc(ytThumb(e.id)) + '" alt="" loading="lazy"><i>' + icon('i-play') + '</i>' + (e.duration ? '<em>' + esc(e.duration) + '</em>' : '') + '</span><span class="ep-tx"><b>' + esc(e.title) + '</b><span>' + esc(epDate(e.published)) + '</span></span></button>';
+  }).join('') + '</div>' : '<div class="note">The episode list couldn\'t be loaded just now. Try again in a minute.</div>') + '</div>';
+  openSheet('MISMO Mic\'d Up', h, { plain: true });
+}
+function episodeSheet(id) {
+  var e = ((MU && MU.episodes) || []).filter(function (x) { return x.id === id; })[0] || { id: id, title: 'MISMO Mic\'d Up' };
+  var h = '<div class="sheet-pad"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?rel=0&playsinline=1" title="' + esc(e.title) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>' +
+    '<div class="d-title" style="font-family:var(--cond);font-size:24px;font-weight:700;margin-top:14px;line-height:1.15">' + esc(e.title) + '</div><div style="color:var(--ink-2);margin-top:4px">' + esc(epDate(e.published)) + (e.duration ? ', ' + esc(e.duration) : '') + '</div>' +
+    '<div class="d-actions" style="margin-top:14px"><a class="btn" href="https://www.youtube.com/watch?v=' + encodeURIComponent(id) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Watch on YouTube</a></div></div>';
+  openSheet(e.title, h, { plain: true });
+}
+function siteSheet() {
+  openSheet('mismo.org', '<div class="sheet-pad"><div class="list">' + SITE_LINKS.map(function (l) {
+    return '<a class="sitelink" href="' + SITE + l[1] + '" target="_blank" rel="noopener"><b>' + esc(l[0]) + '</b><span>' + esc(l[2]) + '</span>' + icon('i-link') + '</a>';
+  }).join('') + '</div></div>', { plain: true });
+}
+
+var RENDER = { home: renderHome, agenda: renderAgenda, mine: renderMine, people: renderPeople, explore: renderExplore };
 function renderPage(p) {
   var el = $('#pg-' + p), act = document.activeElement, keep = act && act.id, caret = act && act.selectionStart;
   el.innerHTML = RENDER[p]();
@@ -960,7 +1127,6 @@ function renderPage(p) {
 }
 function show(p, opts) {
   if (!RENDER[p]) p = 'home';
-  if (p === 'sponsors' && !S.sponsors.length) p = 'home';
   S.page = p;
   $$('.page').forEach(function (el) { el.classList.toggle('on', el.id === 'pg-' + p); });
   $$('nav.tabbar button[data-hq]').forEach(function (b) { if (b.getAttribute('data-hq') === p) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
@@ -1005,7 +1171,9 @@ function sessionSheet(id) {
   var h = '<div class="cover"><span class="k">' + esc(x.type) + '</span>' + (isLive(x) ? ' <span class="livetag">NOW</span>' : '') + '<h2>' + esc(x.title) + '</h2>' +
     '<div class="w"><div>' + icon('i-agenda') + esc(longDate(x.date)) + '</div><div>' + icon('i-clock') + esc(span(x.a, x.b)) + '</div>' +
     (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + '</div>' : '') +
-    (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div></div><div class="sheet-pad">';
+    (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div>' +
+    (sp.length ? '<div class="spline"><span class="spons">Sponsored by</span>' + spChips(sp) + '</div>' : (x.type === 'General Session' && gsSponsors().length ? '<div class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</div>' : '')) +
+    '</div><div class="sheet-pad">';
   h += '<div class="d-actions two"><button type="button" class="btn primary' + (isMine(x.id) ? ' on-mine' : '') + '" data-mine-btn="' + esc(x.id) + '" data-toggle-mine="' + esc(x.id) + '">' + mineBtnHtml(x.id) + '</button>' +
     '<button type="button" class="btn" data-ics="' + esc(x.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div>';
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
@@ -1016,7 +1184,7 @@ function sessionSheet(id) {
       var gsp = g.sponsor ? sponsorByName(g.sponsor) : null;
       return '<div class="ro-item"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + (g.b ? ' to ' + esc(clock(g.b)) : '') + '</span></div><div>' +
         (g.kind ? '<div class="k">' + typeTag(g.kind) + '</div>' : '') + '<div class="tt">' + esc(g.title) + '</div>' + (g.desc ? '<div class="ds">' + esc(g.desc) + '</div>' : '') +
-        (g.sponsor ? '<div class="ds">Sponsored by ' + (gsp ? '<a href="#" data-open="sp:' + esc(slug(gsp.name)) + '"><b>' + esc(gsp.name) + '</b></a>' : '<b>' + esc(g.sponsor) + '</b>') + '</div>' : '') +
+        (g.sponsor ? '<div class="spline" style="margin-top:8px"><span class="spons" style="color:var(--ink-2);font-size:12.5px">Sponsored by</span>' + (gsp ? '<button type="button" class="spchip" style="cursor:pointer" data-open="sp:' + esc(slug(gsp.name)) + '" aria-label="' + esc(gsp.name) + '">' + (gsp.logo ? '<img src="' + esc(gsp.logo) + '" alt="' + esc(gsp.name) + '">' : '<b>' + esc(gsp.name) + '</b>') + '</button>' : '<b>' + esc(g.sponsor) + '</b>') + '</div>' : '') +
         (g.people.length ? '<div class="ro-people">' + g.people.map(function (p) {
           return '<button type="button" class="pp" data-open="p:' + esc(slug(p.name)) + '">' + (p.photo ? '<img class="avatar" src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="avatar">' + esc(initials(p.name)) + '</span>') +
             '<span><div class="n">' + esc(p.name) + (p.role ? ' <span class="tag">' + esc(p.role) + '</span>' : '') + '</div><div class="r">' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></span></button>';
@@ -1050,8 +1218,10 @@ function sponsorSheet(key) {
   if (sp.url) h += '<div class="d-actions"><a class="btn primary" href="' + esc(sp.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Visit Website</a></div>';
   var theirs = S.sessions.filter(function (x) { return sponsorFor(x).some(function (s) { return s.name === sp.name; }); });
   var gsTheirs = S.gs ? S.gs.items.filter(function (g) { return g.sponsor && coKey(g.sponsor) === coKey(sp.name); }) : [];
-  if (theirs.length || gsTheirs.length) {
+  var loose = unplaced(sp);
+  if (theirs.length || gsTheirs.length || loose.length) {
     h += '<div class="d-h">Sponsored Sessions</div>';
+    if (loose.length) h += '<div class="ro" style="margin-bottom:8px">' + loose.map(function (p) { return '<div class="ro-item"><div class="tm">' + esc((p.day || '').slice(0, 3)) + '</div><div><div class="k">' + typeTag(p.type || 'Session') + '</div><div class="tt">' + esc(p.title) + '</div></div></div>'; }).join('') + '</div>';
     if (theirs.length) h += '<div class="list">' + theirs.map(sessCard).join('') + '</div>';
     if (gsTheirs.length) h += '<div class="ro" style="margin-top:8px">' + gsTheirs.map(function (g) { var cp = clockParts(g.a); return '<div class="ro-item"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + ', ' + esc((S.gs.day || '').slice(0, 3)) + '</span></div><div><div class="k">' + typeTag(g.kind || 'General Session') + '</div><div class="tt">' + esc(g.title) + '</div></div></div>'; }).join('') + '</div>';
   }
@@ -1288,6 +1458,10 @@ document.addEventListener('click', function (e) {
     if (kind === 's') sessionSheet(key); else if (kind === 'p') speakerSheet(key); else if (kind === 'sp') sponsorSheet(key); else if (kind === 'a') attendeeSheet(key);
     return;
   }
+  if (t.hasAttribute('data-sponsors')) { openSheet('Sponsors', '<div class="sheet-pad">' + renderSponsors() + '</div>', { plain: true }); return; }
+  if (t.hasAttribute('data-episode')) { episodeSheet(t.getAttribute('data-episode')); return; }
+  if (t.hasAttribute('data-micdup')) { micdupSheet(); return; }
+  if (t.hasAttribute('data-sitelinks')) { siteSheet(); return; }
   if (t.hasAttribute('data-signin')) { closeSheet(true); signInSheet(); return; }
   if (t.hasAttribute('data-profile')) { profileSheet(false); return; }
   if (t.hasAttribute('data-chat')) { chatSheet(t.getAttribute('data-chat')); return; }
@@ -1333,13 +1507,13 @@ function start() {
     var pick = pickSummit(feed), sl = pick ? sponsorSlug(pick.s.name) : '';
     return (sl ? getJSON(FEED_SPONSORS(sl)).catch(function () { return null; }) : Promise.resolve(null)).then(function (sp) { build(feed, sp); });
   }).then(function () {
-    if (!S.sponsors.length) { var b = $('nav.tabbar button[data-hq="sponsors"]'); if (b) b.hidden = true; $('nav.tabbar .in').style.gridTemplateColumns = 'repeat(4,1fr)'; }
     badge();
     var want = (/[?&]page=(\w+)/.exec(location.search) || [])[1] || 'home';
     show(want);
     installHint();
     setTimeout(function () { $('#loading').classList.add('done'); setTimeout(function () { $('#loading').hidden = true; }, 450); }, Math.max(0, 800 - (Date.now() - T0)));
     checkReady();
+    loadExtras();
   }).catch(function (err) {
     var e = $('#loaderr'); e.style.display = 'block';
     e.textContent = navigator.onLine === false ? 'You are offline and the agenda has not been saved to this phone yet. Connect once and it will be here next time.' : 'The agenda could not be loaded right now. Please try again in a moment.';

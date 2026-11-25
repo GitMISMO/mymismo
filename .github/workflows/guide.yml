@@ -1,0 +1,33 @@
+name: Hotel and Travel Guide
+# Copies the website's Hotel and Travel page (www.mismo.org/events/hotel) into data/guide.json for MyMISMO's Explore tab.
+# Runs every morning and afternoon, whenever this job or its script changes, and by hand (Run workflow).
+# If the page can't be read or comes back without its venue, booking link and cards, nothing is written and the job
+# fails, so the app keeps the last good guide and the Failure Watcher picks it up.
+on:
+  schedule:
+    - cron: '17 13 * * *'
+    - cron: '17 20 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/build_guide.py', '.github/workflows/guide.yml']
+permissions:
+  contents: write
+concurrency:
+  group: guide
+  cancel-in-progress: false
+jobs:
+  guide:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: The parser still reads the page's layout
+        run: python3 tools/build_guide.py --html tests/guide-page.html --out /tmp/check.json
+      - name: Read the website's Hotel and Travel page
+        run: python3 tools/build_guide.py
+      - name: Save
+        run: |
+          git config user.name "MyMISMO Guide"
+          git config user.email "jcritchley@mismo.org"
+          git add data/guide.json
+          if git diff --cached --quiet; then echo "No change."; else git commit -m "Hotel and Travel guide from mismo.org" && git push; fi
