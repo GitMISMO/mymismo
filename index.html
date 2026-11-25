@@ -1056,7 +1056,7 @@ function loadExtras() {
 function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
 function guide() { return G && S.summit && norm(G.dates) === norm(S.summit.dates) ? G : null; }
 function gsec(id) { var g = guide(); return g ? (g.sections || []).filter(function (x) { return x.id === id; })[0] || null : null; }
-function noBelow(t) { return String(t || '').split(/\n\n/).filter(function (p) { return !/link below/i.test(p); }).join('\n\n'); }
+function noBelow(t) { return String(t || '').split(/\n\n/).map(function (p) { return p.split(/(?<=[.!?])\s+/).filter(function (x) { return !/link below/i.test(x); }).join(' '); }).filter(Boolean).join('\n\n'); }
 function mapUrl(name, address) {
   var city = guide() && guide().address ? guide().address.replace(/^[^,]*,\s*/, '') : S.place;
   return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent([name, address, city].filter(Boolean).join(', '));
@@ -1075,7 +1075,7 @@ function renderExplore() {
     var v = gsec('the-venue'), rb = v && v.roomBlock;
     h += '<div class="trip"><div class="trip-tx"><div class="summit">Where We\'re Meeting</div><div class="trip-name">' + esc(g.venue) + '</div>' +
       '<div class="when"><span>' + icon('i-pin') + esc(g.address || '') + '</span><span>' + icon('i-agenda') + esc(g.dates) + '</span></div>' +
-      (rb ? '<p class="trip-rb"><b>' + esc(rb.title) + '.</b> ' + esc(rb.text) + '</p>' : '') +
+      (rb ? '<p class="trip-rb"><b>' + esc(rb.title) + '.</b> ' + esc(noBelow(rb.text)) + '</p>' : '') +
       '<div class="d-actions">' + (g.book ? '<a class="btn primary sky" href="' + esc(g.book) + '" target="_blank" rel="noopener">' + icon('i-hotel') + 'Book Your Room</a>' : '') +
       '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></div>';
     if (v && v.cards.length) h += '<div class="section-h"><h2>Getting Here and Around</h2></div><div class="info">' + v.cards.map(function (c) {
