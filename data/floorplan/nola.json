@@ -1,0 +1,48 @@
+{
+ "summit": "nola",
+ "dates": "January 11–14, 2027",
+ "venue": "InterContinental New Orleans",
+ "source": "Summit HQ, Floor plan (the hotel's map)",
+ "image": "data/floorplan/nola.webp",
+ "width": 1079,
+ "height": 2156,
+ "note": "Everything this summit uses is on Floor 3, apart from the Frenchmen rooms, Algiers C and Treme / Marigny on Floor 2.",
+ "floors": [
+  {"floor": 3, "label": "Floor 3", "y0": 0, "y1": 650},
+  {"floor": 2, "label": "Floor 2", "y0": 700, "y1": 1345},
+  {"floor": 1, "label": "Floor 1", "y0": 1450, "y1": 2156}
+ ],
+ "rooms": [
+  {"names": ["La Salle A"], "floor": 3, "x": 221, "y": 495},
+  {"names": ["La Salle B"], "floor": 3, "x": 320, "y": 436},
+  {"names": ["La Salle C"], "floor": 3, "x": 395, "y": 387},
+  {"names": ["La Salle A/B", "La Salle A & B"], "floor": 3, "x": 268, "y": 468},
+  {"names": ["La Salle B/C", "La Salle B & C"], "floor": 3, "x": 357, "y": 412},
+  {"names": ["Pelican I", "Pelican Room I"], "floor": 3, "x": 624, "y": 264},
+  {"names": ["Pelican II", "Pelican Room II"], "floor": 3, "x": 701, "y": 238},
+  {"names": ["Fulton Room", "Fulton"], "floor": 3, "x": 862, "y": 319},
+  {"names": ["Acadian I/II", "Acadian I & II"], "floor": 3, "x": 787, "y": 360},
+  {"names": ["Acadian I", "Acadian Room I"], "floor": 3, "x": 765, "y": 373},
+  {"names": ["Acadian II", "Acadian Room II"], "floor": 3, "x": 808, "y": 346},
+  {"names": ["Poydras Room", "Poydras"], "floor": 3, "x": 914, "y": 288},
+  {"names": ["Algiers C", "Algiers Room C"], "floor": 2, "x": 306, "y": 1100},
+  {"names": ["Algiers B", "Algiers Room B"], "floor": 2, "x": 385, "y": 1053},
+  {"names": ["Algiers A", "Algiers Room A"], "floor": 2, "x": 457, "y": 1009},
+  {"names": ["Frenchmen I & II", "Frenchmen I/II", "Frenchmen Salon"], "floor": 2, "x": 382, "y": 1230},
+  {"names": ["Frenchmen I", "Frenchmen Room I"], "floor": 2, "x": 350, "y": 1205},
+  {"names": ["Frenchmen II", "Frenchmen Room II"], "floor": 2, "x": 413, "y": 1256},
+  {"names": ["Treme / Marigny", "Treme/Marigny"], "floor": 2, "x": 856, "y": 1042},
+  {"names": ["Treme", "Tremé Meeting Room"], "floor": 2, "x": 870, "y": 997},
+  {"names": ["Marigny Atrium", "Marigny Atrium, 2nd Floor", "Marigny"], "floor": 2, "x": 843, "y": 1087},
+  {"names": ["Storyville Room", "Storyville"], "floor": 2, "x": 538, "y": 1263},
+  {"names": ["Bywater Room", "Bywater"], "floor": 2, "x": 196, "y": 1145},
+  {"names": ["Melpomene Meeting Room", "Melpomene"], "floor": 2, "x": 607, "y": 926}
+ ],
+ "landmarks": [
+  {"label": "Elevators", "floor": 3, "x": 548, "y": 364},
+  {"label": "Elevators", "floor": 2, "x": 563, "y": 1065},
+  {"label": "Elevators", "floor": 1, "x": 552, "y": 1825},
+  {"label": "Front Desk", "floor": 1, "x": 396, "y": 2030},
+  {"label": "Main Entrance", "floor": 1, "x": 120, "y": 2080}
+ ]
+}

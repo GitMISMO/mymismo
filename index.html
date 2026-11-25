@@ -131,7 +131,7 @@ html[data-season="december"] .mast-in{padding-top:16px}
 .mast-icon .dot.on{display:grid}
 
 /* ---------- Pages ---------- */
-main{max-width:1240px; margin:0 auto; padding:14px 14px 28px}
+main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 .page{display:none}
 .page.on{display:block}
 .pagehead{display:flex; align-items:baseline; gap:12px; margin:6px 0 12px; flex-wrap:wrap}
@@ -655,6 +655,39 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .ha-win rect,.ha-glow,.ha-run path,.radar .sonar,.ticker .run,.shine:after,.big-logo.halo:before,.poster .pbtn,.w-logos img,.lv-dot i,.lv-badge i,.mat-hero:after,.pc-city,.ring .fg,.radar .dot .pt,.radar .dot .pn{animation:none !important}
   .ha-run path{opacity:0} .radar .dot .pn{opacity:.92} .w-logos img:first-child{opacity:1}
 }
+
+/* Floor map */
+.mapcard{display:grid; grid-template-columns:120px 1fr auto; gap:14px; align-items:center; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:10px; cursor:pointer; color:var(--ink); font:inherit; box-shadow:var(--shadow)}
+.mapcard .mc-art{display:block; border-radius:10px; overflow:hidden; background:#d9dad6; pointer-events:none}
+.mapcard .fpin span,.mapcard .fmark{display:none}
+.mapcard .fpin i{width:7px; height:7px; margin:-3.5px 0 0 -3.5px; box-shadow:none}
+.mc-tx b{display:block; font-family:var(--cond); font-size:20px}
+.mc-tx span{color:var(--ink-2); font-size:13.5px}
+.mapcard > svg{width:20px; height:20px; color:var(--ink-3)}
+.fmap-wrap{display:flex; flex-direction:column}
+.fmap-top{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 16px 8px}
+.fmap-top .seg{margin:0}
+.zoom{display:flex; gap:6px}
+.zoom .iconbtn{font-size:22px; font-weight:600}
+.fmap{overflow:auto; max-height:62vh; background:#d9dad6; -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y}
+.fmap-in{width:100%; transition:width .25s ease}
+.fband{position:relative; overflow:hidden; width:100%}
+.fband img{display:block; width:100%; user-select:none; -webkit-user-drag:none}
+.fpin{position:absolute; transform:translate(-50%,-50%); border:0; background:none; padding:0; cursor:pointer; display:flex; align-items:center; gap:4px; z-index:2}
+.fpin i{display:block; width:14px; height:14px; border-radius:50%; background:#1a8fe3; border:2px solid #fff; box-shadow:0 1px 4px rgba(6,32,47,.4)}
+.fpin span{position:absolute; left:16px; top:50%; transform:translateY(-50%); white-space:nowrap; background:rgba(13,49,76,.88); color:#fff; font-size:11px; font-weight:600; padding:2px 6px; border-radius:4px}
+.fpin.on{z-index:3}
+.fpin.on i{width:22px; height:22px; background:#eb6834; animation:pinpulse 1.6s ease-out infinite}
+.fpin.on span{background:#eb6834; font-size:13px; padding:4px 8px; left:22px}
+@keyframes pinpulse{0%{box-shadow:0 0 0 0 rgba(235,104,52,.7)}100%{box-shadow:0 0 0 18px rgba(235,104,52,0)}}
+.fmark{position:absolute; transform:translate(-50%,-50%); font-size:10px; font-weight:700; color:#5b4a1c; background:rgba(255,255,255,.75); border-radius:3px; padding:1px 4px; pointer-events:none}
+.rooms{display:grid; gap:6px}
+.roomrow{display:grid; grid-template-columns:auto 1fr auto auto; gap:10px; align-items:center; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 12px; cursor:pointer; color:var(--ink); font:inherit}
+.roomrow .fl{width:28px; height:28px; border-radius:7px; display:grid; place-items:center; background:#c99a2e; color:#fff; font-family:var(--cond); font-weight:700}
+.roomrow > span:not(.fl){color:var(--ink-2); font-size:13px}
+.roomrow svg{width:17px; height:17px; color:var(--ink-3)}
+.findmap{margin-left:auto; border:1px solid rgba(255,255,255,.4); background:rgba(255,255,255,.14); color:#fff; border-radius:5px; padding:3px 9px; font-size:12.5px; font-weight:700; cursor:pointer}
+@media (prefers-reduced-motion: reduce){ .fpin.on i{animation:none} }
 
 /* Speaker bio */
 .bio-btn{margin:0 0 4px}
@@ -1409,11 +1442,64 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null;
+/* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
+function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
+function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
+function roomPin(room) {
+  var f = floorMap(); if (!f || !room) return null; var k = rkey(room);
+  for (var i = 0; i < f.rooms.length; i++) if (f.rooms[i].names.some(function (n) { return rkey(n) === k; })) return f.rooms[i];
+  for (i = 0; i < f.rooms.length; i++) if (f.rooms[i].names.some(function (n) { return k.indexOf(rkey(n)) === 0; })) return f.rooms[i];
+  return null;
+}
+function usedRooms() {
+  var seen = {}, out = [];
+  S.sessions.forEach(function (x) { if (x.room && !seen[x.room]) { seen[x.room] = 1; var pin = roomPin(x.room); if (pin) out.push({ room: x.room, pin: pin, n: S.sessions.filter(function (y) { return y.room === x.room; }).length }); } });
+  return out.sort(function (a, b) { return b.pin.floor - a.pin.floor || b.n - a.n; });
+}
+function floorView(f, fl, pick) {
+  var band = fl.y1 - fl.y0, used = usedRooms().filter(function (u) { return u.pin.floor === fl.floor; });
+  var pins = used.map(function (u) {
+    var on = pick && rkey(pick) === rkey(u.room);
+    return '<button type="button" class="fpin' + (on ? ' on' : '') + '" data-fpin="' + esc(u.room) + '" style="left:' + (u.pin.x / f.width * 100).toFixed(2) + '%;top:' + ((u.pin.y - fl.y0) / band * 100).toFixed(2) + '%"><i></i><span>' + esc(u.room) + '</span></button>';
+  }).join('') + (f.landmarks || []).filter(function (l) { return l.floor === fl.floor; }).map(function (l) {
+    return '<span class="fmark" style="left:' + (l.x / f.width * 100).toFixed(2) + '%;top:' + ((l.y - fl.y0) / band * 100).toFixed(2) + '%">' + esc(l.label) + '</span>';
+  }).join('');
+  return '<div class="fband" style="aspect-ratio:' + f.width + '/' + band + '"><img src="' + esc(f.image) + '" alt="' + esc(f.venue + ', ' + fl.label) + '" style="margin-top:-' + (fl.y0 / f.width * 100).toFixed(3) + '%" draggable="false">' + pins + '</div>';
+}
+function mapSheet(pick) {
+  var f = floorMap(); if (!f) return;
+  var p = pick ? roomPin(pick) : null, fl = (p && f.floors.filter(function (x) { return x.floor === p.floor; })[0]) || f.floors[0];
+  var el = openSheet(pick ? pick : 'Floor Map', '<div class="fmap-wrap"><div class="fmap-top"><div class="seg">' + f.floors.map(function (x) { return '<button type="button" data-floor="' + x.floor + '" aria-pressed="' + (x === fl) + '">' + esc(x.label) + '</button>'; }).join('') + '</div>' +
+    '<div class="zoom"><button type="button" class="iconbtn" data-zoom="-1" aria-label="Zoom out">&minus;</button><button type="button" class="iconbtn" data-zoom="1" aria-label="Zoom in">+</button></div></div>' +
+    '<div class="fmap" id="fmap"><div class="fmap-in" id="fmap-in">' + floorView(f, fl, pick) + '</div></div>' +
+    '<div class="sheet-pad"><p class="lede" style="margin-bottom:10px">' + esc(f.note || '') + '</p><div class="d-h" style="margin-top:6px">Rooms We\'re Using</div><div class="rooms">' + usedRooms().map(function (u) {
+      return '<button type="button" class="roomrow" data-froom="' + esc(u.room) + '"><span class="fl">' + u.pin.floor + '</span><b>' + esc(u.room) + '</b><span>' + u.n + (u.n === 1 ? ' session' : ' sessions') + '</span>' + icon('i-pin') + '</button>';
+    }).join('') + '</div></div></div>', { plain: true });
+  var zoom = 1, cur = fl, sel = pick;
+  function paint(center) {
+    el.querySelector('#fmap-in').style.width = (zoom * 100) + '%';
+    el.querySelector('#fmap-in').innerHTML = floorView(f, cur, sel);
+    el.querySelectorAll('[data-floor]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-floor') === cur.floor)); });
+    if (center) setTimeout(function () { var pin = el.querySelector('.fpin.on'), box = el.querySelector('#fmap'); if (pin && box) { box.scrollLeft = pin.offsetLeft - box.clientWidth / 2; box.scrollTop = pin.offsetTop - box.clientHeight / 2; } }, 30);
+  }
+  if (pick) { zoom = 1.8; paint(true); }
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-floor')) { cur = f.floors.filter(function (x) { return x.floor === +b.getAttribute('data-floor'); })[0]; paint(); }
+    else if (b.hasAttribute('data-zoom')) { zoom = Math.max(1, Math.min(3, zoom + (+b.getAttribute('data-zoom')) * 0.6)); paint(!!sel); }
+    else if (b.hasAttribute('data-froom') || b.hasAttribute('data-fpin')) {
+      sel = b.getAttribute('data-froom') || b.getAttribute('data-fpin'); var pp = roomPin(sel);
+      cur = f.floors.filter(function (x) { return x.floor === pp.floor; })[0]; if (zoom < 1.6) zoom = 1.8; paint(true);
+      el.querySelector('.sheet-body').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+}
 function loadExtras() {
   function again(pages) { if (pages.indexOf(S.page) >= 0 && !stack.length) renderPage(S.page); }
   getJSON('data/guide.json').then(function (g) { G = g; again(['explore', 'home', 'dash']); }).catch(function () {});
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
+  if (S.sid) getJSON('data/floorplan/' + S.sid + '.json').then(function (f) { FP = f; again(['explore', 'home']); }).catch(function () {});
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash']); }).catch(function () {});
   getJSON('/podcast/micdup.json').then(function (m) { MU = m; again(['dash']); }).catch(function () {});
   getJSON('/marketing-hq/matters/editions.json').then(function (m) { MM = m; again(['dash']); }).catch(function () {});
@@ -1530,6 +1616,8 @@ function renderExplore() {
     if (v && v.cards.length) h += '<div class="info-rail" role="list">' + v.cards.map(function (c) {
       return '<div class="infocard" role="listitem"><span class="ic">' + icon(infoIcon(c.name, c.text)) + '</span><b>' + esc(c.name) + '</b>' + noBelow(c.text).split(/\n\n/).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
     }).join('') + '</div>';
+    var fm = floorMap();
+    if (fm) h += '<div class="section-h"><h2>Find Your Way</h2></div><button type="button" class="mapcard" data-map><span class="mc-art">' + floorView(fm, fm.floors[0], '') + '</span><span class="mc-tx"><b>Floor Map</b><span>' + usedRooms().length + ' rooms on ' + fm.floors.filter(function (x) { return usedRooms().some(function (u) { return u.pin.floor === x.floor; }); }).length + ' floors. Tap a room to see where it is.</span></span>' + icon('i-chev') + '</button>';
     var all = places('all');
     if (all.length) {
       var cat = S.xcat || 'all';
@@ -1821,7 +1909,7 @@ function sessionSheet(id) {
   var sp = sponsorFor(x);
   var h = '<div class="cover"><span class="k">' + esc(x.type) + '</span>' + (isLive(x) ? ' <span class="livetag">NOW</span>' : '') + '<h2>' + esc(x.title) + '</h2>' +
     '<div class="w"><div>' + icon('i-agenda') + esc(longDate(x.date)) + '</div><div>' + icon('i-clock') + esc(span(x.a, x.b)) + '</div>' +
-    (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + '</div>' : '') +
+    (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + (roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">Find on Map</button>' : '') + '</div>' : '') +
     (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div>' +
     (sp.length ? '<div class="spline"><span class="spons">' + esc(spLabel(x)) + '</span>' + spChips(sp) + '</div>' : (x.type === 'General Session' && gsSponsors().length ? '<div class="spline"><span class="spons">Segments sponsored by</span>' + spChips(gsSponsors()) + '</div>' : '')) +
     '</div><div class="sheet-pad">';
@@ -2106,6 +2194,7 @@ document.addEventListener('click', function (e) {
   if (t.id === 'dash-btn') { closeSheet(true); show('dash'); return; }
   if (t.hasAttribute('data-hq')) { show(t.getAttribute('data-hq')); return; }
   if (t.hasAttribute('data-choose')) { chooser(false); return; }
+  if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-play')) { playIn(t.closest('.player'), t.getAttribute('data-play')); return; }
   if (t.hasAttribute('data-live')) { liveSheet(); return; }
   if (t.hasAttribute('data-place')) { placeSheet(t.getAttribute('data-place')); return; }
