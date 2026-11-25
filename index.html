@@ -2079,7 +2079,10 @@ function triviaSheet() {
   el.addEventListener('click', function (e) { if (e.target.closest('[data-tv-play]')) triviaPlay(); });
 }
 /* Test Run: MISMO staff signed in, or a link with ?trivia=test. Draft questions only; nothing leaves the phone. */
-function triviaTester() { return !!staffSession() || /[?&]trivia=test\b/.test(location.search); }
+function triviaTester() {
+  if (/[?&]trivia=test\b/.test(location.search)) save('trivia-tester', true);   /* the test link is remembered on this phone */
+  return !!staffSession() || load('trivia-tester', false);
+}
 var TQ = null, TV_LEN = 10, TV_SECS = 20;
 function triviaPlay() {
   (TQ ? Promise.resolve(TQ) : getJSON('data/trivia-draft.json').then(function (d) { TQ = d; return d; })).then(function (d) { triviaRound(d.questions || []); })
