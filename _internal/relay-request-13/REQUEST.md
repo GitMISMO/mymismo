@@ -8,8 +8,8 @@ message them in the app. Attendees have no MISMO Resources account, so none of t
 
 ## What to Do
 
-1. **Create the private data repository** `GitMISMO/mymismo-data` (Jonna can create it) and **add it to the relay's
-   GitHub token**. The relay also reads Summit HQ's attendee list in `GitMISMO/summit-hq-data`, which the token
+1. **Add the private data repository** `GitMISMO/mymismo-data` (created by Jonna, Nov 25, 2026, empty) **to the
+   relay's GitHub token**. The relay also reads Summit HQ's attendee list in `GitMISMO/summit-hq-data`, which the token
    already covers.
 2. **Apply the patch** `relay-request-13-mymismo.patch` to `initiative-hub/_dev/aws/index.mjs`, add
    `test-mymismo.mjs` beside the other tests, and deploy. The patch is made against initiative-hub commit `330d7c1`
