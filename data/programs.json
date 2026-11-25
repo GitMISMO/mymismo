@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T21:41:15Z",
+ "updated": "2026-11-25T21:49:31Z",
  "source": "https://www.mismo.org/standards-resources/certification",
  "programs": [
   {
@@ -245,6 +245,45 @@
      "name": "Take Three Technologies",
      "slug": "take-three-technologies",
      "logo": "https://resources.mismo.org/certification/logos/take-three-technologies.png"
+    },
+    {
+     "name": "Viant Eye",
+     "slug": "viant-eye",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/viant-eye-logo_viant-eye-primary-logo2e801ac23df44d9eaae6b544ae232e2f.png"
+    }
+   ]
+  },
+  {
+   "key": "frame-advisory-partner",
+   "title": "MISMO FRAME Advisory Partner",
+   "blurb": "For consulting and advisory organizations that can operationalize MISMO FRAME.",
+   "about": "https://www.mismo.org/standards-resources/certification/organization-certifications/frame-advisory-partner",
+   "directory": "https://www.mismo.org/standards-resources/frame-advisory-partners",
+   "members": [
+    {
+     "name": "Actualize Consulting",
+     "slug": "actualize-consulting",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/actualize-new-logo-small.jpg"
+    },
+    {
+     "name": "Crittora",
+     "slug": "crittora",
+     "logo": "https://www.crittora.com/static/logo-crittora-blob-396967c97756daee086606db8d1b1171.webp"
+    },
+    {
+     "name": "Falcon Capital Advisors",
+     "slug": "falcon-capital-advisors",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/falcon-capital.png"
+    },
+    {
+     "name": "Teraverde Financial",
+     "slug": "teraverde",
+     "logo": "https://www.teraverde.com/assets/teraverde-logo-D-QLm-yD.png"
+    },
+    {
+     "name": "Tidgewell Results eXperience",
+     "slug": "tidgewell",
+     "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/trex-logo.png"
     },
     {
      "name": "Viant Eye",

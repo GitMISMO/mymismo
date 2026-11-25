@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T21:42:26Z",
+ "updated": "2026-11-25T21:50:46Z",
  "source": "https://www.mismo.org/standards-resources/",
  "providers": {
   "docutech": {
@@ -904,6 +904,27 @@
     "Falcon Capital Advisors is a full-service management consulting firm that helps private and public sector clients develop strategy and execute on their eMortgage, business transformation, data analytics, public policy, loan operations, regulatory and MERS compliance, CDFI, and affordable housing program initiatives. Our expertise spans all mortgage industry domains including origination, servicing, and secondary market, both in the residential and multifamily contexts."
    ],
    "aboutTitle": "About Falcon Capital Advisors"
+  },
+  "teraverde": {
+   "slug": "teraverde",
+   "name": "Teraverde Financial",
+   "tagline": "",
+   "website": "https://www.teraverde.com",
+   "logo": "https://www.teraverde.com/assets/teraverde-logo-D-QLm-yD.png",
+   "tags": [
+    "FRAME Advisory Partner"
+   ],
+   "certs": [
+    {
+     "title": "FRAME Advisory Partner",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-frame-advisory-partner.png",
+     "url": "https://www.mismo.org/standards-resources/frame"
+    }
+   ],
+   "about": [
+    "Teraverde helps lenders respond to AI with sharper operating models, practical governance and clearer performance decisions. The firm works to redefine how leaders make data-driven decisions to TopTier® their company and team, drawing on its work with client partners, counterparties and regulators."
+   ],
+   "aboutTitle": "About Teraverde Financial"
   },
   "tidgewell": {
    "slug": "tidgewell",
