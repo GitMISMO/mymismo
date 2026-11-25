@@ -40,3 +40,4 @@
 - Nov 25, 2026: Relay request 15 for Perry is complete (patch and 57 checks): ranked Trivia rounds, monthly board, Quarterly Championship, emailed-code sign-in for anyone, delete my account.
 - Nov 25, 2026: MISMO Trivia: the leaderboard and championship explain themselves with three short tiles each instead of paragraphs; Hard plus Mixed shows a Counts for the Leaderboard tag (the oversized star is gone); difficulty cards read 25 sec / 1× so nothing wraps.
 - Nov 25, 2026: Sponsors has its own button in the summit menu at the bottom (six buttons now). The sponsor tiles and bands open that page instead of a pop-up.
+- Nov 25, 2026: Back to five bottom buttons (Apple and Google both cap a tab bar at five). Instead, the Thank You to Our Sponsors band is now at the foot of every summit page (Home, Agenda, My Schedule, People, Explore) with a See All Sponsors button that opens the full Sponsors page.
