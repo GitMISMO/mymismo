@@ -1,0 +1,202 @@
+{
+ "updated": "2026-11-25T20:19:51Z",
+ "source": "https://www.mismo.org/events/hotel",
+ "summit": "MISMO Winter Summit",
+ "dates": "January 11–14, 2027",
+ "venue": "InterContinental New Orleans",
+ "address": "444 St Charles Avenue, New Orleans, LA 70130",
+ "book": "https://book.passkey.com/event/51208099/owner/110/home",
+ "sections": [
+  {
+   "id": "the-venue",
+   "eyebrow": "The Venue",
+   "title": "InterContinental New Orleans",
+   "intro": "The 2027 MISMO Winter Summit will be held at the InterContinental New Orleans, in the heart of the Central Business District on St Charles Avenue.",
+   "cards": [
+    {
+     "name": "Getting Here",
+     "text": "Louis Armstrong New Orleans International (MSY) is about 12 miles from the hotel. Taxis charge a flat $36 for one or two passengers, or $15 per person for three or more. The RTA Airport Express (Route 202) runs downtown to Poydras Street for $1.25."
+    },
+    {
+     "name": "Getting Around",
+     "text": "A St. Charles Streetcar stop is directly across from the hotel — $1.25 a ride, running 24 hours. The French Quarter is about a five-minute walk. Valet parking is available at the hotel; there is no on-site self parking.\n\nUse the booking link below to get the group rate."
+    },
+    {
+     "name": "What to Expect in January",
+     "text": "January averages a high of 63°F and a low of 46°F, and it is one of the wetter months — pack a rain jacket. Check-in is 4:00 PM and check-out is 11:00 AM."
+    }
+   ],
+   "roomBlock": {
+    "eyebrow": "MISMO Room Block",
+    "title": "Reserve at the InterContinental New Orleans",
+    "text": "Book through the MISMO group link below to receive the discounted rate for January 11–14, 2027. The cut-off date is Monday, December 14, 2026. Rooms are released once the block is full or the cut-off date passes, whichever comes first."
+   }
+  },
+  {
+   "id": "where-to-eat",
+   "eyebrow": "Where to Eat",
+   "title": "Dining Within Walking Distance",
+   "intro": "The InterContinental sits in the Central Business District, a few blocks from some of the best cooking in the country.",
+   "cards": [
+    {
+     "name": "Trenasse",
+     "kind": "In the Hotel",
+     "distance": "On site",
+     "url": "https://www.trenasse.com",
+     "address": "444 St Charles Avenue",
+     "text": "Louisiana seafood and a raw oyster bar on the ground floor of the InterContinental. The easy answer when sessions run late."
+    },
+    {
+     "name": "Luke",
+     "kind": "Brasserie",
+     "distance": "1 block",
+     "url": "https://www.lukeneworleans.com",
+     "address": "333 St Charles Avenue",
+     "text": "A German-Alsatian brasserie with a long oyster happy hour. Big tables, good for groups."
+    },
+    {
+     "name": "Mother’s Restaurant",
+     "kind": "Casual",
+     "distance": "2 blocks",
+     "url": "https://mothersrestaurant.net",
+     "address": "401 Poydras Street",
+     "text": "A New Orleans institution since 1938. Po’boys, red beans and rice, and a line worth standing in."
+    },
+    {
+     "name": "Herbsaint",
+     "kind": "Fine Dining",
+     "distance": "4 blocks",
+     "url": "https://www.herbsaint.com",
+     "address": "701 St Charles Avenue",
+     "text": "Donald Link’s flagship and a James Beard Award winner. French-Louisiana cooking in a room built for a long dinner."
+    },
+    {
+     "name": "Compère Lapin",
+     "kind": "Fine Dining",
+     "distance": "5 minutes",
+     "url": "https://www.comperelapin.com",
+     "address": "535 Tchoupitoulas Street",
+     "text": "Chef Nina Compton’s Caribbean-Creole cooking in the Old No. 77 Hotel. One of the most celebrated kitchens in the city."
+    },
+    {
+     "name": "Pêche Seafood Grill",
+     "kind": "Seafood",
+     "distance": "8 minutes",
+     "url": "https://www.pecherestaurant.com",
+     "address": "800 Magazine Street",
+     "text": "Whole fish over hardwood coals. Named the James Beard Best New Restaurant the year it opened."
+    },
+    {
+     "name": "Cochon",
+     "kind": "Cajun",
+     "distance": "10 minutes",
+     "url": "https://www.cochonrestaurant.com",
+     "address": "930 Tchoupitoulas Street",
+     "text": "Southern Louisiana cooking built around the whole hog. Book ahead — it fills up."
+    },
+    {
+     "name": "Willa Jean",
+     "kind": "Breakfast",
+     "distance": "5 minutes",
+     "url": "https://www.willajean.com",
+     "address": "611 O’Keefe Avenue",
+     "text": "A bakery and all-day Southern kitchen. The best option near the hotel for an early breakfast meeting."
+    }
+   ],
+   "note": "Walking times are approximate and measured from the InterContinental at 444 St Charles Avenue."
+  },
+  {
+   "id": "what-to-see",
+   "eyebrow": "What to See",
+   "title": "Things to Do Near the Hotel",
+   "intro": "Build a morning or an afternoon around the Summit. Everything below is walkable or a short streetcar ride away.",
+   "cards": [
+    {
+     "name": "The National WWII Museum",
+     "kind": "Museum",
+     "distance": "15 minutes",
+     "url": "https://www.nationalww2museum.org",
+     "address": "945 Magazine Street",
+     "text": "Consistently ranked among the finest museums in the country. Give it half a day if you can."
+    },
+    {
+     "name": "Ogden Museum of Southern Art",
+     "kind": "Museum",
+     "distance": "13 minutes",
+     "url": "https://ogdenmuseum.org",
+     "address": "925 Camp Street",
+     "text": "The largest collection of Southern art anywhere, in a building worth the visit on its own."
+    },
+    {
+     "name": "Contemporary Arts Center",
+     "kind": "Gallery",
+     "distance": "13 minutes",
+     "url": "https://cacno.org",
+     "address": "900 Camp Street",
+     "text": "Rotating exhibitions, performance and film in the heart of the Warehouse Arts District."
+    },
+    {
+     "name": "St. Charles Streetcar",
+     "kind": "Ride",
+     "distance": "On site",
+     "url": "https://www.norta.com/ride-with-us/system-overview",
+     "address": "Stops outside the hotel",
+     "text": "The oldest continuously operating streetcar line in the world. Ride it uptown past the Garden District oaks."
+    },
+    {
+     "name": "The French Quarter",
+     "kind": "Neighborhood",
+     "distance": "12 minutes",
+     "url": "https://www.neworleans.com/plan/neighborhoods/french-quarter/",
+     "address": "Jackson Square and Royal Street",
+     "text": "Jackson Square, St. Louis Cathedral, the galleries on Royal Street and café au lait at Café du Monde."
+    },
+    {
+     "name": "Frenchmen Street",
+     "kind": "Music",
+     "distance": "Short ride",
+     "url": "https://www.neworleans.com/plan/streets/frenchmen-street/",
+     "address": "Marigny",
+     "text": "Where the locals go for live music. Three blocks of clubs, most with no cover."
+    },
+    {
+     "name": "The Riverfront and Woldenberg Park",
+     "kind": "Outdoors",
+     "distance": "10 minutes",
+     "url": "https://audubonnatureinstitute.org/woldenberg-park",
+     "address": "Mississippi riverfront",
+     "text": "A level walk along the Mississippi, with the Audubon Aquarium at the near end."
+    },
+    {
+     "name": "Magazine Street",
+     "kind": "Shopping",
+     "distance": "Short ride",
+     "url": "https://magazinestreet.com",
+     "address": "Lower Garden District",
+     "text": "Six miles of independent shops, antiques, bookstores and coffee. Catch it on the way back from the WWII Museum."
+    }
+   ],
+   "note": "Walking times are approximate and measured from the InterContinental at 444 St Charles Avenue."
+  },
+  {
+   "id": "looking-ahead",
+   "eyebrow": "Looking Ahead",
+   "title": "Save the Date for Future Summits",
+   "intro": "",
+   "cards": [
+    {
+     "name": "Spring Summit 2027",
+     "text": "June 7–10, 2027\n\nSalt Lake City, UT"
+    },
+    {
+     "name": "Fall Summit 2027",
+     "text": "September 13–16, 2027\n\nBethesda, MD"
+    },
+    {
+     "name": "Winter Summit 2028",
+     "text": "January 2028\n\nMiami, FL"
+    }
+   ]
+  }
+ ]
+}
