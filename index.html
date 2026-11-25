@@ -1156,7 +1156,7 @@ function icon(id, cls) { return '<svg' + (cls ? ' class="' + cls + '"' : '') + '
 function load(key, dflt) { try { var v = localStorage.getItem(STORE + key); return v ? JSON.parse(v) : dflt; } catch (e) { return dflt; } }
 function save(key, v) { try { localStorage.setItem(STORE + key, JSON.stringify(v)); } catch (e) {} }
 function drop(key) { try { localStorage.removeItem(STORE + key); } catch (e) {} }
-function initials(n) { var p = String(n || '').replace(/^(dr|mr|ms|mrs)\.?\s+/i, '').split(/\s+/).filter(Boolean); return ((p[0] || '')[0] || '') + ((p.length > 1 ? p[p.length - 1][0] : '') || ''); }
+function initials(n) { var p = String(n || '').replace(/\([^)]*\)/g, ' ').replace(/^(dr|mr|ms|mrs)\.?\s+/i, '').split(/\s+/).filter(function (w) { return /^[A-Za-z0-9]/.test(w); }); return ((p[0] || '')[0] || '') + ((p.length > 1 ? p[p.length - 1][0] : '') || ''); }
 function slug(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 function coKey(s) { return String(s || '').toLowerCase().replace(/&/g, ' and ').replace(/\b(inc|llc|corp|corporation|company|co|ltd|the)\b\.?/g, '').replace(/[^a-z0-9]/g, ''); }
 function mins(t) {
