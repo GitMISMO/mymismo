@@ -616,6 +616,42 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .ha-run path{opacity:0} .radar .dot .pn{opacity:.92} .w-logos img:first-child{opacity:1}
 }
 
+/* My Schedule, before anything is added */
+.empty-sched{display:grid; justify-items:center; text-align:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:28px 20px 24px; margin-top:6px}
+.es-star{width:64px; height:64px; border-radius:50%; display:grid; place-items:center; background:color-mix(in srgb, var(--star) 22%, transparent); color:var(--star)}
+.es-star svg{width:32px; height:32px}
+.empty-sched b{font-family:var(--cond); font-size:22px}
+.empty-sched p{color:var(--ink-2); max-width:34ch; margin:0 0 8px}
+
+/* Sponsor band (foot of Home and Explore) */
+.spband{position:relative; overflow:hidden; isolation:isolate; margin:28px 0 8px; border-radius:20px; color:#fff; background:#071d2e; padding:22px 0 18px; box-shadow:0 18px 40px -22px rgba(6,32,47,.7)}
+.spband > .hero-art{z-index:-1; opacity:.9}
+.sb-in{padding:0 16px}
+.sb-eye{display:flex; align-items:center; gap:7px; color:var(--sky); font-weight:700; font-size:13.5px}
+.sb-eye svg{width:17px; height:17px}
+.spband h2{font-family:var(--cond); font-size:clamp(28px, 8vw, 40px); line-height:1; letter-spacing:-.015em; margin:6px 0 6px}
+.spband p{color:rgba(255,255,255,.82); margin:0 0 14px; font-size:14.5px}
+.sb-tick{margin:0 0 16px; background:rgba(255,255,255,.06); border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12)}
+.sb-tick .tk{border-color:transparent}
+.sb-tier{display:flex; align-items:center; gap:8px; font-family:var(--cond); font-weight:700; font-size:18px; margin-bottom:8px}
+.sb-tier .medal{width:20px; height:20px}
+.sb-tier em{font-style:normal; font-family:var(--sans, inherit); font-size:12px; font-weight:700; color:rgba(255,255,255,.75); background:rgba(255,255,255,.12); border-radius:5px; padding:1px 6px}
+.sb-cards{display:grid; gap:8px; grid-template-columns:repeat(var(--n), 1fr)}
+.sb-cards .spc{padding:8px; gap:8px}
+.sb-cards .spc-tx b{font-size:13.5px; line-height:1.2}
+.sb-cards .spc-tx span{font-size:11.5px}
+.sb-cards .spc{border-top-color:var(--tierc); background:rgba(255,255,255,.97)}
+.sb-cards .spc-logo{height:70px; padding:6px}
+@media (min-width:640px){ .sb-cards .spc-logo{height:96px} .sb-cards .spc{padding:12px} }
+.sb-row{margin-top:14px; --tierc:var(--sky)}
+.sb-logos{display:grid; gap:8px; grid-template-columns:repeat(auto-fill, minmax(96px, 1fr))}
+.sb-logo{display:grid; place-items:center; height:58px; background:#fff; border:0; border-bottom:3px solid var(--tierc); border-radius:10px; padding:7px 9px; cursor:pointer; transition:transform .15s ease}
+.sb-logo:active{transform:scale(.96)}
+.sb-logo img{max-width:100%; max-height:100%; object-fit:contain}
+.sb-logo b{color:#0d314c; font-size:12px}
+.sb-all{width:100%; justify-content:center; margin-top:16px; background:var(--sky); color:#06202f; border-color:var(--sky); font-weight:700}
+.sb-all svg{width:17px; height:17px}
+
 /* Floor map */
 .mapcard{display:grid; grid-template-columns:120px 1fr auto; gap:14px; align-items:center; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:10px; cursor:pointer; color:var(--ink); font:inherit; box-shadow:var(--shadow)}
 .mapcard .mc-art{display:block; border-radius:10px; overflow:hidden; background:#d9dad6; pointer-events:none}
@@ -1399,8 +1435,7 @@ function renderHome() {
       '<div class="tx"><b>' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' Sessions, ' + gsPeople().length + ' Speakers</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
   }
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
-  var top = sponsorTiers()[0];
-  if (top) h += '<div class="section-h"><h2>Thank You to Our ' + esc(top.tier) + ' Sponsors</h2><button type="button" class="linkbtn" data-sponsors>All Sponsors&nbsp;→</button></div><div class="strip">' + top.list.map(logoTile).join('') + '</div>';
+  h += sponsorBand();
   if (S.updated) h += '<div class="foot">Updated ' + esc(stamp(S.updated)) + '</div>';
   return h;
 }
@@ -1493,8 +1528,8 @@ function renderMine() {
   var ids = mine(), list = ids.map(sessionById).filter(Boolean).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; });
   var h = '<div class="pagehead"><h1>My Schedule</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
   if (!list.length) {
-    h += '<div class="note"><b>Tap the star on any session to add it here.</b> Your schedule stays on this phone, and Add to Calendar puts it in your phone\'s calendar with a reminder before each session. To get you started, here is how ' + esc(longDate(S.first)) + ' opens.</div>';
-    return h + slots(S.sessions.filter(function (x) { return x.date === S.first; }));
+    return h + '<div class="empty-sched"><span class="es-star">' + icon('i-star') + '</span><b>Your schedule is empty</b><p>Tap the star on any session to add it here. Your schedule stays on this phone, and Add to Calendar puts it in your phone\'s calendar with a reminder before each session.</p>' +
+      '<button type="button" class="btn primary" data-go="agenda">' + icon('i-agenda') + 'Browse the Agenda</button></div>';
   }
   h += '<div class="d-actions" style="margin:0 0 4px"><button type="button" class="btn primary" data-ics="all">' + icon('i-cal') + 'Add All to Calendar</button></div>';
   var byDay = {}; list.forEach(function (x) { (byDay[x.date] = byDay[x.date] || []).push(x); });
@@ -1541,6 +1576,27 @@ function renderAttendees() {
 }
 
 /* ---------- Sponsors ---------- */
+/* The sponsor band at the foot of Home and Explore: a smaller sibling of the Sponsors page */
+function sponsorBand() {
+  var tiers = sponsorTiers(); if (!tiers.length) return '';
+  var run = S.sponsors.filter(function (sp) { return sp.logo; }), top = tiers[0];
+  var h = '<section class="spband" aria-label="Sponsors">' + heroArt() + '<div class="sb-in"><div class="sb-eye">' + icon('i-sponsor') + 'Summit Sponsors</div><h2>Thank You to Our Sponsors</h2>' +
+    '<p>' + S.sponsors.length + (S.sponsors.length === 1 ? ' company' : ' companies') + ' making the ' + esc(S.summit.name) + ' happen.</p></div>';
+  if (run.length > 3) h += '<div class="ticker sb-tick" aria-hidden="true"><div class="run" style="--dur:' + Math.max(22, run.length * 3.5) + 's">' + run.concat(run).map(function (sp) { return '<span class="tk"><img src="' + esc(sp.logo) + '" alt=""></span>'; }).join('') + '</div></div>';
+  h += '<div class="sb-in"><div class="sb-top" style="--tierc:' + (TIER_COLOR[top.tier] || 'var(--sky)') + '"><div class="sb-tier"><span class="medal" aria-hidden="true"></span>' + esc(top.tier) + '</div><div class="sb-cards" style="--n:' + Math.min(top.list.length, 3) + '">' +
+    top.list.map(function (sp, i) {
+      var what = spWhat(sp);
+      return '<button type="button" class="spc shine" style="--sd:' + (i * 0.9) + 's" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '"><span class="spc-logo">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</span>' +
+        '<span class="spc-tx"><b>' + esc(sp.name) + '</b>' + (what.length ? '<span>' + icon('i-star') + esc(what[0]) + (what.length > 1 ? ' +' + (what.length - 1) : '') + '</span>' : '') + '</span></button>';
+    }).join('') + '</div></div>' +
+    tiers.slice(1).map(function (t) {
+      return '<div class="sb-row" style="--tierc:' + (TIER_COLOR[t.tier] || 'var(--sky)') + '"><div class="sb-tier"><span class="medal" aria-hidden="true"></span>' + esc(t.tier) + '<em>' + t.list.length + '</em></div><div class="sb-logos">' + t.list.map(function (sp) {
+        return '<button type="button" class="sb-logo" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</button>';
+      }).join('') + '</div></div>';
+    }).join('') +
+    '<button type="button" class="btn sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></div></section>';
+  return h;
+}
 function sponsorTiers() {
   var groups = {};
   S.sponsors.forEach(function (sp) { (groups[sp.tier] = groups[sp.tier] || []).push(sp); });
@@ -1740,8 +1796,8 @@ function placeSheet(k) {
     '<div class="d-meta"><span>' + icon('i-walk') + esc(c.distance || '') + '</span>' + (c.address ? '<span>' + icon('i-pin') + esc(c.address) + '</span>' : '') + '</div></div></div>' +
     '<div class="sheet-pad">' + (c.text ? '<p class="lede">' + esc(c.text) + '</p>' : '') +
     '<div class="d-actions"><a class="btn primary" href="' + esc(mapUrl(c.name, c.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a>' +
-    (c.url ? '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Website</a>' : '') + '</div></div>';
-  openSheet(c.name, h);
+    (c.url ? '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Website</a>' : '') + '</div>' + (c.url ? sitePeek(homeOf(c.url)) : '') + '</div>';
+  watchPeeks(openSheet(c.name, h));
 }
 function cutoff() {
   var v = gsec('the-venue'), rb = v && v.roomBlock; if (!rb) return null;
@@ -1788,10 +1844,7 @@ function renderExplore() {
       });
     }
   }
-  if (S.sponsors.length) {
-    h += '<div class="section-h"><h2>Thank You to Our Sponsors</h2><button type="button" class="linkbtn" data-sponsors>All Sponsors</button></div>';
-    sponsorTiers().forEach(function (t, i) { h += '<div class="tier' + (i === 0 ? ' big' : '') + '" style="--tierc:' + (TIER_COLOR[t.tier] || 'var(--sky)') + '"><h2><i></i>' + esc(t.tier) + '</h2><div class="logos">' + t.list.map(logoTile).join('') + '</div></div>'; });
-  }
+  h += sponsorBand();
   if (g) h += '<div class="foot">Updated ' + esc(stamp(g.updated)) + '</div>';
   return h;
 }
@@ -2162,6 +2215,7 @@ function speakerSheet(key) {
    screenshot service; while it's still being made the service shows its own placeholder, so the app asks again
    a few seconds later, and if no picture comes the frame is taken away (no empty box). */
 function peekSrc(url, n) { return 'https://s0.wp.com/mshots/v1/' + encodeURIComponent(url) + '?w=1200&h=900' + (n ? '&r=' + n : ''); }
+function homeOf(url) { try { return new URL(url).origin + '/'; } catch (e) { return url; } }
 function sitePeek(url) {
   var host = ''; try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
   return '<a class="sitepeek" href="' + esc(url) + '" target="_blank" rel="noopener" aria-label="' + esc(host) + ' home page"><span class="pk-bar"><i></i><i></i><i></i><span class="pk-url">' + icon('i-lock') + esc(host) + '</span></span>' +

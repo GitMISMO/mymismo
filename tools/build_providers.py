@@ -212,6 +212,15 @@ def main(argv):
                 pass
     except Exception as e:
         print('agenda', e)
+    # the restaurants and things to do on Explore (from the Hotel and Travel guide): their home pages
+    try:
+        for sec in json.load(open('data/guide.json', encoding='utf-8')).get('sections', []):
+            for c in sec.get('cards', []):
+                u = c.get('url') or ''
+                if u.startswith('https://') and host_of(u):
+                    sites.append('https://' + urllib.parse.urlsplit(u).netloc + '/')
+    except Exception as e:
+        print('guide places', e)
     try:
         index = json.load(open('data/peeks/index.json', encoding='utf-8'))
     except Exception:
