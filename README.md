@@ -57,3 +57,12 @@ The app shows the next summit whose last day hasn't passed. A person's starred s
 - Every page has the one shared icon line in `<head>` pointing at `https://resources.mismo.org/assets/favicon-48x48.png`.
 - Back button: the shared `/assets/back.js`; each bottom tab is a page and each open panel is a layer.
 - Stay in your lane: this app only reads other systems' public feeds. If it needs something new from Summit HQ or the Sponsorship Portal, ask that system's Claude to add it to its feed.
+
+## MISMO Trivia: How It Will Work (decided by Jonna, Nov 25, 2026)
+
+- **Questions:** draft set in `data/trivia-draft.json` (96, each with a public source and a level: 1 Easy, 2 Medium, 3 Hard). No Wikipedia sources. Reviewed in Jonna's question review doc before going live.
+- **Test Run (now):** MISMO staff signed in, a `?trivia=test` link, or the reviewer code in Settings. Scores stay on the phone.
+- **Scoring:** like Kahoot. A right answer is worth up to 1,000 points (times 1, 1.5 or 2 for Easy, Medium, Hard), less the slower it comes but never below half; two or more right in a row add 100 (times the level). Study rounds have no clock and no points.
+- **Monthly leaderboard:** starts over on the 1st of every month. Ranks each player's single best round, and only Hard rounds of Mixed questions count. The questions must be well mixed and drawn from a big enough Hard pool that players can't memorize them.
+- **Quarterly Championship:** the three monthly champions play a harder Championship Board. If someone wins two months in one quarter, that later month's next-highest scorer takes the spot. Each plays on their own phone during a set championship window; once they start, a set time runs until they finish (no pausing, no restarting). The highest score is recognized at the next MISMO Summit and wins a prize.
+- **Still to build:** the leaderboard and championship need a save relay request (scores checked on the server, questions served by the relay so answers aren't in the app, the championship clock kept on the server).

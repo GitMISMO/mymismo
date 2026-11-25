@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: MISMO Trivia rules on the page: the monthly leaderboard ranks each player's single best Hard round of Mixed questions; a champion who already qualified hands the spot to that month's next-highest scorer; the championship is played on your own phone during a set window, and once started the clock runs until you finish. The test round says whether your picks would count.
 - Nov 25, 2026: Sponsors page: every logo is centered and fits inside its box, including square logos like ICE and Crittora.
 - Nov 25, 2026: MISMO Trivia: the leaderboard starts over every month, and a new Quarterly Championship section shows the plan (the three monthly champions play a tougher Championship Board; the winner is recognized at the next MISMO Summit and wins a prize). Both open with the game.
 - Nov 25, 2026: Trivia Test Run: you pick your questions by tapping a category card (or Mixed) under Pick Your Questions, then the difficulty and Play in the panel below it. The header no longer has a category picker.

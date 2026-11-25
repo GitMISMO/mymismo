@@ -2118,25 +2118,32 @@ function triviaSheet() {
       return '<button type="button" class="tv-cat' + (c[0] ? '' : ' mixed') + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0] || c[1]) + '</b><span>' + esc(c[0] ? c[1] : c[3]) + '</span>' + icon('i-check') + '</button>';
     }).join('') + '</div>' +
     '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.secs + ' seconds') + '</span><em>' + (l.study ? 'Learn as you go' : l.mult + '&times; points') + '</em></button>'; }).join('') + '</div>' +
-    '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote">Scores stay on this phone and never reach the leaderboard.</span></div>' :
+    '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote" id="tv-lbnote"></span></div>' :
     '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
   h += '<div class="tv-modes">' +
     '<div class="tv-mode" style="--mc:#74bfeb"><span class="tv-mi">' + icon('i-star') + '</span><b>Solo</b><span>Play on your own, keep score and beat your best.</span><em>' + icon('i-lock') + 'Opens Soon</em></div>' +
     '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone. Same questions, one winner.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
   h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
       return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
-    '</div><p>A fresh leaderboard every month: it starts over on the 1st. Each month\'s top scorer earns a spot in the Quarterly Championship.</p></div>';
+    '</div><p>A fresh leaderboard every month: it starts over on the 1st. It ranks each player\'s single best Hard round of Mixed questions, and the month\'s top scorer earns a spot in the Quarterly Championship. If a champion has already qualified that quarter, the month\'s next-highest scorer takes the spot.</p></div>';
   var shortCat = ['Standards', 'Life of Loan', 'Glossary', 'MISMO', 'Certs', 'Mortgage'];
   h += '<div class="d-h">Quarterly Championship</div><section class="tv-champ"><div class="tc-head">' + icon('i-cert') + '<div><b>The Championship Board</b><span>Three monthly champions. One tougher board. One winner.</span></div></div>' +
     '<div class="tc-board" aria-hidden="true">' + shortCat.map(function (c, k) { return '<div class="tc-col" style="--k:' + k + '"><span class="tc-cat">' + esc(c) + '</span>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<span class="tc-cell" style="--r:' + r + '">' + v + '</span>'; }).join('') + '</div>'; }).join('') + '</div>' +
-    '<p>Each quarter, the three monthly champions face off on a special board of harder questions. The winner is recognized at the next MISMO Summit and takes home a prize.</p><em>' + icon('i-lock') + 'Opens Soon</em></section>';
+    '<p>Each quarter, the three monthly champions face off on a special board of harder questions. Each plays the board on their own phone during the championship window, and once you start, the clock runs until you finish. The highest score is recognized at the next MISMO Summit and takes home a prize.</p><em>' + icon('i-lock') + 'Opens Soon</em></section>';
   h += test && ts.games ? '<div class="d-h">Your Test Runs</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b || '&mdash;') + '</b><span>Best ' + l.name + '</span></div>'; }).join('') + '</div><p class="tv-tplayed">' + ts.games + (ts.games === 1 ? ' round' : ' rounds') + ' played, most right ' + (ts.bestRight || 0) + ' of 10</p>' :
     '<div class="d-h">Your Scores</div><div class="tv-stats"><div><b>&mdash;</b><span>Best Score</span></div><div><b>&mdash;</b><span>Games Played</span></div><div><b>&mdash;</b><span>Head to Head Wins</span></div></div>';
   h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions. Trivia opens here once they\'re in.</div></div>';
   var el = openSheet('MISMO Trivia', h, { plain: true });
+  function lbNote() {
+    var n = el.querySelector('#tv-lbnote'); if (!n) return;
+    var counts = load('trivia-level', 1) === 2 && !load('trivia-cat', '');
+    n.innerHTML = (counts ? icon('i-star') + 'Hard and Mixed: this kind of round will count for the leaderboard.' : 'Only Hard rounds of Mixed questions will count for the leaderboard.') + ' Test scores stay on this phone.';
+  }
+  lbNote();
   el.addEventListener('click', function (e) {
     var lv = e.target.closest('[data-tv-level]');
     var cp = e.target.closest('[data-tv-cat]');
+    if (cp || lv) setTimeout(lbNote, 0);
     if (cp) { save('trivia-cat', cp.getAttribute('data-tv-cat')); el.querySelectorAll('[data-tv-cat]').forEach(function (b) { var on = b === cp; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); return; }
     if (lv) { save('trivia-level', +lv.getAttribute('data-tv-level')); el.querySelectorAll('[data-tv-level]').forEach(function (b) { var on = b === lv; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); return; }
     if (e.target.closest('[data-tv-play]')) triviaPlay();
