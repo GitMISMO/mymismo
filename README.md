@@ -8,6 +8,7 @@ This first part is the **summit section**: it replaces what MISMO uses the share
 
 | Page | What people can do |
 | --- | --- |
+| My Dashboard | Opens first. Each person picks their tiles the first time (stored on the phone): MISMO Summit, Webinars, MISMO Mic'd Up, MISMO Matters, Certifications, Summit Sponsors, Submit an Idea, mismo.org. Tiles show live content and open the thing. The S in the top bar comes back here. |
 | Home | The summit at a glance (countdown, or Day 2 of 4 during the summit), figure boxes, what is on now and next, the General Sessions and the top-tier sponsors |
 | Agenda | Every session of the week by day, filtered by type or searched across all four days; a session opens in a panel with its room, time, sponsor, what else is on at the same time, Add to Schedule and Add to Calendar |
 | My Schedule | The sessions a person starred, by day, with overlaps flagged, Add All to Calendar (with a reminder 15 minutes before each), and sessions worth adding |
@@ -23,6 +24,10 @@ Nothing is typed into this app. It reads only public feeds already on resources.
 - `/sponsors/<season>-<year>.json` (for example `winter-2027.json`): the Sponsorship Portal's approved sponsors, with tier, logo, website and sponsored sessions.
 - `data/guide.json`: the website's Hotel and Travel page (www.mismo.org/events/hotel), copied twice a day by `.github/workflows/guide.yml` running `tools/build_guide.py`. Shown only when its dates match the summit's. If the page can't be read, nothing is written and the job fails.
 - `/podcast/micdup.json`: MISMO Media's Mic'd Up episode list (YouTube ids, titles, dates).
+- `data/event.json`: the Summit page's welcome (www.mismo.org/events/summit): title, subtitle, paragraphs, At a Glance, Register Now. Same job as the guide.
+- `data/agenda-tags.json`: the website agenda's session logos (Sponsored by, Presented by, Powered by) and each group's Learn More video. Same job as the guide.
+- `/webinars/webinars.json` (upcoming MISMO webinars), `/marketing-hq/matters/editions.json` (MISMO Matters editions), `/certified/new-certifications.json` and `/certified/individuals.json` (certifications): read only, for the dashboard.
+- The General Sessions live stream plays MISMO's YouTube channel's live stream in the app, from 30 minutes before the General Sessions until they end.
 
 Attendee sign-in, the directory and messages go through the save relay's MyMISMO routes (relay request 13, `_internal/relay-request-13/`). The app asks `/mymismo/att/ready` first and shows none of that until the relay answers, so the app works the same before the request is deployed. The relay reads who may sign in from Summit HQ's attendee list (`summit-hq-data` `data/feed-mymismo-attendees.json`). The only email ever sent is the sign-in code, to the person who asked for it.
 
