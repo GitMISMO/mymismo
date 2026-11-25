@@ -668,6 +668,16 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-mode em{display:inline-flex; align-items:center; gap:5px; font-style:normal; font-weight:700; font-size:12.5px; color:var(--ink-3); margin-top:8px}
 .tv-mode em svg{width:13px; height:13px}
 .tv-cats{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.tv-cats.pick .tv-cat{cursor:pointer; text-align:left; font:inherit; color:var(--ink); grid-template-columns:auto 1fr auto; position:relative; transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease}
+.tv-cats.pick .tv-cat.mixed{grid-column:1 / -1}
+.tv-cats.pick .tv-cat{width:100%; min-width:0; align-content:center; row-gap:2px}
+.tv-cats.pick .tv-cat > i{grid-column:1; grid-row:1 / span 2}
+.tv-cats.pick .tv-cat > b{grid-column:2; grid-row:1}
+.tv-cats.pick .tv-cat > span{grid-column:2; grid-row:2}
+.tv-cats.pick .tv-cat > svg{grid-column:3; grid-row:1 / span 2; width:18px; height:18px; color:var(--oc); opacity:0; transition:opacity .15s ease}
+.tv-cats.pick .tv-cat.on{border:2px solid var(--oc); box-shadow:0 8px 20px -12px var(--oc); transform:translateY(-1px)}
+.tv-cats.pick .tv-cat.on > svg{opacity:1}
+.tv-playbox{margin:14px 0 22px; background:radial-gradient(120% 120% at 50% 0%, #14486e 0%, #071d2e 70%); border-radius:16px; padding:6px 14px 18px; text-align:center; color:#fff}
 .tv-cat{display:grid; grid-template-columns:auto 1fr; column-gap:10px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 60ms)}
 .tv-cat i{grid-row:span 2; width:16px; height:16px; border-radius:50%; background:var(--oc); box-shadow:0 0 0 4px color-mix(in srgb, var(--oc) 25%, transparent)}
 .tv-cat b{font-size:14px; line-height:1.2}
@@ -696,7 +706,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 
 /* Trivia test round */
 .tv-pick-h{font-size:12.5px; font-weight:800; color:rgba(255,255,255,.7); margin:16px 0 8px}
-.tv-catpick{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; max-width:520px; margin:0 auto}
+.tv-catpick-old{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; max-width:520px; margin:0 auto}
 .tv-cp{display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.07); border:2px solid rgba(255,255,255,.15); border-radius:8px; padding:7px 11px; color:#fff; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer}
 .tv-cp i{width:10px; height:10px; border-radius:50%; background:var(--oc)}
 .tv-cp.on{border-color:var(--oc); background:color-mix(in srgb, var(--oc) 22%, transparent)}
@@ -2086,13 +2096,17 @@ function triviaOrbit(big) {
 function triviaSheet() {
   var test = triviaTester(), ts = load('trivia-test', { best: 0, games: 0 });
   var h = '<section class="tv-hero">' + triviaOrbit(true) + '<div class="tv-hin"><span class="tv-soon">' + (test ? 'Test Run' : 'Coming Soon') + '</span><h2>MISMO Trivia</h2><p>How well do you know MISMO? Test yourself, then take on your colleagues.</p>' +
-    (test ? '<div class="tv-pick-h">Questions From</div><div class="tv-catpick" role="radiogroup" aria-label="Category">' + [['', 'Mixed', '#74bfeb']].concat(TRIVIA_CATS).map(function (c) { var on = (load('trivia-cat', '') === c[0]); return '<button type="button" class="tv-cp' + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + '"><i></i>' + esc(c[1] && c[0] ? c[0] : c[1]) + '</button>'; }).join('') + '</div>' +
-      '<div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.secs + ' seconds') + '</span><em>' + (l.study ? 'Learn as you go' : l.mult + '&times; points') + '</em></button>'; }).join('') + '</div>' +
-      '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote">Draft questions under review. Scores stay on this phone and never reach the leaderboard.</span>' : '') + '</div></section><div class="sheet-pad tv">';
+    (test ? '<span class="tv-tnote">Draft questions under review. Pick your questions below.</span>' : '') + '</div></section><div class="sheet-pad tv">';
+  h += test ? '<div class="d-h">Pick Your Questions</div><div class="tv-cats pick" role="radiogroup" aria-label="Category">' + [['', 'Mixed', '#74bfeb', 'A bit of everything']].concat(TRIVIA_CATS).map(function (c, i) {
+      var on = load('trivia-cat', '') === c[0];
+      return '<button type="button" class="tv-cat' + (c[0] ? '' : ' mixed') + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0] || c[1]) + '</b><span>' + esc(c[0] ? c[1] : c[3]) + '</span>' + icon('i-check') + '</button>';
+    }).join('') + '</div>' +
+    '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.secs + ' seconds') + '</span><em>' + (l.study ? 'Learn as you go' : l.mult + '&times; points') + '</em></button>'; }).join('') + '</div>' +
+    '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Test Round</button><span class="tv-tnote">Scores stay on this phone and never reach the leaderboard.</span></div>' :
+    '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
   h += '<div class="tv-modes">' +
     '<div class="tv-mode" style="--mc:#74bfeb"><span class="tv-mi">' + icon('i-star') + '</span><b>Solo</b><span>Play on your own, keep score and beat your best.</span><em>' + icon('i-lock') + 'Opens Soon</em></div>' +
     '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone. Same questions, one winner.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
-  h += '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
   h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
       return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
     '</div><p>The leaderboard opens with the first game: top scores this month and of all time.</p></div>';

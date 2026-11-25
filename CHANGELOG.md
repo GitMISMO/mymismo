@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Trivia Test Run: you pick your questions by tapping a category card (or Mixed) under Pick Your Questions, then the difficulty and Play in the panel below it. The header no longer has a category picker.
 - Nov 25, 2026: MISMO Trivia Test Run has 96 draft questions (16 per category; 27 Easy, 39 Medium, 30 Hard), each checked against a public source.
 - Nov 25, 2026: Trivia scoring like Kahoot: a right answer is worth up to 1,000 points (times the level), less the slower it comes but never below half; two or more right in a row adds a 100-point streak bonus (times the level). New Study level: no clock and no points, the answer and its source after each question, and Next when you're ready.
 - Nov 25, 2026: MISMO Trivia Test Run: pick Mixed or one category, then Easy (25 seconds), Medium (20 seconds, 1.5x points) or Hard (15 seconds, double points). Rounds rotate through the questions: ones you haven't had come first, and the cycle starts over once you've seen them all. Best score kept per level.
