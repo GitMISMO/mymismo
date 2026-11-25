@@ -1,0 +1,38 @@
+/* MyMISMO offline support.
+   The app's own files are kept on the phone so it opens without a connection.
+   The agenda and sponsor feeds are fetched fresh whenever there is a connection,
+   and the last copy is used when there isn't. Pictures (headshots, logos) are kept once seen. */
+var VERSION = 'mymismo-2026-11-25a';
+var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', '/assets/back.js'];
+
+self.addEventListener('install', function (e) {
+  e.waitUntil(caches.open(VERSION).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
+});
+self.addEventListener('activate', function (e) {
+  e.waitUntil(caches.keys().then(function (keys) {
+    return Promise.all(keys.filter(function (k) { return k.indexOf('mymismo-') === 0 && k !== VERSION; }).map(function (k) { return caches.delete(k); }));
+  }).then(function () { return self.clients.claim(); }));
+});
+function fresh(req) {
+  return fetch(req).then(function (res) {
+    if (res && (res.ok || res.type === 'opaque')) { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); }
+    return res;
+  });
+}
+self.addEventListener('fetch', function (e) {
+  var req = e.request;
+  if (req.method !== 'GET') return;
+  var url = new URL(req.url);
+  var feed = url.origin === location.origin && /\.json$/.test(url.pathname);
+  var page = req.mode === 'navigate';
+  if (feed || page) {
+    /* network first, last copy when offline */
+    e.respondWith(fresh(req).catch(function () { return caches.match(req, { ignoreSearch: page }).then(function (r) { return r || caches.match('index.html'); }); }));
+    return;
+  }
+  /* everything else: the kept copy, refreshed in the background */
+  e.respondWith(caches.match(req).then(function (hit) {
+    var net = fresh(req).catch(function () { return hit; });
+    return hit || net;
+  }));
+});
