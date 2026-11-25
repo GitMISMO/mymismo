@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T20:44:24Z",
+ "updated": "2026-11-25T20:46:03Z",
  "source": "https://www.mismo.org/events/agenda",
  "tags": [
   {
@@ -82,6 +82,48 @@
    "name": "Viant Eye",
    "url": "https://vianteye.com/",
    "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/viant-eye-logo_viant-eye-primary-logo2e801ac23df44d9eaae6b544ae232e2f.png"
+  }
+ ],
+ "videos": [
+  {
+   "title": "Mortgage Insurance COP",
+   "youtube": "JGuJfXmVWaM"
+  },
+  {
+   "title": "Servicing COP + Servicing Transfers DWG",
+   "youtube": "Bu-QfpyY3MA"
+  },
+  {
+   "title": "Property and Valuation Services COP",
+   "youtube": "GPlLpwxaJGc"
+  },
+  {
+   "title": "Credit Reporting COP",
+   "youtube": "HFU4BsGGnCY"
+  },
+  {
+   "title": "Mortgage Compliance Dataset DWG",
+   "youtube": "udRz2GbwKEI"
+  },
+  {
+   "title": "Origination COP",
+   "youtube": "-3EucSR_yWo"
+  },
+  {
+   "title": "Business Glossary COP",
+   "youtube": "I9LchGb4zYY"
+  },
+  {
+   "title": "Secondary COP",
+   "youtube": "I6IQ8TDlxO8"
+  },
+  {
+   "title": "Digital Interoperability COP",
+   "youtube": "VezQp9J3pAI"
+  },
+  {
+   "title": "Decision Modeling COP",
+   "youtube": "z05Wl0helk8"
   }
  ]
 }
