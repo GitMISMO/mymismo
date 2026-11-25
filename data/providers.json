@@ -1,0 +1,596 @@
+{
+ "updated": "2026-11-25T21:28:51Z",
+ "source": "https://www.mismo.org/standards-resources/",
+ "providers": {
+  "docutech": {
+   "slug": "docutech",
+   "name": "Docutech",
+   "tagline": "A First American Company",
+   "website": "https://docutech.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/fa_docutech-r_horz_1clr-4x.png",
+   "tags": [
+    "RON Certification",
+    "eClose Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    },
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    }
+   ],
+   "about": [
+    "Docutech, a First American company, provides an end-to-end integrated digital mortgage experience that enables lenders to accelerate the real estate closing process. The company digitizes and streamlines the creation, delivery, execution and perfection of mortgage documents. Docutech sets the standard in providing market-proven technology and unrivaled customer service to the financial industry."
+   ],
+   "aboutTitle": "About Docutech - A First American Company"
+  },
+  "aven": {
+   "slug": "aven",
+   "name": "Aven Financial, Inc.",
+   "tagline": "",
+   "website": "https://www.aven.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/aven.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Aven offers a credit card backed by home equity, so homeowners can use what they want when they need it. The company also offers a traditional HELOC with cash up front, closing in as fast as 15 minutes, and a Foreclosure Protection Guarantee. Aven is partnered with Coastal Community Bank, Member FDIC, pursuant to license by Visa U.S.A., Inc."
+   ],
+   "aboutTitle": "About Aven Financial, Inc."
+  },
+  "notaryhub": {
+   "slug": "notaryhub",
+   "name": "NotaryHub",
+   "tagline": "",
+   "website": "https://notaryhub.com/notary",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notaryhub1.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Notary Hub is a safe, legal, and secure platform for remote online notarization. They offer a subscription based service to notaries and corporations to use their RON platform."
+   ],
+   "aboutTitle": "About NotaryHub"
+  },
+  "rocket-close": {
+   "slug": "rocket-close",
+   "name": "Rocket Close",
+   "tagline": "",
+   "website": "https://www.rocketclose.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/logos_rocketclose-web-padded.png",
+   "tags": [
+    "RON Certification",
+    "eClose Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    },
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    }
+   ],
+   "about": [
+    "Clear Sign is a secure online eClosing platform that digitally connects consumers with notaries and attorneys for an easy, outstanding digital signing and mortgage closing experience. It accommodates the following experiences: hybrid, in-person electronic notarization, and remote online notarization."
+   ],
+   "aboutTitle": "About Rocket Close"
+  },
+  "signix": {
+   "slug": "signix",
+   "name": "SIGNiX",
+   "tagline": "",
+   "website": "https://www.signix.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/signix.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "SIGNiX provides seamlessly integrated digital signature and remote online notarization software to partners in highly regulated industries like real estate. The patented SIGNiX FLEX API allows partners to offer the military-grade cryptography, enhanced data privacy, and permanent legal evidence of a true digital signature for every notary seal and every signature without the costs, delays, or risks that attend paper-based workflows."
+   ],
+   "aboutTitle": "About SIGNiX"
+  },
+  "simply-secure-sign": {
+   "slug": "simply-secure-sign",
+   "name": "Simply Secure Sign",
+   "tagline": "",
+   "website": "https://www.simplysecuresign.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/simply-secure-sign.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Simply Secure Sign is a digital closing platform with digital signature and notarization services. It supports secure, non-repudiation instruments for all closing types: traditional, hybrid, and full eClosing. Simply Secure Sign supports natural signatures and digital notary seals for in-person, notarized closing and remote signing only events."
+   ],
+   "aboutTitle": "About Simply Secure Sign"
+  },
+  "actualize-consulting": {
+   "slug": "actualize-consulting",
+   "name": "Actualize Consulting",
+   "tagline": "",
+   "website": "https://www.actualizeconsulting.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/actualize-new-logo-small.jpg",
+   "tags": [
+    "Certified Product",
+    "Certified Consultant",
+    "FRAME Advisory Partner"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Product",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/badge-product-integration-640.png",
+     "url": "https://www.mismo.org/standards-resources/product"
+    },
+    {
+     "title": "MISMO Certified Consultant",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-consultant.png",
+     "url": "https://www.mismo.org/standards-resources/certified-consultant"
+    },
+    {
+     "title": "FRAME Advisory Partner",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-frame-advisory-partner.png",
+     "url": "https://www.mismo.org/standards-resources/frame"
+    }
+   ],
+   "about": [
+    "Actualize Mortgage and Fixed Income practice focuses on loan origination through securitization and ongoing servicing across multiple asset classes including mortgage, auto, consumer, and commercial loans. Our other offerings include compliance with Integrated Mortgage Disclosure Rules, MERS audits, and MISMO software certification. Our expertise in all aspects of mortgages, systems and regulatory requirements enable us to deliver leading edge solutions to our clients."
+   ],
+   "aboutTitle": "About Actualize Consulting"
+  },
+  "crittora": {
+   "slug": "crittora",
+   "name": "Crittora",
+   "tagline": "",
+   "website": "https://www.crittora.com",
+   "logo": "https://www.crittora.com/static/logo-crittora-blob-396967c97756daee086606db8d1b1171.webp",
+   "tags": [
+    "FRAME Advisory Partner"
+   ],
+   "certs": [
+    {
+     "title": "FRAME Advisory Partner",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-frame-advisory-partner.png",
+     "url": "https://www.mismo.org/standards-resources/frame"
+    }
+   ],
+   "about": [
+    "Crittora controls what AI is authorized to do before it acts, and produces audit-ready proof afterward. The platform identifies which system or agent is acting, what it is attempting and under whose authority, and stops actions that fall outside approved rules before they reach a consequential system. As Crittora puts it, the moment AI takes action is where policy becomes consequence."
+   ],
+   "aboutTitle": "About Crittora"
+  },
+  "viant-eye": {
+   "slug": "viant-eye",
+   "name": "Viant Eye",
+   "tagline": "",
+   "website": "https://vianteye.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/viant-eye-logo_viant-eye-primary-logo2e801ac23df44d9eaae6b544ae232e2f.png",
+   "tags": [
+    "Certified Product",
+    "Certified Consultant",
+    "FRAME Advisory Partner"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Product",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/badge-product-integration-640.png",
+     "url": "https://www.mismo.org/standards-resources/product"
+    },
+    {
+     "title": "MISMO Certified Consultant",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-consultant.png",
+     "url": "https://www.mismo.org/standards-resources/certified-consultant"
+    },
+    {
+     "title": "FRAME Advisory Partner",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-frame-advisory-partner.png",
+     "url": "https://www.mismo.org/standards-resources/frame"
+    }
+   ],
+   "about": [
+    "Viant Eye streamlines the adoption of digital mortgage standards, increasing interoperability, lowering time to market, and lowering the cost of Standards adoption. By leveraging the extensive expertise of our team, we provide a range of products and services that streamline processes, ensure compliance, and enhance efficiency across the mortgage lifecycle."
+   ],
+   "aboutTitle": "About Viant Eye"
+  },
+  "simplifile": {
+   "slug": "simplifile",
+   "name": "Simplifile",
+   "tagline": "",
+   "website": "https://simplifile.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/simplifile-icon-logotype.svg",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Simplifile electronically connects people, technologies, and data in the real estate transaction. From loan submission to collaboration to recording and post closing, our goal is to make your life easier."
+   ],
+   "aboutTitle": "About Simplifile"
+  },
+  "take-three-technologies": {
+   "slug": "take-three-technologies",
+   "name": "Take Three Technologies",
+   "tagline": "",
+   "website": "https://take3tech.com",
+   "logo": "https://resources.mismo.org/certification/logos/take-three-technologies.png",
+   "tags": [
+    "Certified Product"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Product",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/badge-product-integration-640.png",
+     "url": "https://www.mismo.org/standards-resources/product"
+    }
+   ],
+   "about": [
+    "Take Three builds LoanMAPS, an all-in-one origination platform that runs the LOS, POS and CRM on a single living database, and TheRuleTool, an AI guideline search that gives loan officers the Fannie Mae or Freddie Mac answer at their desk. Its One Day Decision process delivers underwriter-backed confidence on income and assets, often within a day."
+   ],
+   "aboutTitle": "About Take Three Technologies"
+  },
+  "fundingshield": {
+   "slug": "fundingshield",
+   "name": "FundingShield",
+   "tagline": "",
+   "website": "https://www.fundingshield.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/funding-shield.png",
+   "tags": [
+    "Certified Product"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Product",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/badge-product-integration-640.png",
+     "url": "https://www.mismo.org/standards-resources/product"
+    }
+   ],
+   "about": [
+    "FundingShield provides the residential mortgage industry's highest level of protection in the funding process to close newly origination mortgage loans. They protect against loss of funds due to inaccurate and/or insufficient documentation, diversionary wire practices or parties closing in excess of their coverage limits from closing agents or attorneys which could jeopardize closing protection letter coverage.",
+    "FundingShield is your single destination to quickly and efficiently access sources to detect fraud risk in closing protection letters (CPLs) and to validate your closing agents compliance with state license requirements verifying these critical details at the transaction level."
+   ],
+   "aboutTitle": "About FundingShield"
+  },
+  "black-knight": {
+   "slug": "black-knight",
+   "name": "Black Knight",
+   "tagline": "",
+   "website": "https://www.blackknightinc.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/black-knight-logo-300x77.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Black Knight, Inc. is an award-winning software, data and analytics company that drives innovation in the mortgage lending and servicing and real estate industries, as well as the capital and secondary markets. Businesses leverage our robust, integrated solutions across the entire homeownership life cycle to help retain existing customers, gain new customers, mitigate risk and operate more effectively."
+   ],
+   "aboutTitle": "About Black Knight"
+  },
+  "eltropy": {
+   "slug": "eltropy",
+   "name": "Eltropy",
+   "tagline": "",
+   "website": "https://eltropy.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/eltopy-logo-dark.svg",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Eltropy is the leading agentic AI-powered conversations platform for community financial institutions (CFIs). Credit unions and community banks use Eltropy to deliver better consumer experiences, improve efficiency, and drive measurable outcomes across the institution — helping them better serve the people and communities that count on them every day.",
+    "The platform brings together Agentic AI, text, voice, video, chat, and automation across the full consumer lifecycle, from lending and servicing to collections, marketing, contact center, and branch operations, all through a single platform integrated with 50+ banking systems. For more information, please visit eltropy.com."
+   ],
+   "aboutTitle": "About Eltropy"
+  },
+  "notarylive": {
+   "slug": "notarylive",
+   "name": "NotaryLive",
+   "tagline": "",
+   "website": "https://notarylive.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/notarylive.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "NotaryLive is an innovative online platform that allows you to notarize your documents remotely. NotaryLive is revolutionizing how you notarize your documents by allowing you to notarize from the comfort of your own home using a desktop or mobile device through our secure online notary portal. Their advanced, multi-functional remote online notary platform that is secure and efficient, meeting all your notary needs."
+   ],
+   "aboutTitle": "About NotaryLive"
+  },
+  "online-notary-center": {
+   "slug": "online-notary-center",
+   "name": "Online Notary Center",
+   "tagline": "",
+   "website": "https://www.onlinenotarycenter.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/online-notary-center_1_.jpg",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Online Notary Center allows you to get your documents notarized online by a remote online notary. Our notaries are available to assist you with your online notarization requirements. Notarization of a document has never been this simple, fast, and secure."
+   ],
+   "aboutTitle": "About Online Notary Center"
+  },
+  "secured-signing": {
+   "slug": "secured-signing",
+   "name": "Secured Signing",
+   "tagline": "",
+   "website": "https://www.securedsigning.com/remote-online-notarization-software",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/securedsigning.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Secured Signing is a cloud based eSigning and eForms service that allows business to invite their customers, employees, partners and suppliers to fill in and sign electronic documents using any device, anywhere, anytime. The system offers a complete signing workflow including issuing invitations, automating reminders, showing signing progress in real time and monitoring of the signing process."
+   ],
+   "aboutTitle": "About Secured Signing"
+  },
+  "guidehouse": {
+   "slug": "guidehouse",
+   "name": "Guidehouse",
+   "tagline": "",
+   "website": "https://guidehouse.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/gh-logo_rgb.png",
+   "tags": [
+    "Certified Consultant"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Consultant",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-consultant.png",
+     "url": "https://www.mismo.org/standards-resources/certified-consultant"
+    }
+   ],
+   "about": [
+    "Guidehouse is a leading global provider of consulting services with broad capabilities in management, technology, and risk consulting. Headquartered in Washington DC, Guidehouse has more than 18,000 professionals in more than 55 locations worldwide. Guidehouse works with every U.S. government agency and countless commercial entities across the housing finance ecosystem, touching all players from origination to secondary market participants.",
+    "Guidehouse has a dedicated Financial Services Advisory and Compliance segment serving both commercial and public sector clients that has earned three stars by Forbes for being one of Americas Best Management Consulting Firms in both the Finance and Risk Management and Financial Institutions categories. Guidehouse provides advisory services to more than 200 leading global financial service companies and work extensively with regulators, originators, secondary market aggregators, warehouse lenders, servicers, government sponsored enterprises, and investors. Our in-depth knowledge of housing finance reform, the mortgage industry, and transformation practices positions us to provide our clients with strategic insights and the specialized knowledge and skill sets necessary for success in the changing housing market. Guidehouse is also CMMI Level 3 certified, and its Advanced Solutions teams leverage enabling technologies and best practices to help clients achieve their goals. Our dedicated staff have used the knowledge and insights gained from their deep experience and suite of tools and services to deliver leading-edge solutions that drive efficiency, improve results, and meet regulatory, industry, and security considerations."
+   ],
+   "aboutTitle": "About Guidehouse"
+  },
+  "docusign": {
+   "slug": "docusign",
+   "name": "Docusign",
+   "tagline": "",
+   "website": "https://www.docusign.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/thumbnail_image004.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Docusign helps organizations connect and automate how they navigate their systems of agreement. As part of its industry leading product lineup, Docusign offers eSignature, the world's #1 way to sign electronically on practically any device, from almost anywhere, at any time."
+   ],
+   "aboutTitle": "About Docusign"
+  },
+  "stavvy": {
+   "slug": "stavvy",
+   "name": "Stavvy",
+   "tagline": "",
+   "website": "https://stavvy.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/stavvyab484cd651e64150ab837b20206e6160.jpg",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "Too many real estate transactions still rely on an antiquated system of documents to capture and share information. At Stavvy, we envision a future not only without paper, but without documents; shattering the notion that paperless is as good as it gets. We’re moving real estate beyond documents. Just one simple, secure flow of data - always on, effortlessly accessible, and infinitely archivable."
+   ],
+   "aboutTitle": "About Stavvy"
+  },
+  "phoenixteam": {
+   "slug": "phoenixteam",
+   "name": "PhoenixTeam",
+   "tagline": "",
+   "website": "https://phoenixoutcomes.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/phoenixteam-logo.png",
+   "tags": [
+    "Certified Consultant"
+   ],
+   "certs": [
+    {
+     "title": "MISMO Certified Consultant",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-consultant.png",
+     "url": "https://www.mismo.org/standards-resources/certified-consultant"
+    }
+   ],
+   "about": [
+    "PhoenixTeam is mortgage technology. We are a technology services company with a genAI product arm. We specialize in difficult projects that require diverse teams who know mortgage technology and MISMO."
+   ],
+   "aboutTitle": "About PhoenixTeam"
+  },
+  "onenotary": {
+   "slug": "onenotary",
+   "name": "OneNotary",
+   "tagline": "",
+   "website": "https://onenotary.us",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/onenotary.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "OneNotary offers a secure remote online notarization platform with end-to-end encryption that is intuitive and easy-to-use. Their solution includes Identity Proofing (KBA), Credential Analysis, Electronic Journal, and Secure Storage."
+   ],
+   "aboutTitle": "About OneNotary"
+  },
+  "pronotary": {
+   "slug": "pronotary",
+   "name": "ProNotary",
+   "tagline": "",
+   "website": "https://pronotary.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/pronotary_logo_3x.png",
+   "tags": [
+    "RON Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    }
+   ],
+   "about": [
+    "ProNotary offers a comprehensive online notarization platform that can be used for Remote Online Notarization or Remote Ink Notarization. Their solution is designed to help businesses thrive by offering a simplified process to notarize documents, from scheduling to signing and securely storing the details of each transaction on one easy-to-use online platform is the key to your success."
+   ],
+   "aboutTitle": "About ProNotary"
+  },
+  "docmagic": {
+   "slug": "docmagic",
+   "name": "DocMagic",
+   "tagline": "",
+   "website": "https://docmagic.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/1_dm_logo_horizontal.png",
+   "tags": [
+    "RON Certification",
+    "eClose Certification",
+    "eVault Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    },
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    },
+    {
+     "title": "eVault Certified System",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-evault-system.png",
+     "url": "https://www.mismo.org/standards-resources/evault"
+    }
+   ],
+   "about": [
+    "DocMagic is a trusted technology partner to lenders, revolutionizing the mortgage loan process with award-winning software, mobile apps, and web-based systems. Their solutions cover the capabilities needed for mortgage lenders of any size, including strategic document generation, automated compliance, eSignature, eClosing, eDelivery, eNote generation and eVault.",
+    "DocMagic is not just about the present; they're committed to shaping the future of lending. And through their continual role in MISMO standard development, they work together with other technology providers to establish clear guidelines for the industry and drive the transformation of lending one mortgage at a time."
+   ],
+   "aboutTitle": "About DocMagic"
+  },
+  "snapdocs": {
+   "slug": "snapdocs",
+   "name": "Snapdocs",
+   "tagline": "",
+   "website": "https://www.snapdocs.com",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/snapdocs-fulllogo-main.png",
+   "tags": [
+    "RON Certification",
+    "eClose Certification",
+    "eVault Certification"
+   ],
+   "certs": [
+    {
+     "title": "RON Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-ron-provider.png",
+     "url": "https://www.mismo.org/standards-resources/ron"
+    },
+    {
+     "title": "eClose Certified Provider",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-eclose-provider.png",
+     "url": "https://www.mismo.org/standards-resources/eclose"
+    },
+    {
+     "title": "eVault Certified System",
+     "badge": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-certified-evault-system.png",
+     "url": "https://www.mismo.org/standards-resources/evault"
+    }
+   ],
+   "about": [
+    "Snapdocs is the leading digital closing provider, connecting the people, processes, and technologies that power a mortgage closing. Our platform delivers the infrastructure the industry has long needed to operate at scale; automating the critical interactions between lenders, title companies, and secondary market participants from pre-closing through the sale of the loan. With patented AI technology, hands-on customer service, complete RON solutions through Snapdocs Technologies LLC (formerly www.pactima.com), and extensive settlement and notary networks, Snapdocs enables fast, accurate, and secure closings.",
+    "This combination saves customers time and money for a clear competitive advantage. Snapdocs makes mortgage a snap. For more information, please visit www.snapdocs.com."
+   ],
+   "aboutTitle": "About Snapdocs"
+  }
+ }
+}
