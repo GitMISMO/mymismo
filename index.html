@@ -185,13 +185,12 @@ main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 .flip .state{font-family:var(--cond); font-size:40px; font-weight:700; line-height:1; color:#fff}
 .flip .state small{font-size:18px; color:var(--sky-soft); font-weight:600; margin-left:6px}
 .pass-figs{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0 0}
-.pass-figs button{position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; gap:2px; background:linear-gradient(180deg, color-mix(in srgb, var(--fc) 14%, var(--surface)), var(--surface) 75%); border:1px solid color-mix(in srgb, var(--fc) 35%, var(--border)); border-top:4px solid var(--fc); border-radius:14px; color:var(--ink); padding:10px 4px 12px; cursor:pointer; text-align:center; font:inherit; transition:transform .15s, box-shadow .15s}
-.pass-figs button:hover{transform:translateY(-2px); box-shadow:0 6px 16px color-mix(in srgb, var(--fc) 25%, transparent)}
-.pass-figs svg{width:22px; height:22px; padding:6px; box-sizing:content-box; border-radius:9px; color:#fff; background:var(--fc); margin-bottom:4px}
-.pass-figs b{display:block; font-family:var(--cond); font-size:28px; line-height:1.05; color:var(--fc)}
-.pass-figs span{font-size:12px; color:var(--ink-2); font-weight:700}
-:root[data-theme="dark"] .pass-figs b{color:color-mix(in srgb, var(--fc) 65%, #fff)}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pass-figs b{color:color-mix(in srgb, var(--fc) 65%, #fff)} }
+.pass-figs button{position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; gap:3px; background:linear-gradient(180deg, #123d61, #0b2a44); border:1px solid rgba(116,191,235,.28); border-radius:14px; color:#fff; padding:12px 4px 12px; cursor:pointer; text-align:center; font:inherit; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color .15s, transform .15s}
+.pass-figs button:after{content:""; position:absolute; left:18%; right:18%; top:0; height:2px; background:linear-gradient(90deg, transparent, #74bfeb, transparent); opacity:.8}
+.pass-figs button:hover{border-color:rgba(116,191,235,.7); transform:translateY(-1px)}
+.pass-figs svg{width:20px; height:20px; color:#74bfeb; margin-bottom:2px}
+.pass-figs b{display:block; font-family:var(--cond); font-size:28px; line-height:1.05; color:#fff}
+.pass-figs span{font-size:12px; color:#a9d8f3; font-weight:600}
 
 /* Your week: each day's sessions by type */
 .week{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
@@ -1800,10 +1799,10 @@ function renderHome() {
     '<div class="flip" id="flip">' + flip + '</div></div>' +
     /* Jonna, Nov 26, 2026: the counts sit under the header, each in its own box */
     '<div class="pass-figs">' +
-      '<button type="button" data-go="agenda" style="--fc:#2477b8">' + icon('i-agenda') + '<b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
-      '<button type="button" data-go="people" style="--fc:#1baf7a">' + icon('i-people') + '<b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
-      '<button type="button" data-sponsors style="--fc:#eb6834">' + icon('i-handshake') + '<b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
-      '<button type="button" data-go="mine" style="--fc:#eda100">' + icon('i-star') + '<b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
+      '<button type="button" data-go="agenda">' + icon('i-agenda') + '<b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
+      '<button type="button" data-go="people">' + icon('i-people') + '<b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
+      '<button type="button" data-sponsors>' + icon('i-handshake') + '<b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
+      '<button type="button" data-go="mine">' + icon('i-star') + '<b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
     '</div>';
 
   var gsl = gsSession();
