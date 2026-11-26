@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: MISMO Merch: a mock-up shop for testers only (a dashboard tile, ten example products with drawn mock-ups, colors, sizes, a bag; checkout is switched off and says so). Labeled Mock-up throughout; nothing can be bought. Dashboard on its side: squares stay in their pairs (Submit an Idea beside mismo.org); a wide tile at the end goes full width instead.
 - Nov 26, 2026: Trivia, the Board: the round clock is 4 minutes (was 6), in the app and in relay request 16.
 - Nov 26, 2026: Trivia: sound and the host voice are off for now (Jonna), switches hidden; one setting (TV_AV) brings them back.
 - Nov 26, 2026: Trivia, the Board: a 6-minute round clock (play as many squares as you can), then the Final Square: see the category, wager up to your score (up to 1,000 at zero or below), hear the answer and type the question in 30 seconds; right adds the wager, wrong takes it away. Typing is checked loosely ("What is" optional, small spelling slips fine). 32 Final answers, each built from a fact already in the question bank, are in data/trivia-draft.json for Jonna's review.

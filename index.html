@@ -491,7 +491,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .wm-li{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:var(--link); padding:7px 0 0; border-top:1px solid var(--rule)}
   .wm-li:after{content:"›"; color:var(--ink-3); font-size:16px; line-height:1}
   .wm-past{margin-top:6px}
-  .wd.grow{grid-column:span 2}
+  .dash-grid .wd.grow{grid-column:span 2}
+  .dash-grid .wd.full{grid-column:1 / -1}
   .wm-art{align-self:flex-end; margin-top:auto; opacity:.9}
   .wm-art svg{width:52px; height:52px; color:#e2b33c; filter:drop-shadow(0 0 14px rgba(240,185,58,.45))}
 }
@@ -731,6 +732,62 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 /* MISMO Trivia */
 .w-trivia{position:relative; overflow:hidden; isolation:isolate; min-height:190px; border:0; color:#fff; background:radial-gradient(120% 140% at 85% 30%, #14486e 0%, #071d2e 55%, #040f18 100%); justify-content:center; padding-right:46%}
 .w-trivia .w-head{color:#a9d8f3}
+/* MISMO Merch (a mock-up for testers) */
+.w-merch{border:0; color:#0d314c; background:linear-gradient(115deg, #e4f2fb 0%, #f6fafd 45%, #fdf3dc 100%); min-height:190px; justify-content:flex-start}
+.w-merch .w-head{color:#14486e}
+.mx-mock{margin-left:auto; font-style:normal; font-size:11px; font-weight:700; color:#8a5a00; background:#fdf0c8; border:1px solid #f0d27a; border-radius:5px; padding:2px 7px}
+.mx-wt{font-family:var(--cond); font-weight:800; font-size:clamp(24px, 6vw, 32px); line-height:1.02; letter-spacing:-.01em; margin-top:4px; max-width:55%}
+.mx-ws{font-size:13.5px; color:#456179; max-width:52%}
+.mx-shelf{position:absolute; right:10px; bottom:12px; display:flex; align-items:flex-end; gap:0; width:min(52%, 330px); pointer-events:none}
+.mx-sh{flex:1; margin-left:-10px; border-radius:12px; overflow:hidden; box-shadow:0 8px 18px -10px rgba(13,49,76,.5); transform:rotate(calc((var(--i) - 1.5) * 4deg)) translateY(calc((var(--i) - 1.5) * (var(--i) - 1.5) * 3px)); animation:mx-in .5s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 80ms)}
+.mx-sh svg{display:block; width:100%; height:auto}
+@keyframes mx-in{from{opacity:0; transform:translateY(20px)}}
+.mx-go{display:inline-flex; align-items:center; gap:4px; margin-top:auto; font-weight:700; font-size:14px; color:#fff; background:#0d314c; border-radius:8px; padding:8px 12px}
+.mx-go svg{width:16px; height:16px}
+html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, #0d2837 50%, #2a2410 100%); color:#e9f4fb} html[data-theme="dark"] .w-merch .w-head{color:#a9d8f3} html[data-theme="dark"] .mx-ws{color:#a6c5d9}
+@media (prefers-color-scheme: dark){ html:not([data-theme="light"]) .w-merch{background:linear-gradient(115deg, #123143 0%, #0d2837 50%, #2a2410 100%); color:#e9f4fb} html:not([data-theme="light"]) .w-merch .w-head{color:#a9d8f3} html:not([data-theme="light"]) .mx-ws{color:#a6c5d9} }
+.mx-hero{position:relative; overflow:hidden; isolation:isolate; padding:26px 20px 24px; background:#071d2e; color:#fff}
+.mx-hero > .hero-art{z-index:-1; opacity:.6}
+.mx-hero-in{position:relative; display:grid; gap:6px; max-width:420px}
+.mx-eye{display:inline-flex; gap:7px; align-items:center; font-weight:700; font-size:13px; color:#f3c64f} .mx-eye svg{width:16px; height:16px}
+.mx-hero h2{font-family:var(--cond); font-weight:800; font-size:clamp(32px, 9vw, 46px); line-height:1; margin:0}
+.mx-hero p{margin:0; color:rgba(255,255,255,.82)}
+.mx-bagbtn{position:absolute; right:16px; top:16px; display:flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.08); color:#fff; border-radius:10px; padding:8px 11px; font:inherit; font-weight:800; cursor:pointer}
+.mx-bagbtn svg{width:20px; height:20px}
+.mx-note{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:10px; background:#fdf6e3; border:1px solid #f0d27a; color:#5b4410; font-size:13.5px; margin-bottom:14px}
+.mx-note svg{flex:none; width:18px; height:18px; color:#c99a2e; margin-top:1px}
+.mx-seg{margin-bottom:14px; overflow-x:auto}
+.mx-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px}
+.mx-card{display:flex; flex-direction:column; text-align:left; padding:0; border:1px solid var(--border); background:var(--surface); color:var(--ink); border-radius:14px; overflow:hidden; cursor:pointer; font:inherit; animation:tbx-up .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 40ms); transition:transform .15s, box-shadow .15s}
+.mx-card:hover{transform:translateY(-2px); box-shadow:0 12px 24px -14px rgba(13,49,76,.45)}
+.mx-img svg{display:block; width:100%; height:auto}
+.mx-tx{display:grid; gap:6px; padding:10px 12px 12px}
+.mx-tx b{font-size:14px; line-height:1.25}
+.mx-row{display:flex; justify-content:space-between; align-items:center}
+.mx-price{font-family:var(--cond); font-weight:800; font-size:17px; color:var(--ink)}
+.mx-price.big{font-size:26px}
+.mx-dots{display:flex; gap:4px} .mx-dots i{width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(13,49,76,.25)}
+.mx-big{background:#e4eff7} .mx-big svg{display:block; width:100%; max-width:420px; height:auto; margin:0 auto}
+.mx-detail{display:grid; gap:10px}
+.mx-detail h2{font-family:var(--cond); font-size:28px; line-height:1.05; margin:0}
+.mx-detail p{margin:0; color:var(--ink-2)}
+.mx-cat{font-size:12px; font-weight:700; color:var(--ink-3)}
+.mx-opt{display:grid; gap:8px} .mx-opt > span{font-size:13px; font-weight:700; color:var(--ink-2)}
+.mx-swatches{display:flex; gap:10px} .mx-swatches button{width:34px; height:34px; border-radius:50%; border:2px solid var(--surface); box-shadow:0 0 0 1px var(--border-strong); cursor:pointer}
+.mx-swatches button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--sky)}
+.mx-sizes{display:flex; flex-wrap:wrap; gap:8px} .mx-sizes button{min-width:46px; padding:9px 10px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); font:inherit; font-weight:700; cursor:pointer}
+.mx-sizes button[aria-pressed="true"]{background:#0d314c; color:#fff; border-color:#0d314c}
+.mx-qty{display:inline-flex; align-items:center; border:1px solid var(--border-strong); border-radius:8px; overflow:hidden; width:max-content}
+.mx-qty button{width:40px; height:38px; border:0; background:var(--surface-2); color:var(--ink); font-size:18px; font-weight:700; cursor:pointer}
+.mx-qty b{min-width:38px; text-align:center}
+.mx-qty.sm button{width:30px; height:28px; font-size:15px} .mx-qty.sm b{min-width:28px}
+.mx-add{width:100%; justify-content:center; margin-top:4px}
+.mx-line{display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid var(--rule)}
+.mx-thumb svg{display:block; width:64px; height:auto; border-radius:10px}
+.mx-lt{display:grid; gap:4px} .mx-lt b{font-size:14px} .mx-lt > span:not(.mx-qty){font-size:12.5px; color:var(--ink-3)}
+.mx-lp{font-family:var(--cond); font-weight:800; font-size:17px}
+.mx-total{display:flex; justify-content:space-between; align-items:center; padding:14px 0; font-weight:700} .mx-total b{font-family:var(--cond); font-size:24px}
+.mx-fine{font-size:12.5px; color:var(--ink-3); text-align:center; margin:8px 0 0}
 .w-trivia .tv-orbit{position:absolute; right:-6%; top:50%; width:58%; max-width:300px; transform:translateY(-50%); z-index:-1}
 .tv-wt{display:block; font-family:var(--cond); font-weight:700; font-size:clamp(24px, 6.6vw, 34px); line-height:1.02; margin-top:8px; letter-spacing:-.01em}
 .tv-ws{display:block; color:rgba(255,255,255,.75); font-size:13.5px; margin-top:6px}
@@ -1602,6 +1659,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 21l2-6 3 3v3M8 12l2-4 4 1 2 4M12 15l-1-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-voice" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 16h-7l-4.5 3.5V16H5a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 5 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M5.5 8h13l-1 12.5h-11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 10V7a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
 <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
@@ -2757,9 +2815,10 @@ var DASH = [
   { id: 'sponsors', name: 'Summit Sponsors', desc: 'The companies supporting the summit', icon: 'i-sponsor' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Solo and head-to-head MISMO trivia with a leaderboard', icon: 'i-star' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
-  { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' }
+  { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
+  { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' }
 ];
-function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE); }).map(function (d) { return d.id; }); }
+function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE) && !(d.id === 'merch' && (STORE_RELEASE || !appTester())); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
 function staffSession() { try { return window.ResourcesSession && ResourcesSession.current(); } catch (e) { return null; } }
 /* Jonna, Nov 25, 2026: the early features (Trivia Test Run, the attendee preview) are only for people given MyMISMO in
@@ -3288,6 +3347,129 @@ function triviaBoard(all) {
   });
   paintBoard();
 }
+/* ---------- MISMO Merch (Jonna, Nov 26, 2026): a mock-up of a shop, shown only to the people testing MyMISMO. The
+   products and prices are examples to react to; nothing can be bought, and checkout says so. ---------- */
+var MERCH = [
+  { id: 'hoodie', name: 'MISMO Standard Hoodie', cat: 'Apparel', price: 48, kind: 'hoodie', colors: [['Navy', '#0d314c'], ['Heather Gray', '#9aa6b1']], sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], blurb: 'Midweight fleece with the MISMO wordmark across the chest. The one you\'ll wear to every summit.' },
+  { id: 'tee', name: 'I Speak MISMO Tee', cat: 'Apparel', price: 24, kind: 'tee', line: 'I SPEAK MISMO', colors: [['Navy', '#0d314c'], ['White', '#f4f7fa'], ['Sky', '#74bfeb']], sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], blurb: 'Soft cotton tee for the people who know what a Reference Model is.' },
+  { id: 'qzip', name: 'Summit Quarter-Zip', cat: 'Apparel', price: 62, kind: 'qzip', colors: [['Navy', '#0d314c'], ['Charcoal', '#3a4450']], sizes: ['S', 'M', 'L', 'XL', 'XXL'], blurb: 'A polished layer for General Sessions, with a small wordmark on the chest.' },
+  { id: 'polo', name: 'MISMO Polo', cat: 'Apparel', price: 40, kind: 'polo', colors: [['Navy', '#0d314c'], ['White', '#f4f7fa']], sizes: ['S', 'M', 'L', 'XL', 'XXL'], blurb: 'Performance knit that holds up from the first session to the last.' },
+  { id: 'cap', name: 'Data. Defined. Cap', cat: 'Apparel', price: 26, kind: 'cap', colors: [['Navy', '#0d314c'], ['Khaki', '#c9b48a']], blurb: 'Unstructured cap with an adjustable strap.' },
+  { id: 'mug', name: 'Reference Model Mug', cat: 'Drinkware', price: 16, kind: 'mug', colors: [['White', '#f4f7fa'], ['Navy', '#0d314c']], blurb: 'Fifteen ounces of coffee for reviewing the next release.' },
+  { id: 'bottle', name: 'Insulated Water Bottle', cat: 'Drinkware', price: 28, kind: 'bottle', colors: [['Navy', '#0d314c'], ['Sky', '#74bfeb']], blurb: 'Keeps it cold through a full day of workgroup meetings.' },
+  { id: 'notebook', name: 'Draft. Review. Publish. Notebook', cat: 'Desk', price: 12, kind: 'notebook', colors: [['Navy', '#0d314c']], blurb: 'Dot-grid pages for your workgroup notes.' },
+  { id: 'tote', name: 'MISMO Tote', cat: 'Extras', price: 20, kind: 'tote', colors: [['Natural', '#e9dfc9'], ['Navy', '#0d314c']], blurb: 'Heavy canvas, big enough for a laptop and the summit swag.' },
+  { id: 'stickers', name: 'Sticker Pack', cat: 'Extras', price: 8, kind: 'stickers', colors: [['Mixed', '#74bfeb']], blurb: 'Six stickers for your laptop: the wordmark, the S and a few favorites.' }
+];
+var BAG = [];
+function merchArt(p, color) {
+  var c = color || p.colors[0][1], dark = /^#(0|1|2|3)/i.test(c), ink = dark ? '#ffffff' : '#0d314c', sh = 'rgba(0,0,0,.12)';
+  var logo = function (x, y, w) { return '<svg x="' + x + '" y="' + y + '" width="' + w + '" height="' + (w * 108 / 708) + '" viewBox="0 0 708 108" style="--logo-body:' + ink + ';--logo-s:#74bfeb"><use href="#mismo-logo"/></svg>'; };
+  var body = '';
+  if (p.kind === 'tee' || p.kind === 'polo' || p.kind === 'hoodie' || p.kind === 'qzip') {
+    var longSleeve = p.kind === 'hoodie' || p.kind === 'qzip';
+    body = (longSleeve ? '<path d="M70 52 L100 40 Q120 56 140 40 L170 52 L208 172 L186 180 L164 112 L164 196 Q120 204 76 196 L76 112 L54 180 L32 172 Z" fill="' + c + '"/><path d="M186 180 L208 172 L211 182 L189 190 Z M54 180 L32 172 L29 182 L51 190 Z" fill="' + sh + '"/>'
+      : '<path d="M70 52 L100 40 Q120 56 140 40 L170 52 L198 92 L172 108 L164 96 L164 196 Q120 204 76 196 L76 96 L68 108 L42 92 Z" fill="' + c + '"/>') +
+      '<path d="M76 96 L76 196 Q120 204 164 196 L164 186 Q120 194 76 186 Z" fill="' + sh + '"/>';
+    if (p.kind === 'hoodie') body += '<path d="M96 42 Q120 86 144 42 Q140 30 120 30 Q100 30 96 42 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><path d="M112 66 L110 96 M128 66 L130 96" stroke="' + ink + '" stroke-width="2" opacity=".6"/><rect x="92" y="150" width="56" height="26" rx="6" fill="' + sh + '"/>';
+    if (p.kind === 'qzip') body += '<path d="M104 42 L120 54 L136 42 L136 34 L104 34 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><path d="M120 54 L120 100" stroke="#b9c3cc" stroke-width="3"/>';
+    if (p.kind === 'polo') body += '<path d="M104 42 L120 60 L136 42 L128 38 L120 48 L112 38 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><circle cx="120" cy="70" r="2.5" fill="' + ink + '" opacity=".7"/><circle cx="120" cy="82" r="2.5" fill="' + ink + '" opacity=".7"/>';
+    if (p.kind === 'tee') body += '<path d="M100 40 Q120 56 140 40" fill="none" stroke="' + sh + '" stroke-width="4"/>';
+    body += p.kind === 'tee' ? logo(86, 92, 68) + '<text x="120" y="132" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="11" fill="' + ink + '" letter-spacing="1.5">' + esc(p.line || '') + '</text>'
+      : p.kind === 'hoodie' ? logo(80, 104, 80) : logo(134, 76, 26);
+  } else if (p.kind === 'cap') {
+    body = '<path d="M60 140 Q60 76 120 72 Q180 76 180 140 Z" fill="' + c + '"/><path d="M120 72 L120 140" stroke="' + sh + '" stroke-width="2"/><path d="M60 140 Q120 128 180 140 L214 150 Q130 170 56 148 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><circle cx="120" cy="73" r="5" fill="' + c + '" stroke="' + sh + '" stroke-width="2"/>' +
+      '<text x="120" y="118" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="13" fill="' + ink + '">DATA. DEFINED.</text>';
+  } else if (p.kind === 'mug') {
+    body = '<rect x="64" y="64" width="96" height="116" rx="10" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><path d="M160 92 Q196 92 196 122 Q196 152 160 152" fill="none" stroke="' + c + '" stroke-width="14"/><path d="M160 92 Q196 92 196 122 Q196 152 160 152" fill="none" stroke="' + sh + '" stroke-width="2"/>' +
+      '<ellipse cx="112" cy="66" rx="46" ry="7" fill="' + sh + '"/>' + logo(74, 108, 76) + '<text x="112" y="138" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-weight="600" font-size="8.5" fill="' + ink + '" opacity=".85">REFERENCE MODEL</text>' +
+      '<path d="M96 52 Q100 40 96 30 M112 52 Q116 40 112 30 M128 52 Q132 40 128 30" stroke="#74bfeb" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>';
+  } else if (p.kind === 'bottle') {
+    body = '<rect x="96" y="30" width="48" height="22" rx="6" fill="#33414d"/><path d="M90 60 Q90 52 100 52 L140 52 Q150 52 150 60 L150 196 Q150 206 140 206 L100 206 Q90 206 90 196 Z" fill="' + c + '"/><rect x="90" y="60" width="12" height="140" fill="rgba(255,255,255,.18)"/>' +
+      '<svg x="104" y="150" width="32" height="32" viewBox="0 0 708 108" preserveAspectRatio="xMidYMid slice" style="--logo-body:' + ink + ';--logo-s:#74bfeb"><use href="#mismo-logo"/></svg>' + logo(98, 112, 44);
+  } else if (p.kind === 'notebook') {
+    body = '<rect x="66" y="36" width="114" height="160" rx="8" fill="' + c + '"/><rect x="66" y="36" width="16" height="160" fill="rgba(0,0,0,.25)"/><rect x="180" y="44" width="6" height="144" rx="2" fill="#e9eef2"/>' +
+      logo(96, 70, 70) + '<text x="131" y="152" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="11" fill="#a9d8f3">DRAFT. REVIEW.</text><text x="131" y="167" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="11" fill="#f3c64f">PUBLISH.</text>';
+  } else if (p.kind === 'tote') {
+    body = '<path d="M92 76 Q92 34 120 34 Q148 34 148 76" fill="none" stroke="' + (dark ? '#0b2a44' : '#cdbf9f') + '" stroke-width="8"/><path d="M62 74 L178 74 L188 200 L52 200 Z" fill="' + c + '"/>' + logo(78, 122, 84);
+  } else {
+    body = '<g transform="rotate(-8 90 90)"><rect x="40" y="50" width="96" height="62" rx="12" fill="#0d314c"/>' + '<svg x="50" y="72" width="76" height="12" viewBox="0 0 708 108" style="--logo-body:#fff;--logo-s:#74bfeb"><use href="#mismo-logo"/></svg></g>' +
+      '<g transform="rotate(10 160 110)"><circle cx="160" cy="104" r="34" fill="#74bfeb"/><text x="160" y="118" text-anchor="middle" font-family="IBM Plex Sans Condensed, sans-serif" font-weight="800" font-size="38" fill="#0d314c">S</text></g>' +
+      '<g transform="rotate(-4 110 170)"><rect x="58" y="146" width="112" height="40" rx="20" fill="#f3c64f"/><text x="114" y="172" text-anchor="middle" font-family="IBM Plex Sans Condensed, sans-serif" font-weight="800" font-size="14" fill="#0d314c">STANDARDS MATTER</text></g>';
+  }
+  return '<svg class="mx-art" viewBox="0 0 240 230" aria-hidden="true"><defs><radialGradient id="mxg-' + p.id + '" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#eef6fc"/><stop offset="1" stop-color="#d9e8f3"/></radialGradient></defs>' +
+    '<rect width="240" height="230" fill="url(#mxg-' + p.id + ')"/><ellipse cx="120" cy="212" rx="78" ry="8" fill="rgba(13,49,76,.12)"/>' + body + '</svg>';
+}
+function bagCount() { return BAG.reduce(function (n, b) { return n + b.qty; }, 0); }
+function money(n) { return '$' + n.toFixed(0); }
+function merchSheet() {
+  var cat = 'All';
+  var el = openSheet('MISMO Merch', '<div id="mx"></div>', { plain: true }), box = el.querySelector('#mx');
+  el.classList.add('mx-sheet');
+  function paint() {
+    var list = MERCH.filter(function (p) { return cat === 'All' || p.cat === cat; });
+    box.innerHTML = '<section class="mx-hero">' + heroArt() + '<div class="mx-hero-in"><span class="mx-eye">' + icon('i-star') + 'MISMO Merch</span><h2>Wear the Standard</h2><p>Gear for the people who build mortgage data standards.</p></div>' +
+      '<button type="button" class="mx-bagbtn" data-mx-bag aria-label="Your bag, ' + bagCount() + ' items">' + icon('i-tag') + '<b>' + bagCount() + '</b></button></section>' +
+      '<div class="sheet-pad"><div class="mx-note">' + icon('i-bulb') + '<span><b>Mock-up.</b> The products and prices are examples for MISMO to react to. Nothing can be bought yet.</span></div>' +
+      '<div class="seg mx-seg" role="group" aria-label="Show">' + ['All', 'Apparel', 'Drinkware', 'Desk', 'Extras'].map(function (c) { return '<button type="button" data-mx-cat="' + c + '" aria-pressed="' + (c === cat) + '">' + c + '</button>'; }).join('') + '</div>' +
+      '<div class="mx-grid">' + list.map(function (p, i) {
+        return '<button type="button" class="mx-card" data-mx="' + p.id + '" style="--i:' + i + '"><span class="mx-img">' + merchArt(p) + '</span><span class="mx-tx"><b>' + esc(p.name) + '</b><span class="mx-row"><span class="mx-price">' + money(p.price) + '</span><span class="mx-dots">' +
+          p.colors.map(function (c) { return '<i style="background:' + c[1] + '" title="' + esc(c[0]) + '"></i>'; }).join('') + '</span></span></span></button>';
+      }).join('') + '</div></div>';
+  }
+  paint();
+  box.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-mx-cat]'); if (c) { cat = c.getAttribute('data-mx-cat'); paint(); return; }
+    var p = e.target.closest('[data-mx]'); if (p) { merchItem(p.getAttribute('data-mx'), paint); return; }
+    if (e.target.closest('[data-mx-bag]')) bagSheet(paint);
+  });
+}
+function merchItem(id, after) {
+  var p = MERCH.filter(function (x) { return x.id === id; })[0]; if (!p) return;
+  var sel = { color: 0, size: p.sizes ? (p.sizes.indexOf('M') >= 0 ? p.sizes.indexOf('M') : 0) : -1, qty: 1 };
+  var el = openSheet(p.name, '<div id="mxi"></div>', { plain: true }), box = el.querySelector('#mxi');
+  function paint(added) {
+    box.innerHTML = '<div class="mx-big">' + merchArt(p, p.colors[sel.color][1]) + '</div><div class="sheet-pad mx-detail">' +
+      '<span class="mx-cat">' + esc(p.cat) + '</span><h2>' + esc(p.name) + '</h2><div class="mx-price big">' + money(p.price) + '</div><p>' + esc(p.blurb) + '</p>' +
+      '<div class="mx-opt"><span>Color: <b>' + esc(p.colors[sel.color][0]) + '</b></span><div class="mx-swatches">' + p.colors.map(function (c, i) { return '<button type="button" data-mx-color="' + i + '" aria-pressed="' + (i === sel.color) + '" aria-label="' + esc(c[0]) + '" style="background:' + c[1] + '"></button>'; }).join('') + '</div></div>' +
+      (p.sizes ? '<div class="mx-opt"><span>Size</span><div class="mx-sizes">' + p.sizes.map(function (z, i) { return '<button type="button" data-mx-size="' + i + '" aria-pressed="' + (i === sel.size) + '">' + z + '</button>'; }).join('') + '</div></div>' : '') +
+      '<div class="mx-opt"><span>Quantity</span><div class="mx-qty"><button type="button" data-mx-q="-1" aria-label="One fewer">&minus;</button><b>' + sel.qty + '</b><button type="button" data-mx-q="1" aria-label="One more">+</button></div></div>' +
+      '<button type="button" class="btn primary mx-add" data-mx-add>' + icon(added ? 'i-check' : 'i-tag') + (added ? 'Added to Your Bag' : 'Add to Bag, ' + money(p.price * sel.qty)) + '</button>' +
+      (added ? '<button type="button" class="btn mx-add" data-mx-bag>View Your Bag (' + bagCount() + ')</button>' : '') + '</div>';
+  }
+  paint(false);
+  box.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-mx-color]'))) { sel.color = +t.getAttribute('data-mx-color'); paint(false); return; }
+    if ((t = e.target.closest('[data-mx-size]'))) { sel.size = +t.getAttribute('data-mx-size'); paint(false); return; }
+    if ((t = e.target.closest('[data-mx-q]'))) { sel.qty = Math.max(1, Math.min(10, sel.qty + +t.getAttribute('data-mx-q'))); paint(false); return; }
+    if (e.target.closest('[data-mx-add]')) {
+      var key = p.id + '|' + sel.color + '|' + sel.size, have = BAG.filter(function (b) { return b.key === key; })[0];
+      if (have) have.qty = Math.min(10, have.qty + sel.qty); else BAG.push({ key: key, id: p.id, color: sel.color, size: sel.size, qty: sel.qty });
+      paint(true); if (after) after(); return;
+    }
+    if (e.target.closest('[data-mx-bag]')) bagSheet(after);
+  });
+}
+function bagSheet(after) {
+  var el = openSheet('Your Bag', '<div id="mxb"></div>', { plain: true }), box = el.querySelector('#mxb');
+  function paint() {
+    var total = 0;
+    var rows = BAG.map(function (b, i) {
+      var p = MERCH.filter(function (x) { return x.id === b.id; })[0]; total += p.price * b.qty;
+      return '<div class="mx-line"><span class="mx-thumb">' + merchArt(p, p.colors[b.color][1]) + '</span><span class="mx-lt"><b>' + esc(p.name) + '</b><span>' + esc(p.colors[b.color][0]) + (b.size >= 0 ? ', ' + p.sizes[b.size] : '') + '</span>' +
+        '<span class="mx-qty sm"><button type="button" data-bq="' + i + ':-1" aria-label="One fewer">&minus;</button><b>' + b.qty + '</b><button type="button" data-bq="' + i + ':1" aria-label="One more">+</button></span></span><span class="mx-lp">' + money(p.price * b.qty) + '</span></div>';
+    }).join('');
+    box.innerHTML = '<div class="sheet-pad">' + (BAG.length ? rows + '<div class="mx-total"><span>Subtotal</span><b>' + money(total) + '</b></div>' +
+      '<button type="button" class="btn primary mx-add" disabled>' + icon('i-lock') + 'Check Out</button><p class="mx-fine">Checkout opens when the MISMO Merch shop does. This mock-up doesn\'t take orders or payment.</p>'
+      : '<div class="note">Your bag is empty. Tap something you like and choose Add to Bag.</div>') + '</div>';
+  }
+  paint();
+  box.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-bq]'); if (!t) return; var v = t.getAttribute('data-bq').split(':'), b = BAG[+v[0]];
+    b.qty += +v[1]; if (b.qty <= 0) BAG.splice(+v[0], 1); paint(); if (after) after();
+  });
+}
 function widget(id) {
   var d = DASH.filter(function (x) { return x.id === id; })[0], h;
   var head = function (lbl) { return '<span class="w-head">' + icon(d.icon) + '<span>' + esc(lbl || d.name) + '</span></span>'; };
@@ -3344,6 +3526,13 @@ function widget(id) {
       return '<img class="' + cls + '" src="' + esc(src) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">'; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
   }
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
+  if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
+    var show = ['hoodie', 'mug', 'cap', 'tote'].map(function (k) { return MERCH.filter(function (p) { return p.id === k; })[0]; });
+    return '<button type="button" class="wd w-merch wide" data-merch>' + '<span class="w-head">' + icon('i-tag') + '<span>MISMO Merch</span><em class="mx-mock">Mock-up</em></span>' +
+      '<span class="mx-wt">Wear the Standard</span><span class="mx-ws">Hoodies, mugs, caps and more</span>' +
+      '<span class="mx-shelf" aria-hidden="true">' + show.map(function (p, i) { return '<span class="mx-sh" style="--i:' + i + '">' + merchArt(p) + '</span>'; }).join('') + '</span>' +
+      '<span class="mx-go">Shop Now' + icon('i-chev') + '</span></button>';
+  }
   if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-more">' + SITE_LINKS.slice(0, 5).map(function (l) { return '<span class="wm-li">' + esc(l[0]) + '</span>'; }).join('') + '</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
   return '';
 }
@@ -3364,8 +3553,11 @@ function renderDash() {
     var units = 0, big = mq('(min-width:760px)');
     ws.forEach(function (w) { (w.match(/class="(?:wd|nextsum) [^"]*"|class="nextsum[^"]*"/g) || []).forEach(function (c) {
       units += /w-summit/.test(c) ? (big ? 4 : 2) : /\bwide\b/.test(c) ? 2 : 1; }); });
-    var rem = (4 - units % 4) % 4;
-    for (var j = ws.length - 1; j >= 0 && rem > 0; j--) if (ws[j].indexOf(' wide') < 0) { ws[j] = ws[j].replace(/class="wd /, 'class="wd grow '); rem--; }
+    var rem = (4 - units % 4) % 4, last = ws.length - 1;
+    /* Jonna, Nov 26, 2026: squares stay in their pairs (Submit an Idea beside mismo.org). Two short: a wide tile at the end
+       goes full width, or the last pair of squares widens together. */
+    if (rem === 2 && last >= 0 && / wide/.test(ws[last]) && !/w-summit/.test(ws[last])) ws[last] = ws[last].replace(/class="wd /, 'class="wd full ');
+    else if (rem === 2) { for (var j = last, n = 0; j >= 0 && n < 2; j--) if (ws[j].indexOf(' wide') < 0) { ws[j] = ws[j].replace(/class="wd /, 'class="wd grow '); n++; } }
   }
   h += '<div class="dash-grid">' + ws.join('') + '</div>';
   return h;
@@ -4398,6 +4590,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-matters')) { mattersSheet(); return; }
   if (t.hasAttribute('data-certs')) { certsSheet(); return; }
   if (t.hasAttribute('data-trivia')) { triviaSheet(); return; }
+  if (t.hasAttribute('data-merch')) { merchSheet(); return; }
   if (t.hasAttribute('data-web')) { webSheet(t.getAttribute('data-web'), t.getAttribute('data-web-title') || ''); return; }
   if (t.hasAttribute('data-web-ics')) { var wb = upcomingWebinars().filter(function (w) { return w.id === t.getAttribute('data-web-ics'); })[0]; if (wb) webinarIcs(wb); return; }
   if (t.hasAttribute('data-bio')) { var bb = document.getElementById(t.getAttribute('data-bio')); if (bb) { bb.hidden = !bb.hidden; t.innerHTML = icon('i-user') + (bb.hidden ? 'View Bio' : 'Hide Bio'); t.setAttribute('aria-expanded', String(!bb.hidden)); } return; }
