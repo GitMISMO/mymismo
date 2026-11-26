@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Floor map: a key under the map says what the marks are (blue: rooms with MISMO sessions; orange: the room you picked; black lines: the hotel's own room names).
 - Nov 26, 2026: New Orleans art for the Summit tile and the summit home: the skyline, St. Louis Cathedral, a French Quarter row with iron balconies and fleur-de-lis flags, flickering gas lamps, a St. Charles streetcar and the light trails, in the app's navy style.
 - Nov 26, 2026: Summit home footer on two lines: when the agenda last changed, and the date and time the app last checked.
 - Nov 26, 2026: Summit home: the footer says when the agenda last changed in Summit HQ and that the app checks every 30 minutes, instead of a bare "Updated" time that read like the app had stopped updating.
