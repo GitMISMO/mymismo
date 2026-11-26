@@ -25,6 +25,7 @@ jobs:
         run: |
           mkdir -p ~/.bubblewrap
           echo "{\"jdkPath\":\"$JAVA_HOME\",\"androidSdkPath\":\"$ANDROID_HOME\"}" > ~/.bubblewrap/config.json
+          # bubblewrap update only writes the Android project; Gradle and the SDK's own tools build and sign it below
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
       - name: The signing key
         env:
@@ -46,7 +47,15 @@ jobs:
         run: |
           cd store/android
           bubblewrap update --skipVersionUpgrade --manifest=./twa-manifest.json
-          bubblewrap build --skipPwaValidation --manifest=./twa-manifest.json
+          chmod +x gradlew
+          ./gradlew --no-daemon -q bundleRelease assembleRelease
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          cp app/build/outputs/bundle/release/app-release.aab app-release-bundle.aab
+          jarsigner -keystore android.keystore -storepass "$BUBBLEWRAP_KEYSTORE_PASSWORD" -keypass "$BUBBLEWRAP_KEY_PASSWORD" app-release-bundle.aab mymismo > /dev/null
+          U=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          "$BT/zipalign" -f -p 4 "$U" aligned.apk
+          "$BT/apksigner" sign --ks android.keystore --ks-key-alias mymismo --ks-pass "env:BUBBLEWRAP_KEYSTORE_PASSWORD" --key-pass "env:BUBBLEWRAP_KEY_PASSWORD" --out app-release-signed.apk aligned.apk
+          jarsigner -verify app-release-bundle.aab | tail -1
           keytool -list -v -keystore android.keystore -alias mymismo -storepass "$BUBBLEWRAP_KEYSTORE_PASSWORD" | grep -E 'SHA256:' | head -1 | sed 's/.*SHA256: /SHA-256 of the signing key: /'
           rm -f android.keystore
       - uses: actions/upload-artifact@v4
