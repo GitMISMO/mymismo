@@ -504,6 +504,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 /* ---------- Explore ---------- */
 .postcard{position:relative; overflow:hidden; isolation:isolate; border-radius:20px; color:#fff; background:#071d2e; min-height:360px; display:flex; flex-direction:column; justify-content:flex-end}
 .postcard > .hero-art{z-index:-2}
+.postcard > .nola{bottom:-24px; height:calc(100% + 24px)}   /* the street line sits below the buttons, not under them */
 .postcard > .nola .no-bldg,.wl-cta > .nola .no-bldg{opacity:.45}   /* Jonna, Nov 26, 2026: buildings faded behind the buttons */
 .postcard:after{content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg, rgba(7,29,46,.92), rgba(7,29,46,.55) 55%, rgba(7,29,46,.1))}
 .pc-city{position:absolute; top:6px; left:12px; right:0; font-family:var(--cond); font-weight:700; font-size:clamp(64px, 21vw, 170px); line-height:.82; letter-spacing:-.04em; color:transparent; -webkit-text-stroke:1.5px rgba(116,191,235,.45); white-space:nowrap; overflow:hidden; animation:city-in 1.1s cubic-bezier(.2,.8,.2,1) both}
