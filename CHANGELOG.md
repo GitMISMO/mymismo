@@ -50,3 +50,4 @@
 - Nov 25, 2026: Android app builds in GitHub Actions (Build the Android App): a Trusted Web Activity for Google Play; test builds until MISMO's upload key is saved as repository secrets.
 - Nov 25, 2026: MyMISMO uses MISMO's own Privacy Policy (www.mismo.org/privacy-policy), with a MyMISMO App section the website adds (CN-042); the app's privacy page now opens it. Relay request 15 adds a sign-in for the app store reviewers (91 checks).
 - Nov 25, 2026: Staff Preview of the attendee directory: until attendee sign-in is live, MISMO staff who can open Summit HQ see the real attendee list (names, titles, companies; never emails) under People, Attendees, read with their own staff sign-in.
+- Nov 25, 2026: Every workgroup session now finds its group's page, even when the agenda names it a little differently (Housing Counseling Data DWG), and a session for two groups (Servicing COP + Servicing Transfers DWG) shows both.

@@ -1579,9 +1579,24 @@ function gkey(t, loose) {
   if (loose) k = k.replace(/\([^)]*\)/g, ' ');
   return k.replace(/[^a-z0-9]+/g, ' ').trim();
 }
-function groupPage(x) {
-  var gs = (WG && WG.groups) || [], a = gkey(x.title), b = gkey(x.title, true);
-  return gs.filter(function (g) { return gkey(g.name) === a; })[0] || gs.filter(function (g) { return gkey(g.name, true) === b; })[0] || null;
+/* the words that name the group, without "COP", "DWG", "Workgroup", "Data" and the like, so "Housing Counseling Data DWG"
+   finds "Housing Counseling Development Workgroup" */
+var G_SKIP = { cop: 1, dwg: 1, workgroup: 1, data: 1, the: 1, of: 1, and: 1 };
+function gcore(t) { return gkey(t, true).split(' ').filter(function (w) { return w && !G_SKIP[w]; }); }
+function groupFor(title) {
+  var gs = (WG && WG.groups) || [], a = gkey(title), b = gkey(title, true), c = gcore(title), cs = c.join(' ');
+  var hit = gs.filter(function (g) { return gkey(g.name) === a; })[0] || gs.filter(function (g) { return gkey(g.name, true) === b; })[0] ||
+    gs.filter(function (g) { return gcore(g.name).join(' ') === cs; })[0];
+  if (hit || c.length < 2) return hit || null;
+  /* else the one group whose name words all appear in the title, or the reverse, with two or more words */
+  var near = gs.filter(function (g) { var w = gcore(g.name); return w.length >= 2 && (w.every(function (x) { return c.indexOf(x) >= 0; }) || c.every(function (x) { return w.indexOf(x) >= 0; })); });
+  return near.length === 1 ? near[0] : null;
+}
+/* a session can hold more than one group ("Servicing COP + Servicing Transfers DWG") */
+function groupPages(x) {
+  var out = [];
+  String(x.title || '').split(/\s+\+\s+|\s*\/\s*/).forEach(function (part) { var g = groupFor(part); if (g && out.indexOf(g) < 0) out.push(g); });
+  return out;
 }
 function groupVideo(x) { var b = tkey(x.title); return ((TAGS && TAGS.videos) || []).filter(function (v) { return tkey(v.title) === b; })[0] || null; }
 function sponsorFor(x) {
@@ -2695,11 +2710,13 @@ function sessionSheet(id) {
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
   if (/MISMO Link/i.test(x.title)) h += '<div class="d-h">MISMO Link</div>' + sitePeek(SITE + '/standards-resources/mismo-link', 'mismo-link');
   var gv = groupVideo(x);
-  var gp = groupPage(x);
-  if (gv || gp) h += '<div class="d-h">Meet the Group</div>' + (gv ? player(gv.youtube, x.title) : '');
-  if (gp) h += '<a class="grp-card" href="' + esc(gp.url) + '" target="_blank" rel="noopener"><span class="grp-ic">' + icon('i-people') + '</span><span class="grp-tx"><b>' + esc(gp.name) + '</b>' +
-    (gp.about ? '<span>' + esc(gp.about) + '</span>' : '') + (gp.meets && /^Meets (every|\d|1st|2nd|3rd|4th|monthly|weekly)/i.test(gp.meets) ? '<em>' + icon('i-clock') + esc(gp.meets) + '</em>' : '') +
-    '<strong>Visit the Group\'s Page on mismo.org' + icon('i-link') + '</strong></span></a>';
+  var gps = groupPages(x);
+  if (gv || gps.length) h += '<div class="d-h">Meet the Group' + (gps.length > 1 ? 's' : '') + '</div>' + (gv ? player(gv.youtube, x.title) : '');
+  gps.forEach(function (gp) {
+    h += '<a class="grp-card" href="' + esc(gp.url) + '" target="_blank" rel="noopener"><span class="grp-ic">' + icon('i-people') + '</span><span class="grp-tx"><b>' + esc(gp.name) + '</b>' +
+      (gp.about ? '<span>' + esc(gp.about) + '</span>' : '') + (gp.meets && /^Meets (every|\d|1st|2nd|3rd|4th|monthly|weekly)/i.test(gp.meets) ? '<em>' + icon('i-clock') + esc(gp.meets) + '</em>' : '') +
+      '<strong>Visit the Group\'s Page on mismo.org' + icon('i-link') + '</strong></span></a>';
+  });
   if (x.type === 'General Session' && S.gs && S.gs.items.length) {
     h += '<div class="d-h">Running Order</div><div class="ro">' + S.gs.items.map(function (g) {
       var cp = clockParts(g.a);
