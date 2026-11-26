@@ -826,6 +826,10 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .web.ai{border-left:4px solid #eda100}
 .web-tag{display:inline-block; font-size:11.5px; font-weight:800; color:#a2701a; margin-bottom:2px}
 :root[data-theme="dark"] .web-tag{color:#e0a83c}
+.re-sign{display:flex; align-items:center; gap:12px; margin:0 0 14px; padding:12px 14px; border:1px solid var(--border); border-left:4px solid #74bfeb; border-radius:10px; background:var(--surface)}
+.re-sign > svg{width:22px; height:22px; flex:none; color:#2477b8}
+.re-sign span{flex:1; min-width:0; font-size:13px; color:var(--ink-2); line-height:1.35}
+.re-sign b{display:block; color:var(--ink); font-size:14px}
 .pv-note{border-left-color:#eda100}
 .att-count{font-size:13px; color:var(--ink-3); font-weight:600; margin-top:10px}
 .cts{display:grid; gap:8px}
@@ -2320,6 +2324,7 @@ function appTester() { var st = staffSession(); return !!(st && ((st.access || {
 function firstName() {
   var st = staffSession(); if (st && st.name) return String(st.name).split(/\s+/)[0];
   if (A.me && A.me.first) return A.me.first;
+  var was = load('staff-was', ''); if (was && was !== 'yes' && !load('myname', '')) return String(was).split(/\s+/)[0];   /* staff whose sign-in ended */
   return load('myname', '');   /* anyone else: the name they gave in Settings, kept on this phone */
 }
 function greetHead() {
@@ -2653,6 +2658,7 @@ function widget(id) {
 function renderDash() {
   var picks = dashPicks() || [];
   var h = greetHead();
+  if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
   var ws = picks.map(widget).filter(Boolean);
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
@@ -3201,7 +3207,7 @@ function settingsSheet() {
     else if (k === 'alerts-on') { turnOnAlerts(b); setTimeout(again, 2500); }
     else if (k === 'alerts-off') { turnOffAlerts(); setTimeout(again, 1200); }
     else if (k === 'staff-in') { closeSheet(false); ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); }
-    else if (k === 'staff-out') { ResourcesSession.signOut(); paintStaff(); again(); }
+    else if (k === 'staff-out') { save('staff-was', ''); ResourcesSession.signOut(); paintStaff(); again(); }
     else if (k === 'att-in') { closeSheet(false); signInSheet(); }
     else if (k === 'profile') { closeSheet(false); profileSheet(false); }
     else if (k === 'att-delete') {
@@ -3225,7 +3231,10 @@ function settingsSheet() {
   });
 }
 /* The staff chip shows only when someone is signed in (attendees never see a staff Sign In button in the top bar) */
-function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
+/* Jonna, Nov 26, 2026: a staff sign-in ends after 8 hours (the rule for every MISMO Resources tool). MyMISMO remembers
+   that this phone had one, and the dashboard offers Sign In again at the top, so nobody has to go to another tool for it.
+   Signing out on purpose forgets it. */
+function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; if (st) save('staff-was', st.name || 'yes'); if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
 if (window.ResourcesSession) { try { ResourcesSession.onChange(function () { paintStaff(); }); } catch (e) {} }
 paintStaff(false);
 
@@ -3522,6 +3531,7 @@ window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault()
 /* ---------- events ---------- */
 document.addEventListener('keydown', function (e) { var g = e.target.closest && e.target.closest('g[data-place]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); placeSheet(g.getAttribute('data-place')); } });
 document.addEventListener('click', function (e) {
+  if (e.target.closest('[data-staff-again]')) { ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); return; }
   var dot = e.target.closest && e.target.closest('g[data-place]'); if (dot) { placeSheet(dot.getAttribute('data-place')); return; }
   var t = e.target.closest('button, a'); if (!t) return;
   if (t.id === 'dash-btn') { closeSheet(true); show('dash'); return; }
