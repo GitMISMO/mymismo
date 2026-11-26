@@ -1,5 +1,8 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: Webinars include the AI Webinar Series MISMO presents with MBA Education: all 14 sessions from the website's Education page (2:00 to 3:00 PM ET), each with Register (MBA.org) and Add to Calendar, marked "AI Webinar Series with MBA". The daily guide job keeps the list in step with the website.
+- Nov 25, 2026: MISMO Matters reads in dark mode when the app is dark (the dark masthead and pictures keep their colors), and the newsletter now fits the phone's width instead of running off the right side.
+- Nov 25, 2026: Dark mode sponsor tile: logos with a colored frame and white inside (ICE) lose the white too, so they show in white like the others.
 - Nov 25, 2026: MISMO Trivia rules on the page: the monthly leaderboard ranks each player's single best Hard round of Mixed questions; a champion who already qualified hands the spot to that month's next-highest scorer; the championship is played on your own phone during a set window, and once started the clock runs until you finish. The test round says whether your picks would count.
 - Nov 25, 2026: Sponsors page: every logo is centered and fits inside its box, including square logos like ICE and Crittora.
 - Nov 25, 2026: MISMO Trivia: the leaderboard starts over every month, and a new Quarterly Championship section shows the plan (the three monthly champions play a tougher Championship Board; the winner is recognized at the next MISMO Summit and wins a prize). Both open with the game.

@@ -29,6 +29,7 @@ URL = 'https://www.mismo.org/events/hotel'
 SUMMIT_URL = 'https://www.mismo.org/events/summit'
 AGENDA_URL = 'https://www.mismo.org/events/agenda'
 GROUPS_URL = 'https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup'
+EDU_URL = 'https://www.mismo.org/events-education/educational-offerings'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
@@ -343,6 +344,31 @@ def build_groups(html):
     return {'source': GROUPS_URL, 'groups': out}
 
 
+def build_ai_series(html):
+    """The AI Webinar Series card on the website's Education page (#ai-series): each session's date, title and MBA page,
+    and the time every session runs. Kept on the website by hand; the app follows whatever it says."""
+    t = Tree()
+    t.feed(html)
+    sec = t.root.find(lambda x: x.attrs.get('id') == 'ai-series')
+    out = {'source': EDU_URL + '#ai-series', 'series': 'AI Webinar Series', 'host': 'MBA Education and MISMO', 'start': '', 'end': '', 'note': '', 'sessions': []}
+    if sec is None:
+        return out
+    txt = sec.text()
+    m = re.search(r'runs\s+(\d{1,2}:\d{2})\s*[\u2013-]\s*(\d{1,2}:\d{2})\s*([AP]M)', txt)
+    if m:
+        out['start'], out['end'] = m.group(1) + ' ' + m.group(3), m.group(2) + ' ' + m.group(3)
+    n = re.search(r'(MISMO members attend.*?(?:MBA\.org\.|\.\s))', txt)
+    out['note'] = n.group(1).strip() if n else ''
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    for a in sec.find_all(lambda x: x.tag == 'a' and 'mba.org' in (x.attrs.get('href') or '')):
+        mm = re.match(MONTH + r' (\d{1,2}), (\d{4})\s*[\u2014\u2013-]+\s*(.+)$', a.text())
+        if not mm:
+            continue
+        out['sessions'].append({'date': '%s-%02d-%02d' % (mm.group(3), months.index(mm.group(1)) + 1, int(mm.group(2))), 'title': mm.group(4).strip(),
+                                'url': (a.attrs.get('href') or '').split('?')[0]})
+    return out
+
+
 def good_event(e):
     return bool(e.get('title') and e.get('subtitle') and e.get('dates') and e.get('paragraphs'))
 
@@ -370,7 +396,7 @@ def write(out, g, what):
 
 def main(argv):
     opts = dict(zip(argv[::2], argv[1::2]))
-    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts
+    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts or '--edu-html' in opts
     failed = 0
     if '--html' in opts or not only_files:
         html = open(opts['--html'], encoding='utf-8').read() if '--html' in opts else fetch(URL)
@@ -398,6 +424,14 @@ def main(argv):
             write(opts.get('--tags-out', 'data/agenda-tags.json'), tg, 'Agenda sponsor tags')
         else:
             print('The Agenda page did not have its day and session cards; nothing written.', file=sys.stderr)
+            failed = 1
+    if '--edu-html' in opts or not only_files:
+        html = open(opts['--edu-html'], encoding='utf-8').read() if '--edu-html' in opts else fetch(EDU_URL)
+        ai = build_ai_series(html)
+        if ai['sessions'] and ai['start']:
+            write(opts.get('--edu-out', 'data/ai-webinars.json'), ai, 'AI Webinar Series')
+        else:
+            print('The Education page did not have the AI Webinar Series sessions; nothing written.', file=sys.stderr)
             failed = 1
     if '--groups-html' in opts or not only_files:
         html = open(opts['--groups-html'], encoding='utf-8').read() if '--groups-html' in opts else fetch(GROUPS_URL)

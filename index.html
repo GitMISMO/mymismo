@@ -805,6 +805,9 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .wifi .btn{background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.35); color:#fff}
 .wifi .btn.primary{background:#74bfeb; border-color:#74bfeb; color:#06202f}
 .wf-note{margin:10px 0 0; font-size:13px; color:rgba(255,255,255,.75)}
+.web.ai{border-left:4px solid #eda100}
+.web-tag{display:inline-block; font-size:11.5px; font-weight:800; color:#a2701a; margin-bottom:2px}
+:root[data-theme="dark"] .web-tag{color:#e0a83c}
 .pv-note{border-left-color:#eda100}
 .att-count{font-size:13px; color:var(--ink-3); font-weight:600; margin-top:10px}
 .cts{display:grid; gap:8px}
@@ -2047,7 +2050,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -2108,6 +2111,7 @@ function loadExtras() {
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
   if (S.sid) getJSON('data/floorplan/' + S.sid + '.json').then(function (f) { FP = f; again(['explore', 'home']); }).catch(function () {});
   getJSON('data/logo-bg.json').then(function (l) { LOGOBG = l; again(['dash']); }).catch(function () {});
+  getJSON('data/ai-webinars.json').then(function (a) { AIW = a; again(['dash']); }).catch(function () {});
   getJSON('data/workgroups.json').then(function (w) { WG = w; again(['agenda', 'mine', 'home']); }).catch(function () {});
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash', 'people']); }).catch(function () {});
   getJSON('/podcast/micdup.json').then(function (m) { MU = m; again(['dash']); }).catch(function () {});
@@ -2296,7 +2300,20 @@ function greetHead() {
   return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1>' + (f ? '' : '<button type="button" class="linkbtn dh-name" data-myname>Add Your Name</button>') + '</div></div>';
 }
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
-function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
+/* the AI Webinar Series with MBA Education, as the website's Education page lists it (data/ai-webinars.json, kept fresh by
+   the guide job), joins MISMO's own webinars. Eastern time: -04:00 from the second Sunday of March to the first of November. */
+function etOffset(iso) {
+  var y = +iso.slice(0, 4), d = function (m, n) { var t = new Date(Date.UTC(y, m, 1)), first = (7 - t.getUTCDay()) % 7 + 1; return Date.UTC(y, m, first + 7 * (n - 1)); };
+  var t = Date.parse(iso + 'T12:00:00Z'); return t >= d(2, 2) && t < d(10, 1) ? '-04:00' : '-05:00';
+}
+function aiWebinars() {
+  var a = AIW || {}; if (!a.sessions) return [];
+  return a.sessions.map(function (x) {
+    var m = /(\d{1,2}):(\d{2})\s*(AM|PM)/i.exec(a.end || '3:00 PM'), hh = m ? (+m[1] % 12 + (/pm/i.test(m[3]) ? 12 : 0)) : 15;
+    return { id: 'ai-' + x.date, date: x.date, title: x.title, start: a.start, end: a.end, endsAt: x.date + 'T' + String(hh).padStart(2, '0') + ':' + (m ? m[2] : '00') + ':00' + etOffset(x.date), url: x.url, register: x.url, series: a.series || 'AI Webinar Series', note: a.note };
+  });
+}
+function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).concat(aiWebinars()).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
 function calBlock(iso) { var p = dparts(iso); return '<span class="cal"><i>' + MON[p.m - 1] + '</i><b>' + p.d + '</b></span>'; }
 /* ---------- MISMO Trivia (coming soon: waiting on the questions) ---------- */
 var TRIVIA_CATS = [
@@ -2547,15 +2564,15 @@ function webinarIcs(w) {
   var a = at(w.start), b = at(w.end) || (a && new Date(+a + 3600e3)); if (!a) return;
   function z(d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
   var body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//MISMO//MyMISMO//EN', 'BEGIN:VEVENT', 'UID:webinar-' + w.id + '@mymismo', 'DTSTAMP:' + z(new Date()), 'DTSTART:' + z(a), 'DTEND:' + z(b),
-    'SUMMARY:' + ('MISMO Webinar: ' + w.title).replace(/[,;]/g, '\\$&'), 'URL:' + (w.url || ''), 'DESCRIPTION:' + ('Register: ' + (w.register || w.url || '')).replace(/[,;]/g, '\\$&'), 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    'SUMMARY:' + ((w.series ? w.series + ': ' : 'MISMO Webinar: ') + w.title).replace(/[,;]/g, '\\$&'), 'URL:' + (w.url || ''), 'DESCRIPTION:' + ('Register: ' + (w.register || w.url || '')).replace(/[,;]/g, '\\$&'), 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
   var u = URL.createObjectURL(new Blob([body], { type: 'text/calendar' })), l = document.createElement('a'); l.href = u; l.download = 'mismo-webinar-' + w.id + '.ics'; document.body.appendChild(l); l.click(); setTimeout(function () { URL.revokeObjectURL(u); l.remove(); }, 1000);
 }
 function webinarsSheet() {
   var up = upcomingWebinars();
-  var h = '<div class="sheet-pad"><p class="lede">MISMO\'s webinars cover new standards, initiatives and the industry topics that matter to members. They\'re free.</p>' +
+  var h = '<div class="sheet-pad"><p class="lede">MISMO\'s webinars cover new standards, initiatives and the industry topics that matter to members, alongside the AI Webinar Series MISMO presents with MBA Education.</p>' +
     (up.length ? '<div class="webs">' + up.map(function (w) {
-      return '<article class="web"><div class="web-top">' + calBlock(w.date) + '<div class="wb"><div class="wt">' + esc(w.title) + '</div><div class="wm">' + esc(longDate(w.date)) + ', ' + esc(w.start || '') + (w.end ? ' to ' + esc(w.end) : '') + ' ET</div></div></div>' +
-        (w.summary ? '<p>' + esc(webSummary(w.summary)) + '</p>' : '') + '<div class="d-actions">' + (w.register ? '<a class="btn primary" href="' + esc(w.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register</a>' : '') +
+      return '<article class="web' + (w.series ? ' ai' : '') + '"><div class="web-top">' + calBlock(w.date) + '<div class="wb">' + (w.series ? '<span class="web-tag">' + esc(w.series) + ' with MBA</span>' : '') + '<div class="wt">' + esc(w.title) + '</div><div class="wm">' + esc(longDate(w.date)) + ', ' + esc(w.start || '') + (w.end ? ' to ' + esc(w.end) : '') + ' ET</div></div></div>' +
+        (w.summary ? '<p>' + esc(webSummary(w.summary)) + '</p>' : (w.note ? '<p>' + esc(w.note) + '</p>' : '')) + '<div class="d-actions">' + (w.register ? '<a class="btn primary" href="' + esc(w.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register</a>' : '') +
         '<button type="button" class="btn" data-web-ics="' + esc(w.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div></article>';
     }).join('') + '</div>' : '<div class="note">No MISMO webinars are scheduled right now. New ones show up here as soon as they\'re announced.</div>') +
     '<div class="d-actions" style="margin-top:16px"><a class="btn" href="' + SITE + '/events/education" target="_blank" rel="noopener">' + icon('i-link') + 'Education and Past Webinars</a></div></div>';
@@ -2648,6 +2665,33 @@ function webSheet(url, title) {
   var h = '<div class="webframe"><iframe src="' + esc(url) + '" title="' + esc(title) + '"></iframe></div>';
   var el = openSheet(title, h, { plain: true });
   el.classList.add('full');
+  /* Jonna, Nov 25, 2026: MISMO Matters (and other MISMO pages made light only) read dark when the app is in dark mode.
+     Only for pages on this site, and only if the page has no dark mode of its own. */
+  var fr = el.querySelector('iframe');
+  fr.addEventListener('load', function () {
+    try {
+      var d = fr.contentDocument; if (!d || !darkNow()) return;
+      var own = [].some.call(d.styleSheets, function (sh) { try { return [].some.call(sh.cssRules, function (r) { return /prefers-color-scheme:\s*dark/.test(r.conditionText || r.media && r.media.mediaText || ''); }); } catch (e) { return false; } });
+      if (own || d.getElementById('mm-dark')) return;
+      var st = d.createElement('style'); st.id = 'mm-dark';
+      st.textContent = 'html{background:#fff;filter:invert(.92) hue-rotate(180deg)}img,video,picture,iframe,svg image,[style*="background-image"],[data-mm-keep]{filter:invert(1) hue-rotate(180deg)}[data-mm-keep] img,[data-mm-keep] [style*="background-image"]{filter:none}';
+      d.head.appendChild(st);
+      /* bands that are already dark (the navy masthead) stay dark instead of turning pale */
+      [].forEach.call(d.body.querySelectorAll('*'), function (x) {
+        if (x.closest('[data-mm-keep]')) return;
+        var cs = getComputedStyle(x), m = /rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?/.exec(cs.backgroundColor);
+        if (!m || (m[4] !== undefined && +m[4] < .5) || cs.backgroundImage !== 'none') return;
+        if ((.2126 * m[1] + .7152 * m[2] + .0722 * m[3]) / 255 < .3) x.setAttribute('data-mm-keep', '');
+      });
+    } catch (e) {}
+  });
+  /* newsletters are laid out for email (about 600px wide): shrink them to fit the phone instead of cutting off the right side */
+  fr.addEventListener('load', function () {
+    try {
+      var d = fr.contentDocument, w = d && d.documentElement.scrollWidth, cw = fr.clientWidth;
+      if (w && cw && w > cw + 4) d.documentElement.style.zoom = (cw / w).toFixed(3);
+    } catch (e) {}
+  });
 }
 /* A video that plays right where it sits: the poster first, then the player in its place when tapped. */
 function player(id, title) {
