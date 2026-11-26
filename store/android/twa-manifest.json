@@ -30,6 +30,6 @@
   "isChromeOSOnly": false,
   "isMetaQuest": false,
   "fullScopeUrl": "https://resources.mismo.org/mymismo/",
-  "minSdkVersion": 21,
+  "minSdkVersion": 24,
   "fingerprints": []
 }
