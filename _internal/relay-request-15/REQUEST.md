@@ -116,6 +116,11 @@ request 13's rule (listed only if they turned it on); test-mymismo.mjs here is r
 | `POST /att/message` | attendee | Can start a conversation with anyone registered and not hidden; it waits for them until they sign in. |
 | `POST /att/delete` | attendee | Removes everything and leaves only a hidden marker (no name or details), so their registration row doesn't show again. Signing in again later makes a fresh account. |
 
+**MISMO staff are in Summit HQ's list twice** (Jonna, Nov 25, 2026): their registration, with their title, and the staff
+roster, which says only "MISMO" with no title. When an entry that is just "MISMO" with no title has the same first and
+last name as another entry, it isn't listed; signing in with that address signs in as the same person as their
+registration (same directory entry and profile). Staff on the roster only are still listed.
+
 ## A Sign-In for the App Store Reviewers (approved by Jonna, Nov 25, 2026)
 
 Apple and Google test every sign-in feature before they approve an app, but their reviewers can't read a MISMO inbox
@@ -145,7 +150,7 @@ Team HQ is MyMISMO's home for the MISMO team's year-round work (summit alerts st
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
 - `test-mymismo.mjs`: request 13's test, with the directory checks updated to the new rule. Replace the old copy with this one.
-- `test-mymismo15.mjs`: 96 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+- `test-mymismo15.mjs`: 100 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
   `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
 
 ## To Switch It On

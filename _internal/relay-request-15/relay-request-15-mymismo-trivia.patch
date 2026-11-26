@@ -1,16 +1,24 @@
 --- a/_dev/aws/index.mjs
 +++ b/_dev/aws/index.mjs
-@@ -2511,7 +2511,8 @@
+@@ -2511,7 +2511,16 @@
        const e = mmStr(p && p.e, 254).toLowerCase(); if (!mmEmailOk(e)) continue;
        people.set(e, { first: mmStr(p.first, 60), last: mmStr(p.last, 60), company: mmStr(p.company, 120), title: mmStr(p.title, 120) });
      }
 -    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people };
-+    const ids = new Map(); for (const [e, p] of people) ids.set(mmIdOf(id, e), p);   /* relay request 15: the whole registration list is the directory */
++    /* Summit HQ's list has MISMO staff twice: their registration (with their title) and the staff roster (just "MISMO").
++       The roster entry still signs in, as the same person as their registration, and isn't listed a second time. */
++    const byName = new Map(), plain = p => /^mismo$/i.test(p.company.trim()) && !p.title.trim();
++    for (const [e, p] of people) { const k = `${p.first} ${p.last}`.trim().toLowerCase(); if (k) (byName.get(k) || byName.set(k, []).get(k)).push(e); }
++    for (const list of byName.values()) {
++      const keep = list.length > 1 && list.find(e => !plain(people.get(e)));
++      if (keep) for (const e of list) if (plain(people.get(e))) people.get(e).dir = keep;
++    }
++    const ids = new Map(); for (const [e, p] of people) if (!p.dir) ids.set(mmIdOf(id, e), p);   /* relay request 15: the whole registration list is the directory */
 +    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people, ids };
    }
    mmFeedCache.at = now; mmFeedCache.value = { summits };
    return mmFeedCache.value;
-@@ -2532,13 +2533,15 @@
+@@ -2532,13 +2541,15 @@
    if (!auth.startsWith('Bearer ') || !process.env.AUTH_SECRET) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
    const t = verifyToken(auth.slice(7).trim(), mmSecret());
    if (t.error || t.kind !== 'mymismo-attendee' || !MM_ID.test(String(t.sub)) || !MM_SUMMIT.test(String(t.s))) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
@@ -29,7 +37,7 @@
  }
  async function mmReadPeople(proj, summit) {
    const r = await readFile(proj.repo, proj.branch || 'main', mmPeoplePath(summit));
-@@ -2556,6 +2559,7 @@
+@@ -2556,6 +2567,7 @@
    if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID', problems: ['Pick the summit you’re registered for.'] });
    if (!mmAllowed('code', mmIp(event), MM_LIMITS.code, now) || !mmAllowed('codeAll', 'all', MM_LIMITS.codeAll, now))
      return respond(429, { error: 'TOO_MANY', message: 'Too many codes asked for from here. Please wait a few minutes.' });
@@ -37,7 +45,7 @@
    const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
    const s = feed.summits[summit], person = s && s.people.get(email);
    if (!s || !person || !mmOpen(s, now)) return fine;   /* the same answer whether or not the address is registered */
-@@ -2582,6 +2586,20 @@
+@@ -2582,6 +2594,20 @@
    const wrong = respond(401, { error: 'WRONG_CODE', message: 'That code isn’t right, or it has expired. Ask for a new one.' });
    if (!mmEmailOk(email) || !MM_SUMMIT.test(summit) || !/^\d{6}$/.test(code)) return wrong;
    const id = mmIdOf(summit, email);
@@ -58,16 +66,30 @@
    let good = false, refused = null;
    const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM_CODES, d => {
      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
-@@ -2599,7 +2617,7 @@
+@@ -2596,17 +2622,18 @@
+   if (!good) return wrong;
+   const feed = await mmFeed(proj); const s = !feed.error && feed.summits[summit], person = s && s.people.get(email);
+   if (!person) return wrong;
++  const pid = person.dir ? mmIdOf(summit, person.dir) : id, reg = person.dir ? s.people.get(person.dir) : person;   /* staff roster address: the same person as their registration */
    /* first sign-in makes their entry, from the registration; never listed until they say so */
    const p = await updateRepoJson(proj.repo, proj.branch || 'main', mmPeoplePath(summit), d => {
      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
 -    if (!d.docs[id]) d.docs[id] = { name: `${person.first} ${person.last}`.trim(), title: person.title, company: person.company, about: '', linkedin: '', listed: false, blocked: [], joined: now, at: now };
-+    if (!d.docs[id] || d.docs[id].deleted) d.docs[id] = { name: `${person.first} ${person.last}`.trim(), title: person.title, company: person.company, about: '', linkedin: '', hidden: false, blocked: [], joined: now, at: now };
++    if (!d.docs[pid] || d.docs[pid].deleted) d.docs[pid] = { name: `${reg.first} ${reg.last}`.trim(), title: reg.title, company: reg.company, about: '', linkedin: '', hidden: false, blocked: [], joined: now, at: now };
      return d;
    }, 'MyMISMO attendee signed in');
    if (!p || p.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
-@@ -2617,12 +2635,25 @@
+   const end = Date.parse(s.last + 'T00:00:00Z'), exp = Math.floor(Math.min(Number.isFinite(end) ? end + 4 * 86_400_000 : now + 45 * 86_400_000, now + 45 * 86_400_000) / 1000);
+-  const me = p.data.docs[id];
+-  const token = signToken({ kind: 'mymismo-attendee', sub: id, s: summit, e: email, n: me.name, iat: Math.floor(now / 1000), exp }, mmSecret());
+-  return respond(200, { token, me: mmMe(id, me, email), expiresAt: new Date(exp * 1000).toISOString() });
++  const me = p.data.docs[pid];
++  const token = signToken({ kind: 'mymismo-attendee', sub: pid, s: summit, e: email, n: me.name, iat: Math.floor(now / 1000), exp }, mmSecret());
++  return respond(200, { token, me: mmMe(pid, me, email), expiresAt: new Date(exp * 1000).toISOString() });
+ }
+ 
+ async function mmSigned(method, subPath, event, proj, headers) {
+@@ -2617,12 +2644,25 @@
      if (!mmAllowed('read', who.id, MM_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a minute.' });
      const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'UNAVAILABLE' });
      const mine = ppl.docs[who.id];
@@ -98,7 +120,7 @@
      }
      if (subPath === '/att/messages') {
        const r = await readFile(proj.repo, branch, mmMsgPath(who.summit)); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
-@@ -2640,17 +2671,27 @@
+@@ -2640,17 +2680,27 @@
      }
      return respond(404, { error: 'NOT_FOUND' });
    }
@@ -129,7 +151,7 @@
        if ('title' in b) p.title = mmStr(b.title, 120);
        if ('company' in b) p.company = mmStr(b.company, 120);
        if ('about' in b) p.about = mmStr(b.about, 600);
-@@ -2666,7 +2707,7 @@
+@@ -2666,7 +2716,7 @@
      let out = null;
      const w = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
        d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
@@ -138,7 +160,7 @@
        const set = new Set(Array.isArray(p.blocked) ? p.blocked : []);
        if (b.on === false) set.delete(b.id); else set.add(b.id);
        p.blocked = [...set].slice(0, 500); out = p; return d;
-@@ -2682,16 +2723,19 @@
+@@ -2682,16 +2732,19 @@
      if (!mmAllowed('msg', who.id, MM_LIMITS.msg, now)) return respond(429, { error: 'TOO_MANY', message: 'You’ve sent a lot of messages. Please wait a few minutes.' });
      const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'NOT_SENT', message: 'Your message couldn’t be sent just now. Please try again.' });
      const me = ppl.docs[who.id], them = ppl.docs[to];
@@ -161,7 +183,7 @@
        const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
        th.m = Array.isArray(th.m) ? th.m : [];
        th.m.push({ f: who.id, t: text, at: now });
-@@ -2914,6 +2958,597 @@
+@@ -2914,6 +2967,597 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -759,7 +781,7 @@
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3619,17 @@
+@@ -2984,6 +3628,17 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
@@ -777,7 +799,7 @@
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
-@@ -3006,7 +3652,7 @@
+@@ -3006,7 +3661,7 @@
      if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */

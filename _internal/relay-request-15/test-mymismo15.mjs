@@ -288,6 +288,24 @@ T = Date.parse('2027-01-21T15:00:00Z'); __resetMyMismoLimits();
 const rvRound = await play(d.token, 10, 1000);
 ok('review: a reviewer’s round is never on the leaderboard', rvRound.last.done === true && rvRound.last.review === true && !JSON.stringify(file('trivia/board-2027-01.json')).includes('App Review'), rvRound.last);
 
+T = realNow();
+/* MISMO staff are in Summit HQ's list twice: their registration (with their title) and the staff roster ("MISMO" only) */
+put('Org/SummitData:data/feed-mymismo-attendees.json', { updated: new Date(T).toISOString(), summits: { nola: { name: '2027 Winter Summit', first: FIRST, last: LAST, people: [
+  { e: 'pat@lender.example', first: 'Pat', last: 'Lee', company: 'Lender Co', title: 'CTO' },
+  { e: 'alex@vendor.example', first: 'Alex', last: 'Kim', company: 'Vendor LLC', title: 'Engineer' },
+  { e: 'jray@mba.example', first: 'Jordan', last: 'Ray', company: 'MISMO', title: 'Director' }, { e: 'jray@mismo.example', first: 'Jordan', last: 'Ray', company: 'MISMO', title: '' },
+  { e: 'sam@mismo.example', first: 'Sam', last: 'Solo', company: 'MISMO', title: '' }] } } });
+__resetMyMismoLimits();
+const viewer = await attIn('pat@lender.example', '203.0.113.65');
+r = await call('GET', '/mymismo/att/directory', { tok: viewer.token }); d = J(r);
+const jr = d.people.filter(x => x.name === 'Jordan Ray');
+ok('staff: listed once, with their title, not again as just "MISMO"', jr.length === 1 && jr[0].title === 'Director', d.people);
+ok('staff: someone only on the staff roster is still listed', d.people.filter(x => x.name === 'Sam Solo').length === 1, d.people);
+const js = await attIn('jray@mismo.example', '203.0.113.63'), jm = await attIn('jray@mba.example', '203.0.113.64');
+ok('staff: signing in with the roster address is the same person as their registration', js.token && jm.token && js.me.id === jm.me.id && js.me.title === 'Director', [js.me, jm.me]);
+r = await call('GET', '/mymismo/att/directory', { tok: viewer.token }); d = J(r);
+ok('staff: still listed once after signing in both ways', d.people.filter(x => x.name === 'Jordan Ray').length === 1, d.people);
+
 /* Team HQ: monthly winners, the quarter's finalists and setting the championship */
 T = Date.parse('2027-04-02T15:00:00Z');
 r = await call('GET', '/mymismo/staff/trivia', { tok: pat }); ok('team: a player token can’t read it', r.statusCode === 403);

@@ -1931,7 +1931,13 @@ function loadPreviewAttendees() {
       var bytes = Uint8Array.from(atob(j.content), function (c) { return c.charCodeAt(0); });
       var d = JSON.parse(new TextDecoder().decode(bytes)), s = d.summits && d.summits[S.sid];
       PV.people = (s && s.people || []).map(function (p, i) { return { id: 'pv' + i, name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '', photo: 0, joined: false, preview: true }; })
-        .filter(function (p) { return p.name; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+        .filter(function (p) { return p.name; });
+      /* MISMO staff are in Summit HQ's list twice: their registration (with their title) and the staff roster (just
+         "MISMO"). Keep the registration; someone only on the roster stays. */
+      var plain = function (p) { return /^mismo$/i.test(p.company.trim()) && !p.title.trim(); }, byName = {};
+      PV.people.forEach(function (p) { var k = p.name.toLowerCase(); (byName[k] = byName[k] || []).push(p); });
+      PV.people = PV.people.filter(function (p) { var g = byName[p.name.toLowerCase()]; return !(plain(p) && g.some(function (o) { return !plain(o); })); })
+        .sort(function (a, b) { return a.name.localeCompare(b.name); });
       PV.state = 'ready';
     })
     .catch(function () { PV.state = 'error'; })
