@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: MISMO Matters and Mic'd Up notifications: a separate opt-in switch in Settings (off until turned on, off any time). MISMO Media's Push to MyMISMO button sends one, with words staff can edit; tapping it opens that edition or episode. A pushed Mic'd Up episode joins the list right away. Waits on relay request 16 (Perry) and MISMO Media (CN-049).
 - Nov 26, 2026: Website copy of the Salt Lake City art at art/slc-summit.svg (tools/make_nola_svg.mjs now builds both cities), for the website's Spring summit header (CN-048).
 - Nov 26, 2026: Salt Lake City art: the same navy night, stars and moon as New Orleans, with the snowcapped Wasatch Range, downtown towers, the Utah State Capitol and a TRAX train. It goes on every summit header when Salt Lake City is the current summit, and behind the Next Summit card once Spring is announced.
 - Nov 26, 2026: The next summit: when staff announce it in Summit HQ during the Tuesday General Sessions (or at a set time), a Next Summit card with Register Now appears under the Summit tile and on the summit home; the current summit stays in place through its last day, then the Summit tile becomes the next summit. Testers see a preview before it's announced. Needs Summit HQ to publish "upcoming" in the agenda feed (CN-047).

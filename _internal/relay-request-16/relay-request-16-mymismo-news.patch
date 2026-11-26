@@ -1,0 +1,134 @@
+--- a/index.mjs
++++ b/index.mjs
+@@ -2770,8 +2770,10 @@
+  * ALERTS. People using MyMISMO can turn on alerts on their phone (Web Push; on iPhone once MyMISMO is on the Home
+  * Screen). MISMO staff write an alert in Summit HQ and only the people named in the project's alertSenders can send it.
+  *   GET  /mymismo/push/ready                          -> { ok, publicKey, summits: [ids] }   (no sign-in)
+- *   POST /mymismo/push/subscribe   { summit, sub: { endpoint, keys: { p256dh, auth } } }   -> { ok }   (no sign-in)
+- *   POST /mymismo/push/unsubscribe { endpoint }       -> { ok }   (no sign-in)
++ *   POST /mymismo/push/subscribe   { summit?, news?, sub: { endpoint, keys: { p256dh, auth } } }   -> { ok }   (no sign-in;
++ *                                                        a summit's alerts, MISMO news (request 16), or both; each keeps the other)
++ *   POST /mymismo/push/unsubscribe { endpoint, what? } -> { ok }   (no sign-in; what: 'summit' or 'news' turns off just
++ *                                                        that list (request 16); without it the phone is removed)
+  *   GET  /mymismo/push/alerts?summit=<id>             -> { alerts: [{ id, title, body, session, at }] }   (no sign-in; the
+  *                                                        same words everyone with alerts on already received)
+  *   POST /mymismo/push/send  { summit, title, body, session }   (STAFF sign-in, alertSenders only)
+@@ -2859,17 +2861,25 @@
+   if (!MM14_PUSH_HOSTS.test(endpoint)) return respond(400, { error: 'INVALID', problems: ['That isn’t a push address this app can use.'] });
+   let entry = null;
+   if (on) {
+-    const k = b.sub.keys || {}, summit = mmStr(b.summit, 31);
+-    if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID' });
++    const k = b.sub.keys || {}, summit = b.summit == null || b.summit === '' ? '' : mmStr(b.summit, 31);
++    if ((summit && !MM_SUMMIT.test(summit)) || (!summit && b.news !== true)) return respond(400, { error: 'INVALID' });   /* request 16: a summit, MISMO news, or both */
+     if (!/^[A-Za-z0-9_-]{80,100}$/.test(String(k.p256dh || '')) || !/^[A-Za-z0-9_-]{16,32}$/.test(String(k.auth || ''))) return respond(400, { error: 'INVALID' });
+     if (mm14unb64u(k.p256dh).length !== 65 || mm14unb64u(k.auth).length !== 16) return respond(400, { error: 'INVALID' });
+-    entry = { endpoint, keys: { p256dh: k.p256dh, auth: k.auth }, summit, at: now };
++    entry = { endpoint, keys: { p256dh: k.p256dh, auth: k.auth }, summit, news: b.news === true, at: now };
+   }
++  const what = !on && (b.what === 'summit' || b.what === 'news') ? b.what : '';   /* request 16: turn off one list, keep the other */
+   const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM14_SUBS, d => {
+     d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+     if (entry) {
+       if (Object.keys(d.docs).length >= 20_000 && !d.docs[mm14key(endpoint)]) throw new Error('full');
++      const had = d.docs[mm14key(endpoint)];
++      if (had && !entry.summit) entry.summit = had.summit || '';
++      if (had && had.news === true && b.news !== false) entry.news = true;
+       d.docs[mm14key(endpoint)] = entry;
++    } else if (what && d.docs[mm14key(endpoint)]) {
++      const e = d.docs[mm14key(endpoint)];
++      if (what === 'summit') e.summit = ''; else e.news = false;
++      if (!e.summit && e.news !== true) delete d.docs[mm14key(endpoint)];
+     } else delete d.docs[mm14key(endpoint)];
+     return d;
+   }, on ? 'MyMISMO: alerts turned on on a phone' : 'MyMISMO: alerts turned off on a phone').catch(() => ({ error: 'THROWN' }));
+@@ -2920,6 +2930,77 @@
+   return respond(200, { ok: true, id, sent, failed, removed: gone.length });
+ }
+ 
++/* --- relay request 16: MISMO Matters and Mic'd Up notifications ---------------------------------------------------
++ * A separate, opt-in list from summit alerts: a phone turns on "MISMO Matters and Mic'd Up" in MyMISMO's Settings
++ * (POST /push/subscribe with news: true). MISMO Media's "Push to MyMISMO" button sends one notification for a new
++ * edition or episode, only when a person presses it (STAFF sign-in, alertSenders only):
++ *   POST /mymismo/push/news { kind: 'matters'|'micdup', ref, title, body, url?, video?, again? }
++ *        -> { ok, id, sent, failed, removed }, or 409 ALREADY_SENT { at } if that edition or episode was pushed before
++ *           (send again: again: true)
++ *   GET  /mymismo/push/news -> { items: [{ id, kind, ref, title, body, url, video, at }] }   (no sign-in; newest 20;
++ *        the app adds a pushed Mic'd Up episode to its list right away, before the website's 3-hourly job catches up)
++ * Kept in push/news.json { items: [...] } (last 200, with who sent it and how many got it). */
++const MM16_NEWS = 'push/news.json';
++const MM16_URL = /^https:\/\/(www\.mismo\.org|resources\.mismo\.org)\/[^\s"<>]*$/;
++const MM16_VIDEO = /^[A-Za-z0-9_-]{11}$/;
++async function mm16newsList(event, proj, headers) {
++  const raw = await mm14raw(); if (!mm14pushOn(raw)) return respond(404, { error: 'NOT_FOUND' });
++  if (headers['origin'] && headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  if (!mmAllowed('have', mmIp(event), MM14_LIMITS.have, Date.now())) return respond(429, { error: 'TOO_MANY' });
++  const r = await readFile(proj.repo, proj.branch || 'main', MM16_NEWS); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++  const items = ((r.data && r.data.items) || []).slice(-20).reverse()
++    .map(a => ({ id: a.id, kind: a.kind, ref: a.ref, title: a.title, body: a.body, url: a.url || null, video: a.video || null, at: a.at }));
++  return respond(200, { items });
++}
++async function mm16news(event, proj, headers) {
++  const raw = await mm14raw(); if (!mm14pushOn(raw)) return respond(404, { error: 'NOT_FOUND' });
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  const t = auth.startsWith('Bearer ') && process.env.AUTH_SECRET ? verifyToken(auth.slice(7).trim(), process.env.AUTH_SECRET) : { error: 'NO' };
++  const senders = (Array.isArray(raw.alertSenders) ? raw.alertSenders : []).map(x => String(x).toLowerCase());
++  if (t.error || !t.sub || !senders.includes(String(t.sub).toLowerCase())) return respond(403, { error: 'NOT_ALLOWED', message: 'Only the people Jonna named can push to MyMISMO.' });
++  const dir = await loadAccess();
++  if (dir.error || !personByEmail(dir.people, t.sub) || tokenIsStale(t, personByEmail(dir.people, t.sub))) return respond(401, { error: 'SIGN_IN' });
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, now = Date.now();
++  const kind = b.kind === 'matters' || b.kind === 'micdup' ? b.kind : '', ref = mmStr(b.ref, 80), title = mmStr(b.title, 80), text = mmStr(b.body, 300);
++  const url = b.url == null || b.url === '' ? null : mmStr(b.url, 400);
++  const problems = [];
++  if (!kind) problems.push('kind must be matters or micdup.');
++  if (!ref || !title || !text) problems.push('A push needs a ref, a title and a message.');
++  if (url && !MM16_URL.test(url)) problems.push('The link must be on www.mismo.org or resources.mismo.org.');
++  let video = null;
++  if (kind === 'micdup') {
++    const v = b.video || {};
++    if (!MM16_VIDEO.test(String(v.id || '')) || String(v.id) !== ref) problems.push('A Mic\'d Up push needs video.id (the YouTube id), the same as ref.');
++    else video = { id: String(v.id), title: mmStr(v.title, 200) || title, published: /^\d{4}-\d{2}-\d{2}/.test(String(v.published || '')) ? mmStr(v.published, 40) : new Date(now).toISOString(), duration: mmStr(v.duration, 20) };
++  }
++  if (problems.length) return respond(400, { error: 'INVALID', problems });
++  const prev = await readFile(proj.repo, proj.branch || 'main', MM16_NEWS); if (prev.status !== 200 && prev.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++  const done = ((prev.data && prev.data.items) || []).filter(a => a && a.kind === kind && a.ref === ref).pop();
++  if (done && b.again !== true) return respond(409, { error: 'ALREADY_SENT', at: done.at, message: 'This was already pushed to MyMISMO.' });
++  if (!mmAllowed('send', t.sub, MM14_LIMITS.send, now)) return respond(429, { error: 'TOO_MANY', message: 'That’s a lot of pushes in an hour. Please wait.' });
++  const v = mm14vapid();
++  const subs = await readFile(proj.repo, proj.branch || 'main', MM14_SUBS); if (subs.status !== 200 && subs.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++  const list = Object.entries((subs.data && subs.data.docs) || {}).filter(([, s]) => s && s.news === true && MM14_PUSH_HOSTS.test(s.endpoint));
++  const id = 'N' + now.toString(36);
++  const payload = JSON.stringify({ id, title, body: text, url: '/mymismo/?page=dash&news=' + id });
++  let sent = 0, failed = 0; const gone = [];
++  for (let i = 0; i < list.length; i += 50) {
++    const res = await Promise.all(list.slice(i, i + 50).map(([k, s]) => mm14push(s, payload, v, now).then(st => [k, st])));
++    for (const [k, st] of res) { if (st >= 200 && st < 300) sent++; else { failed++; if (st === 404 || st === 410) gone.push(k); } }
++  }
++  if (gone.length) await updateRepoJson(proj.repo, proj.branch || 'main', MM14_SUBS, d => { d.docs = d.docs || {}; gone.forEach(k => delete d.docs[k]); return d; }, 'MyMISMO: removed phones that turned notifications off').catch(() => null);
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM16_NEWS, d => {
++    d.items = Array.isArray(d.items) ? d.items : [];
++    d.items.push({ id, kind, ref, title, body: text, url, video, at: now, by: String(t.sub).toLowerCase(), sent, failed });
++    if (d.items.length > 200) d.items = d.items.slice(-200);
++    return d;
++  }, kind === 'matters' ? 'MyMISMO: MISMO Matters pushed' : 'MyMISMO: Mic\'d Up episode pushed').catch(() => null);
++  if (!w || w.error) return respond(200, { ok: true, id, sent, failed, removed: gone.length, warning: 'Sent, but the record couldn’t be saved, so the app won’t list it.' });
++  return respond(200, { ok: true, id, sent, failed, removed: gone.length });
++}
++
+ /* --- slides --- */
+ function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
+ const mm14slideCache = { at: 0, value: null };
+@@ -3828,6 +3909,11 @@
+     const mm = await mmConfig(proj).catch(() => null);
+     if (!mm) return respond(404, { error: 'NOT_FOUND' });
+     proj = mm;
++    if (subPath === '/push/news') {   /* relay request 16: MISMO Matters and Mic'd Up notifications */
++      if (method === 'GET') return mm16newsList(event, proj, headers);
++      if (method === 'POST') return mm16news(event, proj, headers);
++      return respond(405, { error: 'METHOD' });
++    }
+     const want = { '/push/ready': 'GET', '/push/alerts': 'GET', '/slides/have': 'GET', '/push/subscribe': 'POST', '/push/unsubscribe': 'POST', '/push/send': 'POST' }[subPath];
+     if (!want) return respond(404, { error: 'NOT_FOUND' });
+     if (method !== want) return respond(405, { error: 'METHOD' });

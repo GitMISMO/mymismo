@@ -17,14 +17,15 @@ you and doesn't track what you do in the app. Your schedule, settings and the na
   send your sign-in code and isn't shown to anyone unless you choose to show it.
 - **Messages and reports:** messages you send and receive in the app, and any report you make about another attendee, so
   the MISMO team can act on it. The person reported isn't told who reported them.
-- **Summit alerts:** if you turn alerts on, the delivery address your phone's notification service gives the app (it
-  doesn't name you). Turning alerts off removes it.
+- **Notifications:** if you turn on Summit Alerts or MISMO Matters and Mic'd Up notifications, the delivery address your
+  phone's notification service gives the app (it doesn't name you). Turning them off removes it. Notifications are
+  always your choice, are off until you turn them on, and the app works the same without them.
 - **MISMO Trivia ranked play:** the name you give (shown as first name and last initial), your scores and which
   questions you've had.
 - **Sign-in codes:** only a scrambled copy of the six-digit code, which expires after 15 minutes.
 
 The only email the app sends is the sign-in code you ask for. GitHub, Amazon Web Services, Microsoft (the code email) and
-Apple or Google (alerts) process this information only to run the app for MISMO. We keep it until you delete it or ask
+Apple or Google (notifications) process this information only to run the app for MISMO. We keep it until you delete it or ask
 us to.
 
 **Deleting your information:** in the app, Settings, Delete My Attendee Account removes your profile, headshot, messages

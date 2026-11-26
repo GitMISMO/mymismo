@@ -2412,7 +2412,7 @@ function loadExtras() {
   getJSON('data/ai-webinars.json').then(function (a) { AIW = a; again(['dash']); }).catch(function () {});
   getJSON('data/workgroups.json').then(function (w) { WG = w; again(['agenda', 'mine', 'home']); }).catch(function () {});
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash', 'people']); }).catch(function () {});
-  getJSON('/podcast/micdup.json').then(function (m) { MU = m; again(['dash']); }).catch(function () {});
+  getJSON('/podcast/micdup.json').then(function (m) { MU = m; mergeNews(); again(['dash']); }).catch(function () {});
   getJSON('/marketing-hq/matters/editions.json').then(function (m) { MM = m; again(['dash']); }).catch(function () {});
   getJSON('/webinars/webinars.json').then(function (w) { WEB = w; again(['dash']); }).catch(function () {});
   getJSON('/certified/new-certifications.json').then(function (c) { CERT = c; again(['dash']); }).catch(function () {});
@@ -2949,6 +2949,8 @@ function openFromLink() {
 }
 if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', function (e) {
   var u = e.data && e.data.alertUrl; if (!u) return;
+  var nw = /[?&]news=(N[0-9a-z]+)/.exec(u);
+  if (nw) { loadNews().then(function () { openNews(nw[1]); }); return; }
   var m = /[?&]open=([^&]+)/.exec(u); loadAlerts && loadAlerts();
   closeSheet(true); if (S.summit) show('home');
   if (m) sessionSheet(decodeURIComponent(m[1])); else if (PUSH.ready) alertsSheet();
@@ -3380,7 +3382,7 @@ function squarePhoto(file) {
   });
 }
 /* ---------- Alerts (relay request 14) ---------- */
-var PUSH = { ready: false, key: '', alerts: [], on: false };
+var PUSH = { ready: false, key: '', alerts: [], on: false, newsReady: false, news: false, items: [] };
 function rp(method, path, body) {
   return fetch(RELAY + '/mymismo/' + path, { method: method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined })
     .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
@@ -3389,15 +3391,74 @@ function rp(method, path, body) {
 function pushSupported() { return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
 function standalone() { return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
 function keyBytes(b64) { var s = (b64 + '===='.slice(b64.length % 4 || 4)).replace(/-/g, '+').replace(/_/g, '/'), raw = atob(s), out = new Uint8Array(raw.length); for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; }
+/* Relay request 16 (Jonna, Nov 26, 2026): a second, separate opt-in for MISMO Matters and Mic'd Up. One phone has one
+   push address, so each switch is remembered here and the relay keeps both lists on the same address. */
 function checkPush() {
-  if (!S.sid) return;
-  rp('GET', 'push/ready').then(function (r) {
-    PUSH.ready = !!(r.ok && r.j && r.j.publicKey && (r.j.summits || []).indexOf(S.sid) >= 0); PUSH.key = PUSH.ready ? r.j.publicKey : '';
+  return rp('GET', 'push/ready').then(function (r) {
+    var key = r.ok && r.j && r.j.publicKey ? r.j.publicKey : '';
+    PUSH.key = key; PUSH.newsReady = !!key;
+    PUSH.ready = !!(key && S.sid && (r.j.summits || []).indexOf(S.sid) >= 0);
     $('#bell-btn').hidden = !PUSH.ready;
-    if (!PUSH.ready) return;
-    loadAlerts();
-    if (pushSupported()) navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) { PUSH.on = !!sub; }).catch(function () {});
+    if (!key) return;
+    loadNews();
+    if (PUSH.ready) loadAlerts();
+    if (pushSupported()) navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+      PUSH.on = !!sub && load('alerts-on', true) !== false; PUSH.news = !!sub && load('news-on', false) === true;
+    }).catch(function () {});
   });
+}
+/* what MISMO Media pushed: a Mic'd Up episode joins the list right away, before the website's job catches up */
+function loadNews() {
+  return rp('GET', 'push/news').then(function (r) { if (!r.ok) return; PUSH.items = (r.j && r.j.items) || []; mergeNews(); openNewsLink(); });
+}
+function mergeNews() {
+  if (!MU || !MU.episodes) return;
+  var have = {}; MU.episodes.forEach(function (e) { have[e.id] = 1; });
+  var add = PUSH.items.filter(function (x) { return x.kind === 'micdup' && x.video && x.video.id && !have[x.video.id]; })
+    .map(function (x) { return { id: x.video.id, title: x.video.title || x.title, published: x.video.published, duration: x.video.duration || '' }; });
+  if (!add.length) return;
+  MU.episodes = add.concat(MU.episodes).sort(function (a, b) { return String(b.published || '').localeCompare(String(a.published || '')); });
+  MU.count = MU.episodes.length; if (S.page === 'dash') renderPage('dash');
+}
+function openNews(id) {
+  var x = PUSH.items.filter(function (i) { return i.id === id; })[0]; if (!x) return false;
+  closeSheet(true); show('dash');
+  if (x.kind === 'micdup' && x.video) { mergeNews(); micdupSheet(x.video.id); } else mattersSheet();
+  return true;
+}
+function openNewsLink() {
+  var m = /[?&]news=(N[0-9a-z]+)/.exec(location.search); if (!m || S.newsOpened) return;
+  var x = PUSH.items.filter(function (i) { return i.id === m[1]; })[0]; if (!x) return;
+  if ((x.kind === 'micdup' ? !MU : !MM) && (S.newsTries = (S.newsTries || 0) + 1) < 12) { setTimeout(openNewsLink, 600); return; }   /* the episode list or editions are still loading */
+  if (openNews(m[1])) S.newsOpened = true;
+}
+function subscribePhone() {
+  return Notification.requestPermission().then(function (perm) {
+    if (perm !== 'granted') throw new Error('denied');
+    return navigator.serviceWorker.ready;
+  }).then(function (reg) {
+    return reg.pushManager.getSubscription().then(function (sub) { return sub || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(PUSH.key) }); });
+  });
+}
+function turnOnNews(btn) {
+  if (!pushSupported() || !PUSH.key) return;
+  btn.disabled = true; save('alerts-on', !!PUSH.on);   /* a phone that never turned on summit alerts doesn't get them from this */
+  subscribePhone().then(function (sub) { return rp('POST', 'push/subscribe', { news: true, sub: sub.toJSON() }); }).then(function (r) {
+    if (!r.ok) throw new Error('save');
+    PUSH.news = true; save('news-on', true); closeSheet(false); settingsSheet();
+  }).catch(function (e) {
+    btn.disabled = false;
+    var row = btn.closest('.set-row') || btn.parentNode, n = row.querySelector('.problem') || row.appendChild(document.createElement('p')); n.className = 'problem';
+    n.textContent = e && e.message === 'denied' ? 'Notifications are blocked for MyMISMO. Turn them on in your phone\'s settings, then try again.' : 'Notifications couldn\'t be turned on just now. Try again in a minute.';
+  });
+}
+/* turn off one list; the phone's push address is dropped only when both are off */
+function pushOff(what, done) {
+  navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+    if (!sub) return; var ep = sub.endpoint, other = what === 'news' ? PUSH.on : PUSH.news;
+    if (other) return rp('POST', 'push/unsubscribe', { endpoint: ep, what: what });
+    return sub.unsubscribe().then(function () { return rp('POST', 'push/unsubscribe', { endpoint: ep }); });
+  }).catch(function () {}).then(done);
 }
 function loadAlerts() {
   return rp('GET', 'push/alerts?summit=' + encodeURIComponent(S.sid)).then(function (r) {
@@ -3409,16 +3470,11 @@ function loadAlerts() {
 function turnOnAlerts(btn) {
   if (!pushSupported()) return;
   btn.disabled = true;
-  Notification.requestPermission().then(function (perm) {
-    if (perm !== 'granted') throw new Error('denied');
-    return navigator.serviceWorker.ready;
-  }).then(function (reg) {
-    return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(PUSH.key) });
-  }).then(function (sub) {
+  subscribePhone().then(function (sub) {
     return rp('POST', 'push/subscribe', { summit: S.sid, sub: sub.toJSON() });
   }).then(function (r) {
     if (!r.ok) throw new Error('save');
-    PUSH.on = true; closeSheet(false); alertsSheet();
+    PUSH.on = true; save('alerts-on', true); closeSheet(false); alertsSheet();
   }).catch(function (e) {
     btn.disabled = false;
     var n = btn.parentNode.querySelector('.problem') || btn.parentNode.appendChild(document.createElement('p')); n.className = 'problem';
@@ -3426,10 +3482,9 @@ function turnOnAlerts(btn) {
   });
 }
 function turnOffAlerts() {
-  navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
-    if (!sub) return; var ep = sub.endpoint; return sub.unsubscribe().then(function () { return rp('POST', 'push/unsubscribe', { endpoint: ep }); });
-  }).then(function () { PUSH.on = false; closeSheet(false); alertsSheet(); });
+  pushOff('summit', function () { PUSH.on = false; save('alerts-on', false); closeSheet(false); alertsSheet(); });
 }
+function turnOffNews(done) { pushOff('news', function () { PUSH.news = false; save('news-on', false); if (done) done(); }); }
 function alertsSheet() {
   save('alerts-seen:' + S.sid, Date.now()); $('#bell-dot').classList.remove('on');
   var h = '<div class="sheet-pad">';
@@ -3467,6 +3522,13 @@ function settingsSheet() {
   else if (!pushSupported()) h += setRow('i-bell', 'Summit Alerts', 'This browser can\'t get alerts. Open MyMISMO in Chrome or Safari, or install it on your phone.');
   else if (window.Notification && Notification.permission === 'denied') h += setRow('i-bell', 'Summit Alerts', 'Blocked in your phone\'s settings. Allow notifications for MyMISMO there, then come back.');
   else h += setRow('i-bell', 'Summit Alerts', 'Off. Turn on for room changes and news from the MISMO team. Nothing else.', '<button type="button" class="tgl" data-set="alerts-on" aria-pressed="false" aria-label="Turn on alerts"><i></i></button>');
+  var NW = 'a notification when a new MISMO Matters or Mic\'d Up episode comes out';
+  if (PUSH.news) h += setRow('i-mail', 'MISMO Matters and Mic\'d Up', 'On. You\'ll get ' + NW + '. Turn it off here any time.', '<button type="button" class="tgl on" data-set="news-off" aria-pressed="true" aria-label="Turn off MISMO Matters and Mic\'d Up notifications"><i></i></button>');
+  else if (!PUSH.newsReady) h += setRow('i-mail', 'MISMO Matters and Mic\'d Up', 'Turn on ' + NW + ' here once MISMO switches these notifications on.');
+  else if (IOS && !standalone()) h += setRow('i-mail', 'MISMO Matters and Mic\'d Up', 'On iPhone, add MyMISMO to your Home Screen first (tap Share, then Add to Home Screen), then turn this on from there.');
+  else if (!pushSupported()) h += setRow('i-mail', 'MISMO Matters and Mic\'d Up', 'This browser can\'t get notifications. Open MyMISMO in Chrome or Safari, or install it on your phone.');
+  else if (window.Notification && Notification.permission === 'denied') h += setRow('i-mail', 'MISMO Matters and Mic\'d Up', 'Blocked in your phone\'s settings. Allow notifications for MyMISMO there, then come back.');
+  else h += setRow('i-mail', 'MISMO Matters and Mic\'d Up', 'Off. Turn on for ' + NW + '. Nothing else, and you can turn it off any time.', '<button type="button" class="tgl" data-set="news-on" aria-pressed="false" aria-label="Turn on MISMO Matters and Mic\'d Up notifications"><i></i></button>');
   h += setRow('i-cal', 'Session Reminders', 'Add to Calendar on a session (or Add All on My Schedule) puts it in your phone\'s calendar with a reminder before it starts.');
   h += '</div>';
   h += '<div class="d-h">Appearance</div><div class="set-card">' + setRow('i-sun', 'Dark Mode', dark ? 'On' : 'Off', '<button type="button" class="tgl' + (dark ? ' on' : '') + '" data-set="theme" aria-pressed="' + dark + '" aria-label="Dark mode"><i></i></button>') + '</div>';
@@ -3500,6 +3562,8 @@ function settingsSheet() {
     }
     else if (k === 'alerts-on') { turnOnAlerts(b); setTimeout(again, 2500); }
     else if (k === 'alerts-off') { turnOffAlerts(); setTimeout(again, 1200); }
+    else if (k === 'news-on') turnOnNews(b);
+    else if (k === 'news-off') turnOffNews(again);
     else if (k === 'staff-in') { closeSheet(false); ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); }
     else if (k === 'staff-out') { save('staff-was', ''); ResourcesSession.signOut(); paintStaff(); again(); }
     else if (k === 'att-in') { closeSheet(false); signInSheet(); }
@@ -3943,7 +4007,8 @@ function start() {
     show(want);
     installHint();
     setTimeout(function () { $('#loading').classList.add('done'); setTimeout(function () { $('#loading').hidden = true; }, 450); }, Math.max(0, 800 - (Date.now() - T0)));
-    if (S.summit) { checkReady(); checkPush(); checkSlides(); }
+    if (S.summit) { checkReady(); checkSlides(); }
+    checkPush();
     openFromLink();
     loadExtras();
   });
