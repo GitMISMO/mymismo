@@ -978,11 +978,11 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .sb-all{display:flex; align-items:center; gap:7px; margin:16px auto 0; padding:10px 16px; border-radius:8px; border:1px solid rgba(116,191,235,.55); background:rgba(116,191,235,.12); color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer}
 .sb-all:hover{background:rgba(116,191,235,.22)}
 .sb-all svg{width:17px; height:17px; color:#74bfeb}
-.sb-run{overflow:hidden; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)}
+.sb-run{overflow-x:auto; overflow-y:hidden; scrollbar-width:none; overscroll-behavior-x:contain; touch-action:pan-x pan-y; cursor:grab; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)}
 .sb-run .run{display:flex; width:max-content}
 .sbt{margin-right:14px}
-.sb-run.go .run{animation:tick var(--dur) linear infinite}
-.sb-run.go:hover .run, .sb-run.go:focus-within .run{animation-play-state:paused}
+.sb-run::-webkit-scrollbar{display:none}
+.sb-run.drag{cursor:grabbing}
 .sbt{flex:none; display:grid; gap:8px; justify-items:center; background:none; border:0; padding:0; cursor:pointer; color:#fff; font:inherit}
 .sbt-logo{width:190px; height:96px; display:grid; place-items:center; background:#fff; border-radius:12px; padding:12px 16px; border-bottom:4px solid var(--tierc); box-shadow:0 10px 22px -14px rgba(0,0,0,.6)}
 .sbt-logo img{max-width:100%; max-height:66px; object-fit:contain}
@@ -2116,11 +2116,42 @@ function sponsorBand() {
   var run = list.length > 2 ? list.concat(list) : list, dur = Math.max(26, list.length * 4.5);
   /* endless: the list runs twice, so moving by exactly one copy lands where it began. Opening a page starts it at the top
      level (Platinum); the page refreshing itself every minute carries on from where it was instead of jumping back. */
-  var lag = ((Date.now() - (S.bandT0 || Date.now())) / 1000) % dur;
   return '<section class="spband" aria-label="Sponsors">' + heroArt() + '<h2>Thank You to Our Sponsors</h2>' +
-    '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '"><div class="run" style="--dur:' + dur + 's;animation-delay:-' + lag.toFixed(2) + 's">' + run.map(tile).join('') + '</div></div>' +
+    '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '" data-dur="' + dur + '"><div class="run">' + run.map(tile).join('') + '</div></div>' +
     '<button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></section>';
 }
+/* Jonna, Nov 26, 2026: the sponsor band glides on its own, and people can swipe it back and forth (or drag it with a
+   mouse). It pauses while touched and carries on a few seconds after. Endless both ways: the list runs twice, so
+   moving by one copy lands in the same place. The position carries across the page's own minute refresh. */
+(function bandLoop() {
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches, last = performance.now();
+  function wrap(el, half) { if (el.scrollLeft >= half) el.scrollLeft -= half; else if (el.scrollLeft <= 0) el.scrollLeft += half; }
+  function hook(el) {
+    el.setAttribute('data-hooked', '1');
+    var half = el.scrollWidth / 2; el.scrollLeft = (S.bandPos || 0) % half || 1; el._pos = el.scrollLeft;
+    var hold = function () { el._held = performance.now(); };
+    ['touchstart', 'touchmove', 'wheel', 'pointerdown'].forEach(function (k) { el.addEventListener(k, hold, { passive: true }); });
+    el.addEventListener('scroll', function () { if (el._held && performance.now() - el._held < 3000) { el._held = performance.now(); wrap(el, el.scrollWidth / 2); el._pos = el.scrollLeft; } }, { passive: true });
+    /* a mouse can drag it too; a drag isn't a tap on a logo */
+    var down = null, moved = false;
+    el.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') return; down = { x: e.clientX, s: el.scrollLeft }; moved = false; });
+    window.addEventListener('pointermove', function (e) { if (!down) return; var dx = e.clientX - down.x; if (Math.abs(dx) > 5) { moved = true; el.classList.add('drag'); } el.scrollLeft = down.s - dx; wrap(el, el.scrollWidth / 2); el._pos = el.scrollLeft; hold(); });
+    window.addEventListener('pointerup', function () { down = null; el.classList.remove('drag'); });
+    el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+  }
+  function tick(now) {
+    var dt = Math.min(64, now - last); last = now;
+    document.querySelectorAll('.sb-run.go').forEach(function (el) {
+      if (!el.getAttribute('data-hooked')) hook(el);
+      if (still || !el.offsetParent || (el._held && now - el._held < 3000)) return;
+      var half = el.scrollWidth / 2, dur = +el.getAttribute('data-dur') || 30;
+      el._pos = (el._pos || el.scrollLeft) + half / dur * dt / 1000; if (el._pos >= half) el._pos -= half;
+      el.scrollLeft = el._pos; S.bandPos = el._pos;
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
 function sponsorTiers() {
   var groups = {};
   S.sponsors.forEach(function (sp) { (groups[sp.tier] = groups[sp.tier] || []).push(sp); });
@@ -3000,7 +3031,7 @@ function renderPage(p) {
 function show(p, opts) {
   if (!RENDER[p]) p = 'dash';
   if (p !== 'dash' && !S.summit) p = 'dash';
-  S.page = p; S.bandT0 = Date.now();
+  S.page = p; S.bandT0 = Date.now(); S.bandPos = 0;
   document.body.classList.toggle('dash', p === 'dash');
   var db = $('#dash-btn'); if (p === 'dash') db.setAttribute('aria-current', 'page'); else db.removeAttribute('aria-current');
   $$('.page').forEach(function (el) { el.classList.toggle('on', el.id === 'pg-' + p); });
