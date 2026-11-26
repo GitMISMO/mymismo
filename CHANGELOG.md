@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: The next summit: when staff announce it in Summit HQ during the Tuesday General Sessions (or at a set time), a Next Summit card with Register Now appears under the Summit tile and on the summit home; the current summit stays in place through its last day, then the Summit tile becomes the next summit. Testers see a preview before it's announced. Needs Summit HQ to publish "upcoming" in the agenda feed (CN-047).
 - Nov 26, 2026: Explore: The French Quarter, Frenchmen Street and The National WWII Museum have their website previews. Those sites block the screenshot service, so the pictures were captured by hand and the daily job keeps them; a page's own picture now wins over its site's.
 - Nov 26, 2026: Sponsor band: swipe it back and forth (or drag it with a mouse); it pauses while touched and carries on gliding a few seconds later, endlessly both ways.
 - Nov 26, 2026: Explore postcard: the background art sits a little lower, so the street line isn't under the buttons.

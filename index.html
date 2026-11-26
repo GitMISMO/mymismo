@@ -602,6 +602,21 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .livecard > svg{width:26px; height:26px}
 .lv-tx b{display:block; font-family:var(--cond); font-size:19px}
 .lv-tx span{font-size:13px; opacity:.9}
+.nextsum{position:relative; overflow:hidden; isolation:isolate; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:14px; margin-top:14px; padding:18px 18px 16px; border-radius:16px; background:#071d2e; color:#fff; border:1px solid rgba(243,198,79,.5); border-left:5px solid #f3c64f}
+.nextsum > .hero-art{z-index:-1; opacity:.55}
+.nextsum:after{content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg, rgba(7,29,46,.95), rgba(7,29,46,.55) 70%, rgba(7,29,46,.2))}
+.nextsum.wd{margin-top:0; display:flex; flex-direction:row; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; text-align:left; min-height:0}
+.nextsum .ns-in{flex:1 1 240px; justify-items:start}
+.ns-in{display:grid; gap:2px; min-width:0}
+.ns-eye{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:#f3c64f}
+.ns-eye svg{width:15px; height:15px}
+.ns-city{font-family:var(--cond); font-size:34px; line-height:1.05; letter-spacing:-.01em}
+.ns-name{font-size:14px; color:#a9d8f3; font-weight:600}
+.ns-when{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:6px; font-size:13.5px; color:rgba(255,255,255,.88)}
+.ns-when span{display:inline-flex; align-items:center; gap:6px} .ns-when svg{width:15px; height:15px; color:#74bfeb}
+.ns-go{display:flex; align-items:center; gap:14px}
+.ns-left{display:grid; text-align:center; font-size:11.5px; font-weight:600; color:#a9d8f3; line-height:1.1}
+.ns-left b{font-family:var(--cond); font-size:26px; color:#fff}
 .dash-live{margin-top:0; min-height:0}
 .lv-dot{width:18px; height:18px; position:relative}
 .lv-dot i,.lv-badge i{position:absolute; inset:3px; border-radius:50%; background:#fff; animation:livepulse 1.4s ease-out infinite}
@@ -1601,6 +1616,45 @@ function daysBetween(a, b) { var x = dparts(a), y = dparts(b); return Math.round
 
 /* ---------- data ---------- */
 function getJSON(url) { return fetch(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); }); }
+/* ---------- The next summit (Jonna, Nov 26, 2026) ----------
+   Summit HQ publishes the next summit in the agenda feed as "upcoming": { id, name, city, venue, dates, first, last,
+   register, announced, announceAt }. Registration for it opens during the current summit's Tuesday General Sessions:
+   staff press Announce Next Summit in Summit HQ (announced: the time it was pressed), with a set time (announceAt) as a
+   backup. Until then attendees see nothing of it; MyMISMO's testers see a preview marked as hidden. The current summit
+   stays the summit through its last day; after that the Summit tile becomes the next summit, until its own agenda is
+   published (then the app simply moves to it). */
+function upcomingOf(feed) {
+  var u = feed && feed.upcoming;
+  if (!u || typeof u !== 'object' || !u.name || !/^\d{4}-\d{2}-\d{2}$/.test(u.first || '') || !/^https:\/\//.test(u.register || '')) return null;
+  return u;
+}
+function nextShown() {
+  var u = S.upcoming; if (!u) return null;
+  if (S.sid && u.id === S.sid) return null;   /* it's already the summit */
+  var on = !!u.announced || (u.announceAt && Date.now() >= Date.parse(u.announceAt)) || (S.last && nowAt().date > S.last);
+  if (on) return { u: u, preview: false };
+  return appTester() ? { u: u, preview: true } : null;
+}
+function nextPlace(u) { var p = ''; PLACES.forEach(function (z) { if (!p && z[0].test((u.city || '') + ' ' + (u.name || ''))) p = z[2]; }); return p || u.city || u.name; }
+function nextCard(where) {
+  var n = nextShown(); if (!n) return '';
+  var u = n.u, left = daysBetween(nowAt().date, u.first);
+  return '<section class="nextsum' + (where === 'dash' ? ' wd wide' : '') + '">' + heroArt() +
+    '<div class="ns-in"><span class="ns-eye">' + icon('i-star') + (n.preview ? 'Preview: hidden until it\'s announced' : S.last && nowAt().date > S.last ? 'Our Next Summit' : 'Just Announced: Our Next Summit') + '</span>' +
+    '<b class="ns-city">' + esc(nextPlace(u)) + '</b><span class="ns-name">' + esc(u.name) + '</span>' +
+    '<span class="ns-when"><span>' + icon('i-agenda') + esc(u.dates || '') + '</span>' + (u.venue ? '<span>' + icon('i-pin') + esc(u.venue) + '</span>' : '') + '</span></div>' +
+    '<div class="ns-go">' + (left > 0 ? '<span class="ns-left"><b>' + left + '</b>' + (left === 1 ? 'Day' : 'Days') + ' to Go</span>' : '') +
+    '<a class="btn sky" href="' + esc(u.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register Now</a></div></section>';
+}
+/* staff press the button during the session: an open app picks it up within two minutes */
+setInterval(function () {
+  if (document.hidden || !S.summit) return;
+  var u = S.upcoming; if (u && (u.announced || (u.announceAt && Date.now() >= Date.parse(u.announceAt)))) return;
+  getJSON(FEED_AGENDA).then(function (feed) {
+    var nu = upcomingOf(feed); if (JSON.stringify(nu) === JSON.stringify(S.upcoming)) return;
+    S.upcoming = nu; if (!stack.length && (S.page === 'dash' || S.page === 'home')) renderPage(S.page);
+  }).catch(function () {});
+}, 120000);
 function pickSummit(feed) {
   var list = Object.keys(feed.summits || {}).map(function (id) {
     var s = feed.summits[id], g = (s.grid && s.grid.sessions) || [];
@@ -1624,6 +1678,7 @@ function build(feed, spons) {
   if (!pick) throw new Error('No summit schedule is published yet.');
   var s = pick.s;
   S.summit = s; S.sid = pick.id; S.first = pick.first; S.last = pick.last;
+  S.upcoming = upcomingOf(feed);
   S.updated = (s.grid && s.grid.updated) || feed.sourceUpdated || feed.updated || '';
   S.zone = ''; S.place = '';
   PLACES.forEach(function (z) { if (!S.zone && z[0].test((s.city || '') + ' ' + (s.name || ''))) { S.zone = z[1]; S.place = z[2]; } });
@@ -1805,7 +1860,7 @@ function renderHome() {
       '<button type="button" data-go="people">' + icon('i-people') + '<b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
       '<button type="button" data-sponsors>' + icon('i-handshake') + '<b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
       '<button type="button" data-go="mine">' + icon('i-star') + '<b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
-    '</div>';
+    '</div>' + nextCard('home');
 
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
@@ -2750,10 +2805,14 @@ function widget(id) {
     else if (during) {
       var live = S.sessions.filter(function (x) { return isLive(x) && !MEALS.test(x.type); });
       big = '<b>Day ' + (daysBetween(S.first, n.date) + 1) + '</b><i>of ' + days().length + '</i>'; sub = live.length ? 'On now: ' + esc(live[0].title) + (live.length > 1 ? ' and ' + (live.length - 1) + ' more' : '') : esc(longDate(n.date));
-    } else { big = '<b>Thank You</b>'; sub = 'for joining us in ' + esc(S.place); }
+    } else {
+      var nx = nextShown();
+      if (nx && !nx.preview) return nextCard('dash');   /* the summit is over: the next one takes the tile */
+      big = '<b>Thank You</b>'; sub = 'for joining us in ' + esc(S.place);
+    }
     return '<button type="button" class="wd w-summit wide" data-go="home">' + summitArt() + '<span class="w-head">' + icon('i-s') + '<span>MISMO Summit</span>' + icon('i-chev', 'go') + '</span>' +
       '<span class="w-city">' + esc(S.place) + '</span><span class="w-name">' + esc(S.summit.name) + '</span>' +
-      '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span></button>' + dashLive();
+      '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span></button>' + dashLive() + nextCard('dash');
   }
   if (id === 'micdup') {
     var ep = MU && MU.episodes && MU.episodes[0];
