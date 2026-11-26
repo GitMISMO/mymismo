@@ -461,6 +461,10 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-mat .w-t{font-size:17px; -webkit-line-clamp:4}
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
 .w-logos{position:relative; width:100%; height:64px; margin-top:4px}
+/* the dashboard's sponsor tile: the logo fills all the room between the title and the line below, centered */
+.w-spon .w-logos{flex:1 1 auto; align-self:stretch; width:auto; height:auto; min-height:96px; margin:6px 0 8px; background:#fff; border-radius:12px}
+.w-spon .w-logos img{inset:8px; width:calc(100% - 16px); height:calc(100% - 16px); max-width:none; max-height:none; padding:0; border-radius:0; background:none; object-fit:contain; object-position:center}
+.w-spon .w-sub{margin-top:0}
 .w-logos img{position:absolute; inset:0; margin:auto; max-width:85%; max-height:52px; object-fit:contain; background:#fff; border-radius:8px; padding:6px 10px; opacity:0; animation:logo-cycle calc(var(--n) * 2.6s) infinite; animation-delay:calc(var(--i) * 2.6s - .5s)}
 @keyframes logo-cycle{0%{opacity:0; transform:translateY(6px)} 4%,22%{opacity:1; transform:none} 28%,100%{opacity:0; transform:translateY(-6px)}}
 .w-idea{background:linear-gradient(160deg, color-mix(in srgb, #f0b93a 18%, var(--surface)), var(--surface) 60%)}
@@ -603,8 +607,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .sp-stats b{display:block; font-family:var(--cond); font-size:36px; line-height:1; color:var(--sky)}
 .sp-stats span{font-size:12.5px; font-weight:600; color:rgba(255,255,255,.8)}
 .ticker{overflow:hidden; margin:0 -16px 6px; padding:12px 0; background:var(--surface); border-bottom:1px solid var(--border); -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)}
-.ticker .run{display:flex; gap:12px; width:max-content; animation:tick var(--dur) linear infinite}
-.tk{flex:none; width:120px; height:52px; display:grid; place-items:center; background:#fff; border:1px solid var(--border); border-radius:10px; padding:6px 10px}
+.ticker .run{display:flex; width:max-content; animation:tick var(--dur) linear infinite}
+.tk{flex:none; margin-right:12px; width:120px; height:52px; display:grid; place-items:center; background:#fff; border:1px solid var(--border); border-radius:10px; padding:6px 10px}
 .tk img{max-width:100%; max-height:38px; object-fit:contain}
 @keyframes tick{to{transform:translateX(-50%)}}
 .tier2{margin-top:22px}
@@ -867,7 +871,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .empty-sched p{color:var(--ink-2); max-width:34ch; margin:0 0 8px}
 
 /* Sponsor band (foot of Home and Explore): one scrolling row of logos, each with its level */
-.spband{position:relative; overflow:hidden; isolation:isolate; margin:28px 0 8px; border-radius:20px; color:#fff; background:#071d2e; padding:24px 0 22px; box-shadow:0 18px 40px -22px rgba(6,32,47,.7)}
+.spband{position:relative; overflow:hidden; isolation:isolate; margin:28px -14px 8px; border-radius:0; color:#fff; background:#071d2e; padding:24px 0 22px; box-shadow:0 18px 40px -22px rgba(6,32,47,.7)}
 .spband > .hero-art{z-index:-1; opacity:.9}
 .spband h2{font-family:var(--cond); font-size:clamp(26px, 7.5vw, 38px); line-height:1.05; letter-spacing:-.015em; text-align:center; margin:0 16px 18px}
 .sb-all{display:flex; align-items:center; gap:7px; margin:16px auto 0; padding:10px 16px; border-radius:8px; border:1px solid rgba(116,191,235,.55); background:rgba(116,191,235,.12); color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer}
@@ -1866,9 +1870,12 @@ function sponsorBand() {
     return '<button type="button" class="sbt sbt-' + esc(String(x.tier).toLowerCase().replace(/[^a-z]/g, '')) + '" style="--tierc:' + (TIER_COLOR[x.tier] || 'var(--sky)') + '" data-open="sp:' + esc(slug(x.sp.name)) + '" aria-label="' + esc(x.sp.name + ', ' + x.tier) + '">' +
       '<span class="sbt-logo">' + (mark[x.tier] ? '<span class="sbt-mark" aria-hidden="true">' + icon(mark[x.tier]) + '</span>' : '') + (x.sp.logo ? '<img src="' + esc(x.sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(x.sp.name) + '</b>') + '</span><span class="sbt-tier"><i></i>' + esc(x.tier) + '</span></button>';
   };
-  var run = list.length > 2 ? list.concat(list) : list;
+  var run = list.length > 2 ? list.concat(list) : list, dur = Math.max(26, list.length * 4.5);
+  /* endless: the list runs twice, so moving by exactly one copy lands where it began. Opening a page starts it at the top
+     level (Platinum); the page refreshing itself every minute carries on from where it was instead of jumping back. */
+  var lag = ((Date.now() - (S.bandT0 || Date.now())) / 1000) % dur;
   return '<section class="spband" aria-label="Sponsors">' + heroArt() + '<h2>Thank You to Our Sponsors</h2>' +
-    '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '"><div class="run" style="--dur:' + Math.max(26, list.length * 4.5) + 's">' + run.map(tile).join('') + '</div></div>' +
+    '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '"><div class="run" style="--dur:' + dur + 's;animation-delay:-' + lag.toFixed(2) + 's">' + run.map(tile).join('') + '</div></div>' +
     '<button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></section>';
 }
 function sponsorTiers() {
@@ -1888,7 +1895,7 @@ function spWhat(sp) {
   return out;
 }
 function renderSponsors() {
-  var tiers = sponsorTiers(), all = S.sponsors.filter(function (sp) { return sp.logo; }), pts = partners();
+  var tiers = sponsorTiers(), all = [].concat.apply([], tiers.map(function (t) { return t.list; })).filter(function (sp) { return sp.logo; }), pts = partners();
   var nSess = S.sessions.filter(function (x) { return sponsorFor(x).length; }).length;
   var run = all.concat(pts.filter(function (p) { return p.logo; }));
   var h = '<section class="sp-hero">' + heroArt() + '<div class="sp-hero-in"><h1>Thank You to Our Sponsors</h1><p>The companies making the ' + esc(S.summit.name) + ' happen.</p>' +
@@ -2571,7 +2578,7 @@ function renderPage(p) {
 function show(p, opts) {
   if (!RENDER[p]) p = 'dash';
   if (p !== 'dash' && !S.summit) p = 'dash';
-  S.page = p;
+  S.page = p; S.bandT0 = Date.now();
   document.body.classList.toggle('dash', p === 'dash');
   var db = $('#dash-btn'); if (p === 'dash') db.setAttribute('aria-current', 'page'); else db.removeAttribute('aria-current');
   $$('.page').forEach(function (el) { el.classList.toggle('on', el.id === 'pg-' + p); });
