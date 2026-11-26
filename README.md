@@ -38,6 +38,7 @@ The app shows the next summit whose last day hasn't passed. A person's starred s
 
 - Add `?now=2027-01-12T10:30` to the address to see the app as it would look at that date and time in the summit's own time zone (Day 2, what's on now).
 - Add `?page=agenda` (or `mine`, `people`, `explore`) to open on a page.
+- Add `?holiday=preview` to see December's santa hat on the O of the header logo and the snow (the shared `/assets/holiday.js`, CN-052; the logo is marked `data-mismo-logo`). Only the app itself loads it, never the public privacy, support or delete-account pages.
 - Offline: open it once with a connection; after that it opens and shows the last agenda without one (`sw.js`).
 
 ## Files

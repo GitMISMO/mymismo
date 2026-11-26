@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: December: from December 1 to 31 the MISMO logo in the header wears the shared santa hat on its O; the first time the app opens in a session the bobble swings and a little snow falls, and hovering over the hat brings the snow back. Replaces the old small hat. Preview any time with ?holiday=preview (CN-052).
 - Nov 26, 2026: Trivia: no questions about workgroup chairs or other volunteer leaders (staff are fine). Removed the one about an eMortgage CoP co-chair, and its Final Square.
 - Nov 26, 2026: Dashboard upright: the Webinars date is back beside the title, so the white tiles are short again (only a very narrow tile on its side stacks them). A taller partner tile fills with whole extra lines instead of empty space.
 - Nov 26, 2026: MISMO Merch: a mock-up shop for testers only (a dashboard tile, ten example products with drawn mock-ups, colors, sizes, a bag; checkout is switched off and says so). Labeled Mock-up throughout; nothing can be bought. Dashboard on its side: squares stay in their pairs (Submit an Idea beside mismo.org); a wide tile at the end goes full width instead.
