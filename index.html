@@ -2971,10 +2971,13 @@ var TB_VALUES = [200, 400, 600, 800, 1000], TB_SHORT = { 'MISMO Standards': 'Sta
    a soft blip as each square lights up, a whoosh as a square opens, a sweep and sparkle for the Double Square, a chime
    for right, a low buzz for wrong, ticks in the last five seconds. And a host's voice reading each answer aloud, using
    the phone's own voice. Both can be switched off on the board, and the choice is remembered. */
+/* Jonna, Nov 26, 2026: sound and the host voice are off for now. Set TV_AV to true to bring both back (the switches
+   on the board come back with them). */
+var TV_AV = false;
 var TVSFX = (function () {
   var ctx = null;
   function ac() {
-    if (load('tv-sound', true) === false) return null;
+    if (!TV_AV || load('tv-sound', true) === false) return null;
     if (!ctx) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return null; try { ctx = new A(); } catch (e) { return null; } }
     if (ctx.state === 'suspended') ctx.resume().catch(function () {});
     return ctx;
@@ -3008,7 +3011,7 @@ var TVSFX = (function () {
   };
 })();
 var TVVOICE = {
-  ok: function () { return 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function'; },
+  ok: function () { return TV_AV && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function'; },
   on: function () { return this.ok() && load('tv-voice', true) !== false; },
   /* Jonna, Nov 26, 2026: the most natural-sounding voice the phone has, a calm male host voice first. Phones keep their
      best voices as Premium, Enhanced, Natural or Neural ones; the old robotic ones come last. */
@@ -3080,9 +3083,9 @@ function triviaBoard(all) {
   function paintBoard() {
     cur = null;
     var back = !firstPaint;
-    var snd = load('tv-sound', true) !== false, vc = TVVOICE.on();
+    var snd = TV_AV && load('tv-sound', true) !== false, vc = TVVOICE.on();
     box.innerHTML = '<div class="tb' + (firstPaint ? ' first' : ' back') + '"><div class="tb-top">' + scoreHtml() + roundChip() + '<span class="tb-tools">' +
-      '<button type="button" class="tb-tg' + (snd ? ' on' : '') + '" data-tb-sound aria-pressed="' + snd + '" aria-label="Sounds" title="Sounds">' + icon('i-sound') + '</button>' +
+      (TV_AV ? '<button type="button" class="tb-tg' + (snd ? ' on' : '') + '" data-tb-sound aria-pressed="' + snd + '" aria-label="Sounds" title="Sounds">' + icon('i-sound') + '</button>' : '') +
       (TVVOICE.ok() ? '<button type="button" class="tb-tg' + (vc ? ' on' : '') + '" data-tb-voice aria-pressed="' + vc + '" aria-label="Read the answers aloud" title="Read the answers aloud">' + icon('i-voice') + '</button>' : '') +
       '<button type="button" class="tb-end" data-tb-end>End Game</button></span></div>' +
       '<div class="tb-wall"><div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c, i) { return '<div class="tb-h" style="--cc:' + catColor(c) + ';--i:' + i + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
