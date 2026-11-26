@@ -1,0 +1,278 @@
+{
+ "updated": "2026-11-26T17:13:21Z",
+ "people": [
+  {
+   "name": "Brian Vieaux",
+   "title": "President",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-team-vieaux.jpg",
+   "kind": "staff"
+  },
+  {
+   "name": "Jonathan Kearns",
+   "title": "Vice President, Programs & Operations",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-team-kearns.jpg",
+   "kind": "staff"
+  },
+  {
+   "name": "Amy Moses",
+   "title": "Vice President, Strategic Growth",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-team-moses.jpg",
+   "kind": "staff"
+  },
+  {
+   "name": "Kelly Bradshaw",
+   "title": "Director, Strategic Growth",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-team-bradshaw.png",
+   "kind": "staff"
+  },
+  {
+   "name": "Jonna Critchley",
+   "title": "Director, Programs & Operations",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-team-critchley.png",
+   "kind": "staff"
+  },
+  {
+   "name": "Perry Williams",
+   "title": "Senior Program Manager",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/mismo-team-williams.jpg",
+   "kind": "staff"
+  },
+  {
+   "name": "Vanessa Rios",
+   "title": "Sr. Systems and Operations Specialist",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/b236ddb29c3148aba9e6af40edd3a3cd.jpg",
+   "kind": "staff"
+  },
+  {
+   "name": "Timothy J. Bowler",
+   "title": "Chief Innovation Officer, Fixed Income and Data Services",
+   "company": "ICE Mortgage Technology",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/6287f6c4342c44bb8014a1743e229c29.jpg",
+   "kind": "board",
+   "role": "Chair"
+  },
+  {
+   "name": "Mike Hogan",
+   "title": "Chief Information Officer",
+   "company": "Pennymac",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/14653b5c4b804517876a601d44b6d359.jpg",
+   "kind": "board",
+   "role": "Vice Chair"
+  },
+  {
+   "name": "Michele Bodda",
+   "title": "President, Mortgage and Employer Services",
+   "company": "Experian",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/306bbe6e4cd04b17a6cca24e388fbba7.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Gemma Currier",
+   "title": "Senior Vice President",
+   "company": "Guild",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/f1fc61d6ad544be88de6a4c558a32c51.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Lisa Dorsey",
+   "title": "Vice President, Data Governance",
+   "company": "Fannie Mae",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/ed8b7a70b34c4811bb6afdcdc439cec8.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Tim Elkins",
+   "title": "Chief Strategic Officer",
+   "company": "Supreme Lending",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/2fb6b96d92db47f2ad9369338e07d9ff.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Suzanne Garwood",
+   "title": "Executive Director and Associate General Counsel",
+   "company": "JPMorgan Chase",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/8445a2d1ba9d45609992c3358a4a27da.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Peter Grace",
+   "title": "Senior Vice President for Strategy and Member Services",
+   "company": "MBA",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/42ca51bcea1e414aaa582f38d914f5b6.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Patrick Hartford",
+   "title": "Vice President, Architecture and Engineering",
+   "company": "Rocket Mortgage",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/72e8f179bda7459e9edaf69e9221a945.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Anthony Hutchinson",
+   "title": "Executive Vice President",
+   "company": "VantageScore",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/ec42563283ce4f0489338bb0f89b1ab2.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Aravind “Jag” Jagannathan",
+   "title": "Senior Vice President and Single-Family Data Officer",
+   "company": "Freddie Mac",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/f093ccd772ef450fbaa28c9c4cd4a598.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Neenu Kainth",
+   "title": "Senior Vice President and Chief Customer Experience Officer",
+   "company": "Enact",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/f8c5c430702a48518977a0a2d98f98fa.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Jay Kingsley",
+   "title": "President",
+   "company": "Cotality",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/d2bf0cc2a4184accaff6f562d2dd9ebe.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Eric Lapin",
+   "title": "Vice President",
+   "company": "FICO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/334bfa3f1dd0428f996acc3c75d9f1a2.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Giuseppe “Joe” Lucido",
+   "title": "Senior Vice President, Operations",
+   "company": "United Wholesale Mortgage",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/75b0d0a0c3de404ca87a32bc57ef3928.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Greg McElroy",
+   "title": "Managing Director, Chief Operating Officer",
+   "company": "Amerihome Mortgage Company",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/a92507f95ec44134a5ea849f0376f306.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Todd McGowan",
+   "title": "President, Lender Division",
+   "company": "First American",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/58e1b17feb38450caa378611fbee1b05.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Teri Pansing",
+   "title": "Senior Vice President, Corporate Closing",
+   "company": "Fairway Independent Mortgage Corporation",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/105b29f6bf4b4568b84c23b127e38f72.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Leslie Peeler",
+   "title": "Executive Vice President and Chief Operating Officer",
+   "company": "Cenlar FSB",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/1b3204e5186b490d841782f4d7f488d2.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Kevin Peranio",
+   "title": "Chief Lending Officer",
+   "company": "PRMG",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/b0af7660-1193-44cf-ad90-4073559f7527/UploadedImages/Photos/kevin-peranio-headshot.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Aaron Perlis",
+   "title": "Executive Vice President, Special Asset Management",
+   "company": "Walker and Dunlop",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/37ef3cfcb26241e2884ea1fe5e175c06.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Ike Suri",
+   "title": "Chairman and Chief Executive Officer",
+   "company": "FundingShield",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/e285dd0c009f43a6a529d3ee834cc5c2.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Courtney Thompson",
+   "title": "Founder and Chief Executive Officer",
+   "company": "Consigliera",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/5c420c9205094d228b9c88248a83c201.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Matt Tully, CMB",
+   "title": "Chief of Staff",
+   "company": "Sagent",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/8fbfbc1ab25f474e9ba3613c63d6c0bf.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Matt VanFossen",
+   "title": "Chief Executive Officer",
+   "company": "Absolute Home and Mortgage Automation Technologies",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/d04f991169124e3cbf5167fcfdd01cca.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Brian Vieaux",
+   "title": "President",
+   "company": "MISMO",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/690fc6425da34bb3a1d902c42172c664.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Rusty Emory",
+   "title": "Vice President, Manager Investor Delivery",
+   "company": "PrimeLending",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/f51c047fc84a4ef7a51db5ab79c165a3.jpg",
+   "kind": "board",
+   "role": ""
+  },
+  {
+   "name": "Brian Hunt",
+   "title": "Senior Director, Multifamily Technology Management",
+   "company": "Fannie Mae",
+   "photo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/MessageImages/f2b82361789145b4b679b661e2ae48dc.jpg",
+   "kind": "board",
+   "role": ""
+  }
+ ]
+}
