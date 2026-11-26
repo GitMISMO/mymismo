@@ -769,6 +769,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .pf-cam{display:inline-flex; align-items:center; gap:5px; padding:5px 9px; border-radius:7px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35); color:#fff; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap}
 .pf-cam svg{width:13px; height:13px}
 img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
+.pv-note{border-left-color:#eda100}
 .att-count{font-size:13px; color:var(--ink-3); font-weight:600; margin-top:10px}
 .cts{display:grid; gap:8px}
 .ct{display:flex; align-items:center; gap:10px; padding:11px 12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--link); text-decoration:none; font-weight:600; min-width:0}
@@ -1844,8 +1845,10 @@ function renderMine() {
 /* ---------- People: speakers and attendees ---------- */
 function renderPeople() {
   var h = '<div class="pagehead"><h1>People</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
-  if (A.ready) h += '<div class="seg" role="group" aria-label="Show"><button type="button" data-ptab="speakers" aria-pressed="' + (S.peopleTab === 'speakers') + '">Speakers</button><button type="button" data-ptab="attendees" aria-pressed="' + (S.peopleTab === 'attendees') + '">Attendees</button></div>';
+  var pv = !A.ready && canPreviewAttendees();
+  if (A.ready || pv) h += '<div class="seg" role="group" aria-label="Show"><button type="button" data-ptab="speakers" aria-pressed="' + (S.peopleTab === 'speakers') + '">Speakers</button><button type="button" data-ptab="attendees" aria-pressed="' + (S.peopleTab === 'attendees') + '">Attendees</button></div>';
   if (A.ready && S.peopleTab === 'attendees') return h + renderAttendees();
+  if (pv && S.peopleTab === 'attendees') return h + renderPreviewAttendees();
   var q = S.sq.trim().toLowerCase();
   var list = S.speakers.filter(function (p) { return !q || (p.name + ' ' + p.title + ' ' + p.company).toLowerCase().indexOf(q) >= 0; });
   h += '<div class="tools"><label class="search">' + icon('i-search') + '<span class="sr">Search speakers</span><input id="speaker-q" type="search" placeholder="Search speakers by name or company" value="' + esc(S.sq) + '" autocomplete="off"></label></div>';
@@ -1854,6 +1857,49 @@ function renderPeople() {
     return '<button type="button" class="pcard" data-open="p:' + esc(p.key) + '">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="noimg">' + esc(initials(p.name)) + '</span>') +
       '<span class="cap"><b>' + esc(p.name) + '</b><span>' + esc(p.company || p.title) + '</span></span></button>';
   }).join('') + '</div>';
+}
+/* Staff preview (Jonna, Nov 25, 2026): until attendee sign-in is live, MISMO staff who can open Summit HQ see the real
+   attendee directory, read with their own staff sign-in from Summit HQ's attendee list. Names, titles and companies only:
+   emails are never shown, and nothing is kept on the phone. Profiles, headshots and messages open with attendee sign-in. */
+var PV = { state: '', people: [] };
+function canPreviewAttendees() {
+  var st = staffSession(); if (!st || !window.ResourcesSession) return false;
+  var acc = (ResourcesSession.current() || {}).access || {};
+  return !!(acc['summit-hq'] || (ResourcesSession.current() || {}).platformAdmin);
+}
+function loadPreviewAttendees() {
+  if (PV.state) return; PV.state = 'loading';
+  var tok = ResourcesSession.token && ResourcesSession.token();
+  fetch(RELAY + '/summit-hq/file/data/feed-mymismo-attendees.json', { cache: 'no-store', headers: { Authorization: 'Bearer ' + tok } })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (j) {
+      var bytes = Uint8Array.from(atob(j.content), function (c) { return c.charCodeAt(0); });
+      var d = JSON.parse(new TextDecoder().decode(bytes)), s = d.summits && d.summits[S.sid];
+      PV.people = (s && s.people || []).map(function (p, i) { return { id: 'pv' + i, name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '', photo: 0, joined: false, preview: true }; })
+        .filter(function (p) { return p.name; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+      PV.state = 'ready';
+    })
+    .catch(function () { PV.state = 'error'; })
+    .then(function () { if (S.page === 'people') renderPage('people'); });
+}
+function renderPreviewAttendees() {
+  var h = '<div class="note pv-note"><b>Staff Preview.</b> The real attendee list from registration, shown only to MISMO staff until attendee sign-in goes live. Then attendees sign in, add headshots and contact details, and message each other. <button type="button" class="linkbtn" data-pv-profile>Try My Profile&nbsp;→</button></div>';
+  if (!PV.state || PV.state === 'loading') { loadPreviewAttendees(); return h + '<div class="note">Loading the attendee list…</div>'; }
+  if (PV.state === 'error') return h + '<div class="note">The attendee list couldn\'t be loaded. You need Summit HQ access to see the preview.</div>';
+  var q = S.aq.trim().toLowerCase();
+  var list = PV.people.filter(function (p) { return !q || (p.name + ' ' + p.title + ' ' + p.company).toLowerCase().indexOf(q) >= 0; });
+  h += '<div class="tools"><label class="search">' + icon('i-search') + '<span class="sr">Search attendees</span><input id="att-q" type="search" placeholder="Search attendees by name or company" value="' + esc(S.aq) + '" autocomplete="off"></label></div>';
+  if (!list.length) { h += '<div class="note">No attendee matches <b>' + esc(S.aq) + '</b>. Here is everyone.</div>'; list = PV.people; }
+  return h + '<div class="att-count">' + PV.people.length + ' attendees</div><div class="people" style="margin-top:8px">' + list.map(function (p) {
+    return '<button type="button" class="person" data-pvp="' + esc(p.id) + '">' + avatarHtml(p) + '<span><div class="n">' + esc(p.name) + '</div><div class="r">' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></span></button>';
+  }).join('') + '</div>';
+}
+function previewSheet(id) {
+  var p = PV.people.filter(function (x) { return x.id === id; })[0]; if (!p) return;
+  var h = '<div class="cover person-cover">' + avatarHtml(p, 'big') + '<div><span class="k">Attendee</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">' +
+    '<p class="att-note" style="margin-top:0">This is the card everyone registered gets. Once attendee sign-in is live, ' + esc(p.name.split(' ')[0]) + ' can add a headshot, what they\'d like to talk about and how to reach them, and attendees can message each other here.</p>' +
+    '<div class="d-actions" style="margin-top:14px"><button type="button" class="btn primary" disabled>' + icon('i-chat') + 'Message</button><button type="button" class="btn quiet" disabled>Block</button><button type="button" class="btn quiet" disabled>' + icon('i-file') + 'Report</button></div></div>';
+  openSheet(p.name, h, { color: '#14486e' });
 }
 function renderAttendees() {
   if (!A.token) return joinCard();
@@ -2930,7 +2976,7 @@ function settingsSheet() {
   });
 }
 /* The staff chip shows only when someone is signed in (attendees never see a staff Sign In button in the top bar) */
-function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; if (rerender !== false && (S.page === 'dash' || S.page === 'home')) renderPage(S.page); }
+function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
 if (window.ResourcesSession) { try { ResourcesSession.onChange(function () { paintStaff(); }); } catch (e) {} }
 paintStaff(false);
 
@@ -3034,8 +3080,9 @@ function signInSheet() {
   });
   $('#si-code', el).addEventListener('input', function (e) { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); if (e.target.value.length === 6) $('#si-code-form', el).requestSubmit(); });
 }
-function profileSheet(welcome) {
-  var me = A.me || {};
+function profileSheet(welcome, preview) {
+  var st = preview && staffSession();
+  var me = preview ? { name: (st && (st.name || st.email)) || 'You', email: (st && st.email) || '', title: '', company: '', listed: true, photo: 0 } : (A.me || {});
   var h = '<div class="cover person-cover"><div class="pf-shot">' + avatarHtml(me, 'big') + '<label class="pf-cam" for="pf-photo">' + icon('i-user') + '<span>' + (me.photo ? 'Change' : 'Add') + ' Headshot</span></label><input type="file" id="pf-photo" accept="image/*" hidden></div><div><span class="k">' + (welcome ? 'Welcome' : 'My Profile') + '</span><h2>' + esc(me.name) + '</h2><div class="w"><div>' + esc(me.email || '') + '</div></div></div></div><div class="sheet-pad">' +
     (welcome ? '<p style="margin-top:0">You\'re signed in, and you\'re in the attendee directory with your name, title and company from your registration. Add a headshot and how people can reach you.</p>' : '') +
     '<label class="toggle"><input type="checkbox" id="pf-listed"' + (me.listed ? ' checked' : '') + '><span><b>Show Me in the Attendee Directory</b><span>Everyone registered is listed with their name, title and company. Others signed in can see what you add below and message you. Turn this off to hide yourself.</span></span></label>' +
@@ -3047,8 +3094,16 @@ function profileSheet(welcome) {
     '<div class="field"><label for="pf-phone">Phone</label><input id="pf-phone" type="tel" maxlength="30" autocomplete="tel" value="' + esc(me.phone || '') + '"></div>' +
     '<div class="field"><label for="pf-web">Website</label><input id="pf-web" type="url" maxlength="200" placeholder="https://" value="' + esc(me.website || '') + '"></div>' +
     '<label class="toggle"><input type="checkbox" id="pf-email"' + (me.showEmail ? ' checked' : '') + '><span><b>Show My Email</b><span>' + esc(me.email || '') + ' shows on your card for people signed in. Off unless you turn it on.</span></span></label>' +
-    '<div id="pf-msg" role="status"></div><div class="d-actions"><button class="btn primary" type="button" id="pf-save">Save</button><button class="btn quiet" type="button" id="pf-out">Sign Out</button></div></div>';
+    '<div id="pf-msg" role="status"></div><div class="d-actions"><button class="btn primary" type="button" id="pf-save">Save</button>' + (preview ? '' : '<button class="btn quiet" type="button" id="pf-out">Sign Out</button>') + '</div></div>';
   var el = openSheet('My Profile', h, { color: '#14486e' });
+  if (preview) {   /* staff preview: everything works on the screen, nothing is saved */
+    $('#pf-save', el).addEventListener('click', function () { $('#pf-msg', el).innerHTML = '<div class="okmsg">Preview only: saving opens when attendee sign-in goes live.</div>'; });
+    $('#pf-photo', el).addEventListener('change', function () {
+      var f = this.files && this.files[0]; if (!f) return;
+      squarePhoto(f).then(function (data) { var shot = $('.pf-shot .avatar', el); if (shot) swapPhoto(shot, data); $('#pf-msg', el).innerHTML = '<div class="okmsg">This is how your headshot will look. Preview only: it isn\'t saved.</div>'; });
+    });
+    return;
+  }
   $('#pf-save', el).addEventListener('click', function () {
     var btn = this; btn.disabled = true; btn.textContent = 'Saving…'; $('#pf-msg', el).innerHTML = '';
     rq('PUT', 'profile', { listed: $('#pf-listed', el).checked, title: $('#pf-title', el).value, company: $('#pf-company', el).value, about: $('#pf-about', el).value, linkedin: $('#pf-li', el).value.trim(),
@@ -3263,6 +3318,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-profile')) { profileSheet(false); return; }
   if (t.hasAttribute('data-chat')) { chatSheet(t.getAttribute('data-chat')); return; }
   if (t.hasAttribute('data-report')) { reportSheet(t.getAttribute('data-report')); return; }
+  if (t.hasAttribute('data-pvp')) { previewSheet(t.getAttribute('data-pvp')); return; }
+  if (t.hasAttribute('data-pv-profile')) { profileSheet(false, true); return; }
   if (t.hasAttribute('data-who')) { attendeeSheet(t.getAttribute('data-who')); return; }
   if (t.hasAttribute('data-block')) {
     var id = t.getAttribute('data-block'), on = t.getAttribute('data-on') === '1';
