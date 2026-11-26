@@ -1,6 +1,6 @@
 # MyMISMO Changelog
 
-- 2026-11-26: MISMO Merch mock-up redone as a fuller shop: rotating spotlight, search, live color swatches on every card, quick add with a fly-to-bag, bigger product page with sizes and quantity, and a bag with a free-shipping meter. Tee text now fits on the shirt. Still testers-only and labeled Mock-up.
+- Nov 26, 2026: MISMO Merch mock-up redone as a fuller shop: rotating spotlight, search, live color swatches on every card, quick add with a fly-to-bag, bigger product page with sizes and quantity, and a bag with a free-shipping meter. Tee text now fits on the shirt. Still testers-only and labeled Mock-up.
 - Nov 26, 2026: Trivia, the Board: reworded the picks that didn't read as questions ("What is pay a fee?" is now "What is paying a fee?", process names keep their capitals, "the" where it belongs, loss positions spelled out) and two answers that didn't lead to their questions (DWG, Business Glossary for non-members). 20 questions touched; the facts and the right answers are unchanged.
 - Nov 26, 2026: December: the santa hat is on the MISMO logo of the loading screen too, so it is the first thing people see when the app opens, and stays on the header logo once it is open (CN-052).
 - Nov 26, 2026: December: from December 1 to 31 the MISMO logo in the header wears the shared santa hat on its O; the first time the app opens in a session the bobble swings and a little snow falls, and hovering over the hat brings the snow back. Replaces the old small hat. Preview any time with ?holiday=preview (CN-052).
