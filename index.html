@@ -2025,7 +2025,6 @@ function renderSponsors() {
   var run = all.concat(pts.filter(function (p) { return p.logo; }));
   var h = '<section class="sp-hero">' + heroArt() + '<div class="sp-hero-in"><h1>Thank You to Our Sponsors</h1><p>The companies making the ' + esc(S.summit.name) + ' happen.</p>' +
     '<div class="sp-stats"><div><b>' + S.sponsors.length + '</b><span>Sponsors</span></div><div><b>' + tiers.length + '</b><span>Tiers</span></div><div><b>' + nSess + '</b><span>Sessions Sponsored</span></div></div></div></section>';
-  h += becomeSponsor();
   tiers.forEach(function (t, i) {
     var col = TIER_COLOR[t.tier] || 'var(--sky)';
     h += '<section class="tier2' + (i === 0 ? ' top' : '') + '" style="--tierc:' + col + '"><div class="t2-h"><span class="medal" aria-hidden="true"></span><h2>' + esc(t.tier) + '</h2><span class="count">' + t.list.length + '</span></div><div class="t2-grid">' +
