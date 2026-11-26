@@ -1,0 +1,58 @@
+# Builds the MyMISMO Android app (a Trusted Web Activity made with Google's Bubblewrap) from store/android/twa-manifest.json.
+# Run it from Actions (Build the Android App). With the repository secrets ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD
+# and ANDROID_KEY_PASSWORD set, the build is signed with MISMO's upload key and is the one to upload to Google Play.
+# Without them it makes a TEST build signed with a throwaway key: fine for trying on a phone, never upload it to Play
+# (the first upload fixes the upload key for good).
+name: Build the Android App
+on:
+  workflow_dispatch:
+  push:
+    paths: ['store/android/**', '.github/workflows/android.yml']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli@1
+      - name: Point Bubblewrap at the runner's Java and Android SDK
+        run: |
+          mkdir -p ~/.bubblewrap
+          echo "{\"jdkPath\":\"$JAVA_HOME\",\"androidSdkPath\":\"$ANDROID_HOME\"}" > ~/.bubblewrap/config.json
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+      - name: The signing key
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KSP: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KP: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          cd store/android
+          if [ -n "$KS" ]; then
+            echo "$KS" | base64 -d > android.keystore
+            echo "BUBBLEWRAP_KEYSTORE_PASSWORD=$KSP" >> "$GITHUB_ENV"; echo "BUBBLEWRAP_KEY_PASSWORD=$KP" >> "$GITHUB_ENV"; echo "BUILD_KIND=upload" >> "$GITHUB_ENV"
+          else
+            P=$(openssl rand -hex 16)
+            echo "::add-mask::$P"
+            keytool -genkeypair -keystore android.keystore -alias mymismo -keyalg RSA -keysize 2048 -validity 10000 -storepass "$P" -keypass "$P" -dname "CN=MyMISMO TEST build, O=MISMO, C=US" > /dev/null
+            echo "BUBBLEWRAP_KEYSTORE_PASSWORD=$P" >> "$GITHUB_ENV"; echo "BUBBLEWRAP_KEY_PASSWORD=$P" >> "$GITHUB_ENV"; echo "BUILD_KIND=test" >> "$GITHUB_ENV"
+          fi
+      - name: Make the Android project and build it
+        run: |
+          cd store/android
+          bubblewrap update --skipVersionUpgrade --manifest=./twa-manifest.json
+          bubblewrap build --skipPwaValidation --manifest=./twa-manifest.json
+          keytool -list -v -keystore android.keystore -alias mymismo -storepass "$BUBBLEWRAP_KEYSTORE_PASSWORD" | grep -E 'SHA256:' | head -1 | sed 's/.*SHA256: /SHA-256 of the signing key: /'
+          rm -f android.keystore
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mymismo-android-${{ env.BUILD_KIND }}
+          path: |
+            store/android/app-release-bundle.aab
+            store/android/app-release-signed.apk
+          if-no-files-found: error
