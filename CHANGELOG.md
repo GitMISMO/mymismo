@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: The phone's Back button goes back through the app (a summit page back to the dashboard, an open panel closes first) instead of leaving the app.
 - Nov 25, 2026: MISMO Trivia says Beta instead of Coming Soon, on the dashboard tile and the trivia page. Anyone given MyMISMO in People & Access plays it (Play a Beta Round); everyone else sees that it's being tested before it opens.
 - Nov 25, 2026: The Trivia Test Run and the attendee preview are for people given MyMISMO in People & Access (MISMO staff and Erin), not everyone with a MISMO Resources sign-in.
 - Nov 25, 2026: Sponsors page: the sponsors come right after the heading; the Become a Sponsor card is only at the bottom.

@@ -3501,6 +3501,9 @@ document.addEventListener('input', function (e) {
   if (e.target.id === 'chat-text') { e.target.style.height = 'auto'; e.target.style.height = Math.min(140, e.target.scrollHeight) + 'px'; }
 });
 
+/* Jonna, Nov 25, 2026: the phone's Back from a summit page returns to the dashboard instead of leaving the app. The
+   dashboard isn't on the tab bar, so the shared Back helper is told the app's pages itself (the dashboard included). */
+if (window.MismoBack) MismoBack.pages({ current: function () { return S.page || 'dash'; }, go: function (p) { closeSheet(true); show(p); } });
 if (window.MismoBack) [1, 2, 3, 4, 5].forEach(function (depth) { MismoBack.layer({ isOpen: function () { return stack.length >= depth; }, close: function () { closeSheet(false); } }); });
 
 (function theme() {
