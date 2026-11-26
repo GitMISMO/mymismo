@@ -2,7 +2,7 @@
    animated SVG the website can use for its summit header. Run: node tools/make_nola_svg.mjs */
 import { readFileSync, writeFileSync } from 'node:fs';
 const html = readFileSync('index.html', 'utf8');
-const a = html.indexOf('function nolaArt('), b = html.indexOf('/* summit art: New Orleans gets its own');
+const a = html.indexOf('function nolaArt('), b = html.indexOf('/* summit art:');
 const css = html.slice(html.indexOf('.nola .no-stars circle{'), html.indexOf('\n', html.indexOf('@keyframes no-car{')) + 1);
 const nolaArt = new Function('var ART_N = 0;\n' + html.slice(a, b) + '\nreturn nolaArt;')();
 let svg = nolaArt({ align: 'xMaxYMax' }).replace(' class="hero-art nola"', ' class="nola" xmlns="http://www.w3.org/2000/svg" role="img"');

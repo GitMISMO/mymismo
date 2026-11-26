@@ -1639,7 +1639,7 @@ function nextPlace(u) { var p = ''; PLACES.forEach(function (z) { if (!p && z[0]
 function nextCard(where) {
   var n = nextShown(); if (!n) return '';
   var u = n.u, left = daysBetween(nowAt().date, u.first);
-  return '<section class="nextsum' + (where === 'dash' ? ' wd wide' : '') + '">' + heroArt() +
+  return '<section class="nextsum' + (where === 'dash' ? ' wd wide' : '') + '">' + (cityArt(nextPlace(u), { noCar: true }) || heroArt()) +
     '<div class="ns-in"><span class="ns-eye">' + icon('i-star') + (n.preview ? 'Preview: hidden until it\'s announced' : S.last && nowAt().date > S.last ? 'Our Next Summit' : 'Just Announced: Our Next Summit') + '</span>' +
     '<b class="ns-city">' + esc(nextPlace(u)) + '</b><span class="ns-name">' + esc(u.name) + '</span>' +
     '<span class="ns-when"><span>' + icon('i-agenda') + esc(u.dates || '') + '</span>' + (u.venue ? '<span>' + icon('i-pin') + esc(u.venue) + '</span>' : '') + '</span></div>' +
@@ -1957,10 +1957,91 @@ function nolaArt(opts) {
     [0, 1, 2, 3, 4, 5].map(function (k) { return '<rect x="' + (10 + k * 22) + '" y="10" width="16" height="17" rx="2" fill="#f3c64f" opacity=".85"/>'; }).join('') +
     '<path d="M75,-8 L75,-38 M62,-38 H88" stroke="#5aa9d8" stroke-width="2"/></g></svg>')));
 }
-/* summit art: New Orleans gets its own; any other city the usual skyline */
+/* Salt Lake City tile art (Jonna, Nov 26, 2026): the same navy night, twinkling stars and moon as New Orleans, with the
+   Wasatch Range and its snowcaps behind, downtown's towers with warm windows, the Utah State Capitol on its hill, and a
+   TRAX train gliding along the street. Same options as nolaArt. */
+function slcArt(opts) {
+  opts = opts || {}; var g = 'sl' + (++ART_N), GROUND = 526;
+  var stars = [[560,70,2],[640,140,1.6],[720,60,1.4],[800,118,2.2],[870,52,1.5],[930,120,1.4],[990,96,1.8],[1100,64,1.5],[1180,150,2],[680,180,1.3],[460,90,1.5],[760,150,1.2],[500,150,1.4],[380,60,1.3]];
+  function f(n) { return Math.round(n * 10) / 10; }
+  function pt(p) { return f(p[0]) + ',' + f(p[1]); }
+  /* a mountain ridge; peaks above `cap` get snow */
+  function ridge(pts, fill, cap) {
+    var h = '<path d="M' + pts.map(pt).join(' L') + ' V' + GROUND + ' H' + pts[0][0] + ' Z" fill="' + fill + '"/>';
+    if (cap) for (var i = 1; i < pts.length - 1; i++) {
+      var a = pts[i - 1], p = pts[i], b = pts[i + 1];
+      if (p[1] >= cap || p[1] > a[1] || p[1] > b[1]) continue;
+      var t = .34, l = [p[0] + (a[0] - p[0]) * t, p[1] + (a[1] - p[1]) * t], r = [p[0] + (b[0] - p[0]) * t, p[1] + (b[1] - p[1]) * t];
+      h += '<path d="M' + pt(l) + ' L' + pt(p) + ' L' + pt(r) + ' L' + pt([p[0] + (r[0] - p[0]) * .5, (p[1] + r[1]) / 2 + 9]) + ' L' + pt([p[0] + 2, (l[1] + r[1]) / 2 - 3]) +
+        ' L' + pt([p[0] - (p[0] - l[0]) * .5, (p[1] + l[1]) / 2 + 9]) + ' Z" fill="#d9eefa" fill-opacity=".55"/>';
+    }
+    return h;
+  }
+  /* downtown: x, width, roof height */
+  var towers = [[340, 64, 404], [408, 56, 372], [468, 70, 336], [546, 58, 296], [610, 84, 254], [700, 62, 206], [768, 76, 280], [850, 58, 324], [914, 70, 372]];
+  function tower(t, i) {
+    var x = t[0], w = t[1], top = t[2], h = '', cols = Math.floor((w - 8) / 14), off = x + (w - cols * 14) / 2 + 3.5, grid = '', warm = '';
+    h += '<rect x="' + x + '" y="' + top + '" width="' + w + '" height="' + (GROUND - top) + '" fill="' + (i % 2 ? '#0d2f4b' : '#0f3555') + '"/>';
+    h += '<rect x="' + (x + w - 2) + '" y="' + top + '" width="2" height="' + (GROUND - top) + '" fill="#3b80b0" opacity=".55"/>';   /* moonlight on one edge */
+    h += '<rect x="' + (x - 2) + '" y="' + (top - 6) + '" width="' + (w + 4) + '" height="7" fill="#0b2a44"/>';
+    if (i === 5) h += '<rect x="' + (x + 9) + '" y="' + (top - 18) + '" width="' + (w - 18) + '" height="13" fill="#0b2a44"/><rect x="' + (x + 20) + '" y="' + (top - 28) + '" width="' + (w - 40) + '" height="11" fill="#0b2a44"/>' +
+      '<circle cx="' + (x + w / 2) + '" cy="' + (top - 34) + '" r="16" fill="url(#' + g + 'l)" class="no-lamp"/><circle cx="' + (x + w / 2) + '" cy="' + (top - 34) + '" r="2.6" fill="#ffd98a"/>';
+    for (var y = top + 16, r = 0; y < GROUND - 40; y += 19, r++) for (var c = 0; c < cols; c++) {
+      var wx = off + c * 14;
+      if ((i * 7 + c * 5 + r * 3) % 13 < 2) warm += '<rect x="' + wx + '" y="' + y + '" width="7" height="10" fill="#f3c64f" fill-opacity=".8" class="no-door" style="animation-delay:' + ((i + c + r) * 1.3 % 7).toFixed(1) + 's"/>';
+      else grid += 'M' + wx + ',' + y + 'h7v10h-7Z';
+    }
+    return h + '<path d="' + grid + '" fill="#1d5582" fill-opacity=".9"/>' + warm;
+  }
+  /* the Utah State Capitol on its hill */
+  var cx = 1078;
+  var capitol = '<path d="M968,' + GROUND + ' C1000,452 1150,446 1200,450 V' + GROUND + ' Z" fill="#0b2b45"/>' +
+    '<g fill="#123d61" stroke="#3b80b0" stroke-width="1.5" stroke-linejoin="round">' +
+    '<rect x="' + (cx - 28) + '" y="400" width="56" height="40"/>' +                                       /* the drum */
+    '<path d="M' + (cx - 30) + ',402 a30,34 0 0 1 60,0 Z"/>' +                                             /* the dome */
+    '<rect x="' + (cx - 6) + '" y="356" width="12" height="14"/>' +                                        /* the lantern */
+    '<rect x="' + (cx - 100) + '" y="452" width="200" height="' + (GROUND - 452) + '"/>' +                 /* the wings */
+    '<rect x="' + (cx - 36) + '" y="440" width="72" height="' + (GROUND - 440) + '"/>' +                   /* the portico */
+    '<path d="M' + (cx - 42) + ',441 L' + cx + ',420 L' + (cx + 42) + ',441 Z"/></g>' +
+    '<circle cx="' + cx + '" cy="352" r="4" fill="#3b80b0"/>' +
+    '<path d="' + [-30, -21, -12, -3, 6, 15, 24].map(function (k) { return 'M' + (cx + k + 3) + ',446 V' + (GROUND - 8); }).join(' ') + '" stroke="#5aa9d8" stroke-width="2.5" opacity=".6"/>' +
+    [-1, 1].map(function (s) { return [52, 70, 88].map(function (k) { return '<path d="M' + (cx + s * k - 5) + ',' + (GROUND - 18) + ' V470 a5,5 0 0 1 10,0 V' + (GROUND - 18) + ' Z" fill="#f3c64f" fill-opacity=".55"/>'; }).join(''); }).join('') +
+    [-18, -6, 6, 18].map(function (k) { return '<rect x="' + (cx + k - 3) + '" y="410" width="6" height="18" rx="3" fill="#f3c64f" fill-opacity=".5"/>'; }).join('');
+  return '<svg class="hero-art nola slc" viewBox="0 0 1200 560" preserveAspectRatio="' + (opts.align || 'xMaxYMax') + ' slice" aria-hidden="true" focusable="false"><defs>' +
+    '<linearGradient id="' + g + 'g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0b2a44"/><stop offset="100%" stop-color="#103a5e"/></linearGradient>' +
+    '<radialGradient id="' + g + 'm" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#cfe9f8" stop-opacity=".45"/><stop offset="45%" stop-color="#74bfeb" stop-opacity=".16"/><stop offset="100%" stop-color="#74bfeb" stop-opacity="0"/></radialGradient>' +
+    '<radialGradient id="' + g + 'l" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe7b0" stop-opacity=".9"/><stop offset="35%" stop-color="#f3c64f" stop-opacity=".3"/><stop offset="100%" stop-color="#f3c64f" stop-opacity="0"/></radialGradient>' +
+    '<pattern id="' + g + 'p" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48,0 H0 V48" fill="none" stroke="#74bfeb" stroke-opacity=".07" stroke-width="1"/></pattern>' +
+    '</defs>' +
+    (opts.ground === false ? '' : '<rect width="1200" height="560" fill="url(#' + g + 'g)"/>') +
+    '<rect width="1200" height="' + GROUND + '" fill="url(#' + g + 'p)"/>' +
+    '<g fill="#e6f4fc" class="no-stars">' + stars.map(function (s, i) { return '<circle cx="' + s[0] + '" cy="' + s[1] + '" r="' + s[2] + '" style="animation-delay:' + ((i * 0.53) % 4).toFixed(2) + 's"/>'; }).join('') + '</g>' +
+    '<g' + (opts.moon ? ' transform="translate(' + opts.moon[0] + ',' + opts.moon[1] + ') scale(' + opts.moon[2] + ') translate(-1110,-96)"' : '') + '><circle cx="1110" cy="96" r="100" fill="url(#' + g + 'm)" class="no-halo"/><path d="M1098,50 a50,50 0 1,0 50,74 a40,40 0 1,1 -50,-74 Z" fill="#d9eefa"/></g>' +
+    (opts.sky ? '</svg>' : (
+    /* the Wasatch Range, then the foothills */
+    '<g class="no-mtn">' + ridge([[0, 372], [80, 326], [150, 344], [236, 286], [316, 314], [404, 246], [470, 276], [552, 214], [616, 246], [694, 186], [756, 228], [826, 200], [898, 156], [962, 212], [1028, 198], [1094, 252], [1158, 226], [1200, 242]], '#15456b', 262) +
+    ridge([[0, 438], [120, 408], [240, 428], [360, 388], [470, 404], [580, 366], [690, 392], [800, 356], [910, 380], [1020, 350], [1120, 376], [1200, 362]], '#0f3757') + '</g>' +
+    '<g class="no-bldg">' + towers.map(tower).join('') + capitol + '</g>' +
+    /* street lamps */
+    [[596, 452], [990, 458], [1188, 452]].map(function (l, i) { return '<rect x="' + (l[0] - 1.5) + '" y="' + l[1] + '" width="3" height="' + (GROUND - l[1]) + '" fill="#0b2a44"/><circle cx="' + l[0] + '" cy="' + l[1] + '" r="24" fill="url(#' + g + 'l)" class="no-lamp" style="animation-delay:' + (i * 0.8) + 's"/><rect x="' + (l[0] - 6) + '" y="' + (l[1] - 4) + '" width="12" height="5" rx="2" fill="#ffd98a"/>'; }).join('') +
+    /* the street, the overhead line and a TRAX train on it */
+    '<rect x="0" y="' + GROUND + '" width="1200" height="60" fill="#0c2e4b"/><rect x="0" y="' + GROUND + '" width="1200" height="5" fill="#74bfeb" opacity=".9"/>' +
+    (opts.noCar ? '</svg>' :
+    '<path d="M0,439 H1200" stroke="#5aa9d8" stroke-width="1.2" opacity=".35"/>' +
+    '<g class="no-car"><rect x="0" y="0" width="122" height="46" rx="6" fill="#0f3b5c" stroke="#5aa9d8" stroke-width="2"/>' +
+    '<path d="M128,0 H234 Q252,3 258,24 V46 H128 Z" fill="#0f3b5c" stroke="#5aa9d8" stroke-width="2" stroke-linejoin="round"/><rect x="121" y="12" width="8" height="26" fill="#0b2e4a"/>' +
+    [10, 32, 54, 76, 98, 140, 162, 184, 206].map(function (k) { return '<rect x="' + k + '" y="9" width="16" height="16" rx="2" fill="#f3c64f" opacity=".85"/>'; }).join('') +
+    '<path d="M238,9 H246 Q252,12 254,25 H238 Z" fill="#cfe9f8" opacity=".7"/>' +
+    '<rect x="0" y="31" width="122" height="3" fill="#74bfeb" opacity=".8"/><rect x="128" y="31" width="128" height="3" fill="#74bfeb" opacity=".8"/>' +
+    '<circle cx="252" cy="38" r="3" fill="#ffe7b0"/>' +
+    '<path d="M46,-1 L61,-20 L76,-1 M61,-20 L52,-39 M42,-39 H66" stroke="#5aa9d8" stroke-width="2" fill="none"/></g></svg>')));
+}
+/* the city's own art, or '' for a city that doesn't have one yet */
+function cityArt(place, opts) { place = place || ''; return /new orleans/i.test(place) ? nolaArt(opts) : /salt lake/i.test(place) ? slcArt(opts) : ''; }
+/* summit art: New Orleans and Salt Lake City get their own; any other city the usual skyline */
 /* Jonna, Nov 26, 2026: every summit header (Summit tile, summit home, Why Attend, Explore postcard, sponsors) uses it;
    the sponsor ones without the streetcar. */
-function summitArt(opts) { opts = opts || {}; return /new orleans/i.test(S.place || '') ? nolaArt(opts) + (opts.noFade ? '' : '<span class="art-fade" aria-hidden="true"></span>') : heroArt(opts); }
+function summitArt(opts) { opts = opts || {}; var a = cityArt(S.place, opts); return a ? a + (opts.noFade ? '' : '<span class="art-fade" aria-hidden="true"></span>') : heroArt(opts); }
 function heroArt(opts) {
   opts = opts || {}; var n = ++ART_N, g = 'ha' + n;
   var tr = 'M470,620 C690,540 880,470 1250,398|M450,654 C680,572 890,500 1258,428|M520,684 C740,604 940,534 1264,464|M580,712 C800,636 990,570 1272,500'.split('|');
