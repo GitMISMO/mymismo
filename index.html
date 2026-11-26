@@ -739,15 +739,48 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tb-top{display:flex; align-items:center; justify-content:space-between; gap:10px}
 .tb-top .tg-score b{font-size:26px}
 .tb-end{border:1px solid rgba(255,255,255,.25); background:transparent; color:#fff; border-radius:8px; padding:8px 12px; font:inherit; font-weight:700; cursor:pointer}
-.tb-grid{display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:5px}
-.tb-h{display:flex; align-items:flex-end; justify-content:center; min-height:46px; padding:6px 1px; text-align:center; font-weight:800; font-size:clamp(9.5px, 2.55vw, 13px); letter-spacing:-.01em; line-height:1.15; color:#fff; background:#0b2a40; border-top:4px solid var(--cc); border-radius:6px; overflow-wrap:normal; word-break:keep-all; hyphens:none}
-.tb-c{aspect-ratio:1/.82; display:grid; place-items:center; border:0; border-radius:6px; background:linear-gradient(160deg, #1b5a88, #0f3b5c); color:#f3c64f; font:inherit; font-weight:800; font-size:clamp(13px, 3.6vw, 22px); letter-spacing:-.01em; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
-.tb.first .tb-c{animation:tile-in .35s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--k) * 30ms)}
+/* Jonna, Nov 26, 2026: a proper game-show board. A dark wall with blue screens and gold values; the screens flip on one
+   by one when a board starts; a tapped square zooms up to fill the board and turns into the question card. */
+.tg{position:relative}
+.tb-wall{background:#020a12; padding:5px; border-radius:12px; box-shadow:0 0 0 2px rgba(243,198,79,.4), 0 18px 40px rgba(0,0,0,.5), inset 0 0 24px rgba(0,0,0,.7)}
+.tb-grid{display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:4px}
+.tb-h{display:flex; align-items:center; justify-content:center; min-height:50px; padding:6px 2px; text-align:center; font-family:var(--cond); font-weight:800; font-size:clamp(10px, 2.7vw, 14px); letter-spacing:.01em; line-height:1.1; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.6); background:radial-gradient(120% 100% at 50% 15%, #1f5fa6 0%, #143f73 70%, #0e3058 100%); border-bottom:3px solid var(--cc); border-radius:4px; overflow-wrap:normal; word-break:keep-all; hyphens:none}
+.tb-c{aspect-ratio:1/.82; display:grid; place-items:center; border:0; border-radius:4px; background:radial-gradient(120% 95% at 50% 18%, #2467b6 0%, #164c8e 55%, #0e3564 100%); color:#f3c64f; font-family:var(--cond); font-weight:800; font-size:clamp(16px, 4.6vw, 30px); letter-spacing:-.01em; text-shadow:2px 2px 0 #000, 0 0 14px rgba(243,198,79,.3); cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.2), inset 0 -2px 0 rgba(0,0,0,.35); transition:transform .15s, filter .15s, box-shadow .15s}
+.tb.first .tb-h{animation:tb-head .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 110ms)}
+.tb.first .tb-c{animation:tb-flip .5s cubic-bezier(.2,.8,.2,1) both; animation-delay:var(--rd)}
+.tb.first .tb-c span{animation:tb-val .35s ease both; animation-delay:calc(var(--rd) + 700ms)}
+.tb-c.just{animation:tb-gone .7s ease both}
+.tb.back .tb-wall{animation:tb-back .35s ease both}
+@keyframes tb-head{from{opacity:0; transform:translateY(-10px)}}
+@keyframes tb-flip{0%{opacity:0; transform:perspective(520px) rotateX(-95deg)} 55%{opacity:1} 100%{transform:none}}
+@keyframes tb-val{from{opacity:0; transform:scale(.6)}}
+@keyframes tb-gone{0%{background:#f3c64f; box-shadow:0 0 24px rgba(243,198,79,.8)} 100%{}}
+@keyframes tb-back{from{opacity:.4; transform:scale(.985)}}
+/* the square zooming up to fill the board */
+.tb-zoom{position:absolute; z-index:6; transform-origin:0 0; display:grid; place-items:center; border-radius:4px; background:radial-gradient(120% 95% at 50% 18%, #2467b6 0%, #164c8e 55%, #0e3564 100%); box-shadow:0 0 0 2px rgba(243,198,79,.6), 0 24px 60px rgba(0,0,0,.6); color:#f3c64f; font-family:var(--cond); font-weight:800; text-shadow:2px 2px 0 #000; transition:transform .5s cubic-bezier(.25,.8,.25,1), border-radius .5s, opacity .25s; overflow:hidden; pointer-events:none}
+.tb-zoom b{font-size:clamp(16px, 4.6vw, 30px); transition:opacity .2s .15s}
+.tb-zoom.go b{opacity:0}
+.tb-zoom.out{opacity:0}
+.tb-dd{display:grid; place-items:center; text-align:center; font-size:clamp(44px, 14vw, 88px); line-height:.95; color:#f3c64f; text-shadow:3px 3px 0 #000, 0 0 30px rgba(243,198,79,.5); animation:tb-dd .9s cubic-bezier(.2,.9,.2,1.2) both}
+@keyframes tb-dd{0%{opacity:0; transform:scale(.2) rotate(-200deg)} 70%{opacity:1; transform:scale(1.08) rotate(6deg)} 100%{transform:none}}
+/* the question card */
+.tb-clue{position:relative; display:flex; flex-direction:column; justify-content:center; min-height:clamp(200px, 36vh, 340px); padding:46px 18px 22px; border-radius:10px; text-align:center; background:radial-gradient(120% 95% at 50% 18%, #2467b6 0%, #164c8e 55%, #0e3564 100%); box-shadow:0 0 0 2px rgba(243,198,79,.45), 0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.2); animation:tb-in .3s ease both}
+@keyframes tb-in{from{opacity:.5}}
+.tb-clue h3{font-family:var(--cond); font-weight:800; font-size:clamp(22px, 6.4vw, 36px); line-height:1.15; color:#fff; text-shadow:2px 2px 0 rgba(0,0,0,.85); margin:0}
+.tb-clue-h{position:absolute; left:14px; right:14px; top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px}
+.tb-clue-cat{display:inline-flex; align-items:center; text-align:left; gap:7px; font-size:13px; font-weight:800; color:#fff; text-shadow:0 1px 0 #000}
+.tb-clue-cat i{width:10px; height:10px; border-radius:50%; background:var(--cc); box-shadow:0 0 8px var(--cc)}
+.tb-clue-v{text-align:right; flex:none; font-family:var(--cond); font-weight:800; font-size:20px; color:#f3c64f; text-shadow:2px 2px 0 #000}
+.tb-clock{position:relative; width:58px; height:58px}
+.tb-clock b{position:absolute; inset:0; display:grid; place-items:center; font-family:var(--cond); font-size:22px}
+.tb-clock b.hurry{color:#eb6834; animation:tv-bob .5s ease-in-out infinite}
+.tb-clue-wrap{display:grid; gap:14px}
+@media (prefers-reduced-motion:reduce){ .tb.first .tb-c,.tb.first .tb-c span,.tb.first .tb-h,.tb-c.just,.tb-dd,.tb-clue,.tb.back .tb-wall{animation:none} .tb-zoom{transition:none} }
 @media (orientation:portrait){ .tb-c{aspect-ratio:auto; height:clamp(56px, calc((100dvh - 380px) / 5), 96px)} }
 @media (orientation:landscape) and (max-height:560px){ .tb-c{aspect-ratio:auto; height:calc((100vh - 200px) / 5); min-height:34px} .tb-h{min-height:30px; padding-top:3px} .tb-note{display:none} }
-.tb-c:hover{background:linear-gradient(160deg, #2370a8, #14486e)}
-.tb-c:disabled{background:rgba(255,255,255,.04); box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); color:transparent; cursor:default}
-.tb-c.ok:disabled{background:rgba(27,175,122,.14)} .tb-c.no:disabled{background:rgba(235,104,52,.12)}
+.tb-c:not(:disabled):hover,.tb-c:not(:disabled):focus-visible{filter:brightness(1.18); transform:translateY(-1px); box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 0 0 2px rgba(243,198,79,.7); outline:0}
+.tb-c:disabled{background:#0a2440; box-shadow:inset 0 0 0 1px rgba(255,255,255,.05); color:transparent; text-shadow:none; cursor:default}
+.tb-c.ok:disabled{box-shadow:inset 0 -3px 0 rgba(27,175,122,.7)} .tb-c.no:disabled{box-shadow:inset 0 -3px 0 rgba(235,104,52,.6)}
 .tb-note{color:rgba(255,255,255,.7); font-size:13px; text-align:center; margin:0}
 .tb-val{display:inline-block; font-weight:800; color:#f3c64f; font-size:15px}
 .tb-dbl{display:block; text-align:center; font-family:var(--cond); font-weight:800; font-size:30px; color:#f3c64f; animation:tile-in .4s both}
@@ -2813,28 +2846,47 @@ function triviaBoard(all) {
   });
   var live = []; cells.forEach(function (col) { col.forEach(function (x) { if (x) live.push(x); }); });
   var dbl = shuffle(live.filter(function (x) { return x.v >= 600; }))[0]; if (dbl) dbl.dbl = true;
-  var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true;
+  var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true, lastDone = null;
   var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }), box = el.querySelector('#tg');
   el.classList.add('tg-sheet');
   function catColor(c) { var x = TRIVIA_CATS.filter(function (k) { return k[0] === c; })[0]; return x ? x[2] : '#74bfeb'; }
   function scoreHtml() { return '<div class="tg-score"><span>Score</span><b id="tg-sc">' + st.score.toLocaleString() + '</b></div>'; }
   function paintBoard() {
     cur = null;
-    box.innerHTML = '<div class="tb' + (firstPaint ? ' first' : '') + '"><div class="tb-top">' + scoreHtml() + '<button type="button" class="tb-end" data-tb-end>End Game</button></div>' +
-      '<div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c) { return '<div class="tb-h" style="--cc:' + catColor(c) + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
+    var back = !firstPaint;
+    box.innerHTML = '<div class="tb' + (firstPaint ? ' first' : ' back') + '"><div class="tb-top">' + scoreHtml() + '<button type="button" class="tb-end" data-tb-end>End Game</button></div>' +
+      '<div class="tb-wall"><div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c, i) { return '<div class="tb-h" style="--cc:' + catColor(c) + ';--i:' + i + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
       TB_VALUES.map(function (v, r) { return cats.map(function (c, k) { var x = cells[k][r];
-        return '<button type="button" class="tb-c' + (x && x.done ? (x.ok ? ' ok' : ' no') : '') + '" data-tb="' + k + '-' + r + '" style="--k:' + (r * 6 + k) + '"' + (!x || x.done ? ' disabled' : '') + ' aria-label="' + esc((TB_SHORT[c] || c) + ' for ' + v) + '">' + (x ? v : '') + '</button>'; }).join(''); }).join('') + '</div>' +
+        return '<button type="button" class="tb-c' + (x && x.done ? (x.ok ? ' ok' : ' no') + (x === lastDone ? ' just' : '') : '') + '" data-tb="' + k + '-' + r + '" style="--rd:' + Math.round(250 + Math.random() * 900) + 'ms"' + (!x || x.done ? ' disabled' : '') + ' aria-label="' + esc((TB_SHORT[c] || c) + ' for ' + v) + '"><span>' + (x ? v : '') + '</span></button>'; }).join(''); }).join('') + '</div></div>' +
       '<p class="tb-note">Right adds the points, wrong takes them away, and running out of time costs nothing. One square is worth double.</p></div>';
-    firstPaint = false;
+    firstPaint = false; lastDone = null;
+    if (back) box.scrollTop = 0;
   }
+  /* the tapped square grows from where it sits until it covers the board, then becomes the question card */
   function open(k, r) {
-    var x = cells[k][r]; if (!x || x.done) return; cur = x;
+    var x = cells[k][r]; if (!x || x.done || cur) return; cur = x;
+    var tile = box.querySelector('[data-tb="' + k + '-' + r + '"]'), wall = box.querySelector('.tb-wall');
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!tile || !wall || still) { showClue(x); return; }
+    var bb = box.getBoundingClientRect(), tr = tile.getBoundingClientRect(), wr = wall.getBoundingClientRect();
+    var z = document.createElement('div'); z.className = 'tb-zoom';
+    z.style.left = (wr.left - bb.left) + 'px'; z.style.top = (wr.top - bb.top + box.scrollTop) + 'px'; z.style.width = wr.width + 'px'; z.style.height = wr.height + 'px';
+    z.style.transform = 'translate(' + (tr.left - wr.left) + 'px,' + (tr.top - wr.top) + 'px) scale(' + (tr.width / wr.width) + ',' + (tr.height / wr.height) + ')';
+    z.innerHTML = '<b style="transform:scale(' + (wr.width / tr.width).toFixed(3) + ',' + (wr.height / tr.height).toFixed(3) + ')">' + x.v + '</b>';   /* the same size as on the square, then it grows and fades */
+    tile.style.visibility = 'hidden'; box.appendChild(z);
+    void z.offsetWidth;
+    z.classList.add('go'); z.style.transform = 'none'; z.style.borderRadius = '10px';
+    setTimeout(function () {
+      if (!x.dbl) { showClue(x); return; }
+      z.innerHTML = '<span class="tb-dd">Double<br>Square!</span>';   /* the hidden double: its own moment first */
+      setTimeout(function () { showClue(x); }, 1500);
+    }, 520);
+  }
+  function showClue(x) {
     var col = catColor(x.q.cat), val = x.dbl ? x.v * 2 : x.v;
-    box.innerHTML = '<div class="tg-top"><span class="tb-val">' + (x.dbl ? 'Double: ' : '') + val.toLocaleString() + '</span>' + scoreHtml() + '</div>' +
-      (x.dbl ? '<span class="tb-dbl">Double Square!</span>' : '') +
-      '<div class="tg-mid"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div>' +
-      '<div class="tg-card" style="--cc:' + col + '"><span class="tg-cat"><i></i>' + esc(x.q.cat) + '</span><span class="tg-qn">For ' + val.toLocaleString() + '</span><h3>' + esc(x.q.q) + '</h3></div>' +
-      '<div class="tg-ans">' + x.choices.map(function (c, n) { return '<button type="button" class="tg-a" data-a="' + n + '" style="--d:' + (n * 70) + 'ms"><span class="tg-l">' + 'ABCD'[n] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div>';
+    box.innerHTML = '<div class="tb-clue-wrap"><div class="tg-top">' + scoreHtml() + '<div class="tb-clock"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div></div>' +
+      '<div class="tb-clue" style="--cc:' + col + '"><div class="tb-clue-h"><span class="tb-clue-cat"><i></i>' + esc(x.q.cat) + '</span><span class="tb-clue-v">' + (x.dbl ? 'Double ' : '') + val.toLocaleString() + '</span></div><h3>' + esc(x.q.q) + '</h3></div>' +
+      '<div class="tg-ans">' + x.choices.map(function (c, n) { return '<button type="button" class="tg-a" data-a="' + n + '" style="--d:' + (n * 70) + 'ms"><span class="tg-l">' + 'ABCD'[n] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div></div>';
     locked = false; t0 = performance.now(); tick();
   }
   function tick() {
@@ -2847,7 +2899,7 @@ function triviaBoard(all) {
   function answer(n) {
     if (locked || !cur) return; locked = true; cancelAnimationFrame(timer);
     var x = cur, val = x.dbl ? x.v * 2 : x.v, ok = n === x.right, pts = ok ? val : (n < 0 ? 0 : -val);
-    x.done = true; x.ok = ok; st.played++; if (ok) st.right++; st.score += pts;
+    x.done = true; x.ok = ok; lastDone = x; st.played++; if (ok) st.right++; st.score += pts;
     st.log.push({ q: x.q, ok: ok, pick: n >= 0 ? x.choices[n] : '', right: x.choices[x.right], pts: pts });
     seen.push(x.q.id); save('trivia-seen', seen.filter(function (v, i, a) { return a.indexOf(v) === i; }));
     box.querySelectorAll('.tg-a').forEach(function (b, i) { b.disabled = true; if (i === x.right) b.classList.add('right'); else if (i === n) b.classList.add('wrong'); else b.classList.add('dim'); });

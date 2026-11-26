@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Trivia, the Board: a game-show look (dark wall, blue screens, gold values), the categories drop in and the squares flip on one by one at the start, and a tapped square zooms up to fill the board and becomes the question card. The Double Square gets its own spinning reveal; a played square flashes gold and goes dark. Respects reduced motion.
 - Nov 26, 2026: Attendee list headshots: anyone without their own picture in MyMISMO shows the one already public on mismo.org if they're a speaker at this summit, on the MISMO team (About MISMO) or on the Board (MISMO Leadership). Matched by name, nicknames included; a name that could be two people gets none. The daily website job keeps data/faces.json current.
 - Nov 26, 2026: MISMO Matters and Mic'd Up notifications: a separate opt-in switch in Settings (off until turned on, off any time). MISMO Media's Push to MyMISMO button sends one, with words staff can edit; tapping it opens that edition or episode. A pushed Mic'd Up episode joins the list right away. Waits on relay request 16 (Perry) and MISMO Media (CN-049).
 - Nov 26, 2026: Website copy of the Salt Lake City art at art/slc-summit.svg (tools/make_nola_svg.mjs now builds both cities), for the website's Spring summit header (CN-048).
