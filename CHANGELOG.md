@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: December: the santa hat is on the MISMO logo of the loading screen too, so it is the first thing people see when the app opens, and stays on the header logo once it is open (CN-052).
 - Nov 26, 2026: December: from December 1 to 31 the MISMO logo in the header wears the shared santa hat on its O; the first time the app opens in a session the bobble swings and a little snow falls, and hovering over the hat brings the snow back. Replaces the old small hat. Preview any time with ?holiday=preview (CN-052).
 - Nov 26, 2026: Trivia: no questions about workgroup chairs or other volunteer leaders (staff are fine). Removed the one about an eMortgage CoP co-chair, and its Final Square.
 - Nov 26, 2026: Dashboard upright: the Webinars date is back beside the title, so the white tiles are short again (only a very narrow tile on its side stacks them). A taller partner tile fills with whole extra lines instead of empty space.
