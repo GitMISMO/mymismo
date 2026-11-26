@@ -1918,9 +1918,9 @@ function renderPeople() {
    emails are never shown, and nothing is kept on the phone. Profiles, headshots and messages open with attendee sign-in. */
 var PV = { state: '', people: [] };
 function canPreviewAttendees() {
-  var st = staffSession(); if (!st || !window.ResourcesSession) return false;
-  var acc = (ResourcesSession.current() || {}).access || {};
-  return !!(acc['summit-hq'] || (ResourcesSession.current() || {}).platformAdmin);
+  var st = staffSession(); if (!st || !appTester()) return false;
+  var acc = st.access || {};
+  return !!(acc['summit-hq'] || st.platformAdmin);   /* the list itself is read from Summit HQ */
 }
 function loadPreviewAttendees() {
   if (PV.state) return; PV.state = 'loading';
@@ -2295,6 +2295,10 @@ var DASH = [
 function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
 function staffSession() { try { return window.ResourcesSession && ResourcesSession.current(); } catch (e) { return null; } }
+/* Jonna, Nov 25, 2026: the early features (Trivia Test Run, the attendee preview) are only for people given MyMISMO in
+   People & Access (the staff, and Erin), not everyone with a MISMO Resources sign-in. Facilitators and contractors get
+   them when MyMISMO is added for them. */
+function appTester() { var st = staffSession(); return !!(st && ((st.access || {}).mymismo || st.platformAdmin)); }
 function firstName() {
   var st = staffSession(); if (st && st.name) return String(st.name).split(/\s+/)[0];
   if (A.me && A.me.first) return A.me.first;
@@ -2390,7 +2394,7 @@ try { if (/^android-app:\/\/org\.mismo\.mymismo/.test(document.referrer)) save('
 function triviaTester() {
   if (STORE_RELEASE) return false;
   if (/[?&]trivia=test\b/.test(location.search)) save('trivia-tester', true);   /* the test link is remembered on this phone */
-  return !!staffSession() || load('trivia-tester', false);
+  return appTester() || load('trivia-tester', false);
 }
 var TQ = null, TV_LEN = 10, TV_SECS = 20;
 /* Easy: easy questions, more time. Medium: a mix. Hard: the toughest questions, less time, double points. */

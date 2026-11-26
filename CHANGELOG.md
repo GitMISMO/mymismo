@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: The Trivia Test Run and the attendee preview are for people given MyMISMO in People & Access (MISMO staff and Erin), not everyone with a MISMO Resources sign-in.
 - Nov 25, 2026: Sponsors page: the sponsors come right after the heading; the Become a Sponsor card is only at the bottom.
 - Nov 25, 2026: Attendees: MISMO staff are listed once, with their titles. The second entry from Summit HQ's staff roster (just "MISMO") no longer shows; staff signing in with their mismo.org address get the same entry as their registration.
 - Nov 25, 2026: Webinars include the AI Webinar Series MISMO presents with MBA Education: all 14 sessions from the website's Education page (2:00 to 3:00 PM ET), each with Register (MBA.org) and Add to Calendar, marked "AI Webinar Series with MBA". The daily guide job keeps the list in step with the website.
