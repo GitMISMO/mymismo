@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 25, 2026: MISMO Trivia: Hard is now played on the Board (six categories, five squares from 200 to 1,000; right adds the points, wrong takes them away, time running out costs nothing; one hidden square is worth double; end any time). Easy and Medium stay 10 questions against the clock. The Quarterly Championship is off the trivia page for now.
 - Nov 25, 2026: Head to Head plan set (relay request 16 for Perry): challenge someone you pick or find an opponent, the same 10 questions, highest score wins, a tie goes to the quicker player, no computer opponent. The trivia page's Head to Head card says so.
 - Nov 25, 2026: The phone's Back button goes back through the app (a summit page back to the dashboard, an open panel closes first) instead of leaving the app.
 - Nov 25, 2026: MISMO Trivia says Beta instead of Coming Soon, on the dashboard tile and the trivia page. Anyone given MyMISMO in People & Access plays it (Play a Beta Round); everyone else sees that it's being tested before it opens.

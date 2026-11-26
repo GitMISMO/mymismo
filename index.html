@@ -689,6 +689,24 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-cats.pick .tv-cat > svg{grid-column:3; grid-row:1 / span 2; width:18px; height:18px; color:var(--oc); opacity:0; transition:opacity .15s ease}
 .tv-cats.pick .tv-cat.on{border:2px solid var(--oc); box-shadow:0 8px 20px -12px var(--oc); transform:translateY(-1px)}
 .tv-cats.pick .tv-cat.on > svg{opacity:1}
+.tv-cats.pick.off{opacity:.45; pointer-events:none; filter:saturate(.6)}
+/* the Board (Hard) */
+.tb{display:grid; gap:12px}
+.tb-top{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.tb-top .tg-score b{font-size:26px}
+.tb-end{border:1px solid rgba(255,255,255,.25); background:transparent; color:#fff; border-radius:8px; padding:8px 12px; font:inherit; font-weight:700; cursor:pointer}
+.tb-grid{display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:5px}
+.tb-h{display:flex; align-items:flex-end; justify-content:center; min-height:46px; padding:6px 1px; text-align:center; font-weight:800; font-size:clamp(9.5px, 2.55vw, 13px); letter-spacing:-.01em; line-height:1.15; color:#fff; background:#0b2a40; border-top:4px solid var(--cc); border-radius:6px; overflow-wrap:normal; word-break:keep-all; hyphens:none}
+.tb-c{aspect-ratio:1/.82; display:grid; place-items:center; border:0; border-radius:6px; background:linear-gradient(160deg, #1b5a88, #0f3b5c); color:#f3c64f; font:inherit; font-weight:800; font-size:clamp(13px, 3.6vw, 22px); letter-spacing:-.01em; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.tb.first .tb-c{animation:tile-in .35s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--k) * 30ms)}
+@media (orientation:portrait){ .tb-c{aspect-ratio:auto; height:clamp(56px, calc((100dvh - 380px) / 5), 96px)} }
+@media (orientation:landscape) and (max-height:560px){ .tb-c{aspect-ratio:auto; height:calc((100vh - 200px) / 5); min-height:34px} .tb-h{min-height:30px; padding-top:3px} .tb-note{display:none} }
+.tb-c:hover{background:linear-gradient(160deg, #2370a8, #14486e)}
+.tb-c:disabled{background:rgba(255,255,255,.04); box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); color:transparent; cursor:default}
+.tb-c.ok:disabled{background:rgba(27,175,122,.14)} .tb-c.no:disabled{background:rgba(235,104,52,.12)}
+.tb-note{color:rgba(255,255,255,.7); font-size:13px; text-align:center; margin:0}
+.tb-val{display:inline-block; font-weight:800; color:#f3c64f; font-size:15px}
+.tb-dbl{display:block; text-align:center; font-family:var(--cond); font-weight:800; font-size:30px; color:#f3c64f; animation:tile-in .4s both}
 .tv-playbox{margin:14px 0 22px; background:radial-gradient(120% 120% at 50% 0%, #14486e 0%, #071d2e 70%); border-radius:16px; padding:6px 14px 18px; text-align:center; color:#fff}
 .tv-cat{display:grid; grid-template-columns:auto 1fr; column-gap:10px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 60ms)}
 .tv-cat i{grid-row:span 2; width:16px; height:16px; border-radius:50%; background:var(--oc); box-shadow:0 0 0 4px color-mix(in srgb, var(--oc) 25%, transparent)}
@@ -2351,7 +2369,7 @@ function triviaSheet() {
       var on = load('trivia-cat', '') === c[0];
       return '<button type="button" class="tv-cat' + (c[0] ? '' : ' mixed') + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0] || c[1]) + '</b><span>' + esc(c[0] ? c[1] : c[3]) + '</span>' + icon('i-check') + '</button>';
     }).join('') + '</div>' +
-    '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.secs + ' sec') + '</span><em>' + (l.study ? 'Learn' : l.mult + '&times;') + '</em></button>'; }).join('') + '</div>' +
+    '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.board ? 'The Board' : l.secs + ' sec') + '</span><em>' + (l.study ? 'Learn' : l.board ? '6 &times; 5' : l.mult + '&times;') + '</em></button>'; }).join('') + '</div>' +
     '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Beta Round</button><span class="tv-tnote" id="tv-lbnote"></span></div>' :
     '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
   h += '<div class="tv-modes">' +
@@ -2361,17 +2379,19 @@ function triviaSheet() {
       return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
     '</div><div class="tv-facts"><span>' + icon('i-cal') + 'New Every Month</span><span>' + icon('i-star') + 'Your Best Round</span><span>' + icon('i-grid') + 'Hard, Mixed</span></div></div>';
   var shortCat = ['Standards', 'Life of Loan', 'Glossary', 'MISMO', 'Certs', 'Mortgage'];
-  h += '<div class="d-h">Quarterly Championship</div><section class="tv-champ"><div class="tc-head">' + icon('i-cert') + '<div><b>The Championship Board</b><span>Three monthly champions. One tougher board. One winner.</span></div></div>' +
+  /* Jonna, Nov 25, 2026: the Quarterly Championship is off the page for now. */
     '<div class="tc-board" aria-hidden="true">' + shortCat.map(function (c, k) { return '<div class="tc-col" style="--k:' + k + '"><span class="tc-cat">' + esc(c) + '</span>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<span class="tc-cell" style="--r:' + r + '">' + v + '</span>'; }).join('') + '</div>'; }).join('') + '</div>' +
     '<div class="tv-facts"><span>' + icon('i-people') + '3 Monthly Champs</span><span>' + icon('i-clock') + 'One Timed Try</span><span>' + icon('i-cert') + 'Prize at the Summit</span></div><em>' + icon('i-lock') + 'Opens Soon</em></section>';
-  h += test && ts.games ? '<div class="d-h">Your Beta Rounds</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b || '&mdash;') + '</b><span>Best ' + l.name + '</span></div>'; }).join('') + '</div><p class="tv-tplayed">' + ts.games + (ts.games === 1 ? ' round' : ' rounds') + ' played, most right ' + (ts.bestRight || 0) + ' of 10</p>' :
+  h += test && ts.games ? '<div class="d-h">Your Beta Rounds</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b || '&mdash;') + '</b><span>Best ' + (l.board ? 'Board' : l.name) + '</span></div>'; }).join('') + '</div><p class="tv-tplayed">' + ts.games + (ts.games === 1 ? ' round' : ' rounds') + ' played, most right ' + (ts.bestRight || 0) + ' of 10</p>' :
     '<div class="d-h">Your Scores</div><div class="tv-stats"><div><b>&mdash;</b><span>Best Score</span></div><div><b>&mdash;</b><span>Games Played</span></div><div><b>&mdash;</b><span>Head to Head Wins</span></div></div>';
   h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions. Trivia opens here once they\'re in.</div></div>';
   var el = openSheet('MISMO Trivia', h, { plain: true });
   function lbNote() {
     var n = el.querySelector('#tv-lbnote'); if (!n) return;
-    var counts = load('trivia-level', 1) === 2 && !load('trivia-cat', '');
-    n.innerHTML = counts ? '<span class="tv-counts">' + icon('i-check') + 'Counts for the Leaderboard</span>' : 'Only Hard rounds of Mixed questions count for the leaderboard.';
+    var board = !!(TV_LEVELS[load('trivia-level', 1)] || {}).board, go = el.querySelector('[data-tv-play]'), cats = el.querySelector('.tv-cats.pick');
+    if (go) go.innerHTML = icon('i-play') + (board ? 'Play the Board' : 'Play a Beta Round');
+    if (cats) cats.classList.toggle('off', board);
+    n.innerHTML = board ? 'Hard is played on the Board: all six categories, pick your squares, 200 to 1,000 points each.' : 'Easy and Medium: 10 questions against the clock.';
   }
   lbNote();
   el.addEventListener('click', function (e) {
@@ -2401,14 +2421,14 @@ var TQ = null, TV_LEN = 10, TV_SECS = 20;
 var TV_LEVELS = [
   { name: 'Easy', secs: 25, mult: 1, c: '#1baf7a', want: [1, 2] },
   { name: 'Medium', secs: 20, mult: 1.5, c: '#eda100', want: [2, 1, 3] },
-  { name: 'Hard', secs: 15, mult: 2, c: '#eb6834', want: [3, 2] },
+  { name: 'Hard', secs: 20, mult: 2, c: '#eb6834', want: [3, 2], board: true },   /* Jonna, Nov 25, 2026: Hard is played on the Board */
   { name: 'Study', secs: 0, mult: 0, c: '#74bfeb', want: [1, 2, 3], study: true }
 ];
 /* Scoring, like Kahoot: a right answer is worth up to 1,000 points (times the level), less the slower it comes, never
    below half; two or more right in a row adds a 100-point streak bonus (times the level); a wrong answer scores 0. */
 function tvPoints(left, secs, mult) { return Math.floor((1 - ((secs - left) / secs) / 2) * 1000 * mult); }
 function triviaPlay() {
-  (TQ ? Promise.resolve(TQ) : getJSON('data/trivia-draft.json').then(function (d) { TQ = d; return d; })).then(function (d) { triviaRound(d.questions || []); })
+  (TQ ? Promise.resolve(TQ) : getJSON('data/trivia-draft.json').then(function (d) { TQ = d; return d; })).then(function (d) { if ((TV_LEVELS[load('trivia-level', 1)] || {}).board) triviaBoard(d.questions || []); else triviaRound(d.questions || []); })
     .catch(function () { openSheet('MISMO Trivia', '<div class="sheet-pad"><div class="note">The questions couldn\'t be loaded. Check your connection and try again.</div></div>', { plain: true }); });
 }
 function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
@@ -2491,6 +2511,93 @@ function triviaRound(all) {
     if (e.target.closest('[data-tv-review]')) { var r = box.querySelector('#tg-review'); r.hidden = !r.hidden; }
   });
   paint();
+}
+/* ---------- the Board (Hard): six categories, five squares each, pick your way through ----------
+   Jonna, Nov 25, 2026: Easy and Medium stay 10 timed questions; Hard is played on the Board. A right answer adds the
+   square's value, a wrong one takes it away, and letting the clock run out costs nothing. One hidden square is worth
+   double. The game ends when every square is played or you end it. Kept on this phone; it doesn't count anywhere yet. */
+var TB_VALUES = [200, 400, 600, 800, 1000], TB_SHORT = { 'MISMO Standards': 'Standards', 'Life of Loan': 'Life of Loan', 'Business Glossary': 'Glossary', 'How MISMO Works': 'How MISMO Works', 'Bootcamp and Certification': 'Bootcamp, Certs', 'Mortgage Industry': 'Mortgage Industry' };
+function triviaBoard(all) {
+  var lvl = TV_LEVELS.filter(function (l) { return l.board; })[0], SECS = lvl.secs, seen = load('trivia-seen', []), used = [];
+  var want = [[2, 3, 1], [2, 3, 1], [3, 2, 1], [3, 2, 1], [3, 2, 1]];   /* 200 and 400: Medium questions first; 600 up: Hard */
+  var cats = TRIVIA_CATS.map(function (c) { return c[0]; }).filter(function (c) { return all.some(function (q) { return q.cat === c; }); });
+  var cells = cats.map(function (c) {
+    return TB_VALUES.map(function (v, r) {
+      var q = null;
+      [true, false].some(function (fresh) { return want[r].some(function (w) {
+        var pool = shuffle(all.filter(function (x) { return x.cat === c && (x.level || 2) === w && used.indexOf(x.id) < 0 && (seen.indexOf(x.id) < 0) === fresh; }));
+        if (pool.length) { q = pool[0]; used.push(q.id); return true; } return false; }); });
+      if (!q) return null;
+      var order = shuffle([0, 1, 2, 3]);
+      return { q: q, v: v, choices: order.map(function (k) { return q.choices[k]; }), right: order.indexOf(q.answer), done: false };
+    });
+  });
+  var live = []; cells.forEach(function (col) { col.forEach(function (x) { if (x) live.push(x); }); });
+  var dbl = shuffle(live.filter(function (x) { return x.v >= 600; }))[0]; if (dbl) dbl.dbl = true;
+  var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true;
+  var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }), box = el.querySelector('#tg');
+  el.classList.add('tg-sheet');
+  function catColor(c) { var x = TRIVIA_CATS.filter(function (k) { return k[0] === c; })[0]; return x ? x[2] : '#74bfeb'; }
+  function scoreHtml() { return '<div class="tg-score"><span>Score</span><b id="tg-sc">' + st.score.toLocaleString() + '</b></div>'; }
+  function paintBoard() {
+    cur = null;
+    box.innerHTML = '<div class="tb' + (firstPaint ? ' first' : '') + '"><div class="tb-top">' + scoreHtml() + '<button type="button" class="tb-end" data-tb-end>End Game</button></div>' +
+      '<div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c) { return '<div class="tb-h" style="--cc:' + catColor(c) + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
+      TB_VALUES.map(function (v, r) { return cats.map(function (c, k) { var x = cells[k][r];
+        return '<button type="button" class="tb-c' + (x && x.done ? (x.ok ? ' ok' : ' no') : '') + '" data-tb="' + k + '-' + r + '" style="--k:' + (r * 6 + k) + '"' + (!x || x.done ? ' disabled' : '') + ' aria-label="' + esc((TB_SHORT[c] || c) + ' for ' + v) + '">' + (x ? v : '') + '</button>'; }).join(''); }).join('') + '</div>' +
+      '<p class="tb-note">Right adds the points, wrong takes them away, and running out of time costs nothing. One square is worth double.</p></div>';
+    firstPaint = false;
+  }
+  function open(k, r) {
+    var x = cells[k][r]; if (!x || x.done) return; cur = x;
+    var col = catColor(x.q.cat), val = x.dbl ? x.v * 2 : x.v;
+    box.innerHTML = '<div class="tg-top"><span class="tb-val">' + (x.dbl ? 'Double: ' : '') + val.toLocaleString() + '</span>' + scoreHtml() + '</div>' +
+      (x.dbl ? '<span class="tb-dbl">Double Square!</span>' : '') +
+      '<div class="tg-mid"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div>' +
+      '<div class="tg-card" style="--cc:' + col + '"><span class="tg-cat"><i></i>' + esc(x.q.cat) + '</span><span class="tg-qn">For ' + val.toLocaleString() + '</span><h3>' + esc(x.q.q) + '</h3></div>' +
+      '<div class="tg-ans">' + x.choices.map(function (c, n) { return '<button type="button" class="tg-a" data-a="' + n + '" style="--d:' + (n * 70) + 'ms"><span class="tg-l">' + 'ABCD'[n] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div>';
+    locked = false; t0 = performance.now(); tick();
+  }
+  function tick() {
+    var left = Math.max(0, SECS - (performance.now() - t0) / 1000), ring = box.querySelector('#tg-ring'), sx = box.querySelector('#tg-secs');
+    if (!ring) return;
+    ring.style.strokeDashoffset = (326.7 * (1 - left / SECS)).toFixed(1); sx.textContent = Math.ceil(left); sx.classList.toggle('hurry', left <= 5);
+    if (left <= 0) { answer(-1); return; }
+    timer = requestAnimationFrame(tick);
+  }
+  function answer(n) {
+    if (locked || !cur) return; locked = true; cancelAnimationFrame(timer);
+    var x = cur, val = x.dbl ? x.v * 2 : x.v, ok = n === x.right, pts = ok ? val : (n < 0 ? 0 : -val);
+    x.done = true; x.ok = ok; st.played++; if (ok) st.right++; st.score += pts;
+    st.log.push({ q: x.q, ok: ok, pick: n >= 0 ? x.choices[n] : '', right: x.choices[x.right], pts: pts });
+    seen.push(x.q.id); save('trivia-seen', seen.filter(function (v, i, a) { return a.indexOf(v) === i; }));
+    box.querySelectorAll('.tg-a').forEach(function (b, i) { b.disabled = true; if (i === x.right) b.classList.add('right'); else if (i === n) b.classList.add('wrong'); else b.classList.add('dim'); });
+    var fx = document.createElement('div'); fx.className = 'tg-fx ' + (ok ? 'ok' : 'no');
+    fx.innerHTML = ok ? '<b>+' + val.toLocaleString() + '</b><span>Correct!</span>' : '<b>' + (n < 0 ? 'Time\'s Up' : '&minus;' + val.toLocaleString()) + '</b><span>' + esc(x.choices[x.right]) + '</span>';
+    box.appendChild(fx);
+    var sc = box.querySelector('#tg-sc'); if (sc) sc.textContent = st.score.toLocaleString();
+    setTimeout(function () { if (st.played >= live.length) end(); else paintBoard(); }, ok ? 1300 : 2200);
+  }
+  function end() {
+    cancelAnimationFrame(timer);
+    var ts = load('trivia-test', { best: 0, games: 0 }); ts.byLevel = ts.byLevel || {};
+    var newBest = st.played > 0 && st.score > (ts.byLevel.Hard || 0);
+    ts.games = (ts.games || 0) + 1; ts.bestRight = Math.max(ts.bestRight || 0, st.right); if (st.played) ts.byLevel.Hard = Math.max(ts.byLevel.Hard || 0, st.score); save('trivia-test', ts);
+    box.innerHTML = '<div class="tg-end">' + (newBest ? '<div class="tg-confetti" aria-hidden="true">' + Array.apply(null, Array(28)).map(function (z, n) { return '<i style="--x:' + (Math.random() * 100).toFixed(1) + '%;--d:' + (Math.random() * 0.8).toFixed(2) + 's;--c:' + TRIVIA_CATS[n % 6][2] + '"></i>'; }).join('') + '</div>' : '') +
+      '<span class="tg-lvl" style="--lc:' + lvl.c + '">The Board</span><span class="tv-soon">' + (newBest ? 'New Board Best!' : 'Game Over') + '</span><div class="tg-big">' + st.score.toLocaleString() + '</div>' +
+      '<p>' + st.right + ' of ' + st.played + ' right, ' + st.played + ' of ' + live.length + ' squares played</p>' +
+      '<div class="tg-btns"><button type="button" class="btn primary" data-tb-again>' + icon('i-play') + 'New Board</button>' + (st.log.length ? '<button type="button" class="btn" data-tv-review>See the Answers</button>' : '') + '</div>' +
+      '<div class="tg-review" id="tg-review" hidden>' + st.log.map(function (r, n) { return '<div class="tg-r ' + (r.ok ? 'ok' : 'no') + '"><b>' + (n + 1) + '. ' + esc(r.q.q) + '</b><span>' + (r.ok ? 'You got it: ' : (r.pick ? 'You said ' + esc(r.pick) + '. ' : 'No answer. ') + 'Answer: ') + esc(r.right) + '</span><a href="' + esc(r.q.source) + '" target="_blank" rel="noopener">Source' + icon('i-link') + '</a></div>'; }).join('') + '</div></div>';
+    countUp(box);
+  }
+  box.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-tb]'); if (c) { var kr = c.getAttribute('data-tb').split('-'); open(+kr[0], +kr[1]); return; }
+    var a = e.target.closest('[data-a]'); if (a) { answer(+a.getAttribute('data-a')); return; }
+    if (e.target.closest('[data-tb-end]')) { end(); return; }
+    if (e.target.closest('[data-tb-again]')) { closeSheet(false); triviaBoard(all); return; }
+    if (e.target.closest('[data-tv-review]')) { var r = box.querySelector('#tg-review'); r.hidden = !r.hidden; }
+  });
+  paintBoard();
 }
 function widget(id) {
   var d = DASH.filter(function (x) { return x.id === id; })[0], h;
