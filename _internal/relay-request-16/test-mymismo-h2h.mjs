@@ -130,7 +130,7 @@ d = J(await H('', pat)); ok('decline: Pat sees it was declined', d.games.find(x 
 r = await H('/challenge', pat, { to: alexId }); const g4 = J(r).game; await play(pat, g4, 3, 3000);
 T += 10 * 86_400_000;
 d = J(await H('', alex)); ok('no deadline: ten days later the challenge is still Alex’s turn', d.games.find(x => x.id === g4).state === 'your-turn' && d.games.find(x => x.id === g4).expires === null);
-r = await H('/play', alex, { game: g4 }); T += 2 * 86_400_000;
+T += 2 * 86_400_000; r = await H('/play', alex, { game: g4 });
 fin = await play(alex, g4, 2, 3000);
 ok('no deadline: Alex accepts, plays days later and the game finishes', r.statusCode === 200 && fin.last.game && fin.last.game.state === 'done', fin.last);
 

@@ -46,6 +46,28 @@ finished later. The Board's own 20-second clock on each square is the only timer
 Kept in `trivia/contacts.json` (`{ docs: { <player id>: { <other id>: { s: 'sent' or 'got' or 'ok', at } } } }`). Deleting a
 trivia account takes the player off everyone's contacts. `test-mymismo-h2h.mjs` here replaces request 15's (56 checks).
 
+## The Board: a Round Clock and the Final Square
+
+Jonna, Nov 26, 2026. **Round clock:** a board has 6 minutes (plus 3 seconds while it lights up) to play as many squares
+as you can; after that no new square opens (a square already open can still be answered). **Final Square:** when the
+board is over (every square, End Game, or the clock), the player sees the category, wagers up to their total (up to
+1,000 at zero or below), gets the answer, and has 30 seconds to type the question. Right adds the wager; wrong, blank or
+late takes it away. The board is scored (leaderboard, or Head to Head) only after the Final Square, or when it's skipped.
+Head to Head players get the same Final Square (it's picked with the board). A board with no squares played has none.
+
+| Route | What |
+|---|---|
+| `POST /mymismo/trivia/play/pick` | After the round clock: `{ roundOver: true, done: false, final: { cat, max } }` instead of a square. |
+| `POST /mymismo/trivia/play/answer`, `/end` | When the board is over: `{ done: false, final: { cat, max } }`. |
+| `POST /mymismo/trivia/play/wager` | `{ wager, game? }`: locked in (capped at the max); answers `{ cat, clue, wager, secs: 30 }`. |
+| `POST /mymismo/trivia/play/say` | `{ text, game? }`: checked on the relay; answers `{ right, late, points, total, response, done }`. "What is" and "the" optional, punctuation ignored, a small slip in a longer answer counts, numbers exact. |
+| `POST /mymismo/trivia/play/skip` | Ends the board without the Final Square. |
+| `GET /mymismo/trivia/play` | Now also `roundLeft`, `phase` ('board' or 'final') and `final`. |
+
+Final Squares live in `trivia/questions.json` as `finals: [{ id, cat, clue, answers: [...], response, source }]`, kept
+private like the rest of the bank (the accepted answers never leave the relay). MyMISMO's Claude adds them from Jonna's
+review, as with the questions. `test-mymismo-final.mjs` (20 checks).
+
 ## Where Things Live
 
 `mymismo-data`: `push/subs.json` entries gain `news` (true or false; `summit` may now be empty), and `push/news.json`
@@ -53,5 +75,5 @@ trivia account takes the player off everyone's contacts. `test-mymismo-h2h.mjs` 
 
 ## Checks
 
-`node test-mymismo16.mjs` (32 checks, made-up people and phones). Requests 13, 14 and 15's tests still pass (48, 100,
+`node test-mymismo16.mjs` (32 checks, made-up people and phones), `test-mymismo-h2h.mjs` (56) and `test-mymismo-final.mjs` (20). Requests 13, 14 and 15's tests still pass (48, 100,
 43, 59) and so does test-relay.mjs (184).
