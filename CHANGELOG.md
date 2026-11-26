@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Dashboard, four tiles across (a phone on its side, tablets, computers): the white tiles fill their height with more: the next webinars, the Vieaux Point summary and past MISMO Matters editions, what Submit an Idea is for, and the places on mismo.org. Only whole lines show, and they never make a tile taller. The last row is widened so it has no gap beside it. A narrow Webinars tile puts the date above the title.
 - Nov 26, 2026: Explore, Around the Hotel: tap the map (or its expand button) to pop it out bigger, with longer place names and its own Everything / Eat and Drink / Things to Do switch; on a phone it can be swiped around. Tapping a place still opens it.
 - Nov 26, 2026: Explore: the room-block countdown card is now the Book Your Room button (the whole card, with an arrow, like the Floor Map card), and Directions takes the main button spot on the postcard.
 - Nov 26, 2026: Trivia, the Board: game-show style. A tapped square lifts off, grows and flips over to show the answer, and players pick the question ("What is the eNote?"). All 124 Medium and Hard questions now have an answer-style clue and four questions to pick from (data/trivia-draft.json); the facts are unchanged. Relay request 16 passes them through for ranked play.

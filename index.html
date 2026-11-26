@@ -474,10 +474,33 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-foot .lbl{font-size:12px; font-weight:700; color:var(--sky-soft)}
 .w-foot b{display:block; font-family:var(--cond); font-size:20px; line-height:1.15}
 .w-row{display:flex; gap:10px; align-items:flex-start; margin-top:4px}
+/* Jonna, Nov 26, 2026: when the tiles sit four across (tablets, computers, a phone on its side) they stand as tall as
+   the big tiles beside them, so they show more: the next webinars, the Vieaux Point and past editions, the places on
+   mismo.org. Two across on a phone held upright, they stay short. */
+.w-more{display:none}
+@media (min-width:760px), (orientation:landscape) and (max-height:540px){
+  /* the extra lines never make a tile taller: they fill whatever height the row already has, and fade if cut */
+  .w-more{display:flex; flex-direction:column; gap:7px; width:100%; margin-top:10px; flex:1 1 0; height:0; min-height:0; overflow:hidden}
+  .w-more > *{flex:none}
+  .wm-row{display:flex; gap:9px; align-items:center; padding-top:8px; border-top:1px solid var(--rule)}
+  .wm-d{flex:none; width:38px; text-align:center; font-family:var(--cond); font-weight:700; font-size:17px; line-height:1.05; color:var(--ink)}
+  .wm-d i{display:block; font-style:normal; font-family:inherit; font-size:10.5px; font-weight:700; color:#eb6834}
+  .wm-t{font-weight:600; font-size:13.5px; line-height:1.25; color:var(--ink); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+  .wm-k{font-size:11.5px; font-weight:700; color:var(--ink-3)}
+  .wm-p{font-size:13.5px; line-height:1.4; color:var(--ink-2); display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden}
+  .wm-li{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:var(--link); padding:7px 0 0; border-top:1px solid var(--rule)}
+  .wm-li:after{content:"›"; color:var(--ink-3); font-size:16px; line-height:1}
+  .wm-past{margin-top:6px}
+  .wd.grow{grid-column:span 2}
+  .wm-art{align-self:flex-end; margin-top:auto; opacity:.9}
+  .wm-art svg{width:52px; height:52px; color:#e2b33c; filter:drop-shadow(0 0 14px rgba(240,185,58,.45))}
+}
 .cal{flex:none; width:50px; border-radius:9px; overflow:hidden; text-align:center; background:var(--surface-2); border:1px solid var(--border)}
 .cal i{display:block; font-style:normal; font-size:11px; font-weight:700; background:#eb6834; color:#fff; padding:2px 0}
 .cal b{display:block; font-family:var(--cond); font-size:24px; line-height:1.25}
-.w-web .w-t{font-size:16.5px; -webkit-line-clamp:4}
+.w-web .w-t{font-size:16.5px; -webkit-line-clamp:4; min-width:0; overflow-wrap:break-word}
+.w-web{container-type:inline-size}
+@container (max-width:210px){ .w-web .w-row{flex-direction:column; gap:8px} }   /* a narrow tile: the date sits above the title */
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
 .w-mat .w-t{font-size:17px; -webkit-line-clamp:4}
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
@@ -3016,11 +3039,15 @@ function widget(id) {
   }
   if (id === 'webinars') {
     var up = upcomingWebinars(), w = up[0];
-    return '<button type="button" class="wd w-web" data-webinars>' + head() + (w ? '<span class="w-row">' + calBlock(w.date) + '<span class="w-t">' + esc(w.title) + '</span></span><span class="w-sub">' + esc(w.start || '') + ' ET' + (up.length > 1 ? ', ' + (up.length - 1) + ' more coming up' : '') + '</span>' : '<span class="w-t">None scheduled right now</span><span class="w-sub">New ones show up here</span>') + '</button>';
+    return '<button type="button" class="wd w-web" data-webinars>' + head() + (w ? '<span class="w-row">' + calBlock(w.date) + '<span class="w-t">' + esc(w.title) + '</span></span>' +
+      (up.length > 1 ? '<span class="w-more">' + up.slice(1, 4).map(function (x) { var p = dparts(x.date); return '<span class="wm-row"><span class="wm-d"><i>' + MON[p.m - 1] + '</i>' + p.d + '</span><span class="wm-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' : '') +
+      '<span class="w-sub">' + esc(w.start || '') + ' ET' + (up.length > 1 ? ', ' + (up.length - 1) + ' more coming up' : '') + '</span>' : '<span class="w-t">None scheduled right now</span><span class="w-sub">New ones show up here</span>') + '</button>';
   }
   if (id === 'matters') {
     var ed = MM && MM.editions && MM.editions[0];
-    return '<button type="button" class="wd w-mat" data-matters>' + head() + (ed ? '<span class="w-ed">' + esc(ed.label) + '</span>' + (ed.vieauxPoint ? '<span class="w-t">' + esc(ed.vieauxPoint.title) + '</span>' : '<span class="w-sub">The latest edition</span>') : '<span class="w-sub">The monthly newsletter</span>') + '</button>';
+    return '<button type="button" class="wd w-mat" data-matters>' + head() + (ed ? '<span class="w-ed">' + esc(ed.label) + '</span>' + (ed.vieauxPoint ? '<span class="w-t">' + esc(ed.vieauxPoint.title) + '</span>' : '<span class="w-sub">The latest edition</span>') +
+      '<span class="w-more">' + (ed.vieauxPoint && ed.vieauxPoint.summary ? '<span class="wm-k">The Vieaux Point</span><span class="wm-p">' + esc(ed.vieauxPoint.summary) + '</span>' : '') +
+      (MM.editions.length > 1 ? '<span class="wm-k wm-past">Past Editions</span>' + MM.editions.slice(1, 4).map(function (e) { return '<span class="wm-li">' + esc(e.label) + '</span>'; }).join('') : '') + '</span>' : '<span class="w-sub">The monthly newsletter</span>') + '</button>';
   }
   if (id === 'trivia') return '<button type="button" class="wd w-trivia wide" data-trivia>' + triviaOrbit(false) + '<span class="w-head">' + icon('i-star') + '<span>MISMO Trivia</span></span><span class="tv-wt">How well do you know MISMO?</span><span class="tv-ws">Solo and head to head, with a leaderboard</span><span class="tv-soon">Beta</span></button>';
   if (id === 'certs') {
@@ -3041,10 +3068,12 @@ function widget(id) {
       var src = lb && lb.src && dk ? lb.src : sp.logo, cls = lb && lb.kind ? (dk ? lb.kind : 'solid') : lb;
       return '<img class="' + cls + '" src="' + esc(src) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">'; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
   }
-  if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-sub">Tell the community</span></button>';
-  if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
+  if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
+  if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-more">' + SITE_LINKS.slice(0, 5).map(function (l) { return '<span class="wm-li">' + esc(l[0]) + '</span>'; }).join('') + '</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
   return '';
 }
+/* turning the phone or resizing the window changes how many tiles fit across */
+if (window.matchMedia) ['(min-width:760px)', '(orientation:landscape) and (max-height:540px)'].forEach(function (q) { var m = window.matchMedia(q), f = function () { if (S.page === 'dash' && !stack.length) renderPage('dash'); }; if (m.addEventListener) m.addEventListener('change', f); else if (m.addListener) m.addListener(f); });
 function renderDash() {
   var picks = dashPicks() || [];
   var h = greetHead();
@@ -3053,6 +3082,16 @@ function renderDash() {
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
   if (sq % 2 === 1) { for (var i = ws.length - 1; i >= 0; i--) if (ws[i].indexOf(' wide') < 0) { ws[i] = ws[i].replace(/class="wd /, 'class="wd wide solo '); break; } }
+  /* four across (tablets, computers, a phone on its side): count the columns used and widen the last squares so the
+     final row has no empty space beside it (Jonna, Nov 26, 2026) */
+  var mq = function (q) { return window.matchMedia && window.matchMedia(q).matches; };
+  if (mq('(min-width:760px)') || mq('(orientation:landscape) and (max-height:540px)')) {
+    var units = 0, big = mq('(min-width:760px)');
+    ws.forEach(function (w) { (w.match(/class="(?:wd|nextsum) [^"]*"|class="nextsum[^"]*"/g) || []).forEach(function (c) {
+      units += /w-summit/.test(c) ? (big ? 4 : 2) : /\bwide\b/.test(c) ? 2 : 1; }); });
+    var rem = (4 - units % 4) % 4;
+    for (var j = ws.length - 1; j >= 0 && rem > 0; j--) if (ws[j].indexOf(' wide') < 0) { ws[j] = ws[j].replace(/class="wd /, 'class="wd grow '); rem--; }
+  }
   h += '<div class="dash-grid">' + ws.join('') + '</div>';
   return h;
 }
@@ -3283,7 +3322,28 @@ function renderPage(p) {
   el.innerHTML = RENDER[p]() + (p === 'agenda' || p === 'mine' || p === 'people' ? sponsorBand() : '');
   if (keep && /-q$/.test(keep)) { var i = $('#' + keep); if (i) { i.focus(); try { i.setSelectionRange(caret, caret); } catch (e) {} } }
   if (p === 'home') S.flipped = true;
+  if (p === 'dash') { requestAnimationFrame(fitMore); setTimeout(fitMore, 500); }
 }
+/* a tile's extra lines show only as many whole lines as fit: nothing cut in half, no heading left on its own */
+function fitMore() {
+  $$('#pg-dash .w-more').forEach(function (m) {
+    var kids = Array.prototype.slice.call(m.children); kids.forEach(function (k) { k.style.display = ''; k.style.webkitLineClamp = ''; });
+    if (!m.offsetHeight) return;
+    var bottom = m.getBoundingClientRect().bottom + 1, cut = false;
+    kids.forEach(function (k) {
+      if (cut) { k.style.display = 'none'; return; }
+      var r = k.getBoundingClientRect(); if (r.bottom <= bottom) return;
+      if (/\bwm-p\b/.test(k.className)) {   /* a paragraph keeps the lines that fit, ending in an ellipsis */
+        var lh = parseFloat(getComputedStyle(k).lineHeight) || 19, n = Math.floor((bottom - r.top) / lh);
+        if (n >= 2) { k.style.webkitLineClamp = String(n); cut = true; return; }
+      }
+      cut = true; k.style.display = 'none';
+    });
+    for (var i = kids.length - 1; i >= 0; i--) { if (kids[i].style.display === 'none') continue; if (/\bwm-k\b/.test(kids[i].className)) kids[i].style.display = 'none'; else break; }
+  });
+}
+window.addEventListener('resize', function () { clearTimeout(fitMore.t); fitMore.t = setTimeout(fitMore, 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitMore(); });
 function show(p, opts) {
   if (!RENDER[p]) p = 'dash';
   if (p !== 'dash' && !S.summit) p = 'dash';
