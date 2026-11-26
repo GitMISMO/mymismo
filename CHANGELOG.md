@@ -47,3 +47,4 @@
 - Nov 25, 2026: Scrolling sponsors run endlessly: opening a page starts at the Platinum sponsors, and the page refreshing itself each minute no longer jumps the row back to the start. The sponsor band reaches edge to edge. The Sponsors page ticker loops seamlessly in level order.
 - Nov 25, 2026: Dashboard Summit Sponsors tile: the logo is centered and fills the space.
 - Nov 25, 2026: Attendee directory: everyone registered shows (from the registration list Summit HQ already pulls from Aptify daily), like the MBA app; anyone can hide themselves. Profiles get a headshot (shrunk on the phone), phone, website and an optional Show My Email, alongside LinkedIn. Relay request 15 has the server side (81 checks; request 13's checks updated to the new rule).
+- Nov 25, 2026: Android app builds in GitHub Actions (Build the Android App): a Trusted Web Activity for Google Play; test builds until MISMO's upload key is saved as repository secrets.
