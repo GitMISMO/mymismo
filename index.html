@@ -750,6 +750,17 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tv-tplayed{color:var(--ink-2); font-size:13px; margin:8px 0 0; text-align:center}
 .tv-go{display:inline-flex; align-items:center; gap:8px; margin-top:16px; background:linear-gradient(90deg, #74bfeb, #2477b8); color:#06202f; border:0; border-radius:10px; padding:14px 22px; font:inherit; font-weight:800; font-size:17px; cursor:pointer; box-shadow:0 10px 30px -10px rgba(116,191,235,.9); animation:tv-bob 2.4s ease-in-out infinite}
 .tv-go svg{width:18px; height:18px}
+.grp-card{display:flex; gap:12px; align-items:flex-start; margin-top:12px; padding:14px; border:1px solid var(--border); border-left:4px solid var(--sky); border-radius:12px; background:var(--surface); color:var(--ink); text-decoration:none}
+.grp-card:hover{border-color:var(--border-strong)}
+.grp-ic{flex:none; width:40px; height:40px; border-radius:10px; display:grid; place-items:center; background:color-mix(in srgb, var(--sky) 20%, transparent); color:var(--link)}
+.grp-ic svg{width:22px; height:22px}
+.grp-tx{display:grid; gap:4px; min-width:0}
+.grp-tx b{font-size:15.5px}
+.grp-tx span{font-size:13.5px; color:var(--ink-2)}
+.grp-tx em{display:flex; align-items:center; gap:5px; font-style:normal; font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.grp-tx em svg{width:13px; height:13px}
+.grp-tx strong{display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--link); font-size:14px}
+.grp-tx strong svg{width:14px; height:14px}
 .rp{display:grid; gap:8px}
 .rp-o{display:flex; align-items:center; gap:10px; padding:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); cursor:pointer}
 .rp-o input{width:18px; height:18px; accent-color:var(--navy-mid)}
@@ -1546,6 +1557,17 @@ function partners() {
 }
 function spLabel(x) { var t = webTags(x)[0]; return t ? t.label : 'Sponsored by'; }
 function tkey(t) { return norm(String(t || '').replace(/&/g, ' and ')); }
+/* the group's own page on mismo.org, from the website's Communities and Workgroups list (data/workgroups.json, kept
+   fresh by the guide job). "COP" and "Community of Practice", "DWG" and "Development Workgroup" match each other. */
+function gkey(t, loose) {
+  var k = String(t || '').toLowerCase().replace(/&/g, ' and ').replace(/community of practice/g, 'cop').replace(/development work ?group/g, 'dwg');
+  if (loose) k = k.replace(/\([^)]*\)/g, ' ');
+  return k.replace(/[^a-z0-9]+/g, ' ').trim();
+}
+function groupPage(x) {
+  var gs = (WG && WG.groups) || [], a = gkey(x.title), b = gkey(x.title, true);
+  return gs.filter(function (g) { return gkey(g.name) === a; })[0] || gs.filter(function (g) { return gkey(g.name, true) === b; })[0] || null;
+}
 function groupVideo(x) { var b = tkey(x.title); return ((TAGS && TAGS.videos) || []).filter(function (v) { return tkey(v.title) === b; })[0] || null; }
 function sponsorFor(x) {
   var out = [], names = x.sponsor ? x.sponsor.split(/\s*(?:,|&| and )\s*/) : [];
@@ -1901,7 +1923,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -1961,6 +1983,7 @@ function loadExtras() {
   getJSON('data/guide.json').then(function (g) { G = g; again(['explore', 'home', 'dash']); }).catch(function () {});
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
   if (S.sid) getJSON('data/floorplan/' + S.sid + '.json').then(function (f) { FP = f; again(['explore', 'home']); }).catch(function () {});
+  getJSON('data/workgroups.json').then(function (w) { WG = w; again(['agenda', 'mine', 'home']); }).catch(function () {});
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash', 'people']); }).catch(function () {});
   getJSON('/podcast/micdup.json').then(function (m) { MU = m; again(['dash']); }).catch(function () {});
   getJSON('/marketing-hq/matters/editions.json').then(function (m) { MM = m; again(['dash']); }).catch(function () {});
@@ -2607,7 +2630,11 @@ function sessionSheet(id) {
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
   if (/MISMO Link/i.test(x.title)) h += '<div class="d-h">MISMO Link</div>' + sitePeek(SITE + '/standards-resources/mismo-link', 'mismo-link');
   var gv = groupVideo(x);
-  if (gv) h += '<div class="d-h">Meet the Group</div>' + player(gv.youtube, x.title);
+  var gp = groupPage(x);
+  if (gv || gp) h += '<div class="d-h">Meet the Group</div>' + (gv ? player(gv.youtube, x.title) : '');
+  if (gp) h += '<a class="grp-card" href="' + esc(gp.url) + '" target="_blank" rel="noopener"><span class="grp-ic">' + icon('i-people') + '</span><span class="grp-tx"><b>' + esc(gp.name) + '</b>' +
+    (gp.about ? '<span>' + esc(gp.about) + '</span>' : '') + (gp.meets && /^Meets (every|\d|1st|2nd|3rd|4th|monthly|weekly)/i.test(gp.meets) ? '<em>' + icon('i-clock') + esc(gp.meets) + '</em>' : '') +
+    '<strong>Visit the Group\'s Page on mismo.org' + icon('i-link') + '</strong></span></a>';
   if (x.type === 'General Session' && S.gs && S.gs.items.length) {
     h += '<div class="d-h">Running Order</div><div class="ro">' + S.gs.items.map(function (g) {
       var cp = clockParts(g.a);

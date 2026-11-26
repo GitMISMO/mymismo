@@ -28,6 +28,7 @@ from html.parser import HTMLParser
 URL = 'https://www.mismo.org/events/hotel'
 SUMMIT_URL = 'https://www.mismo.org/events/summit'
 AGENDA_URL = 'https://www.mismo.org/events/agenda'
+GROUPS_URL = 'https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
@@ -317,6 +318,31 @@ def build_tags(html):
     return out
 
 
+def build_groups(html):
+    """The website's Communities and Workgroups list: each group's name, page, kind, area, one-line purpose and when it meets,
+    so a workgroup's session in the app can link to the group's own page on mismo.org."""
+    t = Tree()
+    t.feed(html)
+    out, seen = [], set()
+    for a in t.root.find_all(lambda x: x.tag == 'a' and x.find(lambda y: y.tag == 'h3') is not None):
+        href = (a.attrs.get('href') or '').split('?')[0].split('#')[0].strip()
+        if not href or href.startswith(('http', 'mailto:', '#')):
+            continue
+        slug = href.rstrip('/').split('/')[-1]
+        if not re.fullmatch(r'[a-z0-9][a-z0-9()-]{1,80}', slug) or slug in seen or slug == 'sponsorship':
+            continue
+        name = a.find(lambda y: y.tag == 'h3').text()
+        p = a.find(lambda y: y.tag == 'p')
+        meet = a.find(lambda y: 'wgmeet' in y.classes())
+        tags = [s.text() for s in a.find_all(lambda y: y.tag == 'span' and not y.classes() and y.parent.tag == 'div')][:2]
+        if not name:
+            continue
+        seen.add(slug)
+        out.append({'name': name, 'url': 'https://www.mismo.org/get-involved/' + slug, 'area': tags[0] if tags else '',
+                    'kind': tags[1] if len(tags) > 1 else '', 'about': p.text() if p is not None else '', 'meets': meet.text() if meet is not None else ''})
+    return {'source': GROUPS_URL, 'groups': out}
+
+
 def good_event(e):
     return bool(e.get('title') and e.get('subtitle') and e.get('dates') and e.get('paragraphs'))
 
@@ -344,7 +370,7 @@ def write(out, g, what):
 
 def main(argv):
     opts = dict(zip(argv[::2], argv[1::2]))
-    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts
+    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts
     failed = 0
     if '--html' in opts or not only_files:
         html = open(opts['--html'], encoding='utf-8').read() if '--html' in opts else fetch(URL)
@@ -372,6 +398,14 @@ def main(argv):
             write(opts.get('--tags-out', 'data/agenda-tags.json'), tg, 'Agenda sponsor tags')
         else:
             print('The Agenda page did not have its day and session cards; nothing written.', file=sys.stderr)
+            failed = 1
+    if '--groups-html' in opts or not only_files:
+        html = open(opts['--groups-html'], encoding='utf-8').read() if '--groups-html' in opts else fetch(GROUPS_URL)
+        gr = build_groups(html)
+        if len(gr['groups']) >= (2 if '--groups-html' in opts else 10):
+            write(opts.get('--groups-out', 'data/workgroups.json'), gr, 'Workgroups')
+        else:
+            print('The Communities and Workgroups page did not have its group cards; nothing written.', file=sys.stderr)
             failed = 1
     return failed
 
