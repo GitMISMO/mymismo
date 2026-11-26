@@ -51,3 +51,6 @@
 - Nov 25, 2026: MyMISMO uses MISMO's own Privacy Policy (www.mismo.org/privacy-policy), with a MyMISMO App section the website adds (CN-042); the app's privacy page now opens it. Relay request 15 adds a sign-in for the app store reviewers (91 checks).
 - Nov 25, 2026: Staff Preview of the attendee directory: until attendee sign-in is live, MISMO staff who can open Summit HQ see the real attendee list (names, titles, companies; never emails) under People, Attendees, read with their own staff sign-in.
 - Nov 25, 2026: Every workgroup session now finds its group's page, even when the agenda names it a little differently (Housing Counseling Data DWG), and a session for two groups (Servicing COP + Servicing Transfers DWG) shows both.
+- Nov 25, 2026: Sponsors page: the scrolling logo row is replaced by a Become a Sponsor card (top and bottom) that opens the Sponsorship Prospectus.
+- Nov 25, 2026: Dark mode Summit Sponsors tile: logos on a see-through background show in white straight on the tile, no white box (the guide job checks each logo into data/logo-bg.json); the rest sit on a small rounded plate.
+- Nov 25, 2026: Bug check: the Explore category buttons ran off the right edge on phones; they now scroll sideways.

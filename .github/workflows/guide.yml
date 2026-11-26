@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/build_guide.py', '.github/workflows/guide.yml', 'tests/groups-page.html', 'tests/guide-page.html', 'tests/summit-page.html', 'tests/agenda-page.html', 'tests/provider-page.html', 'tests/directory-page.html', 'tools/build_providers.py']
+    paths: ['tools/build_guide.py', '.github/workflows/guide.yml', 'tests/groups-page.html', 'tests/guide-page.html', 'tests/summit-page.html', 'tests/agenda-page.html', 'tests/provider-page.html', 'tests/directory-page.html', 'tools/build_providers.py', 'tools/build_logos.py']
 permissions:
   contents: write
 concurrency:
@@ -34,6 +34,8 @@ jobs:
           pip install --quiet pillow
           sudo apt-get install -y -qq tesseract-ocr > /dev/null || echo "No tesseract: pictures are checked by how blank they are only"
           python3 tools/build_providers.py || echo "GUIDE_FAILED=1" >> "$GITHUB_ENV"
+      - name: Which sponsor logos have a see-through background (for dark mode)
+        run: python3 tools/build_logos.py || echo "GUIDE_FAILED=1" >> "$GITHUB_ENV"
       - name: Save
         run: |
           git config user.name "MyMISMO Guide"

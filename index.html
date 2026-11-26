@@ -281,7 +281,8 @@ html[data-season="december"] .days{top:calc(61px + env(safe-area-inset-top))}
 .chip{border:1px solid var(--border); background:var(--surface); border-radius:5px; padding:6px 10px; font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:6px}
 .chip i{width:9px; height:9px; border-radius:2px; background:var(--tagc, var(--border-strong)); display:inline-block}
 .chip[aria-pressed="true"]{border-color:var(--accent-fill); background:var(--sel); font-weight:600}
-.seg{display:inline-grid; grid-auto-flow:column; border:1px solid var(--border-strong); border-radius:7px; overflow:hidden; margin-bottom:10px}
+.seg{display:inline-grid; grid-auto-flow:column; max-width:100%; border:1px solid var(--border-strong); border-radius:7px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; margin-bottom:10px}
+.seg::-webkit-scrollbar{display:none}
 .seg button{border:0; background:var(--surface); padding:8px 16px; font-weight:600; cursor:pointer; white-space:nowrap; border-right:1px solid var(--border-strong)}
 .seg button:last-child{border-right:0}
 .seg button[aria-pressed="true"]{background:var(--accent-fill); color:var(--accent-ink)}
@@ -465,6 +466,13 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-spon .w-logos{flex:1 1 auto; align-self:stretch; width:auto; height:auto; min-height:96px; margin:6px 0 8px; background:#fff; border-radius:12px}
 .w-spon .w-logos img{inset:8px; width:calc(100% - 16px); height:calc(100% - 16px); max-width:none; max-height:none; padding:0; border-radius:0; background:none; object-fit:contain; object-position:center}
 .w-spon .w-sub{margin-top:0}
+.w-spon .w-logos img.solid{background:#fff}
+:root[data-theme="dark"] .w-spon .w-logos{background:none}
+:root[data-theme="dark"] .w-spon .w-logos img.clear{filter:brightness(0) invert(1)}
+:root[data-theme="dark"] .w-spon .w-logos img.solid{inset:14% 10%; width:80%; height:72%; padding:8px 12px; border-radius:10px; box-shadow:0 8px 20px -10px rgba(0,0,0,.6)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .w-spon .w-logos{background:none}
+  :root:not([data-theme="light"]) .w-spon .w-logos img.clear{filter:brightness(0) invert(1)}
+  :root:not([data-theme="light"]) .w-spon .w-logos img.solid{inset:14% 10%; width:80%; height:72%; padding:8px 12px; border-radius:10px; box-shadow:0 8px 20px -10px rgba(0,0,0,.6)} }
 .w-logos img{position:absolute; inset:0; margin:auto; max-width:85%; max-height:52px; object-fit:contain; background:#fff; border-radius:8px; padding:6px 10px; opacity:0; animation:logo-cycle calc(var(--n) * 2.6s) infinite; animation-delay:calc(var(--i) * 2.6s - .5s)}
 @keyframes logo-cycle{0%{opacity:0; transform:translateY(6px)} 4%,22%{opacity:1; transform:none} 28%,100%{opacity:0; transform:translateY(-6px)}}
 .w-idea{background:linear-gradient(160deg, color-mix(in srgb, #f0b93a 18%, var(--surface)), var(--surface) 60%)}
@@ -769,6 +777,16 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .pf-cam{display:inline-flex; align-items:center; gap:5px; padding:5px 9px; border-radius:7px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35); color:#fff; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap}
 .pf-cam svg{width:13px; height:13px}
 img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
+.be-spon{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; align-items:center; margin:16px 0 6px; padding:16px; border-radius:14px; text-decoration:none; color:#fff;
+  background:linear-gradient(135deg, #14486e, #0d314c 55%, #06202f); border:1px solid rgba(116,191,235,.45); box-shadow:0 14px 30px -18px rgba(6,32,47,.8)}
+.be-spon .bs-ic{grid-row:span 2; width:48px; height:48px; border-radius:12px; display:grid; place-items:center; background:rgba(116,191,235,.18); color:#e2b33c}
+.be-spon .bs-ic svg{width:26px; height:26px}
+.be-spon .bs-tx{display:grid; gap:3px}
+.be-spon .bs-tx b{font-size:17px}
+.be-spon .bs-tx span{font-size:13.5px; color:rgba(255,255,255,.8); line-height:1.4}
+.be-spon strong{grid-column:2; display:inline-flex; align-items:center; gap:6px; justify-self:start; margin-top:4px; padding:9px 13px; border-radius:8px; background:#74bfeb; color:#06202f; font-size:14px}
+.be-spon strong svg{width:15px; height:15px}
+.be-spon.foot{margin-top:26px}
 .pv-note{border-left-color:#eda100}
 .att-count{font-size:13px; color:var(--ink-3); font-weight:600; margin-top:10px}
 .cts{display:grid; gap:8px}
@@ -1967,13 +1985,19 @@ function spWhat(sp) {
   if (S.gs) S.gs.items.forEach(function (g) { if (g.sponsor && coKey(g.sponsor) === coKey(sp.name)) out.push(g.title); });
   return out;
 }
+/* Jonna, Nov 25, 2026: the Sponsors page invites companies to sponsor, pointing to the current prospectus */
+var PROSPECTUS = 'https://resources.mismo.org/Sponsorship-Prospectus/';
+function becomeSponsor(foot) {
+  return '<a class="be-spon' + (foot ? ' foot' : '') + '" href="' + PROSPECTUS + '" target="_blank" rel="noopener"><span class="bs-ic">' + icon('i-sponsor') + '</span><span class="bs-tx"><b>' + (foot ? 'Your Company Could Be Here' : 'Become a Sponsor') + '</b>' +
+    '<span>Put your company in front of the people who build the mortgage industry\'s standards, at every MISMO Summit.</span></span><strong>See the Sponsorship Prospectus' + icon('i-link') + '</strong></a>';
+}
 function renderSponsors() {
   var tiers = sponsorTiers(), all = [].concat.apply([], tiers.map(function (t) { return t.list; })).filter(function (sp) { return sp.logo; }), pts = partners();
   var nSess = S.sessions.filter(function (x) { return sponsorFor(x).length; }).length;
   var run = all.concat(pts.filter(function (p) { return p.logo; }));
   var h = '<section class="sp-hero">' + heroArt() + '<div class="sp-hero-in"><h1>Thank You to Our Sponsors</h1><p>The companies making the ' + esc(S.summit.name) + ' happen.</p>' +
     '<div class="sp-stats"><div><b>' + S.sponsors.length + '</b><span>Sponsors</span></div><div><b>' + tiers.length + '</b><span>Tiers</span></div><div><b>' + nSess + '</b><span>Sessions Sponsored</span></div></div></div></section>';
-  if (run.length > 3) h += '<div class="ticker" aria-hidden="true"><div class="run" style="--dur:' + Math.max(24, run.length * 4) + 's">' + run.concat(run).map(function (sp) { return '<span class="tk"><img src="' + esc(sp.logo) + '" alt=""></span>'; }).join('') + '</div></div>';
+  h += becomeSponsor();
   tiers.forEach(function (t, i) {
     var col = TIER_COLOR[t.tier] || 'var(--sky)';
     h += '<section class="tier2' + (i === 0 ? ' top' : '') + '" style="--tierc:' + col + '"><div class="t2-h"><span class="medal" aria-hidden="true"></span><h2>' + esc(t.tier) + '</h2><span class="count">' + t.list.length + '</span></div><div class="t2-grid">' +
@@ -1987,6 +2011,7 @@ function renderSponsors() {
     var t = ((TAGS && TAGS.tags) || []).filter(function (x) { return coKey(x.name) === coKey(sp.name); });
     return '<button type="button" class="spc shine" data-open="sp:' + esc(slug(sp.name)) + '" aria-label="' + esc(sp.name) + '"><span class="spc-logo">' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" loading="lazy">' : '<b>' + esc(sp.name) + '</b>') + '</span></button>';
   }).join('') + '</div></section>';
+  h += becomeSponsor(true);
   return h;
 }
 
@@ -2003,7 +2028,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -2063,6 +2088,7 @@ function loadExtras() {
   getJSON('data/guide.json').then(function (g) { G = g; again(['explore', 'home', 'dash']); }).catch(function () {});
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
   if (S.sid) getJSON('data/floorplan/' + S.sid + '.json').then(function (f) { FP = f; again(['explore', 'home']); }).catch(function () {});
+  getJSON('data/logo-bg.json').then(function (l) { LOGOBG = l; again(['dash']); }).catch(function () {});
   getJSON('data/workgroups.json').then(function (w) { WG = w; again(['agenda', 'mine', 'home']); }).catch(function () {});
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash', 'people']); }).catch(function () {});
   getJSON('/podcast/micdup.json').then(function (m) { MU = m; again(['dash']); }).catch(function () {});
@@ -2439,7 +2465,7 @@ function widget(id) {
   if (id === 'sponsors') {
     if (!S.sponsors.length) return '';
     var top = (sponsorTiers()[0] || { list: [] }).list.slice(0, 6);
-    return '<button type="button" class="wd w-spon" data-sponsors>' + head() + '<span class="w-logos">' + top.map(function (sp, i) { return sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">' : ''; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
+    return '<button type="button" class="wd w-spon" data-sponsors>' + head() + '<span class="w-logos">' + top.map(function (sp, i) { return sp.logo ? '<img class="' + ((LOGOBG && LOGOBG.logos && LOGOBG.logos[sp.logo]) || 'solid') + '" src="' + esc(sp.logo) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">' : ''; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
   }
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-sub">Tell the community</span></button>';
   if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
