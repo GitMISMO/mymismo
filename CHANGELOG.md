@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Explore postcard: Directions back to its original button.
 - Nov 26, 2026: Explore: the days-left-to-book card stands out: navy with a gold ring, gold edge and a bold heading.
 - Nov 26, 2026: Explore postcard: Directions keeps its glass look with a heavier white outline.
 - Nov 26, 2026: Explore postcard: Directions back to its original glass button.
