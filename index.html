@@ -748,47 +748,99 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .mx-go svg{width:16px; height:16px}
 html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, #0d2837 50%, #2a2410 100%); color:#e9f4fb} html[data-theme="dark"] .w-merch .w-head{color:#a9d8f3} html[data-theme="dark"] .mx-ws{color:#a6c5d9}
 @media (prefers-color-scheme: dark){ html:not([data-theme="light"]) .w-merch{background:linear-gradient(115deg, #123143 0%, #0d2837 50%, #2a2410 100%); color:#e9f4fb} html:not([data-theme="light"]) .w-merch .w-head{color:#a9d8f3} html:not([data-theme="light"]) .mx-ws{color:#a6c5d9} }
-.mx-hero{position:relative; overflow:hidden; isolation:isolate; padding:26px 20px 24px; background:#071d2e; color:#fff}
-.mx-hero > .hero-art{z-index:-1; opacity:.6}
-.mx-hero-in{position:relative; display:grid; gap:6px; max-width:420px}
-.mx-eye{display:inline-flex; gap:7px; align-items:center; font-weight:700; font-size:13px; color:#f3c64f} .mx-eye svg{width:16px; height:16px}
-.mx-hero h2{font-family:var(--cond); font-weight:800; font-size:clamp(32px, 9vw, 46px); line-height:1; margin:0}
-.mx-hero p{margin:0; color:rgba(255,255,255,.82)}
-.mx-bagbtn{position:absolute; right:16px; top:16px; display:flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.08); color:#fff; border-radius:10px; padding:8px 11px; font:inherit; font-weight:800; cursor:pointer}
-.mx-bagbtn svg{width:20px; height:20px}
-.mx-note{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:10px; background:#fdf6e3; border:1px solid #f0d27a; color:#5b4410; font-size:13.5px; margin-bottom:14px}
+.mx{--mx-ink:var(--ink)}
+.mx-top{position:sticky; top:0; z-index:5; display:flex; gap:10px; align-items:center; padding:10px 14px; background:color-mix(in srgb, var(--ground) 88%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--rule)}
+.mx-top-i{justify-content:space-between}
+.mx-search{flex:1; display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border-strong); border-radius:10px; padding:0 12px; height:42px}
+.mx-search svg{width:18px; height:18px; color:var(--ink-3)} .mx-search input{flex:1; min-width:0; border:0; background:transparent; font:inherit; font-size:15px; color:var(--ink); outline:0}
+.mx-bagbtn{position:relative; flex:none; width:46px; height:42px; display:grid; place-items:center; border-radius:10px; border:0; background:#0d314c; color:#fff; cursor:pointer}
+.mx-bagbtn svg{width:21px; height:21px}
+.mx-bagbtn b{position:absolute; top:-6px; right:-6px; min-width:20px; height:20px; padding:0 5px; border-radius:10px; background:#f3c64f; color:#0d314c; font-size:11.5px; font-weight:800; display:grid; place-items:center; box-shadow:0 0 0 2px var(--ground)}
+.mx-bagbtn.bump{animation:mx-bump .5s cubic-bezier(.2,.9,.3,1.5)}
+@keyframes mx-bump{30%{transform:scale(1.25) rotate(-6deg)} 60%{transform:scale(.95)}}
+.mx-spot{position:relative; height:clamp(250px, 62vw, 320px); overflow:hidden; background:radial-gradient(120% 130% at 85% 20%, #1f5fa6 0%, #0d314c 55%, #071d2e 100%); color:#fff; touch-action:pan-y}
+.mx-slide{position:absolute; inset:0; display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:8px; padding:22px 18px 34px; opacity:0; transform:translateX(30px); transition:opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1); pointer-events:none}
+.mx-slide.on{opacity:1; transform:none; pointer-events:auto}
+.mx-sl-tx{display:grid; gap:8px; align-content:center; z-index:1}
+.mx-eye{font-size:12px; font-weight:800; color:#f3c64f}
+.mx-slide h2{font-family:var(--cond); font-weight:800; font-size:clamp(26px, 7.4vw, 40px); line-height:1; margin:0}
+.mx-slide p{margin:0; font-size:13.5px; line-height:1.4; color:rgba(255,255,255,.8); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+.mx-cta{justify-self:start; display:inline-flex; align-items:center; gap:4px; border:0; border-radius:9px; background:#f3c64f; color:#0d314c; font:inherit; font-weight:800; font-size:14px; padding:10px 12px 10px 14px; cursor:pointer; box-shadow:0 8px 20px -8px rgba(243,198,79,.7)}
+.mx-cta svg{width:16px; height:16px}
+.mx-sl-art{position:relative} .mx-sl-art svg{display:block; width:100%; height:auto; border-radius:18px; box-shadow:0 24px 40px -18px rgba(0,0,0,.6); transform:rotate(3deg); transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.mx-slide.on .mx-sl-art svg{animation:mx-float 5s ease-in-out infinite}
+@keyframes mx-float{50%{transform:rotate(-1deg) translateY(-6px)}}
+.mx-pips{position:absolute; left:0; right:0; bottom:12px; display:flex; justify-content:center; gap:7px}
+.mx-pips button{width:22px; height:5px; border-radius:3px; border:0; background:rgba(255,255,255,.3); cursor:pointer; transition:width .3s, background .3s}
+.mx-pips button[aria-pressed="true"]{width:38px; background:#f3c64f}
+.mx-main{display:grid; gap:14px}
+.mx-note{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:10px; background:#fdf6e3; border:1px solid #f0d27a; color:#5b4410; font-size:13px}
 .mx-note svg{flex:none; width:18px; height:18px; color:#c99a2e; margin-top:1px}
-.mx-seg{margin-bottom:14px; overflow-x:auto}
-.mx-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px}
-.mx-card{display:flex; flex-direction:column; text-align:left; padding:0; border:1px solid var(--border); background:var(--surface); color:var(--ink); border-radius:14px; overflow:hidden; cursor:pointer; font:inherit; animation:tbx-up .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 40ms); transition:transform .15s, box-shadow .15s}
-.mx-card:hover{transform:translateY(-2px); box-shadow:0 12px 24px -14px rgba(13,49,76,.45)}
-.mx-img svg{display:block; width:100%; height:auto}
+.mx-cats{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:0 16px}
+.mx-cats button{flex:none; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); border-radius:9px; padding:9px 15px; font:inherit; font-weight:700; font-size:14px; cursor:pointer; transition:background .2s, color .2s, transform .15s}
+.mx-cats button[aria-pressed="true"]{background:#0d314c; color:#fff; border-color:#0d314c}
+.mx-cats button:active{transform:scale(.96)}
+.mx-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(156px, 1fr)); gap:12px}
+.mx-card{position:relative; display:flex; flex-direction:column; border:1px solid var(--border); background:var(--surface); border-radius:16px; overflow:hidden; animation:tbx-up .5s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 45ms); transition:transform .2s, box-shadow .2s}
+.mx-card:hover{transform:translateY(-3px); box-shadow:0 16px 30px -18px rgba(13,49,76,.55)}
+.mx-open{display:block; padding:0; border:0; background:none; cursor:pointer}
+.mx-img{display:block; overflow:hidden} .mx-img svg{display:block; width:100%; height:auto; transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.mx-card:hover .mx-img svg{transform:scale(1.05)}
+.mx-img.swap svg,.mx-big-art.swap svg{animation:mx-swap .4s ease}
+@keyframes mx-swap{from{opacity:.2; transform:scale(.94)}}
+.mx-badge{position:absolute; left:10px; top:10px; font-size:10.5px; font-weight:800; color:#fff; background:#0d314c; border-radius:6px; padding:4px 7px}
+.mx-badge.new{background:#0f7b5c} .mx-badge.ex{background:#a2701a}
+.mx-badge.big{left:16px; top:16px; font-size:12px; padding:5px 9px}
+.mx-quick{position:absolute; right:10px; top:10px; width:36px; height:36px; display:grid; place-items:center; border:0; border-radius:50%; background:#fff; color:#0d314c; box-shadow:0 6px 14px -6px rgba(13,49,76,.6); cursor:pointer; transition:transform .2s, background .2s}
+.mx-quick svg{width:18px; height:18px} .mx-quick:hover{transform:scale(1.1)} .mx-quick.done{background:#0f7b5c; color:#fff; animation:mx-bump .5s}
 .mx-tx{display:grid; gap:6px; padding:10px 12px 12px}
-.mx-tx b{font-size:14px; line-height:1.25}
-.mx-row{display:flex; justify-content:space-between; align-items:center}
-.mx-price{font-family:var(--cond); font-weight:800; font-size:17px; color:var(--ink)}
-.mx-price.big{font-size:26px}
-.mx-dots{display:flex; gap:4px} .mx-dots i{width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(13,49,76,.25)}
-.mx-big{background:#e4eff7} .mx-big svg{display:block; width:100%; max-width:420px; height:auto; margin:0 auto}
-.mx-detail{display:grid; gap:10px}
-.mx-detail h2{font-family:var(--cond); font-size:28px; line-height:1.05; margin:0}
+.mx-name{border:0; background:none; padding:0; text-align:left; font:inherit; font-weight:700; font-size:14px; line-height:1.25; color:var(--ink); cursor:pointer}
+.mx-row{display:flex; justify-content:space-between; align-items:center; gap:6px}
+.mx-price{font-family:var(--cond); font-weight:800; font-size:18px; color:var(--ink)} .mx-price.big{font-size:28px}
+.mx-dots{display:flex; gap:5px}
+.mx-dots button{width:16px; height:16px; border-radius:50%; border:2px solid var(--surface); box-shadow:0 0 0 1px var(--border-strong); padding:0; cursor:pointer}
+.mx-dots button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--sky)}
+.mx-none{grid-column:1 / -1}
+.mx-perks{display:grid; gap:8px; padding:14px; border-radius:12px; background:var(--surface-2); border:1px solid var(--rule); font-size:13.5px; font-weight:600; color:var(--ink-2)}
+.mx-perks span{display:flex; gap:8px; align-items:center} .mx-perks svg{width:16px; height:16px; color:#0f7b5c}
+.mx-fly{position:fixed; z-index:90; pointer-events:none; border-radius:14px; overflow:hidden; transition:transform .7s cubic-bezier(.5,-0.2,.7,1), opacity .7s ease}
+.mx-fly svg{width:100%; height:100%}
+.mx-toast{position:fixed; z-index:91; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%); display:flex; gap:8px; align-items:center; background:#0d314c; color:#fff; padding:11px 16px; border-radius:10px; font-weight:700; font-size:14px; box-shadow:0 14px 30px -12px rgba(0,0,0,.5); animation:tbx-up .35s cubic-bezier(.2,.8,.2,1); transition:opacity .4s, transform .4s}
+.mx-toast svg{width:18px; height:18px; color:#5fe0a8} .mx-toast.out{opacity:0; transform:translateX(-50%) translateY(10px)}
+.mx-big{position:relative; background:radial-gradient(120% 100% at 50% 30%, #f6fbff, #d6e6f2)}
+.mx-big-art{max-width:440px; margin:0 auto} .mx-big-art svg{display:block; width:100%; height:auto}
+.mx-detail{display:grid; gap:12px; padding-bottom:110px}
+.mx-detail h2{font-family:var(--cond); font-size:30px; line-height:1.05; margin:0}
 .mx-detail p{margin:0; color:var(--ink-2)}
 .mx-cat{font-size:12px; font-weight:700; color:var(--ink-3)}
+.mx-bits{list-style:none; margin:0; padding:0; display:grid; gap:6px} .mx-bits li{display:flex; gap:8px; align-items:center; font-size:14px; color:var(--ink-2)} .mx-bits svg{width:16px; height:16px; color:#0f7b5c}
 .mx-opt{display:grid; gap:8px} .mx-opt > span{font-size:13px; font-weight:700; color:var(--ink-2)}
-.mx-swatches{display:flex; gap:10px} .mx-swatches button{width:34px; height:34px; border-radius:50%; border:2px solid var(--surface); box-shadow:0 0 0 1px var(--border-strong); cursor:pointer}
-.mx-swatches button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--sky)}
-.mx-sizes{display:flex; flex-wrap:wrap; gap:8px} .mx-sizes button{min-width:46px; padding:9px 10px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); font:inherit; font-weight:700; cursor:pointer}
+.mx-swatches{display:flex; gap:12px} .mx-swatches button{width:38px; height:38px; border-radius:50%; border:3px solid var(--surface); box-shadow:0 0 0 1px var(--border-strong); cursor:pointer; transition:transform .15s}
+.mx-swatches button:hover{transform:scale(1.08)} .mx-swatches button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--sky)}
+.mx-sizes{display:flex; flex-wrap:wrap; gap:8px} .mx-sizes button{min-width:50px; padding:10px; border-radius:9px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); font:inherit; font-weight:700; cursor:pointer; transition:background .15s, color .15s}
 .mx-sizes button[aria-pressed="true"]{background:#0d314c; color:#fff; border-color:#0d314c}
-.mx-qty{display:inline-flex; align-items:center; border:1px solid var(--border-strong); border-radius:8px; overflow:hidden; width:max-content}
-.mx-qty button{width:40px; height:38px; border:0; background:var(--surface-2); color:var(--ink); font-size:18px; font-weight:700; cursor:pointer}
-.mx-qty b{min-width:38px; text-align:center}
-.mx-qty.sm button{width:30px; height:28px; font-size:15px} .mx-qty.sm b{min-width:28px}
-.mx-add{width:100%; justify-content:center; margin-top:4px}
-.mx-line{display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid var(--rule)}
-.mx-thumb svg{display:block; width:64px; height:auto; border-radius:10px}
+.mx-also{display:grid; grid-auto-flow:column; grid-auto-columns:42%; gap:10px; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:2px 16px 6px; scroll-snap-type:x mandatory}
+.mx-also button{scroll-snap-align:start; display:grid; gap:4px; text-align:left; border:1px solid var(--border); background:var(--surface); border-radius:12px; overflow:hidden; padding:0 0 10px; font:inherit; color:var(--ink); cursor:pointer}
+.mx-also svg{display:block; width:100%; height:auto} .mx-also b{font-size:13px; padding:0 10px; line-height:1.2} .mx-also i{font-style:normal; font-weight:800; font-family:var(--cond); padding:0 10px}
+.mx-buy{position:sticky; bottom:0; z-index:4; display:flex; gap:10px; align-items:center; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-top:1px solid var(--rule); margin-top:-96px}
+.mx-qty{display:inline-flex; align-items:center; border:1px solid var(--border-strong); border-radius:10px; overflow:hidden; width:max-content; background:var(--surface)}
+.mx-qty button{width:40px; height:46px; border:0; background:var(--surface-2); color:var(--ink); font-size:19px; font-weight:700; cursor:pointer}
+.mx-qty b{min-width:34px; text-align:center}
+.mx-qty.sm button{width:30px; height:30px; font-size:15px} .mx-qty.sm b{min-width:28px}
+.mx-add{flex:1; display:flex; justify-content:center; align-items:center; gap:8px; height:48px; border:0; border-radius:10px; background:#0d314c; color:#fff; font:inherit; font-weight:800; font-size:15.5px; cursor:pointer; transition:background .25s, transform .15s}
+.mx-add svg{width:19px; height:19px} .mx-add:active{transform:scale(.98)} .mx-add.done{background:#0f7b5c}
+.mx-add:disabled{background:#7d8d9a; cursor:default}
+.mxb .mx-add{width:100%; margin-top:6px}
+.mx-ship{display:grid; gap:8px; padding:12px 14px; border-radius:12px; background:var(--surface-2); border:1px solid var(--rule); font-size:13.5px; margin-bottom:6px}
+.mx-ship i{display:block; height:8px; border-radius:4px; background:var(--rule); overflow:hidden} .mx-ship em{display:block; height:100%; background:linear-gradient(90deg, #74bfeb, #0f7b5c); transition:width .5s ease}
+.mx-line{display:grid; grid-template-columns:68px 1fr auto; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid var(--rule); animation:tbx-up .4s ease both; animation-delay:calc(var(--i) * 50ms)}
+.mx-thumb svg{display:block; width:68px; height:auto; border-radius:12px}
 .mx-lt{display:grid; gap:4px} .mx-lt b{font-size:14px} .mx-lt > span:not(.mx-qty){font-size:12.5px; color:var(--ink-3)}
-.mx-lp{font-family:var(--cond); font-weight:800; font-size:17px}
-.mx-total{display:flex; justify-content:space-between; align-items:center; padding:14px 0; font-weight:700} .mx-total b{font-family:var(--cond); font-size:24px}
+.mx-lr{display:grid; justify-items:end; gap:4px} .mx-lp{font-family:var(--cond); font-weight:800; font-size:18px} .mx-rm{font-size:12.5px}
+.mx-total{display:flex; justify-content:space-between; align-items:center; padding:14px 0 4px; font-weight:700} .mx-total b{font-family:var(--cond); font-size:26px} .mx-total.sm{padding-top:2px; font-weight:600; color:var(--ink-2)} .mx-total.sm b{font-family:inherit; font-size:14px}
+.mx-empty{display:grid; justify-items:center; gap:8px; text-align:center; padding:40px 20px; color:var(--ink-2)} .mx-empty svg{width:44px; height:44px; color:var(--ink-3)} .mx-empty b{font-size:18px; color:var(--ink)}
+.mx-steam{animation:mx-steam 2.6s ease-in-out infinite} @keyframes mx-steam{50%{opacity:.35; transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){ .mx-slide,.mx-card,.mx-line,.mx-sl-art svg,.mx-steam{animation:none!important; transition:none!important} }
 .mx-fine{font-size:12.5px; color:var(--ink-3); text-align:center; margin:8px 0 0}
 .w-trivia .tv-orbit{position:absolute; right:-6%; top:50%; width:58%; max-width:300px; transform:translateY(-50%); z-index:-1}
 .tv-wt{display:block; font-family:var(--cond); font-weight:700; font-size:clamp(24px, 6.6vw, 34px); line-height:1.02; margin-top:8px; letter-spacing:-.01em}
@@ -1661,6 +1713,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 21l2-6 3 3v3M8 12l2-4 4 1 2 4M12 15l-1-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-voice" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 16h-7l-4.5 3.5V16H5a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 5 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-tag" viewBox="0 0 24 24"><path d="M5.5 8h13l-1 12.5h-11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 10V7a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
 <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -3350,126 +3403,208 @@ function triviaBoard(all) {
   paintBoard();
 }
 /* ---------- MISMO Merch (Jonna, Nov 26, 2026): a mock-up of a shop, shown only to the people testing MyMISMO. The
-   products and prices are examples to react to; nothing can be bought, and checkout says so. ---------- */
+   products, prices and shipping are examples to react to; nothing can be bought, and checkout says so. ---------- */
 var MERCH = [
-  { id: 'hoodie', name: 'MISMO Standard Hoodie', cat: 'Apparel', price: 48, kind: 'hoodie', colors: [['Navy', '#0d314c'], ['Heather Gray', '#9aa6b1']], sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], blurb: 'Midweight fleece with the MISMO wordmark across the chest. The one you\'ll wear to every summit.' },
-  { id: 'tee', name: 'I Speak MISMO Tee', cat: 'Apparel', price: 24, kind: 'tee', line: 'I SPEAK MISMO', colors: [['Navy', '#0d314c'], ['White', '#f4f7fa'], ['Sky', '#74bfeb']], sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], blurb: 'Soft cotton tee for the people who know what a Reference Model is.' },
-  { id: 'qzip', name: 'Summit Quarter-Zip', cat: 'Apparel', price: 62, kind: 'qzip', colors: [['Navy', '#0d314c'], ['Charcoal', '#3a4450']], sizes: ['S', 'M', 'L', 'XL', 'XXL'], blurb: 'A polished layer for General Sessions, with a small wordmark on the chest.' },
-  { id: 'polo', name: 'MISMO Polo', cat: 'Apparel', price: 40, kind: 'polo', colors: [['Navy', '#0d314c'], ['White', '#f4f7fa']], sizes: ['S', 'M', 'L', 'XL', 'XXL'], blurb: 'Performance knit that holds up from the first session to the last.' },
-  { id: 'cap', name: 'Data. Defined. Cap', cat: 'Apparel', price: 26, kind: 'cap', colors: [['Navy', '#0d314c'], ['Khaki', '#c9b48a']], blurb: 'Unstructured cap with an adjustable strap.' },
-  { id: 'mug', name: 'Reference Model Mug', cat: 'Drinkware', price: 16, kind: 'mug', colors: [['White', '#f4f7fa'], ['Navy', '#0d314c']], blurb: 'Fifteen ounces of coffee for reviewing the next release.' },
-  { id: 'bottle', name: 'Insulated Water Bottle', cat: 'Drinkware', price: 28, kind: 'bottle', colors: [['Navy', '#0d314c'], ['Sky', '#74bfeb']], blurb: 'Keeps it cold through a full day of workgroup meetings.' },
-  { id: 'notebook', name: 'Draft. Review. Publish. Notebook', cat: 'Desk', price: 12, kind: 'notebook', colors: [['Navy', '#0d314c']], blurb: 'Dot-grid pages for your workgroup notes.' },
-  { id: 'tote', name: 'MISMO Tote', cat: 'Extras', price: 20, kind: 'tote', colors: [['Natural', '#e9dfc9'], ['Navy', '#0d314c']], blurb: 'Heavy canvas, big enough for a laptop and the summit swag.' },
-  { id: 'stickers', name: 'Sticker Pack', cat: 'Extras', price: 8, kind: 'stickers', colors: [['Mixed', '#74bfeb']], blurb: 'Six stickers for your laptop: the wordmark, the S and a few favorites.' }
+  { id: 'hoodie', name: 'MISMO Standard Hoodie', cat: 'Apparel', price: 48, kind: 'hoodie', badge: 'Best Seller', colors: [['Navy', '#0d314c'], ['Heather Gray', '#a3adb7'], ['Sky', '#74bfeb']], sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], blurb: 'Midweight fleece with the MISMO wordmark across the chest. The one you\'ll wear to every summit.', bits: ['Midweight cotton fleece', 'Kangaroo pocket', 'Embroidered wordmark'] },
+  { id: 'tee', name: 'I Speak MISMO Tee', cat: 'Apparel', price: 24, kind: 'tee', badge: 'New', colors: [['Navy', '#0d314c'], ['White', '#f4f7fa'], ['Sky', '#74bfeb']], sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], blurb: 'Soft cotton tee for the people who know what a Reference Model is.', bits: ['Soft ring-spun cotton', 'Relaxed fit', 'Screen-printed front'] },
+  { id: 'qzip', name: 'Summit Quarter-Zip', cat: 'Apparel', price: 62, kind: 'qzip', badge: 'Summit Exclusive', colors: [['Navy', '#0d314c'], ['Charcoal', '#3a4450']], sizes: ['S', 'M', 'L', 'XL', 'XXL'], blurb: 'A polished layer for General Sessions, with a small wordmark on the chest.', bits: ['Brushed knit', 'Metal zipper', 'Small chest wordmark'] },
+  { id: 'polo', name: 'MISMO Polo', cat: 'Apparel', price: 40, kind: 'polo', colors: [['Navy', '#0d314c'], ['White', '#f4f7fa'], ['Sky', '#74bfeb']], sizes: ['S', 'M', 'L', 'XL', 'XXL'], blurb: 'Performance knit that holds up from the first session to the last.', bits: ['Moisture-wicking knit', 'Two-button placket', 'Small chest wordmark'] },
+  { id: 'cap', name: 'Data. Defined. Cap', cat: 'Apparel', price: 26, kind: 'cap', badge: 'New', colors: [['Navy', '#0d314c'], ['Khaki', '#c9b48a'], ['White', '#f4f7fa']], blurb: 'Unstructured cap with an adjustable strap.', bits: ['Washed cotton twill', 'Adjustable strap', 'Embroidered front'] },
+  { id: 'mug', name: 'Reference Model Mug', cat: 'Drinkware', price: 16, kind: 'mug', colors: [['White', '#f4f7fa'], ['Navy', '#0d314c']], blurb: 'Fifteen ounces of coffee for reviewing the next release.', bits: ['15 ounces', 'Ceramic', 'Dishwasher safe'] },
+  { id: 'bottle', name: 'Insulated Water Bottle', cat: 'Drinkware', price: 28, kind: 'bottle', badge: 'Best Seller', colors: [['Navy', '#0d314c'], ['Sky', '#74bfeb'], ['White', '#f4f7fa']], blurb: 'Keeps it cold through a full day of workgroup meetings.', bits: ['20 ounces', 'Double-wall steel', 'Cold for 24 hours'] },
+  { id: 'notebook', name: 'Draft. Review. Publish. Notebook', cat: 'Desk', price: 12, kind: 'notebook', colors: [['Navy', '#0d314c'], ['Sky', '#74bfeb']], blurb: 'Dot-grid pages for your workgroup notes.', bits: ['160 dot-grid pages', 'Lay-flat binding', 'Elastic closure'] },
+  { id: 'tote', name: 'MISMO Tote', cat: 'Extras', price: 20, kind: 'tote', colors: [['Natural', '#e9dfc9'], ['Navy', '#0d314c']], blurb: 'Heavy canvas, big enough for a laptop and the summit swag.', bits: ['Heavy cotton canvas', 'Fits a 15-inch laptop', 'Inside pocket'] },
+  { id: 'stickers', name: 'Sticker Pack', cat: 'Extras', price: 8, kind: 'stickers', colors: [['Mixed', '#74bfeb']], blurb: 'Six stickers for your laptop: the wordmark, the S and a few favorites.', bits: ['Six vinyl stickers', 'Water resistant', 'Matte finish'] }
 ];
-var BAG = [];
+var MX_FREE = 75, BAG = [];
+function mxShade(hex, amt) {   /* lighten (+) or darken (-) a color */
+  var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, t = amt < 0 ? 0 : 255, p = Math.abs(amt);
+  return '#' + [r, g, b].map(function (v) { return Math.round((t - v) * p + v).toString(16).padStart(2, '0'); }).join('');
+}
+var MX_N = 0;
 function merchArt(p, color) {
-  var c = color || p.colors[0][1], dark = /^#(0|1|2|3)/i.test(c), ink = dark ? '#ffffff' : '#0d314c', sh = 'rgba(0,0,0,.12)';
-  var logo = function (x, y, w) { return '<svg x="' + x + '" y="' + y + '" width="' + w + '" height="' + (w * 108 / 708) + '" viewBox="0 0 708 108" style="--logo-body:' + ink + ';--logo-s:#74bfeb"><use href="#mismo-logo"/></svg>'; };
+  var c = color || p.colors[0][1], light = parseInt(c.slice(1, 3), 16) + parseInt(c.slice(3, 5), 16) + parseInt(c.slice(5, 7), 16) > 420;
+  var ink = light ? '#0d314c' : '#ffffff', hi = mxShade(c, 0.16), lo = mxShade(c, -0.22), id = 'mx' + (++MX_N), F = 'IBM Plex Sans Condensed, IBM Plex Sans, sans-serif';
+  var fill = 'url(#' + id + 'f)';
+  var skyish = Math.abs(parseInt(c.slice(1, 3), 16) - 0x74) + Math.abs(parseInt(c.slice(3, 5), 16) - 0xbf) + Math.abs(parseInt(c.slice(5, 7), 16) - 0xeb) < 90;   /* on sky, the S goes deep blue */
+  var logo = function (x, y, w, inkc) { return '<svg x="' + x + '" y="' + y + '" width="' + w + '" height="' + (w * 108 / 708).toFixed(1) + '" viewBox="0 0 708 108" style="--logo-body:' + (inkc || ink) + ';--logo-s:' + (skyish && !inkc ? '#14486e' : '#74bfeb') + '"><use href="#mismo-logo"/></svg>'; };
   var body = '';
+  var shirt = function (longSleeve) {
+    return longSleeve
+      ? '<path d="M78 50 L102 40 Q120 52 138 40 L162 50 Q176 56 182 74 L200 166 Q190 172 180 170 L164 110 L164 194 Q120 202 76 194 L76 110 L60 170 Q50 172 40 166 L58 74 Q64 56 78 50 Z" fill="' + fill + '"/>' +
+        '<path d="M180 170 Q190 172 200 166 L202 176 Q192 182 182 180 Z M60 170 Q50 172 40 166 L38 176 Q48 182 58 180 Z" fill="' + lo + '"/>'
+      : '<path d="M78 50 L102 40 Q120 52 138 40 L162 50 Q176 56 184 70 L198 96 L174 110 L164 96 L164 194 Q120 202 76 194 L76 96 L66 110 L42 96 L56 70 Q64 56 78 50 Z" fill="' + fill + '"/>';
+  };
   if (p.kind === 'tee' || p.kind === 'polo' || p.kind === 'hoodie' || p.kind === 'qzip') {
-    var longSleeve = p.kind === 'hoodie' || p.kind === 'qzip';
-    body = (longSleeve ? '<path d="M70 52 L100 40 Q120 56 140 40 L170 52 L208 172 L186 180 L164 112 L164 196 Q120 204 76 196 L76 112 L54 180 L32 172 Z" fill="' + c + '"/><path d="M186 180 L208 172 L211 182 L189 190 Z M54 180 L32 172 L29 182 L51 190 Z" fill="' + sh + '"/>'
-      : '<path d="M70 52 L100 40 Q120 56 140 40 L170 52 L198 92 L172 108 L164 96 L164 196 Q120 204 76 196 L76 96 L68 108 L42 92 Z" fill="' + c + '"/>') +
-      '<path d="M76 96 L76 196 Q120 204 164 196 L164 186 Q120 194 76 186 Z" fill="' + sh + '"/>';
-    if (p.kind === 'hoodie') body += '<path d="M96 42 Q120 86 144 42 Q140 30 120 30 Q100 30 96 42 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><path d="M112 66 L110 96 M128 66 L130 96" stroke="' + ink + '" stroke-width="2" opacity=".6"/><rect x="92" y="150" width="56" height="26" rx="6" fill="' + sh + '"/>';
-    if (p.kind === 'qzip') body += '<path d="M104 42 L120 54 L136 42 L136 34 L104 34 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><path d="M120 54 L120 100" stroke="#b9c3cc" stroke-width="3"/>';
-    if (p.kind === 'polo') body += '<path d="M104 42 L120 60 L136 42 L128 38 L120 48 L112 38 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><circle cx="120" cy="70" r="2.5" fill="' + ink + '" opacity=".7"/><circle cx="120" cy="82" r="2.5" fill="' + ink + '" opacity=".7"/>';
-    if (p.kind === 'tee') body += '<path d="M100 40 Q120 56 140 40" fill="none" stroke="' + sh + '" stroke-width="4"/>';
-    body += p.kind === 'tee' ? logo(86, 92, 68) + '<text x="120" y="132" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="11" fill="' + ink + '" letter-spacing="1.5">' + esc(p.line || '') + '</text>'
-      : p.kind === 'hoodie' ? logo(80, 104, 80) : logo(134, 76, 26);
+    body = shirt(p.kind === 'hoodie' || p.kind === 'qzip') + '<path d="M76 184 Q120 192 164 184 L164 194 Q120 202 76 194 Z" fill="' + lo + '" opacity=".7"/>';
+    if (p.kind === 'tee') body += '<path d="M102 40 Q120 54 138 40" fill="none" stroke="' + lo + '" stroke-width="5" stroke-linecap="round"/>' +
+      '<text x="120" y="90" text-anchor="middle" font-family="' + F + '" font-weight="700" font-size="9" letter-spacing="2.5" fill="' + ink + '" opacity=".85">I SPEAK</text>' + logo(88, 96, 64);
+    if (p.kind === 'hoodie') body += '<path d="M98 42 Q120 92 142 42 Q138 28 120 28 Q102 28 98 42 Z" fill="' + lo + '"/><path d="M104 44 Q120 80 136 44" fill="none" stroke="' + mxShade(c, -0.35) + '" stroke-width="3"/>' +
+      '<path d="M113 70 L111 98 M127 70 L129 98" stroke="' + (light ? '#0d314c' : '#e9f4fb') + '" stroke-width="2.2" stroke-linecap="round" opacity=".75"/>' + logo(82, 108, 76) +
+      '<path d="M94 150 L146 150 L152 178 L88 178 Z" fill="' + lo + '" opacity=".55"/>';
+    if (p.kind === 'qzip') body += '<path d="M104 40 L120 56 L136 40 L136 30 L104 30 Z" fill="' + lo + '"/><path d="M120 56 L120 104" stroke="#c8d1d9" stroke-width="3"/><rect x="117" y="100" width="6" height="9" rx="1.5" fill="#c8d1d9"/>' + logo(133, 76, 24);
+    if (p.kind === 'polo') body += '<path d="M104 41 L120 62 L136 41 L130 36 L120 50 L110 36 Z" fill="' + lo + '"/><path d="M120 62 L120 84" stroke="' + lo + '" stroke-width="2"/><circle cx="120" cy="70" r="2.2" fill="' + ink + '" opacity=".7"/><circle cx="120" cy="80" r="2.2" fill="' + ink + '" opacity=".7"/>' + logo(133, 74, 24);
   } else if (p.kind === 'cap') {
-    body = '<path d="M60 140 Q60 76 120 72 Q180 76 180 140 Z" fill="' + c + '"/><path d="M120 72 L120 140" stroke="' + sh + '" stroke-width="2"/><path d="M60 140 Q120 128 180 140 L214 150 Q130 170 56 148 Z" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><circle cx="120" cy="73" r="5" fill="' + c + '" stroke="' + sh + '" stroke-width="2"/>' +
-      '<text x="120" y="118" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="13" fill="' + ink + '">DATA. DEFINED.</text>';
+    body = '<path d="M64 140 Q62 78 120 72 Q178 78 176 140 Z" fill="' + fill + '"/><path d="M120 72 Q126 104 124 140 M92 80 Q100 108 98 140 M148 80 Q140 108 142 140" stroke="' + lo + '" stroke-width="1.6" fill="none"/>' +
+      '<path d="M62 140 Q120 128 178 140 Q206 146 214 154 Q140 172 58 150 Z" fill="' + lo + '"/><circle cx="120" cy="73" r="5" fill="' + lo + '"/>' +
+      '<text x="120" y="118" text-anchor="middle" font-family="' + F + '" font-weight="800" font-size="10.5" letter-spacing=".6" fill="' + ink + '">DATA. DEFINED.</text>';
   } else if (p.kind === 'mug') {
-    body = '<rect x="64" y="64" width="96" height="116" rx="10" fill="' + c + '" stroke="' + sh + '" stroke-width="3"/><path d="M160 92 Q196 92 196 122 Q196 152 160 152" fill="none" stroke="' + c + '" stroke-width="14"/><path d="M160 92 Q196 92 196 122 Q196 152 160 152" fill="none" stroke="' + sh + '" stroke-width="2"/>' +
-      '<ellipse cx="112" cy="66" rx="46" ry="7" fill="' + sh + '"/>' + logo(74, 108, 76) + '<text x="112" y="138" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-weight="600" font-size="8.5" fill="' + ink + '" opacity=".85">REFERENCE MODEL</text>' +
-      '<path d="M96 52 Q100 40 96 30 M112 52 Q116 40 112 30 M128 52 Q132 40 128 30" stroke="#74bfeb" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>';
+    body = '<path d="M160 92 Q198 92 198 124 Q198 156 160 156" fill="none" stroke="' + lo + '" stroke-width="14"/>' +
+      '<path d="M62 62 L162 62 L158 178 Q156 186 148 186 L76 186 Q68 186 66 178 Z" fill="' + fill + '"/><ellipse cx="112" cy="62" rx="50" ry="8" fill="' + lo + '"/><ellipse cx="112" cy="61" rx="44" ry="5.5" fill="#3b2416" opacity=".85"/>' +
+      logo(76, 104, 72) + '<text x="112" y="136" text-anchor="middle" font-family="' + F + '" font-weight="700" font-size="9" letter-spacing="1.5" fill="' + ink + '" opacity=".85">REFERENCE MODEL</text>' +
+      '<path d="M96 50 Q102 38 96 26 M112 50 Q118 38 112 26 M128 50 Q134 38 128 26" stroke="#9fd1f0" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8" class="mx-steam"/>';
   } else if (p.kind === 'bottle') {
-    body = '<rect x="96" y="30" width="48" height="22" rx="6" fill="#33414d"/><path d="M90 60 Q90 52 100 52 L140 52 Q150 52 150 60 L150 196 Q150 206 140 206 L100 206 Q90 206 90 196 Z" fill="' + c + '"/><rect x="90" y="60" width="12" height="140" fill="rgba(255,255,255,.18)"/>' +
-      '<svg x="104" y="150" width="32" height="32" viewBox="0 0 708 108" preserveAspectRatio="xMidYMid slice" style="--logo-body:' + ink + ';--logo-s:#74bfeb"><use href="#mismo-logo"/></svg>' + logo(98, 112, 44);
+    body = '<rect x="100" y="24" width="40" height="12" rx="4" fill="#33414d"/><rect x="104" y="34" width="32" height="14" fill="#55636f"/>' +
+      '<path d="M88 62 Q88 48 104 48 L136 48 Q152 48 152 62 L152 196 Q152 208 140 208 L100 208 Q88 208 88 196 Z" fill="' + fill + '"/><rect x="96" y="60" width="9" height="140" rx="4" fill="#fff" opacity=".18"/>' +
+      '<g transform="rotate(-90 120 128)">' + logo(86, 122, 68) + '</g>';
   } else if (p.kind === 'notebook') {
-    body = '<rect x="66" y="36" width="114" height="160" rx="8" fill="' + c + '"/><rect x="66" y="36" width="16" height="160" fill="rgba(0,0,0,.25)"/><rect x="180" y="44" width="6" height="144" rx="2" fill="#e9eef2"/>' +
-      logo(96, 70, 70) + '<text x="131" y="152" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="11" fill="#a9d8f3">DRAFT. REVIEW.</text><text x="131" y="167" text-anchor="middle" font-family="IBM Plex Sans Condensed, IBM Plex Sans, sans-serif" font-weight="700" font-size="11" fill="#f3c64f">PUBLISH.</text>';
+    body = '<rect x="70" y="34" width="112" height="164" rx="8" fill="#e9eef2"/><rect x="64" y="30" width="112" height="164" rx="8" fill="' + fill + '"/><rect x="64" y="30" width="14" height="164" rx="4" fill="' + lo + '"/>' +
+      '<rect x="160" y="96" width="22" height="10" rx="3" fill="' + lo + '"/>' + logo(92, 66, 70) +
+      '<text x="127" y="148" text-anchor="middle" font-family="' + F + '" font-weight="800" font-size="11.5" fill="' + (light ? '#14486e' : '#a9d8f3') + '">DRAFT. REVIEW.</text><text x="127" y="164" text-anchor="middle" font-family="' + F + '" font-weight="800" font-size="11.5" fill="#f3c64f">PUBLISH.</text>';
   } else if (p.kind === 'tote') {
-    body = '<path d="M92 76 Q92 34 120 34 Q148 34 148 76" fill="none" stroke="' + (dark ? '#0b2a44' : '#cdbf9f') + '" stroke-width="8"/><path d="M62 74 L178 74 L188 200 L52 200 Z" fill="' + c + '"/>' + logo(78, 122, 84);
+    body = '<path d="M94 80 Q94 34 120 34 Q146 34 146 80" fill="none" stroke="' + lo + '" stroke-width="8" stroke-linecap="round"/><path d="M60 76 L180 76 L190 202 L50 202 Z" fill="' + fill + '"/>' +
+      '<path d="M60 76 L180 76 L181 86 L59 86 Z" fill="' + lo + '" opacity=".6"/>' + logo(78, 128, 84);
   } else {
-    body = '<g transform="rotate(-8 90 90)"><rect x="40" y="50" width="96" height="62" rx="12" fill="#0d314c"/>' + '<svg x="50" y="72" width="76" height="12" viewBox="0 0 708 108" style="--logo-body:#fff;--logo-s:#74bfeb"><use href="#mismo-logo"/></svg></g>' +
-      '<g transform="rotate(10 160 110)"><circle cx="160" cy="104" r="34" fill="#74bfeb"/><text x="160" y="118" text-anchor="middle" font-family="IBM Plex Sans Condensed, sans-serif" font-weight="800" font-size="38" fill="#0d314c">S</text></g>' +
-      '<g transform="rotate(-4 110 170)"><rect x="58" y="146" width="112" height="40" rx="20" fill="#f3c64f"/><text x="114" y="172" text-anchor="middle" font-family="IBM Plex Sans Condensed, sans-serif" font-weight="800" font-size="14" fill="#0d314c">STANDARDS MATTER</text></g>';
+    body = '<g transform="rotate(-8 88 86)"><rect x="34" y="52" width="108" height="56" rx="10" fill="#0d314c"/>' + logo(46, 72, 84, '#ffffff') + '</g>' +
+      '<g transform="rotate(10 166 104)"><circle cx="166" cy="104" r="34" fill="#74bfeb" stroke="#fff" stroke-width="4"/><text x="166" y="119" text-anchor="middle" font-family="' + F + '" font-weight="800" font-size="40" fill="#0d314c">S</text></g>' +
+      '<g transform="rotate(-4 112 168)"><rect x="52" y="146" width="124" height="44" rx="8" fill="#f3c64f" stroke="#fff" stroke-width="4"/><text x="114" y="174" text-anchor="middle" font-family="' + F + '" font-weight="800" font-size="14" letter-spacing=".5" fill="#0d314c">STANDARDS MATTER</text></g>';
   }
-  return '<svg class="mx-art" viewBox="0 0 240 230" aria-hidden="true"><defs><radialGradient id="mxg-' + p.id + '" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#eef6fc"/><stop offset="1" stop-color="#d9e8f3"/></radialGradient></defs>' +
-    '<rect width="240" height="230" fill="url(#mxg-' + p.id + ')"/><ellipse cx="120" cy="212" rx="78" ry="8" fill="rgba(13,49,76,.12)"/>' + body + '</svg>';
+  return '<svg class="mx-art" viewBox="0 0 240 230" role="img" aria-label="' + esc(p.name) + '"><defs>' +
+    '<linearGradient id="' + id + 'f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + hi + '"/><stop offset=".55" stop-color="' + c + '"/><stop offset="1" stop-color="' + lo + '"/></linearGradient>' +
+    '<radialGradient id="' + id + 'b" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#f6fbff"/><stop offset="1" stop-color="#dbe9f4"/></radialGradient></defs>' +
+    '<rect width="240" height="230" fill="url(#' + id + 'b)"/><ellipse cx="120" cy="212" rx="80" ry="8" fill="rgba(13,49,76,.13)"/><g class="mx-obj">' + body + '</g></svg>';
 }
+function mxItem(id) { return MERCH.filter(function (x) { return x.id === id; })[0]; }
 function bagCount() { return BAG.reduce(function (n, b) { return n + b.qty; }, 0); }
+function bagTotal() { return BAG.reduce(function (n, b) { return n + mxItem(b.id).price * b.qty; }, 0); }
 function money(n) { return '$' + n.toFixed(0); }
-function merchSheet() {
-  var cat = 'All';
-  var el = openSheet('MISMO Merch', '<div id="mx"></div>', { plain: true }), box = el.querySelector('#mx');
-  el.classList.add('mx-sheet');
-  function paint() {
-    var list = MERCH.filter(function (p) { return cat === 'All' || p.cat === cat; });
-    box.innerHTML = '<section class="mx-hero">' + heroArt() + '<div class="mx-hero-in"><span class="mx-eye">' + icon('i-star') + 'MISMO Merch</span><h2>Wear the Standard</h2><p>Gear for the people who build mortgage data standards.</p></div>' +
-      '<button type="button" class="mx-bagbtn" data-mx-bag aria-label="Your bag, ' + bagCount() + ' items">' + icon('i-tag') + '<b>' + bagCount() + '</b></button></section>' +
-      '<div class="sheet-pad"><div class="mx-note">' + icon('i-bulb') + '<span><b>Mock-up.</b> The products and prices are examples for MISMO to react to. Nothing can be bought yet.</span></div>' +
-      '<div class="seg mx-seg" role="group" aria-label="Show">' + ['All', 'Apparel', 'Drinkware', 'Desk', 'Extras'].map(function (c) { return '<button type="button" data-mx-cat="' + c + '" aria-pressed="' + (c === cat) + '">' + c + '</button>'; }).join('') + '</div>' +
-      '<div class="mx-grid">' + list.map(function (p, i) {
-        return '<button type="button" class="mx-card" data-mx="' + p.id + '" style="--i:' + i + '"><span class="mx-img">' + merchArt(p) + '</span><span class="mx-tx"><b>' + esc(p.name) + '</b><span class="mx-row"><span class="mx-price">' + money(p.price) + '</span><span class="mx-dots">' +
-          p.colors.map(function (c) { return '<i style="background:' + c[1] + '" title="' + esc(c[0]) + '"></i>'; }).join('') + '</span></span></span></button>';
-      }).join('') + '</div></div>';
-  }
-  paint();
-  box.addEventListener('click', function (e) {
-    var c = e.target.closest('[data-mx-cat]'); if (c) { cat = c.getAttribute('data-mx-cat'); paint(); return; }
-    var p = e.target.closest('[data-mx]'); if (p) { merchItem(p.getAttribute('data-mx'), paint); return; }
-    if (e.target.closest('[data-mx-bag]')) bagSheet(paint);
-  });
+function bagAdd(id, color, size, qty) {
+  var p = mxItem(id), s = size === undefined ? (p.sizes ? Math.max(0, p.sizes.indexOf('M')) : -1) : size, key = id + '|' + color + '|' + s;
+  var have = BAG.filter(function (b) { return b.key === key; })[0];
+  if (have) have.qty = Math.min(10, have.qty + (qty || 1)); else BAG.push({ key: key, id: id, color: color, size: s, qty: qty || 1 });
+  $$('.mx-bagbtn b').forEach(function (b) { b.textContent = bagCount(); b.parentNode.classList.remove('bump'); void b.offsetWidth; b.parentNode.classList.add('bump'); });
 }
-function merchItem(id, after) {
-  var p = MERCH.filter(function (x) { return x.id === id; })[0]; if (!p) return;
-  var sel = { color: 0, size: p.sizes ? (p.sizes.indexOf('M') >= 0 ? p.sizes.indexOf('M') : 0) : -1, qty: 1 };
-  var el = openSheet(p.name, '<div id="mxi"></div>', { plain: true }), box = el.querySelector('#mxi');
-  function paint(added) {
-    box.innerHTML = '<div class="mx-big">' + merchArt(p, p.colors[sel.color][1]) + '</div><div class="sheet-pad mx-detail">' +
-      '<span class="mx-cat">' + esc(p.cat) + '</span><h2>' + esc(p.name) + '</h2><div class="mx-price big">' + money(p.price) + '</div><p>' + esc(p.blurb) + '</p>' +
-      '<div class="mx-opt"><span>Color: <b>' + esc(p.colors[sel.color][0]) + '</b></span><div class="mx-swatches">' + p.colors.map(function (c, i) { return '<button type="button" data-mx-color="' + i + '" aria-pressed="' + (i === sel.color) + '" aria-label="' + esc(c[0]) + '" style="background:' + c[1] + '"></button>'; }).join('') + '</div></div>' +
-      (p.sizes ? '<div class="mx-opt"><span>Size</span><div class="mx-sizes">' + p.sizes.map(function (z, i) { return '<button type="button" data-mx-size="' + i + '" aria-pressed="' + (i === sel.size) + '">' + z + '</button>'; }).join('') + '</div></div>' : '') +
-      '<div class="mx-opt"><span>Quantity</span><div class="mx-qty"><button type="button" data-mx-q="-1" aria-label="One fewer">&minus;</button><b>' + sel.qty + '</b><button type="button" data-mx-q="1" aria-label="One more">+</button></div></div>' +
-      '<button type="button" class="btn primary mx-add" data-mx-add>' + icon(added ? 'i-check' : 'i-tag') + (added ? 'Added to Your Bag' : 'Add to Bag, ' + money(p.price * sel.qty)) + '</button>' +
-      (added ? '<button type="button" class="btn mx-add" data-mx-bag>View Your Bag (' + bagCount() + ')</button>' : '') + '</div>';
+/* the picture flies from where you tapped into the bag */
+function mxFly(fromEl) {
+  var bag = document.querySelector('.sheet:last-of-type .mx-bagbtn') || document.querySelector('.mx-bagbtn'); if (!fromEl || !bag || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  var a = fromEl.getBoundingClientRect(), b = bag.getBoundingClientRect(), f = document.createElement('div');
+  f.className = 'mx-fly'; f.appendChild(fromEl.cloneNode(true)); f.style.cssText = 'left:' + a.left + 'px;top:' + a.top + 'px;width:' + a.width + 'px;height:' + a.height + 'px';
+  document.body.appendChild(f); void f.offsetWidth;
+  f.style.transform = 'translate(' + (b.left + b.width / 2 - a.left - a.width / 2) + 'px,' + (b.top + b.height / 2 - a.top - a.height / 2) + 'px) scale(.12) rotate(18deg)'; f.style.opacity = '.4';
+  setTimeout(function () { f.remove(); }, 720);
+}
+function mxToast(msg) {
+  var t = document.createElement('div'); t.className = 'mx-toast'; t.innerHTML = icon('i-check') + '<span>' + esc(msg) + '</span>'; document.body.appendChild(t);
+  setTimeout(function () { t.classList.add('out'); }, 1800); setTimeout(function () { t.remove(); }, 2300);
+}
+function mxBagBtn() { return '<button type="button" class="mx-bagbtn" data-mx-bag aria-label="Your bag">' + icon('i-tag') + '<b>' + bagCount() + '</b></button>'; }
+function mxCard(p, i) {
+  return '<div class="mx-card" style="--i:' + i + '" data-card="' + p.id + '"><button type="button" class="mx-open" data-mx="' + p.id + '" aria-label="' + esc(p.name) + '"><span class="mx-img">' + merchArt(p) + '</span></button>' +
+    (p.badge ? '<span class="mx-badge' + (p.badge === 'New' ? ' new' : p.badge === 'Summit Exclusive' ? ' ex' : '') + '">' + esc(p.badge) + '</span>' : '') +
+    '<button type="button" class="mx-quick" data-mx-quick="' + p.id + '" aria-label="Add ' + esc(p.name) + ' to your bag">' + icon('i-plus') + '</button>' +
+    '<div class="mx-tx"><button type="button" class="mx-name" data-mx="' + p.id + '">' + esc(p.name) + '</button><div class="mx-row"><span class="mx-price">' + money(p.price) + '</span><span class="mx-dots">' +
+    p.colors.map(function (c, k) { return '<button type="button" data-mx-dot="' + p.id + ':' + k + '" aria-pressed="' + (k === 0) + '" aria-label="' + esc(c[0]) + '" style="background:' + c[1] + '"></button>'; }).join('') + '</span></div></div></div>';
+}
+function merchSheet() {
+  var cat = 'All', q = '', spot = 0, spotT = null, FEAT = ['hoodie', 'qzip', 'bottle'];
+  var el = openSheet('MISMO Merch', '<div id="mx" class="mx"></div>', { plain: true }), box = el.querySelector('#mx');
+  el.classList.add('mx-sheet');
+  var colorOf = {};
+  function spotHtml() {
+    return FEAT.map(function (id, k) { var p = mxItem(id);
+      return '<div class="mx-slide' + (k === spot ? ' on' : '') + '" data-k="' + k + '"><div class="mx-sl-tx"><span class="mx-eye">' + (k === 0 ? 'Best Seller' : k === 1 ? 'Summit Exclusive' : 'Stay Hydrated') + '</span><h2>' + esc(p.name) + '</h2><p>' + esc(p.blurb) + '</p>' +
+        '<button type="button" class="mx-cta" data-mx="' + p.id + '">Shop It, ' + money(p.price) + icon('i-chev') + '</button></div><div class="mx-sl-art">' + merchArt(p) + '</div></div>'; }).join('') +
+      '<div class="mx-pips">' + FEAT.map(function (x, k) { return '<button type="button" data-spot="' + k + '" aria-label="Show ' + esc(mxItem(x).name) + '" aria-pressed="' + (k === spot) + '"></button>'; }).join('') + '</div>';
   }
-  paint(false);
+  function gridHtml() {
+    var ql = q.toLowerCase(), list = MERCH.filter(function (p) { return (cat === 'All' || p.cat === cat) && (!ql || (p.name + ' ' + p.cat + ' ' + p.blurb).toLowerCase().indexOf(ql) >= 0); });
+    return list.length ? list.map(mxCard).join('') : '<div class="note mx-none">Nothing matches "' + esc(q) + '". Try "hoodie", "mug" or "cap".</div>';
+  }
+  box.innerHTML = '<div class="mx-top"><label class="mx-search">' + icon('i-search') + '<input type="search" placeholder="Search hoodies, mugs, caps…" aria-label="Search the shop"></label>' + mxBagBtn() + '</div>' +
+    '<section class="mx-spot" aria-label="Featured">' + spotHtml() + '</section>' +
+    '<div class="sheet-pad mx-main"><div class="mx-note">' + icon('i-bulb') + '<span><b>Mock-up.</b> The products, prices and shipping are examples for MISMO to react to. Nothing can be bought yet.</span></div>' +
+    '<div class="mx-cats" role="group" aria-label="Show">' + ['All', 'Apparel', 'Drinkware', 'Desk', 'Extras'].map(function (c) { return '<button type="button" data-mx-cat="' + c + '" aria-pressed="' + (c === cat) + '">' + c + '</button>'; }).join('') + '</div>' +
+    '<div class="mx-grid">' + gridHtml() + '</div><div class="mx-perks"><span>' + icon('i-check') + 'Free shipping over ' + money(MX_FREE) + '</span><span>' + icon('i-check') + 'Easy returns</span><span>' + icon('i-check') + 'Members save 10%</span></div></div>';
+  function regrid() { var g = box.querySelector('.mx-grid'); g.innerHTML = gridHtml(); }
+  function show(k) { spot = (k + FEAT.length) % FEAT.length; box.querySelectorAll('.mx-slide').forEach(function (s, i) { s.classList.toggle('on', i === spot); }); box.querySelectorAll('[data-spot]').forEach(function (b, i) { b.setAttribute('aria-pressed', String(i === spot)); }); }
+  function auto() { clearInterval(spotT); spotT = setInterval(function () { if (!box.isConnected) { clearInterval(spotT); return; } show(spot + 1); }, 4500); }
+  auto();
+  var sp = box.querySelector('.mx-spot'), sx = null;
+  sp.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  sp.addEventListener('touchend', function (e) { if (sx === null) return; var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) { show(spot + (dx < 0 ? 1 : -1)); auto(); } sx = null; });
+  box.querySelector('.mx-search input').addEventListener('input', function (e) { q = e.target.value.trim(); regrid(); });
   box.addEventListener('click', function (e) {
     var t;
-    if ((t = e.target.closest('[data-mx-color]'))) { sel.color = +t.getAttribute('data-mx-color'); paint(false); return; }
-    if ((t = e.target.closest('[data-mx-size]'))) { sel.size = +t.getAttribute('data-mx-size'); paint(false); return; }
-    if ((t = e.target.closest('[data-mx-q]'))) { sel.qty = Math.max(1, Math.min(10, sel.qty + +t.getAttribute('data-mx-q'))); paint(false); return; }
-    if (e.target.closest('[data-mx-add]')) {
-      var key = p.id + '|' + sel.color + '|' + sel.size, have = BAG.filter(function (b) { return b.key === key; })[0];
-      if (have) have.qty = Math.min(10, have.qty + sel.qty); else BAG.push({ key: key, id: p.id, color: sel.color, size: sel.size, qty: sel.qty });
-      paint(true); if (after) after(); return;
+    if ((t = e.target.closest('[data-spot]'))) { show(+t.getAttribute('data-spot')); auto(); return; }
+    if ((t = e.target.closest('[data-mx-cat]'))) { cat = t.getAttribute('data-mx-cat'); box.querySelectorAll('[data-mx-cat]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); regrid(); return; }
+    if ((t = e.target.closest('[data-mx-dot]'))) {   /* the card's picture changes color right there */
+      var v = t.getAttribute('data-mx-dot').split(':'), p = mxItem(v[0]), card = t.closest('.mx-card'); colorOf[v[0]] = +v[1];
+      card.querySelector('.mx-img').innerHTML = merchArt(p, p.colors[+v[1]][1]); card.querySelector('.mx-img').classList.remove('swap'); void card.offsetWidth; card.querySelector('.mx-img').classList.add('swap');
+      card.querySelectorAll('[data-mx-dot]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return;
     }
-    if (e.target.closest('[data-mx-bag]')) bagSheet(after);
+    if ((t = e.target.closest('[data-mx-quick]'))) {
+      var id = t.getAttribute('data-mx-quick'); bagAdd(id, colorOf[id] || 0); mxFly(t.closest('.mx-card').querySelector('.mx-img svg'));
+      t.classList.add('done'); t.innerHTML = icon('i-check'); setTimeout(function () { if (t.isConnected) { t.classList.remove('done'); t.innerHTML = icon('i-plus'); } }, 1400);
+      mxToast(mxItem(id).name + ' added' + (mxItem(id).sizes ? ', size M' : '')); return;
+    }
+    if ((t = e.target.closest('[data-mx]'))) { merchItem(t.getAttribute('data-mx'), colorOf[t.getAttribute('data-mx')] || 0); return; }
+    if (e.target.closest('[data-mx-bag]')) bagSheet();
   });
 }
-function bagSheet(after) {
-  var el = openSheet('Your Bag', '<div id="mxb"></div>', { plain: true }), box = el.querySelector('#mxb');
+function merchItem(id, color0) {
+  var p = mxItem(id); if (!p) return;
+  var sel = { color: color0 || 0, size: p.sizes ? Math.max(0, p.sizes.indexOf('M')) : -1, qty: 1 };
+  var el = openSheet(p.name, '<div class="mx mxi"></div>', { plain: true }), box = el.querySelector('.mxi');
+  var also = MERCH.filter(function (x) { return x.id !== p.id && x.cat === p.cat; }).concat(MERCH.filter(function (x) { return x.cat !== p.cat; })).slice(0, 4);
+  box.innerHTML = '<div class="mx-top mx-top-i"><span></span>' + mxBagBtn() + '</div><div class="mx-big"><div class="mx-big-art">' + merchArt(p, p.colors[sel.color][1]) + '</div>' + (p.badge ? '<span class="mx-badge big' + (p.badge === 'New' ? ' new' : p.badge === 'Summit Exclusive' ? ' ex' : '') + '">' + esc(p.badge) + '</span>' : '') + '</div>' +
+    '<div class="sheet-pad mx-detail"><span class="mx-cat">' + esc(p.cat) + '</span><h2>' + esc(p.name) + '</h2><div class="mx-price big">' + money(p.price) + '</div><p>' + esc(p.blurb) + '</p>' +
+    '<ul class="mx-bits">' + p.bits.map(function (b) { return '<li>' + icon('i-check') + esc(b) + '</li>'; }).join('') + '</ul>' +
+    '<div class="mx-opt"><span>Color: <b class="mx-cname">' + esc(p.colors[sel.color][0]) + '</b></span><div class="mx-swatches">' + p.colors.map(function (c, i) { return '<button type="button" data-mx-color="' + i + '" aria-pressed="' + (i === sel.color) + '" aria-label="' + esc(c[0]) + '" style="background:' + c[1] + '"></button>'; }).join('') + '</div></div>' +
+    (p.sizes ? '<div class="mx-opt"><span>Size</span><div class="mx-sizes">' + p.sizes.map(function (z, i) { return '<button type="button" data-mx-size="' + i + '" aria-pressed="' + (i === sel.size) + '">' + z + '</button>'; }).join('') + '</div></div>' : '') +
+    '<div class="mx-opt"><span>You Might Also Like</span><div class="mx-also">' + also.map(function (x) { return '<button type="button" data-mx-go="' + x.id + '"><span>' + merchArt(x) + '</span><b>' + esc(x.name) + '</b><i>' + money(x.price) + '</i></button>'; }).join('') + '</div></div></div>' +
+    '<div class="mx-buy"><div class="mx-qty"><button type="button" data-mx-q="-1" aria-label="One fewer">&minus;</button><b class="mx-qn">1</b><button type="button" data-mx-q="1" aria-label="One more">+</button></div>' +
+    '<button type="button" class="mx-add" data-mx-add>' + icon('i-tag') + '<span>Add to Bag, ' + money(p.price) + '</span></button></div>';
+  function sync() {
+    box.querySelector('.mx-qn').textContent = sel.qty;
+    box.querySelector('[data-mx-add] span').textContent = 'Add to Bag, ' + money(p.price * sel.qty);
+  }
+  box.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-mx-color]'))) {
+      sel.color = +t.getAttribute('data-mx-color'); var a = box.querySelector('.mx-big-art'); a.classList.remove('swap'); void a.offsetWidth; a.classList.add('swap'); a.innerHTML = merchArt(p, p.colors[sel.color][1]);
+      box.querySelector('.mx-cname').textContent = p.colors[sel.color][0]; box.querySelectorAll('[data-mx-color]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return;
+    }
+    if ((t = e.target.closest('[data-mx-size]'))) { sel.size = +t.getAttribute('data-mx-size'); box.querySelectorAll('[data-mx-size]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return; }
+    if ((t = e.target.closest('[data-mx-q]'))) { sel.qty = Math.max(1, Math.min(10, sel.qty + +t.getAttribute('data-mx-q'))); sync(); return; }
+    if ((t = e.target.closest('[data-mx-go]'))) { merchItem(t.getAttribute('data-mx-go')); return; }
+    if ((t = e.target.closest('[data-mx-add]'))) {
+      bagAdd(p.id, sel.color, sel.size, sel.qty); mxFly(box.querySelector('.mx-big-art svg'));
+      t.classList.add('done'); t.innerHTML = icon('i-check') + '<span>Added to Your Bag</span>';
+      setTimeout(function () { if (t.isConnected) { t.classList.remove('done'); t.innerHTML = icon('i-tag') + '<span></span>'; sync(); } }, 1600);
+      mxToast(p.name + ' added'); return;
+    }
+    if (e.target.closest('[data-mx-bag]')) bagSheet();
+  });
+}
+function bagSheet() {
+  var el = openSheet('Your Bag', '<div class="mx mxb"></div>', { plain: true }), box = el.querySelector('.mxb');
   function paint() {
-    var total = 0;
-    var rows = BAG.map(function (b, i) {
-      var p = MERCH.filter(function (x) { return x.id === b.id; })[0]; total += p.price * b.qty;
-      return '<div class="mx-line"><span class="mx-thumb">' + merchArt(p, p.colors[b.color][1]) + '</span><span class="mx-lt"><b>' + esc(p.name) + '</b><span>' + esc(p.colors[b.color][0]) + (b.size >= 0 ? ', ' + p.sizes[b.size] : '') + '</span>' +
-        '<span class="mx-qty sm"><button type="button" data-bq="' + i + ':-1" aria-label="One fewer">&minus;</button><b>' + b.qty + '</b><button type="button" data-bq="' + i + ':1" aria-label="One more">+</button></span></span><span class="mx-lp">' + money(p.price * b.qty) + '</span></div>';
-    }).join('');
-    box.innerHTML = '<div class="sheet-pad">' + (BAG.length ? rows + '<div class="mx-total"><span>Subtotal</span><b>' + money(total) + '</b></div>' +
-      '<button type="button" class="btn primary mx-add" disabled>' + icon('i-lock') + 'Check Out</button><p class="mx-fine">Checkout opens when the MISMO Merch shop does. This mock-up doesn\'t take orders or payment.</p>'
-      : '<div class="note">Your bag is empty. Tap something you like and choose Add to Bag.</div>') + '</div>';
+    var total = bagTotal(), left = Math.max(0, MX_FREE - total), pct = Math.min(100, total / MX_FREE * 100);
+    var rows = BAG.map(function (b, i) { var p = mxItem(b.id);
+      return '<div class="mx-line" style="--i:' + i + '"><span class="mx-thumb">' + merchArt(p, p.colors[b.color][1]) + '</span><span class="mx-lt"><b>' + esc(p.name) + '</b><span>' + esc(p.colors[b.color][0]) + (b.size >= 0 ? ', ' + p.sizes[b.size] : '') + '</span>' +
+        '<span class="mx-qty sm"><button type="button" data-bq="' + i + ':-1" aria-label="One fewer">&minus;</button><b>' + b.qty + '</b><button type="button" data-bq="' + i + ':1" aria-label="One more">+</button></span></span>' +
+        '<span class="mx-lr"><span class="mx-lp">' + money(p.price * b.qty) + '</span><button type="button" class="linkbtn mx-rm" data-bq="' + i + ':-99">Remove</button></span></div>'; }).join('');
+    box.innerHTML = '<div class="sheet-pad">' + (BAG.length
+      ? '<div class="mx-ship"><span>' + (left > 0 ? 'You\'re <b>' + money(left) + '</b> away from free shipping' : '<b>You\'ve got free shipping!</b>') + '</span><i><em style="width:' + pct.toFixed(0) + '%"></em></i></div>' + rows +
+        '<div class="mx-total"><span>Subtotal</span><b>' + money(total) + '</b></div><div class="mx-total sm"><span>Shipping</span><b>' + (left > 0 ? 'Figured at checkout' : 'Free') + '</b></div>' +
+        '<button type="button" class="mx-add" disabled>' + icon('i-lock') + '<span>Check Out</span></button><p class="mx-fine">Checkout opens when the MISMO Merch shop does. This mock-up doesn\'t take orders or payment.</p>'
+      : '<div class="mx-empty">' + icon('i-tag') + '<b>Your bag is empty</b><span>Tap the + on anything you like, or open it to pick a color and size.</span></div>') + '</div>';
   }
   paint();
   box.addEventListener('click', function (e) {
     var t = e.target.closest('[data-bq]'); if (!t) return; var v = t.getAttribute('data-bq').split(':'), b = BAG[+v[0]];
-    b.qty += +v[1]; if (b.qty <= 0) BAG.splice(+v[0], 1); paint(); if (after) after();
+    b.qty = Math.min(10, b.qty + +v[1]); if (b.qty <= 0) BAG.splice(+v[0], 1); paint();
+    $$('.mx-bagbtn b').forEach(function (x) { x.textContent = bagCount(); });
   });
 }
 function widget(id) {
