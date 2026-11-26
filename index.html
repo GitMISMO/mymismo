@@ -2362,6 +2362,8 @@ function triviaSheet() {
    STORE_RELEASE to true in the build sent to the stores: anything not live yet is left out for everyone, and the
    reviewer code and test link stop working. TRIVIA_LIVE turns true once relay request 15 is live. */
 var STORE_RELEASE = false, TRIVIA_LIVE = false;
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { if (S.page === 'dash') renderPage('dash'); }); } catch (e) {}
+function darkNow() { var t = document.documentElement.getAttribute('data-theme'); return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
 try { if (/^android-app:\/\/org\.mismo\.mymismo/.test(document.referrer)) save('twa', true); } catch (e) {}
 function triviaTester() {
   if (STORE_RELEASE) return false;
@@ -2506,7 +2508,10 @@ function widget(id) {
   if (id === 'sponsors') {
     if (!S.sponsors.length) return '';
     var top = (sponsorTiers()[0] || { list: [] }).list.slice(0, 6);
-    return '<button type="button" class="wd w-spon" data-sponsors>' + head() + '<span class="w-logos">' + top.map(function (sp, i) { return sp.logo ? '<img class="' + ((LOGOBG && LOGOBG.logos && LOGOBG.logos[sp.logo]) || 'solid') + '" src="' + esc(sp.logo) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">' : ''; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
+    return '<button type="button" class="wd w-spon" data-sponsors>' + head() + '<span class="w-logos">' + top.map(function (sp, i) { if (!sp.logo) return ''; var lb = (LOGOBG && LOGOBG.logos && LOGOBG.logos[sp.logo]) || 'solid', dk = darkNow();
+      /* a logo on its own white rectangle has a copy with the white taken away, used on the dark tile */
+      var src = lb && lb.src && dk ? lb.src : sp.logo, cls = lb && lb.kind ? (dk ? lb.kind : 'solid') : lb;
+      return '<img class="' + cls + '" src="' + esc(src) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">'; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
   }
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-sub">Tell the community</span></button>';
   if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
@@ -3032,7 +3037,7 @@ function settingsSheet() {
   el.addEventListener('click', function (e) {
     var b = e.target.closest('[data-set]'); if (!b) return; var k = b.getAttribute('data-set');
     function again() { closeSheet(false); settingsSheet(); }
-    if (k === 'theme') { $('#theme-btn').click(); again(); }
+    if (k === 'theme') { $('#theme-btn').click(); if (S.page === 'dash') renderPage('dash'); again(); }
     else if (k === 'alerts-on') { turnOnAlerts(b); setTimeout(again, 2500); }
     else if (k === 'alerts-off') { turnOffAlerts(); setTimeout(again, 1200); }
     else if (k === 'staff-in') { closeSheet(false); ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); }
