@@ -1,0 +1,270 @@
+{
+ "updated": "2026-11-26T00:00:50Z",
+ "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup",
+ "groups": [
+  {
+   "name": "AI Governance Forum",
+   "url": "https://www.mismo.org/get-involved/ai-governance-forum",
+   "area": "AI Governance",
+   "kind": "Forum",
+   "about": "Share how your organization governs AI and help shape FRAME.",
+   "meets": "Kickoff Thu, Nov 19, 1–2pm ET"
+  },
+  {
+   "name": "API Community of Practice",
+   "url": "https://www.mismo.org/get-involved/api",
+   "area": "Governance",
+   "kind": "CoP",
+   "about": "A forum for standardized mortgage APIs and recommended practices.",
+   "meets": "Meets 4th Tuesday 3–4pm ET"
+  },
+  {
+   "name": "Architecture Workgroup",
+   "url": "https://www.mismo.org/get-involved/architecture",
+   "area": "Governance",
+   "kind": "Workgroup",
+   "about": "Sets technical direction and engineering guidelines for MISMO products.",
+   "meets": "Meets 2nd & 4th Thursday 2–3pm ET"
+  },
+  {
+   "name": "Artificial Intelligence (AI) Community of Practice",
+   "url": "https://www.mismo.org/get-involved/artificial-intelligence",
+   "area": "Artificial Intelligence",
+   "kind": "CoP",
+   "about": "Advances AI standards and shared terms for mortgage technology.",
+   "meets": "Meets 2nd & 4th Monday 3–4pm ET"
+  },
+  {
+   "name": "Automated Valuation Model (AVM) DWG",
+   "url": "https://www.mismo.org/get-involved/avm",
+   "area": "Valuation",
+   "kind": "DWG",
+   "about": "Builds MISMO standards for automated valuation model quality and risk.",
+   "meets": "Meets Every Monday 4–5pm ET"
+  },
+  {
+   "name": "Business Glossary Community of Practice",
+   "url": "https://www.mismo.org/get-involved/business-glossary",
+   "area": "Governance",
+   "kind": "CoP",
+   "about": "Maintains a plain-language glossary of mortgage industry terms.",
+   "meets": "Meets 2nd & 4th Wednesday 2–3pm ET"
+  },
+  {
+   "name": "Business Process Model Community of Practice",
+   "url": "https://www.mismo.org/get-involved/business-process-model",
+   "area": "Governance",
+   "kind": "CoP",
+   "about": "Maintains the MISMO Life of Loan business process model.",
+   "meets": "Meets 1st & 3rd Friday 10–11am ET"
+  },
+  {
+   "name": "Commercial and Other Real Estate Digital Notes DWG",
+   "url": "https://www.mismo.org/get-involved/commercial-digital-notes",
+   "area": "eMortgage",
+   "kind": "DWG",
+   "about": "Prepares the commercial lending industry for electronic notes.",
+   "meets": "Meets 2nd Thursday 3–4pm ET"
+  },
+  {
+   "name": "Credit Reporting Community of Practice",
+   "url": "https://www.mismo.org/get-involved/credit-reporting",
+   "area": "Credit Reporting",
+   "kind": "CoP",
+   "about": "Credit data standards for lenders, investors, servicers and vendors.",
+   "meets": "Meets 1st & 3rd Thursday 4–5pm ET"
+  },
+  {
+   "name": "Data Governance and Management Community of Practice",
+   "url": "https://www.mismo.org/get-involved/data-governance",
+   "area": "Governance",
+   "kind": "CoP",
+   "about": "Builds data governance resources for firms adopting MISMO standards.",
+   "meets": "Meets 3rd Wednesday 1–2pm ET"
+  },
+  {
+   "name": "Decision Modeling Community of Practice",
+   "url": "https://www.mismo.org/get-involved/decision-modeling",
+   "area": "Originations",
+   "kind": "CoP",
+   "about": "Promotes using the DMN decision standard with the MISMO Reference Model.",
+   "meets": "Meets 1st & 3rd Monday 4–5pm ET"
+  },
+  {
+   "name": "Digital Interoperability Community of Practice",
+   "url": "https://www.mismo.org/get-involved/digital-interoperability",
+   "area": "eMortgage",
+   "kind": "CoP",
+   "about": "Standardizes electronic documents and eVaults to support eNote adoption.",
+   "meets": "Meets 2nd Thursday 1–2pm ET"
+  },
+  {
+   "name": "eMortgage Community of Practice",
+   "url": "https://www.mismo.org/get-involved/emortgage",
+   "area": "eMortgage",
+   "kind": "CoP",
+   "about": "Develops specifications and guidelines for electronic mortgage documents.",
+   "meets": "Meets 1st Thursday 1–2pm ET"
+  },
+  {
+   "name": "eNote Master Control Agreement Development Workgroup",
+   "url": "https://www.mismo.org/get-involved/tri-party-enote-bailee",
+   "area": "eMortgage",
+   "kind": "DWG",
+   "about": "Creating a standard eNote Master Control Agreement for lenders, warehouse lenders and investors.",
+   "meets": ""
+  },
+  {
+   "name": "Housing Counseling Development Workgroup",
+   "url": "https://www.mismo.org/get-involved/housing-counseling",
+   "area": "Originations",
+   "kind": "DWG",
+   "about": "Builds a unified MISMO dataset for housing counseling data.",
+   "meets": "Meets 4th Wednesday 3–4pm ET"
+  },
+  {
+   "name": "Housing Emerging Risks and Opportunities (HERO) Community of Practice",
+   "url": "https://www.mismo.org/get-involved/hero",
+   "area": "Governance",
+   "kind": "CoP",
+   "about": "Explores how ESG factors affect mortgages and where standards help.",
+   "meets": "Meets 1st Tuesday 10–11am ET"
+  },
+  {
+   "name": "Information Management",
+   "url": "https://www.mismo.org/get-involved/information-management",
+   "area": "Governance",
+   "kind": "Workgroup",
+   "about": "Keeps business definitions and data consistent across all MISMO products.",
+   "meets": "Meets Every Monday 2–3pm ET"
+  },
+  {
+   "name": "Loan Application Data Exchange DWG",
+   "url": "https://www.mismo.org/get-involved/loan-application-data-exchange",
+   "area": "Originations",
+   "kind": "DWG",
+   "about": "Maintains the iLAD specification for exchanging loan origination data.",
+   "meets": "Meets 4th Tuesday 1–2pm ET"
+  },
+  {
+   "name": "MI Claim Submission Development Workgroup",
+   "url": "https://www.mismo.org/get-involved/mi-claim-submission",
+   "area": "Mortgage Insurance",
+   "kind": "DWG",
+   "about": "Creates a modern dataset standard for mortgage insurance claims.",
+   "meets": "Meets 1st & 3rd Tuesday 3–4pm ET"
+  },
+  {
+   "name": "Mortgage Compliance Dataset DWG",
+   "url": "https://www.mismo.org/get-involved/mortgage-compliance-dataset",
+   "area": "Mortgage Compliance",
+   "kind": "DWG",
+   "about": "Sets a standard loan data file for state regulator exams.",
+   "meets": "Meets 1st & 3rd Thursday 3–4pm ET"
+  },
+  {
+   "name": "Mortgage Insurance Community of Practice",
+   "url": "https://www.mismo.org/get-involved/mortgage-insurance",
+   "area": "Mortgage Insurance",
+   "kind": "CoP",
+   "about": "Builds data standards for mortgage insurance across origination and servicing.",
+   "meets": "Meets 3rd Monday 1–2pm ET"
+  },
+  {
+   "name": "Origination Community of Practice",
+   "url": "https://www.mismo.org/get-involved/origination",
+   "area": "Originations",
+   "kind": "CoP",
+   "about": "Builds data standards for loan application, underwriting and closing.",
+   "meets": "Meets 1st Wednesday 3–4pm ET"
+  },
+  {
+   "name": "Property and Valuation Services Community of Practice",
+   "url": "https://www.mismo.org/get-involved/property-valuation-services",
+   "area": "Valuation",
+   "kind": "CoP",
+   "about": "Builds data standards for property reporting, valuation and collateral risk.",
+   "meets": "Meets 2nd & 4th Friday 1–2pm ET"
+  },
+  {
+   "name": "Remote Online Notarization DWG",
+   "url": "https://www.mismo.org/get-involved/remote-online-notarization",
+   "area": "eMortgage",
+   "kind": "DWG",
+   "about": "Reviews and updates MISMO’s remote online notarization standard.",
+   "meets": "Meets Meetings on Hold Not currently scheduled Email Meghan Tidgewell"
+  },
+  {
+   "name": "Reverse Mortgage Development Workgroup",
+   "url": "https://www.mismo.org/get-involved/reverse-mortgage",
+   "area": "Originations",
+   "kind": "DWG",
+   "about": "Brings reverse mortgage lending into MISMO’s data standards.",
+   "meets": "Meets 1st & 3rd Thursday 1–2pm ET"
+  },
+  {
+   "name": "Secondary Community of Practice",
+   "url": "https://www.mismo.org/get-involved/secondary",
+   "area": "Secondary",
+   "kind": "CoP",
+   "about": "Builds data standards for the secondary mortgage market.",
+   "meets": "Meets 3rd Tuesday 3–4pm ET"
+  },
+  {
+   "name": "Servicing Community of Practice",
+   "url": "https://www.mismo.org/get-involved/servicing",
+   "area": "Servicing",
+   "kind": "CoP",
+   "about": "Builds data standards for mortgage loan servicing activities.",
+   "meets": "Meets 4th Monday 1–2pm ET"
+  },
+  {
+   "name": "Servicing Transfers Development Workgroup",
+   "url": "https://www.mismo.org/get-involved/servicing-transfers",
+   "area": "Servicing",
+   "kind": "DWG",
+   "about": "Makes mortgage servicing transfers smoother and less harmful to borrowers.",
+   "meets": "Meets 2nd & 4th Wednesday 1–2pm ET"
+  },
+  {
+   "name": "Technology Impact and Enablement (TIE) Community of Practice",
+   "url": "https://www.mismo.org/get-involved/tie",
+   "area": "Governance",
+   "kind": "CoP",
+   "about": "Finds and promotes technology that improves the mortgage industry.",
+   "meets": "Meets 3rd Wednesday 2–3pm ET"
+  },
+  {
+   "name": "Title and Closing Community of Practice",
+   "url": "https://www.mismo.org/get-involved/title-closing",
+   "area": "Title & Closing",
+   "kind": "CoP",
+   "about": "Sets data standards for title and closing information exchange.",
+   "meets": "Meets 2nd Monday 1–2pm ET"
+  },
+  {
+   "name": "Title and Closing Docs to Data DWG",
+   "url": "https://www.mismo.org/get-involved/title-closing-docs-to-data",
+   "area": "Title & Closing",
+   "kind": "DWG",
+   "about": "Turns title and closing documents into standard data sets.",
+   "meets": "Meets 1st & 3rd Wednesday 2–3pm ET"
+  },
+  {
+   "name": "VA Documents to Data Development Workgroup",
+   "url": "https://www.mismo.org/get-involved/va-docs-to-data",
+   "area": "Originations",
+   "kind": "DWG",
+   "about": "Turns VA loan forms into standard, exchangeable data sets.",
+   "meets": "Meets 3rd Wednesday 3–4pm ET"
+  },
+  {
+   "name": "Verifiable Profile SMART Doc DWG",
+   "url": "https://www.mismo.org/get-involved/verifiable-smart-doc",
+   "area": "eMortgage",
+   "kind": "DWG",
+   "about": "Proves loan documents and their data have not been altered.",
+   "meets": "Meets 1st Wednesday 11am–12pm ET"
+  }
+ ]
+}
