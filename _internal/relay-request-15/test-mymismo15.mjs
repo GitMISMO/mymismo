@@ -265,5 +265,27 @@ r = await call('POST', '/mymismo/staff/reports', { tok: staffTok('jc@example.org
 ok('reports: closing one is saved', r.statusCode === 200 && file('att/nola/reports.json').reports[0].status === 'closed');
 r = await call('GET', '/mymismo/staff/reports', { tok: staffTok('jc@example.org') }); d = J(r);
 ok('reports: with no summit, every summit’s (for Team HQ), with the open count', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].summit === 'nola' && d.open === 0, d);
+
+/* the app reviewers' sign-in (projects.json reviewAccount): fixed code, no email, hidden, sees only MISMO's contacts, never on the board */
+const { createHash: ch } = await import('node:crypto');
+setProjects({ ...ENTRY, trivia: true, attendees: true, attendeeFeed: { repo: 'Org/SummitData', path: 'data/feed-mymismo-attendees.json' }, alertSenders: ['jc@example.org'],
+  reviewAccount: { email: 'appreview@example.org', codeSha256: ch('sha256').update('mymismo-review:246810').digest('hex'), contacts: ['pat@lender.example'] } });
+await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { listed: true } });
+const before = mails.length;
+r = await call('POST', '/mymismo/att/code', { body: { email: 'appreview@example.org', summit: 'nola', startedAt: T - 9000 }, ip: '203.0.113.80' });
+ok('review: asking for a code sends no email', r.statusCode === 200 && mails.length === before);
+r = await call('POST', '/mymismo/att/verify', { body: { email: 'appreview@example.org', summit: 'nola', code: '111111' }, ip: '203.0.113.80' }); ok('review: a wrong code is refused', r.statusCode === 401);
+r = await call('POST', '/mymismo/att/verify', { body: { email: 'appreview@example.org', summit: 'nola', code: '246810' }, ip: '203.0.113.80' }); d = J(r); const RV = d.token;
+ok('review: the fixed code signs in, hidden', r.statusCode === 200 && d.me.name === 'App Review' && d.me.listed === false, d);
+r = await call('GET', '/mymismo/att/directory', { tok: RV }); d = J(r);
+ok('review: sees only MISMO’s contacts, never real attendees', r.statusCode === 200 && d.people.length === 1 && d.people[0].name === 'Pat Lee', d);
+r = await call('GET', '/mymismo/att/directory', { tok: at2.token }); ok('review: nobody else sees the reviewer', !J(r).people.some(x => x.name === 'App Review'));
+r = await call('POST', '/mymismo/att/message', { tok: RV, body: { to: at2.me.id, text: 'Hello' } }); ok('review: can’t message anyone but the contacts', r.statusCode === 403);
+r = await call('POST', '/mymismo/att/message', { tok: RV, body: { to: ap.me.id, text: 'Testing messages for app review.' } }); ok('review: can message a contact', r.statusCode === 200, J(r));
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'appreview@example.org', code: '246810', first: 'Any', last: 'Name' }, ip: '203.0.113.81' }); d = J(r);
+ok('review: trivia sign-in with the same fixed code', r.statusCode === 200 && d.me.name === 'App Review', d);
+T = Date.parse('2027-01-21T15:00:00Z'); __resetMyMismoLimits();
+const rvRound = await play(d.token, 10, 1000);
+ok('review: a reviewer’s round is never on the leaderboard', rvRound.last.done === true && rvRound.last.review === true && !JSON.stringify(file('trivia/board-2027-01.json')).includes('App Review'), rvRound.last);
 Date.now = realNow;
 console.log(`\n${passed} passed, ${failed} failed`); process.exit(failed ? 1 : 0);

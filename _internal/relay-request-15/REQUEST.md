@@ -116,12 +116,27 @@ request 13's rule (listed only if they turned it on); test-mymismo.mjs here is r
 | `POST /att/message` | attendee | Can start a conversation with anyone registered and not hidden; it waits for them until they sign in. |
 | `POST /att/delete` | attendee | Removes everything and leaves only a hidden marker (no name or details), so their registration row doesn't show again. Signing in again later makes a fresh account. |
 
+## A Sign-In for the App Store Reviewers (approved by Jonna, Nov 25, 2026)
+
+Apple and Google test every sign-in feature before they approve an app, but their reviewers can't read a MISMO inbox
+for the emailed code. So the `mymismo` entry in projects.json can hold:
+
+```
+"reviewAccount": { "email": "appreview@mismo.org", "codeSha256": "<sha-256 hex of 'mymismo-review:' followed by a six-digit code>", "contacts": ["jcritchley@mismo.org"] }
+```
+
+For that one address: no email is sent; the fixed code signs in to any open summit and to trivia; the reviewer is hidden
+from everyone; the reviewer's directory shows only the `contacts` and can message only them, so reviewers never see or
+reach real attendees; and a reviewer's trivia rounds never go on the leaderboard. The address doesn't need a mailbox,
+since nothing is ever sent to it. Pick the six-digit code with Jonna, put only its hash in projects.json, and give the code
+itself only to Jonna for the review notes in App Store Connect and Play Console. Delete the entry to turn it off.
+
 ## What's Here
 
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
 - `test-mymismo.mjs`: request 13's test, with the directory checks updated to the new rule. Replace the old copy with this one.
-- `test-mymismo15.mjs`: 82 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+- `test-mymismo15.mjs`: 91 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
   `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
 
 ## To Switch It On

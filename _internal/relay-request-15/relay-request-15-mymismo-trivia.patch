@@ -10,8 +10,12 @@
    }
    mmFeedCache.at = now; mmFeedCache.value = { summits };
    return mmFeedCache.value;
-@@ -2535,10 +2536,12 @@
-   return { id: t.sub, summit: t.s, email: t.e, name: t.n };
+@@ -2532,13 +2533,15 @@
+   if (!auth.startsWith('Bearer ') || !process.env.AUTH_SECRET) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
+   const t = verifyToken(auth.slice(7).trim(), mmSecret());
+   if (t.error || t.kind !== 'mymismo-attendee' || !MM_ID.test(String(t.sub)) || !MM_SUMMIT.test(String(t.s))) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
+-  return { id: t.sub, summit: t.s, email: t.e, name: t.n };
++  return { id: t.sub, summit: t.s, email: t.e, name: t.n, review: t.rv === 1 };
  }
  function mmPublic(id, p) {
 -  return { id, name: mmStr(p.name, 120), title: mmStr(p.title, 120), company: mmStr(p.company, 120), about: mmStr(p.about, 600), linkedin: mmStr(p.linkedin, 200) };
@@ -25,7 +29,36 @@
  }
  async function mmReadPeople(proj, summit) {
    const r = await readFile(proj.repo, proj.branch || 'main', mmPeoplePath(summit));
-@@ -2599,7 +2602,7 @@
+@@ -2556,6 +2559,7 @@
+   if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID', problems: ['Pick the summit you’re registered for.'] });
+   if (!mmAllowed('code', mmIp(event), MM_LIMITS.code, now) || !mmAllowed('codeAll', 'all', MM_LIMITS.codeAll, now))
+     return respond(429, { error: 'TOO_MANY', message: 'Too many codes asked for from here. Please wait a few minutes.' });
++  if (await mm15Review(email).catch(() => null)) return fine;   /* relay request 15: the reviewers' sign-in uses its fixed code */
+   const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
+   const s = feed.summits[summit], person = s && s.people.get(email);
+   if (!s || !person || !mmOpen(s, now)) return fine;   /* the same answer whether or not the address is registered */
+@@ -2582,6 +2586,20 @@
+   const wrong = respond(401, { error: 'WRONG_CODE', message: 'That code isn’t right, or it has expired. Ask for a new one.' });
+   if (!mmEmailOk(email) || !MM_SUMMIT.test(summit) || !/^\d{6}$/.test(code)) return wrong;
+   const id = mmIdOf(summit, email);
++  const rv = await mm15Review(email).catch(() => null);
++  if (rv) {   /* relay request 15: the app reviewers' sign-in */
++    const fd = await mmFeed(proj), rs = !fd.error && fd.summits[summit];
++    if (!rs || !mmOpen(rs, now) || !mm15ReviewOk(rv, code)) return wrong;
++    const pr = await updateRepoJson(proj.repo, proj.branch || 'main', mmPeoplePath(summit), d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++      if (!d.docs[id] || d.docs[id].deleted) d.docs[id] = { name: 'App Review', title: 'App Reviewer', company: 'MISMO', about: '', linkedin: '', hidden: true, review: true, blocked: [], joined: now, at: now };
++      d.docs[id].hidden = true; d.docs[id].review = true; return d;
++    }, 'MyMISMO app review sign-in').catch(() => null);
++    if (!pr || pr.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
++    const exp = Math.floor((now + 30 * 86_400_000) / 1000);
++    const token = signToken({ kind: 'mymismo-attendee', sub: id, s: summit, e: email, n: 'App Review', rv: 1, iat: Math.floor(now / 1000), exp }, mmSecret());
++    return respond(200, { token, me: mmMe(id, pr.data.docs[id], email), expiresAt: new Date(exp * 1000).toISOString() });
++  }
+   let good = false, refused = null;
+   const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM_CODES, d => {
+     d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+@@ -2599,7 +2617,7 @@
    /* first sign-in makes their entry, from the registration; never listed until they say so */
    const p = await updateRepoJson(proj.repo, proj.branch || 'main', mmPeoplePath(summit), d => {
      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
@@ -34,7 +67,7 @@
      return d;
    }, 'MyMISMO attendee signed in');
    if (!p || p.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
-@@ -2617,12 +2620,21 @@
+@@ -2617,12 +2635,25 @@
      if (!mmAllowed('read', who.id, MM_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a minute.' });
      const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'UNAVAILABLE' });
      const mine = ppl.docs[who.id];
@@ -49,6 +82,10 @@
 +      const feed = await mmFeed(proj), s = !feed.error && feed.summits[who.summit], people = [], seen = new Set([who.id]);
 +      for (const [id, p] of Object.entries(ppl.docs)) { seen.add(id); if (p && p.hidden !== true && id !== who.id) people.push(mmPublic(id, p)); }
 +      if (s) for (const [id, p] of s.ids) if (!seen.has(id)) people.push({ id, name: `${p.first} ${p.last}`.trim(), title: p.title, company: p.company, about: '', linkedin: '', website: '', phone: '', email: '', photo: 0, joined: false });
++      if (who.review) {   /* the app reviewers only ever see MISMO's chosen contacts */
++        const rv = await mm15Review().catch(() => null), ok = new Set((rv ? rv.contacts : []).map(e => mmIdOf(who.summit, e)));
++        people.splice(0, people.length, ...people.filter(x => ok.has(x.id)));
++      }
 +      people.sort((a, c) => a.name.localeCompare(c.name));
 +      return respond(200, { people, listed: mine.hidden !== true });
 +    }
@@ -61,7 +98,7 @@
      }
      if (subPath === '/att/messages') {
        const r = await readFile(proj.repo, branch, mmMsgPath(who.summit)); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
-@@ -2640,17 +2652,27 @@
+@@ -2640,17 +2671,27 @@
      }
      return respond(404, { error: 'NOT_FOUND' });
    }
@@ -92,7 +129,7 @@
        if ('title' in b) p.title = mmStr(b.title, 120);
        if ('company' in b) p.company = mmStr(b.company, 120);
        if ('about' in b) p.about = mmStr(b.about, 600);
-@@ -2666,7 +2688,7 @@
+@@ -2666,7 +2707,7 @@
      let out = null;
      const w = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
        d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
@@ -101,7 +138,7 @@
        const set = new Set(Array.isArray(p.blocked) ? p.blocked : []);
        if (b.on === false) set.delete(b.id); else set.add(b.id);
        p.blocked = [...set].slice(0, 500); out = p; return d;
-@@ -2682,16 +2704,18 @@
+@@ -2682,16 +2723,19 @@
      if (!mmAllowed('msg', who.id, MM_LIMITS.msg, now)) return respond(429, { error: 'TOO_MANY', message: 'You’ve sent a lot of messages. Please wait a few minutes.' });
      const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'NOT_SENT', message: 'Your message couldn’t be sent just now. Please try again.' });
      const me = ppl.docs[who.id], them = ppl.docs[to];
@@ -111,6 +148,7 @@
      const blockedByThem = them && Array.isArray(them.blocked) && them.blocked.includes(who.id);
      const blockedByMe = Array.isArray(me.blocked) && me.blocked.includes(to);
 -    if (!them || blockedByThem || blockedByMe) return respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' });
++    if (who.review) { const rv = await mm15Review().catch(() => null); if (!rv || !rv.contacts.some(e => mmIdOf(who.summit, e) === to)) return respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' }); }
 +    const feedNow = await mmFeed(proj), sNow = !feedNow.error && feedNow.summits[who.summit];
 +    const known = them ? !them.deleted : !!(sNow && sNow.ids.has(to));   /* relay request 15: hidden is checked below (an existing conversation can go on) */
 +    if (!known || blockedByThem || blockedByMe) return respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' });
@@ -123,7 +161,7 @@
        const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
        th.m = Array.isArray(th.m) ? th.m : [];
        th.m.push({ f: who.id, t: text, at: now });
-@@ -2914,6 +2938,512 @@
+@@ -2914,6 +2958,532 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -222,7 +260,7 @@
 +  if (!auth.startsWith('Bearer ') || !process.env.AUTH_SECRET) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in to play.' }) };
 +  const t = verifyToken(auth.slice(7).trim(), mm15Secret());
 +  if (t.error || t.kind !== 'mymismo-player' || !MM_ID.test(String(t.sub))) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in to play.' }) };
-+  return { id: t.sub, name: mmStr(t.n, 60) };
++  return { id: t.sub, name: mmStr(t.n, 60), review: t.rv === 1 };
 +}
 +const mm15Docs = d => { d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; return d.docs; };
 +const mm15Busy = () => respond(502, { error: 'UNAVAILABLE', message: 'Trivia is briefly unavailable. Please try again in a minute.' });
@@ -237,6 +275,7 @@
 +  if (!mmAllowed('t-code', mmIp(event), MM15_LIMITS.code, now) || !mmAllowed('t-codeAll', 'all', MM15_LIMITS.codeAll, now))
 +    return respond(429, { error: 'TOO_MANY', message: 'Too many codes asked for from here. Please wait a few minutes.' });
 +  if (!mmAllowed('t-codeEmail', email, MM15_LIMITS.codeEmail, now)) return fine;
++  if (await mm15Review(email).catch(() => null)) return fine;   /* the app reviewers' sign-in uses its fixed code */
 +  const id = mm15IdOf(email), code = String(randomInt(0, 1_000_000)).padStart(6, '0');
 +  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.codes, d => {
 +    const docs = mm15Docs(d);
@@ -259,6 +298,9 @@
 +  if (!mmEmailOk(email) || !/^\d{6}$/.test(code)) return wrong;
 +  const id = mm15IdOf(email);
 +  let good = false, refused = false;
++  const rv = await mm15Review(email).catch(() => null);
++  if (rv) { if (!mm15ReviewOk(rv, code)) return wrong; good = true; }
++  else {
 +  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.codes, d => {
 +    const docs = mm15Docs(d), c = docs[id];
 +    if (!c || !(c.exp > now) || c.tries >= MM_CODE_TRIES) { refused = true; throw new Error('stop'); }
@@ -267,15 +309,16 @@
 +  }, 'MyMISMO Trivia sign-in').catch(() => (refused ? { refused: true } : { error: 'THROWN' }));
 +  if (refused) return wrong;
 +  if (!w || w.error) return mm15Busy();
++  }
 +  if (!good) return wrong;
 +  const p = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.players, d => {
 +    const docs = mm15Docs(d), cur = docs[id];
-+    docs[id] = { name: name || (cur && cur.name) || 'Player', joined: (cur && cur.joined) || now, at: now };
++    docs[id] = { name: rv ? 'App Review' : (name || (cur && cur.name) || 'Player'), joined: (cur && cur.joined) || now, at: now, ...(rv ? { review: true } : {}) };
 +    return d;
 +  }, 'MyMISMO Trivia player signed in').catch(() => null);
 +  if (!p || p.error) return mm15Busy();
 +  const me = p.data.docs[id], exp = Math.floor((now + 180 * 86_400_000) / 1000);
-+  const token = signToken({ kind: 'mymismo-player', sub: id, n: me.name, iat: Math.floor(now / 1000), exp }, mm15Secret());
++  const token = signToken({ kind: 'mymismo-player', sub: id, n: me.name, ...(rv ? { rv: 1 } : {}), iat: Math.floor(now / 1000), exp }, mm15Secret());
 +  return respond(200, { token, me: { id, name: me.name }, expiresAt: new Date(exp * 1000).toISOString() });
 +}
 +
@@ -350,6 +393,7 @@
 +  if (stop) return stop;
 +  if (!w || w.error) return mm15Busy();
 +  if (!done) return respond(200, { ...res, done: false });
++  if (who.review) return respond(200, { ...res, done: true, saved: false, review: true });   /* the app reviewers never go on the board */
 +  /* the round is over: keep it on this month's board if it's the player's best, and remember the questions seen */
 +  const month = mm15Month(done.started), rightN = done.right.filter(Boolean).length;
 +  let best = 0;
@@ -520,6 +564,20 @@
 +  if (subPath === '/trivia/delete') return mm15Delete(event, proj, headers, who);
 +  return mm15ChampPlay(event, proj, headers, raw, who, subPath.slice('/trivia/champ/'.length));
 +}
++/* --- A sign-in for Apple's and Google's app reviewers (relay request 15; Jonna approved Nov 25, 2026) ---
++ * Reviewers must be able to try every sign-in feature but can't read a MISMO inbox, so projects.json's mymismo entry can
++ * hold "reviewAccount": { "email": "<an address MISMO controls>", "codeSha256": "<sha-256 hex of 'mymismo-review:' + a
++ * six-digit code>", "contacts": ["<emails of MISMO staff the reviewer may see and message>"] }. The code itself goes only
++ * in App Store Connect's and Play Console's review notes, never in a repository. For that one address: no email is sent,
++ * the fixed code works for any open summit, the reviewer is hidden from everyone, and sees and can message only the
++ * contacts (so reviewers never see or reach real attendees). Delete the entry to turn it off. */
++async function mm15Review(email) {
++  const raw = (await projects())[MM_PROJECT] || {}, r = raw.reviewAccount;
++  if (!r || typeof r !== 'object' || !mmEmailOk(String(r.email || '').toLowerCase()) || !/^[0-9a-f]{64}$/.test(String(r.codeSha256 || ''))) return null;
++  if (email && String(r.email).toLowerCase() !== email) return null;
++  return { email: String(r.email).toLowerCase(), hash: String(r.codeSha256), contacts: (Array.isArray(r.contacts) ? r.contacts : []).map(x => String(x).toLowerCase()).filter(mmEmailOk) };
++}
++const mm15ReviewOk = (rv, code) => hashesMatch(rv.hash, createHash('sha256').update('mymismo-review:' + code).digest('hex'));
 +/* --- App store rules for the attendee features (relay request 15, Nov 25, 2026) ---
 + * Apple (App Review Guideline 1.2 and 5.1.1(v)) and Google Play require, for any app where people make an account and
 + * can message each other: a way to delete the account inside the app, a way to report offensive content, a way to block
@@ -636,7 +694,7 @@
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3514,12 @@
+@@ -2984,6 +3554,12 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
@@ -649,7 +707,7 @@
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
-@@ -3006,7 +3542,7 @@
+@@ -3006,7 +3582,7 @@
      if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */
