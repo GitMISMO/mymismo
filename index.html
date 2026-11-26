@@ -1850,6 +1850,8 @@ function nolaArt(opts) {
   var stars = [[560,70,2],[640,140,1.6],[720,60,1.4],[800,118,2.2],[870,52,1.5],[930,160,1.4],[990,96,1.8],[1100,64,1.5],[1150,170,2],[680,210,1.3],[1060,220,1.5],[760,180,1.2],[500,150,1.4],[1180,110,1.3]];
   /* the French Quarter row: x, width, roof height, warm windows */
   var row = [[700, 118, 300, [0, 2]], [818, 92, 250, [1]], [910, 128, 330, [0, 3]], [1038, 162, 262, [1, 2]]];
+  /* Jonna, Nov 26, 2026: no cathedral anywhere; the window buildings carry on in its place */
+  opts.noChurch = true;
   if (opts.noChurch) row = [[352, 120, 318, [1]], [472, 104, 272, [0, 2]], [576, 124, 336, [1, 3]]].concat(row);
   function building(b, i) {
     var x = b[0], w = b[1], top = b[2], cols = Math.max(2, Math.round(w / 40)), gap = w / cols, h = '';
@@ -1936,7 +1938,7 @@ function welcomeCard() {
     return '<div class="wl-g' + (d && d.days.length > 1 ? ' multi' : '') + '" style="--wc:' + tone + ';--i:' + i + '"><div class="wl-cal">' + (d ? d.days.map(function (n) { return '<span class="cal"><i>' + esc(d.mon) + '</i><b>' + esc(n) + '</b></span>'; }).join('') : '<span class="cal wide"><b>' + esc(g.when) + '</b></span>') + '</div>' +
       '<div class="wl-gtx"><b>' + esc(g.when) + '</b><span>' + esc(g.what) + '</span></div></div>';
   }).join('') + '</div>';
-  h += '<section class="wl-cta">' + summitArt() + '<div class="wl-cta-in">' + (e.closer ? '<p class="wl-closer">' + esc(e.closer) + '</p>' : '') +
+  h += '<section class="wl-cta">' + summitArt({ moon: [1172, 470, .42] }) + '<div class="wl-cta-in">' + (e.closer ? '<p class="wl-closer">' + esc(e.closer) + '</p>' : '') +
     '<div class="wl-btns">' + (e.register ? '<a class="btn wl-reg" href="' + esc(e.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register Now</a>' : '') +
     '<button type="button" class="btn wl-ghost" data-go="agenda">' + icon('i-agenda') + 'Full Agenda</button><button type="button" class="btn wl-ghost" data-go="explore">' + icon('i-hotel') + 'Hotel and Travel</button></div></div></section>';
   return h;

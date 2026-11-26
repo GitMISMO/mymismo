@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: New Orleans art: the cathedral is gone from every header (dashboard tile, summit home, Why Attend, Explore, Sponsors page and the website file); the lit window buildings carry on in its place.
 - Nov 26, 2026: Explore postcard: Directions is glass again, with the art behind it blurred and dimmed so it reads clearly.
 - Nov 26, 2026: Summit home count boxes restyled to match the navy header: navy tiles, white numbers, sky-blue icons and labels.
 - Nov 26, 2026: Summit home: a bigger moon, and the Sessions, Speakers, Sponsors and Starred boxes each get a color and an icon. Explore postcard: a bigger, lower moon, the window buildings carry on in place of the cathedral, and Directions stands out.
