@@ -48,7 +48,7 @@ trivia account takes the player off everyone's contacts. `test-mymismo-h2h.mjs` 
 
 ## The Board: a Round Clock and the Final Square
 
-Jonna, Nov 26, 2026. **Round clock:** a board has 4 minutes (plus 3 seconds while it lights up) to play as many squares
+Jonna, Nov 26, 2026. **Round clock:** a board has 3 minutes (plus 3 seconds while it lights up) to play as many squares
 as you can; after that no new square opens (a square already open can still be answered). **Final Square:** when the
 board is over (every square, End Game, or the clock), the player sees the category, wagers up to their total (up to
 1,000 at zero or below), gets the answer, and has 30 seconds to type the question. Right adds the wager; wrong, blank or
@@ -57,7 +57,7 @@ Head to Head players get the same Final Square (it's picked with the board). A b
 
 | Route | What |
 |---|---|
-| `POST /mymismo/trivia/play/pick` | After the round clock (4 minutes): `{ roundOver: true, done: false, final: { cat, max } }` instead of a square. |
+| `POST /mymismo/trivia/play/pick` | After the round clock (3 minutes): `{ roundOver: true, done: false, final: { cat, max } }` instead of a square. |
 | `POST /mymismo/trivia/play/answer`, `/end` | When the board is over: `{ done: false, final: { cat, max } }`. |
 | `POST /mymismo/trivia/play/wager` | `{ wager, game? }`: locked in (capped at the max); answers `{ cat, clue, wager, secs: 30 }`. |
 | `POST /mymismo/trivia/play/say` | `{ text, game? }`: checked on the relay; answers `{ right, late, points, total, response, done }`. "What is" and "the" optional, punctuation ignored, a small slip in a longer answer counts, numbers exact. |

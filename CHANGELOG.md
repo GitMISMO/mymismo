@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Trivia, the Board (Hard): the round clock is 3 minutes (was 4). Relay request 16 updated to match.
+- Nov 26, 2026: Dashboard, phone on its side: the MISMO Merch tile runs the full width with a longer shelf of six products, so there's no empty space beside it.
 - Nov 26, 2026: MISMO Merch: the spotlight pictures stay still (the slides just fade), and the print on every product is sized like real merch so nothing runs off the edges.
 - Nov 26, 2026: MISMO Merch mock-up redone as a fuller shop: rotating spotlight, search, live color swatches on every card, quick add with a fly-to-bag, bigger product page with sizes and quantity, and a bag with a free-shipping meter. Tee text now fits on the shirt. Still testers-only and labeled Mock-up.
 - Nov 26, 2026: Trivia, the Board: reworded the picks that didn't read as questions ("What is pay a fee?" is now "What is paying a fee?", process names keep their capitals, "the" where it belongs, loss positions spelled out) and two answers that didn't lead to their questions (DWG, Business Glossary for non-members). 20 questions touched; the facts and the right answers are unchanged.

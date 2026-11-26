@@ -741,8 +741,11 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .mx-wt{font-family:var(--cond); font-weight:800; font-size:clamp(24px, 6vw, 32px); line-height:1.02; letter-spacing:-.01em; margin-top:4px; max-width:55%}
 .mx-ws{font-size:13.5px; color:#456179; max-width:52%}
 .mx-shelf{position:absolute; right:10px; bottom:12px; display:flex; align-items:flex-end; gap:0; width:min(52%, 330px); pointer-events:none}
-.mx-sh{flex:1; margin-left:-10px; border-radius:12px; overflow:hidden; box-shadow:0 8px 18px -10px rgba(13,49,76,.5); transform:rotate(calc((var(--i) - 1.5) * 4deg)) translateY(calc((var(--i) - 1.5) * (var(--i) - 1.5) * 3px)); animation:mx-in .5s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 80ms)}
+.mx-sh{flex:1; margin-left:-10px; border-radius:12px; overflow:hidden; box-shadow:0 8px 18px -10px rgba(13,49,76,.5); transform:rotate(calc((var(--i) - var(--c, 1.5)) * 4deg)) translateY(calc((var(--i) - var(--c, 1.5)) * (var(--i) - var(--c, 1.5)) * 3px)); animation:mx-in .5s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 80ms)}
 .mx-sh svg{display:block; width:100%; height:auto}
+.mx-sh:nth-child(n+5){display:none}
+/* landscape, when the shop tile runs the full width: a longer shelf of six (Jonna, Nov 26, 2026) */
+.w-merch.full .mx-shelf{width:min(60%, 540px); --c:2.5} .w-merch.full .mx-sh:nth-child(n+5){display:block}
 @keyframes mx-in{from{opacity:0; transform:translateY(20px)}}
 .mx-go{display:inline-flex; align-items:center; gap:4px; margin-top:auto; font-weight:700; font-size:14px; color:#fff; background:#0d314c; border-radius:8px; padding:8px 12px}
 .mx-go svg{width:16px; height:16px}
@@ -3175,8 +3178,8 @@ function triviaBoard(all) {
   var live = []; cells.forEach(function (col) { col.forEach(function (x) { if (x) live.push(x); }); });
   var dbl = shuffle(live.filter(function (x) { return x.v >= 600; }))[0]; if (dbl) dbl.dbl = true;
   var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true, lastDone = null, lastSec = 0;
-  /* Jonna, Nov 26, 2026: a 4-minute round clock (Jonna, Nov 26, 2026: was 6), then the Final Square */
-  var ROUND_MS = 4 * 60 * 1000, roundEnd = 0, roundOver = false, roundT = null, inFinal = false;
+  /* Jonna, Nov 26, 2026: a 3-minute round clock (was 6, then 4), then the Final Square */
+  var ROUND_MS = 3 * 60 * 1000, roundEnd = 0, roundOver = false, roundT = null, inFinal = false;
   function mmss(ms) { var t = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
   function roundChip() { return '<span class="tb-round" title="Time left on the board"><b id="tb-rt">' + mmss(roundEnd ? roundEnd - Date.now() : ROUND_MS) + '</b><i>left</i></span>'; }
   function roundTick() {
@@ -3662,7 +3665,7 @@ function widget(id) {
   }
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
   if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
-    var show = ['hoodie', 'mug', 'cap', 'tote'].map(function (k) { return MERCH.filter(function (p) { return p.id === k; })[0]; });
+    var show = ['hoodie', 'mug', 'cap', 'tote', 'tee', 'bottle'].map(function (k) { return MERCH.filter(function (p) { return p.id === k; })[0]; });
     return '<button type="button" class="wd w-merch wide" data-merch>' + '<span class="w-head">' + icon('i-tag') + '<span>MISMO Merch</span><em class="mx-mock">Mock-up</em></span>' +
       '<span class="mx-wt">Wear the Standard</span><span class="mx-ws">Hoodies, mugs, caps and more</span>' +
       '<span class="mx-shelf" aria-hidden="true">' + show.map(function (p, i) { return '<span class="mx-sh" style="--i:' + i + '">' + merchArt(p) + '</span>'; }).join('') + '</span>' +
@@ -3685,7 +3688,7 @@ function renderDash() {
      final row has no empty space beside it (Jonna, Nov 26, 2026) */
   var mq = function (q) { return window.matchMedia && window.matchMedia(q).matches; };
   if (mq('(min-width:760px)') || mq('(orientation:landscape) and (max-height:540px)')) {
-    var units = 0, big = mq('(min-width:760px)');
+    var units = 0, big = mq('(min-width:760px)') && !mq('(orientation:landscape) and (max-height:540px)');   /* on a phone on its side the Summit tile spans two, not four */
     ws.forEach(function (w) { (w.match(/class="(?:wd|nextsum) [^"]*"|class="nextsum[^"]*"/g) || []).forEach(function (c) {
       units += /w-summit/.test(c) ? (big ? 4 : 2) : /\bwide\b/.test(c) ? 2 : 1; }); });
     var rem = (4 - units % 4) % 4, last = ws.length - 1;
