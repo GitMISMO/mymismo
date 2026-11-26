@@ -798,7 +798,27 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tb-zoom{position:absolute; z-index:6; transform-origin:0 0; display:grid; place-items:center; border-radius:4px; background:radial-gradient(120% 95% at 50% 18%, #2467b6 0%, #164c8e 55%, #0e3564 100%); box-shadow:0 0 0 2px rgba(243,198,79,.6), 0 24px 60px rgba(0,0,0,.6); color:#f3c64f; font-family:var(--cond); font-weight:800; text-shadow:2px 2px 0 #000; transition:transform .5s cubic-bezier(.25,.8,.25,1), border-radius .5s, opacity .25s; overflow:hidden; pointer-events:none}
 .tb-zoom{background:none; box-shadow:none; overflow:visible; transform-origin:50% 50%; transform-style:preserve-3d; transition:transform .75s cubic-bezier(.3,.7,.25,1)}
 .tb-face{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:18px; border-radius:10px; backface-visibility:hidden; -webkit-backface-visibility:hidden; background:radial-gradient(120% 95% at 50% 18%, #2467b6 0%, #164c8e 55%, #0e3564 100%); box-shadow:0 0 0 2px rgba(243,198,79,.6), 0 24px 60px rgba(0,0,0,.6); text-align:center}
-.tb-face.back{transform:rotateY(180deg)}
+.tb-face.back{transform:rotateY(180deg); justify-content:center; padding:46px 18px 22px}
+.tb-face.back .tb-clue-h{position:absolute; left:14px; right:14px; top:12px}
+/* fade the faces, not the 3D card itself (fading the card would flatten it and show the back of the front face) */
+.tb-zoom.out .front{display:none}
+.tb-zoom.out .back{opacity:0; transition:opacity .35s ease .1s}
+.tb{transition:opacity .45s ease, transform .45s ease, filter .45s ease}
+.tb.away{opacity:0; transform:scale(.96); filter:blur(2px); pointer-events:none}
+.tb-next{position:absolute; left:16px; right:16px; top:14px; visibility:hidden}
+.tb-next.in{visibility:visible}
+.tb-next.done{position:static}
+.tb-next .tb-clue{animation:none}
+.tb-next .tg-top,.tb-next .tb-ask,.tb-next .tg-a{opacity:0}
+.tb-next.in .tg-top{animation:tbx-down .5s cubic-bezier(.2,.8,.2,1) both}
+.tb-next.in .tb-ask{animation:tbx-fade .5s ease both .15s}
+.tb-next.in .tg-a{animation:tbx-up .55s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(.22s + var(--i) * .09s)}
+@keyframes tbx-down{from{opacity:0; transform:translateY(-10px)} to{opacity:1; transform:none}}
+@keyframes tbx-fade{from{opacity:0} to{opacity:1}}
+@keyframes tbx-up{from{opacity:0; transform:translateY(16px) scale(.98)} to{opacity:1; transform:none}}
+.tb-clue-wrap{transition:opacity .28s ease, transform .28s ease}
+.tb-clue-wrap.leave{opacity:0; transform:scale(.98)}
+.tb-clue-wrap > .tg-ans .tg-a{animation-delay:calc(var(--i) * 70ms)}
 .tb-face .tb-dd{animation-delay:.45s}
 .tb-face b{font-size:clamp(16px, 4.6vw, 30px)}
 .tb-face h3{font-family:var(--cond); font-weight:800; font-size:clamp(22px, 6.4vw, 36px); line-height:1.15; color:#fff; text-shadow:2px 2px 0 rgba(0,0,0,.85); margin:0}
@@ -817,7 +837,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tb-clock b{position:absolute; inset:0; display:grid; place-items:center; font-family:var(--cond); font-size:22px}
 .tb-clock b.hurry{color:#eb6834; animation:tv-bob .5s ease-in-out infinite}
 .tb-clue-wrap{display:grid; gap:14px}
-@media (prefers-reduced-motion:reduce){ .tb.first .tb-c,.tb.first .tb-c span,.tb.first .tb-h,.tb-c.just,.tb-dd,.tb-clue,.tb.back .tb-wall{animation:none} .tb-zoom{transition:none} }
+@media (prefers-reduced-motion:reduce){ .tb-next .tg-top,.tb-next .tb-ask,.tb-next .tg-a{opacity:1; animation:none} .tb.first .tb-c,.tb.first .tb-c span,.tb.first .tb-h,.tb-c.just,.tb-dd,.tb-clue,.tb.back .tb-wall{animation:none} .tb-zoom{transition:none} }
 @media (orientation:portrait){ .tb-c{aspect-ratio:auto; height:clamp(56px, calc((100dvh - 380px) / 5), 96px)} }
 @media (orientation:landscape) and (max-height:560px){ .tb-c{aspect-ratio:auto; height:calc((100vh - 200px) / 5); min-height:34px} .tb-h{min-height:30px; padding-top:3px} .tb-note{display:none} }
 .tb-c:not(:disabled):hover,.tb-c:not(:disabled):focus-visible{filter:brightness(1.18); transform:translateY(-1px); box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 0 0 2px rgba(243,198,79,.7); outline:0}
@@ -2942,35 +2962,47 @@ function triviaBoard(all) {
     firstPaint = false; lastDone = null;
     if (back) box.scrollTop = 0;
   }
-  /* the tapped square lifts off the board, grows and flips over to show the answer, then becomes the card with the
-     four questions to pick from (Jonna, Nov 26, 2026) */
+  /* the tapped square lifts off the board, grows and flips over to show the answer, landing exactly where the answer
+     card sits; the board fades away under it, then the clock, the score and the four questions ease in around it
+     (Jonna, Nov 26, 2026) */
   function open(k, r) {
-    var x = cells[k][r]; if (!x || x.done || cur) return; cur = x;
-    var tile = box.querySelector('[data-tb="' + k + '-' + r + '"]'), wall = box.querySelector('.tb-wall');
+    var x = cells[k][r]; if (!x || x.done || cur) return; cur = x; locked = true;
+    var tile = box.querySelector('[data-tb="' + k + '-' + r + '"]'), board = box.querySelector('.tb');
     var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!tile || !wall || still) { showClue(x); return; }
-    var bb = box.getBoundingClientRect(), tr = tile.getBoundingClientRect(), wr = wall.getBoundingClientRect();
-    var H = Math.max(200, Math.min(340, window.innerHeight * 0.36)), W = wr.width, L = wr.left - bb.left, T = wr.top - bb.top + box.scrollTop;
-    var sx = tr.width / W, sy = tr.height / H, dx = (tr.left + tr.width / 2) - (wr.left + W / 2), dy = (tr.top + tr.height / 2) - (wr.top + H / 2);
-    var col = catColor(x.q.cat);
+    if (!tile || !board || still) { showClue(x); return; }
+    /* the next screen, laid out but not shown yet, so the square knows where to land */
+    var nx = document.createElement('div'); nx.className = 'tb-next'; nx.innerHTML = clueHtml(x); box.appendChild(nx);
+    var bb = box.getBoundingClientRect(), tr = tile.getBoundingClientRect(), cr = nx.querySelector('.tb-clue').getBoundingClientRect();
+    var W = cr.width, H = cr.height, sx = tr.width / W, sy = tr.height / H;
+    var dx = (tr.left + tr.width / 2) - (cr.left + W / 2), dy = (tr.top + tr.height / 2) - (cr.top + H / 2);
+    var col = catColor(x.q.cat), val = x.dbl ? x.v * 2 : x.v;
     var z = document.createElement('div'); z.className = 'tb-zoom';
-    z.style.cssText = 'left:' + L + 'px;top:' + T + 'px;width:' + W + 'px;height:' + H + 'px;transform:perspective(1400px) translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ') rotateY(0deg)';
+    z.style.cssText = 'left:' + (cr.left - bb.left) + 'px;top:' + (cr.top - bb.top + box.scrollTop) + 'px;width:' + W + 'px;height:' + H + 'px;transform:perspective(1400px) translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ') rotateY(0deg)';
     z.innerHTML = '<div class="tb-face front"><b style="transform:scale(' + (1 / sx).toFixed(3) + ',' + (1 / sy).toFixed(3) + ')">' + x.v + '</b></div>' +
       '<div class="tb-face back" style="--cc:' + col + '">' + (x.dbl ? '<span class="tb-dd">Double<br>Square!</span>' :
-        '<span class="tb-clue-cat"><i></i>' + esc(x.q.cat) + '</span><h3>' + esc(x.q.clue || x.q.q) + '</h3>') + '</div>';
+        '<div class="tb-clue-h"><span class="tb-clue-cat"><i></i>' + esc(x.q.cat) + '</span><span class="tb-clue-v">' + val.toLocaleString() + '</span></div><h3>' + esc(x.q.clue || x.q.q) + '</h3>') + '</div>';
     tile.style.visibility = 'hidden'; box.appendChild(z);
     void z.offsetWidth;
     z.classList.add('go'); z.style.transform = 'perspective(1400px) translate(0px,0px) scale(1,1) rotateY(180deg)';
-    setTimeout(function () { setTimeout(function () { showClue(x); }, x.dbl ? 1500 : 350); }, 750);
+    board.classList.add('away');                                   /* the board dims and drops back as the square rises */
+    setTimeout(function () {
+      nx.classList.add('in');                                      /* the card is under the flipped square: show the rest */
+      z.classList.add('out');
+      setTimeout(function () {
+        if (board.parentNode) board.parentNode.removeChild(board); if (z.parentNode) z.parentNode.removeChild(z);
+        nx.classList.add('done');
+        locked = false; t0 = performance.now(); tick();            /* the clock starts once the questions are in */
+      }, 650);
+    }, x.dbl ? 2200 : 800);
   }
-  function showClue(x) {
+  function clueHtml(x) {
     var col = catColor(x.q.cat), val = x.dbl ? x.v * 2 : x.v;
-    box.innerHTML = '<div class="tb-clue-wrap"><div class="tg-top">' + scoreHtml() + '<div class="tb-clock"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div></div>' +
+    return '<div class="tb-clue-wrap"><div class="tg-top">' + scoreHtml() + '<div class="tb-clock"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div></div>' +
       '<div class="tb-clue" style="--cc:' + col + '"><div class="tb-clue-h"><span class="tb-clue-cat"><i></i>' + esc(x.q.cat) + '</span><span class="tb-clue-v">' + (x.dbl ? 'Double ' : '') + val.toLocaleString() + '</span></div><h3>' + esc(x.q.clue || x.q.q) + '</h3></div>' +
       (x.resp ? '<p class="tb-ask">Pick the question.</p>' : '') +
-      '<div class="tg-ans">' + (x.resp || x.choices).map(function (c, n) { return '<button type="button" class="tg-a" data-a="' + n + '" style="--d:' + (n * 70) + 'ms"><span class="tg-l">' + 'ABCD'[n] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div></div>';
-    locked = false; t0 = performance.now(); tick();
+      '<div class="tg-ans">' + (x.resp || x.choices).map(function (c, n) { return '<button type="button" class="tg-a" data-a="' + n + '" style="--i:' + n + '"><span class="tg-l">' + 'ABCD'[n] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div></div>';
   }
+  function showClue(x) { box.innerHTML = clueHtml(x); locked = false; t0 = performance.now(); tick(); }
   function tick() {
     var left = Math.max(0, SECS - (performance.now() - t0) / 1000), ring = box.querySelector('#tg-ring'), sx = box.querySelector('#tg-secs');
     if (!ring) return;
@@ -2990,7 +3022,10 @@ function triviaBoard(all) {
     fx.innerHTML = ok ? '<b>+' + val.toLocaleString() + '</b><span>Correct!</span>' : '<b>' + (n < 0 ? 'Time\'s Up' : '&minus;' + val.toLocaleString()) + '</b><span>' + esc(said[x.right]) + '</span>';
     box.appendChild(fx);
     var sc = box.querySelector('#tg-sc'); if (sc) sc.textContent = st.score.toLocaleString();
-    setTimeout(function () { if (st.played >= live.length) end(); else paintBoard(); }, ok ? 1300 : 2600);
+    setTimeout(function () {
+      var w = box.querySelector('.tb-clue-wrap'); if (w) w.classList.add('leave');
+      setTimeout(function () { if (st.played >= live.length) end(); else paintBoard(); }, 280);
+    }, ok ? 1300 : 2600);
   }
   function end() {
     cancelAnimationFrame(timer);
