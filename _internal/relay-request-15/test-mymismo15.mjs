@@ -59,7 +59,7 @@ setProjects(ENTRY);
 r = await call('GET', '/mymismo/trivia/ready'); ok('off: 404 until trivia is true', r.statusCode === 404);
 setProjects({ ...ENTRY, trivia: true });
 r = await call('GET', '/mymismo/trivia/ready'); d = J(r);
-ok('ready: month and quarter in Eastern time', r.statusCode === 200 && d.month === '2027-01' && d.quarter === '2027-Q1' && d.board.secs === 20 && d.headToHead.count === 10 && d.champ === null, d);
+ok('ready: month and quarter in Eastern time', r.statusCode === 200 && d.month === '2027-01' && d.quarter === '2027-Q1' && d.board.secs === 20 && !d.headToHead && d.champ === null, d);
 r = await call('GET', '/mymismo/trivia/nope'); ok('unknown route 404', r.statusCode === 404);
 r = await call('GET', '/mymismo/trivia/play/start'); ok('wrong method 405', r.statusCode === 405);
 

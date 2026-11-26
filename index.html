@@ -2379,7 +2379,7 @@ function triviaSheet() {
     '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
   h += '<div class="tv-modes">' +
     '<div class="tv-mode" style="--mc:#74bfeb"><span class="tv-mi">' + icon('i-star') + '</span><b>Solo</b><span>Play on your own, keep score and beat your best.</span><em>' + icon('i-lock') + 'Opens Soon</em></div>' +
-    '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone you pick, or let MyMISMO find you an opponent. The same 10 Medium questions, highest score wins.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
+    '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Challenge someone you pick, or let MyMISMO find you an opponent. You both play the same Board; highest score wins.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
   h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
       return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
     '</div><div class="tv-facts"><span>' + icon('i-cal') + 'New Every Month</span><span>' + icon('i-star') + 'Your Best Board</span><span>' + icon('i-grid') + 'Hard, on the Board</span></div></div>';
@@ -2396,7 +2396,7 @@ function triviaSheet() {
     var board = !!(TV_LEVELS[load('trivia-level', 1)] || {}).board, go = el.querySelector('[data-tv-play]'), cats = el.querySelector('.tv-cats.pick');
     if (go) go.innerHTML = icon('i-play') + (board ? 'Play the Board' : 'Play a Beta Round');
     if (cats) cats.classList.toggle('off', board);
-    n.innerHTML = board ? '<span class="tv-counts">' + icon('i-check') + 'Counts for the Leaderboard</span> Six categories, pick your squares, 200 to 1,000 points each.' : 'Easy and Medium: 10 questions against the clock. Head to Head uses Medium.';
+    n.innerHTML = board ? '<span class="tv-counts">' + icon('i-check') + 'Counts for the Leaderboard</span> Six categories, pick your squares, 200 to 1,000 points each.' : 'Easy and Medium: 10 questions against the clock, for practice.';
   }
   lbNote();
   el.addEventListener('click', function (e) {
