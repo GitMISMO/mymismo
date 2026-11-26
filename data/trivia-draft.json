@@ -300,7 +300,7 @@
     "What is Order Credit Report?",
     "What is Utilize SMART Docs?",
     "What is Evaluate Loss Mitigation Waterfall?",
-    "What is open Title and Closing Order?"
+    "What is Open Title and Closing Order?"
    ]
   },
   {
@@ -393,7 +393,7 @@
    "answer": 2,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
    "level": 2,
-   "clue": "Non-members can do this with the Business Glossary.",
+   "clue": "This is something non-members can do with the Business Glossary.",
    "responses": [
     "What is nothing (it's members only)?",
     "What is downloading the full version?",
@@ -458,9 +458,9 @@
    "level": 2,
    "clue": "ULDD stands for this.",
    "responses": [
-    "What is Uniform Loan Delivery Dataset?",
-    "What is Universal Lender Data Dictionary?",
-    "What is Uniform Lien Document Directory?",
+    "What is the Uniform Loan Delivery Dataset?",
+    "What is the Universal Lender Data Dictionary?",
+    "What is the Uniform Lien Document Directory?",
     "What is Unified Loan Disclosure Data?"
    ]
   },
@@ -554,11 +554,11 @@
    "answer": 1,
    "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
    "level": 2,
-   "clue": "A DWG is this.",
+   "clue": "This kind of MISMO workgroup is created for a discrete mission and overseen by its aligned Community of Practice.",
    "responses": [
-    "What is a Data Warehouse Group that stores loan files?",
-    "What is a Development Workgroup created for a discrete mission, overseen by its aligned CoP?",
-    "What is a Document Writing Guild for the Business Glossary?",
+    "What is a Data Warehouse Group?",
+    "What is a Development Workgroup (DWG)?",
+    "What is a Document Writing Guild?",
     "What is a permanent governance board?"
    ]
   },
@@ -710,8 +710,8 @@
    "level": 2,
    "clue": "The CMSP exam is this kind of exam.",
    "responses": [
-    "What is closed book, proctored in person?",
-    "What is open book?",
+    "What is a closed-book exam, proctored in person?",
+    "What is an open-book exam?",
     "What is an oral interview?",
     "What is a take-home essay?"
    ]
@@ -752,9 +752,9 @@
    "level": 3,
    "clue": "Attending a MISMO Summit earns this many AMSP participation points.",
    "responses": [
-    "What is 1 point per day?",
-    "What is 5 points per Summit?",
-    "What is 10 points per Summit?",
+    "What is one point per day?",
+    "What is five points per Summit?",
+    "What is ten points per Summit?",
     "What is none?"
    ]
   },
@@ -927,10 +927,10 @@
    "level": 3,
    "clue": "The SMART Doc V3 Verifiable Profile lets a document's data do this.",
    "responses": [
-    "What is travel with the PDF and be checked automatically against the document image?",
-    "What is print on paper without a PDF?",
-    "What is stay only in the loan origination system?",
-    "What is skip the eVault?"
+    "What is traveling with the PDF and being checked automatically against the document image?",
+    "What is printing on paper without a PDF?",
+    "What is staying only in the loan origination system?",
+    "What is skipping the eVault?"
    ]
   },
   {
@@ -1111,7 +1111,7 @@
    "responses": [
     "What is Complete Loan Application?",
     "What is Perform Delivery?",
-    "What is open Title and Closing Order?",
+    "What is Open Title and Closing Order?",
     "What is Evaluate Loss Mitigation Waterfall?"
    ]
   },
@@ -1144,10 +1144,10 @@
    "level": 2,
    "clue": "Non-members must do this before downloading Life of Loan materials.",
    "responses": [
-    "What is pay a fee?",
-    "What is accept a license?",
-    "What is pass Boot Camp?",
-    "What is join a workgroup?"
+    "What is paying a fee?",
+    "What is accepting a license?",
+    "What is passing Boot Camp?",
+    "What is joining a workgroup?"
    ]
   },
   {
@@ -1412,7 +1412,7 @@
    "responses": [
     "What is the Board of Directors?",
     "What is the CFPB?",
-    "What is the GSEs?",
+    "What are the GSEs?",
     "What is the Business Glossary CoP?"
    ]
   },
@@ -1805,7 +1805,7 @@
     "What are Fannie Mae's?",
     "What are Freddie Mac's?",
     "What are Ginnie Mae's?",
-    "What are every bank's?"
+    "What are any bank's?"
    ]
   },
   {
@@ -2117,7 +2117,7 @@
    "level": 3,
    "clue": "This Life of Loan process covers title work.",
    "responses": [
-    "What is open Title and Closing Order?",
+    "What is Open Title and Closing Order?",
     "What is Order Credit Report?",
     "What is Trade MBS?",
     "What is Perform AVM Model Due Diligence?"
@@ -2222,10 +2222,10 @@
    "level": 3,
    "clue": "UMDP stands for this.",
    "responses": [
-    "What is Uniform Mortgage Data Program?",
-    "What is Universal Mortgage Delivery Process?",
-    "What is Uniform Market Disclosure Policy?",
-    "What is Unified Mortgage Document Portal?"
+    "What is the Uniform Mortgage Data Program?",
+    "What is the Universal Mortgage Delivery Process?",
+    "What is the Uniform Market Disclosure Policy?",
+    "What is the Unified Mortgage Document Portal?"
    ]
   },
   {
@@ -2243,10 +2243,10 @@
    "level": 3,
    "clue": "UCDP stands for this.",
    "responses": [
-    "What is Uniform Collateral Data Portal?",
-    "What is Universal Closing Document Program?",
-    "What is Uniform Credit Disclosure Process?",
-    "What is Unified Collateral Delivery Platform?"
+    "What is the Uniform Collateral Data Portal?",
+    "What is the Universal Closing Document Program?",
+    "What is the Uniform Credit Disclosure Process?",
+    "What is the Unified Collateral Delivery Platform?"
    ]
   },
   {
@@ -2285,10 +2285,10 @@
    "level": 3,
    "clue": "HPA, the 1998 law on PMI cancellation, stands for this.",
    "responses": [
-    "What is Housing Price Act?",
-    "What is Homeowners Protection Act?",
+    "What is the Housing Price Act?",
+    "What is the Homeowners Protection Act?",
     "What is Home Purchase Assistance?",
-    "What is Housing Policy Amendment?"
+    "What is the Housing Policy Amendment?"
    ]
   },
   {
@@ -2348,10 +2348,10 @@
    "level": 3,
    "clue": "At its 1999 announcement, MISMO had this slightly different name.",
    "responses": [
-    "What is Mortgage Industry Data Standards Maintenance Organization?",
-    "What is Mortgage Internet Standards Organization?",
-    "What is Mortgage Information Systems Management Office?",
-    "What is Mortgage Industry Software Messaging Organization?"
+    "What is the Mortgage Industry Data Standards Maintenance Organization?",
+    "What is the Mortgage Internet Standards Organization?",
+    "What is the Mortgage Information Systems Management Office?",
+    "What is the Mortgage Industry Software Messaging Organization?"
    ]
   },
   {
@@ -2369,7 +2369,7 @@
    "level": 3,
    "clue": "MBA announced MISMO here in October 1999.",
    "responses": [
-    "What is its 86th Annual Convention in Boston?",
+    "What is MBA's 86th Annual Convention in Boston?",
     "What is a Senate hearing?",
     "What is the White House?",
     "What is a GSE board meeting?"
@@ -2831,10 +2831,10 @@
    "level": 3,
    "clue": "To have PMI canceled at 80%, a borrower must be able to certify this.",
    "responses": [
-    "What is that there are no junior liens on the home?",
-    "What is that they have a second home?",
-    "What is that they refinanced in the last year?",
-    "What is that they have no other loans of any kind?"
+    "What is having no junior liens on the home?",
+    "What is owning a second home?",
+    "What is having refinanced in the last year?",
+    "What is having no other loans of any kind?"
    ]
   },
   {
@@ -2936,10 +2936,10 @@
    "level": 3,
    "clue": "In Ginnie Mae's model, the Ginnie Mae guaranty sits in this loss position, behind the borrower, the federal insurer and the issuer.",
    "responses": [
-    "What is first?",
-    "What is second?",
-    "What is third?",
-    "What is fourth?"
+    "What is the first loss position?",
+    "What is the second loss position?",
+    "What is the third loss position?",
+    "What is the fourth loss position?"
    ]
   },
   {
