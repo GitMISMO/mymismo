@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Explore postcard: Directions keeps its glass look with a heavier white outline.
 - Nov 26, 2026: Explore postcard: Directions back to its original glass button.
 - Nov 26, 2026: Summit home count boxes are squares on phones.
 - Nov 26, 2026: New Orleans art: the cathedral is gone from every header (dashboard tile, summit home, Why Attend, Explore, Sponsors page and the website file); the lit window buildings carry on in its place.
