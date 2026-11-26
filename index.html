@@ -3063,8 +3063,8 @@ function triviaBoard(all) {
   var live = []; cells.forEach(function (col) { col.forEach(function (x) { if (x) live.push(x); }); });
   var dbl = shuffle(live.filter(function (x) { return x.v >= 600; }))[0]; if (dbl) dbl.dbl = true;
   var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true, lastDone = null, lastSec = 0;
-  /* Jonna, Nov 26, 2026: a 6-minute round clock (play as many squares as you can), then the Final Square */
-  var ROUND_MS = 6 * 60 * 1000, roundEnd = 0, roundOver = false, roundT = null, inFinal = false;
+  /* Jonna, Nov 26, 2026: a 4-minute round clock (Jonna, Nov 26, 2026: was 6), then the Final Square */
+  var ROUND_MS = 4 * 60 * 1000, roundEnd = 0, roundOver = false, roundT = null, inFinal = false;
   function mmss(ms) { var t = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
   function roundChip() { return '<span class="tb-round" title="Time left on the board"><b id="tb-rt">' + mmss(roundEnd ? roundEnd - Date.now() : ROUND_MS) + '</b><i>left</i></span>'; }
   function roundTick() {
@@ -3091,7 +3091,7 @@ function triviaBoard(all) {
       '<div class="tb-wall"><div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c, i) { return '<div class="tb-h" style="--cc:' + catColor(c) + ';--i:' + i + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
       TB_VALUES.map(function (v, r) { return cats.map(function (c, k) { var x = cells[k][r];
         return '<button type="button" class="tb-c' + (x && x.done ? (x.ok ? ' ok' : ' no') + (x === lastDone ? ' just' : '') : '') + '" data-tb="' + k + '-' + r + '" style="--rd:' + Math.round(250 + Math.random() * 900) + 'ms"' + (!x || x.done ? ' disabled' : '') + ' aria-label="' + esc((TB_SHORT[c] || c) + ' for ' + v) + '"><span>' + (x ? v : '') + '</span></button>'; }).join(''); }).join('') + '</div></div>' +
-      '<p class="tb-note">Six minutes to play as many squares as you can, then the Final Square. Right adds the points, wrong takes them away, and running out of time on a square costs nothing. One square is worth double.</p></div>';
+      '<p class="tb-note">Four minutes to play as many squares as you can, then the Final Square. Right adds the points, wrong takes them away, and running out of time on a square costs nothing. One square is worth double.</p></div>';
     if (!back) {   /* the board lighting up: a blip per square, as it flips on */
       var ms = []; box.querySelectorAll('.tb-c').forEach(function (c) { ms.push(parseInt(c.style.getPropertyValue('--rd'), 10) || 0); });
       cats.forEach(function (c, i) { TVSFX.head(i); }); TVSFX.fill(ms.sort(function (a, b) { return a - b; }));

@@ -61,13 +61,13 @@ const pat = (await signIn('pat@example.org', 'Pat', 'Lee', '203.0.113.31')).toke
 ok('two players signed in', pat && alex);
 
 /* the round clock */
-r = await P('start', pat); d = J(r); ok('start: the board has a 6-minute round clock', r.statusCode === 200 && d.roundLeft > 359000 && d.roundLeft <= 363000 && d.phase === 'board', d);
+r = await P('start', pat); d = J(r); ok('start: the board has a 4-minute round clock', r.statusCode === 200 && d.roundLeft > 239000 && d.roundLeft <= 243000 && d.phase === 'board', d);
 ok('start: the Final Square is picked with the board, and its answers never leave the relay', !!file('trivia/plays.json').docs[Object.keys(file('trivia/plays.json').docs)[0]].final && !r.body.includes('fhfa') && !r.body.includes('What is 75'));
 d = await pickRight(pat, '0-0'); T += 2000; ok('board: a right answer still scores 200', d.right && d.total === 200, d);
 r = await P('wager', pat, { wager: 100 }); ok('final: no wagering before the board is over', r.statusCode === 409 && J(r).error === 'NOT_FINAL');
-T += 6 * 60_000 + 5_000;
+T += 4 * 60_000 + 5_000;
 r = await P('pick', pat, { cell: '1-0' }); d = J(r);
-ok('round: after 6 minutes no new square opens; it’s the Final Square', r.statusCode === 200 && d.roundOver && d.final && d.final.cat && d.final.max === 200 && !d.q, d);
+ok('round: after 4 minutes no new square opens; it’s the Final Square', r.statusCode === 200 && d.roundOver && d.final && d.final.cat && d.final.max === 200 && !d.q, d);
 r = await P('pick', pat, { cell: '1-0' }); ok('round: still no new squares', r.statusCode === 409 && J(r).error === 'FINAL');
 r = await call('GET', '/mymismo/trivia/play', { tok: pat }); d = J(r); ok('resume: the app sees the Final Square is next', d.phase === 'final' && d.final.max === 200 && d.final.wager === null, d);
 

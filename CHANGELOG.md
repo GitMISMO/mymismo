@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Trivia, the Board: the round clock is 4 minutes (was 6), in the app and in relay request 16.
 - Nov 26, 2026: Trivia: sound and the host voice are off for now (Jonna), switches hidden; one setting (TV_AV) brings them back.
 - Nov 26, 2026: Trivia, the Board: a 6-minute round clock (play as many squares as you can), then the Final Square: see the category, wager up to your score (up to 1,000 at zero or below), hear the answer and type the question in 30 seconds; right adds the wager, wrong takes it away. Typing is checked loosely ("What is" optional, small spelling slips fine). 32 Final answers, each built from a fact already in the question bank, are in data/trivia-draft.json for Jonna's review.
 - Nov 26, 2026: Trivia host voice: picks the most natural voice the phone has (Premium, Enhanced or Natural voices first, a calm male host voice preferred), never the novelty robot voices.
