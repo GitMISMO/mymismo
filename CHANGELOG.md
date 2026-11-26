@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: The New Orleans scene is the background of every summit header: the dashboard tile, the summit home card, the Why Attend closing card, the Explore postcard (its outlined NEW ORLEANS kept), the sponsor band and the Sponsors page (those two without the streetcar).
 - Nov 26, 2026: Summit home card: just the night sky (twinkling stars, the glowing moon) behind the countdown; the full New Orleans scene stays on the dashboard tile. art/nola-summit.svg: the scene as one animated file for the website's summit header (tools/make_nola_svg.mjs builds it from the app's own drawing).
 - Nov 26, 2026: New Orleans art, cleaner: twinkling stars and a glowing moon instead of the light trails, a simpler French Quarter row with lanterns and two flags, St. Louis Cathedral, and the streetcar on the street.
 - Nov 26, 2026: Floor map: a key under the map says what the marks are (blue: rooms with MISMO sessions; orange: the room you picked; black lines: the hotel's own room names).

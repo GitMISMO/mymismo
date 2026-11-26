@@ -379,8 +379,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .ha-glow{transform-box:fill-box; transform-origin:center; animation:ha-drift 16s ease-in-out infinite alternate}
 .ha-run path{stroke-dasharray:90 1400; stroke-dashoffset:90; opacity:.9; animation:ha-run 6.5s cubic-bezier(.45,.05,.4,1) infinite}
 .art-fade{position:absolute; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(90deg, rgba(7,29,46,.92) 0%, rgba(7,29,46,.72) 38%, rgba(7,29,46,.25) 66%, rgba(7,29,46,0) 82%)}
-.pass > .art-fade{position:absolute; z-index:0}
-.pass > .nola{opacity:1}
+.pass > span.art-fade{position:absolute; z-index:0; background:linear-gradient(180deg, rgba(7,29,46,.35) 0%, rgba(7,29,46,.2) 30%, rgba(7,29,46,.62) 62%, rgba(7,29,46,.9) 100%)}
+.pass > .nola{opacity:.9}
 .nola .no-stars circle{animation:no-twinkle 4s ease-in-out infinite}
 .nola .no-halo{transform-box:fill-box; transform-origin:center; animation:no-halo 6s ease-in-out infinite}
 .nola .no-flag{animation:no-sway 4.5s ease-in-out infinite}
@@ -1783,7 +1783,7 @@ function renderHome() {
   } else {
     flip = '<div class="unit"><div class="state">Thank You</div><div class="lbl">for joining us in ' + esc(S.place) + '</div></div>';
   }
-  var h = greetHead() + '<div class="pass">' + summitArt({ sky: true, align: 'xMaxYMin' }) +
+  var h = greetHead() + '<div class="pass">' + summitArt() +
     '<div><div class="summit">' + esc(s.name) + '</div><div class="city">' + esc(S.place) + '</div>' +
       '<div class="when"><span>' + icon('i-agenda') + esc(s.dates || '') + '</span>' + (s.city ? '<span>' + icon('i-pin') + esc(s.city) + '</span>' : '') + '</div></div>' +
     '<div class="flip" id="flip">' + flip + '</div>' +
@@ -1879,12 +1879,15 @@ function nolaArt(opts) {
     [[696, 410], [908, 412], [1036, 418]].map(function (l, i) { return '<circle cx="' + l[0] + '" cy="' + l[1] + '" r="26" fill="url(#' + g + 'l)" class="no-lamp" style="animation-delay:' + (i * 0.8) + 's"/><rect x="' + (l[0] - 4) + '" y="' + (l[1] - 7) + '" width="8" height="12" rx="2" fill="#ffd98a"/><rect x="' + (l[0] - 5) + '" y="' + (l[1] - 10) + '" width="10" height="3" fill="#0b2a44"/>'; }).join('') +
     /* the street, and the streetcar on it */
     '<rect x="0" y="' + GROUND + '" width="1200" height="60" fill="#0c2e4b"/><rect x="0" y="' + GROUND + '" width="1200" height="5" fill="#74bfeb" opacity=".9"/>' +
+    (opts.noCar ? '</svg>' : 
     '<g class="no-car"><rect x="0" y="0" width="150" height="50" rx="6" fill="#0f3b5c" stroke="#5aa9d8" stroke-width="2"/><rect x="-4" y="-8" width="158" height="10" rx="4" fill="#0b2e4a" stroke="#5aa9d8" stroke-width="1"/>' +
     [0, 1, 2, 3, 4, 5].map(function (k) { return '<rect x="' + (10 + k * 22) + '" y="10" width="16" height="17" rx="2" fill="#f3c64f" opacity=".85"/>'; }).join('') +
-    '<path d="M75,-8 L75,-38 M62,-38 H88" stroke="#5aa9d8" stroke-width="2"/></g></svg>'));
+    '<path d="M75,-8 L75,-38 M62,-38 H88" stroke="#5aa9d8" stroke-width="2"/></g></svg>')));
 }
 /* summit art: New Orleans gets its own; any other city the usual skyline */
-function summitArt(opts) { return /new orleans/i.test(S.place || '') ? nolaArt(Object.assign({ fade: false }, opts)) + '<span class="art-fade" aria-hidden="true"></span>' : heroArt(opts); }
+/* Jonna, Nov 26, 2026: every summit header (Summit tile, summit home, Why Attend, Explore postcard, sponsors) uses it;
+   the sponsor ones without the streetcar. */
+function summitArt(opts) { opts = opts || {}; return /new orleans/i.test(S.place || '') ? nolaArt(opts) + (opts.noFade ? '' : '<span class="art-fade" aria-hidden="true"></span>') : heroArt(opts); }
 function heroArt(opts) {
   opts = opts || {}; var n = ++ART_N, g = 'ha' + n;
   var tr = 'M470,620 C690,540 880,470 1250,398|M450,654 C680,572 890,500 1258,428|M520,684 C740,604 940,534 1264,464|M580,712 C800,636 990,570 1272,500'.split('|');
@@ -1920,7 +1923,7 @@ function welcomeCard() {
     return '<div class="wl-g' + (d && d.days.length > 1 ? ' multi' : '') + '" style="--wc:' + tone + ';--i:' + i + '"><div class="wl-cal">' + (d ? d.days.map(function (n) { return '<span class="cal"><i>' + esc(d.mon) + '</i><b>' + esc(n) + '</b></span>'; }).join('') : '<span class="cal wide"><b>' + esc(g.when) + '</b></span>') + '</div>' +
       '<div class="wl-gtx"><b>' + esc(g.when) + '</b><span>' + esc(g.what) + '</span></div></div>';
   }).join('') + '</div>';
-  h += '<section class="wl-cta">' + heroArt() + '<div class="wl-cta-in">' + (e.closer ? '<p class="wl-closer">' + esc(e.closer) + '</p>' : '') +
+  h += '<section class="wl-cta">' + summitArt() + '<div class="wl-cta-in">' + (e.closer ? '<p class="wl-closer">' + esc(e.closer) + '</p>' : '') +
     '<div class="wl-btns">' + (e.register ? '<a class="btn wl-reg" href="' + esc(e.register) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Register Now</a>' : '') +
     '<button type="button" class="btn wl-ghost" data-go="agenda">' + icon('i-agenda') + 'Full Agenda</button><button type="button" class="btn wl-ghost" data-go="explore">' + icon('i-hotel') + 'Hotel and Travel</button></div></div></section>';
   return h;
@@ -2096,7 +2099,7 @@ function sponsorBand() {
   /* endless: the list runs twice, so moving by exactly one copy lands where it began. Opening a page starts it at the top
      level (Platinum); the page refreshing itself every minute carries on from where it was instead of jumping back. */
   var lag = ((Date.now() - (S.bandT0 || Date.now())) / 1000) % dur;
-  return '<section class="spband" aria-label="Sponsors">' + heroArt() + '<h2>Thank You to Our Sponsors</h2>' +
+  return '<section class="spband" aria-label="Sponsors">' + summitArt({ noCar: true, noFade: true }) + '<h2>Thank You to Our Sponsors</h2>' +
     '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '"><div class="run" style="--dur:' + dur + 's;animation-delay:-' + lag.toFixed(2) + 's">' + run.map(tile).join('') + '</div></div>' +
     '<button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></section>';
 }
@@ -2126,7 +2129,7 @@ function renderSponsors() {
   var tiers = sponsorTiers(), all = [].concat.apply([], tiers.map(function (t) { return t.list; })).filter(function (sp) { return sp.logo; }), pts = partners();
   var nSess = S.sessions.filter(function (x) { return sponsorFor(x).length; }).length;
   var run = all.concat(pts.filter(function (p) { return p.logo; }));
-  var h = '<section class="sp-hero">' + heroArt() + '<div class="sp-hero-in"><h1>Thank You to Our Sponsors</h1><p>The companies making the ' + esc(S.summit.name) + ' happen.</p>' +
+  var h = '<section class="sp-hero">' + summitArt({ noCar: true }) + '<div class="sp-hero-in"><h1>Thank You to Our Sponsors</h1><p>The companies making the ' + esc(S.summit.name) + ' happen.</p>' +
     '<div class="sp-stats"><div><b>' + S.sponsors.length + '</b><span>Sponsors</span></div><div><b>' + tiers.length + '</b><span>Tiers</span></div><div><b>' + nSess + '</b><span>Sessions Sponsored</span></div></div></div></section>';
   tiers.forEach(function (t, i) {
     var col = TIER_COLOR[t.tier] || 'var(--sky)';
@@ -2349,7 +2352,7 @@ function renderExplore() {
     h = '<div class="pagehead"><h1>Explore</h1><div class="sub">' + esc(S.summit.name) + '</div></div><div class="note">The hotel and travel guide for this summit will be here once it\'s on mismo.org.</div>';
   } else {
     var v = gsec('the-venue'), co = cutoff(), city = (S.place || '').toUpperCase();
-    h += '<section class="postcard" aria-label="' + esc(g.venue) + '">' + heroArt() + '<div class="pc-city" aria-hidden="true">' + esc(city) + '</div><div class="pc-body">' +
+    h += '<section class="postcard" aria-label="' + esc(g.venue) + '">' + summitArt({ noFade: true }) + '<div class="pc-city" aria-hidden="true">' + esc(city) + '</div><div class="pc-body">' +
       '<div class="pc-eye">' + icon('i-hotel') + 'Your Home Base</div><h1 class="pc-venue">' + esc(g.venue) + '</h1>' +
       '<div class="when"><span>' + icon('i-pin') + esc(g.address || '') + '</span><span>' + icon('i-agenda') + esc(g.dates) + '</span></div>';
     if (co) {
