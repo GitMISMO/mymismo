@@ -185,10 +185,13 @@ main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 .flip .state{font-family:var(--cond); font-size:40px; font-weight:700; line-height:1; color:#fff}
 .flip .state small{font-size:18px; color:var(--sky-soft); font-weight:600; margin-left:6px}
 .pass-figs{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0 0}
-.pass-figs button{background:var(--surface); border:1px solid var(--border); border-radius:14px; color:var(--ink); padding:12px 4px 13px; cursor:pointer; text-align:center; font:inherit}
-.pass-figs button:hover{border-color:#74bfeb; background:var(--surface-2)}
-.pass-figs b{display:block; font-family:var(--cond); font-size:26px; line-height:1.05; color:var(--ink)}
-.pass-figs span{font-size:12px; color:var(--ink-2); font-weight:600}
+.pass-figs button{position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; gap:2px; background:linear-gradient(180deg, color-mix(in srgb, var(--fc) 14%, var(--surface)), var(--surface) 75%); border:1px solid color-mix(in srgb, var(--fc) 35%, var(--border)); border-top:4px solid var(--fc); border-radius:14px; color:var(--ink); padding:10px 4px 12px; cursor:pointer; text-align:center; font:inherit; transition:transform .15s, box-shadow .15s}
+.pass-figs button:hover{transform:translateY(-2px); box-shadow:0 6px 16px color-mix(in srgb, var(--fc) 25%, transparent)}
+.pass-figs svg{width:22px; height:22px; padding:6px; box-sizing:content-box; border-radius:9px; color:#fff; background:var(--fc); margin-bottom:4px}
+.pass-figs b{display:block; font-family:var(--cond); font-size:28px; line-height:1.05; color:var(--fc)}
+.pass-figs span{font-size:12px; color:var(--ink-2); font-weight:700}
+:root[data-theme="dark"] .pass-figs b{color:color-mix(in srgb, var(--fc) 65%, #fff)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pass-figs b{color:color-mix(in srgb, var(--fc) 65%, #fff)} }
 
 /* Your week: each day's sessions by type */
 .week{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
@@ -523,6 +526,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .bk-tx{grid-column:2 / -1; font-size:14px; color:rgba(255,255,255,.88)}
 .bk-tx b{color:#fff}
 .postcard .d-actions{margin-top:18px}
+.postcard .btn.ghost{background:rgba(7,29,46,.78); border-color:rgba(116,191,235,.7); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
 .block.solo{margin:14px 0 0; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); -webkit-backdrop-filter:none; backdrop-filter:none; color:var(--ink)}
 .block.solo .ring .tr{stroke:var(--surface-3)}
 .block.solo .ring .fg{stroke:#2477b8}
@@ -1790,16 +1794,16 @@ function renderHome() {
   } else {
     flip = '<div class="unit"><div class="state">Thank You</div><div class="lbl">for joining us in ' + esc(S.place) + '</div></div>';
   }
-  var h = greetHead() + '<div class="pass">' + summitArt({ moon: [1162, 52, .62] }) +
+  var h = greetHead() + '<div class="pass">' + summitArt({ moon: [1132, 82, .95] }) +
     '<div><div class="summit">' + esc(s.name) + '</div><div class="city">' + esc(S.place) + '</div>' +
       '<div class="when"><span>' + icon('i-agenda') + esc(s.dates || '') + '</span>' + (s.city ? '<span>' + icon('i-pin') + esc(s.city) + '</span>' : '') + '</div></div>' +
     '<div class="flip" id="flip">' + flip + '</div></div>' +
     /* Jonna, Nov 26, 2026: the counts sit under the header, each in its own box */
     '<div class="pass-figs">' +
-      '<button type="button" data-go="agenda"><b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
-      '<button type="button" data-go="people"><b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
-      '<button type="button" data-sponsors><b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
-      '<button type="button" data-go="mine"><b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
+      '<button type="button" data-go="agenda" style="--fc:#2477b8">' + icon('i-agenda') + '<b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
+      '<button type="button" data-go="people" style="--fc:#1baf7a">' + icon('i-people') + '<b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
+      '<button type="button" data-sponsors style="--fc:#eb6834">' + icon('i-handshake') + '<b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
+      '<button type="button" data-go="mine" style="--fc:#eda100">' + icon('i-star') + '<b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
     '</div>';
 
   var gsl = gsSession();
@@ -1847,6 +1851,7 @@ function nolaArt(opts) {
   var stars = [[560,70,2],[640,140,1.6],[720,60,1.4],[800,118,2.2],[870,52,1.5],[930,160,1.4],[990,96,1.8],[1100,64,1.5],[1150,170,2],[680,210,1.3],[1060,220,1.5],[760,180,1.2],[500,150,1.4],[1180,110,1.3]];
   /* the French Quarter row: x, width, roof height, warm windows */
   var row = [[700, 118, 300, [0, 2]], [818, 92, 250, [1]], [910, 128, 330, [0, 3]], [1038, 162, 262, [1, 2]]];
+  if (opts.noChurch) row = [[352, 120, 318, [1]], [472, 104, 272, [0, 2]], [576, 124, 336, [1, 3]]].concat(row);
   function building(b, i) {
     var x = b[0], w = b[1], top = b[2], cols = Math.max(2, Math.round(w / 40)), gap = w / cols, h = '';
     h += '<rect x="' + x + '" y="' + top + '" width="' + w + '" height="' + (GROUND - top) + '" fill="' + (i % 2 ? '#0d2f4b' : '#0f3555') + '"/>';
@@ -1874,12 +1879,13 @@ function nolaArt(opts) {
     '<g fill="#e6f4fc" class="no-stars">' + stars.map(function (s, i) { return '<circle cx="' + s[0] + '" cy="' + s[1] + '" r="' + s[2] + '" style="animation-delay:' + ((i * 0.53) % 4).toFixed(2) + 's"/>'; }).join('') + '</g>' +
     '<g' + (opts.moon ? ' transform="translate(' + opts.moon[0] + ',' + opts.moon[1] + ') scale(' + opts.moon[2] + ') translate(-1110,-96)"' : '') + '><circle cx="1110" cy="96" r="100" fill="url(#' + g + 'm)" class="no-halo"/><path d="M1098,50 a50,50 0 1,0 50,74 a40,40 0 1,1 -50,-74 Z" fill="#d9eefa"/></g>' +
     (opts.sky ? '</svg>' : (
+    (opts.noChurch ? '' : (
     /* the skyline, low and soft */
     '<g fill="#0e3150" opacity=".9"><rect x="470" y="330" width="36" height="170"/><rect x="510" y="290" width="30" height="210"/><rect x="544" y="250" width="40" height="250"/><rect x="588" y="306" width="28" height="194"/><path d="M566,250 L566,232 L572,232 L572,250 Z"/></g>' +
     /* St. Louis Cathedral */
     '<g fill="#123d61" stroke="#3b80b0" stroke-width="1.5" stroke-linejoin="round"><path d="M600,500 V368 H636 V306 L652,236 L668,306 V368 H704 V500 Z"/><path d="M606,368 V332 L619,292 L632,332 V368 Z"/><path d="M672,368 V332 L685,292 L698,332 V368 Z"/></g>' +
     '<path d="M652,236 V222 M647,227 H657" stroke="#3b80b0" stroke-width="2"/><circle cx="652" cy="326" r="8" fill="#f3c64f" fill-opacity=".7" class="no-clock"/>' +
-    '<path d="M640,500 V446 a12,12 0 0 1 24,0 V500 Z" fill="#f3c64f" fill-opacity=".45"/>' +
+    '<path d="M640,500 V446 a12,12 0 0 1 24,0 V500 Z" fill="#f3c64f" fill-opacity=".45"/>')) +
     row.map(building).join('') +
     /* two fleur-de-lis flags */
     [[850, 352], [1110, 356]].map(function (f, i) { return '<g class="no-flag" style="transform-origin:' + f[0] + 'px ' + f[1] + 'px; animation-delay:' + (i * 1.1) + 's"><path d="M' + f[0] + ',' + f[1] + ' h34 v44 l-17,11 l-17,-11 Z" fill="#14486e" stroke="#5aa9d8" stroke-width="1.2"/><path d="' + FL + '" fill="#f3c64f" transform="translate(' + (f[0] + 7) + ',' + (f[1] + 6) + ') scale(.5)"/></g>'; }).join('') +
@@ -2360,7 +2366,7 @@ function renderExplore() {
     h = '<div class="pagehead"><h1>Explore</h1><div class="sub">' + esc(S.summit.name) + '</div></div><div class="note">The hotel and travel guide for this summit will be here once it\'s on mismo.org.</div>';
   } else {
     var v = gsec('the-venue'), co = cutoff(), city = (S.place || '').toUpperCase();
-    h += '<section class="postcard" aria-label="' + esc(g.venue) + '">' + summitArt({ noFade: true, moon: [1158, 124, .48] }) + '<div class="pc-city" aria-hidden="true">' + esc(city) + '</div><div class="pc-body">' +
+    h += '<section class="postcard" aria-label="' + esc(g.venue) + '">' + summitArt({ noFade: true, noChurch: true, moon: [1146, 168, .74] }) + '<div class="pc-city" aria-hidden="true">' + esc(city) + '</div><div class="pc-body">' +
       '<div class="pc-eye">' + icon('i-hotel') + 'Your Home Base</div><h1 class="pc-venue">' + esc(g.venue) + '</h1>' +
       '<div class="when"><span>' + icon('i-pin') + esc(g.address || '') + '</span><span>' + icon('i-agenda') + esc(g.dates) + '</span></div>';
     /* Jonna, Nov 26, 2026: the room-block countdown sits under the postcard, not in it */
