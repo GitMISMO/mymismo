@@ -263,5 +263,7 @@ r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: staffTok('jc@
 ok('reports: the MISMO team sees them with names', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].byName === 'Pat Lee' && d.reports[0].aboutName === 'Alex Kim', d);
 r = await call('POST', '/mymismo/staff/reports', { tok: staffTok('jc@example.org'), body: { summit: 'nola', id: d.reports[0].id, status: 'closed', action: 'Spoke with both.' } });
 ok('reports: closing one is saved', r.statusCode === 200 && file('att/nola/reports.json').reports[0].status === 'closed');
+r = await call('GET', '/mymismo/staff/reports', { tok: staffTok('jc@example.org') }); d = J(r);
+ok('reports: with no summit, every summit’s (for Team HQ), with the open count', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].summit === 'nola' && d.open === 0, d);
 Date.now = realNow;
 console.log(`\n${passed} passed, ${failed} failed`); process.exit(failed ? 1 : 0);

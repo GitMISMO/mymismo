@@ -123,7 +123,7 @@
        const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
        th.m = Array.isArray(th.m) ? th.m : [];
        th.m.push({ f: who.id, t: text, at: now });
-@@ -2914,6 +2938,504 @@
+@@ -2914,6 +2938,512 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -592,9 +592,9 @@
 +  return respond(200, { me: mmMe(who.id, out, who.email) });
 +}
 +/* For the MISMO team (staff sign-in, the people in alertSenders): the reports, newest first, with names, and closing one.
-+ *   GET  /mymismo/staff/reports?summit=<id>   -> { reports: [{ id, about, aboutName, byName, reason, note, at, status }] }
++ *   GET  /mymismo/staff/reports[?summit=<id>]   -> { reports: [{ summit, id, about, aboutName, byName, reason, note, at, status, action }], open }
 + *   POST /mymismo/staff/reports { summit, id, status: 'closed' | 'open', action }   -> { ok }
-+ * Summit HQ shows these (CN-040). Nothing is emailed. */
++ * Team HQ shows these (CN-041). Leave out summit to get every summit's. Nothing is emailed. */
 +async function mm15Staff(method, event, proj, headers) {
 +  const raw = (await projects())[MM_PROJECT] || {};
 +  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
@@ -605,13 +605,21 @@
 +  const dir = await loadAccess();
 +  if (dir.error || !personByEmail(dir.people, t.sub) || tokenIsStale(t, personByEmail(dir.people, t.sub))) return respond(401, { error: 'SIGN_IN' });
 +  const branch = proj.branch || 'main';
-+  if (method === 'GET') {
-+    const summit = mmStr((event.queryStringParameters || {}).summit, 31); if (!MM_SUMMIT.test(summit)) return respond(400, { error: 'INVALID' });
-+    const r = await readFile(proj.repo, branch, `att/${summit}/reports.json`), ppl = await mmReadPeople(proj, summit);
-+    if ((r.status !== 200 && r.status !== 404) || ppl.error) return respond(502, { error: 'UNAVAILABLE' });
-+    const name = id => (ppl.docs[id] && mmStr(ppl.docs[id].name, 120)) || 'Deleted account';
-+    const reports = ((r.data && r.data.reports) || []).slice().reverse().map(x => ({ id: x.id, about: x.about, aboutName: name(x.about), byName: name(x.by), reason: x.reason, note: mmStr(x.note, 500), at: x.at, status: x.status === 'closed' ? 'closed' : 'open', action: mmStr(x.action, 300) }));
-+    return respond(200, { reports });
++  if (method === 'GET') {   /* one summit, or with no summit given every summit in the attendee list (for Team HQ) */
++    const q = mmStr((event.queryStringParameters || {}).summit, 31);
++    let ids = [q];
++    if (!q) { const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE' }); ids = Object.keys(feed.summits); }
++    else if (!MM_SUMMIT.test(q)) return respond(400, { error: 'INVALID' });
++    const reports = [];
++    for (const summit of ids) {
++      const r = await readFile(proj.repo, branch, `att/${summit}/reports.json`); if (r.status === 404) continue;
++      const ppl = await mmReadPeople(proj, summit);
++      if (r.status !== 200 || ppl.error) return respond(502, { error: 'UNAVAILABLE' });
++      const name = id => (ppl.docs[id] && mmStr(ppl.docs[id].name, 120)) || 'Deleted account';
++      for (const x of (r.data && r.data.reports) || []) reports.push({ summit, id: x.id, about: x.about, aboutName: name(x.about), byName: name(x.by), reason: x.reason, note: mmStr(x.note, 500), at: x.at, status: x.status === 'closed' ? 'closed' : 'open', action: mmStr(x.action, 300) });
++    }
++    reports.sort((x, y) => y.at - x.at);
++    return respond(200, { reports, open: reports.filter(x => x.status === 'open').length });
 +  }
 +  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
 +  const b = pre.body, summit = mmStr(b.summit, 31), id = mmStr(b.id, 20);
@@ -628,7 +636,7 @@
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3506,12 @@
+@@ -2984,6 +3514,12 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
@@ -641,7 +649,7 @@
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
-@@ -3006,7 +3534,7 @@
+@@ -3006,7 +3542,7 @@
      if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */

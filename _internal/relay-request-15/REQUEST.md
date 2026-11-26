@@ -92,7 +92,7 @@ message each other (Apple App Review Guidelines 1.2 and 5.1.1(v); Google Play's 
 | --- | --- | --- |
 | `POST /att/delete` | attendee | Deletes the attendee's account: their directory entry, every conversation they were in, and blocks naming them. |
 | `POST /att/report` | attendee | `{ id, reason, note }` → kept in `att/<summit>/reports.json` for the MISMO team. Reasons: harassment, spam, inappropriate, other. |
-| `GET  /staff/reports?summit=` | staff (alertSenders) | The reports, newest first, with names. Summit HQ shows them (CN-040). |
+| `GET  /staff/reports[?summit=]` | staff (alertSenders) | The reports, newest first, with names and the open count; leave out summit for every summit. Team HQ shows them (CN-041). |
 | `POST /staff/reports` | staff (alertSenders) | `{ summit, id, status, action }` closes or reopens a report with a note of what was done. |
 
 **A word filter** now checks messages, profile fields and trivia names against a short built-in list of profanity plus
@@ -121,7 +121,7 @@ request 13's rule (listed only if they turned it on); test-mymismo.mjs here is r
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
 - `test-mymismo.mjs`: request 13's test, with the directory checks updated to the new rule. Replace the old copy with this one.
-- `test-mymismo15.mjs`: 81 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+- `test-mymismo15.mjs`: 82 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
   `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
 
 ## To Switch It On
