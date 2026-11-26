@@ -527,6 +527,13 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .bk-n span{font-size:10.5px; font-weight:600; color:var(--sky-soft)}
 .bk-tx{grid-column:2 / -1; font-size:14px; color:rgba(255,255,255,.88)}
 .bk-tx b{color:#fff}
+.block.solo.go{grid-template-columns:64px 1fr auto; color:#fff; text-decoration:none; cursor:pointer; transition:transform .15s, box-shadow .15s}
+.block.solo.go .bk-tx{grid-column:2}
+.block.solo.go > svg:last-child{grid-column:3; grid-row:1; width:22px; height:22px; color:#f3c64f}
+.block.solo.go:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(6,32,47,.35), inset 0 1px 0 rgba(255,255,255,.08)}
+.block.solo.go:focus-visible{outline:3px solid var(--sky); outline-offset:2px}
+.bk-h{display:flex; align-items:center; gap:7px; font-family:var(--cond); font-size:19px; color:#f3c64f !important; margin-bottom:2px}
+.bk-h svg{width:18px; height:18px}
 .postcard .d-actions{margin-top:18px}
 .block.solo{margin:14px 0 0; padding:14px 16px; background:linear-gradient(120deg, #14486e, #0b2a44 70%); border:1px solid rgba(243,198,79,.45); border-left:5px solid #f3c64f; box-shadow:0 6px 18px rgba(6,32,47,.25), inset 0 1px 0 rgba(255,255,255,.06); -webkit-backdrop-filter:none; backdrop-filter:none; color:#fff}
 .block.solo .ring .tr{stroke:rgba(255,255,255,.14)}
@@ -2594,12 +2601,18 @@ function renderExplore() {
     var bk = '';
     if (co) {
       var pct = Math.max(0, Math.min(1, co.left / 60)), circ = 2 * Math.PI * 26;
-      bk = '<div class="block solo"><svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="tr"/><circle cx="32" cy="32" r="26" class="fg" style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + (circ * (1 - pct)).toFixed(1) + '"/></svg>' +
+      /* Jonna, Nov 26, 2026: the countdown card is the Book Your Room button (the whole card, with an arrow like the
+         Floor Map card); Directions takes its place on the postcard */
+      var go = g.book && co.left >= 0;
+      bk = (go ? '<a class="block solo go" href="' + esc(g.book) + '" target="_blank" rel="noopener">' : '<div class="block solo">') +
+        '<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="tr"/><circle cx="32" cy="32" r="26" class="fg" style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + (circ * (1 - pct)).toFixed(1) + '"/></svg>' +
         '<div class="bk-n"><b>' + (co.left > 0 ? co.left : 0) + '</b><span>' + (co.left === 1 ? 'Day' : 'Days') + '</span></div>' +
-        '<div class="bk-tx">' + (co.left > 0 ? '<b>Left to book the MISMO rate.</b> The room block closes ' + esc(co.label) + ', or sooner if it fills.' : co.left === 0 ? '<b>The room block closes today.</b>' : '<b>The room block has closed.</b> The hotel may still have rooms at its own rate.') + '</div></div>';
+        '<div class="bk-tx">' + (go ? '<b class="bk-h">' + icon('i-hotel') + 'Book Your Room</b>' : '') +
+        (co.left > 0 ? (go ? '' : '<b>') + 'Left to book the MISMO rate.' + (go ? ' ' : '</b> ') + 'The room block closes ' + esc(co.label) + ', or sooner if it fills.' : co.left === 0 ? (go ? 'The room block closes today.' : '<b>The room block closes today.</b>') : '<b>The room block has closed.</b> The hotel may still have rooms at its own rate.') + '</div>' +
+        (go ? icon('i-chev') + '</a>' : '</div>');
     }
-    h += '<div class="d-actions">' + (g.book && (!co || co.left >= 0) ? '<a class="btn primary sky" href="' + esc(g.book) + '" target="_blank" rel="noopener">' + icon('i-hotel') + 'Book Your Room</a>' : '') +
-      '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></section>' + bk + wifiCard();
+    h += '<div class="d-actions"><a class="btn primary sky" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a>' +
+      (g.book && !co ? '<a class="btn ghost" href="' + esc(g.book) + '" target="_blank" rel="noopener">' + icon('i-hotel') + 'Book Your Room</a>' : '') + '</div></div></section>' + bk + wifiCard();
     if (v && v.cards.length) h += '<div class="info-rail" role="list">' + v.cards.map(function (c) {
       return '<div class="infocard" role="listitem"><span class="ic">' + icon(infoIcon(c.name, c.text)) + '</span><b>' + esc(c.name) + '</b>' + noBelow(c.text).split(/\n\n/).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
     }).join('') + '</div>';
