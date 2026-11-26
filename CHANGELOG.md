@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Summit home card: just the night sky (twinkling stars, the glowing moon) behind the countdown; the full New Orleans scene stays on the dashboard tile. art/nola-summit.svg: the scene as one animated file for the website's summit header (tools/make_nola_svg.mjs builds it from the app's own drawing).
+- Nov 26, 2026: New Orleans art, cleaner: twinkling stars and a glowing moon instead of the light trails, a simpler French Quarter row with lanterns and two flags, St. Louis Cathedral, and the streetcar on the street.
 - Nov 26, 2026: Floor map: a key under the map says what the marks are (blue: rooms with MISMO sessions; orange: the room you picked; black lines: the hotel's own room names).
 - Nov 26, 2026: New Orleans art for the Summit tile and the summit home: the skyline, St. Louis Cathedral, a French Quarter row with iron balconies and fleur-de-lis flags, flickering gas lamps, a St. Charles streetcar and the light trails, in the app's navy style.
 - Nov 26, 2026: Summit home footer on two lines: when the agenda last changed, and the date and time the app last checked.
