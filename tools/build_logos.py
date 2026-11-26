@@ -51,12 +51,14 @@ def clear_copy(png, url):
         im.thumbnail((1200, 1200))
     w, h = im.size
     px = im.load()
-    corners = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
-    if not all(min(px[c][:3]) >= 225 for c in corners):
+    edge = [(x, 0) for x in range(w)] + [(x, h - 1) for x in range(w)] + [(0, y) for y in range(h)] + [(w - 1, y) for y in range(h)]
+    light = [p for p in edge if px[p][3] > 0 and min(px[p][:3]) >= 200]
+    print('   edge of', url.rsplit('/', 1)[-1][:40], ':', round(len(light) / len(edge), 2), 'light; corner', px[0, 0][:3], file=sys.stderr)
+    if len(light) < 0.85 * len(edge):
         return None
-    for c in corners:
-        if px[c][3] != 0:
-            ImageDraw.floodfill(im, c, (255, 255, 255, 0), thresh=60)
+    for p in light[::7]:
+        if px[p][3] != 0:
+            ImageDraw.floodfill(im, p, (255, 255, 255, 0), thresh=70)
     alpha = im.getchannel('A')
     clear = sum(1 for a in alpha.getdata() if a == 0) / (w * h)
     if clear < 0.12:
