@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-26T02:18:28Z",
+ "updated": "2026-11-26T16:23:43Z",
  "source": "https://www.mismo.org/events-education/educational-offerings#ai-series",
  "series": "AI Webinar Series",
  "host": "MBA Education and MISMO",
@@ -7,11 +7,6 @@
  "end": "3:00 PM",
  "note": "MISMO members attend at no cost — member pricing applies once you sign in on MBA.org.",
  "sessions": [
-  {
-   "date": "2026-11-02",
-   "title": "Intelligent Document Processing (IDP) – Beyond OCR",
-   "url": "https://www.mba.org/conferences-and-education/event/2026/11/02/default-calendar/ai-in-residential-lending-intelligent-document-processing-idp-beyond-ocr-82683"
-  },
   {
    "date": "2026-12-07",
    "title": "Automated Underwriting 2.0 – Income Analysis",
@@ -38,9 +33,24 @@
    "url": "https://www.mba.org/conferences-and-education/event/2027/02/01/default-calendar/ai-in-residential-lending-predictive-retention-knowing-who-will-refi-first-82725"
   },
   {
+   "date": "2027-02-08",
+   "title": "Converting Conversations into Revenue",
+   "url": "https://www.mba.org/conferences-and-education/event/2027/02/08/default-calendar/ai-in-residential-lending-converting-conversations-into-revenue-83484"
+  },
+  {
+   "date": "2027-02-23",
+   "title": "Hyper-Personalization Marketing",
+   "url": "https://www.mba.org/conferences-and-education/event/2027/02/23/default-calendar/ai-in-residential-lending-hyper-personalization-marketing-83640"
+  },
+  {
    "date": "2027-03-01",
    "title": "The Empathic Chatbot – 24/7 Borrower Support",
    "url": "https://www.mba.org/conferences-and-education/event/2027/03/01/default-calendar/ai-in-residential-lending-the-empathic-chatbot-24-7-borrower-support-82729"
+  },
+  {
+   "date": "2027-03-31",
+   "title": "Successful Loan Boarding",
+   "url": "https://www.mba.org/conferences-and-education/event/2027/03/31/default-calendar/ai-in-residential-lending-successful-loan-boarding-83543"
   },
   {
    "date": "2027-04-05",
@@ -48,9 +58,19 @@
    "url": "https://www.mba.org/conferences-and-education/event/2027/04/05/default-calendar/ai-in-residential-lending-default-management-early-intervention-82726"
   },
   {
+   "date": "2027-04-26",
+   "title": "MSR Valuation & Trading Intelligence",
+   "url": "https://www.mba.org/conferences-and-education/event/2027/04/26/default-calendar/ai-in-residential-lending-msr-valuation-trading-intelligence-83485"
+  },
+  {
    "date": "2027-05-03",
    "title": "MSR Valuation & Trading Intelligence (Part II)",
    "url": "https://www.mba.org/conferences-and-education/event/2027/05/03/default-calendar/ai-in-residential-lending-msr-valuation-trading-intelligence-part-ii-82730"
+  },
+  {
+   "date": "2027-05-12",
+   "title": "Default Management & Early Intervention (Part II)",
+   "url": "https://www.mba.org/conferences-and-education/event/2027/05/12/default-calendar/ai-in-residential-lending-default-management-early-intervention-part-ii-83810"
   },
   {
    "date": "2027-06-14",
@@ -61,11 +81,6 @@
    "date": "2027-07-12",
    "title": "Fraud Detection in the Deepfake Era",
    "url": "https://www.mba.org/conferences-and-education/event/2027/07/12/default-calendar/ai-in-residential-lending-fraud-detection-in-the-deepfake-era-82727"
-  },
-  {
-   "date": "2027-08-02",
-   "title": "Hyper-Personalization Marketing",
-   "url": "https://www.mba.org/conferences-and-education/event/2027/08/02/default-calendar/ai-in-residential-lending-hyper-personalization-marketing-82728"
   },
   {
    "date": "2027-08-09",
