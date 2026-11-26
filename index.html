@@ -787,6 +787,24 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .be-spon strong{grid-column:2; display:inline-flex; align-items:center; gap:6px; justify-self:start; margin-top:4px; padding:9px 13px; border-radius:8px; background:#74bfeb; color:#06202f; font-size:14px}
 .be-spon strong svg{width:15px; height:15px}
 .be-spon.foot{margin-top:26px}
+.wifi{margin:14px 0; padding:16px; border-radius:16px; color:#fff; background:linear-gradient(135deg, #14486e, #0d314c 60%, #06202f); box-shadow:0 14px 30px -18px rgba(6,32,47,.8)}
+.wf-top{display:flex; align-items:center; gap:12px}
+.wf-ic{flex:none; width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:rgba(116,191,235,.18); color:#74bfeb}
+.wf-ic svg{width:24px; height:24px}
+.wf-top b{display:block; font-size:17px}
+.wf-sp{display:flex; align-items:center; gap:7px; font-size:12.5px; color:rgba(255,255,255,.75); margin-top:2px}
+.wf-sp img{height:22px; max-width:110px; object-fit:contain; background:#fff; border-radius:5px; padding:2px 6px}
+.wf-sp em{font-style:normal; font-weight:700; color:#fff}
+.wf-rows{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:14px 0 12px}
+.wf-rows div{background:rgba(255,255,255,.08); border-radius:10px; padding:10px 12px; min-width:0}
+.wf-rows span{display:block; font-size:11.5px; color:rgba(255,255,255,.65); font-weight:600}
+.wf-rows b{display:block; font-size:16px; overflow-wrap:anywhere}
+.wf-pw{font-family:"IBM Plex Mono", ui-monospace, monospace; letter-spacing:.02em}
+.wf-act{display:flex; gap:8px; flex-wrap:wrap}
+.wf-act .btn{flex:1 1 140px; justify-content:center}
+.wifi .btn{background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.35); color:#fff}
+.wifi .btn.primary{background:#74bfeb; border-color:#74bfeb; color:#06202f}
+.wf-note{margin:10px 0 0; font-size:13px; color:rgba(255,255,255,.75)}
 .pv-note{border-left-color:#eda100}
 .att-count{font-size:13px; color:var(--ink-3); font-weight:600; margin-top:10px}
 .cts{display:grid; gap:8px}
@@ -1378,7 +1396,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 <symbol id="i-hotel" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 10h4a1 1 0 0 1 1 1v10M3 21h18M8 8h3M8 12h3M8 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
-<symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></g></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 9.2a14 14 0 0 1 19 0M5.6 12.6a9.5 9.5 0 0 1 12.8 0M8.8 16a5 5 0 0 1 6.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.3" r="1.4" fill="currentColor"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></g></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c.8-4.3 4-6.6 8-6.6s7.2 2.3 8 6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-handshake" viewBox="0 0 24 24"><path d="M2.5 11.5 6 8l3 1 3-2.5 3 1 3.5-.5 3 3.5M2.5 11.5l3.5 4 2 .5 3 2.5c.8.6 1.8.4 2.3-.4l3.2-4.6M21.5 11l-3 3.6M9 9l-2.5 3.5c-.5.8.2 1.9 1.2 1.7L12 13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
@@ -1730,6 +1748,7 @@ function renderHome() {
 
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
+  h += wifiCard();
   if (during) {
     var live = S.sessions.filter(function (x) { return isLive(x) && !MEALS.test(x.type); });
     var next = S.sessions.filter(function (x) { return x.date === n.date && x.a > n.min && !MEALS.test(x.type); });
@@ -2189,6 +2208,27 @@ function cutoff() {
 }
 var INFO_ICON = [[/getting here|arriv|airport|fly/i, 'i-plane'], [/around|streetcar|parking|transport/i, 'i-tram'], [/expect|weather|pack|climate/i, 'i-sun']];
 function infoIcon(name, text) { var k, i; for (k = 0; k < 2; k++) for (i = 0; i < INFO_ICON.length; i++) if (INFO_ICON[i][0].test(k ? text : name)) return INFO_ICON[i][1]; return 'i-pin'; }
+/* Summit Wi-Fi (Jonna, Nov 25, 2026): the network and password Summit HQ publishes with the agenda once the hotel sets
+   them (summits.<id>.wifi: { network, password, sponsor, note }), shown from three days before the summit to its last day.
+   In the store apps, Join Wi-Fi hands the network to the phone (iPhone: NEHotspotConfiguration; Android 11 and up: the
+   system's Add Network screen), so it's one tap and a confirm. On the web it's the name and a Copy Password button. */
+function wifiInfo() {
+  var w = S.summit && S.summit.wifi; if (!w || !w.network) return null;
+  var d = nowAt().date; if (d < addDays(S.first, -3) || d > S.last) return null;
+  return w;
+}
+function addDays(iso, n) { var t = new Date(iso + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
+function nativeWifi() { return !!(window.MyMISMONative && window.MyMISMONative.joinWifi) || load('twa', false); }
+function wifiCard() {
+  var w = wifiInfo(); if (!w) return '';
+  var sp = w.sponsor ? sponsorByName(w.sponsor) : null;
+  return '<section class="wifi">' + '<div class="wf-top"><span class="wf-ic">' + icon('i-wifi') + '</span><div><b>Summit Wi-Fi</b>' +
+    (w.sponsor ? '<span class="wf-sp">Sponsored by ' + (sp && sp.logo ? '<img src="' + esc(sp.logo) + '" alt="' + esc(w.sponsor) + '">' : '<em>' + esc(w.sponsor) + '</em>') + '</span>' : '') + '</div></div>' +
+    '<div class="wf-rows"><div><span>Network</span><b>' + esc(w.network) + '</b></div>' + (w.password ? '<div><span>Password</span><b class="wf-pw">' + esc(w.password) + '</b></div>' : '<div><span>Password</span><b>None needed</b></div>') + '</div>' +
+    '<div class="wf-act">' + (nativeWifi() ? '<button type="button" class="btn primary" data-wifi-join>' + icon('i-wifi') + 'Join Wi-Fi</button>' : '') +
+    (w.password ? '<button type="button" class="btn' + (nativeWifi() ? '' : ' primary') + '" data-wifi-copy>' + icon('i-file') + 'Copy Password</button>' : '') + '</div>' +
+    (w.note ? '<p class="wf-note">' + esc(w.note) + '</p>' : (nativeWifi() ? '' : '<p class="wf-note">Open your phone\'s Wi-Fi settings, pick <b>' + esc(w.network) + '</b> and paste the password.</p>')) + '</section>';
+}
 function renderExplore() {
   var g = guide(), h = '';
   if (!g) {
@@ -2205,7 +2245,7 @@ function renderExplore() {
         '<div class="bk-tx">' + (co.left > 0 ? '<b>Left to book the MISMO rate.</b> The room block closes ' + esc(co.label) + ', or sooner if it fills.' : co.left === 0 ? '<b>The room block closes today.</b>' : '<b>The room block has closed.</b> The hotel may still have rooms at its own rate.') + '</div></div>';
     }
     h += '<div class="d-actions">' + (g.book && (!co || co.left >= 0) ? '<a class="btn primary sky" href="' + esc(g.book) + '" target="_blank" rel="noopener">' + icon('i-hotel') + 'Book Your Room</a>' : '') +
-      '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></section>';
+      '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></section>' + wifiCard();
     if (v && v.cards.length) h += '<div class="info-rail" role="list">' + v.cards.map(function (c) {
       return '<div class="infocard" role="listitem"><span class="ic">' + icon(infoIcon(c.name, c.text)) + '</span><b>' + esc(c.name) + '</b>' + noBelow(c.text).split(/\n\n/).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
     }).join('') + '</div>';
@@ -2322,6 +2362,7 @@ function triviaSheet() {
    STORE_RELEASE to true in the build sent to the stores: anything not live yet is left out for everyone, and the
    reviewer code and test link stop working. TRIVIA_LIVE turns true once relay request 15 is live. */
 var STORE_RELEASE = false, TRIVIA_LIVE = false;
+try { if (/^android-app:\/\/org\.mismo\.mymismo/.test(document.referrer)) save('twa', true); } catch (e) {}
 function triviaTester() {
   if (STORE_RELEASE) return false;
   if (/[?&]trivia=test\b/.test(location.search)) save('trivia-tester', true);   /* the test link is remembered on this phone */
@@ -3361,6 +3402,17 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-profile')) { profileSheet(false); return; }
   if (t.hasAttribute('data-chat')) { chatSheet(t.getAttribute('data-chat')); return; }
   if (t.hasAttribute('data-report')) { reportSheet(t.getAttribute('data-report')); return; }
+  if (t.hasAttribute('data-wifi-copy')) {
+    var wc = wifiInfo(); if (!wc) return;
+    (navigator.clipboard ? navigator.clipboard.writeText(wc.password) : Promise.reject()).then(function () { t.innerHTML = icon('i-check') + 'Password Copied'; setTimeout(function () { t.innerHTML = icon('i-file') + 'Copy Password'; }, 2500); }, function () {});
+    return;
+  }
+  if (t.hasAttribute('data-wifi-join')) {
+    var wj = wifiInfo(); if (!wj) return;
+    if (window.MyMISMONative && window.MyMISMONative.joinWifi) window.MyMISMONative.joinWifi(wj.network, wj.password || '');   /* the iPhone app */
+    else location.href = 'intent://wifi?ssid=' + encodeURIComponent(wj.network) + '&pass=' + encodeURIComponent(wj.password || '') + '#Intent;scheme=mymismo;package=org.mismo.mymismo;end';   /* the Android app */
+    return;
+  }
   if (t.hasAttribute('data-pvp')) { previewSheet(t.getAttribute('data-pvp')); return; }
   if (t.hasAttribute('data-pv-profile')) { profileSheet(false, true); return; }
   if (t.hasAttribute('data-who')) { attendeeSheet(t.getAttribute('data-who')); return; }

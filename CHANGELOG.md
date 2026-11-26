@@ -54,3 +54,4 @@
 - Nov 25, 2026: Sponsors page: the scrolling logo row is replaced by a Become a Sponsor card (top and bottom) that opens the Sponsorship Prospectus.
 - Nov 25, 2026: Dark mode Summit Sponsors tile: logos on a see-through background show in white straight on the tile, no white box (the guide job checks each logo into data/logo-bg.json); the rest sit on a small rounded plate.
 - Nov 25, 2026: Bug check: the Explore category buttons ran off the right edge on phones; they now scroll sideways.
+- Nov 25, 2026: Summit Wi-Fi card on Summit Home and Explore (from three days before the summit to its last day), with the sponsor (Factual Data), network, password and Copy Password; in the Android app, Join Wi-Fi opens Android's own Add Network screen. Waits on Summit HQ publishing the Wi-Fi (CN-044).
