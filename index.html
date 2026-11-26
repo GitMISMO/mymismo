@@ -778,6 +778,39 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .tb-top .tg-score b{font-size:26px}
 .tb-end{border:1px solid rgba(255,255,255,.25); background:transparent; color:#fff; border-radius:8px; padding:8px 12px; font:inherit; font-weight:700; cursor:pointer}
 .tb-tools{display:flex; align-items:center; gap:8px}
+.tb-top,.tb-clue-wrap > .tg-top{gap:10px}
+.tb-round{display:flex; flex-direction:column; align-items:center; line-height:1; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); margin-right:auto}
+.tb-round b{font-family:var(--cond); font-size:20px; font-variant-numeric:tabular-nums; color:#fff}
+.tb-round i{font-style:normal; font-size:10.5px; font-weight:700; color:rgba(255,255,255,.6)}
+.tb-round.hurry{border-color:#eb6834; background:rgba(235,104,52,.15)} .tb-round.hurry b{color:#ffb38f; animation:tv-bob .5s ease-in-out infinite}
+.tb-clue-wrap > .tg-top .tg-score{margin-right:0}
+/* the Final Square */
+.fs{display:grid; gap:16px; justify-items:center; text-align:center; padding:8px 0 20px; animation:tb-in .4s ease both}
+.fs-why{display:inline-flex; gap:7px; align-items:center; font-weight:700; color:#ffb38f; font-size:14px}
+.fs-why svg{width:17px; height:17px}
+.fs-title{font-family:var(--cond); font-weight:800; font-size:clamp(34px, 10vw, 52px); line-height:1; color:#f3c64f; text-shadow:3px 3px 0 #000, 0 0 30px rgba(243,198,79,.4); animation:tb-dd .9s cubic-bezier(.2,.9,.2,1.2) both}
+.fs-cat{width:100%; padding:22px 16px; border-radius:10px; background:radial-gradient(120% 95% at 50% 18%, #2467b6 0%, #164c8e 55%, #0e3564 100%); box-shadow:0 0 0 2px rgba(243,198,79,.45), 0 18px 40px rgba(0,0,0,.5); animation:tb-flip .6s cubic-bezier(.2,.8,.2,1) both .25s}
+.fs-cat span{display:block; font-size:12px; font-weight:700; color:rgba(255,255,255,.7); margin-bottom:6px}
+.fs-cat b{font-family:var(--cond); font-weight:800; font-size:clamp(24px, 7vw, 34px); color:#fff; text-shadow:2px 2px 0 #000}
+.fs-wager{width:100%; display:grid; gap:12px; justify-items:center; animation:tbx-up .5s ease both .6s}
+.fs-score{width:100%; display:flex; justify-content:space-between; align-items:center}
+.fs-max{font-size:13px; color:rgba(255,255,255,.75)} .fs-max b{color:#fff}
+.fs-amt b{font-family:var(--cond); font-size:54px; line-height:1; color:#f3c64f; text-shadow:2px 2px 0 #000; font-variant-numeric:tabular-nums}
+#fs-r{width:100%; accent-color:#f3c64f; height:28px}
+.fs-quick{display:flex; gap:8px} .fs-quick button{border:1px solid rgba(255,255,255,.3); background:transparent; color:#fff; border-radius:8px; padding:8px 14px; font:inherit; font-weight:700; cursor:pointer}
+.fs-quick button:hover{background:rgba(255,255,255,.1)}
+.fs-lock{width:100%; justify-content:center}
+.fs-skip{color:rgba(255,255,255,.65)}
+.fs-bet{margin-right:auto; font-size:12.5px; color:rgba(255,255,255,.7); padding:6px 10px; border:1px solid rgba(243,198,79,.5); border-radius:8px} .fs-bet b{color:#f3c64f; font-family:var(--cond); font-size:18px}
+.fs-play .fs-card{animation:tb-flip .6s cubic-bezier(.2,.8,.2,1) both}
+.fs-form{display:grid; grid-template-columns:1fr auto; gap:8px; animation:tbx-up .45s ease both .3s}
+.fs-form input{min-width:0; border:2px solid rgba(243,198,79,.6); background:#fff; color:#0d314c; border-radius:10px; padding:13px 14px; font:inherit; font-size:17px; font-weight:600}
+.fs-form input:disabled{background:rgba(255,255,255,.75)}
+.fs-form .tv-go{margin:0}
+.fs-res .fs-cat{animation:tb-flip .5s cubic-bezier(.2,.8,.2,1) both .1s}
+.fs-you{margin:0; color:rgba(255,255,255,.8)} .fs-you b{color:#fff}
+.fs-delta{font-family:var(--cond); font-weight:800; font-size:48px; line-height:1; text-shadow:2px 2px 0 #000; animation:tb-dd .7s cubic-bezier(.2,.9,.2,1.2) both .2s}
+.fs-res.ok .fs-delta{color:#5fe0a8} .fs-res.no .fs-delta{color:#ff9b7a} .fs-res.no .fs-title{color:#ff9b7a}
 .tb-tg{width:38px; height:38px; display:grid; place-items:center; border-radius:8px; border:1px solid rgba(255,255,255,.22); background:transparent; color:rgba(255,255,255,.45); cursor:pointer; position:relative}
 .tb-tg svg{width:19px; height:19px}
 .tb-tg.on{color:#f3c64f; border-color:rgba(243,198,79,.6); background:rgba(243,198,79,.1)}
@@ -2970,6 +3003,7 @@ var TVSFX = (function () {
     right: function () { tone(880, 0, 0.14, 'triangle', 0.1); tone(1318.5, 0.11, 0.32, 'triangle', 0.1); },
     wrong: function () { tone(155, 0, 0.42, 'square', 0.05); tone(110, 0, 0.42, 'square', 0.035); },
     tick: function () { tone(1200, 0, 0.035, 'square', 0.03); },
+    pulse: function (n) { tone([392, 440, 494, 523.3][n % 4], 0, 0.22, 'sine', 0.035); },   /* a soft, steady pulse while you type the Final */
     timeup: function () { [740, 622, 523].forEach(function (f, i) { tone(f, i * 0.16, 0.14, 'triangle', 0.08); }); }
   };
 })();
@@ -3026,6 +3060,19 @@ function triviaBoard(all) {
   var live = []; cells.forEach(function (col) { col.forEach(function (x) { if (x) live.push(x); }); });
   var dbl = shuffle(live.filter(function (x) { return x.v >= 600; }))[0]; if (dbl) dbl.dbl = true;
   var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true, lastDone = null, lastSec = 0;
+  /* Jonna, Nov 26, 2026: a 6-minute round clock (play as many squares as you can), then the Final Square */
+  var ROUND_MS = 6 * 60 * 1000, roundEnd = 0, roundOver = false, roundT = null, inFinal = false;
+  function mmss(ms) { var t = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
+  function roundChip() { return '<span class="tb-round" title="Time left on the board"><b id="tb-rt">' + mmss(roundEnd ? roundEnd - Date.now() : ROUND_MS) + '</b><i>left</i></span>'; }
+  function roundTick() {
+    if (!box.isConnected) { clearInterval(roundT); return; }
+    var left = roundEnd - Date.now();
+    box.querySelectorAll('#tb-rt').forEach(function (b) { b.textContent = mmss(left); b.parentNode.classList.toggle('hurry', left <= 30000); });
+    if (left <= 0 && !roundOver) {
+      roundOver = true; clearInterval(roundT); TVSFX.timeup();
+      if (!cur) toFinal('time');   /* a square that's open gets finished first */
+    }
+  }
   var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }), box = el.querySelector('#tg');
   el.classList.add('tg-sheet');
   function catColor(c) { var x = TRIVIA_CATS.filter(function (k) { return k[0] === c; })[0]; return x ? x[2] : '#74bfeb'; }
@@ -3034,17 +3081,18 @@ function triviaBoard(all) {
     cur = null;
     var back = !firstPaint;
     var snd = load('tv-sound', true) !== false, vc = TVVOICE.on();
-    box.innerHTML = '<div class="tb' + (firstPaint ? ' first' : ' back') + '"><div class="tb-top">' + scoreHtml() + '<span class="tb-tools">' +
+    box.innerHTML = '<div class="tb' + (firstPaint ? ' first' : ' back') + '"><div class="tb-top">' + scoreHtml() + roundChip() + '<span class="tb-tools">' +
       '<button type="button" class="tb-tg' + (snd ? ' on' : '') + '" data-tb-sound aria-pressed="' + snd + '" aria-label="Sounds" title="Sounds">' + icon('i-sound') + '</button>' +
       (TVVOICE.ok() ? '<button type="button" class="tb-tg' + (vc ? ' on' : '') + '" data-tb-voice aria-pressed="' + vc + '" aria-label="Read the answers aloud" title="Read the answers aloud">' + icon('i-voice') + '</button>' : '') +
       '<button type="button" class="tb-end" data-tb-end>End Game</button></span></div>' +
       '<div class="tb-wall"><div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c, i) { return '<div class="tb-h" style="--cc:' + catColor(c) + ';--i:' + i + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
       TB_VALUES.map(function (v, r) { return cats.map(function (c, k) { var x = cells[k][r];
         return '<button type="button" class="tb-c' + (x && x.done ? (x.ok ? ' ok' : ' no') + (x === lastDone ? ' just' : '') : '') + '" data-tb="' + k + '-' + r + '" style="--rd:' + Math.round(250 + Math.random() * 900) + 'ms"' + (!x || x.done ? ' disabled' : '') + ' aria-label="' + esc((TB_SHORT[c] || c) + ' for ' + v) + '"><span>' + (x ? v : '') + '</span></button>'; }).join(''); }).join('') + '</div></div>' +
-      '<p class="tb-note">Right adds the points, wrong takes them away, and running out of time costs nothing. One square is worth double.</p></div>';
+      '<p class="tb-note">Six minutes to play as many squares as you can, then the Final Square. Right adds the points, wrong takes them away, and running out of time on a square costs nothing. One square is worth double.</p></div>';
     if (!back) {   /* the board lighting up: a blip per square, as it flips on */
       var ms = []; box.querySelectorAll('.tb-c').forEach(function (c) { ms.push(parseInt(c.style.getPropertyValue('--rd'), 10) || 0); });
       cats.forEach(function (c, i) { TVSFX.head(i); }); TVSFX.fill(ms.sort(function (a, b) { return a - b; }));
+      roundEnd = Date.now() + ROUND_MS + 1600; roundT = setInterval(roundTick, 250);   /* the round starts once the board has lit up */
     }
     firstPaint = false; lastDone = null;
     if (back) box.scrollTop = 0;
@@ -3086,7 +3134,7 @@ function triviaBoard(all) {
   }
   function clueHtml(x) {
     var col = catColor(x.q.cat), val = x.dbl ? x.v * 2 : x.v;
-    return '<div class="tb-clue-wrap"><div class="tg-top">' + scoreHtml() + '<div class="tb-clock"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div></div>' +
+    return '<div class="tb-clue-wrap"><div class="tg-top">' + scoreHtml() + roundChip() + '<div class="tb-clock"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:' + col + '"/></svg><b id="tg-secs">' + SECS + '</b></div></div>' +
       '<div class="tb-clue" style="--cc:' + col + '"><div class="tb-clue-h"><span class="tb-clue-cat"><i></i>' + esc(x.q.cat) + '</span><span class="tb-clue-v">' + (x.dbl ? 'Double ' : '') + val.toLocaleString() + '</span></div><h3>' + esc(x.q.clue || x.q.q) + '</h3></div>' +
       (x.resp ? '<p class="tb-ask">Pick the question.</p>' : '') +
       '<div class="tg-ans">' + (x.resp || x.choices).map(function (c, n) { return '<button type="button" class="tg-a" data-a="' + n + '" style="--i:' + n + '"><span class="tg-l">' + 'ABCD'[n] + '</span><span>' + esc(c) + '</span></button>'; }).join('') + '</div></div>';
@@ -3122,11 +3170,90 @@ function triviaBoard(all) {
     var sc = box.querySelector('#tg-sc'); if (sc) sc.textContent = st.score.toLocaleString();
     setTimeout(function () {
       var w = box.querySelector('.tb-clue-wrap'); if (w) w.classList.add('leave');
-      setTimeout(function () { if (st.played >= live.length) end(); else paintBoard(); }, 280);
+      setTimeout(function () { if (roundOver || st.played >= live.length) toFinal(roundOver ? 'time' : 'done'); else paintBoard(); }, 280);
     }, ok ? 1300 : 2600);
   }
+  /* ---- the Final Square (Jonna, Nov 26, 2026): see the category, wager up to your score (up to 1,000 if you're at
+     zero or below), hear the answer, then 30 seconds to type the question. Right adds the wager, wrong takes it away. */
+  var FIN_SECS = 30, fin = null;
+  function toFinal(why) {
+    if (inFinal) return; inFinal = true; clearInterval(roundT); TVVOICE.stop(); cur = null;
+    var pool = (TQ && TQ.finals) || [], seenF = load('trivia-finals-seen', []);
+    var f = shuffle(pool.filter(function (x) { return seenF.indexOf(x.id) < 0; }))[0] || shuffle(pool.slice())[0];
+    if (!f || !st.played) { end(); return; }
+    var maxW = st.score > 0 ? st.score : 1000, col = catColor(f.cat);
+    fin = { f: f, maxW: maxW, wager: Math.min(maxW, Math.round(maxW / 2 / 100) * 100) };
+    box.innerHTML = '<div class="fs">' + (why === 'time' ? '<div class="fs-why">' + icon('i-clock') + 'Time\'s up on the board</div>' : '') +
+      '<div class="fs-title">Final Square</div>' +
+      '<div class="fs-cat" style="--cc:' + col + '"><span>The Category</span><b>' + esc(f.cat) + '</b></div>' +
+      '<div class="fs-wager"><div class="fs-score">' + scoreHtml() + '<span class="fs-max">Wager up to <b>' + maxW.toLocaleString() + '</b></span></div>' +
+      '<div class="fs-amt"><b id="fs-w">' + fin.wager.toLocaleString() + '</b></div>' +
+      '<input type="range" id="fs-r" min="0" max="' + maxW + '" step="' + (maxW >= 1000 ? 100 : 50) + '" value="' + fin.wager + '" aria-label="Your wager">' +
+      '<div class="fs-quick"><button type="button" data-fs-q="0">Nothing</button><button type="button" data-fs-q="0.5">Half</button><button type="button" data-fs-q="1">All of It</button></div>' +
+      '<button type="button" class="tv-go fs-lock" data-fs-lock>' + icon('i-check') + 'Lock In My Wager</button>' +
+      '<button type="button" class="linkbtn fs-skip" data-fs-skip>Skip the Final Square</button></div></div>';
+    TVSFX.dbl();
+    TVVOICE.say((why === 'time' ? 'Time\'s up on the board. ' : '') + 'It\'s time for the Final Square. The category is ' + f.cat + '. How much will you wager?');
+    var r = box.querySelector('#fs-r'); r.addEventListener('input', function () { setWager(+r.value); });
+  }
+  function setWager(v) { fin.wager = Math.max(0, Math.min(fin.maxW, Math.round(v))); var b = box.querySelector('#fs-w'); if (b) b.textContent = fin.wager.toLocaleString(); var r = box.querySelector('#fs-r'); if (r && +r.value !== fin.wager) r.value = fin.wager; }
+  function finalClue() {
+    var f = fin.f, col = catColor(f.cat); TVSFX.right();
+    box.innerHTML = '<div class="tb-clue-wrap fs-play"><div class="tg-top">' + scoreHtml() + '<span class="fs-bet">Wager <b>' + fin.wager.toLocaleString() + '</b></span>' +
+      '<div class="tb-clock"><svg class="tg-clock" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tg-ring" style="stroke:#f3c64f"/></svg><b id="tg-secs">' + FIN_SECS + '</b></div></div>' +
+      '<div class="tb-clue fs-card" style="--cc:' + col + '"><div class="tb-clue-h"><span class="tb-clue-cat"><i></i>' + esc(f.cat) + '</span><span class="tb-clue-v">Final Square</span></div><h3>' + esc(f.clue) + '</h3></div>' +
+      '<form class="fs-form" data-fs-form><label class="sr" for="fs-in">Your question</label><input id="fs-in" type="text" autocomplete="off" autocapitalize="sentences" spellcheck="false" maxlength="120" placeholder="What is …" disabled>' +
+      '<button type="submit" class="tv-go" disabled>' + icon('i-check') + 'Submit</button></form><p class="tb-ask">Type it as a question. Spelling slips are fine.</p></div>';
+    TVSFX.open();
+    TVVOICE.say(f.clue, function () {
+      if (!inFinal) return;
+      var inp = box.querySelector('#fs-in'), btn = box.querySelector('.fs-form button'); if (!inp) return;
+      inp.disabled = false; btn.disabled = false; inp.focus();
+      var t0f = performance.now(), last = 0;
+      (function ft() {
+        var ring = box.querySelector('#tg-ring'), sx = box.querySelector('#tg-secs'); if (!ring || fin.done) return;
+        var left = Math.max(0, FIN_SECS - (performance.now() - t0f) / 1000);
+        ring.style.strokeDashoffset = (326.7 * (1 - left / FIN_SECS)).toFixed(1); sx.textContent = Math.ceil(left); sx.classList.toggle('hurry', left <= 5);
+        var sec = Math.ceil(left); if (sec !== last) { last = sec; if (left <= 5 && left > 0) TVSFX.tick(); else if (left > 0) TVSFX.pulse(sec); }
+        if (left <= 0) { finalAnswer(true); return; }
+        fin.raf = requestAnimationFrame(ft);
+      })();
+    });
+  }
+  function finalNorm(t) {
+    return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&/g, ' and ').replace(/%/g, ' percent ')
+      .replace(/[^a-z0-9 ]+/g, ' ').replace(/^\s*(what|who|where|when|which)\s*(s|is|are|was|were)?\b/, ' ').replace(/\b(the|a|an)\b/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function lev(a, b) { var m = a.length, n = b.length, d = [], i, j; for (i = 0; i <= m; i++) d[i] = [i]; for (j = 0; j <= n; j++) d[0][j] = j;
+    for (i = 1; i <= m; i++) for (j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[m][n]; }
+  function finalRight(typed, answers) {
+    var t = finalNorm(typed); if (!t) return false;
+    return answers.some(function (a) {
+      a = finalNorm(a); if (!a) return false; if (t === a) return true;
+      if (/^\d/.test(a)) return (' ' + t + ' ').indexOf(' ' + a + ' ') >= 0 && t.replace(/\D/g, '') === a.replace(/\D/g, '');   /* numbers must be exact */
+      if (a.length >= 4 && (' ' + t + ' ').indexOf(' ' + a + ' ') >= 0) return true;
+      var slack = a.length >= 12 ? 2 : a.length >= 6 ? 1 : 0;
+      return slack > 0 && lev(t, a) <= slack;
+    });
+  }
+  function finalAnswer(timedOut) {
+    if (!fin || fin.done) return; fin.done = true; cancelAnimationFrame(fin.raf); TVVOICE.stop();
+    var inp = box.querySelector('#fs-in'), typed = inp ? inp.value.trim() : '', ok = finalRight(typed, fin.f.answers || []);
+    var pts = ok ? fin.wager : -fin.wager; st.score += pts;
+    var seenF = load('trivia-finals-seen', []); seenF.push(fin.f.id); save('trivia-finals-seen', seenF.slice(-40));
+    st.log.push({ q: { q: fin.f.clue, source: fin.f.source }, ok: ok, pick: typed, right: fin.f.response, pts: pts, clue: 'Final Square: ' + fin.f.clue });
+    if (ok) TVSFX.right(); else if (timedOut && !typed) TVSFX.timeup(); else TVSFX.wrong();
+    box.innerHTML = '<div class="fs fs-res ' + (ok ? 'ok' : 'no') + '"><div class="fs-title">' + (ok ? 'Correct!' : timedOut && !typed ? 'Time\'s Up' : 'Not Quite') + '</div>' +
+      '<div class="fs-cat"><span>The Question</span><b>' + esc(fin.f.response) + '</b></div>' +
+      (typed ? '<p class="fs-you">You wrote: <b>' + esc(typed) + '</b></p>' : '') +
+      '<div class="fs-delta">' + (pts >= 0 ? '+' : '&minus;') + Math.abs(pts).toLocaleString() + '</div>' +
+      '<button type="button" class="tv-go" data-fs-done>' + icon('i-star') + 'See My Final Score</button></div>';
+    TVVOICE.say((ok ? 'Correct! ' : '') + 'The question was, ' + fin.f.response);
+  }
+  box.addEventListener('input', function (e) { if (e.target && e.target.id === 'fs-r') setWager(+e.target.value); });
+  box.addEventListener('submit', function (e) { if (e.target.matches('[data-fs-form]')) { e.preventDefault(); finalAnswer(false); } });
   function end() {
-    TVVOICE.stop();
+    TVVOICE.stop(); clearInterval(roundT); inFinal = false;
     cancelAnimationFrame(timer);
     var ts = load('trivia-test', { best: 0, games: 0 }); ts.byLevel = ts.byLevel || {};
     var newBest = st.played > 0 && st.score > (ts.byLevel.Hard || 0);
@@ -3141,7 +3268,10 @@ function triviaBoard(all) {
   box.addEventListener('click', function (e) {
     var c = e.target.closest('[data-tb]'); if (c) { var kr = c.getAttribute('data-tb').split('-'); open(+kr[0], +kr[1]); return; }
     var a = e.target.closest('[data-a]'); if (a) { answer(+a.getAttribute('data-a')); return; }
-    if (e.target.closest('[data-tb-end]')) { end(); return; }
+    var fq = e.target.closest('[data-fs-q]'); if (fq) { setWager(fin.maxW * +fq.getAttribute('data-fs-q')); return; }
+    if (e.target.closest('[data-fs-lock]')) { TVVOICE.stop(); finalClue(); return; }
+    if (e.target.closest('[data-fs-skip]') || e.target.closest('[data-fs-done]')) { end(); return; }
+    if (e.target.closest('[data-tb-end]')) { if (st.played) toFinal('end'); else end(); return; }
     var tg = e.target.closest('[data-tb-sound],[data-tb-voice]');
     if (tg) {
       var k = tg.hasAttribute('data-tb-sound') ? 'tv-sound' : 'tv-voice', on = load(k, true) === false;

@@ -2984,5 +2984,389 @@
     "What is Section 502?"
    ]
   }
- ]
+ ],
+ "finals": [
+  {
+   "id": "f027",
+   "from": "q27",
+   "cat": "How MISMO Works",
+   "clue": "The Mortgage Bankers Association created MISMO in this year.",
+   "answers": [
+    "1999"
+   ],
+   "response": "What is 1999?",
+   "source": "https://nationalmortgageprofessional.com/news/mismo-25-honoring-past-building-foundation-future"
+  },
+  {
+   "id": "f045",
+   "from": "q45",
+   "cat": "Mortgage Industry",
+   "clue": "Fannie Mae was created in this year.",
+   "answers": [
+    "1938"
+   ],
+   "response": "What is 1938?",
+   "source": "https://www.britannica.com/topic/Fannie-Mae"
+  },
+  {
+   "id": "f046",
+   "from": "q46",
+   "cat": "Mortgage Industry",
+   "clue": "Freddie Mac was created in this year.",
+   "answers": [
+    "1970"
+   ],
+   "response": "What is 1970?",
+   "source": "https://www.britannica.com/topic/Fannie-Mae"
+  },
+  {
+   "id": "f047",
+   "from": "q47",
+   "cat": "Mortgage Industry",
+   "clue": "This organization issued the first mortgage-backed security, in 1970.",
+   "answers": [
+    "ginnie mae",
+    "government national mortgage association"
+   ],
+   "response": "What is Ginnie Mae?",
+   "source": "https://www.ginniemae.gov/about_us/who_we_are/pages/our_history.aspx"
+  },
+  {
+   "id": "f048",
+   "from": "q48",
+   "cat": "Mortgage Industry",
+   "clue": "Fannie Mae and Freddie Mac run the Uniform Mortgage Data Program at the direction of this agency.",
+   "answers": [
+    "federal housing finance agency",
+    "fhfa"
+   ],
+   "response": "What is the Federal Housing Finance Agency (FHFA)?",
+   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program"
+  },
+  {
+   "id": "f053",
+   "from": "q53",
+   "cat": "MISMO Standards",
+   "clue": "MISMO built its Remote Online Notarization (RON) standards together with this association.",
+   "answers": [
+    "american land title association",
+    "alta"
+   ],
+   "response": "What is the American Land Title Association?",
+   "source": "https://newslink.mba.org/mba-newslinks/2020/january/mba-newslink-monday-february-3-2020/amid-rapid-change-mismo-adapts/"
+  },
+  {
+   "id": "f009",
+   "from": "q09",
+   "cat": "Life of Loan",
+   "clue": "The Life of Loan Business Process Model is built with this notation.",
+   "answers": [
+    "bpmn",
+    "business process model and notation"
+   ],
+   "response": "What is BPMN (Business Process Model and Notation)?",
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "f010",
+   "from": "q10",
+   "cat": "Life of Loan",
+   "clue": "BPMN, the notation behind Life of Loan, is a standard from this organization.",
+   "answers": [
+    "object management group",
+    "omg"
+   ],
+   "response": "What is the Object Management Group?",
+   "source": "https://www.mismo.org/standards-resources/life-of-loan"
+  },
+  {
+   "id": "f005",
+   "from": "q05",
+   "cat": "MISMO Standards",
+   "clue": "Fannie Mae and Freddie Mac require every eNote to be registered here.",
+   "answers": [
+    "mers eregistry",
+    "mers e registry",
+    "eregistry",
+    "e registry"
+   ],
+   "response": "What is the MERS eRegistry?",
+   "source": "https://singlefamily.fanniemae.com/media/6536/display"
+  },
+  {
+   "id": "f006",
+   "from": "q06",
+   "cat": "MISMO Standards",
+   "clue": "The GSEs' Uniform Closing Dataset (UCD) supports this CFPB form.",
+   "answers": [
+    "closing disclosure"
+   ],
+   "response": "What is the Closing Disclosure?",
+   "source": "https://sf.freddiemac.com/faqs/umdp-faq"
+  },
+  {
+   "id": "f024",
+   "from": "q24",
+   "cat": "Business Glossary",
+   "clue": "ULDD stands for this.",
+   "answers": [
+    "uniform loan delivery dataset"
+   ],
+   "response": "What is the Uniform Loan Delivery Dataset?",
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet"
+  },
+  {
+   "id": "f120",
+   "from": "q120",
+   "cat": "Business Glossary",
+   "clue": "UMDP stands for this.",
+   "answers": [
+    "uniform mortgage data program"
+   ],
+   "response": "What is the Uniform Mortgage Data Program?",
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet"
+  },
+  {
+   "id": "f121",
+   "from": "q121",
+   "cat": "Business Glossary",
+   "clue": "UCDP stands for this.",
+   "answers": [
+    "uniform collateral data portal"
+   ],
+   "response": "What is the Uniform Collateral Data Portal?",
+   "source": "https://singlefamily.fanniemae.com/node/2811"
+  },
+  {
+   "id": "f123",
+   "from": "q123",
+   "cat": "Business Glossary",
+   "clue": "HPA, the 1998 law on PMI cancellation, stands for this.",
+   "answers": [
+    "homeowners protection act"
+   ],
+   "response": "What is the Homeowners Protection Act?",
+   "source": "https://files-prod.consumerfinance.gov/f/documents/201508_cfpb_compliance-bulletin_private-mortgage-insurance-cancellation-and-te_jpbfQUl.pdf"
+  },
+  {
+   "id": "f078",
+   "from": "q78",
+   "cat": "How MISMO Works",
+   "clue": "In the LADE DWG, LADE stands for this.",
+   "answers": [
+    "loan application data exchange"
+   ],
+   "response": "What is Loan Application Data Exchange?",
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment"
+  },
+  {
+   "id": "f122",
+   "from": "q122",
+   "cat": "Business Glossary",
+   "clue": "In MISMO's workgroup names, DWG stands for this.",
+   "answers": [
+    "development workgroup",
+    "development work group"
+   ],
+   "response": "What is Development Workgroup?",
+   "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment"
+  },
+  {
+   "id": "f140",
+   "from": "q140",
+   "cat": "Bootcamp and Certification",
+   "clue": "This federal document on voluntary consensus standards is CMSP preparation material.",
+   "answers": [
+    "omb circular a 119",
+    "circular a 119",
+    "a 119",
+    "a119"
+   ],
+   "response": "What is OMB Circular A-119?",
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+  },
+  {
+   "id": "f145",
+   "from": "q145",
+   "cat": "Bootcamp and Certification",
+   "clue": "Besides online classes, MISMO's August 2026 in-person Boot Camp was held in this city.",
+   "answers": [
+    "reston",
+    "reston va",
+    "reston virginia"
+   ],
+   "response": "What is Reston, Virginia?",
+   "source": "https://www.mismo.org/detail-pages/event/2026/08/26/default-calendar/mismo-boot-camp-august-2026-reston-va-82057"
+  },
+  {
+   "id": "f133",
+   "from": "q133",
+   "cat": "How MISMO Works",
+   "clue": "This company powers MISMO's Artificial Intelligence (AI) Community of Practice.",
+   "answers": [
+    "cotality"
+   ],
+   "response": "What is Cotality?",
+   "source": "https://www.mismo.org/get-involved/workgroup/artificial-intelligence-(ai)-community-of-practice-(cop)"
+  },
+  {
+   "id": "f128",
+   "from": "q128",
+   "cat": "How MISMO Works",
+   "clue": "This company ran MISMO's day-to-day operations from February 2009 until MBA took them back in December 2010.",
+   "answers": [
+    "merscorp",
+    "mers corp",
+    "mers"
+   ],
+   "response": "What is Merscorp?",
+   "source": "https://www.nationalmortgagenews.com/dailybriefing/2010_437/mba-mismo-mers-1026675-1.html?site=default_tech"
+  },
+  {
+   "id": "f129",
+   "from": "q129",
+   "cat": "How MISMO Works",
+   "clue": "MISMO became a not-for-profit subsidiary of MBA in this year.",
+   "answers": [
+    "2004"
+   ],
+   "response": "What is 2004?",
+   "source": "https://www.guidestar.org/profile/51-0502943"
+  },
+  {
+   "id": "f096",
+   "from": "q96",
+   "cat": "Mortgage Industry",
+   "clue": "The Federal Housing Administration (FHA) was created in this year.",
+   "answers": [
+    "1934"
+   ],
+   "response": "What is 1934?",
+   "source": "https://chicagoagentmagazine.com/?p=108854"
+  },
+  {
+   "id": "f152",
+   "from": "q152",
+   "cat": "Mortgage Industry",
+   "clue": "Freddie Mac issued the first conventional loan mortgage-backed security in this year.",
+   "answers": [
+    "1971"
+   ],
+   "response": "What is 1971?",
+   "source": "https://www.mortgagecalculator.org/resources/history-of-the-government-sponsored-enterprises.pdf"
+  },
+  {
+   "id": "f153",
+   "from": "q153",
+   "cat": "Mortgage Industry",
+   "clue": "This law created Freddie Mac in July 1970.",
+   "answers": [
+    "emergency home finance act",
+    "emergency home finance act of 1970"
+   ],
+   "response": "What is the Emergency Home Finance Act of 1970?",
+   "source": "https://www.heritage.org/node/11578"
+  },
+  {
+   "id": "f155",
+   "from": "q155",
+   "cat": "Mortgage Industry",
+   "clue": "This section of the National Housing Act pledges the full faith and credit of the United States to Ginnie Mae's guaranty.",
+   "answers": [
+    "306g",
+    "section 306g",
+    "306 g",
+    "section 306 g"
+   ],
+   "response": "What is Section 306(g)?",
+   "source": "https://www.ginniemae.gov/issuers/program_guidelines/Lists/MBSGuideAPMsLib/Attachments/173/App%20IV-04%2011717.pdf"
+  },
+  {
+   "id": "f100",
+   "from": "q100",
+   "cat": "MISMO Standards",
+   "clue": "Charlie Epperson, the eMortgage CoP co-chair quoted on the July 2026 SMART Doc guide, is with this company.",
+   "answers": [
+    "fundingshield",
+    "funding shield"
+   ],
+   "response": "What is FundingShield?",
+   "source": "https://nationalmortgageprofessional.com/news/mismo-updates-enote-standard-digital-mortgage-adoption-tops-32m-registered-loans"
+  },
+  {
+   "id": "f055",
+   "from": "q55",
+   "cat": "MISMO Standards",
+   "clue": "Freddie Mac receives the Uniform Closing Dataset (UCD) file through this tool.",
+   "answers": [
+    "loan closing advisor"
+   ],
+   "response": "What is Loan Closing Advisor?",
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet"
+  },
+  {
+   "id": "f101",
+   "from": "q101",
+   "cat": "MISMO Standards",
+   "clue": "Fannie Mae receives the Uniform Closing Dataset (UCD) through this tool.",
+   "answers": [
+    "ucd collection solution"
+   ],
+   "response": "What is the UCD Collection Solution?",
+   "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet"
+  },
+  {
+   "id": "f106",
+   "from": "q106",
+   "cat": "MISMO Standards",
+   "clue": "The redesigned Uniform Appraisal Dataset brings this new appraisal form.",
+   "answers": [
+    "uniform residential appraisal report",
+    "urar"
+   ],
+   "response": "What is the Uniform Residential Appraisal Report (URAR)?",
+   "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program/umdp-announcements?page=2"
+  },
+  {
+   "id": "f037",
+   "from": "q37",
+   "cat": "Bootcamp and Certification",
+   "clue": "This score passes the CMSP exam.",
+   "answers": [
+    "75",
+    "75 percent",
+    "seventy five",
+    "seventy five percent"
+   ],
+   "response": "What is 75%?",
+   "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide"
+  },
+  {
+   "id": "f044",
+   "from": "q44",
+   "cat": "Mortgage Industry",
+   "clue": "Under federal law, PMI generally ends automatically when the balance is scheduled to reach this share of the home's original value.",
+   "answers": [
+    "78",
+    "78 percent",
+    "seventy eight",
+    "seventy eight percent"
+   ],
+   "response": "What is 78%?",
+   "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/"
+  },
+  {
+   "id": "f132",
+   "from": "q132",
+   "cat": "How MISMO Works",
+   "clue": "This members-only exchange tells you how \"E\" your loan can be with each of your counterparties.",
+   "answers": [
+    "e eligibility exchange",
+    "eeligibility exchange"
+   ],
+   "response": "What is the E-Eligibility Exchange?",
+   "source": "https://www.mismo.org/membership/join-mismo"
+  }
+ ],
+ "finalsNote": "Final Square answers (Nov 26, 2026), each built from the fact in the question it names (from), for Jonna's review. Typed answers are checked loosely: \"What is\" and \"the\" are optional, punctuation is ignored, and a small spelling slip in a longer answer counts."
 }
