@@ -521,6 +521,12 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .bk-n span{font-size:10.5px; font-weight:600; color:var(--sky-soft)}
 .bk-tx{grid-column:2 / -1; font-size:14px; color:rgba(255,255,255,.88)}
 .bk-tx b{color:#fff}
+.postcard .d-actions{margin-top:18px}
+.block.solo{margin:14px 0 0; background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--sky); -webkit-backdrop-filter:none; backdrop-filter:none; color:var(--ink)}
+.block.solo .ring .tr{stroke:var(--surface-3)}
+.block.solo .ring .fg{stroke:#2477b8}
+.block.solo .bk-n b{color:var(--ink)} .block.solo .bk-n span{color:var(--ink-3)}
+.block.solo .bk-tx{color:var(--ink-2)} .block.solo .bk-tx b{color:var(--ink)}
 .btn.sky{background:var(--sky); border-color:var(--sky); color:#06202f}
 .btn.ghost{background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.35); color:#fff}
 .info-rail{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(250px, 78%); gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; margin:14px -14px 0; padding:2px 14px 8px; scrollbar-width:none}
@@ -2355,14 +2361,16 @@ function renderExplore() {
     h += '<section class="postcard" aria-label="' + esc(g.venue) + '">' + summitArt({ noFade: true, moon: [1158, 124, .48] }) + '<div class="pc-city" aria-hidden="true">' + esc(city) + '</div><div class="pc-body">' +
       '<div class="pc-eye">' + icon('i-hotel') + 'Your Home Base</div><h1 class="pc-venue">' + esc(g.venue) + '</h1>' +
       '<div class="when"><span>' + icon('i-pin') + esc(g.address || '') + '</span><span>' + icon('i-agenda') + esc(g.dates) + '</span></div>';
+    /* Jonna, Nov 26, 2026: the room-block countdown sits under the postcard, not in it */
+    var bk = '';
     if (co) {
       var pct = Math.max(0, Math.min(1, co.left / 60)), circ = 2 * Math.PI * 26;
-      h += '<div class="block"><svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="tr"/><circle cx="32" cy="32" r="26" class="fg" style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + (circ * (1 - pct)).toFixed(1) + '"/></svg>' +
+      bk = '<div class="block solo"><svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="tr"/><circle cx="32" cy="32" r="26" class="fg" style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + (circ * (1 - pct)).toFixed(1) + '"/></svg>' +
         '<div class="bk-n"><b>' + (co.left > 0 ? co.left : 0) + '</b><span>' + (co.left === 1 ? 'Day' : 'Days') + '</span></div>' +
         '<div class="bk-tx">' + (co.left > 0 ? '<b>Left to book the MISMO rate.</b> The room block closes ' + esc(co.label) + ', or sooner if it fills.' : co.left === 0 ? '<b>The room block closes today.</b>' : '<b>The room block has closed.</b> The hotel may still have rooms at its own rate.') + '</div></div>';
     }
     h += '<div class="d-actions">' + (g.book && (!co || co.left >= 0) ? '<a class="btn primary sky" href="' + esc(g.book) + '" target="_blank" rel="noopener">' + icon('i-hotel') + 'Book Your Room</a>' : '') +
-      '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></section>' + wifiCard();
+      '<a class="btn ghost" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a></div></div></section>' + bk + wifiCard();
     if (v && v.cards.length) h += '<div class="info-rail" role="list">' + v.cards.map(function (c) {
       return '<div class="infocard" role="listitem"><span class="ic">' + icon(infoIcon(c.name, c.text)) + '</span><b>' + esc(c.name) + '</b>' + noBelow(c.text).split(/\n\n/).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
     }).join('') + '</div>';

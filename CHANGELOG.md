@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Explore: the days-left-to-book countdown moved out of the hotel postcard to its own card just under it.
 - Nov 26, 2026: Explore: the "Updated" line at the bottom is gone.
 - Nov 26, 2026: The moon moved clear of the words on the summit home card and the Explore postcard; the sponsor band is back to its own art.
 - Nov 26, 2026: The New Orleans scene is the background of every summit header: the dashboard tile, the summit home card, the Why Attend closing card, the Explore postcard (its outlined NEW ORLEANS kept), the sponsor band and the Sponsors page (those two without the streetcar).
