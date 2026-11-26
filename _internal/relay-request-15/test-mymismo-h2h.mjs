@@ -1,4 +1,4 @@
-/* MyMISMO Trivia Head to Head (relay request 16). Run: node test-mymismo16.mjs.
+/* MyMISMO Trivia Head to Head (relay request 15). Run: node test-mymismo-h2h.mjs.
  * A stand-in GitHub and mail flow, as test-mymismo14.mjs. Every person, address and question here is made up. */
 const ORIGIN = 'https://resources.example';
 Object.assign(process.env, { GITHUB_TOKEN: 'ghp_test', AUTH_SECRET: 'mymismo-test-secret', PROJECTS_REPO: 'Org/Config', DIRECTORY_REPO: 'Org/Accounts', MAIL_FLOW_URL: 'https://flow.example/mail' });
@@ -11,6 +11,7 @@ put('Org/Accounts:access.json', { people: {} });
 const CATS = ['Standards', 'Life of Loan', 'Glossary', 'How MISMO Works', 'Certs', 'Mortgage'];
 const QS = [];
 CATS.forEach((c, i) => { for (let k = 0; k < 8; k++) QS.push({ id: `h${i}-${k}`, cat: c, q: `Hard ${c} ${k}?`, choices: ['A' + k, 'B' + k, 'C' + k, 'D' + k], answer: k % 4, level: 3, source: 'https://example.org/s' }); });
+CATS.forEach((c, i) => { for (let k = 0; k < 6; k++) QS.push({ id: `m${i}-${k}`, cat: c, q: `Medium ${c} ${k}?`, choices: ['A' + k, 'B' + k, 'C' + k, 'D' + k], answer: (k + 1) % 4, level: 2, source: 'https://example.org/s' }); });
 QS.push({ id: 'e1', cat: 'Standards', q: 'Easy?', choices: ['a', 'b', 'c', 'd'], answer: 0, level: 1 });
 put('Org/MyMismoData:trivia/questions.json', { questions: QS });
 const mails = [];
@@ -70,9 +71,31 @@ const alexId = (J(await call('GET', '/mymismo/trivia/h2h/players?q=al', { tok: p
 /* Challenge Someone: Pat plays first, then it's Alex's turn */
 r = await H('/challenge', pat, { to: alexId }); d = J(r);
 ok('challenge: starts Pat’s round straight away', r.statusCode === 200 && d.round && d.game && d.opponent === 'Alex K.' && d.second === false, d);
-const g1 = d.game;
+const g1 = d.game, R1 = d.round, saved = file('trivia/rounds.json').docs[R1], cats = saved.ids.map(id => QS.find(q => q.id === id).cat);
+let fin;
+ok('round: 10 Medium questions, Mixed (every category, none more than twice)', saved.ids.length === 10 && saved.ids.every(id => QS.find(q => q.id === id).level === 2) && CATS.every(c => cats.includes(c) && cats.filter(x => x === c).length <= 2), cats);
 d = J(await H('', alex)); ok('challenge: Alex doesn’t see it while Pat is still playing', d.games.length === 0, d);
-let fin = await play(pat, 7, 4000, { round: J(r).round });
+r = await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }); d = J(r);
+ok('next: question without the answer, 20 seconds', r.statusCode === 200 && d.n === 0 && d.choices.length === 4 && !('answer' in d) && d.secs === 20 && !r.body.includes('example.org/s'), d);
+const q0 = d, real0 = bank.get(q0.q); T += 4000;
+d = J(await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }));
+ok('next: asking again never restarts the clock', d.n === 0 && d.left === 16000, d);
+r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 1, choice: 0 } }); ok('answer: can’t skip ahead', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 0, choice: q0.choices.indexOf(real0.choices[real0.answer]) } }); d = J(r);
+ok('answer: right in 4 seconds (3 after the network allowance) = 1,387', d.right === true && d.points === 1387 && d.done === false, d);
+r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 0, choice: 0 } }); ok('answer: once only', r.statusCode === 409);
+const q1 = J(await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } })), real1 = bank.get(q1.q); T += 1000;
+d = J(await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 1, choice: q1.choices.indexOf(real1.choices[real1.answer]) } }));
+ok('answer: two in a row adds 150, instant answer 1,500', d.points === 1650 && d.streak === 2, d);
+const q2 = J(await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } })), real2 = bank.get(q2.q); T += 22000;
+d = J(await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 2, choice: q2.choices.indexOf(real2.choices[real2.answer]) } }));
+ok('answer: past 20 seconds (plus 1) scores 0 even if right', d.right === false && d.points === 0 && d.late === true && d.streak === 0, d);
+r = await call('POST', '/mymismo/trivia/next', { tok: alex, body: { round: R1 } }); ok('next: someone else’s round is refused', r.statusCode === 404);
+for (let n = 3; n < 10; n++) {
+  const q = J(await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } })), real = bank.get(q.q); T += 4000;
+  fin = { last: J(await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: q.n, choice: n < 8 ? q.choices.indexOf(real.choices[real.answer]) : (q.choices.indexOf(real.choices[real.answer]) + 1) % 4 } })) };
+}
+ok('round: removed once finished', !file('trivia/rounds.json').docs[R1]);
 ok('challenge: Pat’s score is in, the game is waiting for Alex', fin.last.done && fin.last.h2h && fin.last.game.state === 'waiting' && fin.last.game.you.total > 0, fin.last);
 ok('challenge: a Head to Head round never goes on the leaderboard', !board(), board());
 d = J(await H('', alex)); const g1a = d.games.find(x => x.id === g1);

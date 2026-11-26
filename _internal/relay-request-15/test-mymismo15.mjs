@@ -11,6 +11,7 @@ put('Org/Accounts:access.json', { people: {} });
 const CATS = ['Standards', 'Life of Loan', 'Glossary', 'How MISMO Works', 'Certs', 'Mortgage'];
 const QS = [];
 CATS.forEach((c, i) => { for (let k = 0; k < 8; k++) QS.push({ id: `h${i}-${k}`, cat: c, q: `Hard ${c} ${k}?`, choices: ['A' + k, 'B' + k, 'C' + k, 'D' + k], answer: k % 4, level: 3, source: 'https://example.org/s' }); });
+CATS.forEach((c, i) => { for (let k = 0; k < 6; k++) QS.push({ id: `m${i}-${k}`, cat: c, q: `Medium ${c} ${k}?`, choices: ['A' + k, 'B' + k, 'C' + k, 'D' + k], answer: (k + 1) % 4, level: 2, source: 'https://example.org/s' }); });
 QS.push({ id: 'e1', cat: 'Standards', q: 'Easy?', choices: ['a', 'b', 'c', 'd'], answer: 0, level: 1 });
 put('Org/MyMismoData:trivia/questions.json', { questions: QS });
 const mails = [];
@@ -39,17 +40,17 @@ async function signIn(email, first, last, ip = '203.0.113.9') {
   await call('POST', '/mymismo/trivia/code', { body: { email, startedAt: T - 9000 }, ip });
   return J(await call('POST', '/mymismo/trivia/verify', { body: { email, code: codeFor(email.toLowerCase()), first, last }, ip }));
 }
-/* plays a whole round; right = how many to get right; ms = how long each answer takes */
+/* plays a Board: right on the first n squares (the 200s across, then the 400s), then ends it */
+const CELLS = [0, 1, 2, 3, 4].flatMap(rw => [0, 1, 2, 3, 4, 5].map(c => c + '-' + rw));
 async function play(tok, right, ms = 3000) {
-  const rd = J(await call('POST', '/mymismo/trivia/round', { tok, body: {} }));
+  const st = J(await call('POST', '/mymismo/trivia/play/start', { tok, body: {} }));
   let last;
-  for (let i = 0; i < 10; i++) {
-    const q = J(await call('POST', '/mymismo/trivia/next', { tok, body: { round: rd.round } }));
-    const real = bank.get(q.q), good = q.choices.indexOf(real.choices[real.answer]);
-    T += ms;
-    last = J(await call('POST', '/mymismo/trivia/answer', { tok, body: { round: rd.round, n: q.n, choice: i < right ? good : (good + 1) % 4 } }));
+  for (let i = 0; i < right; i++) {
+    const q = J(await call('POST', '/mymismo/trivia/play/pick', { tok, body: { cell: CELLS[i] } })), real = bank.get(q.q); T += ms;
+    last = J(await call('POST', '/mymismo/trivia/play/answer', { tok, body: { cell: CELLS[i], choice: q.choices.indexOf(real.choices[real.answer]) } }));
   }
-  return { rd, last };
+  last = J(await call('POST', '/mymismo/trivia/play/end', { tok, body: {} }));
+  return { st, last };
 }
 let r, d;
 
@@ -58,9 +59,9 @@ setProjects(ENTRY);
 r = await call('GET', '/mymismo/trivia/ready'); ok('off: 404 until trivia is true', r.statusCode === 404);
 setProjects({ ...ENTRY, trivia: true });
 r = await call('GET', '/mymismo/trivia/ready'); d = J(r);
-ok('ready: month and quarter in Eastern time', r.statusCode === 200 && d.month === '2027-01' && d.quarter === '2027-Q1' && d.secs === 15 && d.champ === null, d);
+ok('ready: month and quarter in Eastern time', r.statusCode === 200 && d.month === '2027-01' && d.quarter === '2027-Q1' && d.board.secs === 20 && d.headToHead.count === 10 && d.champ === null, d);
 r = await call('GET', '/mymismo/trivia/nope'); ok('unknown route 404', r.statusCode === 404);
-r = await call('GET', '/mymismo/trivia/round'); ok('wrong method 405', r.statusCode === 405);
+r = await call('GET', '/mymismo/trivia/play/start'); ok('wrong method 405', r.statusCode === 405);
 
 /* sign-in */
 r = await call('POST', '/mymismo/trivia/code', { body: { email: 'pat@example.org', startedAt: T - 9000 }, origin: 'https://evil.example' }); ok('code: other site refused', r.statusCode === 403);
@@ -84,53 +85,49 @@ r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'sam@example.o
 ok('verify: a code is spent after 5 wrong tries', r.statusCode === 401 || ['123450','123451','123452','123453','123454'].includes(codeFor('sam@example.org')));
 
 /* tokens: an attendee or staff-style token can't play */
-r = await call('POST', '/mymismo/trivia/round', { body: {} }); ok('round: needs sign-in', r.statusCode === 401);
-r = await call('POST', '/mymismo/trivia/round', { body: {}, tok: 'a.b.c' }); ok('round: a bad token is refused', r.statusCode === 401);
-r = await call('POST', '/mymismo/trivia/round', { body: {}, tok: pat, origin: 'https://evil.example' }); ok('round: other site refused', r.statusCode === 403);
+r = await call('POST', '/mymismo/trivia/play/start', { body: {} }); ok('board: needs sign-in', r.statusCode === 401);
+r = await call('POST', '/mymismo/trivia/play/start', { body: {}, tok: 'a.b.c' }); ok('board: a bad token is refused', r.statusCode === 401);
+r = await call('POST', '/mymismo/trivia/play/start', { body: {}, tok: pat, origin: 'https://evil.example' }); ok('board: other site refused', r.statusCode === 403);
 
-/* a round */
-r = await call('POST', '/mymismo/trivia/round', { tok: pat, body: {} }); d = J(r);
-ok('round: started', r.statusCode === 200 && /^R/.test(d.round) && d.count === 10 && d.secs === 15, d);
-const R1 = d.round, saved = file('trivia/rounds.json').docs[R1];
-const cats = saved.ids.map(id => QS.find(q => q.id === id).cat);
-ok('round: 10 Hard questions only', saved.ids.length === 10 && saved.ids.every(id => QS.find(q => q.id === id).level === 3));
-ok('round: Mixed, every category at least once, none more than twice', CATS.every(c => cats.includes(c)) && CATS.every(c => cats.filter(x => x === c).length <= 2), cats);
-r = await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }); d = J(r);
-ok('next: question without the answer', r.statusCode === 200 && d.n === 0 && d.choices.length === 4 && !('answer' in d) && !r.body.includes('example.org/s'), d);
-const q0 = d, real0 = bank.get(q0.q);
+/* the Board: the monthly leaderboard game */
+r = await call('POST', '/mymismo/trivia/play/start', { tok: pat, body: {} }); d = J(r);
+ok('board: six categories, five values, no questions handed out yet', r.statusCode === 200 && d.cats.length === 6 && d.values.join() === '200,400,600,800,1000' && d.squares === 30 && !r.body.includes('Hard ') && !r.body.includes('Medium '), d);
+const pl0 = file('trivia/plays.json').docs, myPlay = Object.values(pl0)[0];
+ok('board: 200s and 400s are Medium questions, 600 up Hard, all different', Object.entries(myPlay.cells).every(([k, x]) => QS.find(q => q.id === x.id).level === (Number(k[2]) < 2 ? 2 : 3)) && new Set(Object.values(myPlay.cells).map(x => x.id)).size === 30);
+const dblCell = Object.keys(myPlay.cells).find(k => myPlay.cells[k].dbl);
+ok('board: one hidden Double square, worth 600 or more', Object.values(myPlay.cells).filter(x => x.dbl).length === 1 && myPlay.cells[dblCell].value >= 600);
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: '0-4', choice: 0 } }); ok('board: answer only a square you opened', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '0-4' } }); d = J(r);
+ok('board: opening a square shows its question, without the answer', r.statusCode === 200 && d.choices.length === 4 && !('answer' in d) && d.left === 20000 && (d.value === 1000 || d.value === 2000), d);
+const q04 = d, real04 = bank.get(q04.q);
 T += 4000;
-r = await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }); d = J(r);
-ok('next: asking again gives the same question and never restarts the clock', d.n === 0 && d.q === q0.q && d.left === 11000, d);
-r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 1, choice: 0 } }); ok('answer: can’t skip ahead', r.statusCode === 409);
-const good0 = q0.choices.indexOf(real0.choices[real0.answer]);
-r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 0, choice: good0 } }); d = J(r);
-ok('answer: right in 4 seconds (3 after the network allowance) = 1,800', d.right === true && d.points === 1800 && d.total === 1800 && d.answer === good0 && d.done === false, d);
-r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 0, choice: good0 } }); ok('answer: once only', r.statusCode === 409);
-r = await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }); const q1 = J(r), real1 = bank.get(q1.q);
-T += 1000;
-r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 1, choice: q1.choices.indexOf(real1.choices[real1.answer]) } }); d = J(r);
-ok('answer: two in a row adds 200, instant answer 2,000', d.points === 2200 && d.streak === 2 && d.total === 4000, d);
-r = await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }); const q2 = J(r), real2 = bank.get(q2.q);
-T += 17000;
-r = await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: 2, choice: q2.choices.indexOf(real2.choices[real2.answer]) } }); d = J(r);
-ok('answer: past 15 seconds (plus 1) scores 0 even if right', d.right === false && d.points === 0 && d.late === true && d.streak === 0, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '0-4' } }); ok('board: opening it again never restarts the clock', J(r).left === 16000, J(r));
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '1-0' } }); ok('board: answer the open square first', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: '0-4', choice: q04.choices.indexOf(real04.choices[real04.answer]) } }); d = J(r);
+ok('board: right adds the square’s value', d.right === true && d.points === q04.value && d.total === q04.value && d.done === false, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '0-4' } }); ok('board: a square is played once', r.statusCode === 409);
+let wrongCell = ['1-0', '2-0'].find(c => c !== dblCell);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: wrongCell } }); d = J(r); const qw = bank.get(d.q);
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: wrongCell, choice: (d.choices.indexOf(qw.choices[qw.answer]) + 1) % 4 } }); d = J(r);
+ok('board: wrong takes the value away', d.right === false && d.points === -200 && d.total === q04.value - 200, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '3-0' } }); d = J(r); const ql = bank.get(d.q);
+T += 22000;
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: '3-0', choice: d.choices.indexOf(ql.choices[ql.answer]) } }); d = J(r);
+ok('board: past 20 seconds (plus 1) scores 0, right or not, and costs nothing', d.right === false && d.points === 0 && d.late === true && d.total === q04.value - 200, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '4-0' } }); T += 30000;
+r = await call('GET', '/mymismo/trivia/play', { tok: pat }); d = J(r);
+ok('board: pick up where you left off; a square left open past its time counts as no answer', d.active === true && d.open === null && d.played['4-0'] && d.played['4-0'].points === 0 && Object.keys(d.played).length === 4 && !r.body.includes('Hard '), d);
 const sam = (await signIn('sam2@example.org', 'Sam', 'Roe')).token;
-r = await call('POST', '/mymismo/trivia/next', { tok: sam, body: { round: R1 } }); ok('next: someone else’s round is refused', r.statusCode === 404);
-for (let n = 3; n < 10; n++) {
-  const q = J(await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } })); T += 1000;
-  d = J(await call('POST', '/mymismo/trivia/answer', { tok: pat, body: { round: R1, n: q.n, choice: -1 } }));
-}
-ok('round: done after 10, saved to January’s board', d.done === true && d.saved === true && d.month === '2027-01' && d.best === 4000, d);
-ok('round: removed once finished', !file('trivia/rounds.json').docs[R1]);
-ok('seen: the 10 questions are remembered', file('trivia/seen.json').docs && Object.values(file('trivia/seen.json').docs)[0].length === 10);
-r = await call('POST', '/mymismo/trivia/next', { tok: pat, body: { round: R1 } }); ok('next: a finished round is over', r.statusCode === 404);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: sam, body: { cell: '0-0' } }); ok('board: someone else’s board isn’t yours to play', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/play/end', { tok: pat, body: {} }); d = J(r);
+ok('board: ending it puts the score on January’s leaderboard', d.done === true && d.saved === true && d.month === '2027-01' && d.best === q04.value - 200, d);
+ok('board: removed once ended', !file('trivia/plays.json').docs[Object.keys(pl0)[0]]);
+ok('seen: the questions played are remembered', Object.values(file('trivia/seen.json').docs)[0].length === 4);
 
-/* the next round prefers questions not seen yet */
-r = await call('POST', '/mymismo/trivia/round', { tok: pat, body: {} }); const R2 = J(r).round;
-const seen1 = Object.values(file('trivia/seen.json').docs)[0];
-ok('round: rotates to questions not seen yet', file('trivia/rounds.json').docs[R2].ids.every(id => !seen1.includes(id)));
-r = await call('POST', '/mymismo/trivia/round', { tok: pat, body: {} }); const R3 = J(r).round;
-ok('round: a new round ends the old one', !file('trivia/rounds.json').docs[R2] && !!file('trivia/rounds.json').docs[R3]);
+/* a new board prefers questions not seen yet, and starting one scores an unfinished one */
+r = await call('POST', '/mymismo/trivia/play/start', { tok: pat, body: {} });
+const seen1 = Object.values(file('trivia/seen.json').docs)[0], pl1 = Object.values(file('trivia/plays.json').docs)[0];
+ok('board: the next board leaves out questions already seen', Object.values(pl1.cells).every(x => !seen1.includes(x.id)));
 
 /* best round only */
 T += 60000; await play(pat, 10, 1000);
@@ -138,7 +135,7 @@ let bd = file('trivia/board-2027-01.json').docs; const patId = Object.keys(bd).f
 const best = bd[patId].best;
 T += 60000; await play(pat, 2, 1000);
 bd = file('trivia/board-2027-01.json').docs;
-ok('board: keeps only the single best round', bd[patId].best === best && best > 4000 && bd[patId].rounds === 3, bd[patId]);
+ok('board: keeps only the single best board', bd[patId].best === best && best === 2800 && bd[patId].rounds === 3, bd[patId]);
 T += 60000; await play(sam, 10, 2000);
 r = await call('GET', '/mymismo/trivia/board?month=2027-01', { tok: sam }); d = J(r);
 ok('board: ranked, names only, and “me”', r.statusCode === 200 && d.rows.length === 2 && d.rows[0].name === 'Pat L.' && d.rows[1].name === 'Sam R.' && d.me && d.me.rank === 2 && !r.body.includes('@'), d);
@@ -286,7 +283,7 @@ r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'appreview@exa
 ok('review: trivia sign-in with the same fixed code', r.statusCode === 200 && d.me.name === 'App Review', d);
 T = Date.parse('2027-01-21T15:00:00Z'); __resetMyMismoLimits();
 const rvRound = await play(d.token, 10, 1000);
-ok('review: a reviewer’s round is never on the leaderboard', rvRound.last.done === true && rvRound.last.review === true && !JSON.stringify(file('trivia/board-2027-01.json')).includes('App Review'), rvRound.last);
+ok('review: a reviewer’s board is never on the leaderboard', rvRound.last.done === true && rvRound.last.saved === false && !JSON.stringify(file('trivia/board-2027-01.json')).includes('App Review'), rvRound.last);
 
 T = realNow();
 /* MISMO staff are in Summit HQ's list twice: their registration (with their title) and the staff roster ("MISMO" only) */

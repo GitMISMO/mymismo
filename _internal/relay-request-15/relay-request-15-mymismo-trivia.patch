@@ -183,7 +183,7 @@
        const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
        th.m = Array.isArray(th.m) ? th.m : [];
        th.m.push({ f: who.id, t: text, at: now });
-@@ -2914,6 +2967,597 @@
+@@ -2914,6 +2967,841 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -236,9 +236,10 @@
 + * board and champ reads 600 an hour from one address. The only email sent is the sign-in code, to the person who
 + * asked for it (kind mymismo-trivia-code, through the same mail flow).
 + * ===================================================================================== */
-+const MM15 = { codes: 'trivia/codes.json', players: 'trivia/players.json', bank: 'trivia/questions.json', rounds: 'trivia/rounds.json', seen: 'trivia/seen.json' };
++const MM15 = { plays: 'trivia/plays.json', codes: 'trivia/codes.json', players: 'trivia/players.json', bank: 'trivia/questions.json', rounds: 'trivia/rounds.json', seen: 'trivia/seen.json' };
 +const MM15_LIMITS = { code: 5, codeEmail: 3, codeAll: 300, verify: 20, round: 30, answer: 600, read: 600, champ: 120 };
-+const MM15_SECS = 15, MM15_MULT = 2, MM15_COUNT = 10, MM15_NET_MS = 1000, MM15_ROUND_TTL = 3_600_000;
++/* Jonna, Nov 25, 2026: the monthly leaderboard is the Board (Hard); Head to Head is 10 Medium questions (20 seconds, 1.5x) */
++const MM15_SECS = 20, MM15_MULT = 1.5, MM15_COUNT = 10, MM15_NET_MS = 1000, MM15_ROUND_TTL = 3_600_000, MM15_PLAY_SECS = 20, MM15_PLAY_STALE = 86_400_000;
 +const MM15_VALUES = [200, 400, 600, 800, 1000];
 +const mm15Secret = () => createHmac('sha256', process.env.AUTH_SECRET || '').update('mymismo-player-token-v1').digest('hex');
 +const mm15IdOf = email => createHash('sha256').update('mymismo-player:' + email).digest('hex').slice(0, 16);
@@ -253,10 +254,10 @@
 +const mm15QuarterOf = m => m.slice(0, 4) + '-Q' + Math.ceil(Number(m.slice(5)) / 3);
 +const mm15MonthsOf = q => { const y = q.slice(0, 4), k = Number(q.slice(6)); return [1, 2, 3].map(i => y + '-' + String((k - 1) * 3 + i).padStart(2, '0')); };
 +const mm15Show = (first, last) => (mmStr(first, 40) + (mmStr(last, 40) ? ' ' + mmStr(last, 40)[0].toUpperCase() + '.' : '')).trim();
-+/* the same score the app's test round shows: 1,000 to 2,000 on Hard by speed, 200 more from two right in a row */
++/* the same score the app's Medium round shows: 750 to 1,500 by speed, 150 more from two right in a row */
 +function mm15Points(ms, streak) {
 +  const used = Math.min(Math.max(ms - MM15_NET_MS, 0), MM15_SECS * 1000) / 1000;
-+  return Math.floor((1 - (used / MM15_SECS) / 2) * 1000 * MM15_MULT) + (streak >= 2 ? 100 * MM15_MULT : 0);
++  return Math.floor((1 - (used / MM15_SECS) / 2) * 1000 * MM15_MULT) + (streak >= 2 ? Math.round(100 * MM15_MULT) : 0);
 +}
 +function mm15Shuffle(n) { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = randomInt(0, i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 +
@@ -344,9 +345,9 @@
 +  return respond(200, { token, me: { id, name: me.name }, expiresAt: new Date(exp * 1000).toISOString() });
 +}
 +
-+/* --- ranked rounds: 10 Hard questions, Mixed (every category once before any twice, none more than twice) --- */
++/* --- Head to Head rounds: 10 Medium questions, Mixed (every category once before any twice, none more than twice) --- */
 +function mm15Pick(qs, seen, count) {
-+  const hard = qs.filter(q => Number(q.level) === 3 && !q.champ), have = new Set(seen);
++  const med = qs.filter(q => Number(q.level || 2) === 2 && !q.champ), hard = med.length >= count * 2 ? med : qs.filter(q => !q.champ), have = new Set(seen);
 +  const cats = [...new Set(hard.map(q => q.cat))];
 +  const pool = cats.map(c => { const all = hard.filter(q => q.cat === c), fresh = all.filter(q => !have.has(q.id)), again = all.filter(q => have.has(q.id));
 +    const order = a => mm15Shuffle(a.length).map(i => a[i]); return [...order(fresh), ...order(again)]; });
@@ -355,24 +356,21 @@
 +    for (const i of mm15Shuffle(cats.length)) { if (out.length >= count) break; const q = pool[i].shift(); if (q) out.push(q); }
 +  return mm15Shuffle(out.length).map(i => out[i]);
 +}
-+async function mm15Round(event, proj, headers, who) {
-+  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
-+  const now = Date.now();
-+  if (!mmAllowed('t-round', who.id, MM15_LIMITS.round, now)) return respond(429, { error: 'TOO_MANY', message: 'That’s a lot of rounds in an hour. Please wait a bit.' });
-+  const bank = await mm15Bank(proj); if (bank.error) return mm15Busy();
-+  const seenR = await readFile(proj.repo, proj.branch || 'main', MM15.seen); if (seenR.status !== 200 && seenR.status !== 404) return mm15Busy();
++async function mm15Picks(proj, bank, who) {
++  const seenR = await readFile(proj.repo, proj.branch || 'main', MM15.seen); if (seenR.status !== 200 && seenR.status !== 404) return { error: true };
 +  const seen = (seenR.data && seenR.data.docs && seenR.data.docs[who.id]) || [];
-+  const picks = mm15Pick(bank.qs, Array.isArray(seen) ? seen : [], MM15_COUNT);
-+  if (picks.length < MM15_COUNT) return respond(503, { error: 'NOT_READY', message: 'Ranked rounds open once there are enough Hard questions.' });
++  return mm15Pick(bank.qs, Array.isArray(seen) ? seen : [], MM15_COUNT);
++}
++/* a round of the given questions for a Head to Head game (h, its id) */
++async function mm15StartRound(proj, who, ids, h, now) {
 +  const round = 'R' + now.toString(36) + randomInt(0, 1_296).toString(36);
 +  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.rounds, d => {
 +    const docs = mm15Docs(d);
 +    for (const [k, v] of Object.entries(docs)) if (!v || v.p === who.id || !(now - v.started < MM15_ROUND_TTL)) delete docs[k];   /* one open round per player */
-+    docs[round] = { p: who.id, ids: picks.map(q => q.id), perm: picks.map(() => mm15Shuffle(4)), at: [], right: [], pts: [], streak: 0, total: 0, started: now };
++    docs[round] = { p: who.id, ids, perm: ids.map(() => mm15Shuffle(4)), at: [], right: [], pts: [], ms: [], streak: 0, total: 0, started: now, ...(h ? { h } : {}) };
 +    return d;
-+  }, 'MyMISMO Trivia round started').catch(() => null);
-+  if (!w || w.error) return mm15Busy();
-+  return respond(200, { round, count: MM15_COUNT, secs: MM15_SECS });
++  }, h ? 'MyMISMO Trivia Head to Head round started' : 'MyMISMO Trivia round started').catch(() => null);
++  return w && !w.error ? round : null;
 +}
 +async function mm15Next(event, proj, headers, who) {
 +  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
@@ -407,7 +405,7 @@
 +    const ms = now - r.at[n], inTime = ms <= MM15_SECS * 1000 + MM15_NET_MS, right = inTime && choice >= 0 && r.perm[n][choice] === q.answer;
 +    r.streak = right ? r.streak + 1 : 0;
 +    const points = right ? mm15Points(ms, r.streak) : 0;
-+    r.right.push(right); r.pts.push(points); r.total += points;
++    r.right.push(right); r.pts.push(points); r.total += points; (r.ms = r.ms || []).push(Math.min(ms, MM15_SECS * 1000));
 +    res = { right, answer: r.perm[n].indexOf(q.answer), points, streak: r.streak, total: r.total, late: !inTime, source: mmStr(q.source, 300) };
 +    if (r.right.length >= r.ids.length) { done = { ...r }; delete docs[round]; }
 +    return d;
@@ -415,25 +413,118 @@
 +  if (stop) return stop;
 +  if (!w || w.error) return mm15Busy();
 +  if (!done) return respond(200, { ...res, done: false });
-+  if (who.review) return respond(200, { ...res, done: true, saved: false, review: true });   /* the app reviewers never go on the board */
-+  /* the round is over: keep it on this month's board if it's the player's best, and remember the questions seen */
-+  const month = mm15Month(done.started), rightN = done.right.filter(Boolean).length;
-+  let best = 0;
++  if (done.h) return mm16Finish(proj, who, done, res, now);   /* a Head to Head round counts for its game, never the leaderboard */
++  return respond(200, { ...res, done: true, saved: false });
++}
++
++/* --- the ranked Board (Jonna, Nov 25, 2026): the monthly leaderboard is each player's best Board ---------------------
++ * Six categories, five squares (200 to 1,000; 200 and 400 lean on Medium questions, 600 up on Hard). A right answer adds
++ * the square's value, a wrong one takes it away, and letting the 20-second clock run out costs nothing. One hidden square
++ * of 600 or more counts double. The board ends when every square is played or the player ends it; its score goes on
++ * the month's board (the month it was started) if it's their best. One board at a time per player, kept in
++ * trivia/plays.json; starting a new board scores an unfinished one first. The clock runs on the server. */
++function mm15PlayBoard(qs, seen) {
++  const have = new Set(seen), pool = qs.filter(q => !q.champ), want = [[2, 3, 1], [2, 3, 1], [3, 2, 1], [3, 2, 1], [3, 2, 1]];
++  const cats = [...new Set(pool.map(q => q.cat))].filter(c => pool.filter(q => q.cat === c).length >= MM15_VALUES.length).slice(0, 6);
++  if (cats.length < 6) return null;
++  const used = new Set(), cells = {};
++  cats.forEach((c, i) => MM15_VALUES.forEach((v, j) => {
++    let q = null;
++    for (const fresh of [true, false]) { for (const w of want[j]) {
++      const fits = pool.filter(x => x.cat === c && Number(x.level || 2) === w && !used.has(x.id) && have.has(x.id) !== fresh);
++      if (fits.length) { q = fits[randomInt(0, fits.length)]; break; } } if (q) break; }
++    used.add(q.id); cells[i + '-' + j] = { id: q.id, perm: mm15Shuffle(4), value: v };
++  }));
++  const big = Object.keys(cells).filter(k => cells[k].value >= 600); cells[big[randomInt(0, big.length)]].dbl = true;
++  return { cats, cells };
++}
++const mm15PlayLeft = (pl, now) => Math.max(0, MM15_PLAY_SECS * 1000 - (now - pl.openAt));
++function mm15PlayView(pl, now) {
++  const played = {}; for (const [k, x] of Object.entries(pl.picked)) played[k] = { right: x.right, points: x.points };
++  return { active: true, cats: pl.cats, values: MM15_VALUES, secs: MM15_PLAY_SECS, total: pl.total, right: pl.right, played, open: pl.open, left: pl.open ? mm15PlayLeft(pl, now) : 0, squares: Object.keys(pl.cells).length };
++}
++/* an open square whose clock ran out counts as no answer (0) */
++function mm15PlayLapse(pl, now) { if (pl.open && now - pl.openAt > MM15_PLAY_SECS * 1000 + MM15_NET_MS) { pl.picked[pl.open] = { right: false, points: 0, late: true, at: now }; pl.open = null; } }
++/* a finished (or ended, or replaced) board: on the month's leaderboard if it's the player's best, and its questions remembered */
++async function mm15PlayRecord(proj, who, pl, now) {
++  const ids = Object.keys(pl.picked).map(k => pl.cells[k] && pl.cells[k].id).filter(Boolean);
++  if (ids.length) await updateRepoJson(proj.repo, proj.branch || 'main', MM15.seen, d => {
++    const docs = mm15Docs(d), list = Array.isArray(docs[who.id]) ? docs[who.id].filter(x => !ids.includes(x)) : [];
++    docs[who.id] = [...list, ...ids].slice(-400); return d;
++  }, 'MyMISMO Trivia questions seen').catch(() => null);
++  if (who.review || !ids.length) return { saved: false };   /* the app reviewers never go on the board; an untouched board isn't a game */
++  const month = mm15Month(pl.start); let best = 0;
 +  const bw = await updateRepoJson(proj.repo, proj.branch || 'main', mm15Board(month), d => {
 +    const docs = mm15Docs(d), cur = docs[who.id] || { best: 0, right: 0, rounds: 0 };
 +    cur.rounds = (cur.rounds || 0) + 1; cur.name = who.name || cur.name || 'Player';
-+    if (done.total > (cur.best || 0)) { cur.best = done.total; cur.right = rightN; cur.at = now; }
++    if (pl.total > (cur.best || 0)) { cur.best = pl.total; cur.right = pl.right; cur.at = now; }
 +    best = cur.best; docs[who.id] = cur; return d;
-+  }, 'MyMISMO Trivia round finished').catch(() => null);
-+  await updateRepoJson(proj.repo, proj.branch || 'main', MM15.seen, d => {
-+    const docs = mm15Docs(d), list = Array.isArray(docs[who.id]) ? docs[who.id].filter(x => !done.ids.includes(x)) : [];
-+    docs[who.id] = [...list, ...done.ids].slice(-400); return d;
-+  }, 'MyMISMO Trivia questions seen').catch(() => null);
++  }, 'MyMISMO Trivia Board finished').catch(() => null);
 +  await updateRepoJson(proj.repo, proj.branch || 'main', MM15.players, d => {   /* the months played, so deleting an account finds every board */
 +    const p = mm15Docs(d)[who.id]; if (p) p.months = [...new Set([...(Array.isArray(p.months) ? p.months : []), month])].filter(m => MM15_MONTH.test(m)).slice(-120); return d;
 +  }, 'MyMISMO Trivia month played').catch(() => null);
-+  if (!bw || bw.error) return respond(200, { ...res, done: true, saved: false, month });
-+  return respond(200, { ...res, done: true, saved: true, month, best, newBest: done.total >= best && done.total > 0 });
++  if (!bw || bw.error) return { saved: false, month };
++  return { saved: true, month, best, newBest: pl.total >= best && pl.total > 0 };
++}
++async function mm15Play(method, step, event, proj, headers, who) {
++  const now = Date.now(), branch = proj.branch || 'main';
++  if (method === 'GET') {   /* pick up where you left off */
++    if (!mmAllowed('t-read', who.id, MM15_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
++    const r = await readFile(proj.repo, branch, MM15.plays); if (r.status !== 200 && r.status !== 404) return mm15Busy();
++    const pl = r.data && r.data.docs && r.data.docs[who.id];
++    if (!pl || now - pl.start > MM15_PLAY_STALE) return respond(200, { active: false });
++    const copy = JSON.parse(JSON.stringify(pl)); mm15PlayLapse(copy, now);
++    return respond(200, mm15PlayView(copy, now));
++  }
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  if (!mmAllowed(step === 'start' ? 't-round' : 't-answer', who.id, step === 'start' ? MM15_LIMITS.round : MM15_LIMITS.answer, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a bit.' });
++  const bank = await mm15Bank(proj); if (bank.error) return mm15Busy();
++  const b = pre.body, cell = mmStr(b.cell, 5), choice = b.choice === null || b.choice === undefined ? -1 : Number(b.choice);
++  if ((step === 'pick' || step === 'answer') && !/^[0-5]-[0-4]$/.test(cell)) return respond(400, { error: 'INVALID' });
++  if (step === 'answer' && (!Number.isInteger(choice) || choice < -1 || choice > 3)) return respond(400, { error: 'INVALID' });
++  let board = null;
++  if (step === 'start') {
++    const picks = await readFile(proj.repo, branch, MM15.seen); if (picks.status !== 200 && picks.status !== 404) return mm15Busy();
++    board = mm15PlayBoard(bank.qs, (picks.data && picks.data.docs && picks.data.docs[who.id]) || []);
++    if (!board) return respond(503, { error: 'NOT_READY', message: 'The Board opens once there are enough questions in six categories.' });
++  }
++  let out = null, stop = null, finished = null;
++  const no = (status, error, message) => { stop = respond(status, { error, message }); throw new Error('stop'); };
++  const w = await updateRepoJson(proj.repo, branch, MM15.plays, d => {
++    const docs = mm15Docs(d);
++    for (const [k, v] of Object.entries(docs)) if (!v || now - v.start > MM15_PLAY_STALE * 7) delete docs[k];   /* long-abandoned boards */
++    const pl = docs[who.id];
++    if (step === 'start') {
++      if (pl) { mm15PlayLapse(pl, now); finished = pl; }   /* an unfinished board is scored before the new one */
++      docs[who.id] = { start: now, cats: board.cats, cells: board.cells, picked: {}, open: null, openAt: 0, total: 0, right: 0 };
++      out = mm15PlayView(docs[who.id], now); return d;
++    }
++    if (!pl) no(409, 'NOT_STARTED', 'Start a board first.');
++    if (!(step === 'answer' && pl.open === cell)) mm15PlayLapse(pl, now);   /* a late answer to the open square is scored below, as 0 */
++    if (step === 'end') { finished = pl; delete docs[who.id]; out = { done: true, total: pl.total, right: pl.right }; return d; }
++    const x = pl.cells[cell]; if (!x) no(400, 'INVALID');
++    if (pl.picked[cell]) no(409, 'ALREADY', 'That square was already played.');
++    const q = bank.byId.get(x.id); if (!q) no(502, 'UNAVAILABLE');
++    const value = x.dbl ? x.value * 2 : x.value;
++    if (step === 'pick') {
++      if (pl.open && pl.open !== cell) no(409, 'OPEN', 'Answer the square you opened first.');
++      if (!pl.open) { pl.open = cell; pl.openAt = now; }   /* opening it again never restarts the clock */
++      out = { cell, cat: pl.cats[Number(cell[0])], value, double: !!x.dbl, q: q.q, choices: x.perm.map(i => q.choices[i]), secs: MM15_PLAY_SECS, left: mm15PlayLeft(pl, now) };
++      return d;
++    }
++    if (pl.open !== cell) no(409, 'NOT_OPEN', 'Open that square first.');
++    const late = now - pl.openAt > MM15_PLAY_SECS * 1000 + MM15_NET_MS, right = !late && choice >= 0 && x.perm[choice] === q.answer;
++    const points = right ? value : (late || choice < 0 ? 0 : -value);
++    pl.picked[cell] = { right, points, at: now }; pl.open = null; pl.total += points; if (right) pl.right++;
++    const done = Object.keys(pl.picked).length >= Object.keys(pl.cells).length;
++    out = { right, answer: x.perm.indexOf(q.answer), points, late, total: pl.total, done, source: mmStr(q.source, 300) };
++    if (done) { finished = pl; delete docs[who.id]; }
++    return d;
++  }, 'MyMISMO Trivia Board ' + step).catch(() => (stop ? { stop: true } : null));
++  if (stop) return stop;
++  if (!w || w.error) return mm15Busy();
++  if (finished) { const rec = await mm15PlayRecord(proj, who, finished, now); if (step !== 'start') out = { ...out, ...rec }; }
++  return respond(200, out);
 +}
 +function mm15Rank(docs) {
 +  return Object.entries(docs || {}).filter(([, v]) => v && v.best > 0)
@@ -554,15 +645,17 @@
 +  /* boards go first and the player record last, so a retry after a failure still knows every month */
 +  let ok = true;
 +  for (const m of months) ok = (await drop(mm15Board(m), 'MyMISMO Trivia player deleted their account')) && ok;
++  ok = ok && await mm16Forget(proj, who.id);   /* their Head to Head games */
 +  ok = ok && await drop(MM15.seen, 'MyMISMO Trivia player deleted their account') && await drop(MM15.players, 'MyMISMO Trivia player deleted their account');
 +  const r = await updateRepoJson(proj.repo, branch, MM15.rounds, d => { const docs = mm15Docs(d); for (const [k, v] of Object.entries(docs)) if (v && v.p === who.id) delete docs[k]; return d; }, 'MyMISMO Trivia player deleted their account').catch(() => null);
++  ok = ok && await drop(MM15.plays, 'MyMISMO Trivia player deleted their account');
 +  if (!ok || !r || r.error) return mm15Busy();
 +  return respond(200, { ok: true });
 +}
 +
 +async function mm15Ready(raw) {
 +  const now = Date.now(), m = mm15Month(now), c = mm15ChampCfg(raw);
-+  return respond(200, { ok: true, month: m, quarter: mm15QuarterOf(m), secs: MM15_SECS, count: MM15_COUNT,
++  return respond(200, { ok: true, month: m, quarter: mm15QuarterOf(m), board: { secs: MM15_PLAY_SECS, values: MM15_VALUES }, headToHead: { secs: MM15_SECS, count: MM15_COUNT },
 +    champ: c ? { quarter: c.quarter, opens: new Date(c.opens).toISOString(), closes: new Date(c.closes).toISOString(), minutes: c.minutes, open: now >= c.opens && now < c.closes } : null });
 +}
 +/* The championship dates the MISMO team sets in Team HQ (trivia/settings.json) win over projects.json's triviaChamp. */
@@ -634,8 +727,10 @@
 +  if (!proj || proj.key !== MM_PROJECT) return respond(404, { error: 'NOT_FOUND' });
 +  const raw = await mm15RawWithSettings(proj).catch(() => null); if (!raw) return respond(404, { error: 'NOT_FOUND' });
 +  if (!process.env.AUTH_SECRET) return respond(500, { error: 'NO_AUTH_SECRET' });
-+  const want = { '/trivia/ready': 'GET', '/trivia/board': 'GET', '/trivia/champ': 'GET', '/trivia/code': 'POST', '/trivia/verify': 'POST', '/trivia/round': 'POST',
-+    '/trivia/next': 'POST', '/trivia/answer': 'POST', '/trivia/champ/start': 'POST', '/trivia/champ/pick': 'POST', '/trivia/champ/answer': 'POST', '/trivia/delete': 'POST' }[subPath];
++  const want = { '/trivia/ready': 'GET', '/trivia/board': 'GET', '/trivia/champ': 'GET', '/trivia/code': 'POST', '/trivia/verify': 'POST',
++    '/trivia/play': 'GET', '/trivia/play/start': 'POST', '/trivia/play/pick': 'POST', '/trivia/play/answer': 'POST', '/trivia/play/end': 'POST',
++    '/trivia/next': 'POST', '/trivia/answer': 'POST', '/trivia/champ/start': 'POST', '/trivia/champ/pick': 'POST', '/trivia/champ/answer': 'POST', '/trivia/delete': 'POST',
++    '/trivia/h2h': 'GET', '/trivia/h2h/players': 'GET', '/trivia/h2h/challenge': 'POST', '/trivia/h2h/find': 'POST', '/trivia/h2h/play': 'POST', '/trivia/h2h/decline': 'POST' }[subPath];
 +  if (!want) return respond(404, { error: 'NOT_FOUND' });
 +  if (method !== want) return respond(405, { error: 'METHOD' });
 +  if (subPath === '/trivia/ready') return mm15Ready(raw);
@@ -645,11 +740,160 @@
 +  if (subPath === '/trivia/verify') return mm15Verify(event, proj, headers);
 +  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN', message: 'MyMISMO only works from MISMO’s own site.' });
 +  const who = mm15Who(headers); if (who.error) return who.error;
-+  if (subPath === '/trivia/round') return mm15Round(event, proj, headers, who);
++  if (subPath === '/trivia/play' || subPath.startsWith('/trivia/play/')) return mm15Play(method, subPath === '/trivia/play' ? '' : subPath.slice('/trivia/play/'.length), event, proj, headers, who);
 +  if (subPath === '/trivia/next') return mm15Next(event, proj, headers, who);
 +  if (subPath === '/trivia/answer') return mm15Answer(event, proj, headers, who);
 +  if (subPath === '/trivia/delete') return mm15Delete(event, proj, headers, who);
++  if (subPath.startsWith('/trivia/h2h')) return mm16Route(subPath, event, proj, headers, who);   /* Head to Head */
 +  return mm15ChampPlay(event, proj, headers, raw, who, subPath.slice('/trivia/champ/'.length));
++}
++/* --- Head to Head (relay request 15; Jonna, Nov 25, 2026) ------------------------------------------------------------
++ * Two players, the same 10 Medium Mixed questions, highest score wins (a tie goes to whoever spent less time answering).
++ * Nobody waits for the other: the one who starts plays first, then the other plays the same questions when they're ready.
++ * Two ways to start, the player's choice:
++ *   Challenge Someone      pick a player by name. Once you've played, it's theirs to play (or decline) for 48 hours.
++ *   Find Me an Opponent    if someone else's open game is waiting, you play its questions against their score; if not,
++ *                          you play first and the next person who asks gets your game. An open game waits 7 days.
++ * No computer opponent. Head to Head games never count for the monthly leaderboard. Nothing is emailed or pushed: the
++ * app shows Your Turn when it next asks. Kept in trivia/h2h.json, by game id:
++ *   { a, aName, b, bName, mode: 'pick'|'open', ids: [question ids], made, sent, exp, aScore, bScore, status }
++ *   status: 'first' (the starter is playing), 'theirs' (waiting for b), 'open' (waiting for anyone), 'done', 'declined',
++ *   'expired'. A score is { total, right, ms, at }.
++ * The app reviewers' account plays only against reviewAccount.contacts (MISMO staff) and is never offered to anyone else. */
++const MM16 = { games: 'trivia/h2h.json' };
++const MM16_PICK_TTL = 48 * 3_600_000, MM16_OPEN_TTL = 7 * 86_400_000, MM16_FIRST_TTL = MM15_ROUND_TTL, MM16_MAX_WAITING = 10, MM16_KEEP = 30 * 86_400_000;
++const MM16_GAME = /^H[0-9a-z]{6,20}$/;
++function mm16Tidy(docs, now) {   /* expire on read; drop finished games after 30 days */
++  for (const [k, g] of Object.entries(docs)) {
++    if (!g || typeof g !== 'object') { delete docs[k]; continue; }
++    if (g.status === 'first' && now - g.made > MM16_FIRST_TTL) { delete docs[k]; continue; }   /* the starter never finished */
++    if ((g.status === 'theirs' || g.status === 'open') && now > g.exp) { g.status = 'expired'; g.ended = now; }
++    if (['done', 'declined', 'expired'].includes(g.status) && now - (g.ended || g.made) > MM16_KEEP) delete docs[k];
++  }
++  return docs;
++}
++function mm16View(id, g, me) {
++  const mine = g.a === me, other = mine ? { id: g.b, name: g.bName } : { id: g.a, name: g.aName };
++  const myScore = mine ? g.aScore : g.bScore, theirScore = mine ? g.bScore : g.aScore;
++  let state = g.status;
++  if (g.status === 'theirs') state = mine ? 'waiting' : 'your-turn';
++  if (g.status === 'open') state = 'waiting';
++  if (g.status === 'first') state = mine ? 'playing' : 'waiting';
++  const out = { id, mode: g.mode, state, opponent: other.name || null, made: new Date(g.made).toISOString(), expires: g.exp ? new Date(g.exp).toISOString() : null,
++    you: myScore ? { total: myScore.total, right: myScore.right } : null };
++  if (g.status === 'done') { out.them = theirScore ? { total: theirScore.total, right: theirScore.right } : null; out.result = g.winner === 'tie' ? 'tie' : (g.winner === (mine ? 'a' : 'b') ? 'won' : 'lost'); }
++  return out;   /* their score shows only once both have played */
++}
++async function mm16Contacts(who) {
++  if (!who.review) return null;
++  const rv = await mm15Review().catch(() => null);
++  return new Set((rv ? rv.contacts : []).map(e => mm15IdOf(String(e).toLowerCase())));
++}
++async function mm16Route(subPath, event, proj, headers, who) {
++  const now = Date.now(), branch = proj.branch || 'main';
++  if (subPath === '/trivia/h2h' || subPath === '/trivia/h2h/players') {
++    if (!mmAllowed('t-read', who.id, MM15_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
++    if (subPath === '/trivia/h2h/players') {   /* search players by name to challenge (shown as on the leaderboard: first name and last initial) */
++      const q = mmStr((event.queryStringParameters || {}).q, 40).trim().toLowerCase(); if (q.length < 2) return respond(200, { players: [] });
++      const pr = await readFile(proj.repo, branch, MM15.players); if (pr.status !== 200 && pr.status !== 404) return mm15Busy();
++      const only = await mm16Contacts(who);
++      const players = Object.entries((pr.data && pr.data.docs) || {}).filter(([id, p]) => p && id !== who.id && !p.review && (!only || only.has(id))
++        && String(p.name || '').toLowerCase().includes(q)).slice(0, 10).map(([id, p]) => ({ id, name: mmStr(p.name, 60) }));
++      return respond(200, { players });
++    }
++    const r = await readFile(proj.repo, branch, MM16.games); if (r.status !== 200 && r.status !== 404) return mm15Busy();
++    const docs = mm16Tidy(JSON.parse(JSON.stringify((r.data && r.data.docs) || {})), now), only = await mm16Contacts(who);
++    const games = Object.entries(docs).filter(([, g]) => g.a === who.id || (g.b === who.id && g.status !== 'first')).sort((x, y) => y[1].made - x[1].made).map(([id, g]) => mm16View(id, g, who.id));
++    const tally = { won: 0, lost: 0, tied: 0 }; games.forEach(g => { if (g.result === 'won') tally.won++; if (g.result === 'lost') tally.lost++; if (g.result === 'tie') tally.tied++; });
++    const openNow = Object.values(docs).filter(g => g.status === 'open' && g.a !== who.id && (only ? only.has(g.a) : !g.review)).length;
++    return respond(200, { games, tally, openGames: openNow, yourTurn: games.filter(g => g.state === 'your-turn').length });
++  }
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  if (!mmAllowed('t-round', who.id, MM15_LIMITS.round, now)) return respond(429, { error: 'TOO_MANY', message: 'That’s a lot of games in an hour. Please wait a bit.' });
++  const bank = await mm15Bank(proj); if (bank.error) return mm15Busy();
++  const b = pre.body, gameId = mmStr(b.game, 24);
++  let stop = null, play = null;
++  const no = (status, error, message) => { stop = respond(status, { error, message }); throw new Error('stop'); };
++
++  if (subPath === '/trivia/h2h/challenge' || subPath === '/trivia/h2h/find') {
++    const to = mmStr(b.to, 20), pick = subPath === '/trivia/h2h/challenge';
++    if (pick && (!MM_ID.test(to) || to === who.id)) return respond(400, { error: 'INVALID', message: 'Pick someone to challenge.' });
++    const pr = await readFile(proj.repo, branch, MM15.players); if (pr.status !== 200 && pr.status !== 404) return mm15Busy();
++    const players = (pr.data && pr.data.docs) || {}, only = await mm16Contacts(who);
++    if (pick && (!players[to] || players[to].review || (only && !only.has(to)))) return respond(404, { error: 'NO_PLAYER', message: 'That player isn’t playing MISMO Trivia.' });
++    const fresh = await mm15Picks(proj, bank, who); if (fresh.error) return mm15Busy();
++    if (fresh.length < MM15_COUNT) return respond(503, { error: 'NOT_READY', message: 'Head to Head opens once there are enough questions.' });
++    const w = await updateRepoJson(proj.repo, branch, MM16.games, d => {
++      const docs = mm16Tidy(mm15Docs(d), now);
++      if (Object.values(docs).filter(g => g.a === who.id && ['first', 'theirs', 'open'].includes(g.status)).length >= MM16_MAX_WAITING)
++        no(429, 'TOO_MANY_WAITING', 'You have 10 games waiting on other players. Play again once some finish.');
++      if (!pick) {   /* someone else's open game first: the one that's waited longest */
++        const take = Object.entries(docs).filter(([, g]) => g.status === 'open' && g.a !== who.id && (only ? only.has(g.a) : !g.review)).sort((x, y) => x[1].made - y[1].made)[0];
++        if (take) { const [id, g] = take; g.b = who.id; g.bName = who.name || 'Player'; g.status = 'theirs'; g.exp = now + MM16_PICK_TTL; play = { id, ids: g.ids, as: 'b', vs: g.aName, theirs: true }; return d; }
++      }
++      const id = 'H' + now.toString(36) + randomInt(0, 1_296).toString(36);
++      docs[id] = { a: who.id, aName: who.name || 'Player', b: pick ? to : null, bName: pick ? mmStr(players[to].name, 60) : null, mode: pick ? 'pick' : 'open',
++        ids: fresh.map(q => q.id), made: now, exp: null, aScore: null, bScore: null, status: 'first', ...(who.review ? { review: true } : {}) };
++      play = { id, ids: docs[id].ids, as: 'a', vs: pick ? docs[id].bName : null, theirs: false };
++      return d;
++    }, pick ? 'MyMISMO Trivia Head to Head challenge' : 'MyMISMO Trivia Head to Head find an opponent').catch(() => (stop ? { stop: true } : null));
++    if (stop) return stop;
++    if (!w || w.error) return mm15Busy();
++  } else {
++    if (!MM16_GAME.test(gameId)) return respond(400, { error: 'INVALID' });
++    const w = await updateRepoJson(proj.repo, branch, MM16.games, d => {
++      const docs = mm16Tidy(mm15Docs(d), now), g = docs[gameId];
++      if (!g || g.b !== who.id) no(404, 'NO_GAME', 'That game isn’t there any more.');
++      if (g.status !== 'theirs' || g.bScore) no(409, 'NOT_YOUR_TURN', g.status === 'expired' ? 'That challenge ran out of time.' : 'That game isn’t waiting for you.');
++      if (subPath === '/trivia/h2h/decline') { g.status = 'declined'; g.ended = now; return d; }
++      play = { id: gameId, ids: g.ids, as: 'b', vs: g.aName, theirs: true };
++      return d;
++    }, subPath === '/trivia/h2h/decline' ? 'MyMISMO Trivia Head to Head declined' : 'MyMISMO Trivia Head to Head your turn').catch(() => (stop ? { stop: true } : null));
++    if (stop) return stop;
++    if (!w || w.error) return mm15Busy();
++    if (subPath === '/trivia/h2h/decline') return respond(200, { ok: true });
++  }
++  const round = await mm15StartRound(proj, who, play.ids, play.id, now); if (!round) return mm15Busy();
++  return respond(200, { game: play.id, round, count: play.ids.length, secs: MM15_SECS, opponent: play.vs, second: play.theirs });
++}
++/* the last answer of a Head to Head round: record the score; once both have played, the higher total wins */
++async function mm16Finish(proj, who, done, res, now) {
++  const score = { total: done.total, right: done.right.filter(Boolean).length, ms: (done.ms || []).reduce((x, y) => x + y, 0), at: now };
++  let view = null;
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM16.games, d => {
++    const docs = mm15Docs(d), g = docs[done.h]; if (!g) return d;
++    if (g.a === who.id && g.status === 'first') {
++      g.aScore = score;
++      if (g.mode === 'pick') { g.status = 'theirs'; g.exp = now + MM16_PICK_TTL; } else { g.status = 'open'; g.exp = now + MM16_OPEN_TTL; }
++      g.sent = now;
++    } else if (g.b === who.id && g.status === 'theirs' && !g.bScore) {
++      g.bScore = score; g.status = 'done'; g.ended = now;
++      const A = g.aScore || { total: 0, ms: 0 };
++      g.winner = A.total !== score.total ? (A.total > score.total ? 'a' : 'b') : (A.ms !== score.ms ? (A.ms < score.ms ? 'a' : 'b') : 'tie');
++    }
++    view = mm16View(done.h, g, who.id); return d;
++  }, 'MyMISMO Trivia Head to Head round finished').catch(() => null);
++  await updateRepoJson(proj.repo, proj.branch || 'main', MM15.seen, d => {
++    const docs = mm15Docs(d), list = Array.isArray(docs[who.id]) ? docs[who.id].filter(x => !done.ids.includes(x)) : [];
++    docs[who.id] = [...list, ...done.ids].slice(-400); return d;
++  }, 'MyMISMO Trivia questions seen').catch(() => null);
++  if (!w || w.error) return respond(200, { ...res, done: true, saved: false, h2h: true });
++  return respond(200, { ...res, done: true, saved: true, h2h: true, game: view });
++}
++/* deleting a trivia account: their open games go, and they're left out of finished ones (shown as "a former player") */
++async function mm16Forget(proj, id) {
++  const r = await readFile(proj.repo, proj.branch || 'main', MM16.games); if (r.status === 404) return true; if (r.status !== 200) return false;
++  if (!Object.values((r.data && r.data.docs) || {}).some(g => g && (g.a === id || g.b === id))) return true;
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM16.games, d => {
++    const docs = mm15Docs(d);
++    for (const [k, g] of Object.entries(docs)) {
++      if (!g || (g.a !== id && g.b !== id)) continue;
++      if (g.status !== 'done' && g.status !== 'declined' && g.status !== 'expired') { delete docs[k]; continue; }
++      if (g.a === id) { g.a = null; g.aName = 'A former player'; } else { g.b = null; g.bName = 'A former player'; }
++    }
++    return d;
++  }, 'MyMISMO Trivia player deleted their account').catch(() => null);
++  return !!(w && !w.error);
 +}
 +/* --- A sign-in for Apple's and Google's app reviewers (relay request 15; Jonna approved Nov 25, 2026) ---
 + * Reviewers must be able to try every sign-in feature but can't read a MISMO inbox, so projects.json's mymismo entry can
@@ -781,7 +1025,7 @@
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3628,17 @@
+@@ -2984,6 +3872,17 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
@@ -799,7 +1043,7 @@
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
-@@ -3006,7 +3661,7 @@
+@@ -3006,7 +3905,7 @@
      if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */

@@ -1,17 +1,28 @@
-# Relay Request 15: MyMISMO Trivia, and App Store Rules for Attendees (for Perry)
+# Relay Request 15: MyMISMO Trivia (the Board Leaderboard and Head to Head), and App Store Rules for Attendees (for Perry)
 
 Requested by Jonna, Nov 25, 2026. Builds on relay requests 13 and 14 (the same `mymismo` entry in projects.json and the
 same private `GitMISMO/mymismo-data`). The patch and its tests follow the same pattern as request 14.
 
 ## What Jonna Decided
 
-- **Monthly leaderboard:** starts over on the 1st of every month (Eastern time). It ranks each player's **single best
-  round**, and only **Hard rounds of Mixed questions** count.
-- **Quarterly Championship:** the three monthly champions of the quarter play a harder Championship Board. If one person
-  wins two months in the same quarter, **that later month's next-highest scorer** takes the spot.
-- **How the championship is played:** each finalist plays on their own phone during a set championship window. **Once
-  they start, a set time runs until they finish**: no pausing, no restarting, one try.
-- The champion is recognized at the next MISMO Summit and gets a prize (MISMO handles both; nothing here).
+Updated Nov 25, 2026 (evening): Easy and Medium are 10 questions against the clock, and **Hard is played on the
+Board**. What used to be request 16 (Head to Head) is folded in here, so this is the one trivia request.
+
+- **Monthly leaderboard = the Board.** It starts over on the 1st of every month (Eastern time) and ranks each player's
+  **single best Board** of the month.
+- **The Board:** six categories, five squares each (200 to 1,000; the 200s and 400s lean on Medium questions, 600 up on
+  Hard). A right answer adds the square's value, **a wrong answer takes it away**, and letting the 20-second clock run
+  out costs nothing. **One hidden square of 600 or more counts double.** The board ends when every square is played or
+  the player ends it.
+- **Head to Head = 10 Medium questions**, Mixed. Two players, the same questions, **highest score wins**; a tie on points
+  goes to whoever spent less time answering. Nobody waits: whoever starts plays first, the other plays when they're
+  ready. Two ways to start, the player's choice: **Challenge Someone** (pick a player by name; they have 48 hours to
+  play or decline) or **Find Me an Opponent** (take the game that's waited longest, or play first and the next person
+  who asks gets your game; an open game waits 7 days). **No computer opponent.** Head to Head never counts for the
+  leaderboard.
+- **Quarterly Championship: off for now.** The code is still here and stays off until a championship window is set
+  (Team HQ or projects.json); the app no longer shows it.
+- Nothing in trivia is emailed or pushed except the sign-in code. Head to Head shows Your Turn in the app.
 
 ## Why the Relay Has to Do It
 
@@ -19,9 +30,9 @@ The app's test round runs on the phone, with the answers in a public file. That 
 leaderboard: anyone could read the answers or replay a round. For ranked rounds and the championship, the relay:
 
 1. keeps the question bank, **with the answers, in the private `mymismo-data`** (`trivia/questions.json`), never in the app;
-2. hands out **one question at a time** and times each answer **on the server**;
-3. checks each answer and scores it, so the score on the board is the relay's, not the phone's;
-4. keeps the championship clock on the server, from the moment a finalist starts.
+2. hands out **one question at a time** (one square at a time on the Board) and times each answer **on the server**;
+3. checks each answer and scores it, so the score on the leaderboard is the relay's, not the phone's;
+4. makes sure both Head to Head players get the same questions, and decides the winner.
 
 ## Routes
 
@@ -30,31 +41,44 @@ All under `/mymismo/trivia/`. Every route answers 404 until projects.json's `mym
 
 | Route | Sign-in | What it does |
 | --- | --- | --- |
-| `GET  /trivia/ready` | none | `{ ok, month: "2026-12", quarter: "2027-Q1", champ: { open, opens, closes, minutes } }` |
-| `POST /trivia/round` | player | Starts a ranked round: 10 Hard questions, Mixed (every category at least once, none more than twice), the ones this player hasn't had first. Returns `{ round, count: 10, secs: 15 }`. One open round per player; starting a new one ends the old one as played. |
-| `POST /trivia/next` | player | `{ round }` → the next question `{ n, cat, q, choices }` with the choices shuffled on the server. Records when it was handed out. |
-| `POST /trivia/answer` | player | `{ round, n, choice }` → `{ right, answer, points, streak, total }`. Time = now minus when the question was handed out; past 15 seconds scores 0. A question can be answered once. |
+| `GET  /trivia/ready` | none | `{ ok, month: "2026-12", quarter: "2027-Q1", board: { secs: 20, values }, headToHead: { secs: 20, count: 10 }, champ }` |
+| `GET  /trivia/play` | player | The player's Board in progress, to pick up where they left off: `{ active, cats, values, total, right, played: { cell: { right, points } }, open, left }`, or `{ active: false }`. |
+| `POST /trivia/play/start` | player | Starts a Board: 6 categories × 5 values, the questions this player hasn't had first. Returns the board without questions. One board at a time; starting a new one scores an unfinished one first. |
+| `POST /trivia/play/pick` | player | `{ cell }` (e.g. `"2-4"`: category 2, the 1,000 square) → `{ q, choices, value, double, left }`. Starts that square's 20-second clock; opening it again never restarts it. One open square at a time. |
+| `POST /trivia/play/answer` | player | `{ cell, choice }` → `{ right, answer, points, late, total, done }`. Right +value, wrong −value, late or no answer 0. When every square is played: `saved`, `month`, `best`, `newBest`. |
+| `POST /trivia/play/end` | player | Ends the board now; its score goes on the month's leaderboard if it's the player's best. |
 | `GET  /trivia/board?month=` | none | Top 25 for the month: `{ rank, name, score, right }`, name shown as first name and last initial. With a player token, also `me: { rank, score }`. |
 | `POST /trivia/code` | none | Emails a six-digit sign-in code to the address given (always the same answer, so it never says whether an address is known). |
 | `POST /trivia/verify` | none | `{ email, code, first, last }` → a player token (180 days) and the name shown. |
 | `POST /trivia/delete` | player | Deletes the player's account (see below). |
-| `GET  /trivia/champ` | none | The quarter's three finalists (names as above), the window, and after it closes the final standings. |
-| `POST /trivia/champ/start` | finalist | Only during the window, only once. Starts the clock (`minutes` from projects.json, e.g. 15). Returns the board: 6 categories × 5 values (200 to 1000), no questions yet. |
-| `POST /trivia/champ/pick` | finalist | `{ cell }` → that square's question `{ q, choices }`. |
-| `POST /trivia/champ/answer` | finalist | `{ cell, choice }` → `{ right, answer, points, total, left }`. Right adds the square's value; wrong adds 0. Refused once the clock has run out. |
+| `GET  /trivia/h2h` | player | The player's Head to Head games, newest first, each `{ id, mode, state, opponent, made, expires, you, them, result }`. `state`: `playing`, `waiting`, `your-turn`, `done`, `declined`, `expired`; the other player's score and `result` (`won`, `lost`, `tie`) only once both have played. Also `tally`, `yourTurn` and `openGames`. |
+| `GET  /trivia/h2h/players?q=` | player | Up to 10 players whose name contains `q` (2 letters at least), never yourself. |
+| `POST /trivia/h2h/challenge` | player | `{ to: <player id> }`: starts the challenger's round → `{ game, round, count, secs, opponent, second: false }`. |
+| `POST /trivia/h2h/find` | player | Takes the open game that has waited longest (`second: true`, with the opponent's name), or starts a new open game. |
+| `POST /trivia/h2h/play` | player | `{ game }`: the challenged player starts their round. |
+| `POST /trivia/h2h/decline` | player | `{ game }`: the challenged player says no. |
+| `POST /trivia/next` | player | `{ round }` → the next Head to Head question `{ n, cat, q, choices, secs, left }`, choices shuffled on the server. Records when it was handed out. |
+| `POST /trivia/answer` | player | `{ round, n, choice }` → `{ right, answer, points, streak, total }`; past 20 seconds scores 0. The last answer comes back with `h2h: true` and the game as the player now sees it. |
+| `GET  /trivia/champ`, `POST /trivia/champ/start`, `/pick`, `/answer` | finalist | The Quarterly Championship, **off for now** (answers "not set" until a window is set). Unchanged from before. |
 
-## Scoring (the same as the app's test round)
+## Scoring
 
-A right answer is worth `floor((1 - (elapsed / 15) / 2) × 1000 × 2)`, with one second allowed for the network, on Hard (between 1,000 and 2,000); two or more
-right in a row add 200; a wrong or late answer is 0. Championship squares are worth their face value.
+- **The Board:** the square's value (double on the Double square) for a right answer, minus it for a wrong one, 0 when
+  the 20 seconds (plus one for the network) run out.
+- **Head to Head (the app's Medium round):** a right answer is worth `floor((1 - (elapsed / 20) / 2) × 1000 × 1.5)`,
+  with one second allowed for the network (between 750 and 1,500); two or more right in a row add 150; a wrong or late
+  answer is 0. The winner has the higher total; a tie goes to the lower total answering time.
 
 ## Where Things Live (all in the private `mymismo-data`)
 
 - `trivia/questions.json` — the question bank: `{ questions: [{ id, cat, q, choices[4], answer, level, source, champ? }] }`.
   Jonna approves questions in her review doc; the approved set is copied here. `champ: true` marks championship-only questions.
-- `trivia/rounds.json` — open rounds: `{ docs: { <round>: { p, ids[10], at[], picks[], total, streak, started } } }`;
+- `trivia/plays.json` — each player's Board in progress: `{ docs: { <player>: { start, cats, cells, picked, open, openAt, total, right } } }`.
+- `trivia/rounds.json` — open Head to Head rounds: `{ docs: { <round>: { p, h, ids[10], at[], ms[], total, streak, started } } }`;
   a round is removed once finished or after an hour.
-- `trivia/board-<YYYY-MM>.json` — `{ docs: { <player>: { name, best, right, at, rounds } } }`: best round only.
+- `trivia/h2h.json` — Head to Head games, by game id: `{ a, aName, b, bName, mode, ids, made, exp, aScore, bScore, status, winner }`.
+  Waiting games expire on read (48 hours for a challenge, 7 days for an open game); finished ones are kept 30 days.
+- `trivia/board-<YYYY-MM>.json` — `{ docs: { <player>: { name, best, right, at, rounds } } }`: best Board only.
 - `trivia/seen.json` — `{ docs: { <player>: [question ids] } }`, so each player's rounds rotate through questions they haven't had.
 - `trivia/champ-<YYYY-Qn>.json` — finalists (worked out from the three monthly boards with the runner-up rule), each
   finalist's start time, squares picked, answers and total.
@@ -68,7 +92,7 @@ right in a row add 200; a wrong or late answer is 0. Championship squares are wo
 
 ## Limits (per running copy)
 
-Rounds: 30 an hour per player. Answers: 600 an hour per player. Board reads: 600 an hour from one address.
+Boards and Head to Head games started: 30 an hour per player. Answers and squares: 600 an hour per player. Leaderboard reads: 600 an hour from one address. At most 10 Head to Head games waiting on other players per person.
 
 ## Who Can Play (decided by Jonna, Nov 25, 2026)
 
@@ -150,8 +174,15 @@ Team HQ is MyMISMO's home for the MISMO team's year-round work (summit alerts st
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
 - `test-mymismo.mjs`: request 13's test, with the directory checks updated to the new rule. Replace the old copy with this one.
-- `test-mymismo15.mjs`: 100 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
-  `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
+- `test-mymismo15.mjs`: 100 checks (sign-in, the Board, the leaderboard, the championship, attendees and app store rules) with a stand-in GitHub and mail flow and made-up people and questions. Run
+  `node test-mymismo15.mjs` next to index.mjs.
+- `test-mymismo-h2h.mjs`: 42 Head to Head checks (rounds, timing and scoring, challenges, Find Me an Opponent, ties,
+  declining, expiry, limits, deleting an account, the app reviewers). Run `node test-mymismo-h2h.mjs` the same way.
+  Requests 13 and 14's tests and test-relay.mjs still pass.
+
+**Head to Head and deleting an account:** a player's waiting games are removed and finished ones show them as "A former
+player". **The app reviewers** (below) can challenge and be matched only with the MISMO staff in `reviewAccount.contacts`,
+and their open games are never offered to anyone else.
 
 ## To Switch It On
 
