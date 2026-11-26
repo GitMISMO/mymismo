@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Trivia, the Board: game-show style. A tapped square lifts off, grows and flips over to show the answer, and players pick the question ("What is the eNote?"). All 124 Medium and Hard questions now have an answer-style clue and four questions to pick from (data/trivia-draft.json); the facts are unchanged. Relay request 16 passes them through for ranked play.
 - Nov 26, 2026: Attendee list: someone registered twice under the same name and company (spelling or "&" and "and" aside) shows once.
 - Nov 26, 2026: Trivia, the Board: a game-show look (dark wall, blue screens, gold values), the categories drop in and the squares flip on one by one at the start, and a tapped square zooms up to fill the board and becomes the question card. The Double Square gets its own spinning reveal; a played square flashes gold and goes dark. Respects reduced motion.
 - Nov 26, 2026: Attendee list headshots: anyone without their own picture in MyMISMO shows the one already public on mismo.org if they're a speaker at this summit, on the MISMO team (About MISMO) or on the Board (MISMO Leadership). Matched by name, nicknames included; a name that could be two people gets none. The daily website job keeps data/faces.json current.

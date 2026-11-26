@@ -24,6 +24,13 @@ Apply requests 13, 14 and 15 first, then `relay-request-16-mymismo-news.patch`. 
 
 Summit alerts (`/push/send`) still go only to that summit's phones; a news-only phone never gets them.
 
+## The Board: Answer First, Pick the Question
+
+Jonna, Nov 26, 2026: the Board is played game-show style. Each square shows the answer (`clue`) and players pick the
+question (`responses`, e.g. "What is the eNote?"). Questions in `trivia/questions.json` may now carry `clue` and
+`responses` (four strings in the same order as `choices`); `/trivia/play/pick` passes them through, in the same
+shuffled order as the choices. Scoring is unchanged (the same index is right). A question without them works as before.
+
 ## Where Things Live
 
 `mymismo-data`: `push/subs.json` entries gain `news` (true or false; `summit` may now be empty), and `push/news.json`

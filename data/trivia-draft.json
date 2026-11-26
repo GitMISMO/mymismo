@@ -28,7 +28,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components",
-   "level": 2
+   "level": 2,
+   "clue": "In \"SMART Doc,\" the S stands for this word.",
+   "responses": [
+    "What is Searchable?",
+    "What is Signed?",
+    "What is Securable?",
+    "What is Standard?"
+   ]
   },
   {
    "id": "q03",
@@ -42,7 +49,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/mismo-product/smart-doc-components",
-   "level": 2
+   "level": 2,
+   "clue": "This word is NOT one of the five behind SMART.",
+   "responses": [
+    "What is Manageable?",
+    "What is Readable?",
+    "What is Archivable?",
+    "What is Transferable?"
+   ]
   },
   {
    "id": "q04",
@@ -56,7 +70,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/media/22241/display",
-   "level": 2
+   "level": 2,
+   "clue": "The industry has done the most work on this SMART Doc.",
+   "responses": [
+    "What is the eNote?",
+    "What is the appraisal report?",
+    "What is the Loan Estimate?",
+    "What is the flood certificate?"
+   ]
   },
   {
    "id": "q05",
@@ -70,7 +91,14 @@
    ],
    "answer": 2,
    "source": "https://singlefamily.fanniemae.com/media/6536/display",
-   "level": 2
+   "level": 2,
+   "clue": "Fannie Mae and Freddie Mac require every eNote to be registered here.",
+   "responses": [
+    "What is the county recorder?",
+    "What is the CFPB?",
+    "What is the MERS eRegistry?",
+    "What is MISMO Link?"
+   ]
   },
   {
    "id": "q06",
@@ -84,7 +112,14 @@
    ],
    "answer": 1,
    "source": "https://sf.freddiemac.com/faqs/umdp-faq",
-   "level": 2
+   "level": 2,
+   "clue": "The GSEs' Uniform Closing Dataset (UCD) supports this CFPB form.",
+   "responses": [
+    "What is the Loan Estimate?",
+    "What is the Closing Disclosure?",
+    "What is the Uniform Residential Loan Application?",
+    "What is the HMDA register?"
+   ]
   },
   {
    "id": "q07",
@@ -98,7 +133,14 @@
    ],
    "answer": 3,
    "source": "https://www.fhfa.gov/blog/insights/standardizing-mortgage-data-through-the-umdp",
-   "level": 3
+   "level": 3,
+   "clue": "This is NOT one of the Uniform Mortgage Data Program datasets.",
+   "responses": [
+    "What is the Uniform Appraisal Dataset (UAD)?",
+    "What is the Uniform Closing Dataset (UCD)?",
+    "What is the Uniform Loan Delivery Dataset (ULDD)?",
+    "What is the Uniform Credit Dataset (UCRD)?"
+   ]
   },
   {
    "id": "q08",
@@ -112,7 +154,14 @@
    ],
    "answer": 0,
    "source": "https://sf.freddiemac.com/faqs/umdp-faq",
-   "level": 3
+   "level": 3,
+   "clue": "Lenders deliver appraisal data that conforms to the UAD through this portal.",
+   "responses": [
+    "What is the Uniform Collateral Data Portal (UCDP)?",
+    "What is MISMO Connect?",
+    "What is the MERS eRegistry?",
+    "What is Loan Closing Advisor?"
+   ]
   },
   {
    "id": "q09",
@@ -126,7 +175,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 2
+   "level": 2,
+   "clue": "The Life of Loan Business Process Model is built with this notation.",
+   "responses": [
+    "What is UML?",
+    "What is BPMN (Business Process Model and Notation)?",
+    "What is DMN (Decision Model and Notation)?",
+    "What is JSON?"
+   ]
   },
   {
    "id": "q10",
@@ -140,7 +196,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "BPMN, the notation behind Life of Loan, is a standard from this organization.",
+   "responses": [
+    "What is the Object Management Group?",
+    "What is the CFPB?",
+    "What is the W3C?",
+    "What is the Appraisal Institute?"
+   ]
   },
   {
    "id": "q11",
@@ -154,7 +217,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/get-involved/workgroup/business-process-model-cop",
-   "level": 3
+   "level": 3,
+   "clue": "This MISMO group maintains Life of Loan.",
+   "responses": [
+    "What is Information Management?",
+    "What is the Origination Community of Practice?",
+    "What is the Business Process Model Community of Practice?",
+    "What is the Board of Directors?"
+   ]
   },
   {
    "id": "q12",
@@ -182,7 +252,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "In Life of Loan Version 2026.01, \"Perform ESG Activities\" was renamed this.",
+   "responses": [
+    "What is Manage Climate Risk?",
+    "What is Address Housing Emerging Risks and Opportunities?",
+    "What is Perform Sustainability Review?",
+    "What is Assess Environmental Factors?"
+   ]
   },
   {
    "id": "q14",
@@ -196,7 +273,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 2
+   "level": 2,
+   "clue": "In Version 2026.01, \"Consider Flood Risk\" became this.",
+   "responses": [
+    "What is Consider Hazard Risk?",
+    "What is Consider Property Risk?",
+    "What is Evaluate Flood Zone?",
+    "What is Order Flood Certificate?"
+   ]
   },
   {
    "id": "q15",
@@ -210,7 +294,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "This process was added to Life of Loan in Version 2026.01.",
+   "responses": [
+    "What is Order Credit Report?",
+    "What is Utilize SMART Docs?",
+    "What is Evaluate Loss Mitigation Waterfall?",
+    "What is open Title and Closing Order?"
+   ]
   },
   {
    "id": "q16",
@@ -224,7 +315,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "Version 2026.01 added this new page to Life of Loan.",
+   "responses": [
+    "What is Servicing Transfers?",
+    "What is Secondary Marketing / Capital Markets?",
+    "What is Default Management?",
+    "What is Home Equity?"
+   ]
   },
   {
    "id": "q17",
@@ -238,7 +336,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 2
+   "level": 2,
+   "clue": "The MISMO Business Glossary holds about this many terms.",
+   "responses": [
+    "What is about 800?",
+    "What is about 2,000?",
+    "What is over 8,000?",
+    "What is over 50,000?"
+   ]
   },
   {
    "id": "q18",
@@ -252,7 +357,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 3
+   "level": 3,
+   "clue": "Each Business Glossary term belongs to this many Term Types.",
+   "responses": [
+    "What is exactly one?",
+    "What is two?",
+    "What is up to five?",
+    "What is none (terms are grouped only by Focus Area)?"
+   ]
   },
   {
    "id": "q19",
@@ -280,7 +392,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 2
+   "level": 2,
+   "clue": "Non-members can do this with the Business Glossary.",
+   "responses": [
+    "What is nothing (it's members only)?",
+    "What is downloading the full version?",
+    "What is searching the term list on mismo.org?",
+    "What is editing the definitions?"
+   ]
   },
   {
    "id": "q21",
@@ -336,7 +455,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
-   "level": 2
+   "level": 2,
+   "clue": "ULDD stands for this.",
+   "responses": [
+    "What is Uniform Loan Delivery Dataset?",
+    "What is Universal Lender Data Dictionary?",
+    "What is Uniform Lien Document Directory?",
+    "What is Unified Loan Disclosure Data?"
+   ]
   },
   {
    "id": "q25",
@@ -378,7 +504,14 @@
    ],
    "answer": 1,
    "source": "https://nationalmortgageprofessional.com/news/mismo-25-honoring-past-building-foundation-future",
-   "level": 2
+   "level": 2,
+   "clue": "The Mortgage Bankers Association created MISMO in this year.",
+   "responses": [
+    "What is 1989?",
+    "What is 1999?",
+    "What is 2008?",
+    "What is 2015?"
+   ]
   },
   {
    "id": "q28",
@@ -420,7 +553,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
-   "level": 2
+   "level": 2,
+   "clue": "A DWG is this.",
+   "responses": [
+    "What is a Data Warehouse Group that stores loan files?",
+    "What is a Development Workgroup created for a discrete mission, overseen by its aligned CoP?",
+    "What is a Document Writing Guild for the Business Glossary?",
+    "What is a permanent governance board?"
+   ]
   },
   {
    "id": "q31",
@@ -448,7 +588,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/about-MISMO/mismo-leadership/information-management",
-   "level": 3
+   "level": 3,
+   "clue": "This group keeps the Reference Model's data structures consistent and reviews each community's completed work.",
+   "responses": [
+    "What is Information Management?",
+    "What is the Board of Directors?",
+    "What is the Business Glossary CoP?",
+    "What is the Secondary CoP?"
+   ]
   },
   {
    "id": "q33",
@@ -476,7 +623,14 @@
    ],
    "answer": 2,
    "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp",
-   "level": 2
+   "level": 2,
+   "clue": "MISMO Boot Camp is taught this way.",
+   "responses": [
+    "What is one eight-hour day?",
+    "What are ten weekly webinars?",
+    "What are four 90-minute lessons?",
+    "What is a self-paced video course?"
+   ]
   },
   {
    "id": "q35",
@@ -490,7 +644,14 @@
    ],
    "answer": 2,
    "source": "https://www.mba.org/conferences-and-education/event/2026/11/16/default-calendar/mismo-boot-camp-november-2026-online-82058",
-   "level": 3
+   "level": 3,
+   "clue": "Completing Boot Camp earns this many CMSP education points.",
+   "responses": [
+    "What is 10?",
+    "What is 25?",
+    "What is 50?",
+    "What is 100?"
+   ]
   },
   {
    "id": "q36",
@@ -504,7 +665,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 3
+   "level": 3,
+   "clue": "The CMSP exam lasts this long.",
+   "responses": [
+    "What is 60 minutes?",
+    "What is 90 minutes?",
+    "What is 150 minutes?",
+    "What is four hours?"
+   ]
   },
   {
    "id": "q37",
@@ -518,7 +686,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 2
+   "level": 2,
+   "clue": "This score passes the CMSP exam.",
+   "responses": [
+    "What is 65%?",
+    "What is 70%?",
+    "What is 75%?",
+    "What is 85%?"
+   ]
   },
   {
    "id": "q38",
@@ -532,7 +707,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 2
+   "level": 2,
+   "clue": "The CMSP exam is this kind of exam.",
+   "responses": [
+    "What is closed book, proctored in person?",
+    "What is open book?",
+    "What is an oral interview?",
+    "What is a take-home essay?"
+   ]
   },
   {
    "id": "q39",
@@ -546,7 +728,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 2
+   "level": 2,
+   "clue": "An AMSP must renew this often.",
+   "responses": [
+    "What is every year?",
+    "What is every two years?",
+    "What is every five years?",
+    "What is never?"
+   ]
   },
   {
    "id": "q40",
@@ -560,7 +749,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 3
+   "level": 3,
+   "clue": "Attending a MISMO Summit earns this many AMSP participation points.",
+   "responses": [
+    "What is 1 point per day?",
+    "What is 5 points per Summit?",
+    "What is 10 points per Summit?",
+    "What is none?"
+   ]
   },
   {
    "id": "q41",
@@ -602,7 +798,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/about-us/blog/loan-estimate-and-closing-disclosure-choose-right-home-loans",
-   "level": 2
+   "level": 2,
+   "clue": "The Loan Estimate is this many pages long.",
+   "responses": [
+    "What is one?",
+    "What is three?",
+    "What is five?",
+    "What is seven?"
+   ]
   },
   {
    "id": "q44",
@@ -616,7 +819,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
-   "level": 3
+   "level": 3,
+   "clue": "Under federal law, PMI generally ends automatically when the balance is scheduled to reach this share of the home's original value.",
+   "responses": [
+    "What is 50%?",
+    "What is 78%?",
+    "What is 80%?",
+    "What is 90%?"
+   ]
   },
   {
    "id": "q45",
@@ -630,7 +840,14 @@
    ],
    "answer": 1,
    "source": "https://www.britannica.com/topic/Fannie-Mae",
-   "level": 2
+   "level": 2,
+   "clue": "Fannie Mae was created in this year.",
+   "responses": [
+    "What is 1934?",
+    "What is 1938?",
+    "What is 1968?",
+    "What is 1970?"
+   ]
   },
   {
    "id": "q46",
@@ -644,7 +861,14 @@
    ],
    "answer": 2,
    "source": "https://www.britannica.com/topic/Fannie-Mae",
-   "level": 3
+   "level": 3,
+   "clue": "Freddie Mac was created in this year.",
+   "responses": [
+    "What is 1938?",
+    "What is 1968?",
+    "What is 1970?",
+    "What is 1989?"
+   ]
   },
   {
    "id": "q47",
@@ -658,7 +882,14 @@
    ],
    "answer": 2,
    "source": "https://www.ginniemae.gov/about_us/who_we_are/pages/our_history.aspx",
-   "level": 2
+   "level": 2,
+   "clue": "This organization issued the first mortgage-backed security, in 1970.",
+   "responses": [
+    "What is Fannie Mae?",
+    "What is Freddie Mac?",
+    "What is Ginnie Mae?",
+    "What is the FHA?"
+   ]
   },
   {
    "id": "q48",
@@ -672,7 +903,14 @@
    ],
    "answer": 2,
    "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program",
-   "level": 2
+   "level": 2,
+   "clue": "Fannie Mae and Freddie Mac run the Uniform Mortgage Data Program at the direction of this agency.",
+   "responses": [
+    "What is the CFPB?",
+    "What is HUD?",
+    "What is the Federal Housing Finance Agency (FHFA)?",
+    "What is the Federal Reserve?"
+   ]
   },
   {
    "id": "q49",
@@ -686,7 +924,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/emortgage-standards-and-specifications",
-   "level": 3
+   "level": 3,
+   "clue": "The SMART Doc V3 Verifiable Profile lets a document's data do this.",
+   "responses": [
+    "What is travel with the PDF and be checked automatically against the document image?",
+    "What is print on paper without a PDF?",
+    "What is stay only in the loan origination system?",
+    "What is skip the eVault?"
+   ]
   },
   {
    "id": "q50",
@@ -700,7 +945,14 @@
    ],
    "answer": 2,
    "source": "https://singlefamily.fanniemae.com/media/6536/display",
-   "level": 3
+   "level": 3,
+   "clue": "Under E-SIGN or UETA, an eNote is this kind of record.",
+   "responses": [
+    "What is a public record?",
+    "What is a recorded deed?",
+    "What is a transferable record?",
+    "What is a paper original?"
+   ]
   },
   {
    "id": "q51",
@@ -714,7 +966,14 @@
    ],
    "answer": 0,
    "source": "https://www.mba.org/news-and-research/newsroom/news/2026/07/16/mismo-enhances-smart-doc--implementation-guide-to-support-secure--digital-mortgage-processes",
-   "level": 2
+   "level": 2,
+   "clue": "This MISMO group developed the SMART Doc 1.02 Implementation Guide.",
+   "responses": [
+    "What is the eMortgage Community of Practice?",
+    "What is Information Management?",
+    "What is the Business Glossary CoP?",
+    "What is the Board of Directors?"
+   ]
   },
   {
    "id": "q52",
@@ -728,7 +987,14 @@
    ],
    "answer": 1,
    "source": "https://mba.org/news-and-research/newsroom/news/2023/11/28/mismo-publishes-evault-standards-and-smart-doc-validation-rules",
-   "level": 2
+   "level": 2,
+   "clue": "MISMO's SMART Doc Validation Rules lay out these.",
+   "responses": [
+    "What are interest rate limits?",
+    "What are the components and fields expected in an eNote?",
+    "What are appraiser license rules?",
+    "What are closing cost caps?"
+   ]
   },
   {
    "id": "q53",
@@ -742,7 +1008,14 @@
    ],
    "answer": 2,
    "source": "https://newslink.mba.org/mba-newslinks/2020/january/mba-newslink-monday-february-3-2020/amid-rapid-change-mismo-adapts/",
-   "level": 2
+   "level": 2,
+   "clue": "MISMO built its Remote Online Notarization (RON) standards together with this association.",
+   "responses": [
+    "What is the National Association of Realtors?",
+    "What is the American Bar Association?",
+    "What is the American Land Title Association?",
+    "What is AARP?"
+   ]
   },
   {
    "id": "q54",
@@ -756,7 +1029,14 @@
    ],
    "answer": 1,
    "source": "https://nationalmortgageprofessional.com/news/mismo-updates-enote-standard-digital-mortgage-adoption-tops-32m-registered-loans",
-   "level": 2
+   "level": 2,
+   "clue": "In July 2026, about this many loans were registered as eMortgages.",
+   "responses": [
+    "What is about 320,000?",
+    "What is more than 3.2 million?",
+    "What is about 32 million?",
+    "What is about 320 million?"
+   ]
   },
   {
    "id": "q55",
@@ -770,7 +1050,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
-   "level": 3
+   "level": 3,
+   "clue": "Freddie Mac receives the Uniform Closing Dataset (UCD) file through this tool.",
+   "responses": [
+    "What is Loan Closing Advisor?",
+    "What is MISMO Link?",
+    "What is the MERS eRegistry?",
+    "What is Desktop Underwriter?"
+   ]
   },
   {
    "id": "q56",
@@ -798,7 +1085,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "In Version 2026.01, this process was taken out of Perform Delivery.",
+   "responses": [
+    "What is Order Credit Report?",
+    "What is Trade MBS?",
+    "What is Validate Title/Settlement Agent(s)?",
+    "What is Utilize SMART Docs?"
+   ]
   },
   {
    "id": "q58",
@@ -812,7 +1106,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "In Version 2026.01, Order Credit Report was copied into this process.",
+   "responses": [
+    "What is Complete Loan Application?",
+    "What is Perform Delivery?",
+    "What is open Title and Closing Order?",
+    "What is Evaluate Loss Mitigation Waterfall?"
+   ]
   },
   {
    "id": "q59",
@@ -840,7 +1141,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 2
+   "level": 2,
+   "clue": "Non-members must do this before downloading Life of Loan materials.",
+   "responses": [
+    "What is pay a fee?",
+    "What is accept a license?",
+    "What is pass Boot Camp?",
+    "What is join a workgroup?"
+   ]
   },
   {
    "id": "q61",
@@ -854,7 +1162,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "MISMO members get this extra Life of Loan resource.",
+   "responses": [
+    "What is a Quick Reference Guide?",
+    "What is a rate sheet?",
+    "What is a printed poster?",
+    "What is a pricing engine?"
+   ]
   },
   {
    "id": "q62",
@@ -868,7 +1183,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 2
+   "level": 2,
+   "clue": "This is one of Life of Loan's supporting materials.",
+   "responses": [
+    "What is an investor matrix?",
+    "What is a Workgroup Cross Reference?",
+    "What is a credit report?",
+    "What is a loan pricing grid?"
+   ]
   },
   {
    "id": "q63",
@@ -882,7 +1204,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/get-involved/workgroup/business-process-model-cop",
-   "level": 2
+   "level": 2,
+   "clue": "The Business Process Model CoP describes Life of Loan as a directory of these.",
+   "responses": [
+    "What are MISMO members' contact details?",
+    "What are MISMO-published and in-flight products, organized as a typical mortgage life cycle?",
+    "What are certified providers?",
+    "What are Summit sessions?"
+   ]
   },
   {
    "id": "q64",
@@ -910,7 +1239,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 3
+   "level": 3,
+   "clue": "The latest Business Glossary version was published as Final in this month.",
+   "responses": [
+    "What is January 2024?",
+    "What is September 2026?",
+    "What is March 2025?",
+    "What is never (it has never been final)?"
+   ]
   },
   {
    "id": "q66",
@@ -924,7 +1260,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 2
+   "level": 2,
+   "clue": "Besides its one Term Type, a glossary term can also have one or more of these.",
+   "responses": [
+    "What are Focus Areas?",
+    "What are owners?",
+    "What are prices?",
+    "What are version numbers?"
+   ]
   },
   {
    "id": "q67",
@@ -938,7 +1281,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 3
+   "level": 3,
+   "clue": "The Business Glossary lists this many sources.",
+   "responses": [
+    "What is 3?",
+    "What is 7?",
+    "What is 11?",
+    "What is 25?"
+   ]
   },
   {
    "id": "q68",
@@ -952,7 +1302,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 2
+   "level": 2,
+   "clue": "This is one of the Business Glossary's sources.",
+   "responses": [
+    "What is the MISMO Logical Data Dictionary?",
+    "What is the Oxford English Dictionary?",
+    "What is the IRS tax code?",
+    "What is a thesaurus?"
+   ]
   },
   {
    "id": "q69",
@@ -1050,7 +1407,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/about-mismo",
-   "level": 2
+   "level": 2,
+   "clue": "This body guides MISMO's strategy and oversees the standards.",
+   "responses": [
+    "What is the Board of Directors?",
+    "What is the CFPB?",
+    "What is the GSEs?",
+    "What is the Business Glossary CoP?"
+   ]
   },
   {
    "id": "q76",
@@ -1064,7 +1428,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/membership/join-mismo",
-   "level": 2
+   "level": 2,
+   "clue": "This is a benefit of MISMO membership.",
+   "responses": [
+    "What is a seat on the CFPB board?",
+    "What is the ability to vote within MISMO's 30+ workgroups?",
+    "What is a discount on mortgage rates?",
+    "What is an automatic CMSP certification?"
+   ]
   },
   {
    "id": "q77",
@@ -1078,7 +1449,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
-   "level": 2
+   "level": 2,
+   "clue": "MISMO has about this many workgroups across the mortgage life cycle and data domains.",
+   "responses": [
+    "What is 5?",
+    "What is 12?",
+    "What is 30+?",
+    "What is 100+?"
+   ]
   },
   {
    "id": "q78",
@@ -1092,7 +1470,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
-   "level": 3
+   "level": 3,
+   "clue": "In the LADE DWG, LADE stands for this.",
+   "responses": [
+    "What is Lender Audit and Data Exchange?",
+    "What is Loan Application Data Exchange?",
+    "What is Lien and Deed Entry?",
+    "What is Loan Accounting Data Engine?"
+   ]
   },
   {
    "id": "q79",
@@ -1106,7 +1491,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/get-involved/workgroup/decision-modeling",
-   "level": 3
+   "level": 3,
+   "clue": "The Decision Modeling CoP advocates this standard alongside the MISMO Reference Model.",
+   "responses": [
+    "What is BPMN?",
+    "What is DMN (Decision Model and Notation)?",
+    "What is UML?",
+    "What is HTML?"
+   ]
   },
   {
    "id": "q80",
@@ -1120,7 +1512,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/about-MISMO/mismo-leadership/information-management",
-   "level": 3
+   "level": 3,
+   "clue": "Membership in Information Management is limited to these people.",
+   "responses": [
+    "Who are MISMO staff?",
+    "Who are Board members?",
+    "Who are designated representatives of the Communities of Practice and DWGs?",
+    "Who is anyone who signs up?"
+   ]
   },
   {
    "id": "q81",
@@ -1134,7 +1533,14 @@
    ],
    "answer": 1,
    "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp",
-   "level": 2
+   "level": 2,
+   "clue": "The Boot Camp exam has this many questions.",
+   "responses": [
+    "What is 25?",
+    "What is 52?",
+    "What is 100?",
+    "What is 150?"
+   ]
   },
   {
    "id": "q82",
@@ -1162,7 +1568,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 3
+   "level": 3,
+   "clue": "A CMSP candidate who scores below 75% can retest within this many days.",
+   "responses": [
+    "What is 5?",
+    "What is 10?",
+    "What is 30?",
+    "What is 90?"
+   ]
   },
   {
    "id": "q84",
@@ -1190,7 +1603,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 2
+   "level": 2,
+   "clue": "A CMSP candidate needs a reference from this person.",
+   "responses": [
+    "Who is any coworker?",
+    "Who is a member of the MISMO Leadership Team?",
+    "Who is their lender?",
+    "Who is a CFPB examiner?"
+   ]
   },
   {
    "id": "q86",
@@ -1204,7 +1624,14 @@
    ],
    "answer": 3,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 2
+   "level": 2,
+   "clue": "Serving as a Board member, or Chair or Vice Chair of a workgroup, earns this many AMSP participation points.",
+   "responses": [
+    "What is 1?",
+    "What is 3?",
+    "What is 5?",
+    "What is 10?"
+   ]
   },
   {
    "id": "q87",
@@ -1218,7 +1645,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 3
+   "level": 3,
+   "clue": "This happens if an AMSP doesn't renew within a year after expiring.",
+   "responses": [
+    "What is nothing (it renews itself)?",
+    "What is a late fee only?",
+    "What is starting the AMSP process over, including Boot Camp?",
+    "What is becoming a CMSP?"
+   ]
   },
   {
    "id": "q88",
@@ -1232,7 +1666,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 2
+   "level": 2,
+   "clue": "Young professionals under 35 get this AMSP enrollment discount.",
+   "responses": [
+    "What is $25?",
+    "What is $50?",
+    "What is $100?",
+    "What is half off?"
+   ]
   },
   {
    "id": "q89",
@@ -1246,7 +1687,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/about-us/blog/loan-estimate-and-closing-disclosure-choose-right-home-loans",
-   "level": 2
+   "level": 2,
+   "clue": "A lender needs this many pieces of information before it must send a Loan Estimate.",
+   "responses": [
+    "What is three?",
+    "What is six?",
+    "What is ten?",
+    "What is fifteen?"
+   ]
   },
   {
    "id": "q90",
@@ -1274,7 +1722,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/ask-cfpb/slug-en-181",
-   "level": 3
+   "level": 3,
+   "clue": "Before the Loan Estimate (applications before October 3, 2015), borrowers got this.",
+   "responses": [
+    "What is a HUD-1 only?",
+    "What are a Good Faith Estimate and a Truth-in-Lending disclosure?",
+    "What is nothing in writing?",
+    "What is a credit report?"
+   ]
   },
   {
    "id": "q92",
@@ -1288,7 +1743,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/ask-cfpb/what-is-a-foreclosure-en-202/",
-   "level": 3
+   "level": 3,
+   "clue": "Besides the 78% mark, PMI must also end when the loan reaches this point.",
+   "responses": [
+    "What is its fifth anniversary?",
+    "What is the midpoint of its amortization schedule?",
+    "What is the first refinance?",
+    "What is the borrower's 65th birthday?"
+   ]
   },
   {
    "id": "q93",
@@ -1316,7 +1778,14 @@
    ],
    "answer": 1,
    "source": "https://www.ginniemae.gov/newsroom/HAPS/Pages/Post.aspx?PostID=68",
-   "level": 2
+   "level": 2,
+   "clue": "Ginnie Mae is part of this federal department.",
+   "responses": [
+    "What is the Treasury?",
+    "What is Housing and Urban Development (HUD)?",
+    "What is Commerce?",
+    "What is Veterans Affairs?"
+   ]
   },
   {
    "id": "q95",
@@ -1330,7 +1799,14 @@
    ],
    "answer": 2,
    "source": "https://ginniemae.gov/about_us/who_we_are",
-   "level": 3
+   "level": 3,
+   "clue": "These are the only mortgage-backed securities backed by the full faith and credit of the U.S. government.",
+   "responses": [
+    "What are Fannie Mae's?",
+    "What are Freddie Mac's?",
+    "What are Ginnie Mae's?",
+    "What are every bank's?"
+   ]
   },
   {
    "id": "q96",
@@ -1344,7 +1820,14 @@
    ],
    "answer": 1,
    "source": "https://chicagoagentmagazine.com/?p=108854",
-   "level": 2
+   "level": 2,
+   "clue": "The Federal Housing Administration (FHA) was created in this year.",
+   "responses": [
+    "What is 1913?",
+    "What is 1934?",
+    "What is 1968?",
+    "What is 1990?"
+   ]
   },
   {
    "id": "q097",
@@ -1358,7 +1841,14 @@
    ],
    "answer": 1,
    "source": "https://singlefamily.fanniemae.com/media/6536/display",
-   "level": 3
+   "level": 3,
+   "clue": "When Fannie Mae and Freddie Mac updated their eNote requirements, this was the original eNote specification version they had mandated.",
+   "responses": [
+    "What is 1.0?",
+    "What is 1.02?",
+    "What is 2.1?",
+    "What is 3.0?"
+   ]
   },
   {
    "id": "q098",
@@ -1372,7 +1862,14 @@
    ],
    "answer": 0,
    "source": "https://mba.org/news-and-research/newsroom/news/2023/08/24/MISMO-releases-the-consumer-home-equity-smart-doc-standardized-mapping-and-updated-implementation-guide",
-   "level": 3
+   "level": 3,
+   "clue": "In Aug. 2023, MISMO's consumer home equity first-lien eNote mapping was based on this standard note.",
+   "responses": [
+    "What is the 3200 Standard Fixed Rate Note?",
+    "What is the 1003 Loan Application?",
+    "What is the HUD-1 Note?",
+    "What is the 4506-C Note?"
+   ]
   },
   {
    "id": "q099",
@@ -1386,7 +1883,14 @@
    ],
    "answer": 0,
    "source": "https://mba.org/news-and-research/newsroom/news/2023/11/28/mismo-publishes-evault-standards-and-smart-doc-validation-rules",
-   "level": 3
+   "level": 3,
+   "clue": "MISMO published its eVault Standards and SMART Doc Validation Rules in this month.",
+   "responses": [
+    "What is November 2023?",
+    "What is March 2019?",
+    "What is June 2021?",
+    "What is January 2026?"
+   ]
   },
   {
    "id": "q100",
@@ -1400,7 +1904,14 @@
    ],
    "answer": 1,
    "source": "https://nationalmortgageprofessional.com/news/mismo-updates-enote-standard-digital-mortgage-adoption-tops-32m-registered-loans",
-   "level": 3
+   "level": 3,
+   "clue": "Charlie Epperson, the eMortgage CoP co-chair quoted on the July 2026 SMART Doc guide, is with this company.",
+   "responses": [
+    "What is Snapdocs?",
+    "What is FundingShield?",
+    "What is DocMagic?",
+    "What is Docusign?"
+   ]
   },
   {
    "id": "q101",
@@ -1414,7 +1925,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
-   "level": 3
+   "level": 3,
+   "clue": "Fannie Mae receives the Uniform Closing Dataset (UCD) through this tool.",
+   "responses": [
+    "What is the UCD Collection Solution?",
+    "What is Loan Closing Advisor?",
+    "What is Desktop Originator?",
+    "What is the MERS eRegistry?"
+   ]
   },
   {
    "id": "q102",
@@ -1428,7 +1946,14 @@
    ],
    "answer": 1,
    "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
-   "level": 3
+   "level": 3,
+   "clue": "The GSEs began phasing in the Uniform Loan Delivery Dataset (ULDD) in this year.",
+   "responses": [
+    "What is 2004?",
+    "What is 2012?",
+    "What is 2019?",
+    "What is 2024?"
+   ]
   },
   {
    "id": "q103",
@@ -1442,7 +1967,14 @@
    ],
    "answer": 0,
    "source": "https://www.fhfa.gov/Media/Blog/Pages/standardizing-mortgage-data-through-the-UMDP.aspx",
-   "level": 3
+   "level": 3,
+   "clue": "Fannie Mae and Freddie Mac have been working on data standardization under UMDP since this month.",
+   "responses": [
+    "What is May 2010?",
+    "What is January 2001?",
+    "What is October 2015?",
+    "What is March 2020?"
+   ]
   },
   {
    "id": "q104",
@@ -1456,7 +1988,14 @@
    ],
    "answer": 1,
    "source": "https://www.housingwire.com/tag/mismo/",
-   "level": 3
+   "level": 3,
+   "clue": "In July 2026, MISMO updated its mortgage insurance data standards to support these credit scores.",
+   "responses": [
+    "What are FICO 8 and VantageScore 3.0?",
+    "What are VantageScore 4.0 and FICO 10T?",
+    "What are FICO 5 and FICO 2?",
+    "What is only FICO 9?"
+   ]
   },
   {
    "id": "q105",
@@ -1470,7 +2009,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program/umdp-announcements",
-   "level": 3
+   "level": 3,
+   "clue": "In September 2026, the GSEs offered a policy exception for sellers needing more time to implement this dataset version.",
+   "responses": [
+    "What is UAD 3.6?",
+    "What is ULDD 1.0?",
+    "What is UCD 1.0?",
+    "What is URLA 2.0?"
+   ]
   },
   {
    "id": "q106",
@@ -1484,7 +2030,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/delivering/uniform-mortgage-data-program/umdp-announcements?page=2",
-   "level": 3
+   "level": 3,
+   "clue": "The redesigned Uniform Appraisal Dataset brings this new appraisal form.",
+   "responses": [
+    "What is the Uniform Residential Appraisal Report (URAR)?",
+    "What is the Closing Disclosure?",
+    "What is the Uniform Loan Application?",
+    "What is the Property Data Report?"
+   ]
   },
   {
    "id": "q107",
@@ -1498,7 +2051,14 @@
    ],
    "answer": 1,
    "source": "https://mismo.org/about-MISMO/news-and-accomplishments/news/3",
-   "level": 3
+   "level": 3,
+   "clue": "The public comment period for the 2024 version of the Life of Loan Process Model ran this long.",
+   "responses": [
+    "What is 30 days?",
+    "What is 60 days?",
+    "What is 90 days?",
+    "What is one year?"
+   ]
   },
   {
    "id": "q108",
@@ -1512,7 +2072,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/get-involved/workgroup/business-reference-model",
-   "level": 3
+   "level": 3,
+   "clue": "The Business Process Model CoP works with this group to provide new terms and definitions.",
+   "responses": [
+    "What is the Business Glossary Community of Practice?",
+    "What is Information Management?",
+    "What is the Board of Directors?",
+    "What is the API CoP?"
+   ]
   },
   {
    "id": "q109",
@@ -1526,7 +2093,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "This Life of Loan process changed in Version 2026.01.",
+   "responses": [
+    "What is Perform AVM Model Due Diligence?",
+    "What is Run Payroll?",
+    "What is File Quarterly Taxes?",
+    "What is Renew Office Lease?"
+   ]
   },
   {
    "id": "q110",
@@ -1540,7 +2114,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "Anyone can download this Life of Loan supporting material.",
+   "responses": [
+    "What are Narratives?",
+    "What is a rate lock form?",
+    "What is a servicing transfer letter?",
+    "What is an escrow analysis?"
+   ]
   },
   {
    "id": "q112",
@@ -1554,7 +2135,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "This Life of Loan process covers title work.",
+   "responses": [
+    "What is open Title and Closing Order?",
+    "What is Order Credit Report?",
+    "What is Trade MBS?",
+    "What is Perform AVM Model Due Diligence?"
+   ]
   },
   {
    "id": "q115",
@@ -1568,7 +2156,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/life-of-loan",
-   "level": 3
+   "level": 3,
+   "clue": "This Life of Loan process mentions MISMO's SMART Doc standard.",
+   "responses": [
+    "What is Utilize SMART Docs?",
+    "What is Consider Hazard Risk?",
+    "What is Order Credit Report?",
+    "What is Perform Delivery?"
+   ]
   },
   {
    "id": "q117",
@@ -1582,7 +2177,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 3
+   "level": 3,
+   "clue": "This is one of the Business Glossary's eleven listed sources.",
+   "responses": [
+    "What is the Artificial Intelligence Glossary?",
+    "What is the Federal Register index?",
+    "What is a banking textbook?",
+    "What is the FDIC call report?"
+   ]
   },
   {
    "id": "q118",
@@ -1596,7 +2198,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 3
+   "level": 3,
+   "clue": "The Business Glossary covers business processes, events, terms, calculations, documents and these.",
+   "responses": [
+    "What are forms?",
+    "What are salaries?",
+    "What are stock symbols?",
+    "What are weather events?"
+   ]
   },
   {
    "id": "q119",
@@ -1610,7 +2219,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/standards-resources/business-glossary",
-   "level": 3
+   "level": 3,
+   "clue": "MISMO invites these people to send comments, edits and suggestions on the Business Glossary.",
+   "responses": [
+    "Who are its users?",
+    "Who are only Board members?",
+    "Who are only the GSEs?",
+    "Who are only regulators?"
+   ]
   },
   {
    "id": "q120",
@@ -1624,7 +2240,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/media/document/pdf/umdp-fact-sheet",
-   "level": 3
+   "level": 3,
+   "clue": "UMDP stands for this.",
+   "responses": [
+    "What is Uniform Mortgage Data Program?",
+    "What is Universal Mortgage Delivery Process?",
+    "What is Uniform Market Disclosure Policy?",
+    "What is Unified Mortgage Document Portal?"
+   ]
   },
   {
    "id": "q121",
@@ -1638,7 +2261,14 @@
    ],
    "answer": 0,
    "source": "https://singlefamily.fanniemae.com/node/2811",
-   "level": 3
+   "level": 3,
+   "clue": "UCDP stands for this.",
+   "responses": [
+    "What is Uniform Collateral Data Portal?",
+    "What is Universal Closing Document Program?",
+    "What is Uniform Credit Disclosure Process?",
+    "What is Unified Collateral Delivery Platform?"
+   ]
   },
   {
    "id": "q122",
@@ -1652,7 +2282,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup/workgroup-alignment",
-   "level": 3
+   "level": 3,
+   "clue": "In MISMO's workgroup names, DWG stands for this.",
+   "responses": [
+    "What is Data Warehouse Group?",
+    "What is Development Workgroup?",
+    "What is Document Writing Guild?",
+    "What is Digital Workflow Gateway?"
+   ]
   },
   {
    "id": "q123",
@@ -1666,7 +2303,14 @@
    ],
    "answer": 1,
    "source": "https://files-prod.consumerfinance.gov/f/documents/201508_cfpb_compliance-bulletin_private-mortgage-insurance-cancellation-and-te_jpbfQUl.pdf",
-   "level": 3
+   "level": 3,
+   "clue": "HPA, the 1998 law on PMI cancellation, stands for this.",
+   "responses": [
+    "What is Housing Price Act?",
+    "What is Homeowners Protection Act?",
+    "What is Home Purchase Assistance?",
+    "What is Housing Policy Amendment?"
+   ]
   },
   {
    "id": "q124",
@@ -1680,7 +2324,14 @@
    ],
    "answer": 0,
    "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
-   "level": 3
+   "level": 3,
+   "clue": "For PMI rules, \"original value\" usually means this.",
+   "responses": [
+    "What is the lower of the sales price or the appraised value at purchase?",
+    "What is the current market value?",
+    "What is the tax-assessed value?",
+    "What is the loan amount?"
+   ]
   },
   {
    "id": "q125",
@@ -1694,7 +2345,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
-   "level": 3
+   "level": 3,
+   "clue": "After a refinance, this is the \"original value\" used for PMI.",
+   "responses": [
+    "What is the original purchase price?",
+    "What is the appraised value at the time of the refinance?",
+    "What is the tax-assessed value?",
+    "What is the loan amount?"
+   ]
   },
   {
    "id": "q126",
@@ -1708,7 +2366,14 @@
    ],
    "answer": 0,
    "source": "https://www.coverpages.org/mbaaXMLWG19991012.html",
-   "level": 3
+   "level": 3,
+   "clue": "At its 1999 announcement, MISMO had this slightly different name.",
+   "responses": [
+    "What is Mortgage Industry Data Standards Maintenance Organization?",
+    "What is Mortgage Internet Standards Organization?",
+    "What is Mortgage Information Systems Management Office?",
+    "What is Mortgage Industry Software Messaging Organization?"
+   ]
   },
   {
    "id": "q127",
@@ -1722,7 +2387,14 @@
    ],
    "answer": 0,
    "source": "https://www.coverpages.org/mbaaXMLWG19991012.html",
-   "level": 3
+   "level": 3,
+   "clue": "MBA announced MISMO here in October 1999.",
+   "responses": [
+    "What is its 86th Annual Convention in Boston?",
+    "What is a Senate hearing?",
+    "What is the White House?",
+    "What is a GSE board meeting?"
+   ]
   },
   {
    "id": "q128",
@@ -1736,7 +2408,14 @@
    ],
    "answer": 0,
    "source": "https://www.nationalmortgagenews.com/dailybriefing/2010_437/mba-mismo-mers-1026675-1.html?site=default_tech",
-   "level": 3
+   "level": 3,
+   "clue": "This company ran MISMO's day-to-day operations from February 2009 until MBA took them back in December 2010.",
+   "responses": [
+    "What is Merscorp?",
+    "What is Fannie Mae?",
+    "What is Freddie Mac?",
+    "What is Ellie Mae?"
+   ]
   },
   {
    "id": "q129",
@@ -1750,7 +2429,14 @@
    ],
    "answer": 1,
    "source": "https://www.guidestar.org/profile/51-0502943",
-   "level": 3
+   "level": 3,
+   "clue": "MISMO became a not-for-profit subsidiary of MBA in this year.",
+   "responses": [
+    "What is 1999?",
+    "What is 2004?",
+    "What is 2010?",
+    "What is 2015?"
+   ]
   },
   {
    "id": "q130",
@@ -1764,7 +2450,14 @@
    ],
    "answer": 0,
    "source": "https://newslink.mba.org/mba-newslinks/2024/october/mba-newslink-monday-oct-7-2024/mismo-seeks-nominations-for-standards-governance-committee-members-deadline-oct-7",
-   "level": 3
+   "level": 3,
+   "clue": "These committees oversee MISMO's standards development process, as noted in the Bylaws.",
+   "responses": [
+    "What are the Residential and Commercial Standards Governance Committees?",
+    "What are the CFPB and FHFA?",
+    "What is the Business Glossary CoP?",
+    "What is the API CoP?"
+   ]
   },
   {
    "id": "q131",
@@ -1778,7 +2471,14 @@
    ],
    "answer": 1,
    "source": "https://newslink.mba.org/mba-newslinks/2024/october/mba-newslink-monday-oct-7-2024/mismo-seeks-nominations-for-standards-governance-committee-members-deadline-oct-7",
-   "level": 3
+   "level": 3,
+   "clue": "These people may serve on MISMO's Standards Governance Committees.",
+   "responses": [
+    "Who is anyone?",
+    "Who are only MISMO members?",
+    "Who are only MBA staff?",
+    "Who are only regulators?"
+   ]
   },
   {
    "id": "q132",
@@ -1792,7 +2492,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/membership/join-mismo",
-   "level": 3
+   "level": 3,
+   "clue": "This members-only exchange tells you how \"E\" your loan can be with each of your counterparties.",
+   "responses": [
+    "What is the E-Eligibility Exchange?",
+    "What is MISMO Link?",
+    "What is the MERS eRegistry?",
+    "What is the UCD Collection Solution?"
+   ]
   },
   {
    "id": "q133",
@@ -1806,7 +2513,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/get-involved/workgroup/artificial-intelligence-(ai)-community-of-practice-(cop)",
-   "level": 3
+   "level": 3,
+   "clue": "This company powers MISMO's Artificial Intelligence (AI) Community of Practice.",
+   "responses": [
+    "What is Cotality?",
+    "What is Fannie Mae?",
+    "What is Viant Eye?",
+    "What is Experian?"
+   ]
   },
   {
    "id": "q134",
@@ -1820,7 +2534,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/get-involved/workgroup/secondary",
-   "level": 3
+   "level": 3,
+   "clue": "Besides loan acquisition and delivery, the Secondary CoP works on this kind of reporting.",
+   "responses": [
+    "What is regulatory reporting (HMDA, etc.)?",
+    "What is payroll reporting?",
+    "What is tax reporting?",
+    "What is sales reporting?"
+   ]
   },
   {
    "id": "q135",
@@ -1834,7 +2555,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/get-involved/workgroup/origination",
-   "level": 3
+   "level": 3,
+   "clue": "The Origination CoP focuses on these three key process areas.",
+   "responses": [
+    "What are Application, Underwriting and Closing?",
+    "What are Servicing, Default and REO?",
+    "What are Marketing, Sales and Billing?",
+    "What are Appraisal, Title and Flood?"
+   ]
   },
   {
    "id": "q136",
@@ -1848,7 +2576,14 @@
    ],
    "answer": 2,
    "source": "https://mismo.org/events-education/educational-offerings/mismo-boot-camp",
-   "level": 3
+   "level": 3,
+   "clue": "You have this long to finish the Boot Camp exam once you start.",
+   "responses": [
+    "What is 30 minutes?",
+    "What is 60 minutes?",
+    "What is 90 minutes?",
+    "What is three hours?"
+   ]
   },
   {
    "id": "q137",
@@ -1862,7 +2597,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 3
+   "level": 3,
+   "clue": "These are the CMSP exam fees for MISMO members and non-members.",
+   "responses": [
+    "What are $100 and $200?",
+    "What are $200 and $400?",
+    "What are $400 and $800?",
+    "What are $500 and $1,000?"
+   ]
   },
   {
    "id": "q138",
@@ -1876,7 +2618,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 3
+   "level": 3,
+   "clue": "After a second unsuccessful CMSP exam attempt, a candidate must wait this long.",
+   "responses": [
+    "What is 30 days?",
+    "What is 90 days?",
+    "What is six months?",
+    "What is two years?"
+   ]
   },
   {
    "id": "q139",
@@ -1890,7 +2639,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 3
+   "level": 3,
+   "clue": "It costs MISMO members this much to retest for the CMSP exam.",
+   "responses": [
+    "What is $50?",
+    "What is $100?",
+    "What is $200?",
+    "What is nothing?"
+   ]
   },
   {
    "id": "q140",
@@ -1904,7 +2660,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/cmsp-exam-study-guide",
-   "level": 3
+   "level": 3,
+   "clue": "This federal document on voluntary consensus standards is CMSP preparation material.",
+   "responses": [
+    "What is OMB Circular A-119?",
+    "What is Regulation Z?",
+    "What is the Dodd-Frank Act?",
+    "What is FHA Handbook 4000.1?"
+   ]
   },
   {
    "id": "q141",
@@ -1918,7 +2681,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 3
+   "level": 3,
+   "clue": "Attending a workgroup (at least 33% of its meetings) earns this many AMSP participation points a year.",
+   "responses": [
+    "What is 1?",
+    "What is 3?",
+    "What is 5?",
+    "What is 10?"
+   ]
   },
   {
    "id": "q142",
@@ -1932,7 +2702,14 @@
    ],
    "answer": 2,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 3
+   "level": 3,
+   "clue": "Serving as a MISMO Boot Camp instructor earns this many AMSP participation points.",
+   "responses": [
+    "What is 1?",
+    "What is 2?",
+    "What is 5?",
+    "What is 10?"
+   ]
   },
   {
    "id": "q143",
@@ -1946,7 +2723,14 @@
    ],
    "answer": 1,
    "source": "https://www.mismo.org/events-education/certifications/individual-certification/amsp-process",
-   "level": 3
+   "level": 3,
+   "clue": "This is the AMSP renewal fee for MISMO members.",
+   "responses": [
+    "What is $25?",
+    "What is $75?",
+    "What is $150?",
+    "What is $200?"
+   ]
   },
   {
    "id": "q144",
@@ -1960,7 +2744,14 @@
    ],
    "answer": 3,
    "source": "https://newslink.mba.org/mba-newslinks/2026/february/mismo-boot-camp-online-feb-23-24/",
-   "level": 3
+   "level": 3,
+   "clue": "MISMO Chair Champion members receive this many complimentary Boot Camp enrollments a year.",
+   "responses": [
+    "What is 1?",
+    "What is 3?",
+    "What is 5?",
+    "What is 10?"
+   ]
   },
   {
    "id": "q145",
@@ -1974,7 +2765,14 @@
    ],
    "answer": 0,
    "source": "https://www.mismo.org/detail-pages/event/2026/08/26/default-calendar/mismo-boot-camp-august-2026-reston-va-82057",
-   "level": 3
+   "level": 3,
+   "clue": "Besides online classes, MISMO's August 2026 in-person Boot Camp was held in this city.",
+   "responses": [
+    "What is Reston, VA?",
+    "What is Dallas, TX?",
+    "What is New Orleans, LA?",
+    "What is Chicago, IL?"
+   ]
   },
   {
    "id": "q146",
@@ -1988,7 +2786,14 @@
    ],
    "answer": 1,
    "source": "https://www.consumerfinance.gov/archive/blog/know-before-you-owe-new-mortgage-disclosures-new-rule/",
-   "level": 3
+   "level": 3,
+   "clue": "The Loan Estimate and Closing Disclosure (Know Before You Owe) rule took effect for most mortgages on this date.",
+   "responses": [
+    "What is January 1, 2014?",
+    "What is October 3, 2015?",
+    "What is July 21, 2011?",
+    "What is March 15, 2020?"
+   ]
   },
   {
    "id": "q147",
@@ -2002,7 +2807,14 @@
    ],
    "answer": 2,
    "source": "https://www.consumerfinance.gov/archive/blog/know-before-you-owe-making-the-mortgage-process-easier-for-you/",
-   "level": 3
+   "level": 3,
+   "clue": "The Loan Estimate and Closing Disclosure replaced this many overlapping disclosure forms.",
+   "responses": [
+    "What is two?",
+    "What is three?",
+    "What is four?",
+    "What is six?"
+   ]
   },
   {
    "id": "q148",
@@ -2016,7 +2828,14 @@
    ],
    "answer": 0,
    "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
-   "level": 3
+   "level": 3,
+   "clue": "The federal PMI cancellation rights described by the CFPB apply to single-family principal residences closed on or after this date.",
+   "responses": [
+    "What is July 29, 1999?",
+    "What is January 1, 2008?",
+    "What is October 3, 2015?",
+    "What is July 21, 2010?"
+   ]
   },
   {
    "id": "q149",
@@ -2030,7 +2849,14 @@
    ],
    "answer": 0,
    "source": "https://www.consumerfinance.gov/ask-cfpb/when-can-i-remove-private-mortgage-insurance-pmi-from-my-loan-en-202/",
-   "level": 3
+   "level": 3,
+   "clue": "To have PMI canceled at 80%, a borrower must be able to certify this.",
+   "responses": [
+    "What is that there are no junior liens on the home?",
+    "What is that they have a second home?",
+    "What is that they refinanced in the last year?",
+    "What is that they have no other loans of any kind?"
+   ]
   },
   {
    "id": "q150",
@@ -2044,7 +2870,14 @@
    ],
    "answer": 0,
    "source": "https://www.ginniemae.gov/newsroom/HAPS/Pages/Post.aspx?PostID=68",
-   "level": 3
+   "level": 3,
+   "clue": "The Housing and Urban Development Act, creating Ginnie Mae, was signed on this date.",
+   "responses": [
+    "What is August 1, 1968?",
+    "What is July 4, 1970?",
+    "What is October 1, 1938?",
+    "What is December 1, 1971?"
+   ]
   },
   {
    "id": "q151",
@@ -2058,7 +2891,14 @@
    ],
    "answer": 2,
    "source": "https://www.ginniemae.gov/newsroom/HAPS/Pages/Post.aspx?PostID=68",
-   "level": 3
+   "level": 3,
+   "clue": "Since 1970, Ginnie Mae has guaranteed about this much in mortgage-backed securities overall.",
+   "responses": [
+    "What is $97 billion?",
+    "What is $970 billion?",
+    "What is more than $9.7 trillion?",
+    "What is $97 trillion?"
+   ]
   },
   {
    "id": "q152",
@@ -2072,7 +2912,14 @@
    ],
    "answer": 1,
    "source": "https://www.mortgagecalculator.org/resources/history-of-the-government-sponsored-enterprises.pdf",
-   "level": 3
+   "level": 3,
+   "clue": "Freddie Mac issued the first conventional loan mortgage-backed security in this year.",
+   "responses": [
+    "What is 1968?",
+    "What is 1971?",
+    "What is 1981?",
+    "What is 1992?"
+   ]
   },
   {
    "id": "q153",
@@ -2086,7 +2933,14 @@
    ],
    "answer": 0,
    "source": "https://www.heritage.org/node/11578",
-   "level": 3
+   "level": 3,
+   "clue": "This law created Freddie Mac in July 1970.",
+   "responses": [
+    "What is the Emergency Home Finance Act of 1970?",
+    "What is the National Housing Act?",
+    "What is the Dodd-Frank Act?",
+    "What is the Fair Housing Act?"
+   ]
   },
   {
    "id": "q154",
@@ -2100,7 +2954,14 @@
    ],
    "answer": 3,
    "source": "https://ginniemae.gov/about_us/what_we_do/Annual_Reports/annual_report11.pdf",
-   "level": 3
+   "level": 3,
+   "clue": "In Ginnie Mae's model, the Ginnie Mae guaranty sits in this loss position, behind the borrower, the federal insurer and the issuer.",
+   "responses": [
+    "What is first?",
+    "What is second?",
+    "What is third?",
+    "What is fourth?"
+   ]
   },
   {
    "id": "q155",
@@ -2114,7 +2975,14 @@
    ],
    "answer": 2,
    "source": "https://www.ginniemae.gov/issuers/program_guidelines/Lists/MBSGuideAPMsLib/Attachments/173/App%20IV-04%2011717.pdf",
-   "level": 3
+   "level": 3,
+   "clue": "This section of the National Housing Act pledges the full faith and credit of the United States to Ginnie Mae's guaranty.",
+   "responses": [
+    "What is Section 8?",
+    "What is Section 203(b)?",
+    "What is Section 306(g)?",
+    "What is Section 502?"
+   ]
   }
  ]
 }

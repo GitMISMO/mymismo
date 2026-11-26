@@ -120,7 +120,16 @@
  /* --- slides --- */
  function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
  const mm14slideCache = { at: 0, value: null };
-@@ -3828,6 +3909,11 @@
+@@ -3229,6 +3310,8 @@
+       if (pl.open && pl.open !== cell) no(409, 'OPEN', 'Answer the square you opened first.');
+       if (!pl.open) { pl.open = cell; pl.openAt = now; }   /* opening it again never restarts the clock */
+       out = { cell, cat: pl.cats[Number(cell[0])], value, double: !!x.dbl, q: q.q, choices: x.perm.map(i => q.choices[i]), secs: MM15_PLAY_SECS, left: mm15PlayLeft(pl, now) };
++      /* relay request 16 (Jonna, Nov 26, 2026): the Board shows the answer and players pick the question */
++      if (typeof q.clue === 'string' && Array.isArray(q.responses) && q.responses.length === q.choices.length) { out.clue = q.clue; out.responses = x.perm.map(i => String(q.responses[i])); }
+       return d;
+     }
+     if (pl.open !== cell) no(409, 'NOT_OPEN', 'Open that square first.');
+@@ -3828,6 +3911,11 @@
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
      proj = mm;
