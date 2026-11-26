@@ -474,12 +474,10 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-foot .lbl{font-size:12px; font-weight:700; color:var(--sky-soft)}
 .w-foot b{display:block; font-family:var(--cond); font-size:20px; line-height:1.15}
 .w-row{display:flex; gap:10px; align-items:flex-start; margin-top:4px}
-/* Jonna, Nov 26, 2026: when the tiles sit four across (tablets, computers, a phone on its side) they stand as tall as
-   the big tiles beside them, so they show more: the next webinars, the Vieaux Point and past editions, the places on
-   mismo.org. Two across on a phone held upright, they stay short. */
-.w-more{display:none}
-@media (min-width:760px), (orientation:landscape) and (max-height:540px){
-  /* the extra lines never make a tile taller: they fill whatever height the row already has, and fade if cut */
+/* Jonna, Nov 26, 2026: a white tile that stands taller than its own content (beside a big tile, or beside a taller
+   partner) fills the space with more: the next webinars, the Vieaux Point and past editions, the places on mismo.org.
+   The extra lines never make a tile taller, and only whole lines show (fitMore). */
+@media all {
   .w-more{display:flex; flex-direction:column; gap:7px; width:100%; margin-top:10px; flex:1 1 0; height:0; min-height:0; overflow:hidden}
   .w-more > *{flex:none}
   .wm-row{display:flex; gap:9px; align-items:center; padding-top:8px; border-top:1px solid var(--rule)}
@@ -491,17 +489,19 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .wm-li{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:var(--link); padding:7px 0 0; border-top:1px solid var(--rule)}
   .wm-li:after{content:"›"; color:var(--ink-3); font-size:16px; line-height:1}
   .wm-past{margin-top:6px}
-  .dash-grid .wd.grow{grid-column:span 2}
-  .dash-grid .wd.full{grid-column:1 / -1}
   .wm-art{align-self:flex-end; margin-top:auto; opacity:.9}
   .wm-art svg{width:52px; height:52px; color:#e2b33c; filter:drop-shadow(0 0 14px rgba(240,185,58,.45))}
+}
+@media (min-width:760px), (orientation:landscape) and (max-height:540px){
+  .dash-grid .wd.grow{grid-column:span 2}
+  .dash-grid .wd.full{grid-column:1 / -1}
 }
 .cal{flex:none; width:50px; border-radius:9px; overflow:hidden; text-align:center; background:var(--surface-2); border:1px solid var(--border)}
 .cal i{display:block; font-style:normal; font-size:11px; font-weight:700; background:#eb6834; color:#fff; padding:2px 0}
 .cal b{display:block; font-family:var(--cond); font-size:24px; line-height:1.25}
 .w-web .w-t{font-size:16.5px; -webkit-line-clamp:4; min-width:0; overflow-wrap:break-word}
 .w-web{container-type:inline-size}
-@container (max-width:210px){ .w-web .w-row{flex-direction:column; gap:8px} }   /* a narrow tile: the date sits above the title */
+@container (max-width:140px){ .w-web .w-row{flex-direction:column; gap:8px} }   /* only a very narrow tile puts the date above the title */
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
 .w-mat .w-t{font-size:17px; -webkit-line-clamp:4}
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
