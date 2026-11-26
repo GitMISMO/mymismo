@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Dark mode: the Why Attend card's heading area is dark instead of a light wash behind light text.
+- Nov 26, 2026: Summit home: Sessions, Speakers, Sponsors and Starred moved out of the header into four boxes of their own right below it.
 - Nov 26, 2026: Explore: the days-left-to-book countdown moved out of the hotel postcard to its own card just under it.
 - Nov 26, 2026: Explore: the "Updated" line at the bottom is gone.
 - Nov 26, 2026: The moon moved clear of the words on the summit home card and the Explore postcard; the sponsor band is back to its own art.

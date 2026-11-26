@@ -184,12 +184,11 @@ main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 .flip .lbl{font-size:12.5px; font-weight:600; color:var(--sky-soft)}
 .flip .state{font-family:var(--cond); font-size:40px; font-weight:700; line-height:1; color:#fff}
 .flip .state small{font-size:18px; color:var(--sky-soft); font-weight:600; margin-left:6px}
-.pass-figs{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid rgba(116,191,235,.3); margin:2px -20px -18px; }
-.pass-figs button{background:none; border:0; border-right:1px solid rgba(116,191,235,.18); color:#fff; padding:12px 6px 14px; cursor:pointer; text-align:center}
-.pass-figs button:last-child{border-right:0}
-.pass-figs button:hover{background:rgba(116,191,235,.08)}
-.pass-figs b{display:block; font-family:var(--cond); font-size:26px; line-height:1.05}
-.pass-figs span{font-size:12px; color:var(--sky-soft); font-weight:500}
+.pass-figs{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0 0}
+.pass-figs button{background:var(--surface); border:1px solid var(--border); border-radius:14px; color:var(--ink); padding:12px 4px 13px; cursor:pointer; text-align:center; font:inherit}
+.pass-figs button:hover{border-color:#74bfeb; background:var(--surface-2)}
+.pass-figs b{display:block; font-family:var(--cond); font-size:26px; line-height:1.05; color:var(--ink)}
+.pass-figs span{font-size:12px; color:var(--ink-2); font-weight:600}
 
 /* Your week: each day's sessions by type */
 .week{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
@@ -407,6 +406,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 /* ---------- Summit welcome (Home) ---------- */
 .welcome{margin-top:22px; background:var(--surface); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); overflow:hidden}
 .wl-head{padding:20px 20px 18px; background:linear-gradient(135deg, var(--sky-wash, #e4f2fb), var(--surface) 70%); border-bottom:1px solid var(--border)}
+:root[data-theme="dark"] .wl-head{background:linear-gradient(135deg, #14486e, var(--surface) 70%)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .wl-head{background:linear-gradient(135deg, #14486e, var(--surface) 70%)} }
 .wl-eye{display:flex; align-items:center; gap:6px; color:var(--link); font-weight:700; font-size:13.5px; margin-bottom:8px}
 .wl-eye svg{width:15px; height:15px; color:var(--star)}
 .wl-title{font-family:var(--cond); font-size:clamp(30px, 8vw, 48px); line-height:1; letter-spacing:-.02em; color:var(--ink); text-wrap:balance}
@@ -1331,9 +1332,9 @@ nav.tabbar .badge.on{display:grid}
 
 /* ---------- Sizes and orientation ---------- */
 @media (min-width:700px){
-  .pass{grid-template-columns:1.35fr 1fr; align-items:end; padding:28px 26px 0; column-gap:26px}
-  .pass .flip{justify-content:flex-end; padding-bottom:18px; flex-wrap:nowrap}
-  .pass-figs{grid-column:1 / -1; margin:0 -26px}
+  .pass{grid-template-columns:1.35fr 1fr; align-items:end; padding:28px 26px 22px; column-gap:26px}
+  .pass .flip{justify-content:flex-end; padding-bottom:0; flex-wrap:nowrap}
+  .pass-figs{grid-column:auto; margin:12px 0 0}
   .rail{grid-auto-columns:minmax(260px, 32%)}
 }
 @media (min-width:900px){
@@ -1358,11 +1359,11 @@ nav.tabbar .badge.on{display:grid}
   nav.tabbar .in{grid-template-columns:1fr; grid-auto-rows:1fr; height:100%; max-width:none}
   nav.tabbar button[aria-current]:before{top:22%; bottom:22%; left:auto; right:0; width:3px; height:auto; border-radius:2px 0 0 2px}
   .mast-in{padding-left:max(14px, env(safe-area-inset-left))}
-  .pass{grid-template-columns:1.3fr 1fr; align-items:end; padding:18px 20px 0; column-gap:18px}
+  .pass{grid-template-columns:1.3fr 1fr; align-items:end; padding:18px 20px 20px; column-gap:18px}
   .pass .city{font-size:clamp(48px, 10vw, 96px)}
-  .pass .flip{justify-content:flex-end; padding-bottom:14px; flex-wrap:nowrap; gap:10px}
+  .pass .flip{justify-content:flex-end; padding-bottom:0; flex-wrap:nowrap; gap:10px}
   .pass .flip .tile{width:clamp(30px, 3.6vw, 46px); height:clamp(42px, 5vw, 62px); font-size:clamp(28px, 3.4vw, 40px)}
-  .pass-figs{grid-column:1 / -1; margin:0 -20px}
+  .pass-figs{grid-column:auto; margin:12px 0 0}
   .grid2{grid-template-columns:1fr 1fr}
   .rail{grid-auto-columns:minmax(250px, 46%)}
   .days{top:calc(50px + env(safe-area-inset-top))}
@@ -1792,13 +1793,14 @@ function renderHome() {
   var h = greetHead() + '<div class="pass">' + summitArt({ moon: [1162, 52, .62] }) +
     '<div><div class="summit">' + esc(s.name) + '</div><div class="city">' + esc(S.place) + '</div>' +
       '<div class="when"><span>' + icon('i-agenda') + esc(s.dates || '') + '</span>' + (s.city ? '<span>' + icon('i-pin') + esc(s.city) + '</span>' : '') + '</div></div>' +
-    '<div class="flip" id="flip">' + flip + '</div>' +
+    '<div class="flip" id="flip">' + flip + '</div></div>' +
+    /* Jonna, Nov 26, 2026: the counts sit under the header, each in its own box */
     '<div class="pass-figs">' +
       '<button type="button" data-go="agenda"><b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
       '<button type="button" data-go="people"><b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
       '<button type="button" data-sponsors><b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
       '<button type="button" data-go="mine"><b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
-    '</div></div>';
+    '</div>';
 
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
