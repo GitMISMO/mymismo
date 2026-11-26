@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Trivia host voice: picks the most natural voice the phone has (Premium, Enhanced or Natural voices first, a calm male host voice preferred), never the novelty robot voices.
 - Nov 26, 2026: Trivia, the Board: game-show sounds (original, made on the phone): blips as the board lights up, a whoosh when a square opens, a sweep and sparkle for the Double Square, a chime for right, a buzz for wrong, ticks in the last five seconds and a time's-up tone. A host voice reads each answer aloud (the phone's own voice), and the clock starts once it's read. Sound and voice switches on the board, remembered on the phone.
 - Nov 26, 2026: Head to Head (relay request 16): Trivia contacts. Add a player; once they accept, you can challenge each other. No deadlines: the Board's 20-second clock is the only timer. Same board for both, highest score wins.
 - Nov 26, 2026: Trivia, the Board: smoother. The square flips and lands exactly where the answer card sits while the board fades back; then the score and clock ease in, "Pick the question" fades in and the four questions rise in one after another. The clock starts once they're in. Going back to the board fades out first.

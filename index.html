@@ -2976,11 +2976,18 @@ var TVSFX = (function () {
 var TVVOICE = {
   ok: function () { return 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function'; },
   on: function () { return this.ok() && load('tv-voice', true) !== false; },
+  /* Jonna, Nov 26, 2026: the most natural-sounding voice the phone has, a calm male host voice first. Phones keep their
+     best voices as Premium, Enhanced, Natural or Neural ones; the old robotic ones come last. */
   pick: function () {
     var vs = speechSynthesis.getVoices().filter(function (v) { return /^en(-|_|$)/i.test(v.lang); });
-    var want = ['Daniel', 'Aaron', 'Alex', 'Google US English', 'Microsoft Guy', 'Microsoft David', 'Arthur', 'Fred', 'Samantha'];
-    for (var i = 0; i < want.length; i++) { var v = vs.filter(function (x) { return x.name.indexOf(want[i]) >= 0; })[0]; if (v) return v; }
-    return vs.filter(function (x) { return /en-US/i.test(x.lang); })[0] || vs[0] || null;
+    var male = /Evan|Nathan|Aaron|Tom|Daniel|Arthur|Oliver|Reed|Alex|Guy|Andrew|Christopher|Eric|Davis|Brian|Ryan|Jason|en-us-x-iom|en-us-x-tpd|en-gb-x-rjs|male/i;
+    var robot = /Fred|Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Junior|Ralph|Kathy|Princess|eSpeak/i;
+    var score = function (v) {
+      var n = v.name + ' ' + (v.voiceURI || '');
+      return (/premium/i.test(n) ? 60 : /enhanced|natural|neural|wavenet|studio|online/i.test(n) ? 45 : 0) + (male.test(n) ? 20 : 0) + (/en-US/i.test(v.lang) ? 8 : /en-GB|en-CA|en-AU/i.test(v.lang) ? 4 : 0) +
+        (v.localService === false ? 6 : 0) - (robot.test(n) ? 100 : 0) - (/compact/i.test(n) ? 10 : 0);
+    };
+    return vs.sort(function (a, b) { return score(b) - score(a); })[0] || null;
   },
   say: function (text, done) {
     var fin = false, end = function () { if (!fin) { fin = true; if (done) done(); } };
@@ -2988,7 +2995,7 @@ var TVVOICE = {
     try {
       speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(text), v = this.pick(); if (v) u.voice = v;
-      u.rate = 0.98; u.pitch = 0.92; u.onend = end; u.onerror = end;
+      u.rate = 0.96; u.pitch = 0.96; u.onend = end; u.onerror = end;
       speechSynthesis.speak(u);
       setTimeout(end, Math.min(12000, 1500 + text.length * 75));   /* never wait forever on a phone that won't speak */
     } catch (e) { end(); }
