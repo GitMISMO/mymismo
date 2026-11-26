@@ -574,6 +574,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .livecard > svg{width:26px; height:26px}
 .lv-tx b{display:block; font-family:var(--cond); font-size:19px}
 .lv-tx span{font-size:13px; opacity:.9}
+.dash-live{margin-top:0; min-height:0}
 .lv-dot{width:18px; height:18px; position:relative}
 .lv-dot i,.lv-badge i{position:absolute; inset:3px; border-radius:50%; background:#fff; animation:livepulse 1.4s ease-out infinite}
 @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}100%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
@@ -2617,7 +2618,7 @@ function widget(id) {
     } else { big = '<b>Thank You</b>'; sub = 'for joining us in ' + esc(S.place); }
     return '<button type="button" class="wd w-summit wide" data-go="home">' + heroArt() + '<span class="w-head">' + icon('i-s') + '<span>MISMO Summit</span>' + icon('i-chev', 'go') + '</span>' +
       '<span class="w-city">' + esc(S.place) + '</span><span class="w-name">' + esc(S.summit.name) + '</span>' +
-      '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span></button>';
+      '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span></button>' + dashLive();
   }
   if (id === 'micdup') {
     var ep = MU && MU.episodes && MU.episodes[0];
@@ -2831,6 +2832,12 @@ function liveWindow(x) { var n = nowAt(); return x && n.date === x.date && n.min
 function liveCard(x) {
   var on = isLive(x);
   return '<button type="button" class="livecard" data-live><span class="lv-dot"><i></i></span><span class="lv-tx"><b>' + (on ? 'Watch the General Sessions Live' : 'The Live Stream Starts at ' + esc(clock(x.a))) + '</b><span>' + (on ? 'Playing right here in the app' : 'Tap to open the player and wait for it to start') + '</span></span>' + icon('i-play') + '</button>';
+}
+/* Jonna, Nov 26, 2026: while the General Sessions stream is on (from 30 minutes before), the dashboard has its own Watch
+   Live button under the Summit tile, so nobody has to open the summit to find it. */
+function dashLive() {
+  var x = S.summit && gsSession(); if (!x || !liveWindow(x)) return '';
+  return liveCard(x).replace('class="livecard"', 'class="wd wide livecard dash-live"');
 }
 function liveSheet() {
   var x = gsSession(); if (!x) return;
