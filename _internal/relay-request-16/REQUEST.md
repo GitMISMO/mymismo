@@ -31,6 +31,21 @@ question (`responses`, e.g. "What is the eNote?"). Questions in `trivia/question
 `responses` (four strings in the same order as `choices`); `/trivia/play/pick` passes them through, in the same
 shuffled order as the choices. Scoring is unchanged (the same index is right). A question without them works as before.
 
+## Head to Head: Trivia Contacts, and No Deadlines
+
+Jonna, Nov 26, 2026: you challenge your **Trivia contacts**. Find a player by name and add them; once they accept, either
+of you can challenge the other (`/trivia/h2h/challenge` answers 403 NOT_A_CONTACT otherwise). **No deadlines:** a challenge
+waits until it's accepted and played (or declined), an open game waits until someone takes it, and a started board can be
+finished later. The Board's own 20-second clock on each square is the only timer. Same board for both; highest score wins.
+
+| Route | Who | What |
+|---|---|---|
+| `POST /mymismo/trivia/h2h/contact` | signed-in player | `{ to, action: 'add' or 'accept' or 'decline' or 'remove' }`. Adding someone who already asked you makes you contacts at once. Decline and remove are quiet and take it off both sides. At most 300 contacts and 50 requests waiting. |
+| `GET /mymismo/trivia/h2h` | signed-in player | Now also `contacts`, `requests` (waiting for you) and `sent`, each `[{ id, name }]` (first name and last initial). `expires` is always null. |
+
+Kept in `trivia/contacts.json` (`{ docs: { <player id>: { <other id>: { s: 'sent' or 'got' or 'ok', at } } } }`). Deleting a
+trivia account takes the player off everyone's contacts. `test-mymismo-h2h.mjs` here replaces request 15's (56 checks).
+
 ## Where Things Live
 
 `mymismo-data`: `push/subs.json` entries gain `news` (true or false; `summit` may now be empty), and `push/news.json`

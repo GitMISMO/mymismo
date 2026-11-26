@@ -129,7 +129,189 @@
        return d;
      }
      if (pl.open !== cell) no(409, 'NOT_OPEN', 'Open that square first.');
-@@ -3828,6 +3911,11 @@
+@@ -3450,7 +3533,7 @@
+   const want = { '/trivia/ready': 'GET', '/trivia/board': 'GET', '/trivia/champ': 'GET', '/trivia/code': 'POST', '/trivia/verify': 'POST',
+     '/trivia/play': 'GET', '/trivia/play/start': 'POST', '/trivia/play/pick': 'POST', '/trivia/play/answer': 'POST', '/trivia/play/end': 'POST',
+     '/trivia/champ/start': 'POST', '/trivia/champ/pick': 'POST', '/trivia/champ/answer': 'POST', '/trivia/delete': 'POST',
+-    '/trivia/h2h': 'GET', '/trivia/h2h/players': 'GET', '/trivia/h2h/challenge': 'POST', '/trivia/h2h/find': 'POST', '/trivia/h2h/play': 'POST', '/trivia/h2h/decline': 'POST' }[subPath];
++    '/trivia/h2h': 'GET', '/trivia/h2h/players': 'GET', '/trivia/h2h/challenge': 'POST', '/trivia/h2h/find': 'POST', '/trivia/h2h/play': 'POST', '/trivia/h2h/decline': 'POST', '/trivia/h2h/contact': 'POST' }[subPath];
+   if (!want) return respond(404, { error: 'NOT_FOUND' });
+   if (method !== want) return respond(405, { error: 'METHOD' });
+   if (subPath === '/trivia/ready') return mm15Ready(raw);
+@@ -3470,9 +3553,14 @@
+  * squares, the same questions, the same Double square), highest score wins (a tie goes to whoever spent less time answering).
+  * Nobody waits for the other: the one who starts plays first, then the other plays the same questions when they're ready.
+  * Two ways to start, the player's choice:
+- *   Challenge Someone      pick a player by name. Once you've played, it's theirs to play (or decline) for 48 hours.
++ *   Challenge Someone      pick one of your Trivia contacts. Once you've played, it's theirs to accept and play, or
++ *                          decline. No deadline: the Board's own 20-second clock on each square is the only timer
++ *                          (Jonna, Nov 26, 2026).
+  *   Find Me an Opponent    if someone else's open game is waiting, you play its questions against their score; if not,
+- *                          you play first and the next person who asks gets your game. An open game waits 7 days.
++ *                          you play first and the next person who asks gets your game. It waits until someone does.
++ * Trivia contacts (Jonna, Nov 26, 2026): find a player by name and add them; once they accept, you can challenge each
++ * other. POST /trivia/h2h/contact { to, action: 'add'|'accept'|'decline'|'remove' }. GET /trivia/h2h lists them.
++ * Kept in trivia/contacts.json: { docs: { <player id>: { <other id>: { s: 'sent'|'got'|'ok', at } } } }.
+  * No computer opponent. Head to Head games never count for the monthly leaderboard. Nothing is emailed or pushed: the
+  * app shows Your Turn when it next asks. Kept in trivia/h2h.json, by game id:
+  *   { a, aName, b, bName, mode: 'pick'|'open', board: { cats, cells }, made, sent, exp, aScore, bScore, status }
+@@ -3480,18 +3568,28 @@
+  *   status: 'first' (the starter is playing), 'theirs' (waiting for b), 'open' (waiting for anyone), 'done', 'declined',
+  *   'expired'. A score is { total, right, ms, at }.
+  * The app reviewers' account plays only against reviewAccount.contacts (MISMO staff) and is never offered to anyone else. */
+-const MM16 = { games: 'trivia/h2h.json' };
+-const MM16_PICK_TTL = 48 * 3_600_000, MM16_OPEN_TTL = 7 * 86_400_000, MM16_FIRST_TTL = 6 * 3_600_000, MM16_PLAYING = 6 * 3_600_000, MM16_MAX_WAITING = 10, MM16_KEEP = 30 * 86_400_000;
++const MM16 = { games: 'trivia/h2h.json', contacts: 'trivia/contacts.json' };
++const MM16_MAX_WAITING = 10, MM16_KEEP = 30 * 86_400_000, MM16_MAX_CONTACTS = 300, MM16_MAX_ASKS = 50;
+ const MM16_GAME = /^H[0-9a-z]{6,20}$/;
+-function mm16Tidy(docs, now) {   /* expire on read; drop finished games after 30 days */
++function mm16Tidy(docs, now) {   /* no deadlines (Jonna, Nov 26, 2026); finished games are dropped after 30 days */
+   for (const [k, g] of Object.entries(docs)) {
+     if (!g || typeof g !== 'object') { delete docs[k]; continue; }
+-    if (g.status === 'first' && now - g.made > MM16_FIRST_TTL) { delete docs[k]; continue; }   /* the starter never finished */
+-    if ((g.status === 'theirs' || g.status === 'open') && now > g.exp && !(g.bStarted && now - g.bStarted < MM16_PLAYING)) { g.status = 'expired'; g.ended = now; }   /* once started, they get to finish */
+     if (['done', 'declined', 'expired'].includes(g.status) && now - (g.ended || g.made) > MM16_KEEP) delete docs[k];
+   }
+   return docs;
+ }
++function mm16ContactOf(all, me, them) { return all && all[me] && all[me][them] ? all[me][them].s : ''; }
++/* the contacts screen: accepted contacts, requests waiting for you, and the ones you sent */
++function mm16ContactLists(all, players, me) {
++  const out = { contacts: [], requests: [], sent: [] }, mine = (all && all[me]) || {};
++  for (const [id, c] of Object.entries(mine)) {
++    const p = players[id]; if (!p) continue;
++    const row = { id, name: mmStr(p.name, 60) };
++    if (c.s === 'ok') out.contacts.push(row); else if (c.s === 'got') out.requests.push(row); else if (c.s === 'sent') out.sent.push(row);
++  }
++  for (const k of Object.keys(out)) out[k].sort((x, y) => x.name.localeCompare(y.name));
++  return out;
++}
+ function mm16View(id, g, me) {
+   const mine = g.a === me, other = mine ? { id: g.b, name: g.bName } : { id: g.a, name: g.aName };
+   const myScore = mine ? g.aScore : g.bScore, theirScore = mine ? g.bScore : g.aScore;
+@@ -3499,7 +3597,7 @@
+   if (g.status === 'theirs') state = mine ? 'waiting' : 'your-turn';
+   if (g.status === 'open') state = 'waiting';
+   if (g.status === 'first') state = mine ? 'playing' : 'waiting';
+-  const out = { id, mode: g.mode, state, opponent: other.name || null, made: new Date(g.made).toISOString(), expires: g.exp ? new Date(g.exp).toISOString() : null,
++  const out = { id, mode: g.mode, state, opponent: other.name || null, made: new Date(g.made).toISOString(), expires: null,
+     you: myScore ? { total: myScore.total, right: myScore.right } : null };
+   if (g.status === 'done') { out.them = theirScore ? { total: theirScore.total, right: theirScore.right } : null; out.result = g.winner === 'tie' ? 'tie' : (g.winner === (mine ? 'a' : 'b') ? 'won' : 'lost'); }
+   return out;   /* their score shows only once both have played */
+@@ -3526,7 +3624,10 @@
+     const games = Object.entries(docs).filter(([, g]) => g.a === who.id || (g.b === who.id && g.status !== 'first')).sort((x, y) => y[1].made - x[1].made).map(([id, g]) => mm16View(id, g, who.id));
+     const tally = { won: 0, lost: 0, tied: 0 }; games.forEach(g => { if (g.result === 'won') tally.won++; if (g.result === 'lost') tally.lost++; if (g.result === 'tie') tally.tied++; });
+     const openNow = Object.values(docs).filter(g => g.status === 'open' && g.a !== who.id && (only ? only.has(g.a) : !g.review)).length;
+-    return respond(200, { games, tally, openGames: openNow, yourTurn: games.filter(g => g.state === 'your-turn').length });
++    const [cr, pr2] = await Promise.all([readFile(proj.repo, branch, MM16.contacts), readFile(proj.repo, branch, MM15.players)]);
++    if ((cr.status !== 200 && cr.status !== 404) || (pr2.status !== 200 && pr2.status !== 404)) return mm15Busy();
++    const lists = mm16ContactLists((cr.data && cr.data.docs) || {}, (pr2.data && pr2.data.docs) || {}, who.id);
++    return respond(200, { games, tally, openGames: openNow, yourTurn: games.filter(g => g.state === 'your-turn').length, ...lists });
+   }
+   const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
+   if (!mmAllowed('t-round', who.id, MM15_LIMITS.round, now)) return respond(429, { error: 'TOO_MANY', message: 'That’s a lot of games in an hour. Please wait a bit.' });
+@@ -3535,12 +3636,42 @@
+   let stop = null, play = null;
+   const no = (status, error, message) => { stop = respond(status, { error, message }); throw new Error('stop'); };
+ 
++  if (subPath === '/trivia/h2h/contact') {   /* add a Trivia contact, accept or decline a request, or remove one */
++    const to = mmStr(b.to, 20), action = ['add', 'accept', 'decline', 'remove'].includes(b.action) ? b.action : '';
++    if (!MM_ID.test(to) || to === who.id || !action) return respond(400, { error: 'INVALID', message: 'Pick a player.' });
++    const pr = await readFile(proj.repo, branch, MM15.players); if (pr.status !== 200 && pr.status !== 404) return mm15Busy();
++    const players = (pr.data && pr.data.docs) || {};
++    if (action === 'add' && (!players[to] || players[to].review)) return respond(404, { error: 'NO_PLAYER', message: 'That player isn’t playing MISMO Trivia.' });
++    let state = '';
++    const w = await updateRepoJson(proj.repo, branch, MM16.contacts, d => {
++      const all = mm15Docs(d), me = all[who.id] = all[who.id] || {}, them = all[to] = all[to] || {}, cur = me[to] ? me[to].s : '';
++      if (action === 'add') {
++        if (cur === 'ok' || cur === 'sent') { state = cur; return d; }
++        if (cur === 'got') { me[to] = { s: 'ok', at: now }; them[who.id] = { s: 'ok', at: now }; state = 'ok'; return d; }   /* they had asked you: now you're contacts */
++        if (Object.keys(me).length >= MM16_MAX_CONTACTS) no(429, 'TOO_MANY_CONTACTS', 'That’s the most Trivia contacts you can have.');
++        if (Object.values(me).filter(c => c.s === 'sent').length >= MM16_MAX_ASKS) no(429, 'TOO_MANY_ASKS', 'You have a lot of requests waiting. Try again once some are answered.');
++        me[to] = { s: 'sent', at: now }; them[who.id] = { s: 'got', at: now }; state = 'sent'; return d;
++      }
++      if (action === 'accept') {
++        if (cur !== 'got') no(409, 'NO_REQUEST', 'There’s no request from that player.');
++        me[to] = { s: 'ok', at: now }; them[who.id] = { s: 'ok', at: now }; state = 'ok'; return d;
++      }
++      delete me[to]; delete them[who.id]; state = ''; return d;   /* decline or remove: gone for both, quietly */
++    }, 'MyMISMO Trivia contacts').catch(() => (stop ? { stop: true } : null));
++    if (stop) return stop;
++    if (!w || w.error) return mm15Busy();
++    return respond(200, { ok: true, state });
++  }
+   if (subPath === '/trivia/h2h/challenge' || subPath === '/trivia/h2h/find') {
+     const to = mmStr(b.to, 20), pick = subPath === '/trivia/h2h/challenge';
+     if (pick && (!MM_ID.test(to) || to === who.id)) return respond(400, { error: 'INVALID', message: 'Pick someone to challenge.' });
+     const pr = await readFile(proj.repo, branch, MM15.players); if (pr.status !== 200 && pr.status !== 404) return mm15Busy();
+     const players = (pr.data && pr.data.docs) || {}, only = await mm16Contacts(who);
+     if (pick && (!players[to] || players[to].review || (only && !only.has(to)))) return respond(404, { error: 'NO_PLAYER', message: 'That player isn’t playing MISMO Trivia.' });
++    if (pick && !only) {   /* Jonna, Nov 26, 2026: you can challenge your Trivia contacts, once they've accepted */
++      const cr = await readFile(proj.repo, branch, MM16.contacts); if (cr.status !== 200 && cr.status !== 404) return mm15Busy();
++      if (mm16ContactOf((cr.data && cr.data.docs) || {}, who.id, to) !== 'ok') return respond(403, { error: 'NOT_A_CONTACT', message: 'Add them as a Trivia contact first. Once they accept, you can challenge them.' });
++    }
+     const sr = await readFile(proj.repo, branch, MM15.seen); if (sr.status !== 200 && sr.status !== 404) return mm15Busy();
+     const fresh = mm15PlayBoard(bank.qs, (sr.data && sr.data.docs && sr.data.docs[who.id]) || []);
+     if (!fresh) return respond(503, { error: 'NOT_READY', message: 'Head to Head opens once there are enough questions in six categories.' });
+@@ -3550,7 +3681,7 @@
+         no(429, 'TOO_MANY_WAITING', 'You have 10 games waiting on other players. Play again once some finish.');
+       if (!pick) {   /* someone else's open game first: the one that's waited longest */
+         const take = Object.entries(docs).filter(([, g]) => g.status === 'open' && g.a !== who.id && (only ? only.has(g.a) : !g.review)).sort((x, y) => x[1].made - y[1].made)[0];
+-        if (take) { const [id, g] = take; g.b = who.id; g.bName = who.name || 'Player'; g.status = 'theirs'; g.exp = now + MM16_PICK_TTL; g.bStarted = now; play = { id, board: g.board, as: 'b', vs: g.aName, theirs: true }; return d; }
++        if (take) { const [id, g] = take; g.b = who.id; g.bName = who.name || 'Player'; g.status = 'theirs'; g.exp = null; g.bStarted = now; play = { id, board: g.board, as: 'b', vs: g.aName, theirs: true }; return d; }
+       }
+       const id = 'H' + now.toString(36) + randomInt(0, 1_296).toString(36);
+       docs[id] = { a: who.id, aName: who.name || 'Player', b: pick ? to : null, bName: pick ? mmStr(players[to].name, 60) : null, mode: pick ? 'pick' : 'open',
+@@ -3585,7 +3716,7 @@
+     const docs = mm15Docs(d), g = docs[gameId]; if (!g) return d;
+     if (g.a === who.id && g.status === 'first') {
+       g.aScore = score;
+-      if (g.mode === 'pick') { g.status = 'theirs'; g.exp = now + MM16_PICK_TTL; } else { g.status = 'open'; g.exp = now + MM16_OPEN_TTL; }
++      g.status = g.mode === 'pick' ? 'theirs' : 'open'; g.exp = null;   /* no deadline */
+       g.sent = now;
+     } else if (g.b === who.id && g.status === 'theirs' && !g.bScore) {
+       g.bScore = score; g.status = 'done'; g.ended = now;
+@@ -3603,18 +3734,27 @@
+ }
+ /* deleting a trivia account: their open games go, and they're left out of finished ones (shown as "a former player") */
+ async function mm16Forget(proj, id) {
+-  const r = await readFile(proj.repo, proj.branch || 'main', MM16.games); if (r.status === 404) return true; if (r.status !== 200) return false;
+-  if (!Object.values((r.data && r.data.docs) || {}).some(g => g && (g.a === id || g.b === id))) return true;
+-  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM16.games, d => {
+-    const docs = mm15Docs(d);
+-    for (const [k, g] of Object.entries(docs)) {
+-      if (!g || (g.a !== id && g.b !== id)) continue;
+-      if (g.status !== 'done' && g.status !== 'declined' && g.status !== 'expired') { delete docs[k]; continue; }
+-      if (g.a === id) { g.a = null; g.aName = 'A former player'; } else { g.b = null; g.bName = 'A former player'; }
+-    }
+-    return d;
+-  }, 'MyMISMO Trivia player deleted their account').catch(() => null);
+-  return !!(w && !w.error);
++  const br = proj.branch || 'main';
++  const r = await readFile(proj.repo, br, MM16.games); if (r.status !== 200 && r.status !== 404) return false;
++  if (r.status === 200 && Object.values((r.data && r.data.docs) || {}).some(g => g && (g.a === id || g.b === id))) {
++    const w = await updateRepoJson(proj.repo, br, MM16.games, d => {
++      const docs = mm15Docs(d);
++      for (const [k, g] of Object.entries(docs)) {
++        if (!g || (g.a !== id && g.b !== id)) continue;
++        if (g.status !== 'done' && g.status !== 'declined' && g.status !== 'expired') { delete docs[k]; continue; }
++        if (g.a === id) { g.a = null; g.aName = 'A former player'; } else { g.b = null; g.bName = 'A former player'; }
++      }
++      return d;
++    }, 'MyMISMO Trivia player deleted their account').catch(() => null);
++    if (!w || w.error) return false;
++  }
++  const cr = await readFile(proj.repo, br, MM16.contacts); if (cr.status === 404) return true; if (cr.status !== 200) return false;
++  const all0 = (cr.data && cr.data.docs) || {};
++  if (!all0[id] && !Object.values(all0).some(m => m && m[id])) return true;
++  const c = await updateRepoJson(proj.repo, br, MM16.contacts, d => {   /* and they're off everyone's Trivia contacts */
++    const all = mm15Docs(d); delete all[id]; for (const k of Object.keys(all)) if (all[k]) delete all[k][id]; return d;
++  }, 'MyMISMO Trivia player deleted their account: contacts').catch(() => null);
++  return !!(c && !c.error);
+ }
+ /* --- A sign-in for Apple's and Google's app reviewers (relay request 15; Jonna approved Nov 25, 2026) ---
+  * Reviewers must be able to try every sign-in feature but can't read a MISMO inbox, so projects.json's mymismo entry can
+@@ -3828,6 +3968,11 @@
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
      proj = mm;
