@@ -30,6 +30,8 @@ SUMMIT_URL = 'https://www.mismo.org/events/summit'
 AGENDA_URL = 'https://www.mismo.org/events/agenda'
 GROUPS_URL = 'https://www.mismo.org/get-involved/participate-in-a-mismo-workgroup'
 EDU_URL = 'https://www.mismo.org/events-education/educational-offerings'
+ABOUT_URL = 'https://www.mismo.org/about-mismo'
+LEADERSHIP_URL = 'https://www.mismo.org/mismo-leadership'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
@@ -369,6 +371,32 @@ def build_ai_series(html):
     return out
 
 
+def build_faces(about_html, leadership_html):
+    """Public headshots already on mismo.org, for MyMISMO's attendee list (Jonna, Nov 26, 2026): the MISMO team on
+    About MISMO (#mismo-team: li > img.ppav + .ppnm > b name + .ppti title) and the Board on MISMO Leadership
+    (.bdcard: img, .bdnm name, .bdti title, .bdco company, .bdbadge Chair or Vice Chair)."""
+    people = []
+    if about_html:
+        t = Tree(); t.feed(about_html)
+        team = t.root.find(lambda n: n.attrs.get('id') == 'mismo-team')
+        for li in (team.find_all(lambda n: n.tag == 'li') if team else []):
+            img, nm = li.find(lambda n: n.tag == 'img'), li.find(lambda n: n.tag == 'b')
+            ti = li.find(lambda n: 'ppti' in n.classes())
+            photo = clean_url(img.attrs.get('src', '').split('?')[0], 'https://www.mismo.org/') if img else ''
+            if nm and nm.text() and photo:
+                people.append({'name': nm.text(), 'title': ti.text() if ti else '', 'company': 'MISMO', 'photo': photo, 'kind': 'staff'})
+    if leadership_html:
+        t = Tree(); t.feed(leadership_html)
+        for c in t.root.find_all(lambda n: 'bdcard' in n.classes()):
+            img = c.find(lambda n: n.tag == 'img')
+            nm, ti, co, bd = [c.find(lambda n, k=k: k in n.classes()) for k in ('bdnm', 'bdti', 'bdco', 'bdbadge')]
+            photo = clean_url(img.attrs.get('src', '').split('?')[0], 'https://www.mismo.org/') if img else ''
+            if nm and nm.text() and photo:
+                people.append({'name': nm.text(), 'title': ti.text() if ti else '', 'company': co.text() if co else '', 'photo': photo,
+                               'kind': 'board', 'role': bd.text() if bd else ''})
+    return {'people': people}
+
+
 def good_event(e):
     return bool(e.get('title') and e.get('subtitle') and e.get('dates') and e.get('paragraphs'))
 
@@ -396,7 +424,7 @@ def write(out, g, what):
 
 def main(argv):
     opts = dict(zip(argv[::2], argv[1::2]))
-    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts or '--edu-html' in opts
+    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts or '--edu-html' in opts or '--about-html' in opts
     failed = 0
     if '--html' in opts or not only_files:
         html = open(opts['--html'], encoding='utf-8').read() if '--html' in opts else fetch(URL)
@@ -440,6 +468,16 @@ def main(argv):
             write(opts.get('--groups-out', 'data/workgroups.json'), gr, 'Workgroups')
         else:
             print('The Communities and Workgroups page did not have its group cards; nothing written.', file=sys.stderr)
+            failed = 1
+    if '--about-html' in opts or not only_files:
+        ab = open(opts['--about-html'], encoding='utf-8').read() if '--about-html' in opts else fetch(ABOUT_URL)
+        ld = open(opts['--leadership-html'], encoding='utf-8').read() if '--leadership-html' in opts else fetch(LEADERSHIP_URL)
+        fc = build_faces(ab, ld)
+        staff = sum(1 for p in fc['people'] if p['kind'] == 'staff'); board = len(fc['people']) - staff
+        if staff >= (2 if '--about-html' in opts else 5) and board >= (2 if '--about-html' in opts else 8):
+            write(opts.get('--faces-out', 'data/faces.json'), fc, 'Website headshots (MISMO team and Board)')
+        else:
+            print('About MISMO or MISMO Leadership did not have the team and Board headshots (%d staff, %d board); nothing written.' % (staff, board), file=sys.stderr)
             failed = 1
     return failed
 

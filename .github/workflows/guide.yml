@@ -1,7 +1,8 @@
 name: Hotel and Travel Guide
 # Copies the website's Hotel and Travel page (www.mismo.org/events/hotel) into data/guide.json for MyMISMO's Explore tab,
 # the Summit page's welcome (www.mismo.org/events/summit) into data/event.json for the summit Home, and the Agenda
-# page's session logos (www.mismo.org/events/agenda) into data/agenda-tags.json.
+# page's session logos (www.mismo.org/events/agenda) into data/agenda-tags.json, and the MISMO team and Board headshots
+# (About MISMO and MISMO Leadership) into data/faces.json for the attendee list.
 # Runs every morning and afternoon, whenever this job or its script changes, and by hand (Run workflow).
 # If a page can't be read or comes back without what the app needs, that file isn't written and the job
 # fails, so the app keeps the last good guide and the Failure Watcher picks it up.
@@ -12,7 +13,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/build_guide.py', '.github/workflows/guide.yml', 'tests/groups-page.html', 'tests/edu-page.html', 'tests/guide-page.html', 'tests/summit-page.html', 'tests/agenda-page.html', 'tests/provider-page.html', 'tests/directory-page.html', 'tools/build_providers.py', 'tools/build_logos.py']
+    paths: ['tools/build_guide.py', '.github/workflows/guide.yml', 'tests/groups-page.html', 'tests/edu-page.html', 'tests/about-page.html', 'tests/leadership-page.html', 'tests/guide-page.html', 'tests/summit-page.html', 'tests/agenda-page.html', 'tests/provider-page.html', 'tests/directory-page.html', 'tools/build_providers.py', 'tools/build_logos.py']
 permissions:
   contents: write
 concurrency:
@@ -24,10 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: The parser still reads the three pages' layouts
-        run: python3 tools/build_guide.py --html tests/guide-page.html --out /tmp/check.json --summit-html tests/summit-page.html --event-out /tmp/event.json --agenda-html tests/agenda-page.html --tags-out /tmp/tags.json --groups-html tests/groups-page.html --groups-out /tmp/wg.json --edu-html tests/edu-page.html --edu-out /tmp/ai.json
+        run: python3 tools/build_guide.py --html tests/guide-page.html --out /tmp/check.json --summit-html tests/summit-page.html --event-out /tmp/event.json --agenda-html tests/agenda-page.html --tags-out /tmp/tags.json --groups-html tests/groups-page.html --groups-out /tmp/wg.json --edu-html tests/edu-page.html --edu-out /tmp/ai.json --about-html tests/about-page.html --leadership-html tests/leadership-page.html --faces-out /tmp/faces.json
       - name: The provider page parser still reads the website's layout
         run: python3 tools/build_providers.py --provider-html tests/provider-page.html > /dev/null && python3 tools/build_providers.py --directory-html tests/directory-page.html > /dev/null
-      - name: Read the website's Hotel and Travel, Summit, Agenda and Workgroups pages
+      - name: Read the website's Hotel and Travel, Summit, Agenda, Workgroups, About and Leadership pages
         run: python3 tools/build_guide.py || echo "GUIDE_FAILED=1" >> "$GITHUB_ENV"
       - name: Read the certified providers' pages and make the home-page pictures
         run: |

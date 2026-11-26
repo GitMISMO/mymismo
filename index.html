@@ -1702,6 +1702,7 @@ function build(feed, spons) {
     });
   });
   S.speakers = Object.keys(byName).map(function (k) { return byName[k]; }).sort(function (a, b) { return lastName(a.name).localeCompare(lastName(b.name)) || a.name.localeCompare(b.name); });
+  FACE_IX = null;
 }
 function lastName(n) { var p = String(n).replace(/,.*$/, '').trim().split(/\s+/); return p[p.length - 1] || n; }
 function days() { var seen = {}, out = []; S.sessions.forEach(function (x) { if (!seen[x.date]) { seen[x.date] = 1; out.push({ date: x.date, day: x.day }); } }); return out; }
@@ -2346,7 +2347,7 @@ var SITE_LINKS = [
   ['Membership', '/membership', 'Benefits, levels and joining'],
   ['News', '/about-mismo/news', 'MISMO in the news and announcements']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null;
+var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null, FACES = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -2420,6 +2421,7 @@ function loadExtras() {
   getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
   getJSON('data/peeks/index.json').then(function (p) { PEEKS = p; }).catch(function () {});
   getJSON('data/programs.json').then(function (p) { PRG = p; again(['dash']); }).catch(function () {});
+  getJSON('data/faces.json').then(function (f) { FACES = f; FACE_IX = null; again(['people']); }).catch(function () {});
 }
 function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
 function guide() { return G && S.summit && norm(G.dates) === norm(S.summit.dates) ? G : null; }
@@ -3344,8 +3346,47 @@ function rq(method, path, body) {
 /* Headshots (relay request 15): only signed-in attendees can load them, so they come through the relay one at a time,
    as each person scrolls into view, and are kept in memory for the session. */
 var PHOTOS = {}, PHOTO_WAIT = [], PHOTO_BUSY = 0;
+/* Jonna, Nov 26, 2026: someone with no headshot of their own in MyMISMO shows the one already public on mismo.org, if
+   they're a speaker at this summit, on the MISMO team or on the Board (data/faces.json, read from the website twice a
+   day). Matched by name: the same last name and the same first name, a nickname of it (Tim, Timothy) or the name in
+   quotes ("Joe"); a name that could be two different people gets no picture. Their own upload always wins. */
+var FACE_IX = null;
+var NICK = { mike: 'michael', mick: 'michael', tim: 'timothy', jim: 'james', jimmy: 'james', jamie: 'james', bob: 'robert', bobby: 'robert', rob: 'robert', robbie: 'robert', bill: 'william', billy: 'william', will: 'william', liam: 'william', dave: 'david', tom: 'thomas', tommy: 'thomas', chris: 'christopher', matt: 'matthew', dan: 'daniel', danny: 'daniel', steve: 'steven', stephen: 'steven', rick: 'richard', rich: 'richard', dick: 'richard', kate: 'katherine', katie: 'katherine', kathy: 'katherine', kathryn: 'katherine', catherine: 'katherine', liz: 'elizabeth', beth: 'elizabeth', betsy: 'elizabeth', jen: 'jennifer', jenny: 'jennifer', joe: 'joseph', joey: 'joseph', tony: 'anthony', andy: 'andrew', drew: 'andrew', ben: 'benjamin', greg: 'gregory', jeff: 'jeffrey', ken: 'kenneth', larry: 'lawrence', pat: 'patrick', pete: 'peter', ron: 'ronald', sam: 'samuel', ted: 'edward', ed: 'edward', eddie: 'edward', nick: 'nicholas', alex: 'alexander', vince: 'vincent', sue: 'susan', deb: 'deborah', debbie: 'deborah', cindy: 'cynthia', peggy: 'margaret', meg: 'margaret', maggie: 'margaret', terri: 'teresa', teri: 'teresa', terry: 'teresa', abby: 'abigail', becky: 'rebecca', vicky: 'victoria', jack: 'john', jon: 'jonathan', zach: 'zachary', nate: 'nathan', russ: 'russell', rusty: 'russell', doug: 'douglas', fred: 'frederick', gene: 'eugene', hank: 'henry', walt: 'walter', al: 'albert' };
+function nameParts(n) {
+  n = String(n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().split(',')[0];   /* "Matt Tully, CMB" */
+  var quoted = (/["“”']([a-z.\- ]+)["“”']/.exec(n) || [])[1];                               /* Aravind "Jag" Jagannathan */
+  var t = n.replace(/["“”'][a-z.\- ]+["“”']/g, ' ').replace(/[^a-z\- ]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 1 && !/^(jr|sr|ii|iii|iv|phd|cmb|amp|mba|cpa|esq)$/.test(w); });
+  if (t.length < 2) return null;
+  var firsts = [t[0]]; if (quoted) firsts.push(quoted.trim().split(/\s+/)[0]);
+  return { firsts: firsts, last: t[t.length - 1] };
+}
+function sameFirst(a, b) {
+  if (a === b) return true;
+  var ca = NICK[a] || a, cb = NICK[b] || b; if (ca === cb) return true;
+  return a.length >= 3 && b.length >= 3 && (a.indexOf(b) === 0 || b.indexOf(a) === 0);
+}
+function faceFor(name) {
+  if (!FACE_IX) {
+    FACE_IX = {};
+    var all = (S.speakers || []).filter(function (p) { return p.photo; }).map(function (p) { return { name: p.name, photo: p.photo }; })
+      .concat(((FACES && FACES.people) || []).filter(function (p) { return p.photo; }));
+    all.forEach(function (p) { var k = nameParts(p.name); if (k) (FACE_IX[k.last] = FACE_IX[k.last] || []).push({ firsts: k.firsts, photo: p.photo, who: k.firsts[0] }); });
+  }
+  var me = nameParts(name); if (!me) return '';
+  var hits = (FACE_IX[me.last] || []).filter(function (c) { return me.firsts.some(function (a) { return c.firsts.some(function (b) { return sameFirst(a, b); }); }); });
+  if (!hits.length) return '';
+  /* two different people (Sam and Samantha Lee) could both match: then no picture rather than the wrong one */
+  var people = {}; hits.forEach(function (c) { people[NICK[c.who] || c.who] = 1; });
+  return Object.keys(people).length === 1 ? hits[0].photo : '';
+}
+/* a website picture that won't load falls back to initials */
+document.addEventListener('error', function (e) {
+  var im = e.target; if (!im || im.tagName !== 'IMG' || !im.hasAttribute('data-face')) return;
+  var sp = document.createElement('span'); sp.className = im.className.replace(/\s+$/, '') + (/\b(big|c)\b/.test(im.className) ? '' : ' c'); sp.textContent = im.getAttribute('data-face'); im.replaceWith(sp);
+}, true);
 function avatarHtml(p, cls) {
-  var k = p.id + ':' + p.photo, src = p.photo ? PHOTOS[k] : '';
+  var k = p.id + ':' + p.photo, src = p.photo ? PHOTOS[k] : '', face = !p.photo && faceFor(p.name);
+  if (face) return '<img class="avatar ' + (cls || '') + '" src="' + esc(face) + '" alt="" loading="lazy" referrerpolicy="no-referrer" data-face="' + esc(initials(p.name)) + '">';
   return src ? '<img class="avatar ' + (cls || '') + '" src="' + esc(src) + '" alt="">' :
     '<span class="avatar ' + (cls || 'c') + '"' + (p.photo ? ' data-photo="' + esc(p.id) + '" data-pv="' + p.photo + '"' : '') + '>' + esc(initials(p.name)) + '</span>';
 }

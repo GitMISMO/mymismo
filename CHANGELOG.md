@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Attendee list headshots: anyone without their own picture in MyMISMO shows the one already public on mismo.org if they're a speaker at this summit, on the MISMO team (About MISMO) or on the Board (MISMO Leadership). Matched by name, nicknames included; a name that could be two people gets none. The daily website job keeps data/faces.json current.
 - Nov 26, 2026: MISMO Matters and Mic'd Up notifications: a separate opt-in switch in Settings (off until turned on, off any time). MISMO Media's Push to MyMISMO button sends one, with words staff can edit; tapping it opens that edition or episode. A pushed Mic'd Up episode joins the list right away. Waits on relay request 16 (Perry) and MISMO Media (CN-049).
 - Nov 26, 2026: Website copy of the Salt Lake City art at art/slc-summit.svg (tools/make_nola_svg.mjs now builds both cities), for the website's Spring summit header (CN-048).
 - Nov 26, 2026: Salt Lake City art: the same navy night, stars and moon as New Orleans, with the snowcapped Wasatch Range, downtown towers, the Utah State Capitol and a TRAX train. It goes on every summit header when Salt Lake City is the current summit, and behind the Next Summit card once Spring is announced.
