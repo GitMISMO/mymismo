@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Explore, Around the Hotel: tap the map (or its expand button) to pop it out bigger, with longer place names and its own Everything / Eat and Drink / Things to Do switch; on a phone it can be swiped around. Tapping a place still opens it.
 - Nov 26, 2026: Explore: the room-block countdown card is now the Book Your Room button (the whole card, with an arrow, like the Floor Map card), and Directions takes the main button spot on the postcard.
 - Nov 26, 2026: Trivia, the Board: game-show style. A tapped square lifts off, grows and flips over to show the answer, and players pick the question ("What is the eNote?"). All 124 Medium and Hard questions now have an answer-style clue and four questions to pick from (data/trivia-draft.json); the facts are unchanged. Relay request 16 passes them through for ranked play.
 - Nov 26, 2026: Attendee list: someone registered twice under the same name and company (spelling or "&" and "and" aside) shows once.

@@ -552,6 +552,14 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .seg button[data-xcat] i{display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--pc); margin-right:6px}
 .radar{position:relative; border-radius:20px; background:radial-gradient(circle at 50% 50%, #0e3a5c, #071d2e 70%); overflow:hidden; max-width:560px}
 .radar svg{display:block; width:100%; height:auto}
+.radar:not(.big){cursor:zoom-in}
+.rd-big{position:absolute; right:10px; bottom:10px; width:38px; height:38px; display:grid; place-items:center; border-radius:10px; border:1px solid rgba(116,191,235,.45); background:rgba(7,29,46,.7); color:#fff; cursor:pointer}
+.rd-big svg{width:20px; height:20px}
+.rd-big:hover{background:rgba(20,72,110,.9)}
+.rd-pop{display:grid; gap:12px}
+.rd-scroll{overflow:auto; border-radius:20px; -webkit-overflow-scrolling:touch; overscroll-behavior:contain}
+.radar.big{max-width:none; width:max(100%, 600px); border-radius:20px}
+.rd-hint{margin:0; font-size:13px; color:var(--ink-2); text-align:center}
 .radar .rg{fill:none; stroke:rgba(116,191,235,.22); stroke-dasharray:3 5}
 .radar .rl{fill:rgba(169,216,243,.7); font:600 10px "IBM Plex Sans",sans-serif; text-anchor:middle}
 .radar .sonar{fill:none; stroke:var(--sky); stroke-width:1.5; transform-box:fill-box; transform-origin:center; animation:sonar 3.6s ease-out infinite}
@@ -1485,6 +1493,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
 <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 15.5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M8 7.5l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -2511,7 +2520,7 @@ function places(which) {
 }
 function placeByKey(k) { return places('all').filter(function (p) { return p.key === k; })[0] || null; }
 /* The radar: the hotel in the middle, each place on the ring for how far it is, dining to the left, things to do to the right. */
-function radar() {
+function radar(big) {
   var list = places(S.xcat || 'all'); if (!list.length) return '';
   var W = 340, C = W / 2, R = 150, maxMin = 20;
   function rad(m) { return 34 + Math.sqrt(Math.min(m, maxMin) / maxMin) * (R - 40); }
@@ -2529,19 +2538,36 @@ function radar() {
       var ang = (a0 + (arr.length === 1 ? span / 2 : span * i / (arr.length - 1))) * Math.PI / 180;
       var r = rad(p.min) + (i % 2 ? 9 : -3);
       var x = C + Math.cos(ang) * r, y = C - Math.sin(ang) * r;
-      var lx = x + (Math.cos(ang) >= 0 ? 9 : -9), anchor = Math.cos(ang) >= 0 ? 'start' : 'end';
-      var words = p.c.name.replace(/^The /, '').split(/\s+/), short = words.slice(0, 2).join(' ').replace(/\s+(and|of|the|&|at)$/i, '');
+      var lx = x + (Math.cos(ang) >= 0 ? 9 : -9), ly = y + 4, anchor = Math.cos(ang) >= 0 ? 'start' : 'end';
+      if (big && r < 95 && Math.sin(ang) > 0 && Math.abs(Math.cos(ang)) < 0.4) { lx = x; ly = y - 10; anchor = 'middle'; }   /* just above the hotel: the longer name sits over its dot */
+      var words = p.c.name.replace(/^The /, '').split(/\s+/), short = words.slice(0, big ? 3 : 2).join(' ').replace(/\s+(and|of|the|&|at)$/i, '');
       dots += '<g class="dot" data-place="' + esc(p.key) + '" role="button" tabindex="0" aria-label="' + esc(p.c.name + ', ' + (p.c.distance || '')) + '" style="--d:' + (0.15 + n++ * 0.06).toFixed(2) + 's;--pc:' + PL_COLORS[cat] + '">' +
         '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="13" class="hit"/><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5.5" class="pt"/>' +
-        '<text x="' + lx.toFixed(1) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="' + anchor + '" class="pn">' + esc(short) + '</text></g>';
+        '<text x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '" text-anchor="' + anchor + '" class="pn">' + esc(short) + '</text></g>';
     });
   });
-  return '<div class="radar"><svg viewBox="-90 0 ' + (W + 180) + ' ' + W + '" role="group" aria-label="Places around the hotel by walking time">' +
+  return '<div class="radar' + (big ? ' big' : '') + '"' + (big ? '' : ' title="Tap to see the map bigger"') + '><svg viewBox="-90 0 ' + (W + 180) + ' ' + W + '" role="group" aria-label="Places around the hotel by walking time">' +
     '<defs><radialGradient id="rg-glow"><stop offset="0" stop-color="#74bfeb" stop-opacity=".35"/><stop offset="1" stop-color="#74bfeb" stop-opacity="0"/></radialGradient></defs>' +
     '<circle cx="' + C + '" cy="' + C + '" r="' + R + '" fill="url(#rg-glow)"/>' + rings +
     '<circle cx="' + C + '" cy="' + C + '" r="18" class="sonar"/><circle cx="' + C + '" cy="' + C + '" r="18" class="sonar s2"/>' +
     '<g class="hq"><rect x="' + (C - 11) + '" y="' + (C - 11) + '" width="22" height="22" rx="5"/><use href="#i-hotel" x="' + (C - 8) + '" y="' + (C - 8) + '" width="16" height="16"/></g>' +
-    dots + '</svg></div>';
+    dots + '</svg>' + (big ? '' : '<button type="button" class="rd-big" data-radar-big aria-label="See the map bigger">' + icon('i-expand') + '</button>') + '</div>';
+}
+/* Jonna, Nov 26, 2026: tapping the map (anywhere but a place) pops it out bigger, with longer names; on a phone it can
+   be scrolled around. Tapping a place still opens it. */
+function radarSheet() {
+  var el = openSheet('Around the Hotel', '<div class="sheet-pad rd-pop"><div class="seg">' + [['all', 'Everything'], ['eat', 'Eat and Drink'], ['see', 'Things to Do']].map(function (o) {
+      return '<button type="button" data-rcat="' + o[0] + '" aria-pressed="' + ((S.xcat || 'all') === o[0]) + '"' + (o[0] !== 'all' ? ' style="--pc:' + PL_COLORS[o[0]] + '"' : '') + '>' + (o[0] !== 'all' ? '<i></i>' : '') + o[1] + '</button>';
+    }).join('') + '</div><div class="rd-scroll">' + radar(true) + '</div><p class="rd-hint">Rings show walking time from the hotel. Tap a place for details.</p></div>', { plain: true });
+  function center() { var sc = el.querySelector('.rd-scroll'), hint = el.querySelector('.rd-hint'); if (!sc) return; sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2;
+    if (hint) hint.textContent = 'Rings show walking time from the hotel. ' + (sc.scrollWidth > sc.clientWidth + 4 ? 'Swipe the map to look around, and tap' : 'Tap') + ' a place for details.'; }
+  setTimeout(center, 60);
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-rcat]'); if (!b) return;
+    S.xcat = b.getAttribute('data-rcat'); el.querySelector('.rd-scroll').innerHTML = radar(true); center();
+    el.querySelectorAll('[data-rcat]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    if (S.page === 'explore') renderPage('explore');
+  });
 }
 function pcard(p) {
   var c = p.c;
@@ -4018,6 +4044,7 @@ document.addEventListener('keydown', function (e) { var g = e.target.closest && 
 document.addEventListener('click', function (e) {
   if (e.target.closest('[data-staff-again]')) { ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); return; }
   var dot = e.target.closest && e.target.closest('g[data-place]'); if (dot) { placeSheet(dot.getAttribute('data-place')); return; }
+  if (e.target.closest && e.target.closest('.radar:not(.big)')) { radarSheet(); return; }
   var t = e.target.closest('button, a'); if (!t) return;
   if (t.id === 'dash-btn') { closeSheet(true); show('dash'); return; }
   if (t.hasAttribute('data-hq')) { show(t.getAttribute('data-hq')); return; }
