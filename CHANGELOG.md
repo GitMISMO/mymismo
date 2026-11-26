@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Settings: the Dark Mode switch flips in place instead of closing and reopening Settings.
 - Nov 26, 2026: Head to Head is Hard only: both players play the same Board (same squares, questions and Double square), highest score wins. Relay request 15 updated to match.
 - Nov 26, 2026: When a staff sign-in ends (they last 8 hours), the dashboard says so at the top with a Sign In button, instead of quietly showing the public app.
 - Nov 25, 2026: Trivia plan: the monthly leaderboard is each player's best Board (Hard) of the month; Head to Head is 10 Medium questions. Relay request 15 for Perry now covers both (request 16 folded in).

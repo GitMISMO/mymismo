@@ -3203,7 +3203,11 @@ function settingsSheet() {
   el.addEventListener('click', function (e) {
     var b = e.target.closest('[data-set]'); if (!b) return; var k = b.getAttribute('data-set');
     function again() { closeSheet(false); settingsSheet(); }
-    if (k === 'theme') { $('#theme-btn').click(); if (S.page === 'dash') renderPage('dash'); again(); }
+    if (k === 'theme') {   /* Jonna, Nov 26, 2026: the switch flips in place; Settings stays open */
+      $('#theme-btn').click(); if (S.page === 'dash') renderPage('dash');
+      var on = darkNow(); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on));
+      var row = b.closest('.set-row'), sub = row && row.querySelector('.set-tx span'); if (sub) sub.textContent = on ? 'On' : 'Off';
+    }
     else if (k === 'alerts-on') { turnOnAlerts(b); setTimeout(again, 2500); }
     else if (k === 'alerts-off') { turnOffAlerts(); setTimeout(again, 1200); }
     else if (k === 'staff-in') { closeSheet(false); ResourcesSession.signIn().then(function () { paintStaff(); }, function () {}); }
