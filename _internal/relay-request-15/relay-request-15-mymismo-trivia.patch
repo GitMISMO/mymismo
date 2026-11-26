@@ -1,7 +1,71 @@
 --- a/_dev/aws/index.mjs
 +++ b/_dev/aws/index.mjs
-@@ -2642,6 +2642,9 @@
+@@ -2511,7 +2511,8 @@
+       const e = mmStr(p && p.e, 254).toLowerCase(); if (!mmEmailOk(e)) continue;
+       people.set(e, { first: mmStr(p.first, 60), last: mmStr(p.last, 60), company: mmStr(p.company, 120), title: mmStr(p.title, 120) });
+     }
+-    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people };
++    const ids = new Map(); for (const [e, p] of people) ids.set(mmIdOf(id, e), p);   /* relay request 15: the whole registration list is the directory */
++    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people, ids };
    }
+   mmFeedCache.at = now; mmFeedCache.value = { summits };
+   return mmFeedCache.value;
+@@ -2535,10 +2536,12 @@
+   return { id: t.sub, summit: t.s, email: t.e, name: t.n };
+ }
+ function mmPublic(id, p) {
+-  return { id, name: mmStr(p.name, 120), title: mmStr(p.title, 120), company: mmStr(p.company, 120), about: mmStr(p.about, 600), linkedin: mmStr(p.linkedin, 200) };
++  return { id, name: mmStr(p.name, 120), title: mmStr(p.title, 120), company: mmStr(p.company, 120), about: mmStr(p.about, 600), linkedin: mmStr(p.linkedin, 200),
++    website: mmStr(p.website, 200), phone: mmStr(p.phone, 30), email: p.showEmail === true ? mmStr(p.contactEmail, 254) : '', photo: Number(p.photo) || 0, joined: true };
+ }
++/* relay request 15: everyone registered is in the directory unless they hide themselves (hidden: true); listed is kept for the app */
+ function mmMe(id, p, email) {
+-  return { ...mmPublic(id, p), email, listed: p.listed === true, blocked: Array.isArray(p.blocked) ? p.blocked.filter(x => MM_ID.test(x)) : [] };
++  return { ...mmPublic(id, p), email, showEmail: p.showEmail === true, listed: p.hidden !== true, hidden: p.hidden === true, blocked: Array.isArray(p.blocked) ? p.blocked.filter(x => MM_ID.test(x)) : [] };
+ }
+ async function mmReadPeople(proj, summit) {
+   const r = await readFile(proj.repo, proj.branch || 'main', mmPeoplePath(summit));
+@@ -2599,7 +2602,7 @@
+   /* first sign-in makes their entry, from the registration; never listed until they say so */
+   const p = await updateRepoJson(proj.repo, proj.branch || 'main', mmPeoplePath(summit), d => {
+     d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+-    if (!d.docs[id]) d.docs[id] = { name: `${person.first} ${person.last}`.trim(), title: person.title, company: person.company, about: '', linkedin: '', listed: false, blocked: [], joined: now, at: now };
++    if (!d.docs[id] || d.docs[id].deleted) d.docs[id] = { name: `${person.first} ${person.last}`.trim(), title: person.title, company: person.company, about: '', linkedin: '', hidden: false, blocked: [], joined: now, at: now };
+     return d;
+   }, 'MyMISMO attendee signed in');
+   if (!p || p.error) return respond(502, { error: 'UNAVAILABLE', message: 'Sign-in is briefly unavailable. Please try again in a minute.' });
+@@ -2617,12 +2620,21 @@
+     if (!mmAllowed('read', who.id, MM_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a minute.' });
+     const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'UNAVAILABLE' });
+     const mine = ppl.docs[who.id];
+-    if (!mine) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
++    if (!mine || mine.deleted) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
+     if (subPath === '/att/me') return respond(200, { me: mmMe(who.id, mine, who.email) });
+-    if (subPath === '/att/directory') {
+-      const people = Object.entries(ppl.docs).filter(([id, p]) => p && p.listed === true && id !== who.id).map(([id, p]) => mmPublic(id, p))
+-        .sort((a, c) => a.name.localeCompare(c.name));
+-      return respond(200, { people, listed: mine.listed === true });
++    if (subPath === '/att/directory') {   /* relay request 15: every registrant (name, title, company), with the profile they filled in if they did */
++      const feed = await mmFeed(proj), s = !feed.error && feed.summits[who.summit], people = [], seen = new Set([who.id]);
++      for (const [id, p] of Object.entries(ppl.docs)) { seen.add(id); if (p && p.hidden !== true && id !== who.id) people.push(mmPublic(id, p)); }
++      if (s) for (const [id, p] of s.ids) if (!seen.has(id)) people.push({ id, name: `${p.first} ${p.last}`.trim(), title: p.title, company: p.company, about: '', linkedin: '', website: '', phone: '', email: '', photo: 0, joined: false });
++      people.sort((a, c) => a.name.localeCompare(c.name));
++      return respond(200, { people, listed: mine.hidden !== true });
++    }
++    if (subPath === '/att/photo') {   /* relay request 15: a headshot, for signed-in attendees only */
++      const id = String((event.queryStringParameters || {}).id || '');
++      if (!MM_ID.test(id) || !ppl.docs[id] || ppl.docs[id].hidden === true || !ppl.docs[id].photo) return respond(404, { error: 'NOT_FOUND' });
++      const r = await readFile(proj.repo, branch, `att/${who.summit}/photos/${id}.json`);
++      if (r.status !== 200 || !r.data || !r.data.s) return respond(404, { error: 'NOT_FOUND' });
++      return respond(200, { s: String(r.data.s), v: Number(r.data.v) || 0 });
+     }
+     if (subPath === '/att/messages') {
+       const r = await readFile(proj.repo, branch, mmMsgPath(who.summit)); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
+@@ -2640,17 +2652,27 @@
+     }
+     return respond(404, { error: 'NOT_FOUND' });
+   }
++  if (method === 'PUT' && subPath === '/att/my-photo') return mm15Photo(event, proj, headers, who, now);   /* relay request 15: larger body than the rest */
    const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
    const b = pre.body;
 +  if (method === 'POST' && (subPath === '/att/report' || subPath === '/att/delete')) return mm15AttExtra(subPath, proj, who, b, now);   /* relay request 15 */
@@ -9,8 +73,57 @@
 +    return respond(400, { error: 'NOT_ALLOWED_WORDS', problems: ['Please keep it professional: that has words MyMISMO doesn’t allow.'] });   /* relay request 15: App Store rule 1.2 */
    if (method === 'PUT' && subPath === '/att/profile') {
      if (!mmAllowed('profile', who.id, MM_LIMITS.profile, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a few minutes.' });
-     const linkedin = mmStr(b.linkedin, 200);
-@@ -2914,6 +2917,483 @@
+-    const linkedin = mmStr(b.linkedin, 200);
++    const linkedin = mmStr(b.linkedin, 200), website = mmStr(b.website, 200), phone = mmStr(b.phone, 30);
+     if (linkedin && !/^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/[^\s<>"']+$/i.test(linkedin)) return respond(400, { error: 'INVALID', problems: ['The LinkedIn address should start with https://www.linkedin.com/'] });
++    if (website && !/^https?:\/\/[a-z0-9.-]+\.[a-z]{2,}(\/[^\s<>"']*)?$/i.test(website)) return respond(400, { error: 'INVALID', problems: ['The website should start with https://'] });
++    if (phone && !/^[+0-9() .-]{7,30}$/.test(phone)) return respond(400, { error: 'INVALID', problems: ['The phone number should only have numbers, spaces and + ( ) - .'] });
+     let out = null, gone = false;
+     const w = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
+       d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+-      const p = d.docs[who.id]; if (!p) { gone = true; throw new Error('stop'); }
+-      if ('listed' in b) p.listed = b.listed === true;
++      const p = d.docs[who.id]; if (!p || p.deleted) { gone = true; throw new Error('stop'); }
++      if ('listed' in b) p.hidden = b.listed !== true;   /* relay request 15 */
++      if ('hidden' in b) p.hidden = b.hidden === true;
++      if ('website' in b) p.website = website;
++      if ('phone' in b) p.phone = phone;
++      if ('showEmail' in b) { p.showEmail = b.showEmail === true; p.contactEmail = p.showEmail ? who.email : ''; }
+       if ('title' in b) p.title = mmStr(b.title, 120);
+       if ('company' in b) p.company = mmStr(b.company, 120);
+       if ('about' in b) p.about = mmStr(b.about, 600);
+@@ -2666,7 +2688,7 @@
+     let out = null;
+     const w = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
+       d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+-      const p = d.docs[who.id]; if (!p) throw new Error('stop');
++      const p = d.docs[who.id]; if (!p || p.deleted) throw new Error('stop');
+       const set = new Set(Array.isArray(p.blocked) ? p.blocked : []);
+       if (b.on === false) set.delete(b.id); else set.add(b.id);
+       p.blocked = [...set].slice(0, 500); out = p; return d;
+@@ -2682,16 +2704,18 @@
+     if (!mmAllowed('msg', who.id, MM_LIMITS.msg, now)) return respond(429, { error: 'TOO_MANY', message: 'You’ve sent a lot of messages. Please wait a few minutes.' });
+     const ppl = await mmReadPeople(proj, who.summit); if (ppl.error) return respond(502, { error: 'NOT_SENT', message: 'Your message couldn’t be sent just now. Please try again.' });
+     const me = ppl.docs[who.id], them = ppl.docs[to];
+-    if (!me) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
++    if (!me || me.deleted) return respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' });
+     const tid = mmThreadId(who.id, to);
+     const blockedByThem = them && Array.isArray(them.blocked) && them.blocked.includes(who.id);
+     const blockedByMe = Array.isArray(me.blocked) && me.blocked.includes(to);
+-    if (!them || blockedByThem || blockedByMe) return respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' });
++    const feedNow = await mmFeed(proj), sNow = !feedNow.error && feedNow.summits[who.summit];
++    const known = them ? !them.deleted : !!(sNow && sNow.ids.has(to));   /* relay request 15: hidden is checked below (an existing conversation can go on) */
++    if (!known || blockedByThem || blockedByMe) return respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' });
+     let reply = null;
+     const w = await updateRepoJson(proj.repo, branch, mmMsgPath(who.summit), d => {
+       d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+       const t = d.docs[tid];
+-      if (!t && them.listed !== true) { reply = respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' }); throw new Error('stop'); }
++      if (!t && them && them.hidden === true) { reply = respond(403, { error: 'CANT_MESSAGE', message: 'You can’t message this person.' }); throw new Error('stop'); }
+       const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
+       th.m = Array.isArray(th.m) ? th.m : [];
+       th.m.push({ f: who.id, t: text, at: now });
+@@ -2914,6 +2938,504 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -445,7 +558,7 @@
 +  if (!mmAllowed('profile', who.id, MM_LIMITS.profile, now)) return respond(429, { error: 'TOO_MANY' });
 +  const a = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
 +    const docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; d.docs = docs;
-+    delete docs[who.id];
++    docs[who.id] = { hidden: true, deleted: true, at: now };   /* nothing about them is kept; this only stops their registration row showing again */
 +    for (const p of Object.values(docs)) if (p && Array.isArray(p.blocked)) p.blocked = p.blocked.filter(x => x !== who.id);
 +    return d;
 +  }, 'MyMISMO: an attendee deleted their account').catch(() => null);
@@ -454,8 +567,29 @@
 +    for (const [k, t] of Object.entries(docs)) if (!t || !Array.isArray(t.p) || t.p.includes(who.id)) delete docs[k];
 +    return d;
 +  }, 'MyMISMO: an attendee deleted their account').catch(() => null);
-+  if (!a || a.error || !m || m.error) return respond(502, { error: 'NOT_SAVED', message: 'That couldn’t be finished just now. Please try again.' });
++  const ph = await readFile(proj.repo, branch, `att/${who.summit}/photos/${who.id}.json`);
++  const pw = ph.status === 200 ? await updateRepoJson(proj.repo, branch, `att/${who.summit}/photos/${who.id}.json`, () => ({ s: '', v: 0 }), 'MyMISMO: an attendee deleted their account').catch(() => null) : { ok: true };
++  if (!a || a.error || !m || m.error || !pw || pw.error) return respond(502, { error: 'NOT_SAVED', message: 'That couldn’t be finished just now. Please try again.' });
 +  return respond(200, { ok: true });
++}
++/* PUT /mymismo/att/my-photo { data } -> { me }: a square headshot the app has already shrunk (a JPEG or PNG data: URL, 150 KB at
++ * most); data '' removes it. Kept at att/<summit>/photos/<id>.json; the directory says only whether there is one (and its version). */
++async function mm15Photo(event, proj, headers, who, now) {
++  if (String(event.body || '').length > 160_000) return respond(413, { error: 'TOO_LARGE', message: 'That picture is too large.' });
++  const parsed = parseBody(event, 160_000); if (parsed.error) return parsed.error;
++  const data = String((parsed.body && parsed.body.data) || '');
++  if (data && !/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]{100,153000}$/.test(data)) return respond(400, { error: 'INVALID', problems: ['That picture couldn’t be used. Try a JPEG or PNG.'] });
++  if (!mmAllowed('profile', who.id, MM_LIMITS.profile, now)) return respond(429, { error: 'TOO_MANY', message: 'Please wait a few minutes.' });
++  const branch = proj.branch || 'main', v = data ? now : 0;
++  const w = await updateRepoJson(proj.repo, branch, `att/${who.summit}/photos/${who.id}.json`, () => ({ s: data, v }), 'MyMISMO attendee headshot').catch(() => null);
++  if (!w || w.error) return respond(502, { error: 'NOT_SAVED', message: 'Your picture couldn’t be saved just now. Please try again.' });
++  let out = null;
++  const p = await updateRepoJson(proj.repo, branch, mmPeoplePath(who.summit), d => {
++    d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++    const me = d.docs[who.id]; if (!me || me.deleted) throw new Error('stop'); me.photo = v; me.at = now; out = me; return d;
++  }, 'MyMISMO attendee headshot').catch(() => null);
++  if (!p || p.error) return respond(502, { error: 'NOT_SAVED', message: 'Your picture couldn’t be saved just now. Please try again.' });
++  return respond(200, { me: mmMe(who.id, out, who.email) });
 +}
 +/* For the MISMO team (staff sign-in, the people in alertSenders): the reports, newest first, with names, and closing one.
 + *   GET  /mymismo/staff/reports?summit=<id>   -> { reports: [{ id, about, aboutName, byName, reason, note, at, status }] }
@@ -494,7 +628,7 @@
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3464,12 @@
+@@ -2984,6 +3506,12 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
@@ -507,12 +641,12 @@
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
-@@ -3006,7 +3492,7 @@
+@@ -3006,7 +3534,7 @@
      if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */
 -    const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST' }[subPath];
-+    const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST', '/att/report': 'POST', '/att/delete': 'POST' }[subPath];
++    const ok = { '/att/me': 'GET', '/att/directory': 'GET', '/att/messages': 'GET', '/att/profile': 'PUT', '/att/block': 'POST', '/att/message': 'POST', '/att/report': 'POST', '/att/delete': 'POST', '/att/photo': 'GET', '/att/my-photo': 'PUT' }[subPath];
      if (!ok) return respond(404, { error: 'NOT_FOUND' });
      if (method !== ok) return respond(405, { error: 'METHOD' });
      return mmSigned(method, subPath, event, proj, headers);

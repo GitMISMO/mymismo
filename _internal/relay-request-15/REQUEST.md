@@ -101,11 +101,27 @@ Whole words only, so ordinary words that contain them aren't caught.
 
 Nothing is emailed by any of these. The checks are in the same test file (70 in all).
 
+## The Attendee Directory Is the Registration List (decided by Jonna, Nov 25, 2026)
+
+Like the MBA event app, everyone registered for the summit is in the directory with the name, title and company from
+their registration, whether or not they have signed in yet. Anyone can hide themselves in their profile. This changes
+request 13's rule (listed only if they turned it on); test-mymismo.mjs here is request 13's test with those checks updated.
+
+| Route | Sign-in | What changes |
+| --- | --- | --- |
+| `GET /att/directory` | attendee | Everyone in the summit's attendee list (Summit HQ's feed), merged with the profiles people filled in; hidden people left out. Each entry has `joined` (signed in yet), `photo` (0 or a version), and phone, website and email only if that person chose to share them. |
+| `PUT /att/profile` | attendee | Also takes `phone`, `website` and `showEmail`. `listed: false` hides the attendee (stored as `hidden: true`). |
+| `PUT /att/my-photo` | attendee | `{ data }`: a headshot the app has already made into a 320-pixel square JPEG (150 KB at most), or '' to remove it. Kept at `att/<summit>/photos/<id>.json`. |
+| `GET /att/photo?id=` | attendee | That person's headshot, for signed-in attendees only, never for someone hidden. |
+| `POST /att/message` | attendee | Can start a conversation with anyone registered and not hidden; it waits for them until they sign in. |
+| `POST /att/delete` | attendee | Removes everything and leaves only a hidden marker (no name or details), so their registration row doesn't show again. Signing in again later makes a fresh account. |
+
 ## What's Here
 
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
-- `test-mymismo15.mjs`: 70 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+- `test-mymismo.mjs`: request 13's test, with the directory checks updated to the new rule. Replace the old copy with this one.
+- `test-mymismo15.mjs`: 81 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
   `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
 
 ## To Switch It On

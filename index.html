@@ -765,6 +765,16 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .grp-tx em svg{width:13px; height:13px}
 .grp-tx strong{display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--link); font-size:14px}
 .grp-tx strong svg{width:14px; height:14px}
+.pf-shot{position:relative; flex:none; display:grid; justify-items:center; gap:6px}
+.pf-cam{display:inline-flex; align-items:center; gap:5px; padding:5px 9px; border-radius:7px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35); color:#fff; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap}
+.pf-cam svg{width:13px; height:13px}
+img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
+.att-count{font-size:13px; color:var(--ink-3); font-weight:600; margin-top:10px}
+.cts{display:grid; gap:8px}
+.ct{display:flex; align-items:center; gap:10px; padding:11px 12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--link); text-decoration:none; font-weight:600; min-width:0}
+.ct svg{width:18px; height:18px; flex:none; color:var(--ink-3)}
+.ct span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.att-note{font-size:13px; color:var(--ink-3); margin:12px 0 0}
 .rp{display:grid; gap:8px}
 .rp-o{display:flex; align-items:center; gap:10px; padding:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); cursor:pointer}
 .rp-o input{width:18px; height:18px; accent-color:var(--navy-mid)}
@@ -1848,15 +1858,17 @@ function renderPeople() {
 function renderAttendees() {
   if (!A.token) return joinCard();
   var h = '';
-  if (A.me && !A.me.listed) h += '<div class="note" style="margin-bottom:10px"><b>You\'re not in the directory yet.</b> Others can\'t see or message you until you add yourself. <button type="button" class="linkbtn" data-profile>Add Me&nbsp;→</button></div>';
+  if (A.me && !A.me.listed) h += '<div class="note" style="margin-bottom:10px"><b>You\'re hidden from the directory.</b> Others can\'t see you or start a conversation with you. <button type="button" class="linkbtn" data-profile>Show Me&nbsp;→</button></div>';
+  else if (A.me && !A.me.photo) h += '<div class="note" style="margin-bottom:10px"><b>Add your headshot and contact details</b> so people can put a face to your name. <button type="button" class="linkbtn" data-profile>My Profile&nbsp;→</button></div>';
   if (!A.loadedPeople) { loadPeople(); return h + '<div class="note">Loading the attendee list…</div>'; }
   var q = S.aq.trim().toLowerCase();
   var list = A.people.filter(function (p) { return !q || (p.name + ' ' + p.title + ' ' + p.company).toLowerCase().indexOf(q) >= 0; });
   h += '<div class="tools"><label class="search">' + icon('i-search') + '<span class="sr">Search attendees</span><input id="att-q" type="search" placeholder="Search attendees by name or company" value="' + esc(S.aq) + '" autocomplete="off"></label></div>';
-  if (!A.people.length) return h + '<div class="note"><b>Nobody has joined the directory yet.</b> Be the first: add yourself from your profile so others can find you.</div>';
+  if (!A.people.length) return h + '<div class="note">The attendee list is on its way. Check back soon.</div>';
   if (!list.length) { h += '<div class="note">No attendee matches <b>' + esc(S.aq) + '</b>. Here is everyone.</div>'; list = A.people; }
-  return h + '<div class="people" style="margin-top:8px">' + list.map(function (p) {
-    return '<button type="button" class="person" data-open="a:' + esc(p.id) + '"><span class="avatar c">' + esc(initials(p.name)) + '</span><span><div class="n">' + esc(p.name) + '</div><div class="r">' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></span></button>';
+  setTimeout(function () { watchPhotos($('#pg-people')); }, 0);
+  return h + '<div class="att-count">' + A.people.length + ' attendees</div><div class="people" style="margin-top:8px">' + list.map(function (p) {
+    return '<button type="button" class="person" data-open="a:' + esc(p.id) + '">' + avatarHtml(p) + '<span><div class="n">' + esc(p.name) + '</div><div class="r">' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></span></button>';
   }).join('') + '</div>';
 }
 
@@ -2736,6 +2748,46 @@ function rq(method, path, body) {
     }); })
     .catch(function () { return { status: 0, ok: false, j: { message: navigator.onLine === false ? 'You\'re offline. Try again once you\'re connected.' : 'MyMISMO couldn\'t reach MISMO just now. Try again in a minute.' } }; });
 }
+/* Headshots (relay request 15): only signed-in attendees can load them, so they come through the relay one at a time,
+   as each person scrolls into view, and are kept in memory for the session. */
+var PHOTOS = {}, PHOTO_WAIT = [], PHOTO_BUSY = 0;
+function avatarHtml(p, cls) {
+  var k = p.id + ':' + p.photo, src = p.photo ? PHOTOS[k] : '';
+  return src ? '<img class="avatar ' + (cls || '') + '" src="' + esc(src) + '" alt="">' :
+    '<span class="avatar ' + (cls || 'c') + '"' + (p.photo ? ' data-photo="' + esc(p.id) + '" data-pv="' + p.photo + '"' : '') + '>' + esc(initials(p.name)) + '</span>';
+}
+function photoPump() {
+  while (PHOTO_BUSY < 4 && PHOTO_WAIT.length) {
+    var el = PHOTO_WAIT.shift(), id = el.getAttribute('data-photo'), v = el.getAttribute('data-pv'), k = id + ':' + v;
+    if (PHOTOS[k]) { swapPhoto(el, PHOTOS[k]); continue; }
+    PHOTO_BUSY++;
+    (function (el, k) {
+      rq('GET', 'photo?id=' + encodeURIComponent(id)).then(function (r) {
+        PHOTO_BUSY--; if (r.ok && r.j.s) { PHOTOS[k] = r.j.s; $$('[data-photo="' + k.split(':')[0] + '"]').forEach(function (e) { swapPhoto(e, r.j.s); }); }
+        photoPump();
+      });
+    })(el, k);
+  }
+}
+function swapPhoto(el, src) { var img = document.createElement('img'); img.className = el.className; img.src = src; img.alt = ''; el.replaceWith(img); }
+var photoSeen = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+  es.forEach(function (e) { if (e.isIntersecting) { photoSeen.unobserve(e.target); PHOTO_WAIT.push(e.target); } }); photoPump();
+}, { rootMargin: '200px' }) : null;
+function watchPhotos(root) { $$('[data-photo]', root || document).forEach(function (e) { if (photoSeen) photoSeen.observe(e); else PHOTO_WAIT.push(e); }); if (!photoSeen) photoPump(); }
+/* shrink a picked photo to a 320-pixel square JPEG on the phone before it's sent */
+function squarePhoto(file) {
+  return new Promise(function (ok, no) {
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () {
+      var n = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement('canvas'); c.width = c.height = 320;
+      var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 320, 320);
+      x.drawImage(img, (img.naturalWidth - n) / 2, Math.max(0, (img.naturalHeight - n) / 3), n, n, 0, 0, 320, 320);
+      URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); no(); };
+    img.src = url;
+  });
+}
 /* ---------- Alerts (relay request 14) ---------- */
 var PUSH = { ready: false, key: '', alerts: [], on: false };
 function rp(method, path, body) {
@@ -2832,7 +2884,7 @@ function settingsSheet() {
     h += '<div class="d-h">My Schedule</div><div class="set-card">' + setRow('i-star', n + (n === 1 ? ' session' : ' sessions') + ' starred', 'Saved on this phone for the ' + esc(S.summit.name) + '.',
       n ? '<button type="button" class="btn small" data-set="clear-sched">Clear</button>' : '') + '</div>';
   }
-  h += '<div class="d-h">Privacy</div><div class="set-card">' + setRow('i-lock', 'What MyMISMO keeps', 'Your schedule and settings stay on this phone. MyMISMO doesn\'t track what you do or share it with anyone. Signing in as an attendee lists you in the attendee directory only if you choose to be listed.') +
+  h += '<div class="d-h">Privacy</div><div class="set-card">' + setRow('i-lock', 'What MyMISMO keeps', 'Your schedule and settings stay on this phone. MyMISMO doesn\'t track what you do or share it with anyone. Everyone registered for a summit is in the attendee directory with their name, title and company, for other signed-in attendees. You can hide yourself in My Profile.') +
     setRow('i-file', 'Clear Saved Data', 'Signs you out and removes your schedule and settings from this phone.', '<button type="button" class="btn small" data-set="clear-all">Clear</button>') +
     '<a class="set-row link" href="privacy/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-lock') + '</span><div class="set-tx"><b>Privacy Policy</b><span>What MyMISMO collects, why, and how to delete it</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="delete-account/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-x') + '</span><div class="set-tx"><b>Delete Your Data</b><span>How to delete a MyMISMO account and its data</span></div>' + icon('i-chev') + '</a></div>';
@@ -2984,18 +3036,23 @@ function signInSheet() {
 }
 function profileSheet(welcome) {
   var me = A.me || {};
-  var h = '<div class="cover person-cover"><span class="avatar">' + esc(initials(me.name)) + '</span><div><span class="k">' + (welcome ? 'Welcome' : 'My Profile') + '</span><h2>' + esc(me.name) + '</h2><div class="w"><div>' + esc(me.email || '') + '</div></div></div></div><div class="sheet-pad">' +
-    (welcome ? '<p style="margin-top:0">You\'re signed in. Add yourself to the attendee directory so others at the summit can find you and message you.</p>' : '') +
-    '<label class="toggle"><input type="checkbox" id="pf-listed"' + (me.listed ? ' checked' : '') + '><span><b>Show Me in the Attendee Directory</b><span>Others signed in can see your name, title, company and what you write below, and can message you here. Your email is never shown.</span></span></label>' +
+  var h = '<div class="cover person-cover"><div class="pf-shot">' + avatarHtml(me, 'big') + '<label class="pf-cam" for="pf-photo">' + icon('i-user') + '<span>' + (me.photo ? 'Change' : 'Add') + ' Headshot</span></label><input type="file" id="pf-photo" accept="image/*" hidden></div><div><span class="k">' + (welcome ? 'Welcome' : 'My Profile') + '</span><h2>' + esc(me.name) + '</h2><div class="w"><div>' + esc(me.email || '') + '</div></div></div></div><div class="sheet-pad">' +
+    (welcome ? '<p style="margin-top:0">You\'re signed in, and you\'re in the attendee directory with your name, title and company from your registration. Add a headshot and how people can reach you.</p>' : '') +
+    '<label class="toggle"><input type="checkbox" id="pf-listed"' + (me.listed ? ' checked' : '') + '><span><b>Show Me in the Attendee Directory</b><span>Everyone registered is listed with their name, title and company. Others signed in can see what you add below and message you. Turn this off to hide yourself.</span></span></label>' +
     '<div class="field"><label for="pf-title">Job Title</label><input id="pf-title" maxlength="120" value="' + esc(me.title) + '"></div>' +
     '<div class="field"><label for="pf-company">Company</label><input id="pf-company" maxlength="120" value="' + esc(me.company) + '"></div>' +
     '<div class="field"><label for="pf-about">What I\'d Like to Talk About</label><textarea id="pf-about" rows="3" maxlength="600">' + esc(me.about) + '</textarea></div>' +
+    '<div class="d-h">How People Can Reach You</div>' +
     '<div class="field"><label for="pf-li">LinkedIn</label><input id="pf-li" type="url" maxlength="200" placeholder="https://www.linkedin.com/in/…" value="' + esc(me.linkedin) + '"></div>' +
+    '<div class="field"><label for="pf-phone">Phone</label><input id="pf-phone" type="tel" maxlength="30" autocomplete="tel" value="' + esc(me.phone || '') + '"></div>' +
+    '<div class="field"><label for="pf-web">Website</label><input id="pf-web" type="url" maxlength="200" placeholder="https://" value="' + esc(me.website || '') + '"></div>' +
+    '<label class="toggle"><input type="checkbox" id="pf-email"' + (me.showEmail ? ' checked' : '') + '><span><b>Show My Email</b><span>' + esc(me.email || '') + ' shows on your card for people signed in. Off unless you turn it on.</span></span></label>' +
     '<div id="pf-msg" role="status"></div><div class="d-actions"><button class="btn primary" type="button" id="pf-save">Save</button><button class="btn quiet" type="button" id="pf-out">Sign Out</button></div></div>';
   var el = openSheet('My Profile', h, { color: '#14486e' });
   $('#pf-save', el).addEventListener('click', function () {
     var btn = this; btn.disabled = true; btn.textContent = 'Saving…'; $('#pf-msg', el).innerHTML = '';
-    rq('PUT', 'profile', { listed: $('#pf-listed', el).checked, title: $('#pf-title', el).value, company: $('#pf-company', el).value, about: $('#pf-about', el).value, linkedin: $('#pf-li', el).value.trim() }).then(function (r) {
+    rq('PUT', 'profile', { listed: $('#pf-listed', el).checked, title: $('#pf-title', el).value, company: $('#pf-company', el).value, about: $('#pf-about', el).value, linkedin: $('#pf-li', el).value.trim(),
+      phone: $('#pf-phone', el).value.trim(), website: $('#pf-web', el).value.trim(), showEmail: $('#pf-email', el).checked }).then(function (r) {
       btn.disabled = false; btn.textContent = 'Save';
       if (!r.ok) { $('#pf-msg', el).innerHTML = '<div class="err">' + esc((r.j.problems && r.j.problems[0]) || r.j.message || 'Your changes weren\'t saved. Try again.') + '</div>'; return; }
       A.me = r.j.me; persist(); A.loadedPeople = false; paintAccount();
@@ -3004,6 +3061,19 @@ function profileSheet(welcome) {
     });
   });
   $('#pf-out', el).addEventListener('click', function () { closeSheet(true); signOutLocal(false); });
+  watchPhotos(el);
+  $('#pf-photo', el).addEventListener('change', function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    $('#pf-msg', el).innerHTML = '<div class="okmsg">Saving your headshot…</div>';
+    squarePhoto(f).then(function (data) {
+      return rq('PUT', 'my-photo', { data: data }).then(function (r) {
+        if (!r.ok) { $('#pf-msg', el).innerHTML = '<div class="err">' + esc((r.j.problems && r.j.problems[0]) || r.j.message || 'Your headshot wasn\'t saved. Try again.') + '</div>'; return; }
+        A.me = r.j.me; persist(); PHOTOS[A.me.id + ':' + A.me.photo] = data;
+        var shot = $('.pf-shot .avatar', el); if (shot) swapPhoto(shot, data);
+        $('#pf-msg', el).innerHTML = '<div class="okmsg">Headshot saved.</div>';
+      });
+    }, function () { $('#pf-msg', el).innerHTML = '<div class="err">That picture couldn\'t be opened. Try another one.</div>'; });
+  });
 }
 function loadPeople() {
   rq('GET', 'directory').then(function (r) {
@@ -3015,13 +3085,18 @@ function loadPeople() {
 function attendeeSheet(id) {
   var p = A.people.filter(function (x) { return x.id === id; })[0] || (threadWith(id) || {}).with; if (!p) return;
   var blocked = A.me && A.me.blocked && A.me.blocked.indexOf(id) >= 0;
-  var h = '<div class="cover person-cover"><span class="avatar">' + esc(initials(p.name)) + '</span><div><span class="k">Attendee</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">' +
-    (p.about ? '<div class="d-desc" style="margin-top:0">' + esc(p.about) + '</div>' : '') +
+  var contact = [p.email ? '<a class="ct" href="mailto:' + esc(p.email) + '">' + icon('i-mail') + '<span>' + esc(p.email) + '</span></a>' : '',
+    p.phone ? '<a class="ct" href="tel:' + esc(p.phone.replace(/[^+0-9]/g, '')) + '">' + icon('i-chat') + '<span>' + esc(p.phone) + '</span></a>' : '',
+    p.linkedin ? '<a class="ct" href="' + esc(p.linkedin) + '" target="_blank" rel="noopener">' + icon('i-link') + '<span>LinkedIn</span></a>' : '',
+    p.website ? '<a class="ct" href="' + esc(p.website) + '" target="_blank" rel="noopener">' + icon('i-globe') + '<span>' + esc(p.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')) + '</span></a>' : ''].join('');
+  var h = '<div class="cover person-cover">' + avatarHtml(p, 'big') + '<div><span class="k">Attendee</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">' +
+    (p.about ? '<div class="d-h" style="margin-top:0">Wants to Talk About</div><div class="d-desc" style="margin-top:0">' + esc(p.about) + '</div>' : '') +
+    (contact ? '<div class="d-h">Contact</div><div class="cts">' + contact + '</div>' : '') +
+    (p.joined === false ? '<p class="att-note">' + esc(p.name.split(' ')[0]) + ' hasn\'t signed in to MyMISMO yet. A message waits for them until they do.</p>' : '') +
     '<div class="d-actions" style="margin-top:14px">' + (blocked ? '' : '<button type="button" class="btn primary" data-chat="' + esc(id) + '">' + icon('i-chat') + 'Message</button>') +
-    (p.linkedin ? '<a class="btn" href="' + esc(p.linkedin) + '" target="_blank" rel="noopener">' + icon('i-link') + 'LinkedIn</a>' : '') +
     '<button type="button" class="btn quiet" data-block="' + esc(id) + '" data-on="' + (blocked ? '0' : '1') + '">' + (blocked ? 'Unblock' : 'Block') + '</button>' +
     '<button type="button" class="btn quiet" data-report="' + esc(id) + '">' + icon('i-file') + 'Report</button></div></div>';
-  openSheet(p.name, h, { color: '#14486e' });
+  var el = openSheet(p.name, h, { color: '#14486e' }); watchPhotos(el);
 }
 /* App Store rule 1.2: anyone can report another attendee to the MISMO team */
 function reportSheet(id) {

@@ -226,8 +226,28 @@ r = await call('POST', '/mymismo/att/report', { tok: ap.token, body: { id: ap.me
 await call('POST', '/mymismo/att/block', { tok: ap.token, body: { id: aa.me.id, on: true } });
 r = await call('POST', '/mymismo/att/delete', { tok: aa.token, body: {} });
 const ppl = file('att/nola/people.json').docs, msgs = file('att/nola/messages.json').docs;
-ok('delete: directory entry, conversations and blocks naming them are gone', r.statusCode === 200 && !ppl[aa.me.id] && Object.values(msgs).every(t => !t.p.includes(aa.me.id)) && !(ppl[ap.me.id].blocked || []).includes(aa.me.id), { ppl, msgs });
+ok('delete: profile, conversations and blocks naming them are gone (only a hidden marker stays)', r.statusCode === 200 && Object.keys(ppl[aa.me.id]).sort().join() === 'at,deleted,hidden' && Object.values(msgs).every(t => !t.p.includes(aa.me.id)) && !(ppl[ap.me.id].blocked || []).includes(aa.me.id), { ppl, msgs });
 r = await call('GET', '/mymismo/att/me', { tok: aa.token }); ok('delete: their old sign-in no longer works', r.statusCode === 401);
+
+/* directory from the registration list, headshots and contact details */
+r = await call('GET', '/mymismo/att/directory', { tok: ap.token }); d = J(r);
+ok('directory: a deleted attendee no longer shows, even though still registered', r.statusCode === 200 && !d.people.some(x => x.name === 'Alex Kim'), d);
+const PNG = 'data:image/png;base64,' + Buffer.from('x'.repeat(300)).toString('base64');
+r = await call('PUT', '/mymismo/att/my-photo', { tok: ap.token, body: { data: PNG } }); d = J(r);
+ok('photo: saved, and the profile says it has one', r.statusCode === 200 && d.me.photo > 0, d);
+r = await call('PUT', '/mymismo/att/my-photo', { tok: ap.token, body: { data: 'javascript:alert(1)' } }); ok('photo: anything but an image is refused', r.statusCode === 400);
+r = await call('PUT', '/mymismo/att/my-photo', { tok: ap.token, body: { data: 'data:image/png;base64,' + 'A'.repeat(170000) } }); ok('photo: too large is refused', r.statusCode === 413);
+r = await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { phone: '+1 (202) 555-0100', website: 'https://lender.example', showEmail: true } }); d = J(r);
+ok('contact details: phone, website and showing their email are saved', r.statusCode === 200 && d.me.phone === '+1 (202) 555-0100' && d.me.website === 'https://lender.example' && d.me.showEmail === true, d);
+r = await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { phone: 'call me maybe' } }); ok('contact details: a phone with letters is refused', r.statusCode === 400);
+const at2 = await attIn('alex@vendor.example', '203.0.113.62');
+ok('a deleted attendee can sign in again as a new account', !!at2.token && at2.me.listed === true, at2);
+r = await call('GET', '/mymismo/att/directory', { tok: at2.token }); d = J(r); const patCard = d.people.find(x => x.name === "Pat Lee");
+ok('directory: shows the email only because Pat chose to, with the phone, website and a photo version', patCard && patCard.email === "pat@lender.example" && patCard.phone && patCard.website && patCard.photo > 0, patCard);
+r = await call('GET', '/mymismo/att/photo?id=' + ap.me.id, { tok: at2.token }); ok('photo: another signed-in attendee can see it', r.statusCode === 200 && J(r).s === PNG);
+r = await call('GET', '/mymismo/att/photo?id=' + ap.me.id); ok('photo: nobody signed out can', r.statusCode === 401);
+await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { listed: false } });
+r = await call('GET', '/mymismo/att/photo?id=' + ap.me.id, { tok: at2.token }); ok('photo: hidden once they hide themselves', r.statusCode === 404);
 r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'z@example.org', code: '123456', first: 'Fuck', last: 'X' } });
 ok('filter: trivia names too', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS');
 
@@ -240,7 +260,7 @@ const staffTok = email => { const now = Math.floor(T / 1000) + 5; const head = b
   return head + '.' + bd + '.' + b64u(hm('sha256', process.env.AUTH_SECRET).update(head + '.' + bd).digest()); };
 r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: ap.token }); ok('reports: an attendee can’t read them', r.statusCode === 403);
 r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: staffTok('jc@example.org') }); d = J(r);
-ok('reports: the MISMO team sees them with names (a deleted account says so)', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].byName === 'Pat Lee' && d.reports[0].aboutName === 'Deleted account', d);
+ok('reports: the MISMO team sees them with names', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].byName === 'Pat Lee' && d.reports[0].aboutName === 'Alex Kim', d);
 r = await call('POST', '/mymismo/staff/reports', { tok: staffTok('jc@example.org'), body: { summit: 'nola', id: d.reports[0].id, status: 'closed', action: 'Spoke with both.' } });
 ok('reports: closing one is saved', r.statusCode === 200 && file('att/nola/reports.json').reports[0].status === 'closed');
 Date.now = realNow;
