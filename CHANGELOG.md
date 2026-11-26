@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Trivia: no questions about workgroup chairs or other volunteer leaders (staff are fine). Removed the one about an eMortgage CoP co-chair, and its Final Square.
 - Nov 26, 2026: Dashboard upright: the Webinars date is back beside the title, so the white tiles are short again (only a very narrow tile on its side stacks them). A taller partner tile fills with whole extra lines instead of empty space.
 - Nov 26, 2026: MISMO Merch: a mock-up shop for testers only (a dashboard tile, ten example products with drawn mock-ups, colors, sizes, a bag; checkout is switched off and says so). Labeled Mock-up throughout; nothing can be bought. Dashboard on its side: squares stay in their pairs (Submit an Idea beside mismo.org); a wide tile at the end goes full width instead.
 - Nov 26, 2026: Trivia, the Board: the round clock is 4 minutes (was 6), in the app and in relay request 16.

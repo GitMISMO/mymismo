@@ -1,6 +1,6 @@
 {
  "status": "draft",
- "note": "Draft questions for review (Nov 25, 2026). Shown only in Test Run: to MISMO staff signed in, or with ?trivia=test. Not on the leaderboard. Each question has a level: 1 Easy, 2 Medium, 3 Hard.",
+ "note": "Draft questions for review (Nov 25, 2026). Shown only in Test Run: to MISMO staff signed in, or with ?trivia=test. Not on the leaderboard. Each question has a level: 1 Easy, 2 Medium, 3 Hard. No questions about workgroup chairs or other volunteer leaders; MISMO staff are fine (Jonna, Nov 26, 2026).",
  "questions": [
   {
    "id": "q01",
@@ -1893,27 +1893,6 @@
    ]
   },
   {
-   "id": "q100",
-   "cat": "MISMO Standards",
-   "q": "The eMortgage CoP co-chair quoted on the July 2026 SMART Doc guide, Charlie Epperson, is with which company?",
-   "choices": [
-    "Snapdocs",
-    "FundingShield",
-    "DocMagic",
-    "Docusign"
-   ],
-   "answer": 1,
-   "source": "https://nationalmortgageprofessional.com/news/mismo-updates-enote-standard-digital-mortgage-adoption-tops-32m-registered-loans",
-   "level": 3,
-   "clue": "Charlie Epperson, the eMortgage CoP co-chair quoted on the July 2026 SMART Doc guide, is with this company.",
-   "responses": [
-    "What is Snapdocs?",
-    "What is FundingShield?",
-    "What is DocMagic?",
-    "What is Docusign?"
-   ]
-  },
-  {
    "id": "q101",
    "cat": "MISMO Standards",
    "q": "Fannie Mae receives the Uniform Closing Dataset (UCD) through which tool?",
@@ -3280,18 +3259,6 @@
    ],
    "response": "What is Section 306(g)?",
    "source": "https://www.ginniemae.gov/issuers/program_guidelines/Lists/MBSGuideAPMsLib/Attachments/173/App%20IV-04%2011717.pdf"
-  },
-  {
-   "id": "f100",
-   "from": "q100",
-   "cat": "MISMO Standards",
-   "clue": "Charlie Epperson, the eMortgage CoP co-chair quoted on the July 2026 SMART Doc guide, is with this company.",
-   "answers": [
-    "fundingshield",
-    "funding shield"
-   ],
-   "response": "What is FundingShield?",
-   "source": "https://nationalmortgageprofessional.com/news/mismo-updates-enote-standard-digital-mortgage-adoption-tops-32m-registered-loans"
   },
   {
    "id": "f055",
