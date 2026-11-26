@@ -131,12 +131,21 @@ reach real attendees; and a reviewer's trivia rounds never go on the leaderboard
 since nothing is ever sent to it. Pick the six-digit code with Jonna, put only its hash in projects.json, and give the code
 itself only to Jonna for the review notes in App Store Connect and Play Console. Delete the entry to turn it off.
 
+## MISMO Trivia in Team HQ (decided by Jonna, Nov 25, 2026)
+
+Team HQ is MyMISMO's home for the MISMO team's year-round work (summit alerts stay in Summit HQ).
+
+| Route | Sign-in | What it does |
+| --- | --- | --- |
+| `GET  /staff/trivia` | staff (alertSenders) | This month and the three before, with each month's top 10 (the #1 is that month's winner, for recognition); this quarter's and last quarter's finalists (with the runner-up rule) and, once played, the championship standings; and the championship dates. |
+| `POST /staff/trivia` | staff (alertSenders) | `{ champ: { quarter, opens, closes, minutes } }` sets the championship (`champ: null` clears it). Kept in `trivia/settings.json` with who set it, and it wins over `triviaChamp` in projects.json, so nobody needs to edit projects.json for it. |
+
 ## What's Here
 
 - `relay-request-15-mymismo-trivia.patch`: the change to `_dev/aws/index.mjs`, on top of requests 13 and 14. It adds one
   block (all names start `mm15`) and one routing line. Nothing shared is changed.
 - `test-mymismo.mjs`: request 13's test, with the directory checks updated to the new rule. Replace the old copy with this one.
-- `test-mymismo15.mjs`: 91 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
+- `test-mymismo15.mjs`: 96 checks with a stand-in GitHub and mail flow and made-up people and questions. Run
   `node test-mymismo15.mjs` next to index.mjs. Requests 13 and 14's tests and test-relay.mjs still pass.
 
 ## To Switch It On

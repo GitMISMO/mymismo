@@ -161,7 +161,7 @@
        const th = d.docs[tid] = t && typeof t === 'object' ? t : { p: [who.id, to].sort(), m: [] };
        th.m = Array.isArray(th.m) ? th.m : [];
        th.m.push({ f: who.id, t: text, at: now });
-@@ -2914,6 +2958,532 @@
+@@ -2914,6 +2958,597 @@
  }
  export function __resetMyMismo14() { mm14slideCache.at = 0; mm14slideCache.value = null; }
  
@@ -543,9 +543,74 @@
 +  return respond(200, { ok: true, month: m, quarter: mm15QuarterOf(m), secs: MM15_SECS, count: MM15_COUNT,
 +    champ: c ? { quarter: c.quarter, opens: new Date(c.opens).toISOString(), closes: new Date(c.closes).toISOString(), minutes: c.minutes, open: now >= c.opens && now < c.closes } : null });
 +}
++/* The championship dates the MISMO team sets in Team HQ (trivia/settings.json) win over projects.json's triviaChamp. */
++const mm15SetCache = { at: 0, value: null };
++async function mm15Settings(proj, fresh) {
++  const now = Date.now(); if (!fresh && mm15SetCache.value && now - mm15SetCache.at < 60_000) return mm15SetCache.value;
++  const r = await readFile(proj.repo, proj.branch || 'main', 'trivia/settings.json');
++  if (r.status !== 200 && r.status !== 404) return mm15SetCache.value || {};
++  mm15SetCache.at = now; mm15SetCache.value = (r.data && typeof r.data === 'object') ? r.data : {}; return mm15SetCache.value;
++}
++async function mm15RawWithSettings(proj) {
++  const raw = await mm15Raw().catch(() => null); if (!raw) return null;
++  const st = await mm15Settings(proj).catch(() => ({}));
++  return st && st.champ ? { ...raw, triviaChamp: st.champ } : raw;
++}
++/* --- Team HQ: MISMO Trivia for the MISMO team (staff sign-in, the people in alertSenders) ---
++ *   GET  /mymismo/staff/trivia  -> { month, quarter, boards: [{ month, players, top: [{ rank, name, score, right }] }] (this month
++ *        and the three before, top 10 each), champ: { quarter, opens, closes, minutes, open } | null,
++ *        quarters: [{ quarter, finalists: [{ name, month }], standings? }] (this quarter and the last) }
++ *   POST /mymismo/staff/trivia  { champ: { quarter, opens, closes, minutes } }  -> { ok, champ }   (sets the championship;
++ *        champ: null clears it). Kept in trivia/settings.json with who set it. */
++async function mm15StaffTrivia(method, event, proj, headers) {
++  const raw = await mm15Raw().catch(() => null); if (!raw) return respond(404, { error: 'NOT_FOUND' });
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  const t = auth.startsWith('Bearer ') && process.env.AUTH_SECRET ? verifyToken(auth.slice(7).trim(), process.env.AUTH_SECRET) : { error: 'NO' };
++  const staff = (Array.isArray(raw.alertSenders) ? raw.alertSenders : []).map(x => String(x).toLowerCase());
++  if (t.error || !t.sub || t.kind || !staff.includes(String(t.sub).toLowerCase())) return respond(403, { error: 'NOT_ALLOWED' });
++  const dir = await loadAccess();
++  if (dir.error || !personByEmail(dir.people, t.sub) || tokenIsStale(t, personByEmail(dir.people, t.sub))) return respond(401, { error: 'SIGN_IN' });
++  const branch = proj.branch || 'main', now = Date.now();
++  if (method === 'POST') {
++    const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++    const c = pre.body.champ;
++    if (c !== null) {
++      const cfg = mm15ChampCfg({ triviaChamp: c });
++      if (!cfg) return respond(400, { error: 'INVALID', problems: ['A championship needs a quarter like 2027-Q1, an opening and closing time (closing after opening) and 1 to 120 minutes.'] });
++    }
++    const w = await updateRepoJson(proj.repo, branch, 'trivia/settings.json', d => {
++      if (c === null) delete d.champ; else d.champ = { quarter: c.quarter, opens: new Date(Date.parse(c.opens)).toISOString(), closes: new Date(Date.parse(c.closes)).toISOString(), minutes: Number(c.minutes) };
++      d.setBy = String(t.sub).toLowerCase(); d.at = now; return d;
++    }, 'MyMISMO Trivia championship set in Team HQ').catch(() => null);
++    if (!w || w.error) return respond(502, { error: 'NOT_SAVED' });
++    await mm15Settings(proj, true).catch(() => null);
++    return respond(200, { ok: true, champ: w.data.champ || null });
++  }
++  const month = mm15Month(now), boards = [];
++  for (let i = 0; i < 4; i++) {
++    const d = new Date(now); d.setUTCDate(15); d.setUTCMonth(d.getUTCMonth() - i); const m = mm15Month(d.getTime());
++    const r = await readFile(proj.repo, branch, mm15Board(m)); if (r.status !== 200 && r.status !== 404) return mm15Busy();
++    const all = mm15Rank(r.data && r.data.docs);
++    boards.push({ month: m, players: all.length, top: all.slice(0, 10).map(({ p, ...x }) => x) });
++  }
++  const q = mm15QuarterOf(month), y = Number(q.slice(0, 4)), k = Number(q.slice(6)), prev = k === 1 ? (y - 1) + '-Q4' : y + '-Q' + (k - 1);
++  const quarters = [];
++  for (const qq of [q, prev]) {
++    const r = await readFile(proj.repo, branch, mm15ChampPath(qq));
++    const fin = (r.data && Array.isArray(r.data.finalists)) ? r.data.finalists : await mm15Finalists(proj, qq);
++    if (!fin) return mm15Busy();
++    const docs = (r.data && r.data.docs) || {};
++    quarters.push({ quarter: qq, finalists: fin.map(f => ({ name: f.name, month: f.month })),
++      standings: Object.keys(docs).length ? fin.map(f => ({ name: f.name, total: (docs[f.p] && docs[f.p].total) || 0, played: !!docs[f.p] })).sort((a, b) => b.total - a.total) : null });
++  }
++  const st = await mm15Settings(proj, true).catch(() => ({})), c = mm15ChampCfg(st && st.champ ? { triviaChamp: st.champ } : raw);
++  return respond(200, { month, quarter: q, boards, quarters,
++    champ: c ? { quarter: c.quarter, opens: new Date(c.opens).toISOString(), closes: new Date(c.closes).toISOString(), minutes: c.minutes, open: now >= c.opens && now < c.closes } : null });
++}
 +async function mm15Route(method, subPath, event, proj, headers) {
 +  if (!proj || proj.key !== MM_PROJECT) return respond(404, { error: 'NOT_FOUND' });
-+  const raw = await mm15Raw().catch(() => null); if (!raw) return respond(404, { error: 'NOT_FOUND' });
++  const raw = await mm15RawWithSettings(proj).catch(() => null); if (!raw) return respond(404, { error: 'NOT_FOUND' });
 +  if (!process.env.AUTH_SECRET) return respond(500, { error: 'NO_AUTH_SECRET' });
 +  const want = { '/trivia/ready': 'GET', '/trivia/board': 'GET', '/trivia/champ': 'GET', '/trivia/code': 'POST', '/trivia/verify': 'POST', '/trivia/round': 'POST',
 +    '/trivia/next': 'POST', '/trivia/answer': 'POST', '/trivia/champ/start': 'POST', '/trivia/champ/pick': 'POST', '/trivia/champ/answer': 'POST', '/trivia/delete': 'POST' }[subPath];
@@ -689,16 +754,21 @@
 +  if (!w || w.error) return respond(502, { error: 'NOT_SAVED' });
 +  return respond(200, { ok: true });
 +}
-+export function __resetMyMismo15() { mm15BankCache.at = 0; mm15BankCache.value = null; }
++export function __resetMyMismo15() { mm15BankCache.at = 0; mm15BankCache.value = null; mm15SetCache.at = 0; mm15SetCache.value = null; }
 +
  
  
  export async function handler(event, context) {
-@@ -2984,6 +3554,12 @@
+@@ -2984,6 +3619,17 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
 +  if (subPath.startsWith('/trivia/')) return mm15Route(method, subPath, event, proj, headers);   /* relay request 15: MyMISMO Trivia */
++  if (subPath === '/staff/trivia') {   /* relay request 15: MISMO Trivia in Team HQ */
++    if (!proj || proj.key !== MM_PROJECT) return respond(404, { error: 'NOT_FOUND' });
++    if (method !== 'GET' && method !== 'POST') return respond(405, { error: 'METHOD' });
++    return mm15StaffTrivia(method, event, proj, headers);
++  }
 +  if (subPath === '/staff/reports') {   /* relay request 15: attendee reports for the MISMO team */
 +    const mm = await mmConfig(proj).catch(() => null); if (!mm) return respond(404, { error: 'NOT_FOUND' });
 +    if (method !== 'GET' && method !== 'POST') return respond(405, { error: 'METHOD' });
@@ -707,7 +777,7 @@
    if (subPath.startsWith('/push/') || subPath === '/slides/have') {   /* relay request 14: MyMISMO alerts and slide counts */
      const mm = await mmConfig(proj).catch(() => null);
      if (!mm) return respond(404, { error: 'NOT_FOUND' });
-@@ -3006,7 +3582,7 @@
+@@ -3006,7 +3652,7 @@
      if (subPath === '/att/code') return method === 'POST' ? mmCode(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/verify') return method === 'POST' ? mmVerify(event, proj, headers) : respond(405, { error: 'METHOD' });
      if (subPath === '/att/slides' || subPath === '/att/slide') return method === 'GET' ? mm14slides(event, proj, headers, subPath) : respond(405, { error: 'METHOD' });   /* relay request 14 */

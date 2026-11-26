@@ -287,5 +287,18 @@ ok('review: trivia sign-in with the same fixed code', r.statusCode === 200 && d.
 T = Date.parse('2027-01-21T15:00:00Z'); __resetMyMismoLimits();
 const rvRound = await play(d.token, 10, 1000);
 ok('review: a reviewer’s round is never on the leaderboard', rvRound.last.done === true && rvRound.last.review === true && !JSON.stringify(file('trivia/board-2027-01.json')).includes('App Review'), rvRound.last);
+
+/* Team HQ: monthly winners, the quarter's finalists and setting the championship */
+T = Date.parse('2027-04-02T15:00:00Z');
+r = await call('GET', '/mymismo/staff/trivia', { tok: pat }); ok('team: a player token can’t read it', r.statusCode === 403);
+r = await call('GET', '/mymismo/staff/trivia', { tok: staffTok('jc@example.org') }); d = J(r);
+const jan = d.boards && d.boards.find(b => b.month === '2027-01');
+ok('team: months with their winners, this quarter and last with finalists', r.statusCode === 200 && d.quarter === '2027-Q2' && jan && jan.top[0].name === 'Pat L.' && d.quarters[1].quarter === '2027-Q1' && d.quarters[1].finalists.length === 3, d);
+r = await call('POST', '/mymismo/staff/trivia', { tok: staffTok('jc@example.org'), body: { champ: { quarter: '2027-Q1', opens: '2027-04-01T00:00:00Z', closes: '2027-03-01T00:00:00Z', minutes: 15 } } });
+ok('team: closing before opening is refused', r.statusCode === 400);
+r = await call('POST', '/mymismo/staff/trivia', { tok: staffTok('jc@example.org'), body: { champ: { quarter: '2027-Q2', opens: '2027-07-06T13:00:00Z', closes: '2027-07-13T04:00:00Z', minutes: 20 } } }); d = J(r);
+ok('team: setting the championship is saved with who set it', r.statusCode === 200 && file('trivia/settings.json').champ.minutes === 20 && file('trivia/settings.json').setBy === 'jc@example.org', d);
+r = await call('GET', '/mymismo/trivia/ready'); d = J(r);
+ok('team: the app sees the championship Team HQ set (over projects.json)', d.champ && d.champ.quarter === '2027-Q2' && d.champ.minutes === 20, d);
 Date.now = realNow;
 console.log(`\n${passed} passed, ${failed} failed`); process.exit(failed ? 1 : 0);
