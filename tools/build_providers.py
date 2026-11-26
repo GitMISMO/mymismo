@@ -12,6 +12,8 @@
 2. Pictures: a small picture of each summit sponsor's and certified provider's home page, saved as
    data/peeks/<host>.jpg (600 x 450), so the app shows it at once instead of waiting for it to be made.
    The pictures come from a public screenshot service (s0.wp.com/mshots), asked again until the real picture is ready.
+   A few sites block that service; their pictures were captured by hand and are listed in index['_kept'] (host, or
+   host-<last part of the page's address> for one page of a site), and this job leaves them alone.
 
 A page or picture that can't be read keeps its last good copy. Run by .github/workflows/guide.yml.
 Usage: python3 tools/build_providers.py [--provider-html saved.html]   (the second form only checks the parser)
@@ -141,6 +143,8 @@ def peek(url, out_dir, index, name=None):
         return False
     blocked = index.setdefault('_blocked', {})
     path = os.path.join(out_dir, host + '.jpg')
+    if host in index.get('_kept', {}) and os.path.exists(path):   # captured by hand (the site blocks the screenshot service)
+        return True
     if host in blocked and time.time() - blocked[host] < 7 * 86400:
         return False
     if os.path.exists(path) and time.time() - index.get(host, 0) < 7 * 86400:
@@ -178,6 +182,8 @@ def recheck(out_dir, index):
         if not f.endswith('.jpg'):
             continue
         host = f[:-4]
+        if host in index.get('_kept', {}):
+            continue
         try:
             bad = bad_picture(Image.open(os.path.join(out_dir, f)))
         except Exception:

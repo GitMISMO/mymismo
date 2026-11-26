@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Explore: The French Quarter, Frenchmen Street and The National WWII Museum have their website previews. Those sites block the screenshot service, so the pictures were captured by hand and the daily job keeps them; a page's own picture now wins over its site's.
 - Nov 26, 2026: Sponsor band: swipe it back and forth (or drag it with a mouse); it pauses while touched and carries on gliding a few seconds later, endlessly both ways.
 - Nov 26, 2026: Explore postcard: the background art sits a little lower, so the street line isn't under the buttons.
 - Nov 26, 2026: Explore postcard and the Why Attend closing card: the buildings are faded so the buttons and words stand out.

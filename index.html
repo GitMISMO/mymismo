@@ -2363,7 +2363,7 @@ function placeSheet(k) {
     '<div class="d-meta"><span>' + icon('i-walk') + esc(c.distance || '') + '</span>' + (c.address ? '<span>' + icon('i-pin') + esc(c.address) + '</span>' : '') + '</div></div></div>' +
     '<div class="sheet-pad">' + (c.text ? '<p class="lede">' + esc(c.text) + '</p>' : '') +
     '<div class="d-actions"><a class="btn primary" href="' + esc(mapUrl(c.name, c.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a>' +
-    (c.url ? '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Website</a>' : '') + '</div>' + (c.url ? sitePeek(homeOf(c.url)) : '') + '</div>';
+    (c.url ? '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Website</a>' : '') + '</div>' + (c.url ? placePeek(c.url) : '') + '</div>';
   watchPeeks(openSheet(c.name, h));
 }
 function cutoff() {
@@ -3145,10 +3145,18 @@ function speakerSheet(key) {
    screenshot service; while it's still being made the service shows its own placeholder, so the app asks again
    a few seconds later, and if no picture comes the frame is taken away (no empty box). */
 function homeOf(url) { try { return new URL(url).origin + '/'; } catch (e) { return url; } }
+/* a place's own page when there's a picture of it (and the link goes to that page); otherwise its site's home page */
+function placePeek(url) {
+  try { var u = new URL(url), seg = u.pathname.replace(/\/$/, '').split('/').pop(), key = u.hostname.replace(/^www\./, '') + '-' + seg;
+    if (seg && PEEKS && typeof PEEKS[key] === 'number') return sitePeek(url); } catch (e) {}
+  return sitePeek(homeOf(url));
+}
 function sitePeek(url, name) {
   var host = ''; try { host = name || new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+  /* a picture of this very page (e.g. neworleans.com's French Quarter and Frenchmen Street pages) wins over the site's */
+  try { var seg = new URL(url).pathname.replace(/\/$/, '').split('/').pop(); if (!name && seg && PEEKS && typeof PEEKS[host + '-' + seg] === 'number') host = host + '-' + seg; } catch (e) {}
   if (!PEEKS || typeof PEEKS[host] !== 'number') return '';   /* no checked picture of this site */
-  var shown = name ? url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : host;
+  var shown = name || host.indexOf('-') > 0 && /\//.test(url.replace(/^https?:\/\//, '').replace(/\/$/, '')) ? url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : host;
   return '<a class="sitepeek" href="' + esc(url) + '" target="_blank" rel="noopener" aria-label="' + esc(shown) + '"><span class="pk-bar"><i></i><i></i><i></i><span class="pk-url">' + icon('i-lock') + esc(shown) + '</span></span>' +
     '<span class="pk-shot"><img data-peek="' + esc(url) + '" src="data/peeks/' + esc(host) + '.jpg" alt="' + esc(shown) + '"><span class="pk-wait"></span></span></a>';
 }
