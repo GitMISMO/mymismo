@@ -1798,7 +1798,8 @@ function renderHome() {
   }
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
-  if (S.updated) h += '<div class="foot">Updated ' + esc(stamp(S.updated)) + '</div>';
+  /* the time the agenda last changed in Summit HQ (checked every 30 minutes on weekdays), not when the app last looked */
+  if (S.updated) h += '<div class="foot">Agenda last changed ' + esc(stamp(S.updated)) + '. The app checks for changes every 30 minutes.</div>';
   return h;
 }
 /* The website's home hero (the skyline and its light trails), drawn behind the big headers, with the sign-in page's

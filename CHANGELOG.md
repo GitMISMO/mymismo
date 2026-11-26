@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Summit home: the footer says when the agenda last changed in Summit HQ and that the app checks every 30 minutes, instead of a bare "Updated" time that read like the app had stopped updating.
 - Nov 26, 2026: Dashboard: while the General Sessions stream is on (from 30 minutes before until they end), a red Watch Live button sits under the Summit tile.
 - Nov 26, 2026: Settings: the Dark Mode switch flips in place instead of closing and reopening Settings.
 - Nov 26, 2026: Head to Head is Hard only: both players play the same Board (same squares, questions and Double square), highest score wins. Relay request 15 updated to match.
