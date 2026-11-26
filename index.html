@@ -2230,8 +2230,19 @@ function loadPreviewAttendees() {
          "MISMO"). Keep the registration; someone only on the roster stays. */
       var plain = function (p) { return /^mismo$/i.test(p.company.trim()) && !p.title.trim(); }, byName = {};
       PV.people.forEach(function (p) { var k = p.name.toLowerCase(); (byName[k] = byName[k] || []).push(p); });
-      PV.people = PV.people.filter(function (p) { var g = byName[p.name.toLowerCase()]; return !(plain(p) && g.some(function (o) { return !plain(o); })); })
-        .sort(function (a, b) { return a.name.localeCompare(b.name); });
+      PV.people = PV.people.filter(function (p) { var g = byName[p.name.toLowerCase()]; return !(plain(p) && g.some(function (o) { return !plain(o); })); });
+      /* Jonna, Nov 26, 2026: someone registered twice (Rhoshunda Kelly: "Commissioner" and "Commisioner", "&" and "and")
+         shows once. Same name and the same company, give or take punctuation; the one that matches their speaker
+         listing wins, otherwise the first. Different companies stay apart: that could be two people. */
+      var co = function (c) { return String(c || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').replace(/\b(the|inc|llc|corp|corporation|co)\b/g, ' ').replace(/\s+/g, ' ').trim(); };
+      var spk = {}; (S.speakers || []).forEach(function (x) { spk[x.name.toLowerCase()] = x; });
+      var keep = {};
+      PV.people.forEach(function (p) {
+        var k = p.name.toLowerCase() + '|' + co(p.company), have = keep[k], sp = spk[p.name.toLowerCase()];
+        if (!have) { keep[k] = p; return; }
+        if (sp && (sp.title || '') === p.title && (have.title || '') !== (sp.title || '')) keep[k] = p;
+      });
+      PV.people = Object.keys(keep).map(function (k) { return keep[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
       PV.state = 'ready';
     })
     .catch(function () { PV.state = 'error'; })
