@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 26, 2026: Explore: once the room block closes, the card reads "The room block closed on December 14. You can still book a room at the regular rate." and opens a search for the hotel so people can book on its own site.
 - Nov 26, 2026: Explore: more room between the hotel icon and Book Your Room on the countdown card.
 - Nov 26, 2026: Trivia, the Board (Hard): the round clock is 3 minutes (was 4). Relay request 16 updated to match.
 - Nov 26, 2026: Dashboard, phone on its side: the MISMO Merch tile runs the full width with a longer shelf of six products, so there's no empty space beside it.
