@@ -2129,6 +2129,7 @@ nav.tabbar .badge.on{display:grid}
 .cover:before{content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(6,32,47,.15), rgba(6,32,47,.7))}
 .cover > *{position:relative; z-index:1}
 .cover > .hero-art{position:absolute; z-index:0; opacity:.9}
+.vchip.food{background:rgba(224,162,90,.16); color:#a85d1c} :root[data-theme="dark"] .vchip.food{color:#f0b46a}
 .ro-ds{font-size:13px; color:var(--ink-2); margin-top:4px; line-height:1.45}
 .ro-go{display:inline-flex; align-items:center; gap:6px; margin-top:8px; padding:7px 10px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface); color:var(--navy-mid); font:inherit; font-size:13px; font-weight:700; cursor:pointer}
 .ro-go svg{width:15px; height:15px} .ro-go svg.go{width:13px; height:13px}
@@ -2425,11 +2426,11 @@ var TIER_COLOR = { Platinum: '#7f93a6', Gold: '#c99a2e', Silver: '#9aa6b1', Bron
 var TYPE_COLOR = {
   'General Session': '#14486e', 'Workshop': 'var(--c2)', 'Community of Practice': 'var(--c1)',
   'Development Workgroup': 'var(--c3)', 'Workgroup': 'var(--c3)', 'Office Hours': 'var(--c4)',
-  'Networking': 'var(--c5)', 'Session': 'var(--c6)', 'Invite Only': '#6d859a', 'Breakfast': '#9bb3c6', 'Lunch': '#e0a25a'
+  'Networking': 'var(--c5)', 'Session': 'var(--c6)', 'Invite Only': '#6d859a', 'Breakfast': '#9bb3c6', 'Lunch': '#e0a25a', 'Break': '#8fb08a'
 };
 var COVER_COLOR = {
   'General Session': '#14486e', 'Workshop': '#b84a1f', 'Community of Practice': '#1f6aa5', 'Development Workgroup': '#137a56', 'Workgroup': '#137a56',
-  'Office Hours': '#9a6b00', 'Networking': '#b1456f', 'Session': '#1d6b1d', 'Invite Only': '#4b6478', 'Breakfast': '#4b6478', 'Lunch': '#a85d1c'
+  'Office Hours': '#9a6b00', 'Networking': '#b1456f', 'Session': '#1d6b1d', 'Invite Only': '#4b6478', 'Breakfast': '#4b6478', 'Lunch': '#a85d1c', 'Break': '#4f7a4a'
 };
 var MEALS = /^(breakfast|lunch|snack|break)/i;
 
@@ -2569,6 +2570,11 @@ function build(feed, spons) {
     if (!l || !l.date || S.sessions.some(function (x) { return x.date === l.date && x.type === 'Lunch'; })) return;
     var g = { i: 'x' + i, a: mins(l.start), b: mins(l.end), kind: 'Lunch', title: 'Lunch', desc: (lunchG && lunchG.desc) || l.desc || '', sponsor: '', brk: true, people: [], menu: '' };
     S.sessions.push({ id: 'lunch-' + l.date, day: DOW[dparts(l.date).dow], date: l.date, a: g.a, b: g.b, type: 'Lunch', title: 'Lunch', room: '', desc: g.desc, sponsor: '', menu: '', gsItem: g });
+  });
+  /* Jonna, Nov 27, 2026: every break is on the Agenda too, as on the website, since food and drinks are often served */
+  (((XTRA && XTRA.summits && XTRA.summits[pick.id]) || {}).breaks || []).forEach(function (k) {
+    if (!k || !k.date || S.sessions.some(function (x) { return x.date === k.date && x.type === 'Break' && x.a === mins(k.start); })) return;
+    S.sessions.push({ id: 'break-' + k.date + '-' + String(k.start).replace(/\W/g, ''), day: DOW[dparts(k.date).dow], date: k.date, a: mins(k.start), b: mins(k.end), type: 'Break', title: k.title || 'Break', room: k.room || '', desc: k.desc || '', sponsor: k.sponsor || '', menu: k.menu || '' });
   });
   S.sessions.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });
   S.sponsors = ((spons && spons.sponsors) || []).map(function (x) { return { name: x.name, tier: x.tier || 'Sponsor', url: x.url || '', logo: x.logo || '', placements: x.placements || [] }; });
@@ -2875,6 +2881,7 @@ function sessCard(x) {
     var ppl = gsPeople();
     extra += '<span class="faces">' + ppl.slice(0, 6).map(face).join('') + '</span><span class="spons gs-tease">See who\'s on stage, and when</span>';   /* Jonna, Nov 27, 2026: a line that makes you tap, not counts */
   }
+  var fn = foodNote(x); if (fn) extra += '<span class="vchip food">' + icon('i-fork') + esc(fn) + '</span>';   /* Jonna, Nov 27, 2026: where there's food */
   if (groupVideo(x)) extra += '<span class="vchip">' + icon('i-play') + 'Group Video</span>';
   if (SLIDES[x.id]) extra += '<span class="vchip">' + icon('i-file') + 'Slides</span>';
   if (sp.length) extra += '<span class="spline"><span class="spons">' + esc(spLabel(x)) + '</span>' + spChips(sp) + '</span>';
@@ -6720,7 +6727,11 @@ function topSheet() { return stack[stack.length - 1] || null; }
    the agenda feed as menu: plain text, a line per item (CN-066). A heading line ends with a colon; (V), (VG), (GF),
    (DF) and (N) after an item show as Vegetarian, Vegan, Gluten-Free, Dairy-Free and Contains Nuts. ---------- */
 var MENU_TAGS = { V: 'Vegetarian', VG: 'Vegan', VE: 'Vegan', GF: 'Gluten-Free', DF: 'Dairy-Free', N: 'Contains Nuts', NF: 'Nut-Free' };
-function isFood(x) { return /breakfast|lunch|dinner|reception|break|happy hour|coffee|snack/i.test((x.type || '') + ' ' + (x.title || '')); }
+/* Jonna, Nov 27, 2026: the meetings with food: Newcomer Orientation has lunch, the Board and the Joint Committee have food,
+   receptions have food and drinks, and breaks often do */
+var FOOD = [[/newcomer orientation/i, 'Lunch Served'], [/board of directors/i, 'Food Served'], [/joint committee/i, 'Food Served'], [/reception|happy hour/i, 'Food and Drinks'], [/break/i, 'Refreshments']];
+function foodNote(x) { var t = (x.type || '') + ' ' + (x.title || ''); if (/breakfast/i.test(t) || x.type === 'Lunch') return ''; for (var i = 0; i < FOOD.length; i++) if (FOOD[i][0].test(t)) return FOOD[i][1]; return ''; }
+function isFood(x) { return /breakfast|lunch|dinner|reception|break|happy hour|coffee|snack/i.test((x.type || '') + ' ' + (x.title || '')) || !!foodNote(x); }
 function menuList(menu, small) {
   var lines = (Array.isArray(menu) ? menu : String(menu || '').split(/\r?\n/)).map(function (l) { return String(l).replace(/^\s*[-•*·]\s*/, '').trim(); }).filter(Boolean);
   if (!lines.length) return '';
@@ -6751,7 +6762,7 @@ function sessionSheet(id) {
   var h = '<div class="cover"><span class="k">' + esc(x.type) + '</span>' + (isLive(x) ? ' <span class="livetag">NOW</span>' : '') + '<h2>' + esc(x.title) + '</h2>' +
     '<div class="w"><div>' + icon('i-agenda') + esc(longDate(x.date)) + '</div><div>' + icon('i-clock') + esc(span(x.a, x.b)) + '</div>' +
     (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + '</div>' : '') +
-    (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div>' +
+    (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + (foodNote(x) ? '<div>' + icon('i-fork') + esc(foodNote(x)) + '</div>' : '') + '</div>' +
     '<div class="cv-foot">' +
     /* Jonna, Nov 27, 2026: Find on Map and Walk There always side by side in the same spot (scanning is the top-bar button) */
     (x.room && roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">' + icon('i-pin') + 'Find on Map</button>' + (walkData() ? '<button type="button" class="findmap" data-walk="' + esc(x.room) + '">' + icon('i-walk') + 'Walk There</button>' : '') : '') +
@@ -6792,7 +6803,7 @@ function sessionSheet(id) {
     }).join('') + '</div>';
   }
   if (sp.length && !spEarly) h += spBlock();
-  var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type) && !(x.type === 'Lunch' && y.type === 'General Session'); });   /* the General Sessions break for lunch */
+  var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type) && !((x.type === 'Lunch' || x.type === 'Break') && y.type === 'General Session'); });   /* the General Sessions break for lunch */
   if (also.length && also.length < 12) h += '<div class="d-h">Also at This Time</div><div class="list">' + also.map(sessCard).join('') + '</div>';
   var sel = openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });
   watchPeeks(sel);
