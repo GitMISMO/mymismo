@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Audit fixes: the top bar fits the smallest phones (320 wide) without cutting off Sign In; a helper with no list access goes straight to Add by Hand; "Rusty's Link" in Title Case.
 - Nov 27, 2026: Let Someone Help: in Check-In, staff and facilitators make a link for a helper (a volunteer, or a chair who likes to scan) that opens MyMISMO's scanner for that one session for 2 to 12 hours, no sign-in needed; each check-in shows it came from them (relay request 17 adds the route).
 - Nov 27, 2026: Handheld Bluetooth scanners work in the scanner: pair one with the phone, keep the scanner open, and each scan counts like a camera scan.
 - Nov 27, 2026: Amy's Summit Photo Submissions read everyone's submissions from the relay when photo sharing goes live (this phone's until then). American spelling for "Canceled"; "The Latest Edition".
