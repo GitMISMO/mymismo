@@ -2482,7 +2482,7 @@ function renderPreviewAttendees() {
 function previewSheet(id) {
   var p = PV.people.filter(function (x) { return x.id === id; })[0]; if (!p) return;
   var h = '<div class="cover person-cover">' + avatarHtml(p, 'big') + '<div><span class="k">Attendee</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">' +
-    '<p class="att-note" style="margin-top:0">This is the card everyone registered gets. Once attendee sign-in is live, ' + esc(p.name.split(' ')[0]) + ' can add a headshot, what they\'d like to talk about and how to reach them, and attendees can message each other here.</p>' +
+    '<p class="att-note" style="margin-top:0">This is the card everyone registered gets. Once attendee sign-in is live, ' + esc(p.name.split(' ')[0]) + ' can add a headshot, a short bio and how to reach them, and attendees can message each other here.</p>' +
     '<div class="d-actions" style="margin-top:14px"><button type="button" class="btn primary" disabled>' + icon('i-chat') + 'Message</button><button type="button" class="btn quiet" disabled>Block</button><button type="button" class="btn quiet" disabled>' + icon('i-file') + 'Report</button></div></div>';
   openSheet(p.name, h, { color: '#14486e' });
 }
@@ -4527,7 +4527,7 @@ function profileSheet(welcome, preview) {
     '<label class="toggle"><input type="checkbox" id="pf-listed"' + (me.listed ? ' checked' : '') + '><span><b>Show Me in the Attendee Directory</b><span>Everyone registered is listed with their name, title and company. Others signed in can see what you add below and message you. Turn this off to hide yourself.</span></span></label>' +
     '<div class="field"><label for="pf-title">Job Title</label><input id="pf-title" maxlength="120" value="' + esc(me.title) + '"></div>' +
     '<div class="field"><label for="pf-company">Company</label><input id="pf-company" maxlength="120" value="' + esc(me.company) + '"></div>' +
-    '<div class="field"><label for="pf-about">What I\'d Like to Talk About</label><textarea id="pf-about" rows="3" maxlength="600">' + esc(me.about) + '</textarea></div>' +
+    '<div class="field"><label for="pf-about">Bio</label><textarea id="pf-about" rows="4" maxlength="600" placeholder="A few sentences about you and your work">' + esc(me.about) + '</textarea></div>' +
     '<div class="d-h">How People Can Reach You</div>' +
     '<div class="field"><label for="pf-li">LinkedIn</label><input id="pf-li" type="url" maxlength="200" placeholder="https://www.linkedin.com/in/…" value="' + esc(me.linkedin) + '"></div>' +
     '<div class="field"><label for="pf-phone">Phone</label><input id="pf-phone" type="tel" maxlength="30" autocomplete="tel" value="' + esc(me.phone || '') + '"></div>' +
@@ -4584,7 +4584,7 @@ function attendeeSheet(id) {
     p.linkedin ? '<a class="ct" href="' + esc(p.linkedin) + '" target="_blank" rel="noopener">' + icon('i-link') + '<span>LinkedIn</span></a>' : '',
     p.website ? '<a class="ct" href="' + esc(p.website) + '" target="_blank" rel="noopener">' + icon('i-globe') + '<span>' + esc(p.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')) + '</span></a>' : ''].join('');
   var h = '<div class="cover person-cover">' + avatarHtml(p, 'big') + '<div><span class="k">Attendee</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">' +
-    (p.about ? '<div class="d-h" style="margin-top:0">Wants to Talk About</div><div class="d-desc" style="margin-top:0">' + esc(p.about) + '</div>' : '') +
+    (p.about ? '<div class="d-h" style="margin-top:0">Bio</div><div class="d-desc" style="margin-top:0">' + esc(p.about) + '</div>' : '') +
     (contact ? '<div class="d-h">Contact</div><div class="cts">' + contact + '</div>' : '') +
     (p.joined === false ? '<p class="att-note">' + esc(p.name.split(' ')[0]) + ' hasn\'t signed in to MyMISMO yet. A message waits for them until they do.</p>' : '') +
     '<div class="d-actions" style="margin-top:14px">' + (blocked ? '' : '<button type="button" class="btn primary" data-chat="' + esc(id) + '">' + icon('i-chat') + 'Message</button>') +
