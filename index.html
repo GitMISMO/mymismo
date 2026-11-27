@@ -3031,8 +3031,8 @@ function heroArt(opts) {
     '<linearGradient id="' + g + 't" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74bfeb" stop-opacity="0"/><stop offset="45%" stop-color="#9ad4f4" stop-opacity=".95"/><stop offset="100%" stop-color="#ffffff" stop-opacity=".55"/></linearGradient></defs>' +
     (opts.ground === false ? '' : '<rect width="1200" height="560" fill="url(#' + g + 'g)"/>') +
     '<ellipse class="ha-glow" cx="930" cy="360" rx="420" ry="250" fill="url(#' + g + 'r)"/>' +
-    '<g fill="#0a2740" class="ha-city"><rect x="640" y="300" width="52" height="260"/><rect x="698" y="236" width="40" height="324"/><rect x="744" y="318" width="60" height="242"/><rect x="810" y="186" width="48" height="374"/><rect x="864" y="268" width="68" height="292"/><rect x="938" y="214" width="42" height="346"/><rect x="986" y="296" width="56" height="264"/><rect x="1048" y="238" width="50" height="322"/><rect x="1104" y="310" width="64" height="250"/><rect x="1174" y="258" width="44" height="302"/><rect x="560" y="548" width="660" height="12"/></g>' +
-    '<g fill="#74bfeb" class="ha-win">' + WINDOWS.map(function (w, i) { return '<rect x="' + w[0] + '" y="' + w[1] + '" width="5" height="7" style="animation-delay:' + ((i * 0.83) % 5.5).toFixed(2) + 's"/>'; }).join('') + '</g>' +
+    (opts.city === false ? '' : '<g fill="#0a2740" class="ha-city"><rect x="640" y="300" width="52" height="260"/><rect x="698" y="236" width="40" height="324"/><rect x="744" y="318" width="60" height="242"/><rect x="810" y="186" width="48" height="374"/><rect x="864" y="268" width="68" height="292"/><rect x="938" y="214" width="42" height="346"/><rect x="986" y="296" width="56" height="264"/><rect x="1048" y="238" width="50" height="322"/><rect x="1104" y="310" width="64" height="250"/><rect x="1174" y="258" width="44" height="302"/><rect x="560" y="548" width="660" height="12"/></g>' +
+    '<g fill="#74bfeb" class="ha-win">' + WINDOWS.map(function (w, i) { return '<rect x="' + w[0] + '" y="' + w[1] + '" width="5" height="7" style="animation-delay:' + ((i * 0.83) % 5.5).toFixed(2) + 's"/>'; }).join('') + '</g>') +
     '<g fill="none" stroke="url(#' + g + 't)" stroke-linecap="round" class="ha-trails"><path d="' + tr[0] + '" stroke-width="13" opacity=".15"/><path d="' + tr[0] + '" stroke-width="3"/><path d="' + tr[1] + '" stroke-width="1.4" opacity=".7"/><path d="' + tr[2] + '" stroke-width="7" opacity=".2"/><path d="' + tr[2] + '" stroke-width="2" opacity=".85"/><path d="' + tr[3] + '" stroke-width="1.2" opacity=".55"/></g>' +
     '<g fill="none" stroke="#ffffff" stroke-linecap="round" class="ha-run"><path d="' + tr[0] + '" stroke-width="3.2"/><path d="' + tr[2] + '" stroke-width="2.2" style="animation-delay:2.6s"/><path d="' + tr[3] + '" stroke-width="1.4" style="animation-delay:4.4s"/></g></svg>';
 }
@@ -3276,7 +3276,7 @@ function sponsorBand() {
   var run = list.length > 2 ? list.concat(list) : list, dur = Math.max(26, list.length * 4.5);
   /* endless: the list runs twice, so moving by exactly one copy lands where it began. Opening a page starts it at the top
      level (Platinum); the page refreshing itself every minute carries on from where it was instead of jumping back. */
-  return '<section class="spband" aria-label="Sponsors">' + heroArt() + '<h2>Thank You to Our Sponsors</h2>' +
+  return '<section class="spband" aria-label="Sponsors">' + heroArt({ city: false }) + '<h2>Thank You to Our Sponsors</h2>' +   /* Jonna, Nov 27, 2026: no skyline here */
     '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '" data-dur="' + dur + '"><div class="run">' + run.map(tile).join('') + '</div></div>' +
     '<button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></section>';
 }

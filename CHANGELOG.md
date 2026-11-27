@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Thank You to Our Sponsors: the skyline is gone; the navy, the glow, the light trails and the sponsor logos stay.
 - Nov 27, 2026: A session's pop-up wears the summit's header too (navy, the New Orleans skyline and moon), with the session type in its colored tag. Who I Met has a gold Take a Picture button right on the camera.
 - Nov 27, 2026: Who I Met is the same for everyone: staff, facilitators, signed-in attendees and anyone at the summit can scan a name tag, take a picture together, or both. The picture stays on the phone (it isn't sent with staff notes). Names fill in from tags for signed-in attendees, staff and facilitators.
 - Nov 27, 2026: The summit's Agenda, My Schedule and People pages wear the same header as the summit's home card: navy with the city's skyline, the summit's name over the page's name.
