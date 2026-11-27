@@ -32,6 +32,19 @@ Attendees don't need the app to be scanned.
 - My Profile: Share My Email with Sponsors Who Scan My Name Tag (`shareLead`, sent with the profile; the relay request
   must keep it and use it).
 
+## Session Check-In and Attendance Now (Nov 27, 2026, staff test; Jonna: "yes" to replacing TrackPod and live stats)
+- **Session Check-In** (Summit page, and Check People In on each session): pick the session (the one on now is chosen
+  for you), scan tag after tag at the door; each one beeps, flashes the name and adds to the count; the same person twice
+  shows Already Checked In. Kept on the phone in the test.
+- **Attendance Now**: people checked in, sessions scanned, in sessions now, a bar per session (the ones on now marked),
+  and the companies with the most people checked in. Refreshes every few seconds.
+- **To go live (relay request)**: check-ins sent as they happen and kept on the phone until sent when the Wi-Fi drops;
+  everyone's check-ins in Attendance Now; a feed Meeting Trackers reads in place of TrackPod's exports (a Change Notice
+  to Meeting Trackers when it's built); Summit HQ shows the live counts too. Members vs non-members and new vs returning
+  need the member class from the registration report (a field to add to CN-055's feed) and Meeting Trackers' history.
+- **Plan for Winter**: run TrackPod as usual and the app at a few sessions, compare the counts; if they match, switch
+  for Spring.
+
 ## Testing before the relay
 Once Summit HQ adds `reg`, staff can test the whole scan with real Winter 2027 registrations, using two phones and the
 Test Badge screen; scans stay on the phone that scanned until the relay part is live.

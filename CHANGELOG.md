@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Session Check-In and Attendance Now (staff test): scan name tags at a session's door one after another (beep, name, running count, Already Checked In for repeats), and see live counts by session, who's in sessions now and the companies with the most people. Kept on the phone until the relay part is live; meant to replace TrackPod's exports.
 - Nov 27, 2026: Name tag scanning: a successful scan now flashes the screen green with a big check and "Got It", plays a short scanner beep (Beep On / Off on the camera screen, remembered) and buzzes on phones that allow it.
 - Nov 27, 2026: Summit tile: the Platinum Sponsors strip is clear glass, and the city art now stops just above it, so the New Orleans streetcar runs where you can see it.
 - Nov 27, 2026: Name tag scanning (staff test): Scan a Name Tag on the Summit page reads the name tag's barcode with the camera, shows who it is from Summit HQ's attendee list, and keeps a note, Hot / Warm / Cold and an email only if they gave it; My Scans with Download; My Test Badge. Scans stay on the phone for now. My Profile: Share My Email with Sponsors Who Scan My Name Tag (off unless turned on).
