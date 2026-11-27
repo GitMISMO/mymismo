@@ -519,9 +519,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .cal{flex:none; width:50px; border-radius:9px; overflow:hidden; text-align:center; background:var(--surface-2); border:1px solid var(--border)}
 .cal i{display:block; font-style:normal; font-size:11px; font-weight:700; background:#eb6834; color:#fff; padding:2px 0}
 .cal b{display:block; font-family:var(--cond); font-size:24px; line-height:1.25}
-.w-web .w-t{font-size:16.5px; -webkit-line-clamp:4; min-width:0; overflow-wrap:break-word}
+.w-web .w-t{font-size:16.5px; -webkit-line-clamp:4; min-width:0; overflow-wrap:break-word} .w-web .w-row{min-width:0; max-width:100%} .w-web .w-row > :first-child{flex:none}
 .w-web{container-type:inline-size}
-@container (max-width:140px){ .w-web .w-row{flex-direction:column; gap:8px} }   /* only a very narrow tile puts the date above the title */
+@container (max-width:175px){ .w-web .w-row{flex-direction:column; gap:8px} }   /* a narrow tile (a phone held upright) puts the date above the title, so long words aren't cut */
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
 .w-mat .w-t{font-size:17px; -webkit-line-clamp:4}
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
@@ -4077,11 +4077,11 @@ function renderExplore() {
 /* ---------- My Dashboard ---------- */
 var DASH = [
   { id: 'summit', name: 'MISMO Summit', desc: 'The agenda, your schedule, speakers, the hotel and more', icon: 'i-s' },
-  { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
-  { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-play' },
   { id: 'matters', name: 'MISMO Matters', desc: 'The monthly newsletter and The Vieaux Point', icon: 'i-mail' },
-  { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'groups', name: 'Join a Workgroup', desc: 'Every workgroup, when it meets and how to join', icon: 'i-people' },
+  { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-play' },
+  { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
+  { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Solo and head-to-head MISMO trivia with a leaderboard', icon: 'i-star' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
