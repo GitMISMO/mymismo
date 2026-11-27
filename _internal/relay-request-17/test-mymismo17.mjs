@@ -1,6 +1,6 @@
 /* MyMISMO: name tag scanning and Summit Photos (relay request 17). Run: node test-mymismo17.mjs. A stand-in GitHub and mail
  * flow, as test-mymismo16.mjs. Every person, address and registration number here is made up. */
-import { pbkdf2Sync, createHmac } from 'node:crypto';
+import { pbkdf2Sync, createHmac, createHash } from 'node:crypto';
 const ORIGIN = 'https://resources.example';
 Object.assign(process.env, { GITHUB_TOKEN: 'ghp_test', AUTH_SECRET: 'mymismo-test-secret', PROJECTS_REPO: 'Org/Config', DIRECTORY_REPO: 'Org/Accounts', MAIL_FLOW_URL: 'https://flow.example/mail' });
 let N = 100; const sha = () => (N++).toString(16).padEnd(40, 'c'); const repo = {};
@@ -155,6 +155,23 @@ ok('the passed photo stays behind', !batch.photos.some(p => p.id === pid2) && fi
 ok('the sent photo is marked sent', file('photos/nola/index.json').docs[pid].status === 'sent', file('photos/nola/index.json').docs[pid]);
 r = await call('POST', '/mymismo/photos/review', { tok: ST, body: { summit: 'nola', id: pid, status: 'new' } });
 ok('a sent photo can\'t be changed', r.statusCode === 404, r.statusCode);
+
+/* ---- attendees' Who I Met: a name tag's name, title and company, nothing for hidden people (Jonna, Nov 27, 2026) ---- */
+const attTok = (email, summit = 'nola') => { const now = Math.floor(Date.now() / 1000), sec = createHmac('sha256', process.env.AUTH_SECRET).update('mymismo-attendee-token-v1').digest('hex');
+  const id = createHmac ? require_id(summit, email) : ''; const head = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })), bd = b64u(JSON.stringify({ kind: 'mymismo-attendee', sub: id, s: summit, e: email, n: 'X', iat: now, exp: now + 3600 }));
+  return head + '.' + bd + '.' + b64u(createHmac('sha256', sec).update(head + '.' + bd).digest()); };
+function require_id(summit, email) { return createHash('sha256').update(`mymismo:${summit}:${email}`).digest('hex').slice(0, 16); }
+const AT = attTok('pat@lender.example');
+r = await call('POST', '/mymismo/scan/lookup', { tok: AT, body: { summit: 'nola', regs: ['1000002'] } }); d = J(r);
+ok('a signed-in attendee scanning a name tag gets the name, title and company', r.statusCode === 200 && d.people['1000002'] && d.people['1000002'].name === 'Sam Roe' && d.people['1000002'].company === 'Bank Inc', d);
+ok('...and never an email', !JSON.stringify(d).includes('@'), d);
+put('Org/MyMismoData:att/nola/people.json', { docs: { [require_id('nola', 'sam@bank.example')]: { name: 'Sam Roe', hidden: true } } });
+r = await call('POST', '/mymismo/scan/lookup', { tok: AT, body: { summit: 'nola', regs: ['1000002'] } }); d = J(r);
+ok('someone hidden from the directory: nothing comes back', r.statusCode === 200 && !d.people['1000002'], d);
+r = await call('POST', '/mymismo/scan/lookup', { tok: AT, body: { summit: 'other', regs: ['1000002'] } });
+ok('only for their own summit', r.statusCode === 403, r.statusCode);
+r = await call('POST', '/mymismo/scan/checkins', { tok: AT, body: { summit: 'nola', items: [] } });
+ok('attendees can\'t check people in or read anything else', r.statusCode === 401 || r.statusCode === 403, r.statusCode);
 
 /* ---- MyMISMO's numbers for MISMO Media's Results page (Jonna, Nov 27, 2026) ---- */
 setProjects({ ...ENTRY, scan: true, photos: true, alertSenders: ['staff@example.org'], mediaReviewers: ['Staff@example.org'], mediaInbox: { repo: 'Org/MediaData', dir: 'incoming/summit-photos' } }); __resetMyMismoLimits();

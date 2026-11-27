@@ -1557,7 +1557,7 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .an-bar{grid-column:1 / -1; height:6px; border-radius:3px; background:var(--rule); overflow:hidden} .an-bar i{display:block; height:100%; background:linear-gradient(90deg, #74bfeb, #2477b8); transition:width .6s ease}
 .an-cos{display:grid; gap:6px} .an-cos div{display:flex; justify-content:space-between; padding:9px 12px; border-radius:10px; background:var(--surface); border:1px solid var(--border); font-size:14px} .an-cos b{font-family:var(--cond); font-size:18px}
 .sc-pad{grid-template-columns:minmax(0, 1fr)} .sc-acts.four{grid-template-columns:repeat(4, minmax(0, 1fr))} .sc-acts.four .btn{font-size:12px; padding:10px 4px; white-space:normal; line-height:1.15; text-align:center; min-width:0}
-.ci-row{grid-template-columns:24px minmax(0, 1fr) auto}
+.ci-row{grid-template-columns:24px minmax(0, 1fr) auto} .ci-row .met-row{width:24px; height:24px; border-radius:6px}
 .fp{display:grid; gap:10px} .fp-list{display:grid; gap:6px}
 .fp-row{display:grid; gap:2px; padding:11px 14px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer} .fp-row b{font-size:15px} .fp-row span{font-size:12.5px; color:var(--ink-3)}
 .fp-add{border:1px dashed var(--border-strong); border-radius:12px; padding:10px 14px} .fp-add summary{display:flex; align-items:center; gap:8px; font-weight:700; cursor:pointer; list-style:none} .fp-add summary::-webkit-details-marker{display:none} .fp-add summary svg{width:18px; height:18px} .fp-add[open]{display:grid; gap:8px}
@@ -1601,6 +1601,11 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ph-card .ph-pr{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:0 16px} .ph-card .ph-pr button{flex:none}
 .ph-row{display:flex; gap:16px; flex-wrap:wrap} .ph-row .linkbtn{display:inline-flex; align-items:center; gap:6px} .ph-row .linkbtn svg{width:16px; height:16px}
 .ph-ed .ph-cv{background:#071d2e; padding:12px; display:grid; place-items:center}
+.met-picrow{display:flex; gap:8px; flex-wrap:wrap; padding:12px 16px 0} .met-picrow .btn{flex:1 1 auto}
+.ld-top .met-big{width:64px; height:64px; border-radius:12px; object-fit:cover; flex:none; box-shadow:0 2px 8px rgba(13,49,76,.25)}
+.met-row{width:34px; height:34px; border-radius:8px; object-fit:cover; flex:none}
+.rc-p.has-pic{display:grid; grid-template-columns:40px 1fr; column-gap:10px} .rc-p.has-pic .met-row{grid-row:span 3; width:40px; height:40px}
+.rc .rc-li{width:100%; justify-content:center; margin:8px 0 4px; background:#0a66c2; border-color:#0a66c2; color:#fff}
 .ph-ed .ph-cv canvas{cursor:grab; touch-action:none} .ph-ed .ph-cv canvas:active{cursor:grabbing}
 /* move and zoom the photo (Jonna, Nov 27, 2026) */
 .ph-move{background:#071d2e; display:flex; align-items:center; gap:12px; padding:0 16px 12px; color:#a9d8f3; font-size:12.5px}
@@ -2573,7 +2578,7 @@ function recapData(cb) {
   phAll(function (ph) {
     ph = ph.filter(function (p) { return (p.sid === S.sid || !p.sid) && p.blob; });
     var ses = mine().map(sessionById).filter(Boolean).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; });
-    var met = (canScan() ? myScans(S.sid) : []).map(function (x) { var w = x.reg ? regLookup(x.reg) : null; return { name: x.name || (w && w.name) || '', title: x.title || (w && w.title) || '', company: x.company || (w && w.company) || '', email: x.email || '', note: x.note || '', kind: scanKind(x) }; }).filter(function (x) { return x.name; });
+    var met = (canScan() ? myScans(S.sid) : []).map(function (x) { var w = x.reg ? regLookup(x.reg) : null; return { name: x.name || (w && w.name) || (x.pic ? 'Someone I Met' : ''), title: x.title || (w && w.title) || '', company: x.company || (w && w.company) || '', email: x.email || '', note: x.note || '', kind: scanKind(x), pic: x.pic || '' }; }).filter(function (x) { return x.name; });
     var done = {}; ph.forEach(function (p) { if (p.prompt) done[p.prompt] = 1; });
     cb({ ses: ses, met: met, ph: ph, ch: PH_PROMPTS.filter(function (p) { return done[p]; }).length });
   });
@@ -2597,7 +2602,7 @@ function recapPicture(d, cb) {
 function vcards(list) {
   var e = function (t) { return String(t || '').replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n'); };
   return list.map(function (p) { var parts = p.name.split(/\s+/), last = parts.length > 1 ? parts.pop() : '', first = parts.join(' ');
-    return ['BEGIN:VCARD', 'VERSION:3.0', 'N:' + e(last) + ';' + e(first) + ';;;', 'FN:' + e(p.name), p.company ? 'ORG:' + e(p.company) : '', p.title ? 'TITLE:' + e(p.title) : '', p.email ? 'EMAIL;TYPE=WORK:' + e(p.email) : '', 'NOTE:' + e('Met at ' + S.summit.name + (p.note ? '. ' + p.note : '')), 'END:VCARD'].filter(Boolean).join('\r\n'); }).join('\r\n');
+    return ['BEGIN:VCARD', 'VERSION:3.0', 'N:' + e(last) + ';' + e(first) + ';;;', 'FN:' + e(p.name), p.company ? 'ORG:' + e(p.company) : '', p.title ? 'TITLE:' + e(p.title) : '', p.email ? 'EMAIL;TYPE=WORK:' + e(p.email) : '', 'NOTE:' + e('Met at ' + S.summit.name + (p.note ? '. ' + p.note : '')), p.pic && /^data:image\/jpeg;base64,/.test(p.pic) ? ('PHOTO;ENCODING=b;TYPE=JPEG:' + p.pic.split(',')[1]).replace(/(.{74})/g, '$1\r\n ') : '', 'END:VCARD'].filter(Boolean).join('\r\n'); }).join('\r\n');
 }
 function recapSheet() {
   var el = openSheet('Your Summit Recap', '<div class="sheet-pad rc"><div class="note">Putting your recap together…</div></div>', { plain: true }), box = el.querySelector('.rc'), D = null, pic = null;
@@ -2605,9 +2610,10 @@ function recapSheet() {
     D = d;
     box.innerHTML = '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
       '<div class="ph-acts"><button type="button" class="btn primary" data-rc-share>' + icon('i-share') + 'Share</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
+      '<button type="button" class="btn rc-li" data-rc-li>' + icon('i-send') + 'Post on LinkedIn</button>' +
       '<h3 class="wg-h">Sessions You Starred</h3>' + (d.ses.length ? slots(d.ses, { withDay: true }) : '<div class="note">You didn\'t star any sessions this time.</div>') +
       (canScan() ? '<div class="sct-h"><h3 class="wg-h">People You Met</h3>' + (d.met.length ? '<button type="button" class="linkbtn" data-rc-vcf>' + icon('i-download') + 'Save All to Contacts</button>' : '') + '</div>' +
-        (d.met.length ? '<div class="rc-met">' + d.met.map(function (p) { return '<div class="rc-p"><b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span>' + (p.note ? '<i>' + esc(p.note) + '</i>' : '') + '</div>'; }).join('') + '</div>' : '<div class="note">Nobody scanned this time.</div>') : '') +
+        (d.met.length ? '<div class="rc-met">' + d.met.map(function (p) { return '<div class="rc-p' + (p.pic ? ' has-pic' : '') + '">' + metThumb(p, 'met-row') + '<b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span>' + (p.note ? '<i>' + esc(p.note) + '</i>' : '') + '</div>'; }).join('') + '</div>' : '<div class="note">Nobody scanned this time.</div>') : '') +
       '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<div class="ph-grid">' + d.ph.slice(0, 12).map(function (p) { return '<div class="ph-tile"><img alt="" src="' + phThumb(p) + '"></div>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
       '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
     recapPicture(d, function (b) { pic = b; var im = box.querySelector('.rc-pic img'); if (im) im.src = URL.createObjectURL(b); });
@@ -2616,6 +2622,17 @@ function recapSheet() {
     var name = 'my-' + slug(S.summit.name);
     if (e.target.closest('[data-rc-save]') && pic) { var a = document.createElement('a'); a.href = URL.createObjectURL(pic); a.download = name + '.jpg'; document.body.appendChild(a); a.click(); a.remove(); return; }
     if (e.target.closest('[data-rc-share]') && pic) { var f = new File([pic], name + '.jpg', { type: 'image/jpeg' }); if (navigator.canShare && navigator.canShare({ files: [f] })) navigator.share({ files: [f], title: 'My ' + S.summit.name }).catch(function () {}); else mxToast('Sharing isn\'t available here. Save the picture, then share it from your photos.'); return; }
+    /* Jonna, Nov 27, 2026: the phone decides which apps the Share list shows, so LinkedIn gets its own button: the words
+       for the post are copied, then the picture goes to the phone's share list (pick LinkedIn), or on a computer the
+       picture is saved and LinkedIn opens with the words in a new post */
+    if (e.target.closest('[data-rc-li]') && pic && D) {
+      var words = 'My ' + S.summit.name + (S.place ? ' in ' + S.place : '') + ': ' + D.ses.length + ' session' + (D.ses.length === 1 ? '' : 's') + (D.met.length ? ' and ' + D.met.length + ' new connection' + (D.met.length === 1 ? '' : 's') : '') + '. Thank you, MISMO! #MISMO';
+      try { navigator.clipboard.writeText(words); } catch (er) {}
+      var lf = new File([pic], name + '.jpg', { type: 'image/jpeg' });
+      if (navigator.canShare && navigator.canShare({ files: [lf] })) { mxToast('Words copied. Pick LinkedIn, then paste them in.'); navigator.share({ files: [lf], text: words }).catch(function () {}); }
+      else { var la = document.createElement('a'); la.href = URL.createObjectURL(pic); la.download = name + '.jpg'; document.body.appendChild(la); la.click(); la.remove(); window.open('https://www.linkedin.com/feed/?shareActive=true&text=' + encodeURIComponent(words), '_blank', 'noopener'); mxToast('Picture saved. Add it to your LinkedIn post.'); }
+      return;
+    }
     if (e.target.closest('[data-rc-vcf]') && D) { var v = document.createElement('a'); v.href = URL.createObjectURL(new Blob([vcards(D.met)], { type: 'text/vcard' })); v.download = 'people-i-met-' + slug(S.summit.name) + '.vcf'; document.body.appendChild(v); v.click(); v.remove(); }
   });
 }
@@ -3513,7 +3530,7 @@ function c39Row(row) {
    (a CSV the staff member loads on their phone; kept on the phone only, and emails are never read from it). A MISMO
    Summit's lookups never apply to another event's numbers, since the two lists can share numbers. */
 function scanEvents() { return load('scan-events', []); }
-function scanEvent() { var e = load('scan-event', ''); return e && scanEvents().some(function (x) { return x.id === e; }) ? e : ''; }
+function scanEvent() { if (scanRole() === 'attendee') return ''; var e = load('scan-event', ''); return e && scanEvents().some(function (x) { return x.id === e; }) ? e : ''; }
 function scanEventName(id) { var e = scanEvents().filter(function (x) { return x.id === id; })[0]; return e ? e.name : (S.summit ? S.summit.name : 'This Summit'); }
 function scansKey(ev) { return 'scans:' + (ev === undefined ? (scanEvent() || S.sid) : ev); }
 function myScans(ev) { return load(scansKey(ev), []); }
@@ -3594,7 +3611,8 @@ function scanRole() {
   var st = staffSession(), acc = (st && st.access) || {};
   if (st && appTester() && (acc['summit-hq'] || st.platformAdmin)) return 'staff';
   if (st && appTester() && acc['meeting-trackers']) return 'facilitator';
-  return helperPass() ? 'helper' : '';
+  if (helperPass()) return 'helper';
+  return A && A.token ? 'attendee' : '';   /* Jonna, Nov 27, 2026: signed-in attendees get Who I Met (scan, picture or both), kept on their phone */
 }
 /* Helpers (Jonna, Nov 27, 2026): staff or a facilitator can let someone else check people in to one session for a few
    hours (a big workshop, or a chair who likes to scan). They send a link; it opens MyMISMO with the scanner for that
@@ -3687,25 +3705,51 @@ function findPerson(cb, other) {
     }
   });
 }
+/* Who I Met pictures (Jonna, Nov 27, 2026): a small square copy kept with the person on this phone (about 25 KB), never sent */
+function metPicture(cb) {
+  phPick('camera', function (fs) { phLoad(fs[0], function (img) {
+    var c = document.createElement('canvas'), n = 360, x = c.getContext('2d'), w = img.naturalWidth || img.width, h = img.naturalHeight || img.height, m = Math.min(w, h);
+    c.width = n; c.height = n; x.drawImage(img, (w - m) / 2, Math.max(0, (h - m) / 3), m, m, 0, 0, n, n); cb(c.toDataURL('image/jpeg', .72));
+  }); });
+}
+function metThumb(s, cls) { return s && s.pic ? '<img class="' + (cls || 'met-th') + '" alt="" src="' + s.pic + '">' : ''; }
+/* an attendee's scan: the name, title and company on that tag from the relay (never an email; nothing for people who hide
+   themselves from the directory), kept with the names this phone already knows */
+function attLookup(reg, cb) {
+  if (!A || !A.token || !reg || !S.sid || navigator.onLine === false) return cb(null);
+  fetch(RELAY + '/mymismo/scan/lookup', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + A.token }, body: JSON.stringify({ summit: S.sid, regs: [reg] }) })
+    .then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { var p = j && j.people && j.people[reg]; if (p) { var m = load('scan-names:' + S.sid, {}); m[reg] = p; save('scan-names:' + S.sid, m); } cb(p || null); })
+    .catch(function () { cb(null); });
+}
 /* a scan: who it is, a note, Hot / Warm / Cold, and what kind it is */
 function leadSheet(sc, fresh) {
   var who = sc.reg ? scanLookup(sc.reg) : null, kinds = scanRole() === 'staff' ? ['Touchpoint', 'Someone I Met'] : ['Someone I Met'];
   sc.kind = sc.kind ? scanKind(sc) : kinds[0];
   if (!who && sc.name) who = { name: sc.name, title: sc.title || '', company: sc.company || '' };
   sc.kind = sc.kind || kinds[0]; sc.rate = sc.rate || '';
-  var h = '<div class="ld-top">' + (who ? avatarHtml({ id: 'reg:' + sc.reg, name: who.name, photo: 0 }, 'big') + '<div><b>' + esc(who.name) + '</b><span>' + esc([who.title, who.company].filter(Boolean).join(', ')) + '</span><i>Registration ' + esc(sc.reg) + '</i></div>'
-      : '<span class="ld-q">?</span><div><b>' + (sc.reg ? 'Registration ' + esc(sc.reg) : 'New Person') + '</b><span>' + (scanRole() === 'facilitator' ? 'Type their name below for now. Names fill in for facilitators once scanning goes live.' : PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).') + '</span></div>') + '</div>' +
+  var att = scanRole() === 'attendee';
+  var unknown = att ? (sc.reg ? 'Their name fills in from their name tag when you\'re online. You can type it below too.' : 'Add their name below so you remember.')
+    : scanRole() === 'facilitator' ? 'Type their name below for now. Names fill in for facilitators once scanning goes live.' : PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).';
+  var h = '<div class="ld-top">' + (sc.pic ? metThumb(sc, 'met-big') : who ? avatarHtml({ id: 'reg:' + sc.reg, name: who.name, photo: 0 }, 'big') : '<span class="ld-q">?</span>') +
+    (who ? '<div><b>' + esc(who.name) + '</b><span>' + esc([who.title, who.company].filter(Boolean).join(', ')) + '</span>' + (sc.reg ? '<i>Registration ' + esc(sc.reg) + '</i>' : '') + '</div>'
+      : '<div><b>' + (sc.reg ? 'Registration ' + esc(sc.reg) : att ? 'Who Is This?' : 'New Person') + '</b><span>' + unknown + '</span></div>') + '</div>' +
+    '<div class="met-picrow">' + (sc.pic ? '<button type="button" class="btn" data-ld-pic>' + icon('i-camera') + 'Retake the Picture</button><button type="button" class="btn quiet" data-ld-nopic>Remove the Picture</button>' : '<button type="button" class="btn" data-ld-pic>' + icon('i-camera') + 'Add a Picture Together</button>') + '</div>' +
     '<div class="sheet-pad ld">' +
     (kinds.length > 1 ? '<div class="ld-h">This Is</div><div class="seg ld-kind">' + kinds.map(function (k) { return '<button type="button" data-ld-kind="' + esc(k) + '" aria-pressed="' + (sc.kind === k) + '">' + esc(k === 'Touchpoint' ? 'A Touchpoint' : k) + '</button>'; }).join('') + '</div>' : '') +
-    '<div class="ld-h">How Warm</div><div class="ld-rate">' + ['Hot', 'Warm', 'Cold'].map(function (r) { return '<button type="button" class="r-' + r.toLowerCase() + '" data-ld-rate="' + r + '" aria-pressed="' + (sc.rate === r) + '">' + r + '</button>'; }).join('') + '</div>' +
+    (att ? '' : '<div class="ld-h">How Warm</div><div class="ld-rate">' + ['Hot', 'Warm', 'Cold'].map(function (r) { return '<button type="button" class="r-' + r.toLowerCase() + '" data-ld-rate="' + r + '" aria-pressed="' + (sc.rate === r) + '">' + r + '</button>'; }).join('') + '</div>') +
     '<div class="ld-h">Their Details <span>Fix anything that\'s wrong</span></div><div class="ld-who"><div class="field"><label for="ld-name">Name</label><input id="ld-name" maxlength="120" value="' + esc(sc.name || (who && who.name) || '') + '"></div>' +
     '<div class="field"><label for="ld-title">Title</label><input id="ld-title" maxlength="120" value="' + esc(sc.title || (who && who.title) || '') + '"></div><div class="field"><label for="ld-co">Company</label><input id="ld-co" maxlength="120" value="' + esc(sc.company || (who && who.company) || '') + '"></div></div>' +
     '<div class="field"><label for="ld-note">Note</label><textarea id="ld-note" rows="3" maxlength="600" placeholder="What you talked about, what to follow up on">' + esc(sc.note || '') + '</textarea></div>' +
     '<div class="field"><label for="ld-email">Email</label><input id="ld-email" type="email" maxlength="160" placeholder="Only if they gave it to you" value="' + esc(sc.email || '') + '"></div>' +
     '<div class="d-actions"><button class="btn primary" type="button" data-ld-save>' + icon('i-check') + 'Save</button>' + (fresh ? '<button class="btn" type="button" data-ld-again>' + icon('i-scan') + 'Save and Scan Next</button>' : '<button class="btn quiet" type="button" data-ld-del>Delete</button>') + '</div>' +
-    '<p class="sc-fine">Staff test: kept on this phone only.</p></div>';
+    '<p class="sc-fine">' + (att ? 'Kept on this phone only.' : 'Staff test: kept on this phone only.') + '</p></div>';
   var el = openSheet(sc.kind === 'Someone I Met' ? 'Who I Met' : sc.kind === 'Touchpoint' ? 'Log a Touchpoint' : 'Scan', h, { plain: true });
   el.classList.add('ld-sheet');
+  if (att && sc.reg && !who) attLookup(sc.reg, function (p) {   /* the name on their tag fills in, unless it's been typed already */
+    if (!p || !el.isConnected) return;
+    [['#ld-name', p.name], ['#ld-title', p.title], ['#ld-co', p.company]].forEach(function (f) { var i = el.querySelector(f[0]); if (i && !i.value.trim()) i.value = f[1] || ''; });
+    var b = el.querySelector('.ld-top b'); if (b) b.textContent = p.name; var sp = el.querySelector('.ld-top div span'); if (sp) sp.textContent = [p.title, p.company].filter(Boolean).join(', ');
+  });
   function keep() {
     sc.note = el.querySelector('#ld-note').value.trim(); sc.email = el.querySelector('#ld-email').value.trim();
     sc.name = el.querySelector('#ld-name').value.trim(); sc.title = el.querySelector('#ld-title').value.trim(); sc.company = el.querySelector('#ld-co').value.trim();
@@ -3714,6 +3758,8 @@ function leadSheet(sc, fresh) {
   }
   el.addEventListener('click', function (e) {
     var t;
+    if (e.target.closest('[data-ld-pic]')) { metPicture(function (pic) { sc.pic = pic; var nm = el.querySelector('#ld-name').value, ti = el.querySelector('#ld-title').value, co = el.querySelector('#ld-co').value, no = el.querySelector('#ld-note').value, em = el.querySelector('#ld-email').value; sc.name = nm; sc.title = ti; sc.company = co; sc.note = no; sc.email = em; closeSheet(); leadSheet(sc, fresh); }); return; }
+    if (e.target.closest('[data-ld-nopic]')) { delete sc.pic; sc.name = el.querySelector('#ld-name').value; sc.note = el.querySelector('#ld-note').value; closeSheet(); leadSheet(sc, fresh); return; }
     if ((t = e.target.closest('[data-ld-kind]'))) { sc.kind = t.getAttribute('data-ld-kind'); el.querySelectorAll('[data-ld-kind]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return; }
     if ((t = e.target.closest('[data-ld-rate]'))) { sc.rate = sc.rate === t.getAttribute('data-ld-rate') ? '' : t.getAttribute('data-ld-rate'); el.querySelectorAll('[data-ld-rate]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-ld-rate') === sc.rate)); }); return; }
     if (e.target.closest('[data-ld-save]')) { keep(); closeSheet(); mxToast('Scan saved'); return; }
@@ -3726,9 +3772,9 @@ function scansSheet() {
   var l = myScans();
   /* names fill in once the list has them */
   l.forEach(function (s) { var w = scanLookup(s.reg); if (w && !s.name) { s.name = w.name; s.title = w.title; s.company = w.company; } });
-  var el = openSheet('My Scans', '<div class="sheet-pad scl">' + (l.length ? '<div class="scl-top"><span>' + l.length + (l.length === 1 ? ' scan' : ' scans') + ' on this phone</span><button type="button" class="btn" data-scl-csv>' + icon('i-download') + 'Download</button></div>' +
+  var el = openSheet(scanRole() === 'attendee' ? 'Who I Met' : 'My Scans', '<div class="sheet-pad scl">' + (l.length ? '<div class="scl-top"><span>' + l.length + (l.length === 1 ? ' scan' : ' scans') + ' on this phone</span><button type="button" class="btn" data-scl-csv>' + icon('i-download') + 'Download</button></div>' +
     l.map(function (s) { var d = new Date(s.at);
-      return '<button type="button" class="scl-row" data-scl="' + s.at + '"><span class="scl-r r-' + esc((s.rate || 'none').toLowerCase()) + '">' + esc(s.rate || '–') + '</span><span class="scl-t"><b>' + esc(s.name || 'Registration ' + s.reg) + '</b><span>' + esc([s.company, s.kind].filter(Boolean).join(', ')) + '</span>' + (s.note ? '<em>' + esc(s.note) + '</em>' : '') + '</span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</i></button>'; }).join('')
+      return '<button type="button" class="scl-row" data-scl="' + s.at + '">' + (s.pic ? metThumb(s, 'met-row') : '<span class="scl-r r-' + esc((s.rate || 'none').toLowerCase()) + '">' + esc(s.rate || '–') + '</span>') + '<span class="scl-t"><b>' + esc(s.name || (s.reg ? 'Registration ' + s.reg : 'Someone I Met')) + '</b><span>' + esc([s.company, s.kind].filter(Boolean).join(', ')) + '</span>' + (s.note ? '<em>' + esc(s.note) + '</em>' : '') + '</span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</i></button>'; }).join('')
     : '<div class="mx-empty">' + icon('i-scan') + '<b>No scans yet</b><span>Scan a name tag and it shows up here.</span></div>') +
     '<button type="button" class="btn primary scl-new" data-scan>' + icon('i-scan') + 'Scan a Name Tag</button></div>', { plain: true });
   el.classList.add('scl-sheet');
@@ -3830,9 +3876,10 @@ function checkinDefault() {
    does. Staff: Workgroup Check-In, Who I Met, Log a Touchpoint. Facilitators: Workgroup Check-In, Who I Met. Sponsors
    (when the relay part is live): their leads. ---------- */
 var SCAN_MODES = { checkin: 'Check-In', met: 'Who I Met', touch: 'Touchpoint' };
-function scanModes() { var r = scanRole(); return r === 'staff' ? ['checkin', 'met', 'touch'] : r === 'facilitator' ? ['checkin', 'met'] : r === 'helper' ? ['checkin'] : []; }
+function scanModes() { var r = scanRole(); return r === 'staff' ? ['checkin', 'met', 'touch'] : r === 'facilitator' ? ['checkin', 'met'] : r === 'helper' ? ['checkin'] : r === 'attendee' ? ['met'] : []; }
 function scanHub(sid, mode0) {
   var modes = scanModes(); if (!modes.length) return;
+  var att = scanRole() === 'attendee';
   if (scanRole() === 'staff' && !PV.state) loadPreviewAttendees();
   if (!CIS.state) loadCheckinSessions();
   var mode = modes.indexOf(mode0) >= 0 ? mode0 : modes.indexOf(load('scan-mode', '')) >= 0 ? load('scan-mode', '') : modes[0];
@@ -3857,14 +3904,20 @@ function scanHub(sid, mode0) {
       t.innerHTML = (hp ? '<div class="ci-pickbtn hlp-fixed"><span class="ci-pk-l">' + esc(hp.n ? hp.n + ', you\'re checking people in to' : 'Checking In To') + '</span>' : '<button type="button" class="ci-pickbtn" data-ci-pick><span class="ci-pk-l">Checking In To</span>') + (y ? '<b>' + esc(y.name) + '</b><span class="ci-pk-s">' + esc(DOW[dparts(y.date).dow].slice(0, 3) + ', ' + span(y.a, y.b) + (y.room ? ', ' + y.room : '')) + '</span>' : '<b>' + (hp ? 'Your Session' : 'Pick a Session') + '</b>') + (hp ? '</div>' : icon('i-chev', 'go') + '</button>') +
         '<div class="ci-count"><b>' + n + '</b><span>checked in</span></div>';
     } else {
-      t.innerHTML = '<button type="button" class="hub-ev" data-hub-ev>' + icon('i-pin') + '<span>At <b>' + esc(scanEventName(scanEvent())) + '</b></span>' + icon('i-chev', 'go') + '</button>' +
+      t.innerHTML = (att ? '' : '<button type="button" class="hub-ev" data-hub-ev>' + icon('i-pin') + '<span>At <b>' + esc(scanEventName(scanEvent())) + '</b></span>' + icon('i-chev', 'go') + '</button>') +
         '<div class="hub-say">' + icon(mode === 'met' ? 'i-people' : 'i-handshake') + '<span><b>' + (mode === 'met' ? 'Who I Met' : 'Log a Touchpoint') + '</b><span>' +
-        (mode === 'met' ? 'Scan someone\'s name tag to remember them, with a note.' : 'Scan a member\'s name tag to log your conversation. It goes to Member 360 when scanning goes live.') + '</span></span></div>';
+        (mode === 'met' ? (att ? 'Scan their name tag, take a picture together, or both, so you remember who you met.' : 'Scan someone\'s name tag to remember them, with a note.') : 'Scan a member\'s name tag to log your conversation. It goes to Member 360 when scanning goes live.') + '</span></span></div>';
     }
   }
   function lower() {
     var acts = el.querySelector('.sc-acts');
     acts.className = 'sc-acts ' + (hp ? 'two' : 'four');
+    if (att) {
+      acts.innerHTML = '<button type="button" class="btn primary" data-met-pic>' + icon('i-camera') + 'Take a Picture</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
+        '<button type="button" class="btn" data-met-hand>' + icon('i-plus') + 'Add by Hand</button><button type="button" class="btn" data-sc-list>' + icon('i-list') + 'Who I Met</button>';
+      el.querySelector('.sc-fine').textContent = 'Kept on this phone only. Nobody else sees who you met, your pictures or your notes.';
+      return;
+    }
     acts.innerHTML = '<button type="button" class="btn" data-ci-find>' + icon('i-search') + (hp ? 'Add by Hand' : 'Find by Name') + '</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
       (hp ? '' : (mode === 'checkin' ? '<button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button>' : '<button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button>') +
       '<button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button>') +
@@ -3883,7 +3936,7 @@ function scanHub(sid, mode0) {
     } else {
       var k = mode === 'met' ? 'Someone I Met' : 'Touchpoint', l = myScans().filter(function (s) { return scanKind(s) === k; });
       list.innerHTML = l.slice(0, 4).map(function (s) { var w = s.reg ? scanLookup(s.reg) : null; var d = new Date(s.at);
-        return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(s.name || (w && w.name) || 'Registration ' + s.reg) + '</b><i>' + esc(s.note || s.company || '') + '</i><em>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</em></div>'; }).join('');
+        return '<div class="ci-row">' + (s.pic ? metThumb(s, 'met-row') : '<span>' + icon('i-check') + '</span>') + '<b>' + esc(s.name || (w && w.name) || (s.reg ? 'Registration ' + s.reg : 'Someone I Met')) + '</b><i>' + esc(s.note || s.company || '') + '</i><em>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</em></div>'; }).join('');
     }
   }
   function pop(kind, title, sub) {
@@ -3959,6 +4012,8 @@ function scanHub(sid, mode0) {
     if (e.target.closest('[data-hub-again]')) { resume(); return; }
     if (e.target.closest('[data-ci-type]')) { var n = String(prompt('The number under the barcode on the name tag:') || '').replace(/\D/g, ''); if (n) onCode(n); return; }
     if (e.target.closest('[data-ci-find]')) { findPerson(onPerson, mode !== 'checkin'); return; }
+    if (e.target.closest('[data-met-hand]')) { card({ reg: '', name: '', at: Date.now(), manual: true }); return; }
+    if (e.target.closest('[data-met-pic]')) { metPicture(function (pic) { card({ reg: '', name: '', at: Date.now(), manual: true, pic: pic }); }); return; }
     if (e.target.closest('[data-ci-stats]')) { attendanceSheet(); return; }
     if (e.target.closest('[data-sc-list]')) { scansSheet(); return; }
     if (e.target.closest('[data-sc-badge]')) { testBadge(); }
@@ -4376,6 +4431,10 @@ function scanApi(method, path, body, tok) {
 }
 function ciId(c) { return 'c-' + Number(c.at || 0).toString(36) + '-' + (c.reg || String(c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 12) || 'x'); }
 function scanSync() {
+  if (scanRole() === 'attendee' && S.sid && navigator.onLine !== false) {   /* attendees: names for tags scanned offline, a few at a time; nothing is sent */
+    myScans(S.sid).filter(function (x) { return x.reg && !x.name && !regLookup(x.reg); }).slice(0, 5).forEach(function (x) { attLookup(x.reg, function (p) { if (!p) return; var l = myScans(S.sid); l.forEach(function (y) { if (y.at === x.at && !y.name) { y.name = p.name; y.title = p.title; y.company = p.company; } }); saveScans(l, S.sid); }); });
+    return;
+  }
   if (SYNC.busy || !canScan() || !S.sid || navigator.onLine === false || !scanTok()) return;
   if (SYNC.live === false && Date.now() - SYNC.t < 600000) return;
   SYNC.busy = true;

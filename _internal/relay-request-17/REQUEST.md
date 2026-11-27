@@ -96,3 +96,12 @@ allows, and the other systems would start failing too.
 **Still needed for a summit-sized crowd.** The cap protects the other systems, but at 250 saves an hour MyMISMO itself
 would turn people away in a busy hour. Relay request 18 moves MyMISMO's busy live data off GitHub.
 
+## Hotel Wi-Fi (added Nov 27, 2026)
+
+At a summit most phones reach the relay from the hotel's one internet address, and the attendee limits counted per
+address: only 5 people an hour could ask for a sign-in code (5 an hour, 20 code tries, 30 alert sign-ups). This patch
+raises the per-address limits to 600 codes, 1,500 tries and 600 alert sign-ups an hour (Trivia's sign-in the same).
+Each email address still gets only 3 codes an hour and each code only its few tries, and all codes together stay under
+1,500 an hour, below what one Outlook mailbox sends (30 a minute). Request 13's test for the old limit is updated in
+`test-mymismo13-updated-limits.mjs` (use it in place of `test-mymismo.mjs` once this patch is on).
+

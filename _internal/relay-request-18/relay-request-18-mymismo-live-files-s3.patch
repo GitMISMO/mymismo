@@ -1,0 +1,233 @@
+--- index.base18.mjs	2026-11-27 14:40:31.194272399 -0700
++++ index.mjs	2026-11-27 14:40:31.304836457 -0700
+@@ -502,6 +502,98 @@
+   console.warn(`GitHub allowance low: ${left} requests left${reset ? ' until ' + new Date(reset).toISOString() : ''}`);
+ }
+ 
++/* ---------- Relay request 18: MyMISMO's live files in Amazon S3 (Jonna, Nov 27, 2026) ----------
++ * GitHub allows one account about 500 saves an hour; a summit with hundreds of people on MyMISMO needs thousands. When
++ * MYMISMO_BUCKET names a private S3 bucket (versioning on, so every earlier copy is kept, like GitHub's history), the
++ * files MyMISMO changes all day are kept there instead of in its GitHub repository: sign-in codes and profiles,
++ * messages, reports, headshots, check-ins, Who I Met and touchpoints, summit photos, alert phones and the alerts sent,
++ * and Trivia plays, boards and contacts. The question bank, Trivia settings and MISMO Media's news alerts stay on GitHub.
++ * Every route reads and writes exactly as before (readFile and updateRepoJson pick the store), each save is checked
++ * against the copy it changed (S3 conditional writes, like GitHub's sha), and a file not yet in S3 is read from GitHub
++ * once, so nothing is lost on the switch. Meeting Trackers and Member 360 read scan/ from GitHub, so a scheduled run
++ * (EventBridge, every 15 minutes, input {"mymismoMirror": true}) copies the scan/ files that changed to GitHub.
++ * With MYMISMO_BUCKET unset, nothing changes. */
++const MM18_HOT = /^(att\/|scan\/|photos\/|push\/(subs|alerts)\.json$|trivia\/(?!questions\.json$|settings\.json$))/;
++let mm18Repo = '', mm18S3 = null;
++function mm18IsHot(repo, path) { return !!(process.env.MYMISMO_BUCKET && mm18Repo && repo === mm18Repo && MM18_HOT.test(path)); }
++/* In S3, the files everyone writes at once are split one per person (sign-in codes, Trivia boards in play), so two
++ * people never wait on each other; on GitHub they stay one file, as before. */
++function mm18Shard(repo, path, id) { return mm18IsHot(repo, path) && /^[0-9a-z]{6,40}$/.test(String(id)) ? path.replace(/\.json$/, '') + '/' + id + '.json' : path; }
++export function __setHotStore(store, repo) { mm18S3 = store; mm18Repo = repo || ''; }
++async function mm18Store() {
++  if (mm18S3) return mm18S3;
++  const m = await import('@aws-sdk/client-s3'), c = new m.S3Client({}), Bucket = process.env.MYMISMO_BUCKET;
++  const code = e => (e && e.$metadata && e.$metadata.httpStatusCode) || 0;
++  mm18S3 = {
++    async get(Key) {
++      try { const r = await c.send(new m.GetObjectCommand({ Bucket, Key })); return { status: 200, body: await r.Body.transformToString(), etag: r.ETag }; }
++      catch (e) { return { status: e && (e.name === 'NoSuchKey' || code(e) === 404) ? 404 : 502 }; }
++    },
++    async put(Key, body, etag) {   /* etag: change only that copy; null: only if there is none yet */
++      try { const r = await c.send(new m.PutObjectCommand({ Bucket, Key, Body: body, ContentType: 'application/json', ...(etag ? { IfMatch: etag } : { IfNoneMatch: '*' }) })); return { status: 200, etag: r.ETag }; }
++      catch (e) { const s = code(e); return { status: s === 412 || s === 409 ? 409 : 502 }; }
++    },
++    async list(Prefix, deep) {   /* [{ name, sha }]: the files directly in a folder (or everything under it) */
++      const out = []; let ContinuationToken;
++      do {
++        const r = await c.send(new m.ListObjectsV2Command({ Bucket, Prefix, ContinuationToken, ...(deep ? {} : { Delimiter: '/' }) }));
++        for (const o of r.Contents || []) out.push({ name: o.Key.slice(Prefix.length), sha: o.ETag });
++        ContinuationToken = r.IsTruncated ? r.NextContinuationToken : undefined;
++      } while (ContinuationToken);
++      return out;
++    }
++  };
++  return mm18S3;
++}
++async function mm18Read(repo, branch, path) {
++  const st = await mm18Store(), r = await st.get(path).catch(() => ({ status: 502 }));
++  if (r.status === 200) { try { return { status: 200, data: JSON.parse(r.body), sha: r.etag }; } catch { return { status: 500, data: null, sha: null, corrupt: true }; } }
++  if (r.status !== 404) return { status: 502, data: null, sha: null };
++  const g = await readFileGitHub(repo, branch, path);   /* not moved yet: GitHub's copy, written to S3 on the next save */
++  return g.status === 200 ? { status: 200, data: g.data, sha: null } : g;
++}
++async function mm18Update(repo, branch, path, change) {
++  const st = await mm18Store();
++  const until = Date.now() + 12_000;   /* a burst (a whole room signing in at once) waits its turn rather than failing */
++  for (let tries = 0; tries < 60 && Date.now() < until; tries++) {
++    const cur = await mm18Read(repo, branch, path);
++    if (cur.status !== 200 && cur.status !== 404) return { error: 'UNREADABLE' };
++    const next = change(cur.status === 200 && cur.data && typeof cur.data === 'object' ? JSON.parse(JSON.stringify(cur.data)) : {});
++    const w = await st.put(path, JSON.stringify(next, null, 2) + '\n', cur.sha || null).catch(() => ({ status: 502 }));
++    if (w.status === 200) return { ok: true, data: next };
++    if (w.status !== 409) return { error: 'STORE', status: w.status };
++    await new Promise(r => setTimeout(r, 10 + Math.floor(Math.random() * Math.min(400, 20 * 2 ** Math.min(tries, 5)))));   /* someone saved first: read again */
++  }
++  return { error: 'CONFLICT' };
++}
++/* the files directly in one folder of MyMISMO's repository, wherever they are kept: [{ name, sha }] */
++async function mm18ListDir(repo, branch, dir) {
++  const fromGitHub = async () => { const ls = await github('GET', `/repos/${repo}/contents/${dir}?ref=${encodeURIComponent(branch)}`); if (ls.status !== 200 && ls.status !== 404) return null; return (ls.status === 200 && Array.isArray(ls.json) ? ls.json : []).filter(f => f && f.type !== 'dir').map(f => ({ name: f.name, sha: f.sha })); };
++  if (!mm18IsHot(repo, dir + '/')) return fromGitHub();
++  const st = await mm18Store(), s3 = await st.list(dir + '/').catch(() => null); if (!s3) return null;
++  const gh = await fromGitHub() || [], have = new Set(s3.map(f => f.name));
++  return s3.concat(gh.filter(f => !have.has(f.name)).map(f => ({ name: f.name, sha: null })));   /* files not moved yet */
++}
++/* the scheduled copy of scan/ to GitHub, for Meeting Trackers and Member 360: only files changed since the last copy */
++async function mm18Mirror() {
++  if (!process.env.MYMISMO_BUCKET) return { ok: true, skipped: 'no bucket' };
++  const proj = await projectConfig(MM_PROJECT).catch(() => null); if (!proj || !proj.repo) return { ok: false, error: 'NO_PROJECT' };
++  mm18Repo = proj.repo; MM_OWN_REPOS.add('/repos/' + proj.repo + '/');
++  const st = await mm18Store(), branch = proj.branch || 'main';
++  const man = await st.get('mirror/manifest.json'), done = man.status === 200 ? (JSON.parse(man.body).files || {}) : {};
++  const files = (await st.list('scan/', true)).filter(f => /\.json$/.test(f.name) && done['scan/' + f.name] !== f.sha);
++  let copied = 0, failed = 0;
++  for (const f of files) {
++    const path = 'scan/' + f.name, r = await st.get(path); if (r.status !== 200) { failed++; continue; }
++    const gh = await readFileGitHub(proj.repo, branch, path);
++    if (gh.status === 200 && JSON.stringify(gh.data) === JSON.stringify(JSON.parse(r.body))) { done[path] = f.sha; continue; }
++    const { status } = await github('PUT', `/repos/${proj.repo}/contents/${path}`, { message: 'MyMISMO: copy of the live file for Meeting Trackers and Member 360', content: Buffer.from(r.body, 'utf8').toString('base64'), branch, sha: gh.sha || undefined });
++    if (status === 200 || status === 201) { done[path] = f.sha; copied++; } else failed++;
++  }
++  await st.put('mirror/manifest.json', JSON.stringify({ at: Date.now(), files: done }), man.status === 200 ? man.etag : null);
++  return { ok: failed === 0, copied, failed };
++}
++
+ /* MyMISMO's own GitHub account (relay request 17, load test Nov 27, 2026). A summit with hundreds of people on MyMISMO
+  * makes far more saves than the other tools, and GitHub allows one account about 500 saves an hour. So MyMISMO's own
+  * repositories use MYMISMO_GITHUB_TOKEN when it is set (a token for a SEPARATE GitHub account or GitHub App: a second
+@@ -579,6 +671,10 @@
+ const encodeBase64Utf8 = (obj) => Buffer.from(JSON.stringify(obj, null, 2) + '\n', 'utf8').toString('base64');
+ 
+ async function readFile(repo, branch, path) {
++  if (mm18IsHot(repo, path)) return mm18Read(repo, branch, path);   /* relay request 18: MyMISMO's live files */
++  return readFileGitHub(repo, branch, path);
++}
++async function readFileGitHub(repo, branch, path) {
+   const { status, json } = await github('GET', `/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
+   if (status === 404) return { status, data: null, sha: null };
+   if (status !== 200) return { status, data: null, sha: null, message: json?.message };
+@@ -1943,6 +2039,7 @@
+   return { idea, problems };
+ }
+ async function updateRepoJson(repo, branch, path, change, message) {
++  if (mm18IsHot(repo, path)) return mm18Update(repo, branch, path, change);   /* relay request 18 */
+   for (let tries = 0; tries < 4; tries++) {
+     const cur = await readFile(repo, branch, path);
+     if (cur.status !== 200 && cur.status !== 404) return { error: 'UNREADABLE' };
+@@ -2598,7 +2695,7 @@
+   if (!s || !person || !mmOpen(s, now)) return fine;   /* the same answer whether or not the address is registered */
+   if (!mmAllowed('codeEmail', email, MM_LIMITS.codeEmail, now)) return fine;
+   const id = mmIdOf(summit, email), code = String(randomInt(0, 1_000_000)).padStart(6, '0');
+-  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM_CODES, d => {
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', mm18Shard(proj.repo, MM_CODES, id), d => {
+     d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+     for (const [k, v] of Object.entries(d.docs)) if (!v || !(v.exp > now - 86_400_000)) delete d.docs[k];   /* tidy: a day after expiry */
+     d.docs[id] = { h: mmHash(code), exp: now + MM_CODE_TTL_MS, tries: 0, s: summit };
+@@ -2634,7 +2731,7 @@
+     return respond(200, { token, me: mmMe(id, pr.data.docs[id], email), expiresAt: new Date(exp * 1000).toISOString() });
+   }
+   let good = false, refused = null;
+-  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM_CODES, d => {
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', mm18Shard(proj.repo, MM_CODES, id), d => {
+     d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
+     const c = d.docs[id];
+     if (!c || !(c.exp > now) || c.tries >= MM_CODE_TRIES || c.s !== summit) { refused = wrong; throw new Error('stop'); }
+@@ -3142,11 +3239,11 @@
+     if (!mmAllowed('scanread', who.email, MM17_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
+     const summit = mm17Summit(q.summit); if (!summit) return respond(400, { error: 'INVALID' });
+     if (subPath === '/scan/checkins') {
+-      const ls = await github('GET', `/repos/${proj.repo}/contents/scan/${summit}/checkins?ref=${encodeURIComponent(branch)}`);
+-      if (ls.status !== 200 && ls.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++      const ls = await mm18ListDir(proj.repo, branch, `scan/${summit}/checkins`);
++      if (!ls) return respond(502, { error: 'UNAVAILABLE' });
+       /* one listing call, then only the scanners' files that changed since last time (the listing gives each file's
+        * version), read side by side: dozens of people watching Attendance Now cost about one GitHub read each */
+-      const docs = {}, files = (ls.status === 200 && Array.isArray(ls.json) ? ls.json : []).filter(f => f && /^[a-f0-9]{20}\.json$/.test(f.name || ''));
++      const docs = {}, files = ls.filter(f => f && /^[a-f0-9]{20}\.json$/.test(f.name || ''));
+       await Promise.all(files.map(async f => {
+         const key = proj.repo + ':' + summit + ':' + f.name, hit = MM17_CI.get(key);
+         if (hit && f.sha && hit.sha === f.sha) return;
+@@ -3246,7 +3343,7 @@
+   if (!q) { const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE' }); ids = Object.keys(feed.summits); }
+   else if (!MM_SUMMIT.test(q)) return respond(400, { error: 'INVALID' });
+   const docsOf = r => (r.status === 200 && r.data && r.data.docs && typeof r.data.docs === 'object' && !Array.isArray(r.data.docs)) ? r.data.docs : {};
+-  const listDir = async path => { const ls = await github('GET', `/repos/${proj.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`); return ls.status === 200 && Array.isArray(ls.json) ? ls.json.filter(f => f && /^[a-f0-9]{20}\.json$/.test(f.name || '')).map(f => f.name) : []; };
++  const listDir = async path => ((await mm18ListDir(proj.repo, branch, path)) || []).filter(f => f && /^[a-f0-9]{20}\.json$/.test(f.name || '')).map(f => f.name);
+   const [subs, alerts] = await Promise.all([readFile(proj.repo, branch, MM14_SUBS), readFile(proj.repo, branch, MM14_ALERTS)]);
+   if ([subs, alerts].some(r => r.status !== 200 && r.status !== 404)) return respond(502, { error: 'UNAVAILABLE' });
+   const subList = Object.values(docsOf(subs)), sent = (alerts.status === 200 && alerts.data && Array.isArray(alerts.data.alerts)) ? alerts.data.alerts : [];
+@@ -3528,7 +3625,7 @@
+   if (!mmAllowed('t-codeEmail', email, MM15_LIMITS.codeEmail, now)) return fine;
+   if (await mm15Review(email).catch(() => null)) return fine;   /* the app reviewers' sign-in uses its fixed code */
+   const id = mm15IdOf(email), code = String(randomInt(0, 1_000_000)).padStart(6, '0');
+-  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.codes, d => {
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', mm18Shard(proj.repo, MM15.codes, id), d => {
+     const docs = mm15Docs(d);
+     for (const [k, v] of Object.entries(docs)) if (!v || !(v.exp > now - 86_400_000)) delete docs[k];
+     docs[id] = { h: mm15Hash(code), exp: now + MM_CODE_TTL_MS, tries: 0 };
+@@ -3552,7 +3649,7 @@
+   const rv = await mm15Review(email).catch(() => null);
+   if (rv) { if (!mm15ReviewOk(rv, code)) return wrong; good = true; }
+   else {
+-  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.codes, d => {
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', mm18Shard(proj.repo, MM15.codes, id), d => {
+     const docs = mm15Docs(d), c = docs[id];
+     if (!c || !(c.exp > now) || c.tries >= MM_CODE_TRIES) { refused = true; throw new Error('stop'); }
+     if (hashesMatch(c.h, mm15Hash(code))) { good = true; delete docs[id]; } else c.tries = (c.tries || 0) + 1;
+@@ -3633,7 +3730,7 @@
+ /* a fresh play of a board; Head to Head games hand both players the same board */
+ async function mm15PlayCreate(proj, key, board, now) {
+   let view = null;
+-  const w = await updateRepoJson(proj.repo, proj.branch || 'main', MM15.plays, d => {
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', mm18Shard(proj.repo, MM15.plays, String(key).split(':')[0]), d => {
+     const docs = mm15Docs(d); docs[key] = { start: now, cats: board.cats, cells: board.cells, picked: {}, open: null, openAt: 0, total: 0, right: 0, ms: 0, roundEnds: now + MM16_ROUND_MS, ...(board.final ? { final: board.final } : {}) };
+     view = mm15PlayView(docs[key], now); return d;
+   }, 'MyMISMO Trivia Head to Head board started').catch(() => null);
+@@ -3671,7 +3768,7 @@
+   const key = game ? who.id + ':' + game : who.id;
+   if (method === 'GET') {   /* pick up where you left off */
+     if (!mmAllowed('t-read', who.id, MM15_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
+-    const r = await readFile(proj.repo, branch, MM15.plays); if (r.status !== 200 && r.status !== 404) return mm15Busy();
++    const r = await readFile(proj.repo, branch, mm18Shard(proj.repo, MM15.plays, who.id)); if (r.status !== 200 && r.status !== 404) return mm15Busy();
+     const pl = r.data && r.data.docs && r.data.docs[key];
+     if (!pl || now - pl.start > MM15_PLAY_STALE) return respond(200, { active: false });
+     const copy = JSON.parse(JSON.stringify(pl)); mm15PlayLapse(copy, now);
+@@ -3693,7 +3790,7 @@
+   }
+   let out = null, stop = null, finished = null;
+   const no = (status, error, message) => { stop = respond(status, { error, message }); throw new Error('stop'); };
+-  const w = await updateRepoJson(proj.repo, branch, MM15.plays, d => {
++  const w = await updateRepoJson(proj.repo, branch, mm18Shard(proj.repo, MM15.plays, who.id), d => {
+     const docs = mm15Docs(d);
+     for (const [k, v] of Object.entries(docs)) if (!v || now - v.start > MM15_PLAY_STALE * 7) delete docs[k];   /* long-abandoned boards */
+     const pl = docs[key];
+@@ -3882,7 +3979,7 @@
+   for (const m of months) ok = (await drop(mm15Board(m), 'MyMISMO Trivia player deleted their account')) && ok;
+   ok = ok && await mm16Forget(proj, who.id);   /* their Head to Head games */
+   ok = ok && await drop(MM15.seen, 'MyMISMO Trivia player deleted their account') && await drop(MM15.players, 'MyMISMO Trivia player deleted their account');
+-  const r = await updateRepoJson(proj.repo, branch, MM15.plays, d => { const docs = mm15Docs(d); for (const k of Object.keys(docs)) if (k === who.id || k.startsWith(who.id + ':')) delete docs[k]; return d; }, 'MyMISMO Trivia player deleted their account').catch(() => null);
++  const r = await updateRepoJson(proj.repo, branch, mm18Shard(proj.repo, MM15.plays, who.id), d => { const docs = mm15Docs(d); for (const k of Object.keys(docs)) if (k === who.id || k.startsWith(who.id + ':')) delete docs[k]; return d; }, 'MyMISMO Trivia player deleted their account').catch(() => null);
+   if (!ok || !r || r.error) return mm15Busy();
+   return respond(200, { ok: true });
+ }
+@@ -4318,6 +4415,7 @@
+ 
+ export async function handler(event, context) {
+   currentContext = context || null;
++  if (event && event.mymismoMirror === true && !event.requestContext) return mm18Mirror();   /* relay request 18: the schedule, never a web request */
+   const method = (event.requestContext?.http?.method || 'GET').toUpperCase();
+   const rawPath = event.rawPath || '/';
+   const headers = Object.fromEntries(Object.entries(event.headers || {}).map(([k, v]) => [k.toLowerCase(), v]));
+@@ -4338,7 +4436,7 @@
+     return respond(503, { error: 'CONFIG_UNAVAILABLE', message: 'Saving is briefly unavailable. Nothing was written — try again in a minute.' });
+   }
+   const subPath = projMatch ? (projMatch[2] || '/') : '/';
+-  if (proj && proj.key === MM_PROJECT && proj.repo) MM_OWN_REPOS.add('/repos/' + proj.repo + '/');   /* relay request 17: MyMISMO's saves go on its own GitHub budget */
++  if (proj && proj.key === MM_PROJECT && proj.repo) { MM_OWN_REPOS.add('/repos/' + proj.repo + '/'); mm18Repo = proj.repo; }   /* relay request 17: MyMISMO's saves go on its own GitHub budget */
+   currentProjectKey = proj ? proj.key : null;
+   if (proj) responseOrigin = proj.origin;
+   /* Relay request 11: a public form sent from one of its project's listed websites (formOrigins) is answered to that

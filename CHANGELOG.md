@@ -1,5 +1,8 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Who I Met for attendees: signed-in attendees get the scanner for Who I Met. Scan someone's name tag, take a picture together, or both, with a note. The name, title and company fill in from the tag (never an email, and nothing for people who hide themselves from the directory). Everything stays on the phone, and the pictures show in Who I Met, the recap and the saved contacts. Staff and facilitators can add a picture too.
+- Nov 27, 2026: Summit Recap: a Post on LinkedIn button (the phone decides which apps the Share list shows); the words for the post are copied and the picture goes to LinkedIn.
+- Nov 27, 2026: Relay request 18 written for Perry (MyMISMO's live files in Amazon S3, tested with 600 people signing in, 50 at once); request 17 now also fixes the hotel Wi-Fi limit (a hotel is one internet address) and adds attendee name tag lookups.
 - Nov 27, 2026: Summit Photos: move your photo inside the frame by dragging it, and zoom with two fingers or the slider (Reset puts it back). The frame previews and the saved or sent photo follow it.
 - Nov 27, 2026: The MISMO team's side of MyMISMO (Attendee Reports, MISMO Trivia, and new MyMISMO numbers for the Results page) moves from Team HQ to MISMO Media (CN-061, CN-062); relay request 17 adds the counts-only stats route.
 - Nov 27, 2026: Getting around: pull a pop-up down to close it (from its top bar, or anywhere once it's scrolled to the top), and tap the tab you're already on to jump back to its top, like other phone apps.
