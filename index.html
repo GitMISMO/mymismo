@@ -1640,6 +1640,19 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ph-hero .ph-pr button.done{background:#0f7b5c; border-color:#0f7b5c} .ph-hero .ph-pr button.done:before{content:"\2713  "}
 .ph-hero .ph-row{justify-content:center} .ph-hero .linkbtn{color:#a9d8f3}
 @media (prefers-reduced-motion:reduce){ .ph-flash{animation:none} .ph-fan > span{transition:none} }
+.ph-mini{position:relative; overflow:hidden; display:grid; grid-template-columns:auto minmax(0, 1fr) auto; align-items:center; gap:12px; width:100%; margin-top:14px; padding:14px 12px 14px 14px; border:0; border-radius:16px; color:#fff; text-align:left; font:inherit; cursor:pointer;
+  background:radial-gradient(90% 120% at 100% 0%, rgba(235,104,52,.6), transparent 60%), linear-gradient(150deg, #14486e 0%, #0d314c 60%, #071d2e 100%); box-shadow:0 8px 20px rgba(13,49,76,.25)}
+.ph-mini:before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 18% 50%, rgba(255,255,255,.18), transparent 35%); opacity:0; animation:ph-flash 7s ease-out 1.5s infinite; pointer-events:none}
+.phm-fan{position:relative; width:96px; height:80px; align-self:center}
+.phm-fan > span{position:absolute; top:4px; left:50%; width:46px; padding:3px 3px 8px; background:#fff; border-radius:3px; box-shadow:0 6px 14px rgba(0,0,0,.4); transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.phm-fan canvas{display:block; width:100%; height:auto; aspect-ratio:4/5; background:#0d314c}
+.phm-fan > span:nth-child(1){transform:translateX(-100%) rotate(-12deg) translateY(5px)} .phm-fan > span:nth-child(2){transform:translateX(-50%) rotate(-1deg); z-index:2} .phm-fan > span:nth-child(3){transform:translateX(0%) rotate(11deg) translateY(5px)}
+.ph-mini:hover .phm-fan > span:nth-child(1){transform:translateX(-108%) rotate(-15deg) translateY(3px)} .ph-mini:hover .phm-fan > span:nth-child(3){transform:translateX(8%) rotate(14deg) translateY(3px)}
+.phm-tx{display:grid; gap:3px; min-width:0} .phm-tx b{display:flex; align-items:center; gap:7px; font-family:var(--cond); font-size:20px; line-height:1.1; color:#ffb48f; white-space:nowrap} .phm-tx b svg{width:18px; height:18px; flex:none}
+.phm-sub{font-size:14px; color:#cfe3f1; line-height:1.35} .phm-ch{font-size:12.5px; font-weight:800; color:#fff; margin-top:2px}
+.ph-mini > svg.go{width:20px; height:20px; color:#fff; opacity:.8}
+.ph-sheet{padding-top:14px} .ph-sheet .ph-hero{border-radius:18px} .ph-sheet .ph-fan{height:230px} .ph-sheet .ph-fan > span{width:140px}
+@media (prefers-reduced-motion:reduce){ .ph-mini:before{animation:none} .phm-fan > span{transition:none} }
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -3865,14 +3878,39 @@ function phEditor(file, prompt0) {
     });
   });
 }
-function phChanged() { try { window.dispatchEvent(new Event('ph-changed')); if ($('#pg-home') && $('#pg-home').innerHTML) renderPage('home'); } catch (e) {} }
+function phChanged() { try { window.dispatchEvent(new Event('ph-changed')); phMiniPaint(); } catch (e) {} }
 function phTake(kind, prompt) { phPick(kind, function (fs) { phEditor(fs[0], prompt); }); }
 /* the card on the summit page */
 /* Jonna, Nov 27, 2026 ("jazz up the summit photos section"): a fan of framed photos (yours once you've taken some, else
    samples in the real frames), one big Take a Photo, and the Photo Challenge with your progress */
+/* Jonna, Nov 27, 2026: on the Summit page, a card the size of Book Your Room; it opens Summit Photos in its own big pop-up */
 function photosCard() {
+  setTimeout(phMiniPaint, 0);
+  return '<button type="button" class="ph-mini" data-ph-open>' +
+    '<span class="phm-fan" aria-hidden="true"><span><canvas></canvas></span><span><canvas></canvas></span><span><canvas></canvas></span></span>' +
+    '<span class="phm-tx"><b>' + icon('i-camera') + 'Snap the Summit</b><span class="phm-sub">Selfies and friends in a summit frame.</span><span class="phm-ch">Photo Challenge: ' + PH_PROMPTS.length + ' to try</span></span>' + icon('i-chev', 'go') + '</button>';
+}
+function phMiniPaint() {
+  var card = document.querySelector('.ph-mini'); if (!card) return;
+  var cvs = card.querySelectorAll('canvas');
+  phAll(function (l) {
+    l = l.filter(function (p) { return p.sid === (S.sid || '') || !p.sid; });
+    var done = {}; l.forEach(function (p) { if (p.prompt) done[p.prompt] = 1; });
+    var n = PH_PROMPTS.filter(function (p) { return done[p]; }).length, ch = card.querySelector('.phm-ch');
+    if (ch) ch.textContent = n >= PH_PROMPTS.length ? 'Photo Challenge done!' : 'Photo Challenge: ' + (n ? n + ' of ' + PH_PROMPTS.length + ' done' : PH_PROMPTS.length + ' to try');
+    var mine = l.filter(function (p) { return p.blob; }).slice(0, 3);
+    var paint = function (a) { [['pass', 'solo'], ['instant', 'group'], ['postcard', 'pair']].forEach(function (f, k) { if (mine[k]) { var im = new Image(); im.onload = function () { cvs[k].width = 108; cvs[k].height = 135; cvs[k].getContext('2d').drawImage(im, 0, 0, 108, 135); }; im.src = phThumb(mine[k]); } else phDraw(cvs[k], phSample(f[1]), f[0], '', a, .1); }); };
+    paint(PH_ART); if (!PH_ART) phAssets(paint);
+  });
+}
+function phSheet() {
+  var el = openSheet('Summit Photos', '<div class="sheet-pad ph-sheet">' + photosHero() + '</div>', { plain: true });
+  el.classList.add('ph-sheet-w');
+  function onCh() { if (!el.isConnected) { window.removeEventListener('ph-changed', onCh); return; } phCardPaint(); } window.addEventListener('ph-changed', onCh);
+}
+function photosHero() {
   setTimeout(phCardPaint, 0);
-  return '<div class="section-h"><h2>Summit Photos</h2></div><div class="ph-card ph-hero">' +
+  return '<div class="ph-card ph-hero">' +
     '<div class="ph-fan" aria-hidden="true"><span class="phf1"><canvas></canvas></span><span class="phf2"><canvas></canvas></span><span class="phf3"><canvas></canvas></span><i class="ph-flash"></i></div>' +
     '<div class="ph-say"><b>Snap the Summit</b><span>Selfies, friends and ' + esc(S.place || 'the summit') + ' in a frame made for this summit. Save it, share it, or send your best to MISMO.</span></div>' +
     '<button type="button" class="ph-go" data-ph-take="camera">' + icon('i-camera') + '<span>Take a Photo</span></button>' +
@@ -3970,7 +4008,7 @@ function attendanceSheet() {
     var max = Math.max.apply(null, ses.map(function (s) { return s.n; }).concat([1]));
     var live = ses.filter(function (s) { return s.x.date === n.date && s.x.a <= n.min && s.x.b > n.min; });
     var topCo = Object.keys(cos).sort(function (a, b) { return cos[b] - cos[a] || a.localeCompare(b); }).slice(0, 5);
-    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>' + icon('i-agenda') + '<span><b>Open Meeting Trackers</b><span>Live tracking for every meeting, summit or not</span></span>' + icon('i-chev', 'go') + '</button>' +
+    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>' +
       '<div class="an-kpis"><div><b>' + Object.keys(people).length + '</b><span>People Checked In</span></div><div><b>' + ses.length + '</b><span>Sessions Scanned</span></div><div><b>' + live.reduce(function (t, s) { return t + s.n; }, 0) + '</b><span>In Sessions Now</span></div></div>' +
       (ses.length ? '<h3 class="wg-h">By Session</h3><div class="an-ses">' + ses.map(function (s) {
         var on = live.indexOf(s) >= 0;
@@ -6357,6 +6395,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-ph-take')) { phTake(t.getAttribute('data-ph-take'), t.getAttribute('data-ph-prompt') || ''); return; }
   if (t.hasAttribute('data-ph-mine')) { phMine(); return; }
   if (t.hasAttribute('data-ph-frames')) { phFrames(); return; }
+  if (t.hasAttribute('data-ph-open')) { phSheet(); return; }
   if (t.hasAttribute('data-ph-review')) { phReview(); return; }
   if (t.hasAttribute('data-checkin')) { checkinSheet(t.getAttribute('data-checkin')); return; }
   if (t.hasAttribute('data-attend')) { attendanceSheet(); return; }

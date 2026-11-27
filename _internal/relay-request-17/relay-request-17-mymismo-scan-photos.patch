@@ -1,0 +1,274 @@
+--- a/index.mjs
++++ b/index.mjs
+@@ -2509,7 +2509,8 @@
+     const people = new Map();
+     for (const p of Array.isArray(s.people) ? s.people : []) {
+       const e = mmStr(p && p.e, 254).toLowerCase(); if (!mmEmailOk(e)) continue;
+-      people.set(e, { first: mmStr(p.first, 60), last: mmStr(p.last, 60), company: mmStr(p.company, 120), title: mmStr(p.title, 120) });
++      people.set(e, { first: mmStr(p.first, 60), last: mmStr(p.last, 60), company: mmStr(p.company, 120), title: mmStr(p.title, 120),
++        reg: (Array.isArray(p.reg) ? p.reg : []).map(x => mmStr(x, 12)).filter(x => /^\d{4,12}$/.test(x)).slice(0, 5) });   /* relay request 17: registration numbers (CN-055) */
+     }
+     /* Summit HQ's list has MISMO staff twice: their registration (with their title) and the staff roster (just "MISMO").
+        The roster entry still signs in, as the same person as their registration, and isn't listed a second time. */
+@@ -2520,7 +2521,8 @@
+       if (keep) for (const e of list) if (plain(people.get(e))) people.get(e).dir = keep;
+     }
+     const ids = new Map(); for (const [e, p] of people) if (!p.dir) ids.set(mmIdOf(id, e), p);   /* relay request 15: the whole registration list is the directory */
+-    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people, ids };
++    const byReg = new Map(); for (const p of people.values()) for (const x of p.reg || []) if (!byReg.has(x)) byReg.set(x, p);   /* relay request 17: name tag lookups */
++    summits[id] = { name: mmStr(s.name, 120), first: mmStr(s.first, 10), last: mmStr(s.last, 10), people, ids, byReg };
+   }
+   mmFeedCache.at = now; mmFeedCache.value = { summits };
+   return mmFeedCache.value;
+@@ -3001,6 +3003,243 @@
+   return respond(200, { ok: true, id, sent, failed, removed: gone.length });
+ }
+ 
++/* --- relay request 17: name tag scanning and Summit Photos (Jonna, Nov 27, 2026) ------------------------------------
++ * Switched on in the mymismo entry of projects.json: scan: true for /scan/*, photos: true for /photos/*. Both need the
++ * attendee list (attendeeFeed) carrying each person's registration numbers (reg, CN-055).
++ *
++ * Who can scan (a MISMO Resources sign-in, MyMISMO given in People & Access, at admin or staff level):
++ *   staff        also Summit HQ (or a platform administrator): check-in, Who I Met, Log a Touchpoint
++ *   facilitator  also Meeting Trackers: check-in, Who I Met
++ * No email address ever leaves here: a lookup gives name, title and company only.
++ *
++ *   GET  /mymismo/scan/me                                   -> { role, name }
++ *   POST /mymismo/scan/lookup   { summit, regs: [..50] }     -> { people: { <reg>: { name, title, company } } }
++ *   POST /mymismo/scan/checkins { summit, items: [..200] }   -> { ok, saved, have }
++ *        item { id (made on the phone, so a retry after the Wi-Fi drops isn't counted twice), ses, reg | name, title,
++ *               company, manual, at }
++ *   GET  /mymismo/scan/checkins?summit=<id>[&since=<ms>]     -> { items: [{ id, ses, reg, name, company, at }], now }
++ *        everyone's, for Attendance Now; Meeting Trackers reads scan/<summit>/checkins.json in place of TrackPod's exports
++ *   POST /mymismo/scan/notes    { summit, items: [..100] }   -> { ok, saved }
++ *        item { id, kind: 'met' | 'touch' (staff only), reg, name, title, company, rate, note, email, at, deleted }
++ *   GET  /mymismo/scan/notes?summit=<id>                     -> { items } (only your own)
++ *        touchpoints are also kept together in scan/<summit>/touchpoints.json for Member 360 (a Change Notice follows)
++ *
++ * Summit Photos:
++ *   POST /mymismo/photos        { summit, data (JPEG data: URL, 2 MB), caption, challenge, tags, consent }
++ *        a signed-in attendee (consent must be true) or anyone with a MISMO Resources sign-in and MyMISMO  -> { ok, id }
++ *   For the people in mediaReviewers (staff sign-in):
++ *   GET  /mymismo/photos/list?summit=<id>                    -> { items: [...] } (no picture data), newest first
++ *   GET  /mymismo/photos/one?summit=<id>&id=<photo>          -> { s }
++ *   POST /mymismo/photos/review { summit, id, status: 'new' | 'picked' | 'passed', note }  -> { ok }
++ *   POST /mymismo/photos/send   { summit }                    -> { ok, batch, count }
++ *        only when the reviewer presses Send: each picked photo goes to MISMO Media's mediaInbox {repo, branch, dir} as
++ *        <dir>/<summit>/<batch>/<id>.jpg, with <dir>/<summit>/<batch>.json listing them (CN-057). Nothing is posted. */
++const MM17_LIMITS = { lookup: 600, checkins: 600, notes: 300, read: 900, photo: 30, review: 600, send: 20 };
++const MM17_ID = /^[A-Za-z0-9_-]{6,40}$/, MM17_SES = /^[A-Za-z0-9:_.@-]{1,60}$/, MM17_REG = /^\d{4,12}$/;
++const MM17_PHOTO_MAX = 2_200_000;
++async function mm17Raw() { return (await projects())[MM_PROJECT] || null; }
++const mm17Hash = e => createHash('sha256').update('mymismo-scan:' + String(e).toLowerCase()).digest('hex').slice(0, 20);
++/* a staff sign-in that may scan: role 'staff' or 'facilitator', or an error response */
++async function mm17Staff(headers) {
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  const t = auth.startsWith('Bearer ') && process.env.AUTH_SECRET ? verifyToken(auth.slice(7).trim(), process.env.AUTH_SECRET) : { error: 'NO' };
++  if (t.error || !t.sub || t.kind) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
++  const dir = await loadAccess(); if (dir.error) return { error: respond(502, { error: 'UNAVAILABLE' }) };
++  const person = personByEmail(dir.people, t.sub);
++  if (!person || isExpired(person) || tokenIsStale(t, person)) return { error: respond(401, { error: 'SIGN_IN', message: 'Please sign in again.' }) };
++  const acc = person.access || {}, admin = person.platformAdmin === true;
++  const can = k => admin || ['admin', 'staff'].includes(normaliseRole(acc[k]));
++  if (!can(MM_PROJECT)) return { error: respond(403, { error: 'NOT_ALLOWED', message: 'Scanning is for MISMO staff and facilitators.' }) };
++  const role = admin || can('summit-hq') ? 'staff' : can('meeting-trackers') ? 'facilitator' : '';
++  return { email: String(t.sub).toLowerCase(), name: mmStr(person.name || t.sub, 120), role };
++}
++function mm17Summit(v) { const s = mmStr(v, 31); return MM_SUMMIT.test(s) ? s : ''; }
++function mm17Person(feed, summit, reg) {
++  const s = feed.summits && feed.summits[summit]; const p = s && s.byReg && s.byReg.get(reg);
++  return p ? { name: `${p.first} ${p.last}`.trim(), title: p.title, company: p.company } : null;
++}
++async function mm17Route(method, subPath, event, proj, headers) {
++  const raw = await mm17Raw();
++  const photos = subPath === '/photos' || subPath.startsWith('/photos/');
++  if (!raw || (photos ? raw.photos !== true : raw.scan !== true)) return respond(404, { error: 'NOT_FOUND' });
++  const mm = await mmConfig(proj).catch(() => null); if (!mm) return respond(404, { error: 'NOT_FOUND' });
++  proj = mm;
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN', message: 'MyMISMO only works from MISMO’s own site.' });
++  if (!process.env.AUTH_SECRET) return respond(500, { error: 'NO_AUTH_SECRET' });
++  return photos ? mm17Photos(method, subPath, event, proj, headers, raw) : mm17Scan(method, subPath, event, proj, headers);
++}
++async function mm17Scan(method, subPath, event, proj, headers) {
++  const want = { '/scan/me': 'GET', '/scan/lookup': 'POST', '/scan/checkins': method === 'GET' ? 'GET' : 'POST', '/scan/notes': method === 'GET' ? 'GET' : 'POST' }[subPath];
++  if (!want) return respond(404, { error: 'NOT_FOUND' });
++  if (method !== want) return respond(405, { error: 'METHOD' });
++  const who = await mm17Staff(headers); if (who.error) return who.error;
++  if (!who.role) return respond(403, { error: 'NOT_ALLOWED', message: 'Scanning is for MISMO staff and facilitators.' });
++  const now = Date.now(), branch = proj.branch || 'main', q = event.queryStringParameters || {};
++  if (subPath === '/scan/me') return respond(200, { role: who.role, name: who.name });
++  if (method === 'GET') {
++    if (!mmAllowed('scanread', who.email, MM17_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
++    const summit = mm17Summit(q.summit); if (!summit) return respond(400, { error: 'INVALID' });
++    if (subPath === '/scan/checkins') {
++      const r = await readFile(proj.repo, branch, `scan/${summit}/checkins.json`); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++      const since = Number(q.since) || 0, feed = await mmFeed(proj);
++      const items = Object.entries((r.data && r.data.docs) || {}).filter(([, c]) => c && (c.saved || 0) > since).map(([id, c]) => {
++        const p = c.reg && !feed.error ? mm17Person(feed, summit, c.reg) : null;
++        return { id, ses: c.ses, reg: c.reg || '', name: (p && p.name) || c.name || '', company: (p && p.company) || c.company || '', manual: c.manual === true, at: c.at };
++      });
++      return respond(200, { items, now });
++    }
++    const r = await readFile(proj.repo, branch, `scan/${summit}/notes/${mm17Hash(who.email)}.json`); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++    return respond(200, { items: Object.entries((r.data && r.data.docs) || {}).map(([id, n]) => ({ id, ...n })) });
++  }
++  if (String(event.body || '').length > 64_000) return respond(413, { error: 'TOO_LARGE' });   /* a batch of check-ins is bigger than MyMISMO's usual 16 KB */
++  const parsed = parseBody(event, 64_000); if (parsed.error) return parsed.error;
++  const b = parsed.body && typeof parsed.body === 'object' && !Array.isArray(parsed.body) ? parsed.body : {}, summit = mm17Summit(b.summit); if (!summit) return respond(400, { error: 'INVALID', problems: ['Which summit?'] });
++  if (subPath === '/scan/lookup') {
++    if (!mmAllowed('lookup', who.email, MM17_LIMITS.lookup, now)) return respond(429, { error: 'TOO_MANY' });
++    const regs = (Array.isArray(b.regs) ? b.regs : []).map(x => mmStr(x, 12)).filter(x => MM17_REG.test(x)).slice(0, 50);
++    const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE' });
++    const people = {}; regs.forEach(x => { const p = mm17Person(feed, summit, x); if (p) people[x] = p; });
++    return respond(200, { people });
++  }
++  if (subPath === '/scan/checkins') {
++    if (!mmAllowed('checkins', who.email, MM17_LIMITS.checkins, now)) return respond(429, { error: 'TOO_MANY' });
++    const items = (Array.isArray(b.items) ? b.items : []).slice(0, 200).map(c => c && typeof c === 'object' ? {
++      id: mmStr(c.id, 40), ses: mmStr(c.ses, 60), reg: MM17_REG.test(mmStr(c.reg, 12)) ? mmStr(c.reg, 12) : '',
++      name: mmStr(c.name, 120), title: mmStr(c.title, 120), company: mmStr(c.company, 120), manual: c.manual === true,
++      at: Number.isFinite(Number(c.at)) ? Math.min(Number(c.at), now) : now } : null)
++      .filter(c => c && MM17_ID.test(c.id) && MM17_SES.test(c.ses) && (c.reg || c.name));
++    if (!items.length) return respond(400, { error: 'INVALID', problems: ['Nothing to check in.'] });
++    let saved = 0, have = 0;
++    const w = await updateRepoJson(proj.repo, proj.branch || 'main', `scan/${summit}/checkins.json`, d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; saved = 0;
++      for (const c of items) { if (d.docs[c.id]) continue; const { id, ...rest } = c; d.docs[id] = { ...rest, by: who.email, saved: now }; saved++; }
++      have = Object.keys(d.docs).length; return d;
++    }, 'MyMISMO check-ins').catch(() => null);
++    if (!w || w.error) return respond(502, { error: 'NOT_SAVED', message: 'Kept on this phone; it’ll send when it can.' });
++    return respond(200, { ok: true, saved, have });
++  }
++  /* /scan/notes: Who I Met and Log a Touchpoint */
++  if (!mmAllowed('notes', who.email, MM17_LIMITS.notes, now)) return respond(429, { error: 'TOO_MANY' });
++  const items = (Array.isArray(b.items) ? b.items : []).slice(0, 100).map(n => n && typeof n === 'object' ? {
++    id: mmStr(n.id, 40), kind: n.kind === 'touch' ? 'touch' : n.kind === 'met' ? 'met' : '', reg: MM17_REG.test(mmStr(n.reg, 12)) ? mmStr(n.reg, 12) : '',
++    name: mmStr(n.name, 120), title: mmStr(n.title, 120), company: mmStr(n.company, 120), rate: ['Hot', 'Warm', 'Cold'].includes(n.rate) ? n.rate : '',
++    note: mmStr(n.note, 1000), email: mmEmailOk(mmStr(n.email, 254)) ? mmStr(n.email, 254) : '', at: Number.isFinite(Number(n.at)) ? Math.min(Number(n.at), now) : now, deleted: n.deleted === true } : null)
++    .filter(n => n && MM17_ID.test(n.id) && n.kind && (n.reg || n.name || n.deleted));
++  if (items.some(n => n.kind === 'touch') && who.role !== 'staff') return respond(403, { error: 'NOT_ALLOWED', message: 'Touchpoints are for MISMO staff.' });
++  if (!items.length) return respond(400, { error: 'INVALID', problems: ['Nothing to save.'] });
++  const w = await updateRepoJson(proj.repo, proj.branch || 'main', `scan/${summit}/notes/${mm17Hash(who.email)}.json`, d => {
++    d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; d.by = who.email;
++    for (const n of items) { const { id, deleted, ...rest } = n; if (deleted) delete d.docs[id]; else d.docs[id] = { ...rest, saved: now }; }
++    return d;
++  }, 'MyMISMO scans').catch(() => null);
++  if (!w || w.error) return respond(502, { error: 'NOT_SAVED', message: 'Kept on this phone; it’ll send when it can.' });
++  const touch = items.filter(n => n.kind === 'touch' || n.deleted);
++  if (touch.length) {
++    const t = await updateRepoJson(proj.repo, proj.branch || 'main', `scan/${summit}/touchpoints.json`, d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++      for (const n of touch) { const { id, deleted, kind, ...rest } = n; if (deleted || kind !== 'touch') { if (d.docs[id] && d.docs[id].by === who.email) delete d.docs[id]; } else d.docs[id] = { ...rest, by: who.email, byName: who.name, saved: now }; }
++      return d;
++    }, 'MyMISMO touchpoints').catch(() => null);
++    if (!t || t.error) return respond(200, { ok: true, saved: items.length, warning: 'Saved, but the touchpoint list for Member 360 couldn’t be updated. It will be next time.' });
++  }
++  return respond(200, { ok: true, saved: items.length });
++}
++async function mm17Photos(method, subPath, event, proj, headers, raw) {
++  const now = Date.now(), branch = proj.branch || 'main', q = event.queryStringParameters || {};
++  if (subPath === '/photos') {
++    if (method !== 'POST') return respond(405, { error: 'METHOD' });
++    if (String(event.body || '').length > MM17_PHOTO_MAX + 4000) return respond(413, { error: 'TOO_LARGE', message: 'That photo is too large.' });
++    /* who: a signed-in attendee, or anyone with a MISMO Resources sign-in and MyMISMO */
++    let by = null;
++    const auth = headers['authorization'] || headers['Authorization'] || '';
++    const at = auth.startsWith('Bearer ') ? verifyToken(auth.slice(7).trim(), mmSecret()) : { error: 'NO' };
++    if (!at.error && at.kind === 'mymismo-attendee') { const w = mmWho(headers); if (w.error) return w.error; by = { kind: 'attendee', who: w.id, name: mmStr(w.name, 120), summit: w.summit }; }
++    else { const s = await mm17Staff(headers); if (s.error) return s.error; by = { kind: 'staff', who: s.email, name: s.name }; }
++    const parsed = parseBody(event, MM17_PHOTO_MAX + 4000); if (parsed.error) return parsed.error;
++    const b = parsed.body && typeof parsed.body === 'object' ? parsed.body : {};
++    const summit = mm17Summit(b.summit), data = String(b.data || '');
++    const problems = [];
++    if (!summit || (by.summit && by.summit !== summit)) problems.push('Which summit?');
++    if (!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]{1000,2200000}$/.test(data)) problems.push('That photo couldn’t be used.');
++    if (by.kind === 'attendee' && b.consent !== true) problems.push('Please check the box saying MISMO may use the photo.');
++    if (problems.length) return respond(400, { error: 'INVALID', problems });
++    if (!mmAllowed('photo', by.who, MM17_LIMITS.photo, now)) return respond(429, { error: 'TOO_MANY', message: 'That’s a lot of photos in an hour. Please wait a little.' });
++    const id = 'P' + now.toString(36) + randomBytes(3).toString('hex');
++    const p1 = await updateRepoJson(proj.repo, branch, `photos/${summit}/${id}.json`, () => ({ s: data }), 'MyMISMO summit photo').catch(() => null);
++    if (!p1 || p1.error) return respond(502, { error: 'NOT_SAVED', message: 'Your photo couldn’t be sent just now. It’s still on your phone.' });
++    const tags = (Array.isArray(b.tags) ? b.tags : []).map(x => mmStr(x, 80)).filter(Boolean).slice(0, 12);
++    const p2 = await updateRepoJson(proj.repo, branch, `photos/${summit}/index.json`, d => {
++      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {};
++      d.docs[id] = { by: by.kind, who: by.who, name: by.name, caption: mmStr(b.caption, 120), challenge: mmStr(b.challenge, 80), tags, consent: by.kind === 'attendee' ? true : b.consent === true, at: now, status: 'new' };
++      return d;
++    }, 'MyMISMO summit photo').catch(() => null);
++    if (!p2 || p2.error) return respond(502, { error: 'NOT_SAVED', message: 'Your photo couldn’t be sent just now. It’s still on your phone.' });
++    return respond(200, { ok: true, id });
++  }
++  /* reviewers only */
++  const want = { '/photos/list': 'GET', '/photos/one': 'GET', '/photos/review': 'POST', '/photos/send': 'POST' }[subPath];
++  if (!want) return respond(404, { error: 'NOT_FOUND' });
++  if (method !== want) return respond(405, { error: 'METHOD' });
++  const s = await mm17Staff(headers); if (s.error) return s.error;
++  const reviewers = (Array.isArray(raw.mediaReviewers) ? raw.mediaReviewers : []).map(x => String(x).toLowerCase());
++  if (!reviewers.includes(s.email)) return respond(403, { error: 'NOT_ALLOWED', message: 'Only the people Jonna named can review summit photos.' });
++  if (!mmAllowed(method === 'GET' ? 'scanread' : 'review', s.email, method === 'GET' ? MM17_LIMITS.read : MM17_LIMITS.review, now)) return respond(429, { error: 'TOO_MANY' });
++  if (method === 'GET') {
++    const summit = mm17Summit(q.summit); if (!summit) return respond(400, { error: 'INVALID' });
++    if (subPath === '/photos/one') {
++      const id = mmStr(q.id, 40); if (!/^P[a-z0-9]{6,20}$/.test(id)) return respond(400, { error: 'INVALID' });
++      const r = await readFile(proj.repo, branch, `photos/${summit}/${id}.json`); if (r.status !== 200 || !r.data || !r.data.s) return respond(404, { error: 'NOT_FOUND' });
++      return respond(200, { s: String(r.data.s) });
++    }
++    const r = await readFile(proj.repo, branch, `photos/${summit}/index.json`); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++    const items = Object.entries((r.data && r.data.docs) || {}).map(([id, p]) => ({ id, ...p, who: p.by === 'staff' ? p.who : undefined })).sort((a, c) => c.at - a.at);
++    return respond(200, { items });
++  }
++  const pre = mmPre(event, proj, headers); if (pre.error) return pre.error;
++  const b = pre.body, summit = mm17Summit(b.summit); if (!summit) return respond(400, { error: 'INVALID' });
++  if (subPath === '/photos/review') {
++    const id = mmStr(b.id, 40), status = ['new', 'picked', 'passed'].includes(b.status) ? b.status : '';
++    if (!/^P[a-z0-9]{6,20}$/.test(id) || !status) return respond(400, { error: 'INVALID' });
++    let found = false;
++    const w = await updateRepoJson(proj.repo, branch, `photos/${summit}/index.json`, d => {
++      const p = d.docs && d.docs[id]; if (!p || p.status === 'sent') throw new Error('stop'); found = true;
++      p.status = status; p.note = mmStr(b.note, 500); p.reviewedBy = s.email; p.reviewedAt = now; return d;
++    }, 'MyMISMO summit photo reviewed').catch(() => null);
++    if (!found) return respond(404, { error: 'NOT_FOUND' });
++    if (!w || w.error) return respond(502, { error: 'NOT_SAVED' });
++    return respond(200, { ok: true });
++  }
++  /* /photos/send: the picks to MISMO Media, only when a reviewer presses Send */
++  if (!mmAllowed('send', s.email, MM17_LIMITS.send, now)) return respond(429, { error: 'TOO_MANY' });
++  const inbox = mm17Inbox(raw.mediaInbox); if (!inbox) return respond(503, { error: 'NOT_SET_UP', message: 'MISMO Media’s inbox isn’t set up yet.' });
++  const r = await readFile(proj.repo, branch, `photos/${summit}/index.json`); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++  const picks = Object.entries((r.data && r.data.docs) || {}).filter(([, p]) => p && p.status === 'picked');
++  if (!picks.length) return respond(400, { error: 'NOTHING_PICKED', message: 'Pick some photos first.' });
++  const batch = new Date(now).toISOString().replace(/[-:]/g, '').slice(0, 15) + '-' + randomBytes(2).toString('hex'), sent = [];
++  for (const [id, p] of picks) {
++    const f = await readFile(proj.repo, branch, `photos/${summit}/${id}.json`); if (f.status !== 200 || !f.data || !f.data.s) continue;
++    const b64 = String(f.data.s).replace(/^data:image\/jpeg;base64,/, '');
++    const { status } = await github('PUT', `/repos/${inbox.repo}/contents/${inbox.dir}/${summit}/${batch}/${id}.jpg`, { message: 'Summit photo from MyMISMO', content: b64, branch: inbox.branch });
++    if (status !== 200 && status !== 201) return respond(502, { error: 'NOT_SENT', message: 'The photos couldn’t be sent to MISMO Media just now. Please try again.' });
++    sent.push({ id, file: `${batch}/${id}.jpg`, by: p.by, name: p.name, caption: p.caption || '', challenge: p.challenge || '', tags: p.tags || [], note: p.note || '', consent: p.consent === true, at: p.at });
++  }
++  if (!sent.length) return respond(502, { error: 'NOT_SENT' });
++  const idx = await updateRepoJson(inbox.repo, inbox.branch, `${inbox.dir}/${summit}/${batch}.json`, () => ({ summit, sentBy: s.email, sentByName: s.name, sentAt: new Date(now).toISOString(), photos: sent }), 'Summit photos from MyMISMO').catch(() => null);
++  if (!idx || idx.error) return respond(502, { error: 'NOT_SENT', message: 'The photos couldn’t be sent to MISMO Media just now. Please try again.' });
++  await updateRepoJson(proj.repo, branch, `photos/${summit}/index.json`, d => {
++    for (const x of sent) if (d.docs && d.docs[x.id]) { d.docs[x.id].status = 'sent'; d.docs[x.id].batch = batch; d.docs[x.id].sentAt = now; d.docs[x.id].sentBy = s.email; }
++    return d;
++  }, 'MyMISMO summit photos sent to MISMO Media').catch(() => null);
++  return respond(200, { ok: true, batch, count: sent.length });
++}
++/* where MISMO Media's incoming photos go: a repository of the same owner, a plain folder path */
++function mm17Inbox(f) {
++  if (!f || typeof f !== 'object' || Array.isArray(f)) return null;
++  if (typeof f.repo !== 'string' || !/^[^/]+\/[^/]+$/.test(f.repo) || !sameOwner(f.repo, process.env.PROJECTS_REPO)) return null;
++  if (typeof f.dir !== 'string' || !/^[A-Za-z0-9._-]+(\/[A-Za-z0-9._-]+)*$/.test(f.dir) || f.dir.includes('..')) return null;
++  return { repo: f.repo, branch: typeof f.branch === 'string' && /^[A-Za-z0-9._\/-]{1,60}$/.test(f.branch) ? f.branch : 'main', dir: f.dir };
++}
++
+ /* --- slides --- */
+ function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
+ const mm14slideCache = { at: 0, value: null };
+@@ -4017,6 +4256,7 @@
+     if (method !== 'POST') return respond(405, { error: 'METHOD' });
+     return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
+   }
++  if (proj && proj.key === MM_PROJECT && (subPath.startsWith('/scan/') || subPath === '/photos' || subPath.startsWith('/photos/'))) return mm17Route(method, subPath, event, proj, headers);   /* relay request 17: scanning and Summit Photos */
+   if (subPath.startsWith('/trivia/')) return mm15Route(method, subPath, event, proj, headers);   /* relay request 15: MyMISMO Trivia */
+   if (subPath === '/staff/trivia') {   /* relay request 15: MISMO Trivia in Team HQ */
+     if (!proj || proj.key !== MM_PROJECT) return respond(404, { error: 'NOT_FOUND' });

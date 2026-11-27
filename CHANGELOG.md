@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Snap the Summit is a compact card on the Summit page (a fan of framed photos, the challenge progress) that opens Summit Photos big in its own pop-up. Fixed stray Meeting Trackers text left in Attendance Now.
 - Nov 27, 2026: Summit Photos is now a showpiece: a fan of framed photos (yours once you've taken some), a big orange Take a Photo, and a three-part Photo Challenge (a selfie at the General Sessions, you and someone you just met, your favorite bite in town) with your progress.
 - Nov 27, 2026: The name tag scanner sounds like a grocery store checkout: one bright beep for a good scan, a low buzz for a tag already scanned.
 - Nov 27, 2026: MISMO Link Office Hours shows "Powered By" Viant Eye right under MISMO Link, where a workgroup shows "Sponsored By". The General Sessions card says "See who's on stage, and when" instead of counting sessions and speakers.
