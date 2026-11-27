@@ -1441,8 +1441,12 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .sc-line{position:absolute; left:6%; right:6%; top:50%; height:2px; background:#eb6834; box-shadow:0 0 12px #eb6834; animation:sc-sweep 1.8s ease-in-out infinite alternate}
 @keyframes sc-sweep{from{transform:translateY(-34px)} to{transform:translateY(34px)}}
 .sc-hint{position:absolute; left:0; right:0; bottom:16px; text-align:center; color:#fff; font-weight:700; font-size:14px; text-shadow:0 1px 3px rgba(0,0,0,.6)}
-.sc-flash{position:absolute; inset:0; background:#2fd08a; opacity:0; pointer-events:none} .sc-flash.go{animation:sc-flash .5s ease-out}
-@keyframes sc-flash{30%{opacity:.55}}
+.sc-flash{position:absolute; inset:0; display:grid; place-items:center; background:rgba(47,208,138,.0); opacity:0; pointer-events:none}
+.sc-flash span{display:grid; justify-items:center; gap:8px; color:#fff; transform:scale(.6)} .sc-flash svg{width:64px; height:64px; padding:12px; border-radius:50%; background:#0f7b5c; box-shadow:0 0 0 10px rgba(255,255,255,.25)} .sc-flash b{font-size:22px; text-shadow:0 2px 6px rgba(0,0,0,.4)}
+.sc-flash.go{opacity:1; background:rgba(47,208,138,.55); animation:sc-flash .7s ease-out both} .sc-flash.go span{animation:sc-pop .45s cubic-bezier(.2,.9,.3,1.4) forwards}
+@keyframes sc-flash{0%{background:rgba(255,255,255,.95)} 25%{background:rgba(47,208,138,.6)} 100%{background:rgba(47,208,138,.45)}}
+@keyframes sc-pop{to{transform:none}}
+.sc-snd{position:absolute; right:12px; top:12px; z-index:2; display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border-radius:9px; border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.45); color:#fff; font:inherit; font-size:12.5px; font-weight:700; cursor:pointer} .sc-snd svg{width:16px; height:16px} .sc-snd[aria-pressed="false"]{opacity:.7}
 .sc-pad{display:grid; gap:12px; color:#fff}
 .sc-acts{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px} .sc-acts .btn{display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 6px; font-size:12.5px; font-weight:700; background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.2)} .sc-acts svg{width:22px; height:22px}
 .sc-fine{margin:0; font-size:12.5px; color:var(--ink-3); line-height:1.45} .sc-sheet .sc-fine{color:rgba(255,255,255,.6)}
@@ -3150,11 +3154,20 @@ function c39Svg(v) {
 function scanSheet() {
   if (!PV.state) loadPreviewAttendees();
   var el = openSheet('Scan a Name Tag', '<div class="scx"><div class="sc-cam"><video playsinline muted></video><canvas hidden></canvas>' +
-    '<div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><div class="sc-hint">Line up the barcode on the name tag inside the box</div><div class="sc-flash"></div></div>' +
+    '<div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><div class="sc-hint">Line up the barcode on the name tag inside the box</div>' +
+    '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
+    '<div class="sc-flash"><span>' + icon('i-check') + '<b>Got It</b></span></div></div>' +
     '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div>' +
     '<div class="sc-acts"><button type="button" class="btn" data-sc-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button><button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button></div>' +
     '<p class="sc-fine">Staff test: scans stay on this phone. When scanning goes live, engagement conversations go to Member 360 and sponsors\' leads go to that sponsor.</p></div></div>', { plain: true });
   el.classList.add('sc-sheet');
+  /* the beep: a short scanner chirp, made on the phone (no sound file); the sound is set up on the tap that opened the
+     scanner, which phones need before they'll play anything */
+  var AC = null; try { var ACx = window.AudioContext || window.webkitAudioContext; if (ACx) { AC = new ACx(); AC.resume && AC.resume(); } } catch (e) {}
+  function beep() {
+    if (!AC || !load('scan-beep', true)) return;
+    try { [[1320, 0], [1760, .09]].forEach(function (n) { var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + n[1]; o.type = 'square'; o.frequency.value = n[0]; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + .08); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + .09); }); } catch (e) {}
+  }
   var v = el.querySelector('video'), cv = el.querySelector('canvas'), ctx = cv.getContext('2d', { willReadFrequently: true }), stream = null, alive = true, seen = {}, det = null, busy = false;
   var msg = function (h) { el.querySelector('.sc-msg').innerHTML = h; };
   function stop() { alive = false; if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; }
@@ -3162,9 +3175,9 @@ function scanSheet() {
   var mo = new MutationObserver(function () { if (!el.isConnected) { stop(); mo.disconnect(); } }); mo.observe(document.body, { childList: true, subtree: true });
   function found(n) {
     if (!alive) return; stop();
-    try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
+    beep(); try { navigator.vibrate && navigator.vibrate([40, 30, 40]); } catch (e) {}   /* a buzz too, on phones that allow it */
     var f = el.querySelector('.sc-flash'); f.classList.add('go');
-    setTimeout(function () { leadSheet({ reg: n, at: Date.now() }, true); }, 350);
+    setTimeout(function () { leadSheet({ reg: n, at: Date.now() }, true); }, 700);
   }
   function scanFrame() {
     if (!alive || !v.videoWidth) return;
@@ -3194,6 +3207,8 @@ function scanSheet() {
     if (e.target.closest('[data-sc-type]')) {
       var n = prompt('The number under the barcode on the name tag:'); n = String(n || '').replace(/\D/g, ''); if (n) found(n); return;
     }
+    var sb = e.target.closest('[data-sc-snd]');
+    if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on) beep(); return; }
     if (e.target.closest('[data-sc-badge]')) { stop(); testBadge(); return; }
     if (e.target.closest('[data-sc-list]')) { stop(); scansSheet(); }
   });

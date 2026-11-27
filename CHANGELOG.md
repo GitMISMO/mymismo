@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Name tag scanning: a successful scan now flashes the screen green with a big check and "Got It", plays a short scanner beep (Beep On / Off on the camera screen, remembered) and buzzes on phones that allow it.
 - Nov 27, 2026: Summit tile: the Platinum Sponsors strip is clear glass, and the city art now stops just above it, so the New Orleans streetcar runs where you can see it.
 - Nov 27, 2026: Name tag scanning (staff test): Scan a Name Tag on the Summit page reads the name tag's barcode with the camera, shows who it is from Summit HQ's attendee list, and keeps a note, Hot / Warm / Cold and an email only if they gave it; My Scans with Download; My Test Badge. Scans stay on the phone for now. My Profile: Share My Email with Sponsors Who Scan My Name Tag (off unless turned on).
 - Nov 27, 2026: Walk Me There: a walkthrough on the hotel's floor map. Pick a room (or a session's Walk There) and a starting point; a dot walks the hallways, the map follows it up the floors, and step cards say where to go. Elevators-only option. Routes traced from the hotel's map, to be checked once on site.
