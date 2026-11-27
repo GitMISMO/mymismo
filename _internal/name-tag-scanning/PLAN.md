@@ -73,5 +73,5 @@ Test Badge screen; scans stay on the phone that scanned until the relay part is 
 - **Session picker**: a big button showing the session name, day, time and room; it opens Pick a Session, with day
   buttons, search, the session on now marked On Now, and the facilitator's own sessions at the top under Yours once
   Summit HQ's check-in list carries a `facilitator` field (CN-058).
-- **Meeting Trackers**: staff and facilitators open the live Meeting Trackers (every meeting, any time) from the Scan tab
-  and from Attendance Now.
+- **Attendance Now**: staff and facilitators both see every session and workgroup, not just their own (Jonna: no
+  Meeting Trackers link needed).

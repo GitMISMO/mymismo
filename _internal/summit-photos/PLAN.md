@@ -5,11 +5,11 @@ ability to take photos and review the summit photo submissions to send to MISMO 
 post for amy to review and determine if she wants to post?"
 
 ## Built (in the app now; phone-only until the relay part is live)
-- **Summit Photos card** on the Summit page: Take a Selfie, Take a Photo, From My Photos, and a **Photo Challenge** strip
+- **Summit Photos card** on the Summit page: Take a Photo, From My Photos, See the Frames, and a **Photo Challenge** strip
   (a selfie at the General Sessions, you and someone you just met, your workgroup, a New Orleans bite, the streetcar,
   your team, something you learned). Tapping a challenge opens the selfie camera with it chosen.
-- **Your Photo**: the photo cropped to 4:5 (Instagram and LinkedIn friendly) with a frame: Summit Frame (navy band with
-  the MISMO logo, the city, the summit and its dates), Corner Badge, or No Frame. Caption, Photo Challenge, Who's In It
+- **Your Photo**: the photo cropped to 4:5 (Instagram and LinkedIn friendly) with a frame: Summit Pass, Night Out, Postcard,
+  Instant, Name Badge or No Frame (drawn from the app's city art, logo, navy and sky). See the Frames previews them all. Caption, Photo Challenge, Who's In It
   (names from Who I Met suggested). Save to My Photos (also downloads it), Share (the phone's own share sheet), and
   **Send to MISMO**, which needs the box "MISMO may use this photo in its posts and newsletter, and everyone in it is OK
   with that."
@@ -27,3 +27,5 @@ post for amy to review and determine if she wants to post?"
   picks to MISMO Media's incoming folder. Rate limit per person. To be added to the scanning relay request.
 - **MISMO Media** (CN-057): an incoming Summit Photos list on its Summits tab; a draft post per batch for Amy.
 - Photos never show to other attendees in the app unless MISMO picks them (a summit gallery can come later).
+
+- Once the summit starts, the Summit Photos card sits right under the Sponsors, Sessions, Speakers, Starred buttons.

@@ -1532,7 +1532,6 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ps-row em{font-style:normal; font-size:11.5px; font-weight:800; color:#fff; background:#0f7b5c; border-radius:6px; padding:4px 7px} .ps-row svg{width:20px; height:20px; color:#0f7b5c}
 .ps-row.sel{border-color:#0d314c; box-shadow:0 0 0 1px #0d314c inset} .ps-row.on{border-color:#2fd08a}
 .sct-two.three > :first-child{grid-column:1 / -1}
-.an-tr{width:100%; margin:0 0 14px} .an-tr svg.go{margin-left:auto; width:18px; height:18px}
 /* ---------- Summit Photos (Jonna, Nov 27, 2026) ---------- */
 .ph-card{grid-template-columns:minmax(0, 1fr); min-width:0; border:1px solid var(--border); border-radius:16px; background:linear-gradient(160deg, #fff6ee, var(--surface) 55%); padding:16px; display:grid; gap:14px}
 :root[data-theme="dark"] .ph-card{background:linear-gradient(160deg, #2a2117, var(--surface) 55%)}
@@ -1561,6 +1560,13 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .phr-meta textarea{min-height:56px; margin-top:4px; font-size:14px}
 .phr-acts{display:flex; gap:8px; flex-wrap:wrap; align-self:end} .phr-acts .btn{padding:8px 12px}
 .phr-send{width:100%; justify-content:center}
+.ph-frs{display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:2px 16px 4px}
+.ph-frs button, .phf-grid button{flex:none; display:grid; gap:6px; justify-items:center; padding:6px; border:2px solid transparent; border-radius:12px; background:none; color:var(--ink-2); font:inherit; font-size:12.5px; font-weight:700; cursor:pointer}
+.ph-frs canvas{width:86px; height:auto; border-radius:6px; box-shadow:0 2px 8px rgba(13,49,76,.25)}
+.ph-frs button[aria-pressed="true"], .phf-grid button[aria-pressed="true"]{border-color:#d95926; color:var(--ink)}
+.phf-big{background:#071d2e; padding:14px; display:grid; place-items:center} .phf-big canvas{width:min(78%, 300px); height:auto; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.phf-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px} .phf-grid canvas{width:100%; height:auto; border-radius:6px; box-shadow:0 2px 8px rgba(13,49,76,.25)}
+.sct-wide{width:100%; margin-top:10px} .sct-wide svg.go{margin-left:auto; width:18px; height:18px}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -2430,11 +2436,12 @@ function renderHome() {
     '<div class="flip" id="flip">' + flip + '</div></div>' +
     /* Jonna, Nov 26, 2026: under the header, each in its own box; Nov 27: no numbers, just the cards */
     '<div class="pass-figs">' +
+      '<button type="button" data-sponsors>' + icon('i-handshake') + '<span>Sponsors</span></button>' +
       '<button type="button" data-go="agenda">' + icon('i-agenda') + '<span>Sessions</span></button>' +
       '<button type="button" data-go="people">' + icon('i-people') + '<span>Speakers</span></button>' +
-      '<button type="button" data-sponsors>' + icon('i-handshake') + '<span>Sponsors</span></button>' +
       '<button type="button" data-go="mine">' + icon('i-star') + '<span>Starred</span></button>' +
     '</div>' +
+    (during ? photosCard() : '') +   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
     nextCard('home');
 
   var gsl = gsSession();
@@ -2461,7 +2468,7 @@ function renderHome() {
       (ppl.length ? '<div class="ph" style="grid-template-columns:repeat(' + ppl.length + ',1fr)">' + ppl.map(function (p) { return '<img src="' + esc(p.photo) + '" alt="" loading="lazy">'; }).join('') + '</div>' : '') +
       '<div class="tx"><b>' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' Sessions, ' + gsPeople().length + ' Speakers</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
   }
-  h += photosCard();
+  if (!during) h += photosCard();
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
   /* Jonna, Nov 26, 2026: when the agenda last changed in Summit HQ, and when this phone last got it (the server's time
@@ -2743,7 +2750,7 @@ function renderScanTab() {
     '<button type="button" class="sct-hero" data-scan><span class="sct-ic">' + icon('i-scan') + '</span><span><b>Scan Name Tags</b><span>Point your camera at the barcode on someone\'s name tag</span></span>' + icon('i-chev', 'go') + '</button>' +
     '<div class="sct-two' + (modes.length === 3 ? ' three' : '') + '">' + card('checkin', 'i-check', 'Workgroup Check‑In', 'Scan name tags at the door') + card('met', 'i-people', 'Who I Met', 'Remember someone, with a note') +
       (modes.indexOf('touch') >= 0 ? card('touch', 'i-handshake', 'Log a Touchpoint', 'A member conversation, for Member 360') : '') + '</div>' +
-    '<div class="sct-two"><button type="button" class="scan-ci" data-attend>' + icon('i-chart') + '<span><b>Attendance Now</b><span>Live counts at the summit</span></span></button><button type="button" class="scan-ci" data-trackers>' + icon('i-agenda') + '<span><b>Meeting Trackers</b><span>Every meeting, any time</span></span></button></div>' +
+    '<button type="button" class="scan-ci sct-wide" data-attend>' + icon('i-chart') + '<span><b>Attendance Now</b><span>Live counts for every session and workgroup</span></span>' + icon('i-chev', 'go') + '</button>' +
     '<div class="sct-h"><h3 class="wg-h">My Scans</h3>' + (l.length ? '<button type="button" class="linkbtn" data-scans>See All' + icon('i-chev') + '</button>' : '') + '</div>' +
     (l.length ? '<div class="scl">' + l.slice(0, 4).map(function (x) { var d = new Date(x.at), w = x.reg ? regLookup(x.reg) : null;
         return '<button type="button" class="scl-row" data-scans><span class="scl-r r-' + esc((x.rate || 'none').toLowerCase()) + '">' + esc(x.rate || '–') + '</span><span class="scl-t"><b>' + esc(x.name || (w && w.name) || 'Registration ' + x.reg) + '</b><span>' + esc([x.company || (w && w.company), scanKind(x)].filter(Boolean).join(', ')) + '</span></span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</i></button>'; }).join('') + '</div>'
@@ -3594,36 +3601,138 @@ function phLogoImg(cb) {
   var im = new Image(); im.onload = function () { cb(im); }; im.onerror = function () { cb(null); };
   im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
-/* draws the photo, cropped to 4:5, with the chosen frame */
-function phDraw(cv, img, frame, cap, logo) {
-  var W = 1080, H = 1350, x = cv.getContext('2d'); cv.width = W; cv.height = H;
-  var ff = getComputedStyle(document.body).fontFamily;
-  var band = frame === 'band' ? 250 : 0, ph = H - band;
-  var r = Math.max(W / img.width, ph / img.height), w = img.width * r, h = img.height * r;
+/* ---------- Summit photo frames (Jonna, Nov 27, 2026: "make the frames visually super amazing as well as on brand").
+   Drawn on the phone at 1080 x 1350 (4:5, right for Instagram and LinkedIn) from the app's own art: the city scene, the
+   MISMO logo, navy and sky. ---------- */
+var PH_FRAMES = [['pass', 'Summit Pass'], ['night', 'Night Out'], ['postcard', 'Postcard'], ['instant', 'Instant'], ['badge', 'Name Badge'], ['none', 'No Frame']];
+var PH_ART = null;
+function phImg(svg, cb) { var im = new Image(); im.onload = function () { cb(im); }; im.onerror = function () { cb(null); }; im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }
+function phArtSvg(clear) {
+  var s = cityArt(S.place || '', clear ? { ground: false } : {}) || heroArt(clear ? { ground: false } : {});
+  return s.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" ').replace(/<g class="no-car">/, '<g transform="translate(820,470)">').replace(/<g fill="none" stroke="#ffffff" stroke-linecap="round" class="ha-run">[\s\S]*?<\/g>/, '');
+}
+function phAssets(cb) {
+  if (PH_ART) { cb(PH_ART); return; }
+  var a = {}, left = 3;
+  function done() { if (--left) return; var f = (document.fonts && document.fonts.load) ? Promise.all(['700 100px "IBM Plex Sans Condensed"', '600 40px "IBM Plex Sans"', 'italic 500 40px "IBM Plex Sans"'].map(function (q) { return document.fonts.load(q).catch(function () {}); })) : Promise.resolve();
+    f.then(function () { PH_ART = a; cb(a); }); }
+  phLogoImg(function (l) { a.logo = l; done(); });
+  phImg(phArtSvg(false), function (i) { a.art = i; done(); });
+  phImg(phArtSvg(true), function (i) { a.clear = i; done(); });
+}
+function phShort() { if (!S.first) return ''; var a = dparts(S.first), b = dparts(S.last || S.first); return MON[a.m - 1] + ' ' + a.d + (S.last && S.last !== S.first ? '–' + (b.m !== a.m ? MON[b.m - 1] + ' ' : '') + b.d : ''); }
+function phDraw(cv, img, frame, cap, A0, scale) {
+  scale = scale || 1; var W = 1080, H = 1350, x = cv.getContext('2d'); cv.width = Math.round(W * scale); cv.height = Math.round(H * scale);
+  x.setTransform(scale, 0, 0, scale, 0, 0); x.textBaseline = 'alphabetic';
+  var as = A0 || {}, COND = '"IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif', SANS = '"IBM Plex Sans", -apple-system, sans-serif';
+  var name = (S.summit && S.summit.name) || 'MISMO Summit', city = S.place || 'The Summit', dates = phDates(), yr = (/\d{4}/.exec(name) || [''])[0], season = name.replace(/\d{4}/, '').trim();
+  function rr(a, b, w, h, r) { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); }
+  function cover(im, a, b, w, h, ay) { if (!im) return; var r = Math.max(w / im.width, h / im.height), iw = w / r, ih = h / r; x.drawImage(im, (im.width - iw) / 2, (im.height - ih) * (ay === undefined ? .5 : ay), iw, ih, a, b, w, h); }
+  function fit(t, weight, size, fam, max) { x.font = weight + ' ' + size + 'px ' + fam; while (x.measureText(t).width > max && size > 20) { size -= 2; x.font = weight + ' ' + size + 'px ' + fam; } return size; }
+  function plate(a, b, w) { var h = w * 108 / 708; x.save(); x.shadowColor = 'rgba(0,0,0,.25)'; x.shadowBlur = 18; x.fillStyle = '#fff'; rr(a, b, w + 36, h + 26, 10); x.fill(); x.restore(); if (as.logo) x.drawImage(as.logo, a + 18, b + 13, w, h); }
+  function capOn(a, b, maxw, color) { if (!cap) return; x.save(); x.font = 'italic 500 40px ' + SANS; fit(cap, 'italic 500', 40, SANS, maxw); x.fillStyle = color || '#fff'; x.shadowColor = 'rgba(0,0,0,.55)'; x.shadowBlur = 14; x.fillText(cap, a, b); x.restore(); }
   x.fillStyle = '#071d2e'; x.fillRect(0, 0, W, H);
-  x.drawImage(img, (W - w) / 2, (ph - h) / 2, w, h);
-  var name = (S.summit && S.summit.name) || 'MISMO Summit', where = S.place || '';
-  if (frame === 'band') {
-    var g = x.createLinearGradient(0, ph, 0, H); g.addColorStop(0, '#0e3a5c'); g.addColorStop(1, '#071d2e');
-    x.fillStyle = g; x.fillRect(0, ph, W, band); x.fillStyle = '#74bfeb'; x.fillRect(0, ph, W, 8);
-    x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(56, ph + 62, 300, 74, 10) : x.rect(56, ph + 62, 300, 74); x.fill();
-    if (logo) x.drawImage(logo, 76, ph + 80, 260, 260 * 108 / 708);
-    x.textAlign = 'right'; x.fillStyle = '#ffffff'; x.font = '800 64px ' + ff; x.fillText(where || name, W - 56, ph + 112);
-    x.fillStyle = '#a9d8f3'; x.font = '600 34px ' + ff; x.fillText(name + (phDates() ? ', ' + phDates() : ''), W - 56, ph + 166);
-    if (cap) { x.fillStyle = '#cfe3f1'; x.font = 'italic 500 30px ' + ff; x.fillText(cap.slice(0, 60), W - 56, ph + 212); }
-  } else if (frame === 'badge') {
-    x.font = '800 40px ' + ff; var tw = Math.max(x.measureText(where || name).width, 260) + 60;
-    x.fillStyle = 'rgba(7,29,46,.86)'; x.beginPath(); x.roundRect ? x.roundRect(40, H - 200, tw, 160, 14) : x.rect(40, H - 200, tw, 160); x.fill();
-    x.fillStyle = '#74bfeb'; x.fillRect(40, H - 200, 8, 160);
-    x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(72, H - 178, 200, 48, 8) : x.rect(72, H - 178, 200, 48); x.fill();
-    if (logo) x.drawImage(logo, 84, H - 166, 176, 176 * 108 / 708);
-    x.textAlign = 'left'; x.fillStyle = '#fff'; x.font = '800 40px ' + ff; x.fillText(where || name, 72, H - 88);
-    x.fillStyle = '#a9d8f3'; x.font = '600 26px ' + ff; x.fillText(name, 72, H - 54);
+  if (frame === 'none') { cover(img, 0, 0, W, H); return; }
+  if (frame === 'pass') {
+    var ph = 980; cover(img, 0, 0, W, ph);
+    var sh = x.createLinearGradient(0, ph - 260, 0, ph); sh.addColorStop(0, 'rgba(7,29,46,0)'); sh.addColorStop(1, 'rgba(7,29,46,.55)'); x.fillStyle = sh; x.fillRect(0, ph - 260, W, 260);
+    capOn(60, ph - 48, W - 120);
+    cover(as.art, 0, ph, W, H - ph, .62);
+    var ov = x.createLinearGradient(0, 0, W, 0); ov.addColorStop(0, 'rgba(6,23,36,.95)'); ov.addColorStop(.55, 'rgba(6,23,36,.7)'); ov.addColorStop(1, 'rgba(6,23,36,.05)'); x.fillStyle = ov; x.fillRect(0, ph, W, H - ph);
+    var rl = x.createLinearGradient(0, 0, W, 0); rl.addColorStop(0, '#74bfeb'); rl.addColorStop(.6, '#a9d8f3'); rl.addColorStop(1, '#ffffff'); x.fillStyle = rl; x.fillRect(0, ph, W, 10);
+    plate(60, ph + 44, 210);
+    x.fillStyle = '#a9d8f3'; x.font = '700 30px ' + SANS; x.fillText("I'm at the " + name, 360, ph + 94);
+    var cs = fit(city, '700', 132, COND, W - 120); x.fillStyle = '#fff'; x.fillText(city, 56, ph + 152 + cs * .78);
+    x.fillStyle = '#cfe3f1'; x.font = '600 34px ' + SANS; x.fillText(dates, 60, H - 34);
+    return;
   }
+  if (frame === 'night') {
+    cover(img, 0, 0, W, H);
+    var g2 = x.createLinearGradient(0, H - 760, 0, H - 300); g2.addColorStop(0, 'rgba(7,29,46,0)'); g2.addColorStop(1, 'rgba(7,29,46,.97)'); x.fillStyle = g2; x.fillRect(0, H - 760, W, 760);
+    var top = x.createLinearGradient(0, 0, 0, 220); top.addColorStop(0, 'rgba(7,29,46,.55)'); top.addColorStop(1, 'rgba(7,29,46,0)'); x.fillStyle = top; x.fillRect(0, 0, W, 220);
+    if (as.clear) x.drawImage(as.clear, 0, 0, 1200, 560, -150, H - 560 * 1.05, 1200 * 1.05, 560 * 1.05);
+    plate(44, 44, 190);
+    x.save(); x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 24;
+    var ns = fit(city, '700', 150, COND, W - 100); x.fillStyle = '#fff'; x.fillText(city, 48, H - 400);
+    x.fillStyle = '#74bfeb'; x.font = '700 36px ' + SANS; x.fillText(name + ', ' + phShort(), 52, H - 344); x.restore();
+    capOn(52, H - 290, 480, '#e6f4fc');
+    return;
+  }
+  if (frame === 'postcard') {
+    x.fillStyle = '#f6fafd'; x.fillRect(0, 0, W, H);
+    x.save(); rr(40, 40, W - 80, H - 80, 22); x.clip(); cover(img, 40, 40, W - 80, H - 80);
+    var pg = x.createLinearGradient(0, 40, 0, 520); pg.addColorStop(0, 'rgba(7,29,46,.6)'); pg.addColorStop(1, 'rgba(7,29,46,0)'); x.fillStyle = pg; x.fillRect(40, 40, W - 80, 480);
+    var pb = x.createLinearGradient(0, H - 340, 0, H - 40); pb.addColorStop(0, 'rgba(7,29,46,0)'); pb.addColorStop(1, 'rgba(7,29,46,.7)'); x.fillStyle = pb; x.fillRect(40, H - 340, W - 80, 300); x.restore();
+    x.save(); x.shadowColor = 'rgba(0,0,0,.5)'; x.shadowBlur = 12; x.fillStyle = '#fff'; x.font = 'italic 600 48px ' + SANS; x.fillText('Greetings from', 92, 150); x.restore();
+    /* the city in big letters filled with the city scene */
+    var ps = fit(city, '700', 190, COND, 610), off = document.createElement('canvas'); off.width = W; off.height = 300; var o = off.getContext('2d');
+    o.font = '700 ' + ps + 'px ' + COND; o.fillStyle = '#fff'; o.fillText(city, 88, ps * .86 + 20); o.globalCompositeOperation = 'source-in'; var lg = o.createLinearGradient(0, 0, 0, 260); lg.addColorStop(0, '#74bfeb'); lg.addColorStop(1, '#0d314c'); o.fillStyle = lg; o.fillRect(0, 0, W, 300); o.globalCompositeOperation = 'source-atop'; if (as.art) o.drawImage(as.art, 0, 230, 1200, 330, 0, 0, 1200, 330);
+    x.save(); x.font = '700 ' + ps + 'px ' + COND; x.lineJoin = 'round'; x.lineWidth = 16; x.strokeStyle = '#fff'; x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 20; x.strokeText(city, 88, 170 + ps * .86 + 20); x.restore();
+    x.drawImage(off, 0, 170);
+    /* the stamp and its postmark */
+    x.save(); x.translate(888, 150); x.rotate(.06);
+    x.fillStyle = '#fff'; x.shadowColor = 'rgba(0,0,0,.3)'; x.shadowBlur = 16; x.fillRect(-92, -108, 184, 216); x.shadowBlur = 0;
+    x.fillStyle = '#f6fafd'; for (var k = 0; k < 9; k++) { [[-92 + k * 23, -108], [-92 + k * 23, 108]].forEach(function (p) { x.beginPath(); x.arc(p[0] + 11.5, p[1], 7, 0, 7); x.fill(); }); }
+    for (k = 0; k < 10; k++) { [[-92, -108 + k * 24], [92, -108 + k * 24]].forEach(function (p) { x.beginPath(); x.arc(p[0], p[1] + 12, 7, 0, 7); x.fill(); }); }
+    var sg = x.createLinearGradient(0, -90, 0, 90); sg.addColorStop(0, '#14486e'); sg.addColorStop(1, '#071d2e'); x.fillStyle = sg; x.fillRect(-76, -92, 152, 184);
+    if (as.clear) x.drawImage(as.clear, 300, 160, 900, 400, -76, 10, 152, 82);
+    x.fillStyle = '#fff'; rr(-64, -80, 128, 34, 5); x.fill(); if (as.logo) x.drawImage(as.logo, -56, -73, 112, 112 * 108 / 708);
+    x.fillStyle = '#fff'; x.textAlign = 'center'; x.font = '700 50px ' + COND; x.fillText(yr, 0, -2); x.fillStyle = '#a9d8f3'; x.font = '700 19px ' + SANS; x.fillText(season.replace(/ Summit$/i, ''), 0, 22); x.restore();
+    x.save(); x.translate(810, 318); x.rotate(-.18); x.strokeStyle = 'rgba(255,255,255,.9)'; x.lineWidth = 5; x.beginPath(); x.arc(0, 0, 84, 0, 7); x.stroke(); x.lineWidth = 2.5; x.beginPath(); x.arc(0, 0, 70, 0, 7); x.stroke();
+    x.fillStyle = 'rgba(255,255,255,.95)'; x.textAlign = 'center'; fit(city.toUpperCase(), '700', 22, SANS, 112); x.fillText(city.toUpperCase(), 0, -16); x.font = '700 30px ' + COND; x.fillText(phShort(), 0, 18); x.font = '700 18px ' + SANS; x.fillText(yr, 0, 44);
+    x.lineWidth = 4; for (k = 0; k < 4; k++) { x.beginPath(); x.moveTo(96, -30 + k * 20); x.bezierCurveTo(130, -44 + k * 20, 160, -16 + k * 20, 196, -30 + k * 20); x.stroke(); } x.restore();
+    capOn(92, H - 92, W - 184);
+    return;
+  }
+  if (frame === 'instant') {
+    var bg = x.createRadialGradient(W * .7, 200, 50, W * .5, H * .5, 1000); bg.addColorStop(0, '#14486e'); bg.addColorStop(1, '#061722'); x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    x.strokeStyle = 'rgba(116,191,235,.08)'; x.lineWidth = 1; for (var gx = 0; gx < W; gx += 54) { x.beginPath(); x.moveTo(gx, 0); x.lineTo(gx, H); x.stroke(); } for (var gy = 0; gy < H; gy += 54) { x.beginPath(); x.moveTo(0, gy); x.lineTo(W, gy); x.stroke(); }
+    x.fillStyle = '#e6f4fc'; [[90, 120, 3], [980, 90, 2.4], [1010, 300, 2], [60, 520, 2.2], [1030, 760, 2.6], [70, 1010, 2]].forEach(function (s2) { x.globalAlpha = .7; x.beginPath(); x.arc(s2[0], s2[1], s2[2], 0, 7); x.fill(); }); x.globalAlpha = 1;
+    x.save(); x.translate(540, 640); x.rotate(-.035);
+    x.shadowColor = 'rgba(0,0,0,.55)'; x.shadowBlur = 50; x.shadowOffsetY = 22; x.fillStyle = '#fdfdfb'; x.fillRect(-440, -560, 880, 1110); x.shadowColor = 'transparent';
+    x.save(); x.beginPath(); x.rect(-400, -520, 800, 840); x.clip(); cover(img, -400, -520, 800, 840); x.restore();
+    x.fillStyle = 'rgba(0,0,0,.06)'; x.fillRect(-400, -520, 800, 3);
+    x.textAlign = 'center'; var t2 = cap || ('Hello from ' + city + '!'); fit(t2, 'italic 600', 56, SANS, 760); x.fillStyle = '#0d314c'; x.fillText(t2, 0, 418);
+    x.fillStyle = '#456179'; x.font = '600 28px ' + SANS; x.fillText(name + ', ' + dates, 0, 470);
+    if (as.logo) x.drawImage(as.logo, 290, 500, 120, 120 * 108 / 708);
+    x.restore();
+    x.save(); x.translate(540, 92); x.rotate(.05); x.fillStyle = 'rgba(116,191,235,.82)'; x.fillRect(-150, -34, 300, 68); x.fillStyle = 'rgba(255,255,255,.25)'; for (k = -150; k < 150; k += 14) x.fillRect(k, -34, 5, 68); x.restore();
+    x.fillStyle = '#a9d8f3'; x.textAlign = 'center'; x.font = '700 30px ' + SANS; x.fillText(city + ', ' + name, W / 2, H - 50);
+    return;
+  }
+  if (frame === 'badge') {
+    cover(img, 0, 0, W, H);
+    var bv = x.createLinearGradient(0, H - 600, 0, H); bv.addColorStop(0, 'rgba(7,29,46,0)'); bv.addColorStop(1, 'rgba(7,29,46,.45)'); x.fillStyle = bv; x.fillRect(0, H - 600, W, 600);
+    x.save(); x.translate(250, H - 330); x.rotate(-.07);
+    /* the lanyard */
+    x.strokeStyle = '#74bfeb'; x.lineWidth = 26; x.lineCap = 'round'; x.beginPath(); x.moveTo(-40, -300); x.quadraticCurveTo(-10, -420, -120, -700); x.stroke(); x.beginPath(); x.moveTo(40, -300); x.quadraticCurveTo(70, -440, 40, -720); x.stroke();
+    x.strokeStyle = '#0d314c'; x.lineWidth = 4; x.setLineDash([14, 12]); x.beginPath(); x.moveTo(-40, -300); x.quadraticCurveTo(-10, -420, -120, -700); x.stroke(); x.beginPath(); x.moveTo(40, -300); x.quadraticCurveTo(70, -440, 40, -720); x.stroke(); x.setLineDash([]);
+    x.fillStyle = '#9fb3c2'; rr(-50, -318, 100, 44, 10); x.fill(); x.fillStyle = '#d5e2ed'; rr(-40, -310, 80, 28, 8); x.fill();
+    x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 36; x.shadowOffsetY = 14; x.fillStyle = '#fff'; rr(-190, -280, 380, 540, 18); x.fill(); x.shadowColor = 'transparent';
+    x.fillStyle = '#e9f1f8'; rr(-40, -262, 80, 16, 8); x.fill();
+    if (as.logo) x.drawImage(as.logo, -130, -222, 260, 260 * 108 / 708);
+    x.save(); rr(-190, -150, 380, 230, 0); x.clip(); var bgr = x.createLinearGradient(0, -150, 0, 80); bgr.addColorStop(0, '#14486e'); bgr.addColorStop(1, '#071d2e'); x.fillStyle = bgr; x.fillRect(-190, -150, 380, 230); if (as.clear) x.drawImage(as.clear, 300, 150, 900, 410, -190, -8, 380, 88 * 1.95); x.restore();
+    x.fillStyle = '#74bfeb'; x.fillRect(-190, 80, 380, 7);
+    x.textAlign = 'center'; x.fillStyle = '#a9d8f3'; x.font = '700 26px ' + SANS; x.fillText("I'M AT THE", 0, -104);
+    var bs = fit(city, '700', 66, COND, 340); x.fillStyle = '#fff'; x.fillText(city, 0, -104 + 18 + bs * .8);
+    x.fillStyle = '#0d314c'; x.font = '700 30px ' + SANS; fit(name, '700', 30, SANS, 330); x.fillText(name, 0, 134); x.fillStyle = '#456179'; x.font = '600 24px ' + SANS; x.fillText(dates, 0, 170);
+    x.fillStyle = '#0d314c'; var bx = -120; [3, 1, 2, 1, 3, 1, 1, 2, 3, 1, 2, 1, 1, 3, 2, 1, 3, 1, 2, 2, 1, 3, 1, 1, 2, 3, 1, 2, 1, 3, 1, 2].forEach(function (w2, i2) { if (i2 % 2 === 0) x.fillRect(bx, 196, w2 * 3, 44); bx += w2 * 3 + 2; });
+    x.restore();
+    capOn(470, H - 70, W - 520);
+    return;
+  }
+}
+/* a sample photo for Preview Frames: a warm evening scene with two friends */
+function phSample() {
+  var c = document.createElement('canvas'); c.width = 1080; c.height = 1350; var x = c.getContext('2d');
+  var g = x.createLinearGradient(0, 0, 0, 1350); g.addColorStop(0, '#f6b26b'); g.addColorStop(.55, '#e07a5f'); g.addColorStop(1, '#3d405b'); x.fillStyle = g; x.fillRect(0, 0, 1080, 1350);
+  [[180, 260, 90, '#ffe7b0'], [880, 200, 60, '#fff3d6'], [760, 420, 110, '#ffd9a0'], [300, 520, 70, '#ffe2bf'], [960, 600, 50, '#fff0d0']].forEach(function (b) { x.globalAlpha = .35; x.fillStyle = b[3]; x.beginPath(); x.arc(b[0], b[1], b[2], 0, 7); x.fill(); }); x.globalAlpha = 1;
+  [[380, 640, '#2b2d42'], [700, 600, '#1d3557']].forEach(function (p) { x.fillStyle = p[2]; x.beginPath(); x.arc(p[0], p[1], 120, 0, 7); x.fill(); x.beginPath(); x.ellipse(p[0], p[1] + 520, 250, 400, 0, Math.PI, 0); x.fill(); });
+  return c;
 }
 function phPick(kind, cb) {
   var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
-  if (kind === 'selfie') inp.setAttribute('capture', 'user'); else if (kind === 'camera') inp.setAttribute('capture', 'environment'); else inp.multiple = true;
+  if (kind === 'camera' || kind === 'selfie') inp.setAttribute('capture', 'user'); else inp.multiple = true;
   inp.style.display = 'none'; document.body.appendChild(inp);
   inp.addEventListener('change', function () { var fs = [].slice.call(inp.files || []); inp.remove(); if (fs.length) cb(fs); });
   inp.click();
@@ -3633,10 +3742,11 @@ function phThumb(p) { return p.url || (p.url = URL.createObjectURL(p.blob)); }
 /* make a framed photo: frame, caption, who's in it, then save, share or send to MISMO */
 function phEditor(file, prompt0) {
   phLoad(file, function (img) {
-    var frame = load('ph-frame', 'band'), cap = '', tags = [], prompt = prompt0 || '', logo = null, staff = phReviewer();
+    var frame = load('ph-frame', 'pass'), cap = '', tags = [], prompt = prompt0 || '', assets = PH_ART, staff = phReviewer();
+    if (!PH_FRAMES.some(function (f) { return f[0] === frame; })) frame = 'pass';
     var met = myScans().filter(function (s) { return scanKind(s) === 'Someone I Met' || scanKind(s) === 'Touchpoint'; }).map(function (s) { var w = s.reg ? regLookup(s.reg) : null; return s.name || (w && w.name) || ''; }).filter(Boolean);
     var el = openSheet('Your Photo', '<div class="ph-ed"><div class="ph-cv"><canvas></canvas></div><div class="sheet-pad">' +
-      '<div class="ld-h">Frame</div><div class="seg ph-fr">' + [['band', 'Summit Frame'], ['badge', 'Corner Badge'], ['none', 'No Frame']].map(function (f) { return '<button type="button" data-ph-fr="' + f[0] + '" aria-pressed="' + (frame === f[0]) + '">' + f[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="ld-h">Frame</div><div class="ph-frs">' + PH_FRAMES.map(function (f) { return '<button type="button" data-ph-fr="' + f[0] + '" aria-pressed="' + (frame === f[0]) + '"><canvas></canvas><span>' + f[1] + '</span></button>'; }).join('') + '</div>' +
       '<label class="ld-h" for="ph-cap">Caption</label><input id="ph-cap" class="ld-in" maxlength="60" placeholder="Say something about it (optional)">' +
       '<div class="ld-h">Photo Challenge</div><div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-pr="' + esc(p) + '" aria-pressed="' + (p === prompt) + '">' + esc(p) + '</button>'; }).join('') + '</div>' +
       '<div class="ld-h">Who\'s In It</div><div class="ph-tags"></div><div class="ph-tagadd"><input class="ld-in" id="ph-tag" placeholder="Add a name" list="ph-met"><datalist id="ph-met">' + met.map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist><button type="button" class="btn" data-ph-tag>' + icon('i-plus') + 'Add</button></div>' +
@@ -3645,8 +3755,9 @@ function phEditor(file, prompt0) {
       (staff ? '' : '<label class="ph-ok"><input type="checkbox" id="ph-ok"><span>MISMO may use this photo in its posts and newsletter, and everyone in it is OK with that.</span></label>') +
       '<button type="button" class="btn" data-ph-send>' + icon('i-send') + (staff ? 'Add to Submissions' : 'Send to MISMO') + '</button></div></div></div>', { plain: true });
     var cv = el.querySelector('canvas');
-    function draw() { phDraw(cv, img, frame, cap, logo); }
-    phLogoImg(function (l) { logo = l; draw(); }); draw();
+    function draw() { phDraw(cv, img, frame, cap, assets); }
+    function thumbs() { el.querySelectorAll('[data-ph-fr]').forEach(function (b) { phDraw(b.querySelector('canvas'), img, b.getAttribute('data-ph-fr'), cap, assets, .2); }); }
+    draw(); thumbs(); if (!assets) phAssets(function (a) { assets = a; draw(); thumbs(); });
     function paintTags() { el.querySelector('.ph-tags').innerHTML = tags.length ? tags.map(function (t, i) { return '<button type="button" data-ph-untag="' + i + '">' + esc(t) + icon('i-x') + '</button>'; }).join('') : '<span class="ph-none">Nobody tagged yet</span>'; }
     paintTags();
     function blob(cb) { cv.toBlob(function (b) { cb(b); }, 'image/jpeg', .86); }
@@ -3677,9 +3788,18 @@ function phTake(kind, prompt) { phPick(kind, function (fs) { phEditor(fs[0], pro
 /* the card on the summit page */
 function photosCard() {
   return '<div class="section-h"><h2>Summit Photos</h2></div><div class="ph-card"><div class="ph-card-top">' + icon('i-camera') + '<span><b>Snap the Summit</b><span>Selfies, friends and ' + esc(S.place || 'the summit') + ', in a summit frame to save or share. Send your best to MISMO.</span></span></div>' +
-    '<div class="ph-btns"><button type="button" class="btn primary" data-ph-take="selfie">' + icon('i-camera') + 'Take a Selfie</button><button type="button" class="btn" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button></div>' +
-    '<div class="ph-ch"><b>Photo Challenge</b><div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-take="selfie" data-ph-prompt="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div>' +
+    '<div class="ph-btns"><button type="button" class="btn primary" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button><button type="button" class="btn" data-ph-frames>' + icon('i-grid') + 'See the Frames</button></div>' +
+    '<div class="ph-ch"><b>Photo Challenge</b><div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-take="camera" data-ph-prompt="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div>' +
     '<div class="ph-row"><button type="button" class="linkbtn" data-ph-mine>' + icon('i-image') + 'My Photos' + icon('i-chev') + '</button>' + (phReviewer() ? '<button type="button" class="linkbtn" data-ph-review>' + icon('i-check') + 'Review Submissions' + icon('i-chev') + '</button>' : '') + '</div></div>';
+}
+/* Preview Frames: every frame on a sample photo (or the last one taken); pick one, then take the photo */
+function phFrames() {
+  var cur = load('ph-frame', 'pass'), src = phSample();
+  var el = openSheet('Pick a Frame', '<div class="phf"><div class="phf-big"><canvas></canvas></div><div class="sheet-pad"><div class="phf-grid">' + PH_FRAMES.map(function (f) { return '<button type="button" data-phf="' + f[0] + '" aria-pressed="' + (cur === f[0]) + '"><canvas></canvas><span>' + f[1] + '</span></button>'; }).join('') + '</div>' +
+    '<div class="ph-acts"><button type="button" class="btn primary" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button></div><p class="sc-fine">Your pick is used next time; you can change it on the photo too.</p></div></div>', { plain: true });
+  function paint(a) { phDraw(el.querySelector('.phf-big canvas'), src, cur, '', a, .5); el.querySelectorAll('[data-phf]').forEach(function (b) { phDraw(b.querySelector('canvas'), src, b.getAttribute('data-phf'), '', a, .25); }); }
+  paint(PH_ART); phAssets(paint);
+  el.addEventListener('click', function (e) { var t = e.target.closest('[data-phf]'); if (!t) return; cur = t.getAttribute('data-phf'); save('ph-frame', cur); el.querySelectorAll('[data-phf]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); paint(PH_ART); });
 }
 function phMine() {
   var el = openSheet('My Photos', '<div class="sheet-pad ph-grid-w"></div>', { plain: true });
@@ -3739,8 +3859,7 @@ function attendanceSheet() {
     var max = Math.max.apply(null, ses.map(function (s) { return s.n; }).concat([1]));
     var live = ses.filter(function (s) { return s.x.date === n.date && s.x.a <= n.min && s.x.b > n.min; });
     var topCo = Object.keys(cos).sort(function (a, b) { return cos[b] - cos[a] || a.localeCompare(b); }).slice(0, 5);
-    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>' +
-      '<button type="button" class="scan-ci an-tr" data-trackers>' + icon('i-agenda') + '<span><b>Open Meeting Trackers</b><span>Live tracking for every meeting, summit or not</span></span>' + icon('i-chev', 'go') + '</button>' +
+    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>' + icon('i-agenda') + '<span><b>Open Meeting Trackers</b><span>Live tracking for every meeting, summit or not</span></span>' + icon('i-chev', 'go') + '</button>' +
       '<div class="an-kpis"><div><b>' + Object.keys(people).length + '</b><span>People Checked In</span></div><div><b>' + ses.length + '</b><span>Sessions Scanned</span></div><div><b>' + live.reduce(function (t, s) { return t + s.n; }, 0) + '</b><span>In Sessions Now</span></div></div>' +
       (ses.length ? '<h3 class="wg-h">By Session</h3><div class="an-ses">' + ses.map(function (s) {
         var on = live.indexOf(s) >= 0;
@@ -6083,8 +6202,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }
   if (t.hasAttribute('data-ph-take')) { phTake(t.getAttribute('data-ph-take'), t.getAttribute('data-ph-prompt') || ''); return; }
   if (t.hasAttribute('data-ph-mine')) { phMine(); return; }
+  if (t.hasAttribute('data-ph-frames')) { phFrames(); return; }
   if (t.hasAttribute('data-ph-review')) { phReview(); return; }
-  if (t.hasAttribute('data-trackers')) { webSheet('/meeting-trackers/', 'Meeting Trackers'); return; }
   if (t.hasAttribute('data-checkin')) { checkinSheet(t.getAttribute('data-checkin')); return; }
   if (t.hasAttribute('data-attend')) { attendanceSheet(); return; }
   if (t.hasAttribute('data-scans')) { scansSheet(); return; }
