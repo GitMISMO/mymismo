@@ -645,7 +645,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .rd-big svg{width:20px; height:20px}
 .rd-big:hover{background:rgba(20,72,110,.9)}
 .rd-pop{display:grid; gap:12px}
-.rd-scroll{overflow:auto; border-radius:20px; -webkit-overflow-scrolling:touch; overscroll-behavior:contain}
+.rd-scroll{overflow:auto; border-radius:20px; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; touch-action:pan-x pan-y}
+/* Jonna, Nov 27, 2026: Around the Hotel opened big fills the whole screen sideways too, and a swipe up or down on the map scrolls the page */
+.sheet.rd-full{left:0; width:auto}
 .radar.big{max-width:none; width:max(100%, 600px); border-radius:20px}
 .rd-hint{margin:0; font-size:13px; color:var(--ink-2); text-align:center}
 .radar .rg{fill:none; stroke:rgba(116,191,235,.22); stroke-dasharray:3 5}
@@ -4021,6 +4023,7 @@ function radarSheet() {
   var el = openSheet('Around the Hotel', '<div class="sheet-pad rd-pop"><div class="seg">' + [['all', 'Everything'], ['eat', 'Eat and Drink'], ['see', 'Things to Do']].map(function (o) {
       return '<button type="button" data-rcat="' + o[0] + '" aria-pressed="' + ((S.xcat || 'all') === o[0]) + '"' + (o[0] !== 'all' ? ' style="--pc:' + PL_COLORS[o[0]] + '"' : '') + '>' + (o[0] !== 'all' ? '<i></i>' : '') + o[1] + '</button>';
     }).join('') + '</div><div class="rd-scroll">' + radar(true) + '</div><p class="rd-hint">Rings show walking time from the hotel. Tap a place for details.</p></div>', { plain: true });
+  el.classList.add('rd-full');
   function center() { var sc = el.querySelector('.rd-scroll'), hint = el.querySelector('.rd-hint'); if (!sc) return; sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2;
     if (hint) hint.textContent = 'Rings show walking time from the hotel. ' + (sc.scrollWidth > sc.clientWidth + 4 ? 'Swipe the map to look around, and tap' : 'Tap') + ' a place for details.'; }
   setTimeout(center, 60);
