@@ -32,6 +32,7 @@ GROUPS_URL = 'https://www.mismo.org/get-involved/participate-in-a-mismo-workgrou
 EDU_URL = 'https://www.mismo.org/events-education/educational-offerings'
 ABOUT_URL = 'https://www.mismo.org/about-mismo'
 LEADERSHIP_URL = 'https://www.mismo.org/mismo-leadership'
+SCHEDULE_URL = 'https://www.mismo.org/get-involved/meeting-schedule'
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
@@ -397,6 +398,28 @@ def build_faces(about_html, leadership_html):
     return {'people': people}
 
 
+def build_wg_sponsors(html):
+    """The Workgroup Meeting Schedule page's sponsor tags ("Sponsored by" and the sponsor's logo on a group's card), so the
+    app's Join a Workgroup page shows the same sponsors. Each tag belongs to the card whose bold group name comes before it."""
+    t = Tree()
+    t.feed(html)
+    out, seen = [], set()
+    for tag in t.root.find_all(lambda x: any('sponsor-tag' in c for c in x.classes())):
+        img = tag.find(lambda y: y.tag == 'img')
+        sponsor = ((img.attrs.get('alt') if img is not None else '') or '').strip()
+        logo = ((img.attrs.get('src') if img is not None else '') or '').split('?')[0].strip()
+        card, name = tag.parent, ''
+        while card is not None and card.tag != 'root' and not name:
+            hit = card.find(lambda y: y.tag == 'div' and 'font-size: 17px' in (y.attrs.get('style') or '') and 'bold' in (y.attrs.get('style') or ''))
+            name = hit.text() if hit is not None else ''
+            card = card.parent
+        if not (name and sponsor) or name in seen:
+            continue
+        seen.add(name)
+        out.append({'name': name, 'sponsor': sponsor, 'logo': logo if logo.startswith('https://') else ''})
+    return {'source': SCHEDULE_URL, 'groups': out}
+
+
 def good_event(e):
     return bool(e.get('title') and e.get('subtitle') and e.get('dates') and e.get('paragraphs'))
 
@@ -424,7 +447,7 @@ def write(out, g, what):
 
 def main(argv):
     opts = dict(zip(argv[::2], argv[1::2]))
-    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts or '--edu-html' in opts or '--about-html' in opts
+    only_files = '--html' in opts or '--summit-html' in opts or '--agenda-html' in opts or '--groups-html' in opts or '--edu-html' in opts or '--about-html' in opts or '--schedule-html' in opts
     failed = 0
     if '--html' in opts or not only_files:
         html = open(opts['--html'], encoding='utf-8').read() if '--html' in opts else fetch(URL)
@@ -468,6 +491,19 @@ def main(argv):
             write(opts.get('--groups-out', 'data/workgroups.json'), gr, 'Workgroups')
         else:
             print('The Communities and Workgroups page did not have its group cards; nothing written.', file=sys.stderr)
+            failed = 1
+    if '--schedule-html' in opts or not only_files:
+        html = open(opts['--schedule-html'], encoding='utf-8').read() if '--schedule-html' in opts else fetch(SCHEDULE_URL)
+        ws = build_wg_sponsors(html)
+        # a page with its group cards but no sponsor tags is fine (no group sponsored); a page without the cards is not
+        if 'ms-list' in html or '--schedule-html' in opts:
+            if '--schedule-html' in opts and not ws['groups']:
+                print('The test schedule page gave no sponsor tags; the parser no longer reads the layout.', file=sys.stderr)
+                failed = 1
+            else:
+                write(opts.get('--wg-sponsors-out', 'data/wg-sponsors.json'), ws, 'Workgroup sponsors')
+        else:
+            print('The Workgroup Meeting Schedule page did not have its group list; nothing written.', file=sys.stderr)
             failed = 1
     if '--about-html' in opts or not only_files:
         ab = open(opts['--about-html'], encoding='utf-8').read() if '--about-html' in opts else fetch(ABOUT_URL)

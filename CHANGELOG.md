@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Dashboard: the summit's sponsors moved onto the MISMO Summit tile, in a strip of logos along its foot that opens the full sponsor list. The Summit Sponsors tile is gone.
+- Nov 27, 2026: New Join a Workgroup tile and page: a phone version of the website's Workgroup Meeting Schedule, with who's meeting now and next, the next two weeks day by day, search and topics, and each group's dates, leaders, current work, summit sessions, Join and Add to Calendar.
 - Nov 27, 2026: My Profile: "What I'd Like to Talk About" is now "A Few Sentences About You and Your Work", and attendee cards show it under "About" and the person's first name.
 - Nov 26, 2026: Explore: once the room block closes, the card reads "The room block closed on December 14. You can still book a room at the regular rate." and opens a search for the hotel so people can book on its own site.
 - Nov 26, 2026: Explore: more room between the hotel icon and Book Your Room on the countdown card.

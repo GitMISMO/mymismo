@@ -454,7 +454,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-head{display:flex; align-items:center; gap:7px; font-weight:700; font-size:13px; color:var(--ink-2); width:100%}
 .w-head svg{width:18px; height:18px; color:var(--link); flex:none}
 .w-head .go{margin-left:auto; width:18px; height:18px; opacity:.7}
-.w-t{font-family:var(--cond); font-size:20px; font-weight:700; line-height:1.12; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+.w-t{font-family:var(--cond); font-size:20px; font-weight:700; line-height:1.12; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; overflow-wrap:break-word; hyphens:auto}
 .w-sub{color:var(--ink-2); font-size:13px; line-height:1.35; margin-top:auto}
 .w-summit{min-height:230px; background:#071d2e; border:0; color:#fff}
 .w-summit .w-head{color:var(--sky-soft)}
@@ -466,6 +466,21 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-count b{font-family:var(--cond); font-size:40px; line-height:1; color:var(--sky)}
 .w-count i{font-style:normal; font-weight:600; color:#fff}
 .w-summit .w-sub{color:rgba(255,255,255,.75); margin-top:0}
+/* the Summit tile is a card with a button over it (Jonna, Nov 27, 2026), so its sponsor strip can be a button too */
+.w-summit .w-hit{position:absolute; inset:0; z-index:0; border:0; padding:0; background:none; border-radius:inherit; cursor:pointer}
+.w-summit .w-hit:focus-visible{outline:3px solid var(--sky); outline-offset:-3px}
+.w-summit > span:not(.art-fade){position:relative; z-index:1; pointer-events:none}
+.w-summit:has(> .w-hit:active){transform:scale(.975)}
+.ws-spon{position:relative; z-index:2; align-self:stretch; display:flex; align-items:center; gap:10px; margin:8px -6px -6px; padding:8px 8px 8px 12px; border:1px solid rgba(116,191,235,.28); border-radius:12px; background:rgba(6,32,47,.62); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); color:#fff; font:inherit; text-align:left; cursor:pointer}
+.ws-spon:active{transform:scale(.98)}
+.ws-lbl{display:grid; gap:1px; flex:none}
+.ws-lbl b{font-size:14px} .ws-lbl i{display:flex; align-items:center; gap:2px; font-style:normal; font-size:12.5px; font-weight:600; color:var(--sky)} .ws-lbl svg{width:13px; height:13px}
+.ws-logos{flex:1; display:grid; grid-template-columns:repeat(auto-fit, minmax(60px, 1fr)); grid-template-rows:38px; grid-auto-rows:0; row-gap:0; column-gap:6px; overflow:hidden; min-width:0}
+.ws-plate{position:relative; height:38px; border-radius:8px; background:#fff; overflow:hidden}
+.ws-plate img{position:absolute; inset:5px 8px; width:calc(100% - 16px); height:calc(100% - 10px); object-fit:contain; opacity:0; transform:translateY(6px); transition:opacity .6s ease, transform .6s ease}
+.ws-plate img:not([src]), .ws-plate img[src=""]{display:none}
+.ws-plate img.on{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){ .ws-plate img{transition:none} }
 .w-mic{min-height:200px; background:#06202f; border:0; color:#fff; justify-content:flex-end}
 .w-mic .bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; transform:scale(1.02)}
 .w-mic .shade{position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(6,32,47,.55), rgba(6,32,47,.1) 35%, rgba(6,32,47,.92))}
@@ -844,6 +859,102 @@ html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, 
 .mx-steam{animation:mx-steam 2.6s ease-in-out infinite} @keyframes mx-steam{50%{opacity:.35; transform:translateY(-3px)}}
 @media (prefers-reduced-motion:reduce){ .mx-slide,.mx-card,.mx-line,.mx-sl-art svg,.mx-steam{animation:none!important; transition:none!important} }
 .mx-fine{font-size:12.5px; color:var(--ink-3); text-align:center; margin:8px 0 0}
+/* ---------- Join a Workgroup (Jonna, Nov 27, 2026) ---------- */
+.w-wg{background:linear-gradient(160deg, #0f3d5e 0%, #0d314c 60%, #0a2740 100%); border:0; color:#fff}
+.w-wg .w-head{color:var(--sky-soft)} .w-wg .w-head svg{color:var(--sky)}
+.w-wg .w-t{color:#fff; font-size:16px; line-height:1.2}
+.w-wg .w-sub{color:rgba(255,255,255,.72)}
+.w-wg .wm-row{border-color:rgba(255,255,255,.14)} .w-wg .wm-t{color:rgba(255,255,255,.88)} .w-wg .wm-d{background:rgba(255,255,255,.1); color:#fff} .w-wg .wm-d i{color:var(--sky)}
+.wg-tnext{display:grid; gap:3px; flex:none}
+.wg-tw{font-size:13px; font-weight:600; color:var(--sky-soft)}
+.wg-tk{display:inline-flex; align-items:center; gap:6px; justify-self:start; font-size:11.5px; font-weight:800; color:#0d314c; background:var(--sky); border-radius:5px; padding:3px 7px}
+.wg-tk.live{background:#2fd08a; color:#05301e}
+.wg-tk i{width:7px; height:7px; border-radius:50%; background:currentColor; animation:wg-pulse 1.4s ease-in-out infinite}
+@keyframes wg-pulse{50%{opacity:.25}}
+.wg-sheet .sheet-body{background:var(--ground)}
+.wg-hero{position:relative; overflow:hidden; padding:26px 18px 64px; color:#fff; background:radial-gradient(130% 120% at 100% 0%, #1f5fa6 0%, #0d314c 50%, #071d2e 100%)}
+.wg-hero::after{content:""; position:absolute; right:-40px; top:-30px; width:220px; height:220px; border-radius:50%; border:28px solid rgba(116,191,235,.08); pointer-events:none}
+.wg-eye{font-size:12.5px; font-weight:800; color:#f3c64f}
+.wg-hero h2{font-family:var(--cond); font-weight:800; font-size:clamp(32px, 9vw, 44px); line-height:1; margin:6px 0 10px}
+.wg-hero p{margin:0; max-width:46ch; color:rgba(255,255,255,.8); font-size:14.5px; line-height:1.45}
+.wg-stats{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:18px}
+.wg-stats span{display:grid; gap:2px; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,.07); border:1px solid rgba(116,191,235,.22); font-size:12px; font-weight:600; color:rgba(255,255,255,.75)}
+.wg-stats b{font-family:var(--cond); font-size:26px; line-height:1; color:#fff}
+.wg-spot{position:relative; z-index:2; display:grid; gap:6px; margin:-44px 16px 0; padding:16px 16px 16px 20px; border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--ink); text-align:left; font:inherit; cursor:pointer; box-shadow:0 18px 34px -20px rgba(7,29,46,.55); overflow:hidden}
+.wg-spot::before{content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--c)}
+.wg-spot b{font-size:19px; line-height:1.2}
+.wg-spot .wg-tk{background:#0d314c; color:#fff} .wg-spot .wg-tk.live{background:#0f7b5c; color:#fff}
+.wg-sw{display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; color:var(--ink-2); font-weight:600; font-size:14px}
+.wg-sw em{font-style:normal; font-size:12.5px; font-weight:700; color:var(--c)}
+.wg-spot .wg-hit{position:absolute; inset:0; z-index:0; border:0; padding:0; background:none; cursor:pointer; border-radius:inherit}
+.wg-spot > :not(.wg-hit){position:relative; z-index:1; pointer-events:none} .wg-spot > a.wg-join{pointer-events:auto; z-index:2}
+.wg-spot .wg-hit:focus-visible{outline:3px solid var(--sky); outline-offset:-3px}
+.wg-spot .wg-sw{padding-right:104px}
+.wg-join{position:absolute!important; right:14px; bottom:14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:800; color:#fff; background:var(--c); border-radius:8px; padding:7px 10px}
+.wg-join svg{width:16px; height:16px}
+.wg-main{display:grid; grid-template-columns:minmax(0, 1fr); gap:12px; padding-top:20px}
+.wg-week, .wg-tl, .wg-list, .wgd{min-width:0}
+.wg-h{font-family:var(--cond); font-weight:800; font-size:21px; margin:10px 0 0; color:var(--ink)}
+.wg-days{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:4px 16px 6px; scroll-snap-type:x proximity; scroll-padding-inline:16px}
+.wg-days::-webkit-scrollbar{display:none}
+.wg-days button{flex:none; scroll-snap-align:start; width:58px; display:grid; justify-items:center; gap:2px; padding:9px 0 8px; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--ink); font:inherit; cursor:pointer; transition:background .2s, color .2s, transform .15s}
+.wg-days button.wk2{margin-left:10px}
+.wg-days button i{font-style:normal; font-size:11.5px; font-weight:700; color:var(--ink-3)}
+.wg-days button b{font-family:var(--cond); font-size:24px; line-height:1}
+.wg-dots{display:flex; gap:3px; height:6px} .wg-dots em{width:5px; height:5px; border-radius:50%; background:var(--sky)}
+.wg-days button[aria-selected="true"]{background:#0d314c; border-color:#0d314c; color:#fff; transform:translateY(-2px); box-shadow:0 10px 18px -12px rgba(13,49,76,.8)}
+.wg-days button[aria-selected="true"] i{color:var(--sky-soft)}
+.wg-tl{display:grid; gap:8px; margin-top:4px}
+.wg-slot{display:grid; grid-template-columns:56px minmax(0, 1fr) auto; gap:12px; align-items:center; padding:10px 12px 10px 0; border:1px solid var(--border); border-left:5px solid var(--c); border-radius:12px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer; animation:tbx-up .4s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 40ms)}
+.wg-at{text-align:right; font-family:var(--cond); font-weight:800; font-size:18px; line-height:1} .wg-at i{display:block; font-style:normal; font-size:11px; color:var(--ink-3)}
+.wg-sb{display:grid; gap:2px; min-width:0} .wg-sb b{font-size:14.5px; line-height:1.25} .wg-sb > span{font-size:12.5px; color:var(--ink-3)}
+.wg-slot.past{opacity:.55} .wg-slot.x b{text-decoration:line-through} .wg-slot.x .wg-sb > span{color:var(--bad); font-weight:700}
+.wg-slot.live{background:color-mix(in srgb, #2fd08a 10%, var(--surface))} .wg-slot.live .wg-sb > span{color:var(--good); font-weight:700}
+svg.wg-go{width:18px; height:18px; color:var(--ink-3)}
+.wg-none{padding:18px; text-align:center; color:var(--ink-3); border:1px dashed var(--border-strong); border-radius:12px}
+.wg-search{flex:none} .wg-doms button[aria-pressed="true"]{background:var(--c, #0d314c); border-color:var(--c, #0d314c)}
+.wg-doms{margin-top:-2px}
+.wg-count{margin:2px 0 0; font-size:13px; color:var(--ink-3); font-weight:600}
+.wg-list{display:grid; gap:10px}
+.wg-card{position:relative; display:grid; gap:7px; padding:14px 40px 14px 16px; border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer; overflow:hidden; transition:transform .15s, box-shadow .2s}
+.wg-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--c)}
+.wg-card:active{transform:scale(.985)}
+.wg-card svg.wg-go{position:absolute; right:12px; top:50%; margin-top:-9px}
+.wg-cn{font-weight:700; font-size:15.5px; line-height:1.25}
+.wg-tags{display:flex; flex-wrap:wrap; gap:6px}
+.wg-dom{font-size:11.5px; font-weight:700; color:var(--c); background:color-mix(in srgb, var(--c) 12%, transparent); border-radius:5px; padding:3px 7px}
+.wg-sp{font-size:11.5px; font-weight:700; color:#8a6410; background:#fdf6e3; border:1px solid #ecd9a3; border-radius:5px; padding:2px 7px}
+.wg-cw{display:flex; flex-wrap:wrap; gap:4px 10px; font-size:13.5px} .wg-cw b{font-weight:700} .wg-cw span{color:var(--ink-2)} .wg-hold{color:var(--warn)}
+.wg-nx{font-size:12.5px; font-weight:700; color:var(--ink-3)} .wg-nx.x{color:var(--bad)} .wg-nx.live{display:inline-flex; align-items:center; gap:6px; color:var(--good)} .wg-nx.live i{width:7px; height:7px; border-radius:50%; background:currentColor; animation:wg-pulse 1.4s infinite}
+.wg-all{display:grid; gap:6px; padding:16px; border-radius:14px; background:var(--surface-2); border:1px solid var(--rule); margin-top:8px}
+.wg-all > span{font-size:13.5px; color:var(--ink-2)}
+.wg-cal{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:4px} .wg-cal .btn{padding:9px 6px}
+.wgd-top{position:relative; padding:22px 18px 20px; color:#fff; background:linear-gradient(135deg, color-mix(in srgb, var(--c) 78%, #071d2e) 0%, #0d314c 100%)}
+.wgd-k{font-size:12px; font-weight:800; color:rgba(255,255,255,.8)}
+.wgd-top h2{font-family:var(--cond); font-weight:800; font-size:clamp(26px, 7.5vw, 34px); line-height:1.04; margin:6px 0}
+.wgd-kind{font-size:13.5px; font-weight:600; color:rgba(255,255,255,.78)}
+.wgd-sp{display:flex; align-items:center; gap:10px; margin-top:14px; padding:8px 12px; border-radius:10px; background:#fff; width:max-content; max-width:100%}
+.wgd-sp i{font-style:normal; font-size:11.5px; font-weight:800; color:#8a6410} .wgd-sp img{height:22px; width:auto; max-width:140px; object-fit:contain} .wgd-sp b{color:#0d314c}
+.wgd{display:grid; grid-template-columns:minmax(0, 1fr); gap:10px}
+.wgd-act{display:grid; grid-template-columns:1.3fr 1fr; gap:8px} .wgd-act .btn{padding:12px 10px; font-weight:700} .wgd-act .btn:only-child{grid-column:1 / -1}
+.wg-livebtn{background:#0f7b5c!important; border-color:#0f7b5c!important; color:#fff!important}
+.wgd-cals{display:grid; gap:6px} .wgd-cals > span{font-size:12.5px; color:var(--ink-3)}
+.wgd-when{display:flex; flex-wrap:wrap; gap:4px 12px; font-size:15px} .wgd-when span{color:var(--ink-2)}
+.wgd-dates{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:2px 16px 4px}
+.wgd-dates > span{flex:none; display:grid; gap:1px; min-width:74px; padding:8px 10px; border-radius:10px; border:1px solid var(--border); background:var(--surface)}
+.wgd-dates i{font-style:normal; font-size:11.5px; font-weight:700; color:var(--ink-3)} .wgd-dates b{font-size:14px}
+.wgd-dates .x b{text-decoration:line-through; color:var(--ink-3)} .wgd-dates em{font-style:normal; font-size:11px; font-weight:800; color:var(--bad)}
+.wgd-about{margin:0; color:var(--ink-2); line-height:1.5}
+.wgd-ag{display:grid; gap:8px} .wgd-ag > div{display:grid; gap:4px; padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:var(--surface)}
+.wgd-ag b{font-size:14.5px} .wgd-ag p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.45}
+.wgd-st{justify-self:start; font-size:11px; font-weight:800; color:#14486e; background:var(--sky-wash, #e4f2fb); border-radius:5px; padding:3px 7px}
+.wgd-from{margin:0; font-size:12.5px; color:var(--ink-3)}
+.wgd-lead{display:grid; gap:10px} .wgd-lead > div{display:flex; gap:12px; align-items:center} .wgd-lead .avatar{width:44px; height:44px; flex:none}
+.wgd-lead span span{display:block; font-size:13px; color:var(--ink-3)}
+.wgd-ses{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer}
+.wgd-ses b{display:block; font-size:14px} .wgd-ses span span{font-size:12.5px; color:var(--ink-3)}
+.wgd-page{margin-top:8px}
+@media (prefers-reduced-motion:reduce){ .wg-slot{animation:none} .wg-tk i, .wg-nx.live i{animation:none} }
 .w-trivia .tv-orbit{position:absolute; right:-6%; top:50%; width:58%; max-width:300px; transform:translateY(-50%); z-index:-1}
 .tv-wt{display:block; font-family:var(--cond); font-weight:700; font-size:clamp(24px, 6.6vw, 34px); line-height:1.02; margin-top:8px; letter-spacing:-.01em}
 .tv-ws{display:block; color:rgba(255,255,255,.75); font-size:13.5px; margin-top:6px}
@@ -1680,6 +1791,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-agenda" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M7 13.5h4M7 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.2 2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z" fill="var(--star-fill, none)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6.5" width="12.5" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 10.5 5-3v9l-5-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 20c.6-3.6 3.2-5.6 6.5-5.6s5.9 2 6.5 5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 4.8a3.4 3.4 0 0 1 0 6.6M18 14.7c1.9.7 3.1 2.5 3.5 5.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-sponsor" viewBox="0 0 24 24"><path d="M12 2.8 14.4 7l4.8.9-3.3 3.6.6 4.8L12 14.3l-4.5 2 .6-4.8L4.8 7.9 9.6 7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.3 15.8 7 21.5l5-2.4 5 2.4-1.3-5.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
@@ -2678,6 +2790,12 @@ function loadExtras() {
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash', 'people']); }).catch(function () {});
   getJSON('/podcast/micdup.json').then(function (m) { MU = m; mergeNews(); again(['dash']); }).catch(function () {});
   getJSON('/marketing-hq/matters/editions.json').then(function (m) { MM = m; again(['dash']); }).catch(function () {});
+  /* Join a Workgroup: Meeting Trackers' published schedule, leaders, agendas and calendars, and the website's workgroup sponsors */
+  getJSON('/meeting-trackers/schedule.json').then(function (d) { WGS.sched = d; again(['dash']); }).catch(function () {});
+  getJSON('/meeting-trackers/leadership.json').then(function (d) { WGS.lead = d; }).catch(function () {});
+  getJSON('/meeting-trackers/agendas.json').then(function (d) { WGS.ag = d; }).catch(function () {});
+  getJSON('/meeting-trackers/calendars/feeds.json').then(function (d) { WGS.feeds = d; }).catch(function () {});
+  getJSON('data/wg-sponsors.json').then(function (d) { WGS.spon = d; again(['dash']); }).catch(function () {});
   getJSON('/webinars/webinars.json').then(function (w) { WEB = w; again(['dash']); }).catch(function () {});
   getJSON('/certified/new-certifications.json').then(function (c) { CERT = c; again(['dash']); }).catch(function () {});
   getJSON('/certified/individuals.json').then(function (c) { PROS = c; again(['dash']); }).catch(function () {});
@@ -2872,7 +2990,7 @@ var DASH = [
   { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-play' },
   { id: 'matters', name: 'MISMO Matters', desc: 'The monthly newsletter and The Vieaux Point', icon: 'i-mail' },
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
-  { id: 'sponsors', name: 'Summit Sponsors', desc: 'The companies supporting the summit', icon: 'i-sponsor' },
+  { id: 'groups', name: 'Join a Workgroup', desc: 'Every workgroup, when it meets and how to join', icon: 'i-people' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Solo and head-to-head MISMO trivia with a leaderboard', icon: 'i-star' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
@@ -2911,6 +3029,208 @@ function aiWebinars() {
 }
 function upcomingWebinars() { var now = Date.now(); return ((WEB && WEB.mismo) || []).concat(aiWebinars()).filter(function (w) { return !w.endsAt || Date.parse(w.endsAt) > now; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }); }
 function calBlock(iso) { var p = dparts(iso); return '<span class="cal"><i>' + MON[p.m - 1] + '</i><b>' + p.d + '</b></span>'; }
+/* ---------- Join a Workgroup (Jonna, Nov 27, 2026): a phone-sized version of the website's Workgroup Meeting Schedule
+   (www.mismo.org/get-involved/meeting-schedule), built only from what MISMO already publishes: the schedule, the
+   calendars, each group's leaders and its latest agenda (Meeting Trackers, /meeting-trackers/), each group's page and
+   purpose (the website, data/workgroups.json) and the workgroup sponsors (the schedule page, data/wg-sponsors.json). ---------- */
+var WGS = { sched: null, lead: null, ag: null, feeds: null, spon: null };
+var WG_ICS = 'https://resources.mismo.org/meeting-trackers/';
+var WG_DOM = { 'Artificial Intelligence': '#7b5cd6', 'Credit Reporting': '#d9822b', Governance: '#2477b8', 'Mortgage Compliance': '#b3372c', 'Mortgage Insurance': '#0f7b5c',
+  Originations: '#1f8f6a', Secondary: '#a2701a', Servicing: '#1b8fa6', 'Title & Closing': '#c2477f', Valuation: '#6b7f22', eMortgage: '#3f6fd8' };
+function wgColor(topic) { return WG_DOM[topic] || '#14486e'; }
+/* now in Eastern time (?now= in the address is read as Eastern too, for testing) */
+function etNow() {
+  var q = /[?&]now=(\d{4}-\d{2}-\d{2})(?:T(\d{2}):(\d{2}))?/.exec(location.search);
+  if (q) return { date: q[1], min: q[2] ? (+q[2]) * 60 + (+q[3]) : 8 * 60 };
+  try {
+    var o = {}; new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(new Date()).forEach(function (p) { o[p.type] = p.value; });
+    return { date: o.year + '-' + o.month + '-' + o.day, min: (+o.hour) * 60 + (+o.minute) };
+  } catch (e) { var d = new Date(); return { date: d.toISOString().slice(0, 10), min: d.getHours() * 60 + d.getMinutes() }; }
+}
+function isoAdd(iso, n) { var p = dparts(iso), d = new Date(Date.UTC(p.y, p.m - 1, p.d + n)); return d.toISOString().slice(0, 10); }
+/* "1–2pm ET", "11am–12pm ET", "10–11am ET" */
+function wgTimes(t) {
+  var m = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*[–-]\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i.exec(t || ''); if (!m) return null;
+  var to = function (h, mi, ap) { h = +h % 12; if (/pm/i.test(ap)) h += 12; return h * 60 + (+mi || 0); };
+  var eap = m[6], sap = m[3] || (+m[1] === 12 ? 'pm' : (/pm/i.test(eap) && +m[4] === 12 && +m[1] < 12 ? 'am' : (+m[1] > +m[4] && +m[4] !== 12 ? 'am' : eap)));
+  return { a: to(m[1], m[2], sap), b: to(m[4], m[5], eap) };
+}
+var WG_ORD = { '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5, first: 1, second: 2, third: 3, fourth: 4, last: -1 };
+/* which days a cadence falls on: "2nd & 4th Thursday", "Every Monday", "Kickoff: Thursday, Nov 19, 2026", "On hold" */
+function wgRule(c) {
+  c = String(c || '');
+  if (/hold/i.test(c)) return { hold: true };
+  var one = /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2}),\s*(\d{4})/i.exec(c);
+  if (one) return { once: one[3] + '-' + String(MON.indexOf(one[1].slice(0, 1).toUpperCase() + one[1].slice(1, 3).toLowerCase()) + 1).padStart(2, '0') + '-' + String(+one[2]).padStart(2, '0') };
+  var dw = /(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i.exec(c); if (!dw) return {};
+  var dow = DOW.map(function (d) { return d.toLowerCase(); }).indexOf(dw[1].toLowerCase());
+  if (/every\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/i.test(c)) return { dow: dow, every: true };
+  var ords = (c.match(/\b(1st|2nd|3rd|4th|5th|first|second|third|fourth|last)\b/gi) || []).map(function (o) { return WG_ORD[o.toLowerCase()]; });
+  return ords.length ? { dow: dow, nth: ords } : {};
+}
+function wgOn(r, iso) {
+  if (r.once) return iso === r.once;
+  if (r.dow == null) return false;
+  var p = dparts(iso); if (p.dow !== r.dow) return false; if (r.every) return true;
+  var n = Math.ceil(p.d / 7), dim = new Date(Date.UTC(p.y, p.m, 0)).getUTCDate();
+  return r.nth.some(function (k) { return k === n || (k === -1 && p.d + 7 > dim); });
+}
+function wgGroups() {
+  return ((WGS.sched && WGS.sched.groups) || []).map(function (g) {
+    var x = Object.assign({}, g); x.rule = wgRule(g.cadence); x.t = wgTimes(g.time); x.cx = g.cancelled || [];
+    x.site = groupFor(g.name); x.key = 'wg' + gkey(g.name).replace(/ /g, '-'); return x;
+  });
+}
+/* the next n meetings from today on (Eastern), with cancelled ones marked; a meeting already over today is left out */
+function wgNext(g, n, from) {
+  var now = etNow(), d = from || now.date, out = [];
+  if (g.rule.hold) return out;
+  for (var i = 0; i < 400 && out.length < n; i++) {
+    var iso = isoAdd(d, i);
+    if (!wgOn(g.rule, iso)) continue;
+    if (iso === now.date && g.t && now.min >= g.t.b) continue;
+    out.push({ date: iso, cancelled: g.cx.indexOf(iso) >= 0 });
+    if (g.rule.once) break;
+  }
+  return out;
+}
+function wgLive(g) { var n = etNow(); return !g.rule.hold && g.t && wgOn(g.rule, n.date) && g.cx.indexOf(n.date) < 0 && n.min >= g.t.a && n.min < g.t.b; }
+function wgShort(iso) { var p = dparts(iso); return DOW[p.dow].slice(0, 3) + ', ' + MON[p.m - 1] + ' ' + p.d; }
+function wgWhen(iso, g) {
+  var n = etNow(), dd = daysBetween(n.date, iso), lbl = dd === 0 ? 'Today' : dd === 1 ? 'Tomorrow' : wgShort(iso);
+  return lbl + (g.time ? ', ' + g.time.replace(/\s*ET$/, '') + ' ET' : '');
+}
+function wgSoon(iso, g) {   /* "in 45 minutes", "in 3 hours", "in 2 days" */
+  var n = etNow(), mins = daysBetween(n.date, iso) * 1440 + ((g.t && g.t.a) || 0) - n.min;
+  if (mins <= 0) return 'Now'; if (mins < 60) return 'In ' + mins + ' minute' + (mins === 1 ? '' : 's');
+  if (mins < 1440) { var h = Math.round(mins / 60); return 'In ' + h + ' hour' + (h === 1 ? '' : 's'); }
+  var d = daysBetween(n.date, iso); return 'In ' + d + ' day' + (d === 1 ? '' : 's');
+}
+function wgKind(g) { return /\bDWG\b|Development Workgroup/i.test(g.name) ? 'Development Workgroup' : /\bCOP\b|Community of Practice/i.test(g.name) ? 'Community of Practice' : /Forum/i.test(g.name) ? 'Forum' : 'Workgroup'; }
+/* "Artificial Intelligence (AI) COP" is also "AI COP", so a sponsor listed under either name is found */
+function wgAliases(n) {
+  var out = [gkey(n), gkey(n, true)];
+  var ac = String(n).replace(/((?:[A-Za-z]+\s+){1,7})\(([A-Za-z]{2,7})\)/, function (m, words, acr) {
+    var w = words.trim().split(/\s+/).filter(function (x) { return !/^(and|of|the)$/i.test(x); }); w = w.slice(-acr.length);
+    return w.map(function (x) { return x[0]; }).join('').toLowerCase() === acr.toLowerCase() ? acr + ' ' : m;
+  });
+  out.push(gkey(ac)); return out;
+}
+function wgSponsor(g) {
+  var mine = wgAliases(g.name);
+  return ((WGS.spon && WGS.spon.groups) || []).filter(function (s) { return wgAliases(s.name).some(function (a) { return mine.indexOf(a) >= 0; }); })[0] || null;
+}
+function wgLeaders(g) { var l = ((WGS.lead && WGS.lead.groups) || []).filter(function (x) { return x.name === g.name; })[0]; return (l && l.leaders) || []; }
+function wgAgenda(g) { if (!g.site || !WGS.ag) return null; var slug = g.site.url.replace(/\/+$/, '').split('/').pop(); return (WGS.ag.groups || {})[slug] || null; }
+function wgFeed(g) {
+  var f = (WGS.feeds && WGS.feeds.feeds) || {}, k = Object.keys(f).filter(function (k) { return f[k].name === g.name && f[k].status === 'active'; })[0];
+  return k ? WG_ICS + 'calendars/' + k + '.ics' : '';
+}
+function wgCalLinks(url, name) {
+  var web = url.replace(/^https:/, 'webcal:');
+  return '<div class="wg-cal"><a class="btn" href="https://calendar.google.com/calendar/r?cid=' + encodeURIComponent(web) + '" target="_blank" rel="noopener">Google</a>' +
+    '<a class="btn" href="https://outlook.office.com/calendar/0/addfromweb?url=' + encodeURIComponent(url) + '&name=' + encodeURIComponent(name) + '" target="_blank" rel="noopener">Outlook</a>' +
+    '<a class="btn" href="' + esc(web) + '">Apple</a></div>';
+}
+function wgSessions(g) {
+  if (!g.site || !S.summit) return [];
+  return S.sessions.filter(function (x) { return groupPages(x).indexOf(g.site) >= 0; });
+}
+/* the dashboard tile: who meets next (or now), and the few after */
+function wgTile() {
+  var gs = wgGroups(), now = etNow(), up = [];
+  gs.forEach(function (g) { wgNext(g, 2).forEach(function (o) { if (!o.cancelled) up.push({ g: g, date: o.date }); }); });
+  up.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : ((a.g.t || {}).a || 0) - ((b.g.t || {}).a || 0); });
+  var live = gs.filter(wgLive), first = live[0] ? { g: live[0], date: now.date } : up[0], rest = up.filter(function (u) { return u !== first && !(live.length && u.g === live[0] && u.date === now.date); }).slice(0, 3);
+  var head = '<span class="w-head">' + icon('i-people') + '<span>Join a Workgroup</span></span>';
+  if (!gs.length) return '<button type="button" class="wd w-wg" data-groups>' + head + '<span class="w-t">Every workgroup, when it meets and how to join</span><span class="w-sub">Open to everyone</span></button>';
+  return '<button type="button" class="wd w-wg" data-groups>' + head +
+    (first ? '<span class="wg-tnext"><span class="wg-tk' + (live.length ? ' live' : '') + '">' + (live.length ? '<i></i>Meeting Now' : 'Up Next') + '</span><span class="w-t">' + esc(first.g.name) + '</span><span class="wg-tw">' + esc(live.length ? first.g.time : wgWhen(first.date, first.g)) + '</span></span>' : '') +
+    (rest.length ? '<span class="w-more">' + rest.map(function (u) { var p = dparts(u.date); return '<span class="wm-row"><span class="wm-d"><i>' + MON[p.m - 1] + '</i>' + p.d + '</span><span class="wm-t">' + esc(u.g.name) + '</span></span>'; }).join('') + '</span>' : '') +
+    '<span class="w-sub">' + gs.length + ' groups, open to everyone</span></button>';
+}
+function wgCard(g, i) {
+  var nx = wgNext(g, 1)[0], sp = wgSponsor(g), live = wgLive(g);
+  return '<button type="button" class="wg-card" data-wg="' + esc(g.key) + '" style="--c:' + wgColor(g.topic) + ';--i:' + (i || 0) + '">' +
+    '<span class="wg-cn">' + esc(g.name) + '</span>' +
+    '<span class="wg-tags"><span class="wg-dom">' + esc(g.topic || '') + '</span>' + (sp ? '<span class="wg-sp">Sponsored by ' + esc(sp.sponsor) + '</span>' : '') + '</span>' +
+    '<span class="wg-cw">' + (g.rule.hold ? '<b class="wg-hold">On Hold</b>' : '<b>' + esc(g.cadence) + '</b><span>' + esc(g.time) + '</span>') + '</span>' +
+    (live ? '<span class="wg-nx live"><i></i>Meeting now</span>' : nx ? '<span class="wg-nx' + (nx.cancelled ? ' x' : '') + '">' + (nx.cancelled ? 'Next one cancelled: ' + wgShort(nx.date) : 'Next: ' + esc(wgWhen(nx.date, g).replace(/, [^,]*ET$/, ''))) + '</span>' : '') +
+    icon('i-chev', 'wg-go') + '</button>';
+}
+function wgSheet() {
+  var gs = wgGroups(), now = etNow(), dom = 'All', q = '', day = null;
+  var el = openSheet('Join a Workgroup', '<div class="wgx"></div>', { plain: true }), box = el.querySelector('.wgx');
+  el.classList.add('wg-sheet');
+  if (!gs.length) { box.innerHTML = '<div class="sheet-pad"><div class="note">The meeting schedule couldn\'t be loaded. Check your connection and try again.</div></div>'; return; }
+  /* the next ten weekdays, each with its meetings */
+  var days = [], d = now.date;
+  while (days.length < 10) { var p = dparts(d); if (p.dow > 0 && p.dow < 6) days.push(d); d = isoAdd(d, 1); }
+  var meets = function (iso) {
+    return gs.filter(function (g) { return wgOn(g.rule, iso) && !g.rule.hold; }).map(function (g) { return { g: g, x: g.cx.indexOf(iso) >= 0 }; })
+      .sort(function (a, b) { return ((a.g.t || {}).a || 0) - ((b.g.t || {}).a || 0) || a.g.name.localeCompare(b.g.name); });
+  };
+  day = days.filter(function (x) { return meets(x).some(function (m) { return !m.x && !(x === now.date && m.g.t && now.min >= m.g.t.b); }); })[0] || days[0];
+  var live = gs.filter(wgLive), up = [];
+  gs.forEach(function (g) { var o = wgNext(g, 3).filter(function (o) { return !o.cancelled; })[0]; if (o) up.push({ g: g, date: o.date }); });
+  up.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : ((a.g.t || {}).a || 0) - ((b.g.t || {}).a || 0); });
+  var weekN = days.reduce(function (n, x) { return n + meets(x).filter(function (m) { return !m.x; }).length; }, 0);
+  var doms = []; gs.forEach(function (g) { if (g.topic && doms.indexOf(g.topic) < 0) doms.push(g.topic); }); doms.sort();
+  var spot = live[0] ? { g: live[0], date: now.date, live: true } : up[0];
+  function dayHtml() {
+    var ms = meets(day);
+    return '<div class="wg-days" role="tablist" aria-label="Pick a day">' + days.map(function (x, i) { var p = dparts(x), n = meets(x).filter(function (m) { return !m.x; }).length;
+      return '<button type="button" role="tab" data-wg-day="' + x + '" aria-selected="' + (x === day) + '"' + (i === 5 ? ' class="wk2"' : '') + '><i>' + (x === now.date ? 'Today' : DOW[p.dow].slice(0, 3)) + '</i><b>' + p.d + '</b><span class="wg-dots">' + (n ? new Array(Math.min(n, 4) + 1).join('<em></em>') : '') + '</span></button>'; }).join('') + '</div>' +
+      '<div class="wg-tl">' + (ms.length ? ms.map(function (m, i) { var past = day === now.date && m.g.t && now.min >= m.g.t.b, lv = wgLive(m.g) && day === now.date;
+        return '<button type="button" class="wg-slot' + (m.x ? ' x' : '') + (past ? ' past' : '') + (lv ? ' live' : '') + '" data-wg="' + esc(m.g.key) + '" style="--c:' + wgColor(m.g.topic) + ';--i:' + i + '">' +
+          '<span class="wg-at">' + (m.g.t ? clockParts(m.g.t.a).t + '<i>' + clockParts(m.g.t.a).ap + '</i>' : '') + '</span><span class="wg-sb"><b>' + esc(m.g.name) + '</b><span>' + (m.x ? 'Cancelled' : lv ? 'Meeting now' : esc(m.g.time) + ', ' + esc(m.g.topic || '')) + '</span></span>' + icon('i-chev', 'wg-go') + '</button>'; }).join('')
+        : '<div class="wg-none">No meetings on ' + esc(longDate(day)) + '.</div>') + '</div>';
+  }
+  function listHtml() {
+    var ql = q.toLowerCase(), list = gs.filter(function (g) { return (dom === 'All' || g.topic === dom) && (!ql || (g.name + ' ' + (g.topic || '') + ' ' + ((g.site && g.site.about) || '')).toLowerCase().indexOf(ql) >= 0); });
+    return '<p class="wg-count">' + (list.length === gs.length ? 'All ' + gs.length + ' groups' : list.length + ' of ' + gs.length + ' groups') + '</p>' +
+      (list.length ? list.map(wgCard).join('') : '<div class="wg-none">Nothing matches "' + esc(q) + '". Try a topic like "servicing" or "AI".</div>');
+  }
+  box.innerHTML = '<section class="wg-hero"><span class="wg-eye">Open to Everyone</span><h2>Find Your Workgroup</h2><p>Every MISMO workgroup and community of practice, when it meets and how to join. Members and non-members are welcome. All times are Eastern.</p>' +
+    '<div class="wg-stats"><span><b>' + gs.length + '</b>Groups</span><span><b>' + weekN + '</b>Meetings in the Next 2 Weeks</span><span><b>' + doms.length + '</b>Topics</span></div></section>' +
+    /* the card opens the group; while it's meeting, Join Now goes straight into the meeting */
+    (spot ? '<div class="wg-spot' + (spot.live ? ' live' : '') + '" style="--c:' + wgColor(spot.g.topic) + '"><button type="button" class="wg-hit" data-wg="' + esc(spot.g.key) + '" aria-label="' + esc(spot.g.name) + '"></button><span class="wg-tk' + (spot.live ? ' live' : '') + '">' + (spot.live ? '<i></i>Meeting Now' : 'Up Next') + '</span>' +
+      '<b>' + esc(spot.g.name) + '</b><span class="wg-sw">' + esc(spot.live ? spot.g.time : wgWhen(spot.date, spot.g)) + (spot.live ? '' : '<em>' + wgSoon(spot.date, spot.g) + '</em>') + '</span>' +
+      (spot.live && spot.g.join ? '<a class="wg-join" href="' + esc(spot.g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + 'Join Now</a>' : '<span class="wg-join">Details' + icon('i-chev') + '</span>') + '</div>' : '') +
+    '<div class="sheet-pad wg-main"><h3 class="wg-h">Coming Up</h3><div class="wg-week">' + dayHtml() + '</div>' +
+    '<h3 class="wg-h">All Groups</h3><label class="mx-search wg-search">' + icon('i-search') + '<input type="search" placeholder="Search groups and topics" aria-label="Search groups"></label>' +
+    '<div class="mx-cats wg-doms" role="group" aria-label="Topic">' + ['All'].concat(doms).map(function (x) { return '<button type="button" data-wg-dom="' + esc(x) + '" aria-pressed="' + (x === dom) + '"' + (x === 'All' ? '' : ' style="--c:' + wgColor(x) + '"') + '>' + esc(x) + '</button>'; }).join('') + '</div>' +
+    '<div class="wg-list">' + listHtml() + '</div>' +
+    '<div class="wg-all"><b>Add Every Meeting to Your Calendar</b><span>Your calendar updates on its own when the schedule changes.</span>' + wgCalLinks(WG_ICS + 'mismo-meetings.ics', 'MISMO Workgroup Meetings') + '</div></div>';
+  box.querySelector('.wg-search input').addEventListener('input', function (e) { q = e.target.value.trim(); box.querySelector('.wg-list').innerHTML = listHtml(); });
+  box.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-wg-day]'))) { day = t.getAttribute('data-wg-day'); box.querySelector('.wg-week').innerHTML = dayHtml(); var b = box.querySelector('[data-wg-day="' + day + '"]'); if (b && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'center' }); return; }
+    if ((t = e.target.closest('[data-wg-dom]'))) { dom = t.getAttribute('data-wg-dom'); box.querySelectorAll('[data-wg-dom]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); box.querySelector('.wg-list').innerHTML = listHtml(); return; }
+  });
+}
+function wgDetail(key) {
+  var g = wgGroups().filter(function (x) { return x.key === key; })[0]; if (!g) return;
+  var c = wgColor(g.topic), nx = wgNext(g, 5), sp = wgSponsor(g), lead = wgLeaders(g), ag = wgAgenda(g), feed = wgFeed(g), live = wgLive(g), ss = wgSessions(g);
+  var h = '<div class="wgd-top" style="--c:' + c + '"><span class="wgd-k">' + esc(g.topic || '') + '</span><h2>' + esc(g.name) + '</h2><span class="wgd-kind">' + wgKind(g) + '</span>' +
+    (sp ? '<span class="wgd-sp"><i>Sponsored by</i>' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="' + esc(sp.sponsor) + '">' : '<b>' + esc(sp.sponsor) + '</b>') + '</span>' : '') + '</div>' +
+    '<div class="sheet-pad wgd">' +
+    (g.rule.hold ? '<div class="note">This group\'s meetings are on hold for now.</div>' :
+      '<div class="wgd-act">' + (g.join ? '<a class="btn primary' + (live ? ' wg-livebtn' : '') + '" href="' + esc(g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + (live ? 'Join Now' : 'Join the Meeting') + '</a>' : '') +
+      (feed ? '<button type="button" class="btn" data-wg-cal>' + icon('i-cal') + 'Add to Calendar</button>' : '') + '</div>' +
+      (feed ? '<div class="wgd-cals" hidden>' + wgCalLinks(feed, g.name + ' (MISMO)') + '<span>Every meeting, kept up to date, including cancellations.</span></div>' : '')) +
+    '<h3 class="wg-h">When It Meets</h3><div class="wgd-when"><b>' + esc(g.cadence) + '</b>' + (g.rule.hold ? '' : '<span>' + esc(g.time) + '</span>') + '</div>' +
+    (nx.length ? '<div class="wgd-dates">' + nx.map(function (o) { var p = dparts(o.date); return '<span class="' + (o.cancelled ? 'x' : '') + '"><i>' + DOW[p.dow].slice(0, 3) + '</i><b>' + MON[p.m - 1] + ' ' + p.d + '</b>' + (o.cancelled ? '<em>Cancelled</em>' : '') + '</span>'; }).join('') + '</div>' : '') +
+    (ss.length ? '<h3 class="wg-h">At the ' + esc(S.summit.name) + '</h3>' + ss.map(function (x) { return '<button type="button" class="wgd-ses" data-open="s:' + esc(x.id) + '">' + calBlock(x.date) + '<span><b>' + esc(x.title) + '</b><span>' + esc(span(x.a, x.b)) + (x.room ? ', ' + esc(x.room) : '') + '</span></span>' + icon('i-chev', 'wg-go') + '</button>'; }).join('') : '') +
+    (g.site && g.site.about ? '<h3 class="wg-h">What It Does</h3><p class="wgd-about">' + esc(g.site.about) + '</p>' : '') +
+    (ag && ag.items && ag.items.length ? '<h3 class="wg-h">Working On Now</h3><div class="wgd-ag">' + ag.items.map(function (it) { return '<div><span class="wgd-st">' + esc(it[0]) + '</span><b>' + esc(it[1]) + '</b><p>' + esc(it[2] || '') + '</p></div>'; }).join('') + '</div>' +
+      (ag.date ? '<p class="wgd-from">From the agenda for ' + esc(longDate(ag.date)) + '</p>' : '') : '') +
+    (lead.length ? '<h3 class="wg-h">Who Leads It</h3><div class="wgd-lead">' + lead.map(function (l) { return '<div>' + avatarHtml({ id: 'wg:' + l.name, name: l.name, photo: 0 }) + '<span><b>' + esc(l.name) + '</b><span>' + esc(l.role) + (l.company ? ', ' + esc(l.company) : '') + '</span></span></div>'; }).join('') + '</div>' : '') +
+    (g.site && g.site.url ? '<a class="btn wgd-page" href="' + esc(g.site.url) + '" target="_blank" rel="noopener">' + icon('i-globe') + 'Visit the Group\'s Page on mismo.org</a>' : '') + '</div>';
+  var el = openSheet(g.name, h, { plain: true });
+  el.addEventListener('click', function (e) { if (e.target.closest('[data-wg-cal]')) { var b = el.querySelector('.wgd-cals'); if (b) b.hidden = !b.hidden; } });
+}
 /* ---------- MISMO Trivia (coming soon: waiting on the questions) ---------- */
 var TRIVIA_CATS = [
   ['MISMO Standards', 'The data standards and how they fit together', '#2477b8'],
@@ -3612,6 +3932,30 @@ function bagSheet() {
     $$('.mx-bagbtn b').forEach(function (x) { x.textContent = bagCount(); });
   });
 }
+/* the summit's sponsors, top level first, as logos for the Summit tile's strip */
+function summitSponsorLogos() {
+  var out = []; sponsorTiers().forEach(function (t) { t.list.forEach(function (sp) { if (sp.logo && out.indexOf(sp.logo) < 0) out.push(sp.logo); }); });
+  return out.slice(0, 18);
+}
+/* the strip shows as many plates as fit (three on a phone, six on a wide tile); every few seconds one plate fades to the
+   next sponsor not already showing, so every sponsor comes round (still when Reduce Motion is on) */
+setInterval(function () {
+  if (document.hidden || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  document.querySelectorAll('.ws-logos').forEach(function (box) {
+    var all; try { all = JSON.parse(box.getAttribute('data-logos') || '[]'); } catch (e) { return; }
+    var vis = Array.prototype.filter.call(box.querySelectorAll('.ws-plate'), function (p) { return p.offsetTop < 10; });
+    if (all.length <= vis.length) return;
+    var showing = vis.map(function (p) { var i = p.querySelector('img.on'); return i ? i.getAttribute('src') : ''; });
+    var k = +(box.getAttribute('data-k') || 0), ptr = +(box.getAttribute('data-p') || vis.length), next = null;
+    for (var n = 0; n < all.length && !next; n++) { var u = all[(ptr + n) % all.length]; if (showing.indexOf(u) < 0) { next = u; ptr = (ptr + n + 1) % all.length; } }
+    if (!next) return;
+    var pl = vis[k % vis.length], old = pl.querySelector('img.on'), im = document.createElement('img');
+    im.alt = ''; im.src = next; pl.appendChild(im);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { im.classList.add('on'); if (old) old.classList.remove('on'); }); });
+    setTimeout(function () { if (old && old.parentNode) old.remove(); }, 800);
+    box.setAttribute('data-k', (k + 1) % vis.length); box.setAttribute('data-p', ptr);
+  });
+}, 1700);
 function widget(id) {
   var d = DASH.filter(function (x) { return x.id === id; })[0], h;
   var head = function (lbl) { return '<span class="w-head">' + icon(d.icon) + '<span>' + esc(lbl || d.name) + '</span></span>'; };
@@ -3627,9 +3971,15 @@ function widget(id) {
       if (nx && !nx.preview) return nextCard('dash');   /* the summit is over: the next one takes the tile */
       big = '<b>Thank You</b>'; sub = 'for joining us in ' + esc(S.place);
     }
-    return '<button type="button" class="wd w-summit wide" data-go="home">' + summitArt() + '<span class="w-head">' + icon('i-s') + '<span>MISMO Summit</span>' + icon('i-chev', 'go') + '</span>' +
+    /* Jonna, Nov 27, 2026: the sponsors live on the Summit tile now, in a strip along its foot, instead of a tile of their own.
+       The tile is a card with a button over it, so the strip can be a button of its own. */
+    var sl = summitSponsorLogos();
+    return '<div class="wd w-summit wide' + (sl.length ? ' has-spon' : '') + '"><button type="button" class="w-hit" data-go="home" aria-label="' + esc(S.summit.name) + '"></button>' + summitArt() + '<span class="w-head">' + icon('i-s') + '<span>MISMO Summit</span>' + icon('i-chev', 'go') + '</span>' +
       '<span class="w-city">' + esc(S.place) + '</span><span class="w-name">' + esc(S.summit.name) + '</span>' +
-      '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span></button>' + dashLive() + nextCard('dash');
+      '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span>' +
+      (sl.length ? '<button type="button" class="ws-spon" data-sponsors aria-label="See all ' + S.sponsors.length + ' sponsors"><span class="ws-lbl"><b>' + S.sponsors.length + ' Sponsors</b><i>See All' + icon('i-chev') + '</i></span>' +
+        '<span class="ws-logos" data-logos="' + esc(JSON.stringify(sl)) + '">' + sl.slice(0, 6).map(function (u) { return '<span class="ws-plate"><img class="on" src="' + esc(u) + '" alt=""></span>'; }).join('') + '</span></button>' : '') +
+      '</div>' + dashLive() + nextCard('dash');
   }
   if (id === 'micdup') {
     var ep = MU && MU.episodes && MU.episodes[0];
@@ -3659,14 +4009,7 @@ function widget(id) {
     return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="w-num"><b>' + (all || '') + '</b></span><span class="w-sub">' + (all ? 'Certified: ' + no + ' organizations and ' + ppl + ' professionals' : 'Certified products and professionals') + '</span>' +
       (CERT ? '<span class="w-new"><b>' + fresh.length + '</b> new in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
-  if (id === 'sponsors') {
-    if (!S.sponsors.length) return '';
-    var top = (sponsorTiers()[0] || { list: [] }).list.slice(0, 6);
-    return '<button type="button" class="wd w-spon" data-sponsors>' + head() + '<span class="w-logos">' + top.map(function (sp, i) { if (!sp.logo) return ''; var lb = (LOGOBG && LOGOBG.logos && LOGOBG.logos[sp.logo]) || 'solid', dk = darkNow();
-      /* a logo on its own white rectangle has a copy with the white taken away, used on the dark tile */
-      var src = lb && lb.src && dk ? lb.src : sp.logo, cls = lb && lb.kind ? (dk ? lb.kind : 'solid') : lb;
-      return '<img class="' + cls + '" src="' + esc(src) + '" alt="" style="--i:' + i + ';--n:' + top.length + '">'; }).join('') + '</span><span class="w-sub">' + S.sponsors.length + ' supporting the ' + esc(S.summit.name) + '</span></button>';
-  }
+  if (id === 'groups') return wgTile();
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
   if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
     var show = ['hoodie', 'mug', 'cap', 'tote', 'tee', 'bottle'].map(function (k) { return MERCH.filter(function (p) { return p.id === k; })[0]; });
@@ -4733,6 +5076,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-certs')) { certsSheet(); return; }
   if (t.hasAttribute('data-trivia')) { triviaSheet(); return; }
   if (t.hasAttribute('data-merch')) { merchSheet(); return; }
+  if (t.hasAttribute('data-groups')) { wgSheet(); return; }
+  if (t.hasAttribute('data-wg')) { wgDetail(t.getAttribute('data-wg')); return; }
   if (t.hasAttribute('data-web')) { webSheet(t.getAttribute('data-web'), t.getAttribute('data-web-title') || ''); return; }
   if (t.hasAttribute('data-web-ics')) { var wb = upcomingWebinars().filter(function (w) { return w.id === t.getAttribute('data-web-ics'); })[0]; if (wb) webinarIcs(wb); return; }
   if (t.hasAttribute('data-bio')) { var bb = document.getElementById(t.getAttribute('data-bio')); if (bb) { bb.hidden = !bb.hidden; t.innerHTML = icon('i-user') + (bb.hidden ? 'View Bio' : 'Hide Bio'); t.setAttribute('aria-expanded', String(!bb.hidden)); } return; }
