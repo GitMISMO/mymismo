@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Summit Recap picture redone as one image: the night sky runs into the New Orleans skyline, the city's name in big outlined letters like Explore's header, the numbers on glass, and up to three of your summit photos as little prints (tap them in Your Photos to pick or take off). Sharing is one button, Share on LinkedIn, beside Save Picture.
+- Nov 27, 2026: The summit's Home tab is now called Summit. The Board's note says three minutes (it was still saying four).
 - Nov 27, 2026: Thank You to Our Sponsors: the skyline is gone; the navy, the glow, the light trails and the sponsor logos stay.
 - Nov 27, 2026: A session's pop-up wears the summit's header too (navy, the New Orleans skyline and moon), with the session type in its colored tag. Who I Met has a gold Take a Picture button right on the camera.
 - Nov 27, 2026: Who I Met is the same for everyone: staff, facilitators, signed-in attendees and anyone at the summit can scan a name tag, take a picture together, or both. The picture stays on the phone (it isn't sent with staff notes). Names fill in from tags for signed-in attendees, staff and facilitators.

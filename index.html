@@ -1727,7 +1727,13 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ld-top .met-big{width:64px; height:64px; border-radius:12px; object-fit:cover; flex:none; box-shadow:0 2px 8px rgba(13,49,76,.25)}
 .met-row{width:34px; height:34px; border-radius:8px; object-fit:cover; flex:none}
 .rc-p.has-pic{display:grid; grid-template-columns:40px 1fr; column-gap:10px} .rc-p.has-pic .met-row{grid-row:span 3; width:40px; height:40px}
-.rc .rc-li{width:100%; justify-content:center; margin:8px 0 4px; background:#0a66c2; border-color:#0a66c2; color:#fff}
+.rc-hint{margin:-4px 0 10px; font-size:13px; color:var(--ink-2)}
+.rc-pick .ph-tile{position:relative; padding:0; border:3px solid transparent; border-radius:10px; overflow:hidden; cursor:pointer; background:none}
+.rc-pick .ph-tile.on{border-color:#eb6834}
+.rc-pick .ph-tile i{position:absolute; top:6px; right:6px; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:13px; background:#eb6834; color:#fff}
+.rc-pick .ph-tile:not(.on) i{display:none}
+.rc-pic img{transition:opacity .2s ease}
+.rc .rc-li{justify-content:center; background:#0a66c2; border-color:#0a66c2; color:#fff}
 .ph-ed .ph-cv canvas{cursor:grab; touch-action:none} .ph-ed .ph-cv canvas:active{cursor:grabbing}
 /* move and zoom the photo (Jonna, Nov 27, 2026) */
 .ph-move{background:#071d2e; display:flex; align-items:center; gap:12px; padding:0 16px 12px; color:#a9d8f3; font-size:12.5px}
@@ -2357,7 +2363,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 
 <nav class="tabbar" aria-label="MyMISMO">
   <div class="in">
-    <button type="button" data-hq="home"><svg aria-hidden="true"><use href="#i-home"/></svg>Home</button>
+    <button type="button" data-hq="home"><svg aria-hidden="true"><use href="#i-badge"/></svg>Summit</button>
     <button type="button" data-hq="agenda"><svg aria-hidden="true"><use href="#i-agenda"/></svg>Agenda</button>
     <button type="button" data-hq="mine"><svg aria-hidden="true"><use href="#i-star"/></svg>My Schedule<span class="badge" id="mine-badge"></span></button>
     <button type="button" data-hq="people"><svg aria-hidden="true"><use href="#i-people"/></svg>People</button>
@@ -2711,20 +2717,70 @@ function recapData(cb) {
     cb({ ses: ses, met: met, ph: ph, ch: PH_PROMPTS.filter(function (p) { return done[p]; }).length });
   });
 }
-function recapPicture(d, cb) {
+function recapPicture(d, cb, picks) {
+  /* Jonna, Nov 27, 2026: one picture, top to bottom: the night sky into the city's skyline, the city's name in big
+     outlined letters like Explore's header, the numbers on glass, and (if they want) up to three of their summit photos
+     as little prints. 1080 x 1350, right for LinkedIn and Instagram. */
   phAssets(function (as) {
-    var cv = document.createElement('canvas'), W = 1080, H = 1350, x; cv.width = W; cv.height = H; x = cv.getContext('2d');
-    var COND = '"IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif', SANS = '"IBM Plex Sans", sans-serif';
-    var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#14486e'); g.addColorStop(.6, '#0d314c'); g.addColorStop(1, '#071d2e'); x.fillStyle = g; x.fillRect(0, 0, W, H);
-    if (as.art) x.drawImage(as.art, 0, 0, 1200, 560, -60, H - 600, 1200, 560);
-    var sh = x.createLinearGradient(0, H - 700, 0, H - 300); sh.addColorStop(0, '#0d314c'); sh.addColorStop(1, 'rgba(13,49,76,0)'); x.fillStyle = sh; x.fillRect(0, H - 700, W, 400);
-    x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(70, 80, 270, 66, 10) : x.rect(70, 80, 270, 66); x.fill(); if (as.logo) x.drawImage(as.logo, 88, 98, 234, 234 * 108 / 708);
-    x.fillStyle = '#a9d8f3'; x.font = '700 40px ' + SANS; x.fillText('My ' + S.summit.name, 70, 240);
-    x.fillStyle = '#fff'; x.font = '700 120px ' + COND; x.fillText(S.place || '', 66, 360);
-    var stats = [[d.ses.length, d.ses.length === 1 ? 'Session' : 'Sessions'], [d.met.length, d.met.length === 1 ? 'Person Met' : 'People Met'], [d.ph.length, d.ph.length === 1 ? 'Photo' : 'Photos']];
-    stats.forEach(function (st, i) { var y = 470 + i * 150; x.fillStyle = i === 2 ? '#eb6834' : '#74bfeb'; x.fillRect(70, y, 10, 112); x.fillStyle = '#fff'; x.font = '700 104px ' + COND; x.fillText(String(st[0]), 110, y + 92); var w = x.measureText(String(st[0])).width; x.fillStyle = '#cfe3f1'; x.font = '600 44px ' + SANS; x.fillText(st[1], 130 + w, y + 88); });
-    if (d.ch) { x.fillStyle = '#ffb48f'; x.font = '700 36px ' + SANS; x.fillText('Photo Challenge: ' + d.ch + ' of ' + PH_PROMPTS.length, 70, 960); }
-    cv.toBlob(function (b) { cb(b); }, 'image/jpeg', .9);
+    if (!as.sky) { phImg(phArtSvg(true, { moon: [-4000, -4000, .01] }), function (i) { as.sky = i || as.clear || 'none'; recapPicture(d, cb, picks); }); return; }
+    var imgs = [], left = (picks || []).length;
+    function go() {
+      var cv = document.createElement('canvas'), W = 1080, H = 1350, x; cv.width = W; cv.height = H; x = cv.getContext('2d');
+      var COND = '"IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif', SANS = '"IBM Plex Sans", sans-serif', city = S.place || 'The Summit';
+      function rr(a, b, w, h, r) { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); }
+      function fit(t, w0, size, fam, max) { x.font = w0 + ' ' + size + 'px ' + fam; while (x.measureText(t).width > max && size > 20) { size -= 4; x.font = w0 + ' ' + size + 'px ' + fam; } return size; }
+      /* the sky, one gradient all the way down so the city sits in it */
+      var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#04121d'); g.addColorStop(.45, '#0b2c46'); g.addColorStop(.78, '#0e3a5c'); g.addColorStop(1, '#071d2e'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      var glow = x.createRadialGradient(820, 260, 20, 820, 260, 620); glow.addColorStop(0, 'rgba(116,191,235,.35)'); glow.addColorStop(1, 'rgba(116,191,235,0)'); x.fillStyle = glow; x.fillRect(0, 0, W, H);
+      for (var i = 0; i < 90; i++) { var sx = (i * 397) % W, sy = (i * 211) % 760, r = (i % 7 === 0) ? 2.6 : 1.4; x.fillStyle = 'rgba(255,255,255,' + (0.25 + (i % 5) * 0.12) + ')'; x.beginPath(); x.arc(sx, sy, r, 0, Math.PI * 2); x.fill(); }
+      /* the moon */
+      x.save(); x.shadowColor = 'rgba(233,244,251,.85)'; x.shadowBlur = 60; x.fillStyle = '#eef6fb'; x.beginPath(); x.arc(900, 170, 62, 0, Math.PI * 2); x.fill(); x.restore();
+      x.fillStyle = '#04121d'; x.globalAlpha = .9; x.beginPath(); x.arc(928, 152, 58, 0, Math.PI * 2); x.fill(); x.globalAlpha = 1;
+      /* the city's name, huge and outlined, behind everything */
+      var words = city.toUpperCase().split(/\s+/), lines = words.length > 1 ? [words.slice(0, Math.ceil(words.length / 2)).join(' '), words.slice(Math.ceil(words.length / 2)).join(' ')] : words;
+      x.save(); x.lineWidth = 3; x.strokeStyle = 'rgba(116,191,235,.42)'; lines.forEach(function (l, k) { var sz = fit(l, '700', 300, COND, W - 60); x.strokeText(l, 34, 300 + k * sz * .86); }); x.restore();
+      /* the skyline across the bottom, from edge to edge */
+      if (as.sky && as.sky !== 'none') { var sc = 1.32, aw = 1200 * sc, ah = 560 * sc; x.drawImage(as.sky, 0, 0, 1200, 560, W - aw + 40, H - ah + 40, aw, ah); }
+      var fade = x.createLinearGradient(0, H - 260, 0, H); fade.addColorStop(0, 'rgba(7,29,46,0)'); fade.addColorStop(1, 'rgba(7,29,46,.85)'); x.fillStyle = fade; x.fillRect(0, H - 260, W, 260);
+      /* the logo and who it's for */
+      x.fillStyle = '#fff'; rr(64, 64, 250, 62, 10); x.fill(); if (as.logo) x.drawImage(as.logo, 82, 80, 214, 214 * 108 / 708);
+      x.textBaseline = 'alphabetic';
+      x.fillStyle = '#a9d8f3'; x.font = '700 38px ' + SANS; x.fillText('My ' + S.summit.name, 66, 410);
+      var cs = fit(city, '700', 150, COND, W - 130); x.save(); x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 24; x.fillStyle = '#fff'; x.fillText(city, 60, 410 + cs * .92); x.restore();
+      x.fillStyle = '#cfe3f1'; x.font = '600 34px ' + SANS; x.fillText(phShort() + (S.first ? ', ' + S.first.slice(0, 4) : ''), 66, 410 + cs * .92 + 54);
+      /* the numbers, on glass */
+      var top = 410 + cs * .92 + 96, stats = [[d.ses.length, d.ses.length === 1 ? 'Session' : 'Sessions', '#74bfeb'], [d.met.length, d.met.length === 1 ? 'Person Met' : 'People Met', '#4fc79b'], [d.ph.length, d.ph.length === 1 ? 'Photo' : 'Photos', '#eb6834']];
+      stats.forEach(function (st, k) {
+        var bx = 60 + k * 330, bw = 300, bh = 176;
+        x.save(); x.fillStyle = 'rgba(255,255,255,.08)'; rr(bx, top, bw, bh, 22); x.fill(); x.strokeStyle = 'rgba(255,255,255,.22)'; x.lineWidth = 2; x.stroke(); x.restore();
+        x.fillStyle = st[2]; rr(bx, top, bw, 8, 4); x.fill();
+        x.save(); x.shadowColor = st[2]; x.shadowBlur = 26; x.fillStyle = '#fff'; x.font = '700 108px ' + COND; x.fillText(String(st[0]), bx + 26, top + 118); x.restore();
+        x.fillStyle = '#cfe3f1'; x.font = '600 30px ' + SANS; x.fillText(st[1], bx + 28, top + 156);
+      });
+      var y2 = top + 176;
+      /* their photos as little prints */
+      if (imgs.length) {
+        var n = imgs.length, pw = n === 1 ? 330 : n === 2 ? 300 : 270, ph = Math.min(pw * 1.18, H - 150 - (y2 + 50)), gap = n === 1 ? 0 : Math.min(60, (W - 120 - n * pw) / (n - 1)), x0 = (W - (n * pw + (n - 1) * gap)) / 2, tilt = [-.07, .045, -.03];
+        imgs.forEach(function (im, k) {
+          var cx = x0 + pw / 2 + k * (pw + gap), cy = y2 + 50 + ph / 2;
+          x.save(); x.translate(cx, cy); x.rotate(tilt[k] * (n === 1 ? .6 : 1));
+          x.shadowColor = 'rgba(0,0,0,.55)'; x.shadowBlur = 40; x.shadowOffsetY = 16; x.fillStyle = '#fbfaf6'; x.fillRect(-pw / 2, -ph / 2, pw, ph); x.shadowColor = 'transparent';
+          var iw = pw - 28, ih = iw * 1.25 > ph - 70 ? ph - 70 : iw * 1.25, r = Math.max(iw / im.width, ih / im.height), sw = iw / r, sh2 = ih / r;
+          x.drawImage(im, (im.width - sw) / 2, (im.height - sh2) / 2, sw, sh2, -iw / 2, -ph / 2 + 14, iw, ih);
+          x.restore();
+        });
+        y2 += 60 + ph + 30;
+      } else if (d.met.length) {   /* no photos: the first few people they met, by first name */
+        x.fillStyle = '#a9d8f3'; x.font = '700 30px ' + SANS; x.fillText('Great to meet', 66, y2 + 74);
+        x.fillStyle = '#fff'; x.font = '600 40px ' + SANS; var names = d.met.slice(0, 4).map(function (m) { return String(m.name || '').split(/\s+/)[0]; }).filter(Boolean).join(', ') + (d.met.length > 4 ? ' and more' : '');
+        fit(names, '600', 40, SANS, W - 140); x.fillText(names, 66, y2 + 124);
+      }
+      if (d.ch) { x.fillStyle = '#eb6834'; rr(60, H - 132, 470, 66, 12); x.fill(); x.fillStyle = '#fff'; x.font = '700 32px ' + SANS; x.fillText('Photo Challenge: ' + d.ch + ' of ' + PH_PROMPTS.length, 84, H - 88); }
+      x.fillStyle = 'rgba(255,255,255,.85)'; x.font = '700 30px ' + SANS; x.textAlign = 'right'; x.fillText('#MISMO', W - 64, H - 88); x.textAlign = 'left';
+      cv.toBlob(function (b) { cb(b); }, 'image/jpeg', .9);
+    }
+    if (!left) { go(); return; }
+    (picks || []).forEach(function (bl, k) { var u = URL.createObjectURL(bl), im = new Image(); im.onload = im.onerror = function () { if (im.naturalWidth) imgs[k] = im; if (--left === 0) { imgs = imgs.filter(Boolean); go(); } }; im.src = u; });
   });
 }
 function vcards(list) {
@@ -2734,20 +2790,27 @@ function vcards(list) {
 }
 function recapSheet() {
   var el = openSheet('Your Summit Recap', '<div class="sheet-pad rc"><div class="note">Putting your recap together…</div></div>', { plain: true }), box = el.querySelector('.rc'), D = null, pic = null;
+  var sel = [];
+  function draw() { var im = box.querySelector('.rc-pic img'); if (im) im.style.opacity = '.55'; recapPicture(D, function (b) { pic = b; var im2 = box.querySelector('.rc-pic img'); if (im2) { im2.src = URL.createObjectURL(b); im2.style.opacity = ''; } }, sel.map(function (i) { return D.ph[i] && D.ph[i].blob; }).filter(Boolean)); }
   recapData(function (d) {
-    D = d;
+    D = d; sel = d.ph.slice(0, 3).map(function (p, i) { return i; });
     box.innerHTML = '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
-      '<div class="ph-acts"><button type="button" class="btn primary" data-rc-share>' + icon('i-share') + 'Share</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
-      '<button type="button" class="btn rc-li" data-rc-li>' + icon('i-send') + 'Post on LinkedIn</button>' +
+      '<div class="ph-acts"><button type="button" class="btn primary rc-li" data-rc-li>' + icon('i-send') + 'Share on LinkedIn</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
       '<h3 class="wg-h">Sessions You Starred</h3>' + (d.ses.length ? slots(d.ses, { withDay: true }) : '<div class="note">You didn\'t star any sessions this time.</div>') +
       (canScan() ? '<div class="sct-h"><h3 class="wg-h">People You Met</h3>' + (d.met.length ? '<button type="button" class="linkbtn" data-rc-vcf>' + icon('i-download') + 'Save All to Contacts</button>' : '') + '</div>' +
         (d.met.length ? '<div class="rc-met">' + d.met.map(function (p) { return '<div class="rc-p' + (p.pic ? ' has-pic' : '') + '">' + metThumb(p, 'met-row') + '<b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span>' + (p.note ? '<i>' + esc(p.note) + '</i>' : '') + '</div>'; }).join('') + '</div>' : '<div class="note">Nobody scanned this time.</div>') : '') +
-      '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<div class="ph-grid">' + d.ph.slice(0, 12).map(function (p) { return '<div class="ph-tile"><img alt="" src="' + phThumb(p) + '"></div>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
+      '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<p class="rc-hint">Tap up to three to put them on your recap picture as little prints. Tap again to take one off.</p><div class="ph-grid rc-pick">' + d.ph.slice(0, 12).map(function (p, i) { return '<button type="button" class="ph-tile' + (sel.indexOf(i) >= 0 ? ' on' : '') + '" data-rc-ph="' + i + '" aria-pressed="' + (sel.indexOf(i) >= 0) + '"><img alt="" src="' + phThumb(p) + '"><i>' + (sel.indexOf(i) + 1 || '') + '</i></button>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
       '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
-    recapPicture(d, function (b) { pic = b; var im = box.querySelector('.rc-pic img'); if (im) im.src = URL.createObjectURL(b); });
+    draw();
   });
   el.addEventListener('click', function (e) {
-    var name = 'my-' + slug(S.summit.name);
+    var name = 'my-' + slug(S.summit.name), tp = e.target.closest('[data-rc-ph]');
+    if (tp && D) {
+      var k = +tp.getAttribute('data-rc-ph'), at = sel.indexOf(k);
+      if (at >= 0) sel.splice(at, 1); else if (sel.length < 3) sel.push(k); else { mxToast('Three fit on the picture. Tap one to take it off first.'); return; }
+      box.querySelectorAll('[data-rc-ph]').forEach(function (b) { var j = sel.indexOf(+b.getAttribute('data-rc-ph')); b.classList.toggle('on', j >= 0); b.setAttribute('aria-pressed', String(j >= 0)); b.querySelector('i').textContent = j >= 0 ? j + 1 : ''; });
+      draw(); return;
+    }
     if (e.target.closest('[data-rc-save]') && pic) { var a = document.createElement('a'); a.href = URL.createObjectURL(pic); a.download = name + '.jpg'; document.body.appendChild(a); a.click(); a.remove(); return; }
     if (e.target.closest('[data-rc-share]') && pic) { var f = new File([pic], name + '.jpg', { type: 'image/jpeg' }); if (navigator.canShare && navigator.canShare({ files: [f] })) navigator.share({ files: [f], title: 'My ' + S.summit.name }).catch(function () {}); else mxToast('Sharing isn\'t available here. Save the picture, then share it from your photos.'); return; }
     /* Jonna, Nov 27, 2026: the phone decides which apps the Share list shows, so LinkedIn gets its own button: the words
@@ -4196,8 +4259,9 @@ function phLogoImg(cb) {
 var PH_FRAMES = [['pass', 'Summit Pass'], ['night', 'Night Out'], ['postcard', 'Postcard'], ['instant', 'Instant'], ['badge', 'Name Badge'], ['none', 'No Frame']];
 var PH_ART = null;
 function phImg(svg, cb) { var im = new Image(); im.onload = function () { cb(im); }; im.onerror = function () { cb(null); }; im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }
-function phArtSvg(clear) {
-  var s = cityArt(S.place || '', clear ? { ground: false } : {}) || heroArt(clear ? { ground: false } : {});
+function phArtSvg(clear, more) {
+  var o = clear ? { ground: false } : {}; if (more) for (var k in more) o[k] = more[k];
+  var s = cityArt(S.place || '', o) || heroArt(o);
   return s.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" ').replace(/<g class="no-car">/, '<g transform="translate(820,470)">').replace(/<g fill="none" stroke="#ffffff" stroke-linecap="round" class="ha-run">[\s\S]*?<\/g>/, '');
 }
 function phAssets(cb) {
@@ -5656,7 +5720,7 @@ function triviaBoard(all, srv) {
       '<div class="tb-wall"><div class="tb-grid" role="grid" aria-label="The Board">' + cats.map(function (c, i) { return '<div class="tb-h" style="--cc:' + catColor(c) + ';--i:' + i + '">' + esc(TB_SHORT[c] || c) + '</div>'; }).join('') +
       TB_VALUES.map(function (v, r) { return cats.map(function (c, k) { var x = cells[k][r];
         return '<button type="button" class="tb-c' + (x && x.done ? (x.ok ? ' ok' : ' no') + (x === lastDone ? ' just' : '') : '') + '" data-tb="' + k + '-' + r + '" style="--rd:' + Math.round(250 + Math.random() * 900) + 'ms"' + (!x || x.done ? ' disabled' : '') + ' aria-label="' + esc((TB_SHORT[c] || c) + ' for ' + v) + '"><span>' + (x ? v : '') + '</span></button>'; }).join(''); }).join('') + '</div></div>' +
-      '<p class="tb-note">Four minutes to play as many squares as you can, then the Final Square. Right adds the points, wrong takes them away, and running out of time on a square costs nothing. One square is worth double.</p></div>';
+      '<p class="tb-note">Three minutes to play as many squares as you can, then the Final Square. Right adds the points, wrong takes them away, and running out of time on a square costs nothing. One square is worth double.</p></div>';
     if (!back) {   /* the board lighting up: a blip per square, as it flips on */
       var ms = []; box.querySelectorAll('.tb-c').forEach(function (c) { ms.push(parseInt(c.style.getPropertyValue('--rd'), 10) || 0); });
       cats.forEach(function (c, i) { TVSFX.head(i); }); TVSFX.fill(ms.sort(function (a, b) { return a - b; }));
