@@ -75,3 +75,9 @@ Test Badge screen; scans stay on the phone that scanned until the relay part is 
   Summit HQ's check-in list carries a `facilitator` field (CN-058).
 - **Attendance Now**: staff and facilitators both see every session and workgroup, not just their own (Jonna: no
   Meeting Trackers link needed).
+
+## Relay request 17 (written Nov 27, 2026)
+The relay part for scanning and Summit Photos is written and tested: `_internal/relay-request-17` (patch, REQUEST.md, 37
+checks). The app already uses it: when Perry turns it on, check-ins, Who I Met and touchpoints are sent every 20 seconds
+and when the Wi-Fi comes back (never counted twice), facilitators get names, Attendance Now shows everyone's check-ins live,
+and photos sent to MISMO go up for Amy's review. Sponsors' own lead scanning is a later request.
