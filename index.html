@@ -520,20 +520,21 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .cal i{display:block; font-style:normal; font-size:11px; font-weight:700; background:#eb6834; color:#fff; padding:2px 0}
 .cal b{display:block; font-family:var(--cond); font-size:24px; line-height:1.25}
 .w-web{background:var(--surface)}
-.wt-top{display:flex; flex-direction:column; gap:6px; align-self:stretch; margin:-16px -16px 0; padding:16px 16px 12px; color:#fff; background:linear-gradient(150deg, #f08a5d 0%, #eb6834 45%, #d95926 100%)}
+.wt-top{display:flex; flex-direction:column; gap:4px; align-self:stretch; margin:-16px -16px 0; padding:14px 16px 9px; color:#fff; background:linear-gradient(150deg, #f08a5d 0%, #eb6834 45%, #d95926 100%)}
 .w-web .wt-top .w-head, .w-web .wt-top .w-head svg{color:#fff3ec}
 .wt-wm{position:absolute; right:-18px; bottom:-22px; z-index:-1; color:#eb6834; opacity:.08} .wt-wm svg{width:120px; height:120px}
 .wt-stub{display:flex; align-items:flex-end; justify-content:space-between; gap:8px; width:100%}
-.wt-day{display:grid; gap:3px; line-height:1} .wt-day i{font-style:normal; font-size:12px; font-weight:800; color:#fff3ec; white-space:nowrap} .wt-day b{font-family:var(--cond); font-size:36px; font-weight:700; letter-spacing:-.01em; white-space:nowrap}
-.wt-perf{position:relative; display:block; align-self:stretch; height:0; border-top:2px dashed #f3b59a; margin:0 0 6px}
+.wt-day{display:grid; gap:3px; line-height:1} .wt-day i{font-style:normal; font-size:12px; font-weight:800; color:#fff3ec; white-space:nowrap} .wt-day b{font-family:var(--cond); font-size:32px; font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.wt-perf{position:relative; display:block; align-self:stretch; height:0; border-top:2px dashed #f3b59a; margin:0 0 3px}
 .wt-perf:before, .wt-perf:after{content:""; position:absolute; top:-12px; width:22px; height:22px; border-radius:50%; background:var(--ground)}
 .wt-perf:before{left:-28px} .wt-perf:after{right:-28px}
-.w-web .w-t{font-size:15.5px; line-height:1.22; -webkit-line-clamp:3; min-width:0; overflow-wrap:break-word; color:var(--ink)}
+.w-web .w-t{font-size:15px; line-height:1.22; -webkit-line-clamp:2; min-width:0; overflow-wrap:break-word; color:var(--ink)}
 .w-web .w-sub{color:#d95926; font-weight:700}
 .w-web .wm-d i{color:#eb6834}
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
-.w-mat{position:relative; overflow:hidden; border-color:#3f97d3; background:linear-gradient(155deg, #8ccbf0 0%, #4ea3dc 50%, #2477b8 100%); padding-top:14px; padding-bottom:20px}
-.w-mat:before{content:""; position:absolute; inset:0; background:radial-gradient(circle, rgba(255,255,255,.28) 1px, transparent 1.4px) 0 0 / 14px 14px; pointer-events:none}
+.w-mat{position:relative; overflow:hidden; border-color:#3f97d3; background:linear-gradient(155deg, #8ccbf0 0%, #4ea3dc 50%, #2477b8 100%); padding-top:14px; padding-bottom:16px}
+.w-mat:before{content:""; position:absolute; inset:0; background:radial-gradient(90% 70% at 0% 0%, rgba(255,255,255,.35), transparent 60%); pointer-events:none}
+.wm-env{position:absolute; right:-14px; bottom:-18px; z-index:-1; color:#fff; opacity:.16; pointer-events:none} .wm-env svg{width:112px; height:112px}
 :root[data-theme="dark"] .w-mat{border-color:#1f4a63; background:linear-gradient(155deg, #1d5a86 0%, #14486e 55%, #0f3a5c 100%)}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .w-mat{border-color:#1f4a63; background:linear-gradient(155deg, #1d5a86 0%, #14486e 55%, #0f3a5c 100%)} }
 .wm-desk{position:relative; flex:1 1 auto; display:flex; min-height:0; min-width:0; align-self:stretch; margin:2px 2px 0}
@@ -546,13 +547,15 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .wm-kick{font-size:11.5px; font-style:italic; font-weight:600; color:#456179; margin-bottom:2px}
 .w-mat .w-t{font-size:15.5px; line-height:1.22; color:#0d314c; -webkit-line-clamp:3}
 .wm-paper .wm-p{color:#456179} .wm-paper .wm-k{color:#7794aa} .wm-paper .wm-li{color:#14486e; border-top-color:#e5eef5}
-.wm-air{position:absolute; left:0; right:0; bottom:0; height:8px; background:repeating-linear-gradient(-45deg, #74bfeb 0 10px, #fff 10px 14px, #eb6834 14px 24px, #fff 24px 28px)}
 @media (prefers-reduced-motion: reduce){ .wm-paper{transition:none} }
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
 .w-cert{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cg fill='none' stroke='%2374bfeb' stroke-opacity='.28' stroke-width='.8'%3E%3Cpath d='M0 30 Q15 8 30 30 T60 30 T90 30 T120 30'/%3E%3Cpath d='M0 30 Q15 52 30 30 T60 30 T90 30 T120 30'/%3E%3Cpath d='M0 20 Q15 -2 30 20 T60 20 T90 20 T120 20'/%3E%3Cpath d='M0 40 Q15 62 30 40 T60 40 T90 40 T120 40'/%3E%3C/g%3E%3C/svg%3E") 0 100% / 120px 60px repeat-x, linear-gradient(165deg, color-mix(in srgb, #eda100 16%, var(--surface)), var(--surface) 58%)}
 .ct-row{display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px}
-.w-cert .w-num{display:grid; line-height:1} .w-cert .w-num b{font-size:46px} .w-cert .w-num i{font-style:normal; font-size:12px; font-weight:800; color:#a2701a; margin-top:2px}
-.ct-seal{width:44px; height:53px; flex:none; margin:-4px -2px -6px 0; filter:drop-shadow(0 4px 6px rgba(13,49,76,.25)); transform:rotate(8deg)}
+.w-cert .w-num{display:grid; line-height:1} .w-cert .w-num b{font-size:42px} .w-cert .w-num i{font-style:normal; font-size:12px; font-weight:800; color:#a2701a; margin-top:2px}
+.ct-seal{width:40px; height:48px; flex:none; margin:-4px -2px -6px 0; filter:drop-shadow(0 4px 6px rgba(13,49,76,.25)); transform:rotate(8deg)}
+.ct-split{display:grid; gap:4px; width:100%; margin-top:2px} .ct-split span{display:flex; align-items:baseline; gap:5px; padding-left:7px; border-left:4px solid #0d314c; font-size:12.5px; font-weight:600; color:var(--ink-2); line-height:1.15; min-width:0; white-space:nowrap} .ct-split .k2{border-left-color:#74bfeb} .ct-split b{font-family:var(--cond); font-size:17px; font-weight:700; color:var(--ink); line-height:1.05}
+:root[data-theme="dark"] .ct-split .k1{border-left-color:#a9d8f3}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ct-split .k1{border-left-color:#a9d8f3} }
 .ct-bar{display:flex; width:100%; height:7px; border-radius:4px; overflow:hidden; background:#74bfeb; margin-top:2px} .ct-bar i{display:block; background:#0d314c}
 .ct-key{display:grid; gap:2px; font-size:12.5px; font-weight:600; color:var(--ink-2)} .ct-key span{display:flex; align-items:center; gap:6px} .ct-key i{width:9px; height:9px; border-radius:2px} .ct-key .k1{background:#0d314c} .ct-key .k2{background:#74bfeb}
 :root[data-theme="dark"] .ct-key .k1, :root[data-theme="dark"] .ct-bar i{background:#a9d8f3} 
@@ -562,7 +565,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .ct-prog{font-style:normal; font-weight:500; color:var(--ink-3)} .w-cert .wm-t{-webkit-line-clamp:1; font-size:13px} .w-cert .wm-row{padding-top:4px} .w-cert .w-more{margin-top:6px; gap:4px}
 .ct-seal{transition:none} :root[data-theme="dark"] .ct-seal{filter:drop-shadow(0 0 8px rgba(116,191,235,.45))}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ct-seal{filter:drop-shadow(0 0 8px rgba(116,191,235,.45))} }
-.w-cert .w-new{margin-top:auto; padding-top:5px; line-height:1.3; border-top:1px dashed var(--border-strong); width:100%}
+.w-cert .w-new{margin-top:auto; padding-top:5px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; border-top:1px dashed var(--border-strong); width:100%}
 .w-logos{position:relative; width:100%; height:64px; margin-top:4px}
 /* the dashboard's sponsor tile: the logo fills all the room between the title and the line below, centered */
 .w-spon .w-logos{flex:1 1 auto; align-self:stretch; width:auto; height:auto; min-height:96px; margin:6px 0 8px; background:#fff; border-radius:12px}
@@ -5175,7 +5178,7 @@ function widget(id) {
         '<span class="w-more">' + (vp && vp.summary ? '<span class="wm-p">' + esc(vp.summary) + '</span>' : '') +
         (MM.editions.length > 1 ? '<span class="wm-k wm-past">Past Editions</span>' + MM.editions.slice(1, 4).map(function (e) { return '<span class="wm-li">' + esc(e.label) + '</span>'; }).join('') : '') + '</span>'
       : '<span class="w-t">The monthly newsletter</span>') +
-      '</span></span><span class="wm-air" aria-hidden="true"></span></button>';
+      '</span></span><span class="wm-env" aria-hidden="true">' + icon('i-mail') + '</span></button>';
   }
   if (id === 'trivia') return '<button type="button" class="wd w-trivia wide" data-trivia>' + triviaOrbit(false) + '<span class="w-head">' + icon('i-star') + '<span>MISMO Trivia</span></span><span class="tv-wt">How well do you know MISMO?</span><span class="tv-ws">Solo and head to head, with a leaderboard</span><span class="tv-soon">Beta</span></button>';
   if (id === 'certs') {
@@ -5190,8 +5193,8 @@ function widget(id) {
     var seal = '<svg class="ct-seal" viewBox="0 0 80 96" aria-hidden="true"><path d="M26,56 L16,94 L28,86 L34,96 L42,60 Z" fill="#14486e"/><path d="M54,56 L64,94 L52,86 L46,96 L38,60 Z" fill="#74bfeb"/>' +
       '<path d="' + (function () { var d = '', n = 18; for (var k = 0; k < n * 2; k++) { var a = Math.PI * k / n - Math.PI / 2, r = k % 2 ? 31 : 36; d += (k ? 'L' : 'M') + (40 + r * Math.cos(a)).toFixed(1) + ',' + (38 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })() + '" fill="#0d314c"/>' +
       '<circle cx="40" cy="38" r="26" fill="none" stroke="#eda100" stroke-width="2.5"/><circle cx="40" cy="38" r="21" fill="none" stroke="#74bfeb" stroke-width="1" stroke-dasharray="2 3"/><path d="M30,38.5 L37,45.5 L51,31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="ct-row"><span class="w-num"><b>' + (all || '') + '</b><i>Certified</i></span>' + seal + '</span>' +
-      '' + (all ? '<span class="ct-bar" aria-hidden="true"><i style="width:' + Math.max(6, Math.round(no / all * 100)) + '%"></i></span><span class="ct-key"><span><i class="k1"></i>' + no + ' Organizations</span><span><i class="k2"></i>' + ppl + ' Professionals</span></span>' : '<span class="w-sub">Certified products and professionals</span>') +
+    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="ct-row"><span class="w-num"><b>' + (all || '') + '</b></span>' + seal + '</span>' +
+      '' + (all ? '<span class="ct-split"><span class="k1"><b>' + no + '</b>Organizations</span><span class="k2"><b>' + ppl + '</b>Professionals</span></span>' : '<span class="w-sub">Certified products and professionals</span>') +
       (CERT && CERT.certifications && CERT.certifications.length ? '<span class="w-more"><span class="wm-k">Recently Certified</span>' + CERT.certifications.filter(function (c) { return !/^renewal/i.test(c.type || ''); }).slice().sort(function (a, b) { return String(b.certifiedOn || '') < String(a.certifiedOn || '') ? -1 : 1; }).slice(0, 4).map(function (c) { var d = String(c.certifiedOn || ''); return '<span class="wm-row"><span class="wm-t">' + esc(c.org || '') + (c.product || c.program ? '<i class="ct-prog">, ' + esc(c.product || c.program) + '</i>' : '') + '</span></span>'; }).join('') + '</span>' : '') +
       (CERT ? '<span class="w-new"><b>' + fresh.length + ' new</b> in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }

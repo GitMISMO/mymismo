@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Certifications and Webinars are now the same height as MISMO Matters and Join a Workgroup on a phone held upright (Certifications: the count and seal, organizations and professionals on two short lines, what's new; Webinars: the orange stub and a two-line title). MISMO Matters lost the dots and the airmail stripe: bright blue with a soft light and a faint envelope behind the page.
 - Nov 27, 2026: Lighter home screen: MISMO Matters' page now sits on bright MISMO blue instead of navy, and Webinars is a light ticket with an orange stub, so the dark tiles (Summit, Mic'd Up, Trivia) alternate with light ones instead of running together.
 - Nov 27, 2026: New looks for two home tiles. Certifications is a certificate: guilloche lines, a seal, the count with a bar splitting organizations and professionals, what's new this month, and (on bigger screens) who was certified most recently. Webinars is a ticket: the day, time and date on the stub, a tear line, then the title. Pick a Frame: Name Badge now shows one person and the group photo is four friends side by side.
 - Nov 27, 2026: Pick a Frame shows a mix of sample photos (one person, two, and a group of five) so you can see how each frame looks with a selfie or a crowd.
