@@ -860,13 +860,26 @@ html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, 
 @media (prefers-reduced-motion:reduce){ .mx-slide,.mx-card,.mx-line,.mx-sl-art svg,.mx-steam{animation:none!important; transition:none!important} }
 .mx-fine{font-size:12.5px; color:var(--ink-3); text-align:center; margin:8px 0 0}
 /* ---------- Join a Workgroup (Jonna, Nov 27, 2026) ---------- */
-.w-wg{background:linear-gradient(160deg, #0f3d5e 0%, #0d314c 60%, #0a2740 100%); border:0; color:#fff}
-.w-wg .w-head{color:var(--sky-soft)} .w-wg .w-head svg{color:var(--sky)}
-.w-wg .w-t{color:#fff; font-size:16px; line-height:1.2}
-.w-wg .w-sub{color:rgba(255,255,255,.72)}
-.w-wg .wm-row{border-color:rgba(255,255,255,.14)} .w-wg .wm-t{color:rgba(255,255,255,.88)} .w-wg .wm-d{background:rgba(255,255,255,.1); color:#fff} .w-wg .wm-d i{color:var(--sky)}
-.wg-tnext{display:grid; gap:3px; flex:none}
-.wg-tw{font-size:13px; font-weight:600; color:var(--sky-soft)}
+.w-wg{--c:#1b8fa6; border:0; color:#fff; background:linear-gradient(155deg, color-mix(in srgb, var(--c) 58%, #04182a) 0%, color-mix(in srgb, var(--c) 88%, #0d314c) 62%, color-mix(in srgb, var(--c) 72%, #74bfeb) 100%); transition:background .6s ease}
+.wgw-glow{position:absolute; z-index:-1; inset:-40%; pointer-events:none; background:radial-gradient(closest-side at 70% 30%, rgba(255,255,255,.22), transparent 70%), radial-gradient(closest-side at 20% 85%, rgba(116,191,235,.28), transparent 70%); animation:wgw-drift 14s ease-in-out infinite alternate}
+@keyframes wgw-drift{to{transform:translate(-12%, 8%) rotate(18deg)}}
+.w-wg .w-head{color:rgba(255,255,255,.88)} .w-wg .w-head svg{color:#fff}
+.w-wg .w-t{color:#fff; font-size:17px; line-height:1.15; -webkit-line-clamp:2}
+.w-wg .wg-tk{background:rgba(255,255,255,.95); color:color-mix(in srgb, var(--c) 70%, #04182a)} .w-wg .wg-tk.live{background:#2fd08a; color:#05301e}
+.wg-tnext{display:grid; gap:4px; flex:none}
+.wg-tw{font-size:13px; font-weight:700; color:rgba(255,255,255,.82)}
+.wgw{margin-top:auto; align-self:stretch; display:grid; gap:6px; padding:9px 10px 7px; border-radius:12px; background:rgba(4,24,42,.28); border:1px solid rgba(255,255,255,.16)}
+.wgw-cols{display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; align-items:end}
+.wgw-col{display:grid; justify-items:center; gap:4px}
+.wgw-stack{display:flex; flex-direction:column-reverse; gap:2px; width:100%; min-height:54px; justify-content:flex-start}
+.wgw-stack em{display:block; height:7px; border-radius:2px; background:var(--c); box-shadow:0 0 0 1px rgba(255,255,255,.35); transform-origin:bottom; animation:wgw-in .5s cubic-bezier(.2,.9,.3,1.3) both; animation-delay:var(--d)}
+.wgw-stack em.on{background:#2fd08a; box-shadow:0 0 0 1px #fff, 0 0 10px #2fd08a; animation:wgw-in .5s both, wg-pulse 1.4s 1s ease-in-out infinite}
+@keyframes wgw-in{from{transform:scaleY(0) translateY(6px); opacity:0}}
+.wgw-col i{font-style:normal; font-size:10.5px; font-weight:800; color:rgba(255,255,255,.7)}
+.wgw-col.today i{color:#0d314c; background:#fff; border-radius:4px; padding:0 5px}
+.wgw-col.past .wgw-stack{opacity:.38}
+.wgw-n{font-size:11.5px; font-weight:600; color:rgba(255,255,255,.78); text-align:right} .wgw-n b{color:#fff}
+@media (prefers-reduced-motion:reduce){ .wgw-glow, .wgw-stack em{animation:none!important} }
 .wg-tk{display:inline-flex; align-items:center; gap:6px; justify-self:start; font-size:11.5px; font-weight:800; color:#0d314c; background:var(--sky); border-radius:5px; padding:3px 7px}
 .wg-tk.live{background:#2fd08a; color:#05301e}
 .wg-tk i{width:7px; height:7px; border-radius:50%; background:currentColor; animation:wg-pulse 1.4s ease-in-out infinite}
@@ -3137,18 +3150,31 @@ function wgSessions(g) {
   if (!g.site || !S.summit) return [];
   return S.sessions.filter(function (x) { return groupPages(x).indexOf(g.site) >= 0; });
 }
-/* the dashboard tile: who meets next (or now), and the few after */
+/* the dashboard tile (Jonna, Nov 27, 2026: "something cool and dynamic"): it takes on the color of the topic of whichever group
+   meets next (or now), and its foot is this week drawn as stacks of colored blocks, one block per meeting in its topic's
+   color, with today lit and the days gone by faded */
 function wgTile() {
   var gs = wgGroups(), now = etNow(), up = [];
-  gs.forEach(function (g) { wgNext(g, 2).forEach(function (o) { if (!o.cancelled) up.push({ g: g, date: o.date }); }); });
-  up.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : ((a.g.t || {}).a || 0) - ((b.g.t || {}).a || 0); });
-  var live = gs.filter(wgLive), first = live[0] ? { g: live[0], date: now.date } : up[0], rest = up.filter(function (u) { return u !== first && !(live.length && u.g === live[0] && u.date === now.date); }).slice(0, 3);
   var head = '<span class="w-head">' + icon('i-people') + '<span>Join a Workgroup</span></span>';
   if (!gs.length) return '<button type="button" class="wd w-wg" data-groups>' + head + '<span class="w-t">Every workgroup, when it meets and how to join</span><span class="w-sub">Open to everyone</span></button>';
-  return '<button type="button" class="wd w-wg" data-groups>' + head +
+  gs.forEach(function (g) { wgNext(g, 2).forEach(function (o) { if (!o.cancelled) up.push({ g: g, date: o.date }); }); });
+  up.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : ((a.g.t || {}).a || 0) - ((b.g.t || {}).a || 0); });
+  var live = gs.filter(wgLive), first = live[0] ? { g: live[0], date: now.date } : up[0];
+  /* this week, Monday to Friday (on a weekend, next week) */
+  var p0 = dparts(now.date), mon = isoAdd(now.date, p0.dow === 0 ? 1 : p0.dow === 6 ? 2 : 1 - p0.dow), k = 0;
+  var cols = [0, 1, 2, 3, 4].map(function (i) {
+    var iso = isoAdd(mon, i), ms = gs.filter(function (g) { return !g.rule.hold && wgOn(g.rule, iso) && g.cx.indexOf(iso) < 0; })
+      .sort(function (a, b) { return ((a.t || {}).a || 0) - ((b.t || {}).a || 0); });
+    var cls = iso === now.date ? ' today' : iso < now.date ? ' past' : '';
+    return '<span class="wgw-col' + cls + '"><span class="wgw-stack">' + ms.slice(0, 7).map(function (g) {
+      var on = live.indexOf(g) >= 0 && iso === now.date;
+      return '<em class="' + (on ? 'on' : '') + '" style="--c:' + wgColor(g.topic) + ';--d:' + (k++ * 35) + 'ms"></em>'; }).join('') +
+      '</span><i>' + DOW[dparts(iso).dow].slice(0, 1) + '</i></span>';
+  }).join('');
+  var n = cols.split('<em').length - 1;
+  return '<button type="button" class="wd w-wg" data-groups style="--c:' + wgColor(first ? first.g.topic : '') + '"><span class="wgw-glow" aria-hidden="true"></span>' + head +
     (first ? '<span class="wg-tnext"><span class="wg-tk' + (live.length ? ' live' : '') + '">' + (live.length ? '<i></i>Meeting Now' : 'Up Next') + '</span><span class="w-t">' + esc(first.g.name) + '</span><span class="wg-tw">' + esc(live.length ? first.g.time : wgWhen(first.date, first.g)) + '</span></span>' : '') +
-    (rest.length ? '<span class="w-more">' + rest.map(function (u) { var p = dparts(u.date); return '<span class="wm-row"><span class="wm-d"><i>' + MON[p.m - 1] + '</i>' + p.d + '</span><span class="wm-t">' + esc(u.g.name) + '</span></span>'; }).join('') + '</span>' : '') +
-    '<span class="w-sub">' + gs.length + ' groups, open to everyone</span></button>';
+    '<span class="wgw" aria-label="' + n + ' meetings this week"><span class="wgw-cols">' + cols + '</span><span class="wgw-n"><b>' + n + '</b> this week</span></span></button>';
 }
 function wgCard(g, i) {
   var nx = wgNext(g, 1)[0], sp = wgSponsor(g), live = wgLive(g);
