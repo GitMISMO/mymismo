@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Lunch on Monday (12:00 to 1:00), Wednesday and Thursday (12:00 to 1:30) is on the Agenda, as on the website, with the same words as Tuesday's and See Lunch Spots Near the Hotel (kept in data/agenda-extras.json until Summit HQ's feed carries them, CN-067). A lunch's Also at This Time leaves out the General Sessions, which break for lunch.
+- Nov 27, 2026: MISMO Trivia: Solo and Head to Head each open their own pop-up (the Board and Warm Up, or the Head to Head lobby), and the game plays right in that pop-up instead of in another box on top. Back to Head to Head brings the lobby back in the same pop-up.
 - Nov 27, 2026: Lunch is its own line on the Agenda, as on the website (12:05 to 1:30 on the General Sessions day), with the website's words and See Lunch Spots Near the Hotel; it can be starred and added to a calendar.
 - Nov 27, 2026: Menus: breakfasts, lunches, breaks and receptions show On the Menu once Summit HQ publishes the menu from Hotel Specs (CN-066), with Vegetarian, Vegan, Gluten-Free, Dairy-Free and Contains Nuts marked; until then they say the menu shows once it's set with the hotel.
 - Nov 27, 2026: Lunch (and other breaks) in the General Sessions running order show the website agenda's words, and the lunch recommendations link opens the app's Explore page at Eat and Drink instead of the website.

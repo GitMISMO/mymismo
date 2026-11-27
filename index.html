@@ -2541,6 +2541,7 @@ function sponsorSlug(name) {
   var y = /\d{4}/.test(m[1]) ? m[1] : m[2], season = /\d{4}/.test(m[1]) ? m[2] : m[1];
   return season.toLowerCase() + '-' + y;
 }
+var XTRA = null;   /* data/agenda-extras.json: rows the website agenda shows that the feed doesn't carry yet */
 function build(feed, spons) {
   var pick = pickSummit(feed);
   if (!pick) throw new Error('No summit schedule is published yet.');
@@ -2561,7 +2562,15 @@ function build(feed, spons) {
   if (S.gs) { var gsx = S.sessions.filter(function (x) { return x.type === 'General Session'; })[0];
     if (gsx) S.gs.items.forEach(function (g) { if (!/lunch/i.test(g.kind + ' ' + g.title)) return;
       S.sessions.push({ id: 'gs-lunch-' + gsx.date + '-' + g.i, day: gsx.day, date: gsx.date, a: g.a, b: g.b || g.a + 60, type: 'Lunch', title: g.title || 'Lunch', room: '', desc: g.desc, sponsor: g.sponsor, menu: g.menu || '', gsItem: g }); });
-    S.sessions.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); }); }
+  }
+  /* Jonna, Nov 27, 2026: the website's other lunch breaks (Monday, Wednesday, Thursday), with the same words as Tuesday's */
+  var lunchG = S.gs ? S.gs.items.filter(function (g) { return /lunch/i.test(g.kind + ' ' + g.title); })[0] : null;
+  (((XTRA && XTRA.summits && XTRA.summits[pick.id]) || {}).lunches || []).forEach(function (l, i) {
+    if (!l || !l.date || S.sessions.some(function (x) { return x.date === l.date && x.type === 'Lunch'; })) return;
+    var g = { i: 'x' + i, a: mins(l.start), b: mins(l.end), kind: 'Lunch', title: 'Lunch', desc: (lunchG && lunchG.desc) || l.desc || '', sponsor: '', brk: true, people: [], menu: '' };
+    S.sessions.push({ id: 'lunch-' + l.date, day: DOW[dparts(l.date).dow], date: l.date, a: g.a, b: g.b, type: 'Lunch', title: 'Lunch', room: '', desc: g.desc, sponsor: '', menu: '', gsItem: g });
+  });
+  S.sessions.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });
   S.sponsors = ((spons && spons.sponsors) || []).map(function (x) { return { name: x.name, tier: x.tier || 'Sponsor', url: x.url || '', logo: x.logo || '', placements: x.placements || [] }; });
   var byName = {};
   if (S.gs) S.gs.items.forEach(function (g) {
@@ -5355,11 +5364,66 @@ function tvsSolo() {
   if (!tvsPlayer()) { tvsSignIn(tvsSolo); return; }
   tvsApi('POST', 'play/start', {}).then(function (r) { if (!r.ok) { mxToast(r.j.message || 'The Board didn\'t load. Try again.'); return; } tvsBoard(r.j, '', '', tvsSolo); });
 }
-/* after a Head to Head board: back to the lobby that's already open under it (or open it) */
+/* the Solo pop-up: what the Board is, Play the Board, and the warm-ups; the game then plays right here */
+function tvSoloSheet() {
+  var test = triviaTester();
+  var el = openSheet('Solo', '<div class="sheet-pad tv tv-solo">' +
+    '<div class="tvb"><div class="tvb-art" aria-hidden="true">' + [0, 1, 2, 3, 4, 5].map(function (k) { return '<span class="tvb-col" style="--k:' + k + '"><i></i>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<em style="--r:' + r + '">' + v + '</em>'; }).join('') + '</span>'; }).join('') + '</div>' +
+    '<div class="tvb-txt"><b>The Board</b><p>Six categories, thirty squares. A 200 is an easy one, a 1,000 is tough, and one square pays double. Three minutes on the clock, then the Final Square.</p>' +
+    '<span class="tvb-chip" id="tvb-chip">' + icon('i-clock') + 'Checking the leaderboard…</span>' +
+    (test ? '<button type="button" class="tv-go big" data-tv-board>' + icon('i-play') + 'Play the Board</button>' : '<em class="tvb-lock">' + icon('i-lock') + 'Opens Soon</em>') + '</div></div>' +
+    (test ? '<div class="tvw"><div class="tvw-h">Warm Up</div><div class="tvw-row">' + [[0, 'Easy Round', '10 questions, 25 seconds each'], [1, 'Quick Round', '10 questions, 20 seconds each'], [3, 'Study', 'No clock, learn as you go']].map(function (w) { var l = TV_LEVELS[w[0]]; return '<button type="button" class="tvw-b" data-tv-warm="' + w[0] + '" style="--lc:' + l.c + '"><b>' + w[1] + '</b><span>' + w[2] + '</span></button>'; }).join('') + '</div></div>' : '') +
+    '</div>', { plain: true });
+  el.setAttribute('data-tvhost', 'solo');
+  var chip = el.querySelector('#tvb-chip');
+  tvsReady(function (ready) {
+    if (!chip || !chip.isConnected) return;
+    chip.innerHTML = ready ? (tvsPlayer() ? icon('i-check') + 'Counts for the leaderboard' : icon('i-user') + 'Sign in once, and it counts for the leaderboard') : icon('i-info') + 'Practice for now: the leaderboard opens with MISMO\'s server';
+    chip.classList.toggle('live', !!ready);
+  });
+  el.addEventListener('click', function (e) {
+    var t;
+    if (e.target.closest('[data-tv-board]')) { TVSFX.wake(); tvsReady(function (ready) { if (ready) tvsSolo(); else { save('trivia-level', 2); save('trivia-cat', ''); triviaPlay(); } }); return; }
+    if ((t = e.target.closest('[data-tv-warm]'))) { TVSFX.wake(); save('trivia-level', +t.getAttribute('data-tv-warm')); save('trivia-cat', ''); triviaPlay(); }
+  });
+}
+/* the Head to Head pop-up: the lobby; a game plays right here, and Back to Head to Head brings the lobby back */
+function tvH2HSheet() {
+  var el = openSheet('Head to Head', '<div class="sheet-pad tv"><div class="h2" id="tv-h2h"></div></div>', { plain: true });
+  el.setAttribute('data-tvhost', 'h2h');
+  if (triviaTester()) tvsLobby(el.querySelector('#tv-h2h'));
+  else el.querySelector('#tv-h2h').innerHTML = '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Opens Soon</b><p>Add players as Trivia contacts, challenge them, or let MyMISMO find you an opponent. You both play the same Board; highest score wins.</p></div>';
+  function lookFor(q) {
+    var out = el.querySelector('.h2-found'); if (!out) return;
+    if (q.length < 2) { out.innerHTML = ''; return; }
+    tvsApi('GET', 'h2h/players?q=' + encodeURIComponent(q)).then(function (r) {
+      var l = (r.ok && r.j.players) || [];
+      out.innerHTML = l.length ? l.map(function (p) { return '<div class="h2-c"><span class="h2-av">' + esc(p.name.slice(0, 1)) + '</span><b>' + esc(p.name) + '</b><div class="h2-acts"><button type="button" class="h2-btn go" data-h2-add="' + esc(p.id) + '">Add</button></div></div>'; }).join('') : '<p class="h2-empty">No players by that name yet. They show up once they\'ve signed in to Trivia.</p>';
+    });
+  }
+  var qT = null;
+  el.addEventListener('input', function (e) { if (e.target.matches('[data-h2-q]')) { clearTimeout(qT); var v = e.target.value.trim(); qT = setTimeout(function () { lookFor(v); }, 300); } });
+  function lobby() { return el.querySelector('#tv-h2h'); }
+  function contact(id, action, msg) { tvsApi('POST', 'h2h/contact', { to: id, action: action }).then(function (r) { if (!r.ok) { mxToast(r.j.message || 'That didn\'t go through.'); return; } if (msg) mxToast(msg); tvsLobby(lobby()); }); }
+  el.addEventListener('click', function (e) {
+    var t;
+    if (e.target.closest('[data-tvs-signin]')) { tvsSignIn(function () { tvsLobby(lobby()); }); return; }
+    if (e.target.closest('[data-h2-find]')) { tvsH2HGo('h2h/find'); return; }
+    if ((t = e.target.closest('[data-h2-challenge]'))) { tvsH2HGo('h2h/challenge', { to: t.getAttribute('data-h2-challenge') }); return; }
+    if ((t = e.target.closest('[data-h2-play]'))) { tvsH2HGo('h2h/play', { game: t.getAttribute('data-h2-play') }); return; }
+    if ((t = e.target.closest('[data-h2-resume]'))) { tvsResume(t.getAttribute('data-h2-resume'), t.getAttribute('data-vs')); return; }
+    if ((t = e.target.closest('[data-h2-decline]'))) { tvsApi('POST', 'h2h/decline', { game: t.getAttribute('data-h2-decline') }).then(function () { tvsLobby(lobby()); }); return; }
+    if ((t = e.target.closest('[data-h2-add]'))) { contact(t.getAttribute('data-h2-add'), 'add', 'Request sent'); return; }
+    if ((t = e.target.closest('[data-h2-accept]'))) { contact(t.getAttribute('data-h2-accept'), 'accept', 'You\'re Trivia contacts now'); return; }
+    if ((t = e.target.closest('[data-h2-no]'))) { contact(t.getAttribute('data-h2-no'), 'decline'); return; }
+  });
+}
+/* after a Head to Head board: the lobby again, in the same pop-up */
 function tvsBackToLobby() {
   var t = topSheet();
-  if (t && t.getAttribute('data-key') === 'trivia') { var b = t.querySelector('[data-tvm="h2h"]'); if (b) b.click(); else tvsLobby(t.querySelector('#tv-h2h')); var lb = t.querySelector('#tv-lb'); if (lb) tvsFillBoard(lb, load('trivia-test', {})); }
-  else triviaSheet('h2h');
+  if (t && t.getAttribute('data-tvhost') === 'h2h') { var b = t.querySelector('.sheet-body'); t.classList.remove('tg-sheet'); b.innerHTML = '<div class="sheet-pad tv"><div class="h2" id="tv-h2h"></div></div>'; b.scrollTop = 0; tvsLobby(b.querySelector('#tv-h2h')); }
+  else tvH2HSheet();
+  var lb = document.getElementById('tv-lb'); if (lb) tvsFillBoard(lb, load('trivia-test', {}));
 }
 function tvsH2HGo(path, body) {
   tvsApi('POST', path, body || {}).then(function (r) {
@@ -5444,61 +5508,19 @@ function triviaSheet(tab0) {
     '<span class="tv-tnote">' + (test ? 'You\'re one of the beta testers. Questions are still being added.' : 'Being tested by a small group before it opens to everyone.') + '</span></div></section><div class="sheet-pad tv">';
   /* Jonna, Nov 27, 2026: two ways to play, picked like a game show's big doors; no category picking (only the Final
      Square shows one), and the Board's values set how hard each question is */
-  h += '<div class="tvm" role="tablist" aria-label="How to play">' +
-    '<button type="button" class="tvm-b solo' + (tab === 'solo' ? ' on' : '') + '" role="tab" aria-selected="' + (tab === 'solo') + '" data-tvm="solo"><svg class="tvm-art" viewBox="0 0 120 80" aria-hidden="true"><path class="beam" d="M60 0 L30 80 L90 80 Z"/><circle cx="60" cy="38" r="10"/><path d="M42 74 C44 56 76 56 78 74 Z"/></svg><b>Solo</b><span>The Board, for the leaderboard</span></button>' +
+  h += '<div class="tvm" role="group" aria-label="How to play">' +
+    '<button type="button" class="tvm-b solo on" data-tvm="solo"><svg class="tvm-art" viewBox="0 0 120 80" aria-hidden="true"><path class="beam" d="M60 0 L30 80 L90 80 Z"/><circle cx="60" cy="38" r="10"/><path d="M42 74 C44 56 76 56 78 74 Z"/></svg><b>Solo</b><span>The Board, for the leaderboard</span></button>' +
     '<span class="tvm-vs" aria-hidden="true">or</span>' +
-    '<button type="button" class="tvm-b h2h' + (tab === 'h2h' ? ' on' : '') + '" role="tab" aria-selected="' + (tab === 'h2h') + '" data-tvm="h2h"><svg class="tvm-art" viewBox="0 0 120 80" aria-hidden="true"><circle cx="36" cy="36" r="9"/><path d="M20 72 C22 56 50 56 52 72 Z"/><circle cx="84" cy="36" r="9"/><path d="M68 72 C70 56 98 56 100 72 Z"/><path class="bolt" d="M62 18 L54 40 L62 40 L56 60 L70 34 L62 34 L68 18 Z"/></svg><b>Head to Head</b><span>Same Board, highest score wins</span></button></div>';
-  h += '<div class="tvm-p" data-panel="solo"' + (tab === 'solo' ? '' : ' hidden') + '>' +
-    '<div class="tvb"><div class="tvb-art" aria-hidden="true">' + [0, 1, 2, 3, 4, 5].map(function (k) { return '<span class="tvb-col" style="--k:' + k + '"><i></i>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<em style="--r:' + r + '">' + v + '</em>'; }).join('') + '</span>'; }).join('') + '</div>' +
-    '<div class="tvb-txt"><b>The Board</b><p>Six categories, thirty squares. A 200 is an easy one, a 1,000 is tough, and one square pays double. Three minutes on the clock, then the Final Square.</p>' +
-    '<span class="tvb-chip" id="tvb-chip">' + icon('i-clock') + 'Checking the leaderboard…</span>' +
-    (test ? '<button type="button" class="tv-go big" data-tv-board>' + icon('i-play') + 'Play the Board</button>' : '<em class="tvb-lock">' + icon('i-lock') + 'Opens Soon</em>') + '</div></div>' +
-    (test ? '<div class="tvw"><div class="tvw-h">Warm Up</div><div class="tvw-row">' + [[0, 'Easy Round', '10 questions, 25 seconds each'], [1, 'Quick Round', '10 questions, 20 seconds each'], [3, 'Study', 'No clock, learn as you go']].map(function (w) { var l = TV_LEVELS[w[0]]; return '<button type="button" class="tvw-b" data-tv-warm="' + w[0] + '" style="--lc:' + l.c + '"><b>' + w[1] + '</b><span>' + w[2] + '</span></button>'; }).join('') + '</div></div>' : '') +
-    '</div>';
-  h += '<div class="tvm-p" data-panel="h2h"' + (tab === 'h2h' ? '' : ' hidden') + '><div class="h2" id="tv-h2h">' + (test ? '' : '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Opens Soon</b><p>Add players as Trivia contacts, challenge them, or let MyMISMO find you an opponent. You both play the same Board; highest score wins.</p></div>') + '</div></div>';
+    '<button type="button" class="tvm-b h2h on" data-tvm="h2h"><svg class="tvm-art" viewBox="0 0 120 80" aria-hidden="true"><circle cx="36" cy="36" r="9"/><path d="M20 72 C22 56 50 56 52 72 Z"/><circle cx="84" cy="36" r="9"/><path d="M68 72 C70 56 98 56 100 72 Z"/><path class="bolt" d="M62 18 L54 40 L62 40 L56 60 L70 34 L62 34 L68 18 Z"/></svg><b>Head to Head</b><span>Same Board, highest score wins</span></button></div>';
   h += '<div id="tv-lb"></div>';
   h += test && ts.games ? '<div class="d-h">Your Practice</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b ? b.toLocaleString() : '&mdash;') + '</b><span>Best ' + (l.board ? 'Board' : l.name === 'Easy' ? 'Easy Round' : 'Quick Round') + '</span></div>'; }).join('') + '</div>' : '';
   h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions.</div></div>';
   var el = openSheet('MISMO Trivia', h, { plain: true, key: 'trivia' });
   tvsFillBoard(el.querySelector('#tv-lb'), ts);
-  var chip = el.querySelector('#tvb-chip');
-  tvsReady(function (ready) {
-    if (!chip) return;
-    chip.innerHTML = ready ? (tvsPlayer() ? icon('i-check') + 'Counts for the leaderboard' : icon('i-user') + 'Sign in once, and it counts for the leaderboard') : icon('i-info') + 'Practice for now: the leaderboard opens with MISMO\'s server';
-    chip.classList.toggle('live', !!ready);
-  });
-  if (test && tab === 'h2h') tvsLobby(el.querySelector('#tv-h2h'));
-  function lookFor(q) {
-    var out = el.querySelector('.h2-found'); if (!out) return;
-    if (q.length < 2) { out.innerHTML = ''; return; }
-    tvsApi('GET', 'h2h/players?q=' + encodeURIComponent(q)).then(function (r) {
-      var l = (r.ok && r.j.players) || [];
-      out.innerHTML = l.length ? l.map(function (p) { return '<div class="h2-c"><span class="h2-av">' + esc(p.name.slice(0, 1)) + '</span><b>' + esc(p.name) + '</b><div class="h2-acts"><button type="button" class="h2-btn go" data-h2-add="' + esc(p.id) + '">Add</button></div></div>'; }).join('') : '<p class="h2-empty">No players by that name yet. They show up once they\'ve signed in to Trivia.</p>';
-    });
-  }
-  var qT = null;
-  el.addEventListener('input', function (e) { if (e.target.matches('[data-h2-q]')) { clearTimeout(qT); var v = e.target.value.trim(); qT = setTimeout(function () { lookFor(v); }, 300); } });
-  function contact(id, action, msg) { tvsApi('POST', 'h2h/contact', { to: id, action: action }).then(function (r) { if (!r.ok) { mxToast(r.j.message || 'That didn\'t go through.'); return; } if (msg) mxToast(msg); tvsLobby(el.querySelector('#tv-h2h')); }); }
   el.addEventListener('click', function (e) {
-    var t;
-    if ((t = e.target.closest('[data-tvm]'))) {
-      var k = t.getAttribute('data-tvm'); save('trivia-tab', k); TVSFX.wake && TVSFX.wake();
-      el.querySelectorAll('[data-tvm]').forEach(function (b) { var on = b === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
-      el.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== k; });
-      if (k === 'h2h' && test) tvsLobby(el.querySelector('#tv-h2h'));
-      return;
-    }
-    if (e.target.closest('[data-tv-board]')) { TVSFX.wake(); tvsReady(function (ready) { if (ready) tvsSolo(); else { save('trivia-level', 2); save('trivia-cat', ''); triviaPlay(); } }); return; }
-    if ((t = e.target.closest('[data-tv-warm]'))) { TVSFX.wake(); save('trivia-level', +t.getAttribute('data-tv-warm')); save('trivia-cat', ''); triviaPlay(); return; }
-    if (e.target.closest('[data-tvs-signin]')) { tvsSignIn(function () { tvsLobby(el.querySelector('#tv-h2h')); }); return; }
-    if (e.target.closest('[data-h2-find]')) { tvsH2HGo('h2h/find'); return; }
-    if ((t = e.target.closest('[data-h2-challenge]'))) { tvsH2HGo('h2h/challenge', { to: t.getAttribute('data-h2-challenge') }); return; }
-    if ((t = e.target.closest('[data-h2-play]'))) { tvsH2HGo('h2h/play', { game: t.getAttribute('data-h2-play') }); return; }
-    if ((t = e.target.closest('[data-h2-resume]'))) { tvsResume(t.getAttribute('data-h2-resume'), t.getAttribute('data-vs')); return; }
-    if ((t = e.target.closest('[data-h2-decline]'))) { tvsApi('POST', 'h2h/decline', { game: t.getAttribute('data-h2-decline') }).then(function () { tvsLobby(el.querySelector('#tv-h2h')); }); return; }
-    if ((t = e.target.closest('[data-h2-add]'))) { contact(t.getAttribute('data-h2-add'), 'add', 'Request sent'); return; }
-    if ((t = e.target.closest('[data-h2-accept]'))) { contact(t.getAttribute('data-h2-accept'), 'accept', 'You\'re Trivia contacts now'); return; }
-    if ((t = e.target.closest('[data-h2-no]'))) { contact(t.getAttribute('data-h2-no'), 'decline'); return; }
+    var t = e.target.closest('[data-tvm]'); if (!t) return;
+    TVSFX.wake && TVSFX.wake();
+    if (t.getAttribute('data-tvm') === 'h2h') tvH2HSheet(); else tvSoloSheet();
   });
 }
 /* Test Run: MISMO staff signed in, or a link with ?trivia=test. Draft questions only; nothing leaves the phone. */
@@ -5550,8 +5572,7 @@ function triviaRound(all) {
   save('trivia-seen', seen.concat(pick.map(function (q) { return q.id; })).filter(function (v, n, a) { return a.indexOf(v) === n; }));
   var game = pick.map(function (q) { var order = shuffle([0, 1, 2, 3]); return { q: q, choices: order.map(function (k) { return q.choices[k]; }), right: order.indexOf(q.answer) }; });
   var st = { n: 0, score: 0, streak: 0, bestStreak: 0, right: 0, log: [] }, timer = null, t0 = 0, locked = false;
-  var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }), box = el.querySelector('#tg');
-  el.classList.add('tg-sheet');
+  var el = tvHost(), box = el.querySelector('#tg');
   function catColor(c) { var x = TRIVIA_CATS.filter(function (k) { return k[0] === c; })[0]; return x ? x[2] : '#74bfeb'; }
   function paint() {
     var g = game[st.n], col = catColor(g.q.cat);
@@ -5604,7 +5625,7 @@ function triviaRound(all) {
   }
   box.addEventListener('click', function (e) {
     var a = e.target.closest('[data-a]'); if (a) { answer(+a.getAttribute('data-a')); return; }
-    if (e.target.closest('[data-tv-again]')) { closeSheet(false); triviaRound(all); return; }
+    if (e.target.closest('[data-tv-again]')) { if (!el.hasAttribute('data-tvhost')) closeSheet(false); triviaRound(all); return; }
     if (e.target.closest('[data-tv-next]')) { st.n++; if (st.n < game.length) paint(); else end(); return; }
     if (e.target.closest('[data-tv-review]')) { var r = box.querySelector('#tg-review'); r.hidden = !r.hidden; }
   });
@@ -5690,6 +5711,15 @@ var TVVOICE = {
   prime: function () { try { if (this.on() && !this.primed) { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); this.primed = true; } } catch (e) {} }
 };
 if (TVVOICE.ok()) try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function () {}; } catch (e) {}
+/* Jonna, Nov 27, 2026: a game plays in the Solo or Head to Head pop-up it was started from, not in another box on top */
+function tvHost() {
+  var t = topSheet();
+  if (t && t.hasAttribute('data-tvhost')) {
+    var b = t.querySelector('.sheet-body'); b.innerHTML = '<div class="tg" id="tg"></div>'; b.scrollTop = 0; t.classList.add('tg-sheet');
+    return t;
+  }
+  var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }); el.classList.add('tg-sheet'); return el;
+}
 function triviaBoard(all, srv) {
   all = all || [];
   var lvl = TV_LEVELS.filter(function (l) { return l.board; })[0], SECS = lvl.secs, seen = load('trivia-seen', []), used = [];
@@ -5732,8 +5762,7 @@ function triviaBoard(all, srv) {
       if (!cur) toFinal('time');   /* a square that's open gets finished first */
     }
   }
-  var el = openSheet('MISMO Trivia', '<div class="tg" id="tg"></div>', { plain: true }), box = el.querySelector('#tg');
-  el.classList.add('tg-sheet');
+  var el = tvHost(), box = el.querySelector('#tg');
   function catColor(c) { var x = TRIVIA_CATS.filter(function (k) { return k[0] === c; })[0]; return x ? x[2] : '#74bfeb'; }
   function scoreHtml() { return '<div class="tg-score"><span>Score</span><b id="tg-sc">' + st.score.toLocaleString() + '</b></div>'; }
   function paintBoard() {
@@ -5983,7 +6012,7 @@ function triviaBoard(all, srv) {
       if (k === 'tv-voice' && on) TVVOICE.say('Let’s play.');
       return;
     }
-    if (e.target.closest('[data-tb-again]')) { closeSheet(false); if (srv) { if (srv.again) srv.again(); } else triviaBoard(all); return; }
+    if (e.target.closest('[data-tb-again]')) { if (!el.hasAttribute('data-tvhost')) closeSheet(false); if (srv) { if (srv.again) srv.again(); } else triviaBoard(all); return; }
     if (e.target.closest('[data-tv-review]')) { var r = box.querySelector('#tg-review'); r.hidden = !r.hidden; }
   });
   paintBoard();
@@ -6763,7 +6792,7 @@ function sessionSheet(id) {
     }).join('') + '</div>';
   }
   if (sp.length && !spEarly) h += spBlock();
-  var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type); });
+  var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type) && !(x.type === 'Lunch' && y.type === 'General Session'); });   /* the General Sessions break for lunch */
   if (also.length && also.length < 12) h += '<div class="d-h">Also at This Time</div><div class="list">' + also.map(sessCard).join('') + '</div>';
   var sel = openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });
   watchPeeks(sel);
@@ -7566,7 +7595,7 @@ function start() {
     S.checked = new Date(Date.parse(r.headers.get('date')) || Date.now()).toISOString(); return r.json();
   }).then(function (feed) {
     var pick = pickSummit(feed), sl = pick ? sponsorSlug(pick.s.name) : '';
-    return (sl ? getJSON(FEED_SPONSORS(sl)).catch(function () { return null; }) : Promise.resolve(null)).then(function (sp) { build(feed, sp); });
+    return Promise.all([sl ? getJSON(FEED_SPONSORS(sl)).catch(function () { return null; }) : Promise.resolve(null), getJSON('data/agenda-extras.json').catch(function () { return null; })]).then(function (r) { XTRA = r[1]; build(feed, r[0]); });
   }).catch(function (err) {
     S.loadErr = navigator.onLine === false ? 'You\'re offline. Connect once and the summit will be saved to this phone.' : 'The summit couldn\'t be loaded right now. Try again in a moment.';
     if (window.console) console.error(err);
