@@ -24,6 +24,14 @@ Attendees don't need the app to be scanned.
   sponsors who scan my name tag", off unless they turn it on. A sponsor can also type in an email the person handed them
   (a business card) on the lead.
 
+## Built in MyMISMO (Nov 27, 2026, staff test)
+- Scan a Name Tag on the Summit page (staff who can open Summit HQ): camera, its own Code 39 reader (checked against Jonna's real
+  name tag photo, also upside down) or BarcodeDetector where the phone has it; Type the Number; the scan card (who it is,
+  Engagement Conversation or Sponsor Lead, Hot / Warm / Cold, note, email only if they gave it); My Scans with Download (CSV);
+  My Test Badge (your own registration barcode once CN-055 is done, or type any number).
+- My Profile: Share My Email with Sponsors Who Scan My Name Tag (`shareLead`, sent with the profile; the relay request
+  must keep it and use it).
+
 ## Testing before the relay
 Once Summit HQ adds `reg`, staff can test the whole scan with real Winter 2027 registrations, using two phones and the
 Test Badge screen; scans stay on the phone that scanned until the relay part is live.

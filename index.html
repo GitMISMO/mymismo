@@ -1426,6 +1426,46 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .fpin.on i{width:22px; height:22px; background:#eb6834; animation:pinpulse 1.6s ease-out infinite}
 .fpin.on span{background:#eb6834; font-size:13px; padding:4px 8px; left:22px}
 @keyframes pinpulse{0%{box-shadow:0 0 0 0 rgba(235,104,52,.7)}100%{box-shadow:0 0 0 18px rgba(235,104,52,0)}}
+/* ---------- Name tag scanning (Jonna, Nov 27, 2026) ---------- */
+.scan-row{display:grid; grid-template-columns:1fr auto; gap:10px; margin:10px 0 0}
+.scan-go,.scan-mine{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:14px; border:1px solid rgba(116,191,235,.35); background:linear-gradient(120deg, #eb6834, #c9502a); color:#fff; font:inherit; text-align:left; cursor:pointer}
+.scan-go > svg:first-child{width:28px; height:28px; flex:none} .scan-go span{display:grid; gap:2px; flex:1} .scan-go b{font-size:16px} .scan-go span span{font-size:12.5px; opacity:.85} .scan-go svg.go{width:18px; height:18px}
+.scan-mine{background:var(--surface); color:var(--ink); border-color:var(--border); flex-direction:column; justify-content:center; gap:4px; font-weight:700; font-size:12.5px; padding:10px 14px} .scan-mine svg{width:20px; height:20px; color:#eb6834}
+.sc-sheet .sheet-body{background:#06141f}
+.sc-cam{position:relative; height:min(62vh, 520px); background:#000; overflow:hidden}
+.sc-cam video{width:100%; height:100%; object-fit:cover; display:block}
+.sc-frame{position:absolute; left:8%; right:8%; top:34%; height:32%; border-radius:12px; box-shadow:0 0 0 999px rgba(0,0,0,.45)}
+.sc-frame i{position:absolute; width:30px; height:30px; border:4px solid #fff} .sc-frame i:nth-child(1){left:-2px; top:-2px; border-right:0; border-bottom:0; border-top-left-radius:12px} .sc-frame i:nth-child(2){right:-2px; top:-2px; border-left:0; border-bottom:0; border-top-right-radius:12px} .sc-frame i:nth-child(3){left:-2px; bottom:-2px; border-right:0; border-top:0; border-bottom-left-radius:12px} .sc-frame i:nth-child(4){right:-2px; bottom:-2px; border-left:0; border-top:0; border-bottom-right-radius:12px}
+.sc-line{position:absolute; left:6%; right:6%; top:50%; height:2px; background:#eb6834; box-shadow:0 0 12px #eb6834; animation:sc-sweep 1.8s ease-in-out infinite alternate}
+@keyframes sc-sweep{from{transform:translateY(-34px)} to{transform:translateY(34px)}}
+.sc-hint{position:absolute; left:0; right:0; bottom:16px; text-align:center; color:#fff; font-weight:700; font-size:14px; text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.sc-flash{position:absolute; inset:0; background:#2fd08a; opacity:0; pointer-events:none} .sc-flash.go{animation:sc-flash .5s ease-out}
+@keyframes sc-flash{30%{opacity:.55}}
+.sc-pad{display:grid; gap:12px; color:#fff}
+.sc-acts{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px} .sc-acts .btn{display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 6px; font-size:12.5px; font-weight:700; background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.2)} .sc-acts svg{width:22px; height:22px}
+.sc-fine{margin:0; font-size:12.5px; color:var(--ink-3); line-height:1.45} .sc-sheet .sc-fine{color:rgba(255,255,255,.6)}
+.ld-top{display:flex; gap:14px; align-items:center; padding:20px 16px; background:linear-gradient(135deg, #14486e, #0d314c); color:#fff}
+.ld-top .avatar{width:64px; height:64px; flex:none} .ld-top div{display:grid; gap:3px} .ld-top b{font-size:20px; line-height:1.15} .ld-top span{font-size:14px; color:#cfe3f1} .ld-top i{font-style:normal; font-size:12px; color:#a9d8f3}
+.ld-q{width:64px; height:64px; flex:none; border-radius:50%; display:grid; place-items:center; font-size:30px; font-weight:800; background:rgba(255,255,255,.12)}
+.ld{display:grid; gap:10px} .ld-h{font-size:12.5px; font-weight:800; color:var(--ink-2); margin-top:4px}
+.ld-kind{display:grid; grid-template-columns:1fr 1fr} .ld-kind button{white-space:normal; line-height:1.2; padding-top:10px; padding-bottom:10px}
+.ld-rate{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px}
+.ld-rate button{padding:11px; border-radius:10px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); font:inherit; font-weight:800; cursor:pointer}
+.ld-rate .r-hot[aria-pressed="true"]{background:#c9402a; border-color:#c9402a; color:#fff} .ld-rate .r-warm[aria-pressed="true"]{background:#d9822b; border-color:#d9822b; color:#fff} .ld-rate .r-cold[aria-pressed="true"]{background:#2477b8; border-color:#2477b8; color:#fff}
+.ld .d-actions .btn{display:inline-flex; align-items:center; gap:8px} .ld .d-actions svg{width:18px; height:18px}
+.scl{display:grid; gap:10px}
+.scl-top{display:flex; justify-content:space-between; align-items:center; font-size:13.5px; font-weight:700; color:var(--ink-2)} .scl-top .btn{display:inline-flex; align-items:center; gap:6px} .scl-top svg{width:18px; height:18px}
+.scl-row{display:grid; grid-template-columns:56px 1fr auto; gap:12px; align-items:start; padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer}
+.scl-r{display:grid; place-items:center; height:28px; border-radius:7px; font-size:12px; font-weight:800; background:var(--surface-2); color:var(--ink-3)} .scl-r.r-hot{background:#c9402a; color:#fff} .scl-r.r-warm{background:#d9822b; color:#fff} .scl-r.r-cold{background:#2477b8; color:#fff}
+.scl-t{display:grid; gap:2px; min-width:0} .scl-t b{font-size:14.5px} .scl-t span{font-size:12.5px; color:var(--ink-3)} .scl-t em{font-style:normal; font-size:13px; color:var(--ink-2); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.scl-row > i{font-style:normal; font-size:11.5px; color:var(--ink-3); white-space:nowrap}
+.scl-new{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:6px} .scl-new svg{width:20px; height:20px}
+.tb-wrap{display:grid; gap:14px}
+.tbg{display:grid; justify-items:center; gap:4px; padding:26px 18px 20px; border-radius:14px; background:#fff; color:#111; border:1px solid var(--border); box-shadow:0 18px 34px -22px rgba(0,0,0,.5)}
+.tbg-first{font-size:40px; font-weight:800; letter-spacing:.5px; text-transform:uppercase} .tbg-name{font-size:22px} .tbg-co{font-size:20px; margin-bottom:10px}
+.tbg-code{width:100%; max-width:340px} .tbg-code svg{display:block; width:100%; height:90px} .tbg-code rect{fill:#000}
+.tbg-n{font-family:ui-monospace, Menlo, monospace; font-size:18px; letter-spacing:1px}
+@media (prefers-reduced-motion:reduce){ .sc-line{animation:none} }
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -1851,6 +1891,11 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-agenda" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M7 13.5h4M7 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.2 2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z" fill="var(--star-fill, none)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7.5 8.5v7M10 8.5v7M13.5 8.5v7M16.5 8.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-badge" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 6V4h6v2M8 11h8M7.5 15h1M10 15h1M12.5 15h1M15 15h1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-stairs" viewBox="0 0 24 24"><path d="M3 20h5v-4.5h4.5V11H17V6.5h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-elevator" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9.5 3-3 3 3M9 14.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
@@ -2288,7 +2333,9 @@ function renderHome() {
       '<button type="button" data-go="people">' + icon('i-people') + '<span>Speakers</span></button>' +
       '<button type="button" data-sponsors>' + icon('i-handshake') + '<span>Sponsors</span></button>' +
       '<button type="button" data-go="mine">' + icon('i-star') + '<span>Starred</span></button>' +
-    '</div>' + nextCard('home');
+    '</div>' +
+    /* Jonna, Nov 27, 2026: name tag scanning, staff test */
+    (canScan() ? '<div class="scan-row"><button type="button" class="scan-go" data-scan>' + icon('i-scan') + '<span><b>Scan a Name Tag</b><span>Staff test: leads and engagement conversations</span></span>' + icon('i-chev', 'go') + '</button><button type="button" class="scan-mine" data-scans>' + icon('i-list') + '<span>My Scans</span></button></div>' : '') + nextCard('home');
 
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
@@ -2618,6 +2665,14 @@ function loadPreviewAttendees() {
     .then(function (j) {
       var bytes = Uint8Array.from(atob(j.content), function (c) { return c.charCodeAt(0); });
       var d = JSON.parse(new TextDecoder().decode(bytes)), s = d.summits && d.summits[S.sid];
+      /* registration numbers, for name tag scanning (CN-055); and this staff member's own, for the Test Badge */
+      PV.byReg = {}; PV.hasReg = false; PV.myReg = '';
+      var meE = String((staffSession() || {}).email || '').toLowerCase();
+      (s && s.people || []).forEach(function (p) {
+        var regs = Array.isArray(p.reg) ? p.reg : p.reg ? [p.reg] : [];
+        regs.forEach(function (n) { PV.hasReg = true; PV.byReg[String(n)] = { name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '' }; });
+        if (meE && p.e === meE && regs.length && !PV.myReg) PV.myReg = String(regs[0]);
+      });
       PV.people = (s && s.people || []).map(function (p, i) { return { id: 'pv' + i, name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '', photo: 0, joined: false, preview: true }; })
         .filter(function (p) { return p.name; });
       /* MISMO staff are in Summit HQ's list twice: their registration (with their title) and the staff roster (just
@@ -3027,6 +3082,180 @@ function walkSheet(room, from0) {
     if (e.target.matches('[data-wk-nostairs]')) { noStairs = e.target.checked; save('walk-nostairs', noStairs); playing = false; render(); }
   });
   render();
+}
+/* Code 39, read from rows of a camera frame (Jonna, Nov 27, 2026): MISMO's name tags carry the registration number as a
+   Code 39 barcode. Each character is 9 bars and spaces, 3 of them wide; a row's bar and space widths are matched against
+   the table, reading either way (a name tag held upside down reads backwards). */
+var C39 = { '0': '000110100', '1': '100100001', '2': '001100001', '3': '101100000', '4': '000110001', '5': '100110000', '6': '001110000', '7': '000100101', '8': '100100100', '9': '001100100',
+  A: '100001001', B: '001001001', C: '101001000', D: '000011001', E: '100011000', F: '001011000', G: '000001101', H: '100001100', I: '001001100', J: '000011100', K: '100000011', L: '001000011', M: '101000010',
+  N: '000010011', O: '100010010', P: '001010010', Q: '000000111', R: '100000110', S: '001000110', T: '000010110', U: '110000001', V: '011000001', W: '111000000', X: '010010001', Y: '110010000', Z: '011010000',
+  '-': '010000101', '.': '110000100', ' ': '011000100', '$': '010101000', '/': '010100010', '+': '010001010', '%': '000101010', '*': '010010100' };
+var C39R = {}; Object.keys(C39).forEach(function (k) { C39R[C39[k]] = k; });
+function c39Char(w) {   /* nine widths: the three widest are wide, if they stand clear of the rest */
+  var s = w.slice().sort(function (a, b) { return b - a; });
+  if (s[2] < s[3] * 1.5) return null;
+  var cut = (s[2] + s[3]) / 2;
+  return C39R[w.map(function (x) { return x > cut ? '1' : '0'; }).join('')] || null;
+}
+function c39Runs(row) {   /* a row of grey levels (0 dark, 255 light) to alternating run widths, starting with a bar */
+  var mn = 255, mx = 0; for (var i = 0; i < row.length; i++) { if (row[i] < mn) mn = row[i]; if (row[i] > mx) mx = row[i]; }
+  if (mx - mn < 40) return null;
+  var t = (mn + mx) / 2, runs = [], cur = row[0] < t, n = 0;
+  for (i = 0; i < row.length; i++) { var d = row[i] < t; if (d === cur) n++; else { runs.push({ bar: cur, w: n }); cur = d; n = 1; } }
+  runs.push({ bar: cur, w: n });
+  return runs;
+}
+function c39FromRuns(runs) {
+  var w = runs.map(function (r) { return r.w; });
+  for (var i = 0; i + 9 <= runs.length; i++) {
+    if (!runs[i].bar) continue;
+    if (c39Char(w.slice(i, i + 9)) !== '*') continue;
+    var out = '', j = i + 10, ok = false;
+    while (j + 9 <= runs.length) {
+      var ch = c39Char(w.slice(j, j + 9)); if (!ch) break;
+      if (ch === '*') { ok = out.length > 0; break; }
+      out += ch; j += 10;
+    }
+    if (ok) return out;
+  }
+  return null;
+}
+function c39Row(row) {
+  var runs = c39Runs(row); if (!runs) return null;
+  var a = c39FromRuns(runs); if (a) return a;
+  var rev = runs.slice().reverse(); return c39FromRuns(rev);
+}
+/* ---------- Name Tag Scanning (Jonna, Nov 27, 2026; plan in _internal/name-tag-scanning/PLAN.md). Staff test for now:
+   scan a summit name tag, see who it is from Summit HQ's attendee list (its registration number, CN-055), add a note and
+   Hot / Warm / Cold, and keep it. In this test, scans stay on this phone. When it goes live, engagement conversations go
+   to Member 360 and sponsors' leads to that sponsor; sponsors get an email only if the attendee chose to share it. ---------- */
+function scansKey() { return 'scans:' + S.sid; }
+function myScans() { return load(scansKey(), []); }
+function saveScans(l) { save(scansKey(), l); }
+function canScan() { return canPreviewAttendees(); }
+function regLookup(n) { return (PV.byReg && PV.byReg[String(n)]) || null; }
+function myReg() { return PV.myReg || ''; }
+/* Code 39 drawn as an SVG, for the Test Badge */
+function c39Svg(v) {
+  var s = '*' + String(v).toUpperCase() + '*', x = 10, N = 3, Wd = 8, bars = '';
+  for (var i = 0; i < s.length; i++) {
+    var p = C39[s[i]]; if (!p) continue;
+    for (var k = 0; k < 9; k++) { var w = p[k] === '1' ? Wd : N; if (k % 2 === 0) bars += '<rect x="' + x + '" y="0" width="' + w + '" height="70"/>'; x += w; }
+    x += N;
+  }
+  return '<svg class="c39" viewBox="0 0 ' + (x + 10) + ' 70" preserveAspectRatio="none" role="img" aria-label="Barcode ' + esc(v) + '">' + bars + '</svg>';
+}
+function scanSheet() {
+  if (!PV.state) loadPreviewAttendees();
+  var el = openSheet('Scan a Name Tag', '<div class="scx"><div class="sc-cam"><video playsinline muted></video><canvas hidden></canvas>' +
+    '<div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><div class="sc-hint">Line up the barcode on the name tag inside the box</div><div class="sc-flash"></div></div>' +
+    '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div>' +
+    '<div class="sc-acts"><button type="button" class="btn" data-sc-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button><button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button></div>' +
+    '<p class="sc-fine">Staff test: scans stay on this phone. When scanning goes live, engagement conversations go to Member 360 and sponsors\' leads go to that sponsor.</p></div></div>', { plain: true });
+  el.classList.add('sc-sheet');
+  var v = el.querySelector('video'), cv = el.querySelector('canvas'), ctx = cv.getContext('2d', { willReadFrequently: true }), stream = null, alive = true, seen = {}, det = null, busy = false;
+  var msg = function (h) { el.querySelector('.sc-msg').innerHTML = h; };
+  function stop() { alive = false; if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; }
+  /* stop the camera when the sheet closes */
+  var mo = new MutationObserver(function () { if (!el.isConnected) { stop(); mo.disconnect(); } }); mo.observe(document.body, { childList: true, subtree: true });
+  function found(n) {
+    if (!alive) return; stop();
+    try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
+    var f = el.querySelector('.sc-flash'); f.classList.add('go');
+    setTimeout(function () { leadSheet({ reg: n, at: Date.now() }, true); }, 350);
+  }
+  function scanFrame() {
+    if (!alive || !v.videoWidth) return;
+    var W = 960, H = Math.round(v.videoHeight * W / v.videoWidth); cv.width = W; cv.height = H; ctx.drawImage(v, 0, 0, W, H);
+    var votes = {};
+    for (var y = Math.round(H * .3); y < H * .7; y += 5) {
+      var d = ctx.getImageData(0, y, W, 1).data, row = new Array(W);
+      for (var i = 0; i < W; i++) row[i] = (d[i * 4] * 299 + d[i * 4 + 1] * 587 + d[i * 4 + 2] * 114) / 1000;
+      var r = c39Row(row); if (r && /^\d{5,10}$/.test(r)) votes[r] = (votes[r] || 0) + 1;
+    }
+    Object.keys(votes).forEach(function (k) { seen[k] = (seen[k] || 0) + votes[k]; if (votes[k] >= 2 || seen[k] >= 3) found(k); });
+  }
+  function loop() {
+    if (!alive) return;
+    if (det && !busy) { busy = true; det.detect(v).then(function (codes) { busy = false; var c = (codes || []).filter(function (x) { return /^\d{5,10}$/.test(x.rawValue); })[0]; if (c) found(c.rawValue); }).catch(function () { busy = false; det = null; }); }
+    else scanFrame();
+    setTimeout(loop, 140);
+  }
+  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) msg('<div class="note">This phone\'s browser can\'t open the camera here. Use Type the Number.</div>');
+  else navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false }).then(function (s) {
+    if (!alive) { s.getTracks().forEach(function (t) { t.stop(); }); return; }
+    stream = s; v.srcObject = s; v.play().catch(function () {});
+    try { if ('BarcodeDetector' in window) BarcodeDetector.getSupportedFormats().then(function (f) { if (f.indexOf('code_39') >= 0) det = new BarcodeDetector({ formats: ['code_39'] }); }); } catch (e) {}
+    loop();
+  }).catch(function () { msg('<div class="note">The camera is off for MyMISMO. Allow the camera in your phone\'s settings, or use Type the Number.</div>'); });
+  el.addEventListener('click', function (e) {
+    if (e.target.closest('[data-sc-type]')) {
+      var n = prompt('The number under the barcode on the name tag:'); n = String(n || '').replace(/\D/g, ''); if (n) found(n); return;
+    }
+    if (e.target.closest('[data-sc-badge]')) { stop(); testBadge(); return; }
+    if (e.target.closest('[data-sc-list]')) { stop(); scansSheet(); }
+  });
+}
+/* a scan: who it is, a note, Hot / Warm / Cold, and what kind it is */
+function leadSheet(sc, fresh) {
+  var who = regLookup(sc.reg), kinds = ['Engagement Conversation', 'Sponsor Lead'];
+  sc.kind = sc.kind || kinds[0]; sc.rate = sc.rate || '';
+  var h = '<div class="ld-top">' + (who ? avatarHtml({ id: 'reg:' + sc.reg, name: who.name, photo: 0 }, 'big') + '<div><b>' + esc(who.name) + '</b><span>' + esc([who.title, who.company].filter(Boolean).join(', ')) + '</span><i>Registration ' + esc(sc.reg) + '</i></div>'
+      : '<span class="ld-q">?</span><div><b>Registration ' + esc(sc.reg) + '</b><span>' + (PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).') + '</span></div>') + '</div>' +
+    '<div class="sheet-pad ld">' +
+    '<div class="ld-h">This Is</div><div class="seg ld-kind">' + kinds.map(function (k) { return '<button type="button" data-ld-kind="' + esc(k) + '" aria-pressed="' + (sc.kind === k) + '">' + esc(k) + '</button>'; }).join('') + '</div>' +
+    '<div class="ld-h">How Warm</div><div class="ld-rate">' + ['Hot', 'Warm', 'Cold'].map(function (r) { return '<button type="button" class="r-' + r.toLowerCase() + '" data-ld-rate="' + r + '" aria-pressed="' + (sc.rate === r) + '">' + r + '</button>'; }).join('') + '</div>' +
+    '<div class="field"><label for="ld-note">Note</label><textarea id="ld-note" rows="3" maxlength="600" placeholder="What you talked about, what to follow up on">' + esc(sc.note || '') + '</textarea></div>' +
+    '<div class="field"><label for="ld-email">Email</label><input id="ld-email" type="email" maxlength="160" placeholder="Only if they gave it to you" value="' + esc(sc.email || '') + '"></div>' +
+    '<div class="d-actions"><button class="btn primary" type="button" data-ld-save>' + icon('i-check') + 'Save</button>' + (fresh ? '<button class="btn" type="button" data-ld-again>' + icon('i-scan') + 'Save and Scan Next</button>' : '<button class="btn quiet" type="button" data-ld-del>Delete</button>') + '</div>' +
+    '<p class="sc-fine">Staff test: kept on this phone only.</p></div>';
+  var el = openSheet(fresh ? 'New Scan' : 'Scan', h, { plain: true });
+  el.classList.add('ld-sheet');
+  function keep() {
+    sc.note = el.querySelector('#ld-note').value.trim(); sc.email = el.querySelector('#ld-email').value.trim();
+    if (who) { sc.name = who.name; sc.title = who.title; sc.company = who.company; }
+    var l = myScans().filter(function (x) { return x.at !== sc.at; }); l.unshift(sc); saveScans(l);
+  }
+  el.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-ld-kind]'))) { sc.kind = t.getAttribute('data-ld-kind'); el.querySelectorAll('[data-ld-kind]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return; }
+    if ((t = e.target.closest('[data-ld-rate]'))) { sc.rate = sc.rate === t.getAttribute('data-ld-rate') ? '' : t.getAttribute('data-ld-rate'); el.querySelectorAll('[data-ld-rate]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-ld-rate') === sc.rate)); }); return; }
+    if (e.target.closest('[data-ld-save]')) { keep(); closeSheet(); mxToast('Scan saved'); return; }
+    if (e.target.closest('[data-ld-again]')) { keep(); closeSheet(); mxToast('Scan saved'); scanSheet(); return; }
+    if (e.target.closest('[data-ld-del]')) { saveScans(myScans().filter(function (x) { return x.at !== sc.at; })); closeSheet(); mxToast('Scan deleted'); var l = document.querySelector('.scl-sheet'); if (l) { closeSheet(); scansSheet(); } }
+  });
+}
+function scansSheet() {
+  var l = myScans();
+  /* names fill in once the list has them */
+  l.forEach(function (s) { var w = regLookup(s.reg); if (w && !s.name) { s.name = w.name; s.title = w.title; s.company = w.company; } });
+  var el = openSheet('My Scans', '<div class="sheet-pad scl">' + (l.length ? '<div class="scl-top"><span>' + l.length + (l.length === 1 ? ' scan' : ' scans') + ' on this phone</span><button type="button" class="btn" data-scl-csv>' + icon('i-download') + 'Download</button></div>' +
+    l.map(function (s) { var d = new Date(s.at);
+      return '<button type="button" class="scl-row" data-scl="' + s.at + '"><span class="scl-r r-' + esc((s.rate || 'none').toLowerCase()) + '">' + esc(s.rate || '–') + '</span><span class="scl-t"><b>' + esc(s.name || 'Registration ' + s.reg) + '</b><span>' + esc([s.company, s.kind].filter(Boolean).join(', ')) + '</span>' + (s.note ? '<em>' + esc(s.note) + '</em>' : '') + '</span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</i></button>'; }).join('')
+    : '<div class="mx-empty">' + icon('i-scan') + '<b>No scans yet</b><span>Scan a name tag and it shows up here.</span></div>') +
+    '<button type="button" class="btn primary scl-new" data-scan>' + icon('i-scan') + 'Scan a Name Tag</button></div>', { plain: true });
+  el.classList.add('scl-sheet');
+  el.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-scl]'))) { var s = myScans().filter(function (x) { return String(x.at) === t.getAttribute('data-scl'); })[0]; if (s) leadSheet(s, false); return; }
+    if (e.target.closest('[data-scl-csv]')) {
+      var q = function (x) { x = String(x == null ? '' : x); return /[",\n]/.test(x) ? '"' + x.replace(/"/g, '""') + '"' : x; };
+      var rows = [['Name', 'Title', 'Company', 'Email', 'Registration', 'Kind', 'How Warm', 'Note', 'When']].concat(myScans().map(function (s) { return [s.name, s.title, s.company, s.email, s.reg, s.kind, s.rate, s.note, new Date(s.at).toLocaleString()]; }));
+      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows.map(function (r) { return r.map(q).join(','); }).join('\n')], { type: 'text/csv' }));
+      a.download = 'MyMISMO Scans, ' + (S.summit ? S.summit.name : 'Summit') + '.csv'; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    }
+  });
+}
+/* your own name tag's barcode, big, so another phone can scan it */
+function testBadge() {
+  var n = myReg(), st = staffSession();
+  var el = openSheet('My Test Badge', '<div class="sheet-pad tb-wrap"><div class="tbg"><div class="tbg-first">' + esc(firstName() || '') + '</div><div class="tbg-name">' + esc((st && st.name) || '') + '</div><div class="tbg-co">MISMO</div>' +
+    '<div class="tbg-code">' + (n ? c39Svg(n) : '') + '</div><div class="tbg-n">' + esc(n || '') + '</div></div>' +
+    (n ? '<p class="sc-fine">Your ' + esc(S.summit ? S.summit.name : 'summit') + ' registration number, the same barcode your name tag will have. Hold this up to another phone\'s scanner.</p>'
+      : '<div class="field"><label for="tb-n">Badge Number</label><input id="tb-n" inputmode="numeric" maxlength="10" placeholder="The number under a name tag\'s barcode"></div><p class="sc-fine">Your registration number shows here once Summit HQ adds registration numbers to the attendee list. Until then, type the number from any name tag to test the scanner.</p>') +
+    '</div>', { plain: true });
+  var inp = el.querySelector('#tb-n');
+  if (inp) inp.addEventListener('input', function () { var v = inp.value.replace(/\D/g, ''); el.querySelector('.tbg-code').innerHTML = v ? c39Svg(v) : ''; el.querySelector('.tbg-n').textContent = v; });
 }
 function loadExtras() {
   function again(pages) { if (pages.indexOf(S.page) >= 0 && !stack.length) renderPage(S.page); }
@@ -5159,6 +5388,7 @@ function profileSheet(welcome, preview) {
     '<div class="field"><label for="pf-phone">Phone</label><input id="pf-phone" type="tel" maxlength="30" autocomplete="tel" value="' + esc(me.phone || '') + '"></div>' +
     '<div class="field"><label for="pf-web">Website</label><input id="pf-web" type="url" maxlength="200" placeholder="https://" value="' + esc(me.website || '') + '"></div>' +
     '<label class="toggle"><input type="checkbox" id="pf-email"' + (me.showEmail ? ' checked' : '') + '><span><b>Show My Email</b><span>' + esc(me.email || '') + ' shows on your card for people signed in. Off unless you turn it on.</span></span></label>' +
+    '<label class="toggle"><input type="checkbox" id="pf-share"' + (me.shareLead ? ' checked' : '') + '><span><b>Share My Email with Sponsors Who Scan My Name Tag</b><span>When a sponsor scans your name tag, they get your name, title and company. Turn this on to give them your email too. Off unless you turn it on.</span></span></label>' +
     '<div id="pf-msg" role="status"></div><div class="d-actions"><button class="btn primary" type="button" id="pf-save">Save</button>' + (preview ? '' : '<button class="btn quiet" type="button" id="pf-out">Sign Out</button>') + '</div></div>';
   var el = openSheet('My Profile', h, { color: '#14486e' });
   if (preview) {   /* staff preview: everything works on the screen, nothing is saved */
@@ -5172,7 +5402,7 @@ function profileSheet(welcome, preview) {
   $('#pf-save', el).addEventListener('click', function () {
     var btn = this; btn.disabled = true; btn.textContent = 'Saving…'; $('#pf-msg', el).innerHTML = '';
     rq('PUT', 'profile', { listed: $('#pf-listed', el).checked, title: $('#pf-title', el).value, company: $('#pf-company', el).value, about: $('#pf-about', el).value, linkedin: $('#pf-li', el).value.trim(),
-      phone: $('#pf-phone', el).value.trim(), website: $('#pf-web', el).value.trim(), showEmail: $('#pf-email', el).checked }).then(function (r) {
+      phone: $('#pf-phone', el).value.trim(), website: $('#pf-web', el).value.trim(), showEmail: $('#pf-email', el).checked, shareLead: $('#pf-share', el).checked }).then(function (r) {
       btn.disabled = false; btn.textContent = 'Save';
       if (!r.ok) { $('#pf-msg', el).innerHTML = '<div class="err">' + esc((r.j.problems && r.j.problems[0]) || r.j.message || 'Your changes weren\'t saved. Try again.') + '</div>'; return; }
       A.me = r.j.me; persist(); A.loadedPeople = false; paintAccount();
@@ -5351,6 +5581,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
+  if (t.hasAttribute('data-scan')) { scanSheet(); return; }
+  if (t.hasAttribute('data-scans')) { scansSheet(); return; }
   if (t.hasAttribute('data-walk-next')) { var nx = walkNextMine(); if (nx) walkSheet(nx.room); return; }
   if (t.hasAttribute('data-play')) { playIn(t.closest('.player'), t.getAttribute('data-play')); return; }
   if (t.hasAttribute('data-live')) { liveSheet(); return; }

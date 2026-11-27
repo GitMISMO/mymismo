@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Name tag scanning (staff test): Scan a Name Tag on the Summit page reads the name tag's barcode with the camera, shows who it is from Summit HQ's attendee list, and keeps a note, Hot / Warm / Cold and an email only if they gave it; My Scans with Download; My Test Badge. Scans stay on the phone for now. My Profile: Share My Email with Sponsors Who Scan My Name Tag (off unless turned on).
 - Nov 27, 2026: Walk Me There: a walkthrough on the hotel's floor map. Pick a room (or a session's Walk There) and a starting point; a dot walks the hallways, the map follows it up the floors, and step cards say where to go. Elevators-only option. Routes traced from the hotel's map, to be checked once on site.
 - Nov 27, 2026: Summit tile: the sponsor strip shows only the Platinum sponsors (and any tier above), labeled "Platinum Sponsors" with no count; tapping it still opens every sponsor.
 - Nov 27, 2026: Summit page: the Sessions, Speakers, Sponsors and Starred cards no longer show numbers; they're still the same buttons.
