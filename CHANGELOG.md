@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Join a Workgroup: on a group's page, Follow is a star in the corner of its header (gold when you follow it) instead of a big button.
+- Nov 27, 2026: MISMO Matters: The Vieaux Point header moves: a slowly shifting sky, VIEAUX POINT in big outlined letters, a floating quote mark and Brian's byline.
 - Nov 27, 2026: Cotality and Asurity (and every company on the website agenda's Sponsored by and Powered by plates) get the picture of their website in their sponsor pop-up, made by the guide job. Asurity's name reads Asurity (it was being read from its logo's file name).
 - Nov 27, 2026: Receptions say Refreshments (was Food and Drinks).
 - Nov 27, 2026: The Board of Directors and the Joint Committee say Refreshments (was Food Served), like the breaks.

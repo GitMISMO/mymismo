@@ -752,6 +752,19 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .web .wt{font-family:var(--cond); font-size:21px; font-weight:700; line-height:1.12}
 .web .wm{color:var(--ink-2); font-size:13.5px; margin-top:4px; font-weight:600}
 .web p{font-size:14.5px; margin:12px 0 14px}
+.mat-hero.vp{isolation:isolate; padding:22px 20px 20px; background:radial-gradient(90% 70% at 85% 10%, rgba(116,191,235,.38), transparent 60%), radial-gradient(80% 80% at 0% 100%, rgba(36,119,184,.55), transparent 65%), linear-gradient(155deg, #17507a 0%, #0b2a42 55%, #06151f 100%); background-size:160% 160%, 140% 140%, 100% 100%; animation:vp-sky 14s ease-in-out infinite alternate}
+@keyframes vp-sky{0%{background-position:0% 0%, 0% 100%, 0 0}100%{background-position:100% 30%, 40% 60%, 0 0}}
+.mat-hero.vp:before{content:""; position:absolute; inset:0; z-index:-1; opacity:.14; background-image:linear-gradient(rgba(116,191,235,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(116,191,235,.6) 1px, transparent 1px); background-size:26px 26px; mask-image:linear-gradient(180deg, #000, transparent 75%); -webkit-mask-image:linear-gradient(180deg, #000, transparent 75%)}
+.vp-ghost{position:absolute; z-index:-1; top:4px; right:-6px; font-family:var(--cond); font-weight:700; font-size:clamp(54px, 17vw, 96px); line-height:.82; letter-spacing:-.03em; text-align:right; color:transparent; -webkit-text-stroke:1.4px rgba(169,216,243,.28); pointer-events:none}
+.vp-q{position:absolute; z-index:-1; right:16px; bottom:18px; width:92px; height:auto; fill:rgba(116,191,235,.16); animation:vp-float 6s ease-in-out infinite}
+@keyframes vp-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+.mat-hero .mh-lbl{display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:6px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18)} .mat-hero .mh-lbl svg{width:14px; height:14px}
+.mat-hero.vp .mh-k{display:flex; align-items:center; gap:8px; margin-top:16px; font-size:13px; letter-spacing:.02em} .mat-hero.vp .mh-k i{width:22px; height:3px; border-radius:2px; background:var(--sky)}
+.mat-hero.vp h2{font-size:clamp(26px, 7.5vw, 34px); margin:6px 0 10px; max-width:24ch; text-wrap:balance}
+.mat-hero.vp p{max-width:44ch}
+.vp-by{display:flex; align-items:center; gap:10px; margin:0 0 16px} .vp-av{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; color:#06202f; background:linear-gradient(135deg, #a9d8f3, #74bfeb); box-shadow:0 0 0 3px rgba(116,191,235,.25)}
+.vp-by span:last-child{display:grid; line-height:1.2} .vp-by b{font-size:14px} .vp-by i{font-style:normal; font-size:12px; color:rgba(255,255,255,.7)}
+@media (prefers-reduced-motion: reduce){ .mat-hero.vp, .vp-q{animation:none} }
 .mat-hero{position:relative; overflow:hidden; border-radius:16px; padding:20px; color:#fff; background:linear-gradient(150deg, #14486e, #06202f 70%)}
 .mat-hero:after{content:""; position:absolute; right:-60px; top:-60px; width:200px; height:200px; border-radius:50%; background:radial-gradient(closest-side, rgba(116,191,235,.45), transparent); animation:ha-drift 9s ease-in-out infinite alternate}
 .mh-lbl{font-weight:700; color:var(--sky-soft); font-size:13px}
@@ -1810,6 +1823,11 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .rc-tx{display:grid; gap:3px} .rc-tx b{font-family:var(--cond); font-size:19px} .rc-tx span{font-size:13.5px; color:#cfe3f1} .rc-card > svg.go{width:20px; height:20px}
 .rc{display:grid; gap:12px} .rc-pic{background:#071d2e; border-radius:14px; padding:14px; display:grid; place-items:center} .rc-pic img{width:min(100%, 320px); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45); aspect-ratio:4/5; background:#0d314c}
 .rc-met{display:grid; gap:8px} .rc-p{display:grid; gap:2px; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--surface)} .rc-p b{font-size:15px} .rc-p span{font-size:13px; color:var(--ink-2)} .rc-p i{font-size:13.5px; color:var(--ink-2)}
+.wgd-top{position:relative} .wgd-top h2{padding-right:58px}
+.wg-star{position:absolute; top:12px; right:12px; z-index:2; display:grid; justify-items:center; gap:1px; min-width:48px; padding:6px 6px 4px; border-radius:10px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.14); color:#fff; font:inherit; font-size:10.5px; font-weight:700; cursor:pointer; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
+.wg-star svg{width:22px; height:22px; transition:transform .2s ease}
+.wg-star.on{background:#fff6dd; border-color:#e0a83c; color:#7a5310} .wg-star.on svg{--star-fill:#e0a83c; color:#c98500; transform:scale(1.08)}
+.wg-star:active svg{transform:scale(.9)}
 .wg-fol svg{color:#a2701a} .wg-fol.on{background:#fff6dd; border-color:#e0a83c; color:#7a5310} .wg-fol.on svg{fill:currentColor}
 .wg-tip{display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:12px; background:var(--surface-2); border:1px dashed var(--border-strong); font-size:14px; color:var(--ink-2); margin-bottom:6px} .wg-tip svg{width:18px; height:18px; flex:none; color:#a2701a; margin-top:2px}
 .wg-mine{display:grid; gap:10px; margin-bottom:8px}
@@ -5210,6 +5228,8 @@ function wgCard(g, i) {
 function wgFollowing() { return load('wg-follow', []); }
 function wgIsFollowed(key) { return wgFollowing().indexOf(key) >= 0; }
 function wgToggleFollow(key) { var f = wgFollowing(), i = f.indexOf(key); if (i >= 0) f.splice(i, 1); else f.push(key); save('wg-follow', f); return i < 0; }
+/* Jonna, Nov 27, 2026: on a group's page, Follow is a star in the corner of its header */
+function wgFollowStar(key) { var on = wgIsFollowed(key), t = on ? 'Following (tap to stop)' : 'Follow This Group'; return '<button type="button" class="wg-star' + (on ? ' on' : '') + '" data-wg-follow="' + esc(key) + '" aria-pressed="' + on + '" aria-label="' + t + '" title="' + t + '">' + icon('i-star') + '<span>' + (on ? 'Following' : 'Follow') + '</span></button>'; }
 function wgFollowBtn(key) { var on = wgIsFollowed(key); return '<button type="button" class="btn wg-fol' + (on ? ' on' : '') + '" data-wg-follow="' + esc(key) + '" aria-pressed="' + on + '">' + icon('i-star') + (on ? 'Following' : 'Follow') + '</button>'; }
 /* a followed group meeting now or within 15 minutes */
 function wgSoonBanner() {
@@ -5274,11 +5294,11 @@ function wgSheet() {
 function wgDetail(key) {
   var g = wgGroups().filter(function (x) { return x.key === key; })[0]; if (!g) return;
   var c = wgColor(g.topic), nx = wgNext(g, 5), sp = wgSponsor(g), lead = wgLeaders(g), ag = wgAgenda(g), feed = wgFeed(g), live = wgLive(g), ss = wgSessions(g);
-  var h = '<div class="wgd-top" style="--c:' + c + '"><span class="wgd-k">' + esc(g.topic || '') + '</span><h2>' + esc(g.name) + '</h2><span class="wgd-kind">' + wgKind(g) + '</span>' +
+  var h = '<div class="wgd-top" style="--c:' + c + '">' + (g.rule.hold ? '' : wgFollowStar(g.key)) + '<span class="wgd-k">' + esc(g.topic || '') + '</span><h2>' + esc(g.name) + '</h2><span class="wgd-kind">' + wgKind(g) + '</span>' +
     (sp ? '<span class="wgd-sp"><i>Sponsored by</i>' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="' + esc(sp.sponsor) + '">' : '<b>' + esc(sp.sponsor) + '</b>') + '</span>' : '') + '</div>' +
     '<div class="sheet-pad wgd">' +
     (g.rule.hold ? '<div class="note">This group\'s meetings are on hold for now.</div>' :
-      '<div class="wgd-act">' + wgFollowBtn(g.key) + (g.join ? '<a class="btn primary' + (live ? ' wg-livebtn' : '') + '" href="' + esc(g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + (live ? 'Join Now' : 'Join the Meeting') + '</a>' : '') +
+      '<div class="wgd-act">' + (g.join ? '<a class="btn primary' + (live ? ' wg-livebtn' : '') + '" href="' + esc(g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + (live ? 'Join Now' : 'Join the Meeting') + '</a>' : '') +
       (feed ? '<button type="button" class="btn" data-wg-cal>' + icon('i-cal') + 'Add to Calendar</button>' : '') + '</div>' +
       (feed ? '<div class="wgd-cals" hidden>' + wgCalLinks(feed, g.name + ' (MISMO)') + '<span>Every meeting, kept up to date, including cancellations.</span></div>' : '')) +
     '<h3 class="wg-h">When It Meets</h3><div class="wgd-when"><b>' + esc(g.cadence) + '</b>' + (g.rule.hold ? '' : '<span>' + esc(g.time) + '</span>') + '</div>' +
@@ -5292,7 +5312,7 @@ function wgDetail(key) {
   var el = openSheet(g.name, h, { plain: true });
   el.addEventListener('click', function (e) {
     if (e.target.closest('[data-wg-cal]')) { var b = el.querySelector('.wgd-cals'); if (b) b.hidden = !b.hidden; return; }
-    var fb = e.target.closest('[data-wg-follow]'); if (fb) { var on = wgToggleFollow(g.key); fb.outerHTML = wgFollowBtn(g.key); mxToast(on ? 'Following ' + g.name : 'Not following ' + g.name); if (on && feed) { var c = el.querySelector('.wgd-cals'); if (c) c.hidden = false; } if (S.page === 'dash') renderPage('dash'); }
+    var fb = e.target.closest('[data-wg-follow]'); if (fb) { var on = wgToggleFollow(g.key); fb.outerHTML = wgFollowStar(g.key); mxToast(on ? 'Following ' + g.name : 'Not following ' + g.name); if (on && feed) { var c = el.querySelector('.wgd-cals'); if (c) c.hidden = false; } if (S.page === 'dash') renderPage('dash'); }
   });
 }
 /* ---------- MISMO Trivia (coming soon: waiting on the questions) ---------- */
@@ -6404,7 +6424,9 @@ function sameSite(u) { return /^https:\/\/resources\.mismo\.org\//.test(u) || /^
 function readLink(u, title) { return sameSite(u) ? '<button type="button" class="btn primary" data-web="' + esc(u) + '" data-web-title="' + esc(title) + '">' + icon('i-mail') + 'Read It</button>' : '<a class="btn primary" href="' + esc(u) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Read It</a>'; }
 function mattersSheet() {
   var eds = (MM && MM.editions) || [], ed = eds[0];
-  var h = '<div class="sheet-pad">' + (ed ? '<article class="mat-hero"><div class="mh-lbl">' + esc(ed.label) + '</div>' + (ed.vieauxPoint ? '<div class="mh-k">The Vieaux Point</div><h2>' + esc(ed.vieauxPoint.title) + '</h2><p>' + esc(ed.vieauxPoint.summary || '') + '</p>' : '<h2>The Latest Edition</h2>') +
+  var h = '<div class="sheet-pad">' + (ed ? '<article class="mat-hero' + (ed.vieauxPoint ? ' vp' : '') + '">' + (ed.vieauxPoint ? '<span class="vp-ghost" aria-hidden="true">VIEAUX<br>POINT</span><svg class="vp-q" viewBox="0 0 120 100" aria-hidden="true"><path d="M8 92 C8 52 22 22 52 8 L58 18 C40 30 34 46 34 58 L52 58 L52 92 Z M66 92 C66 52 80 22 110 8 L116 18 C98 30 92 46 92 58 L110 58 L110 92 Z"/></svg>' : '') +
+      '<div class="mh-lbl">' + icon('i-mail') + esc(ed.label) + '</div>' + (ed.vieauxPoint ? '<div class="mh-k"><i></i>The Vieaux Point</div><h2>' + esc(ed.vieauxPoint.title) + '</h2><p>' + esc(ed.vieauxPoint.summary || '') + '</p>' +
+      '<div class="vp-by"><span class="vp-av">BV</span><span><b>Brian Vieaux</b><i>MISMO President</i></span></div>' : '<h2>The Latest Edition</h2>') +
     '<div class="d-actions">' + readLink(ed.url, 'MISMO Matters, ' + ed.label) + '</div></article>' : '<div class="note">The editions couldn\'t be loaded just now.</div>') +
     (eds.length > 1 ? '<div class="section-h"><h2>Past Editions</h2></div><div class="list">' + eds.slice(1).map(function (e) {
       return sameSite(e.url) ? '<button type="button" class="row" data-web="' + esc(e.url) + '" data-web-title="' + esc('MISMO Matters, ' + e.label) + '"><b>' + esc(e.label) + '</b>' + icon('i-chev') + '</button>' : '<a class="row" href="' + esc(e.url) + '" target="_blank" rel="noopener"><b>' + esc(e.label) + '</b>' + icon('i-link') + '</a>';
