@@ -4312,6 +4312,15 @@ function wgTile() {
       return '<span class="wgw-d' + cls + (anyLive && c.iso === now.date ? ' live' : '') + '"><span class="wgw-bar"><em style="--h:' + Math.round(c.n / max * 100) + '%;--d:' + (j * 60) + 'ms"></em></span><i>' + DOW[dparts(c.iso).dow].slice(0, 1) + '</i></span>'; }).join('') +
     '<span class="wgw-n"><b>' + total + '</b>' + wk + '</span></span></button>';
 }
+/* Jonna, Nov 27, 2026: phones stay upright (the app and the installed web app are set to portrait), but a video played
+   full screen (Mic'd Up, the General Sessions live stream) turns sideways, and turns back when it closes */
+document.addEventListener('fullscreenchange', function () {
+  try {
+    var so = screen.orientation; if (!so || !so.lock) return;
+    if (document.fullscreenElement) so.lock('landscape').catch(function () {});
+    else if (so.unlock) so.unlock();
+  } catch (e) {}
+});
 /* the tile's meetings scroll up, one every few seconds (with Reduce Motion on they change without moving) */
 setInterval(function () {
   if (document.hidden) return;

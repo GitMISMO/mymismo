@@ -6,7 +6,7 @@
   "start_url": "/mymismo/",
   "scope": "/mymismo/",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait",
   "background_color": "#06202f",
   "theme_color": "#0d314c",
   "categories": [

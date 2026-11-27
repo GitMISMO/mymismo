@@ -69,3 +69,8 @@ The app shows the next summit whose last day hasn't passed. A person's starred s
 - **Still to build:** the leaderboard and championship need a save relay request (scores checked on the server, questions served by the relay so answers aren't in the app, the championship clock kept on the server).
 
 - **Who can play (Nov 25, 2026):** anyone can download MyMISMO (it is headed for the Apple App Store and Google Play). What's public on mismo.org stays public in the app; what needs a website sign-in still needs one. Practice rounds are open to everyone; ranked rounds need a sign-in with an emailed six-digit code, and players can delete their account in the app. Relay request 15 (_internal/relay-request-15) has the patch and 57 checks.
+
+## Screen Orientation (Jonna, Nov 27, 2026)
+- **Phones: portrait only.** The Android app (store/android/twa-manifest.json) and the installed web app (manifest.webmanifest) are set to portrait. Full-screen video (Mic'd Up, the General Sessions live stream) still turns sideways and turns back when it closes.
+- **Tablets: any way up.** Android 16 and later let large screens turn whatever the app asks, and the iPhone build must list iPad as supporting all four orientations (Apple requires it for iPad multitasking). For the iPhone build: UISupportedInterfaceOrientations = portrait only; UISupportedInterfaceOrientations~ipad = all four.
+- The landscape layout stays in the page for anyone using it in a browser or on a tablet.
