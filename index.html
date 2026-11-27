@@ -1721,6 +1721,8 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ph-card .ph-pr{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:0 16px} .ph-card .ph-pr button{flex:none}
 .ph-row{display:flex; gap:16px; flex-wrap:wrap} .ph-row .linkbtn{display:inline-flex; align-items:center; gap:6px} .ph-row .linkbtn svg{width:16px; height:16px}
 .ph-ed .ph-cv{background:#071d2e; padding:12px; display:grid; place-items:center}
+.hub-pic{position:absolute; left:12px; bottom:12px; z-index:3; display:inline-flex; align-items:center; gap:7px; padding:10px 14px; border-radius:10px; border:0; background:#f2c14e; color:#06202f; font:inherit; font-weight:800; font-size:14px; box-shadow:0 6px 18px rgba(0,0,0,.4); cursor:pointer}
+.hub-pic svg{width:18px; height:18px}
 .met-picrow{display:flex; gap:8px; flex-wrap:wrap; padding:12px 16px 0} .met-picrow .btn{flex:1 1 auto}
 .ld-top .met-big{width:64px; height:64px; border-radius:12px; object-fit:cover; flex:none; box-shadow:0 2px 8px rgba(13,49,76,.25)}
 .met-row{width:34px; height:34px; border-radius:8px; object-fit:cover; flex:none}
@@ -2115,6 +2117,12 @@ nav.tabbar .badge.on{display:grid}
 .cover:before{content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(6,32,47,.15), rgba(6,32,47,.7))}
 .cover > *{position:relative; z-index:1}
 .cover > .hero-art{position:absolute; z-index:0; opacity:.9}
+.cover.sum{background:radial-gradient(120% 90% at 100% 0%, rgba(116,191,235,.30), rgba(116,191,235,0) 55%), radial-gradient(90% 70% at 0% 100%, rgba(20,72,110,.9), rgba(20,72,110,0) 70%), linear-gradient(160deg, #0d314c 0%, #06202f 70%); box-shadow:inset 0 -4px 0 var(--tagc, #74bfeb)}
+.cover.sum:before{background:linear-gradient(180deg, rgba(6,32,47,.1) 0%, rgba(6,32,47,.35) 45%, rgba(6,32,47,.8) 100%)}
+.cover.sum > svg, .cover.sum > .hero-art{position:absolute; inset:0; z-index:0; opacity:.9}
+.cover.sum > .art-fade{position:absolute; z-index:0}
+.cover.sum .k{background:var(--tagc, rgba(255,255,255,.16)); border-color:color-mix(in srgb, var(--tagc, #fff) 70%, #fff)}
+
 .cover .k{display:inline-block; font-size:12.5px; font-weight:700; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:4px; padding:3px 8px}
 .cover h2{font-family:var(--cond); font-size:30px; line-height:1.05; margin-top:10px; letter-spacing:-.01em}
 .cover .w{margin-top:12px; display:grid; gap:5px; color:rgba(255,255,255,.92); font-size:14.5px}
@@ -4019,6 +4027,7 @@ function scanHub(sid, mode0) {
     '<div class="ci-top"></div>' +
     '<div class="sc-cam ci-cam"><video playsinline muted></video><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div>' +
     '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
+    '<button type="button" class="hub-pic" data-met-pic hidden>' + icon('i-camera') + '<span>Take a Picture</span></button>' +
     '<button type="button" class="hub-again" data-hub-again hidden>' + icon('i-scan') + '<b>Scan the Next Name Tag</b></button>' +
     '<div class="ci-pop" aria-live="polite"></div></div>' +
     '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div><div class="ci-list"></div><div class="sc-acts four"></div><p class="sc-fine"></p></div></div>', { plain: true });
@@ -4036,6 +4045,7 @@ function scanHub(sid, mode0) {
     }
   }
   function lower() {
+    var hpBtn = el.querySelector('.hub-pic'); if (hpBtn) hpBtn.hidden = mode === 'checkin';   /* Who I Met: the picture button sits right on the camera */
     var acts = el.querySelector('.sc-acts');
     acts.className = 'sc-acts ' + (hp ? 'two' : 'four');
     if (att) {
@@ -6513,7 +6523,8 @@ function openSheet(title, html, opts) {
   el.innerHTML = '<div class="sheet-head"><span class="grab" aria-hidden="true"></span>' + (stack.length ? '<button type="button" class="iconbtn" data-sheet-back aria-label="Back">' + icon('i-back') + '</button>' : '') +
     '<span class="title">' + (opts.plain ? esc(title) : '') + '</span><button type="button" class="iconbtn close" data-sheet-close aria-label="Close">' + icon('i-x') + '</button></div><div class="sheet-body">' + html + '</div>';
   if (opts.key) el.setAttribute('data-key', opts.key);
-  var cv = el.querySelector('.cover'); if (cv) cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false }));
+  /* Jonna, Nov 27, 2026: a session's pop-up wears the summit's header (navy, the city's skyline and moon); its type shows in its colored tag */
+  var cv = el.querySelector('.cover'); if (cv) { if (S.summit && S.place) { cv.classList.add('sum'); cv.insertAdjacentHTML('afterbegin', summitArt({ moon: [1010, 190, .8] })); } else cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false })); }
   $('#sheets').appendChild(el);
   stack.push(el);
   var back = $('#sheet-back'); back.hidden = false;
