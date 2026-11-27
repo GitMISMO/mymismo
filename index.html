@@ -1498,6 +1498,13 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .an-n{font-family:var(--cond); font-weight:800; font-size:26px; align-self:center}
 .an-bar{grid-column:1 / -1; height:6px; border-radius:3px; background:var(--rule); overflow:hidden} .an-bar i{display:block; height:100%; background:linear-gradient(90deg, #74bfeb, #2477b8); transition:width .6s ease}
 .an-cos{display:grid; gap:6px} .an-cos div{display:flex; justify-content:space-between; padding:9px 12px; border-radius:10px; background:var(--surface); border:1px solid var(--border); font-size:14px} .an-cos b{font-family:var(--cond); font-size:18px}
+.sc-pad{grid-template-columns:minmax(0, 1fr)} .sc-acts.four{grid-template-columns:repeat(4, minmax(0, 1fr))} .sc-acts.four .btn{font-size:12px; padding:10px 4px; white-space:normal; line-height:1.15; text-align:center; min-width:0}
+.ci-row{grid-template-columns:24px minmax(0, 1fr) auto}
+.fp{display:grid; gap:10px} .fp-list{display:grid; gap:6px}
+.fp-row{display:grid; gap:2px; padding:11px 14px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer} .fp-row b{font-size:15px} .fp-row span{font-size:12.5px; color:var(--ink-3)}
+.fp-add{border:1px dashed var(--border-strong); border-radius:12px; padding:10px 14px} .fp-add summary{display:flex; align-items:center; gap:8px; font-weight:700; cursor:pointer; list-style:none} .fp-add summary::-webkit-details-marker{display:none} .fp-add summary svg{width:18px; height:18px} .fp-add[open]{display:grid; gap:8px}
+.ld-h span{font-weight:600; color:var(--ink-3); margin-left:6px}
+.ld-who{display:grid; grid-template-columns:1fr 1fr; gap:0 10px} .ld-who .field:first-child{grid-column:1 / -1}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -2708,7 +2715,7 @@ function loadPreviewAttendees() {
         regs.forEach(function (n) { PV.hasReg = true; PV.byReg[String(n)] = { name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '' }; });
         if (meE && p.e === meE && regs.length && !PV.myReg) PV.myReg = String(regs[0]);
       });
-      PV.people = (s && s.people || []).map(function (p, i) { return { id: 'pv' + i, name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '', photo: 0, joined: false, preview: true }; })
+      PV.people = (s && s.people || []).map(function (p, i) { var rg = Array.isArray(p.reg) ? p.reg : p.reg ? [p.reg] : []; return { id: 'pv' + i, name: ((p.first || '') + ' ' + (p.last || '')).trim(), title: p.title || '', company: p.company || '', reg: rg[0] ? String(rg[0]) : '', photo: 0, joined: false, preview: true }; })
         .filter(function (p) { return p.name; });
       /* MISMO staff are in Summit HQ's list twice: their registration (with their title) and the staff roster (just
          "MISMO"). Keep the registration; someone only on the roster stays. */
@@ -3187,7 +3194,7 @@ function scanSheet() {
     '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
     '<div class="sc-flash"><span>' + icon('i-check') + '<b>Got It</b></span></div></div>' +
     '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div>' +
-    '<div class="sc-acts"><button type="button" class="btn" data-sc-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button><button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button></div>' +
+    '<div class="sc-acts four"><button type="button" class="btn" data-sc-find>' + icon('i-search') + 'Find by Name</button><button type="button" class="btn" data-sc-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button><button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button></div>' +
     '<p class="sc-fine">Staff test: scans stay on this phone. When scanning goes live, engagement conversations go to Member 360 and sponsors\' leads go to that sponsor.</p></div></div>', { plain: true });
   el.classList.add('sc-sheet');
   /* the beep: a short scanner chirp, made on the phone (no sound file); the sound is set up on the tap that opened the
@@ -3239,18 +3246,46 @@ function scanSheet() {
     var sb = e.target.closest('[data-sc-snd]');
     if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on) beep(); return; }
     if (e.target.closest('[data-sc-badge]')) { stop(); testBadge(); return; }
+    if (e.target.closest('[data-sc-find]')) { findPerson(function (pp) { stop(); leadSheet({ reg: pp.reg || '', name: pp.name, title: pp.title || '', company: pp.company || '', manual: !!pp.manual, at: Date.now() }, true); }); return; }
     if (e.target.closest('[data-sc-list]')) { stop(); scansSheet(); }
+  });
+}
+/* find someone by name in the attendee list, or add someone who isn't on it (Jonna, Nov 27, 2026: no name tag, a tag
+   that won't read, or the wrong details) */
+function findPerson(cb) {
+  if (!PV.state) loadPreviewAttendees();
+  var el = openSheet('Find by Name', '<div class="sheet-pad fp"><label class="mx-search">' + icon('i-search') + '<input type="search" placeholder="Type a name or company" aria-label="Find by name" autocomplete="off"></label><div class="fp-list"></div>' +
+    '<details class="fp-add"><summary>' + icon('i-plus') + 'Add Someone Not on the List</summary><div class="field"><label for="fp-n">Name</label><input id="fp-n" maxlength="120" autocomplete="off"></div><div class="field"><label for="fp-t">Title</label><input id="fp-t" maxlength="120" autocomplete="off"></div><div class="field"><label for="fp-c">Company</label><input id="fp-c" maxlength="120" autocomplete="off"></div><button type="button" class="btn primary" data-fp-add>Add</button></details></div>', { plain: true });
+  var inp = el.querySelector('input[type=search]'), list = el.querySelector('.fp-list'), hits = [];
+  function paint() {
+    var q = inp.value.trim().toLowerCase();
+    if (PV.state !== 'ready') { list.innerHTML = '<div class="note">Loading the attendee list…</div>'; return; }
+    hits = q.length < 2 ? [] : PV.people.filter(function (p) { return (p.name + ' ' + p.company).toLowerCase().indexOf(q) >= 0; }).slice(0, 30);
+    list.innerHTML = q.length < 2 ? '<p class="sc-fine">Type at least two letters.</p>' : hits.length ? hits.map(function (p, i) { return '<button type="button" class="fp-row" data-fp="' + i + '"><b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span></button>'; }).join('') : '<p class="sc-fine">No one by that name. Use Add Someone Not on the List.</p>';
+  }
+  inp.addEventListener('input', paint); paint(); setTimeout(function () { inp.focus(); }, 300);
+  var wait = setInterval(function () { if (!el.isConnected || PV.state === 'ready') { clearInterval(wait); if (el.isConnected) paint(); } }, 500);
+  el.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-fp]');
+    if (t) { var p = hits[+t.getAttribute('data-fp')]; closeSheet(); cb({ reg: p.reg || '', name: p.name, title: p.title, company: p.company }); return; }
+    if (e.target.closest('[data-fp-add]')) {
+      var n = el.querySelector('#fp-n').value.trim(); if (!n) { el.querySelector('#fp-n').focus(); return; }
+      var pp = { reg: '', name: n, title: el.querySelector('#fp-t').value.trim(), company: el.querySelector('#fp-c').value.trim(), manual: true }; closeSheet(); cb(pp);
+    }
   });
 }
 /* a scan: who it is, a note, Hot / Warm / Cold, and what kind it is */
 function leadSheet(sc, fresh) {
-  var who = regLookup(sc.reg), kinds = ['Engagement Conversation', 'Sponsor Lead'];
+  var who = sc.reg ? regLookup(sc.reg) : null, kinds = ['Engagement Conversation', 'Sponsor Lead'];
+  if (!who && sc.name) who = { name: sc.name, title: sc.title || '', company: sc.company || '' };
   sc.kind = sc.kind || kinds[0]; sc.rate = sc.rate || '';
   var h = '<div class="ld-top">' + (who ? avatarHtml({ id: 'reg:' + sc.reg, name: who.name, photo: 0 }, 'big') + '<div><b>' + esc(who.name) + '</b><span>' + esc([who.title, who.company].filter(Boolean).join(', ')) + '</span><i>Registration ' + esc(sc.reg) + '</i></div>'
-      : '<span class="ld-q">?</span><div><b>Registration ' + esc(sc.reg) + '</b><span>' + (PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).') + '</span></div>') + '</div>' +
+      : '<span class="ld-q">?</span><div><b>' + (sc.reg ? 'Registration ' + esc(sc.reg) : 'New Person') + '</b><span>' + (PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).') + '</span></div>') + '</div>' +
     '<div class="sheet-pad ld">' +
     '<div class="ld-h">This Is</div><div class="seg ld-kind">' + kinds.map(function (k) { return '<button type="button" data-ld-kind="' + esc(k) + '" aria-pressed="' + (sc.kind === k) + '">' + esc(k) + '</button>'; }).join('') + '</div>' +
     '<div class="ld-h">How Warm</div><div class="ld-rate">' + ['Hot', 'Warm', 'Cold'].map(function (r) { return '<button type="button" class="r-' + r.toLowerCase() + '" data-ld-rate="' + r + '" aria-pressed="' + (sc.rate === r) + '">' + r + '</button>'; }).join('') + '</div>' +
+    '<div class="ld-h">Their Details <span>Fix anything that\'s wrong</span></div><div class="ld-who"><div class="field"><label for="ld-name">Name</label><input id="ld-name" maxlength="120" value="' + esc(sc.name || (who && who.name) || '') + '"></div>' +
+    '<div class="field"><label for="ld-title">Title</label><input id="ld-title" maxlength="120" value="' + esc(sc.title || (who && who.title) || '') + '"></div><div class="field"><label for="ld-co">Company</label><input id="ld-co" maxlength="120" value="' + esc(sc.company || (who && who.company) || '') + '"></div></div>' +
     '<div class="field"><label for="ld-note">Note</label><textarea id="ld-note" rows="3" maxlength="600" placeholder="What you talked about, what to follow up on">' + esc(sc.note || '') + '</textarea></div>' +
     '<div class="field"><label for="ld-email">Email</label><input id="ld-email" type="email" maxlength="160" placeholder="Only if they gave it to you" value="' + esc(sc.email || '') + '"></div>' +
     '<div class="d-actions"><button class="btn primary" type="button" data-ld-save>' + icon('i-check') + 'Save</button>' + (fresh ? '<button class="btn" type="button" data-ld-again>' + icon('i-scan') + 'Save and Scan Next</button>' : '<button class="btn quiet" type="button" data-ld-del>Delete</button>') + '</div>' +
@@ -3259,7 +3294,8 @@ function leadSheet(sc, fresh) {
   el.classList.add('ld-sheet');
   function keep() {
     sc.note = el.querySelector('#ld-note').value.trim(); sc.email = el.querySelector('#ld-email').value.trim();
-    if (who) { sc.name = who.name; sc.title = who.title; sc.company = who.company; }
+    sc.name = el.querySelector('#ld-name').value.trim(); sc.title = el.querySelector('#ld-title').value.trim(); sc.company = el.querySelector('#ld-co').value.trim();
+    var orig = sc.reg ? regLookup(sc.reg) : null; sc.edited = !!(orig && (orig.name !== sc.name || orig.title !== sc.title || orig.company !== sc.company));
     var l = myScans().filter(function (x) { return x.at !== sc.at; }); l.unshift(sc); saveScans(l);
   }
   el.addEventListener('click', function (e) {
@@ -3349,37 +3385,67 @@ function scanRig(el, onCode) {
   else { var m = el.querySelector('.sc-msg'); if (m) m.innerHTML = '<div class="note">This phone\'s browser can\'t open the camera here. Use Type the Number.</div>'; }
   return { stop: stop, ok: function () { tone([[1320, 0], [1760, .09]]); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }, again: function () { tone([[660, 0], [660, .14]]); try { navigator.vibrate && navigator.vibrate([30, 40, 30]); } catch (e) {} } };
 }
-/* the session on now (or next) to check people in to, from the agenda */
+/* the sessions to check people in to: Summit HQ's list, the same sessions and codes as its TrackPod Scanner Sheet
+   (CN-056, read with the staff sign-in like the attendee list); until that's published, the agenda */
+var CIS = { state: '', list: [] };
+function loadCheckinSessions() {
+  if (CIS.state) return; CIS.state = 'loading';
+  var tok = ResourcesSession.token && ResourcesSession.token();
+  fetch(RELAY + '/summit-hq/file/data/feed-mymismo-checkin.json', { cache: 'no-store', headers: { Authorization: 'Bearer ' + tok } })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (j) {
+      var d = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content), function (c) { return c.charCodeAt(0); }))), sm = d.summits && d.summits[S.sid];
+      CIS.list = (sm && sm.sessions || []).filter(function (x) { return x.code && x.date && x.start != null; })
+        .map(function (x) { return { id: 'tp:' + x.code, code: x.code, name: x.name, room: x.room || '', date: x.date, a: x.start, b: x.end }; });
+      CIS.state = 'ready';
+    }).catch(function () { CIS.state = 'none'; });
+}
+function ciSessions() {
+  if (CIS.list.length) return CIS.list;
+  return S.sessions.filter(function (x) { return !/^(break|lunch|breakfast|reception)/i.test(x.title || ''); }).map(function (x) { return { id: x.id, name: x.title, room: x.room || '', date: x.date, a: x.a, b: x.b }; });
+}
+function ciById(id) { var l = ciSessions(); for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; var x = sessionById(id); return x ? { id: x.id, name: x.title, room: x.room || '', date: x.date, a: x.a, b: x.b } : null; }
 function checkinDefault() {
-  var n = nowAt(), list = S.sessions.filter(function (x) { return x.date === n.date && x.b > n.min && !/^(break|lunch|breakfast|reception)/i.test(x.title || ''); }).sort(function (a, b) { return a.a - b.a; });
-  return list.filter(function (x) { return x.a <= n.min + 15; })[0] || list[0] || null;
+  var n = nowAt(), list = ciSessions().filter(function (x) { return x.date === n.date && x.b > n.min; }).sort(function (a, b) { return a.a - b.a; });
+  return list.filter(function (x) { return x.a <= n.min + 15; })[0] || list[0] || ciSessions().slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; })[0] || null;
 }
 function checkinSheet(sid) {
   if (!PV.state) loadPreviewAttendees();
-  var x = (sid && sessionById(sid)) || checkinDefault(); if (!x) { mxToast('No session to check in to'); return; }
-  var day = S.sessions.filter(function (y) { return y.date === x.date && !/^(break|lunch|breakfast)/i.test(y.title || ''); }).sort(function (a, b) { return a.a - b.a || String(a.room).localeCompare(String(b.room)); });
+  if (!CIS.state) { loadCheckinSessions(); }
+  var x = (sid && ciById(sid)) || checkinDefault(); if (!x) { mxToast('No session to check in to'); return; }
+  /* a session from the agenda opens its Summit HQ match (same day, room and start) when there is one */
+  var twin = ciSessions().filter(function (y) { return y.id !== x.id && y.date === x.date && y.a === x.a && rkey(y.room) === rkey(x.room); })[0]; if (CIS.list.length && twin) x = twin;
+  var day = ciSessions().filter(function (y) { return y.date === x.date; }).sort(function (a, b) { return a.a - b.a || String(a.room).localeCompare(String(b.room)); });
   var el = openSheet('Session Check-In', '<div class="scx ci"><div class="ci-top"><label class="ci-pick"><span>Checking In To</span><select data-ci-ses>' + day.map(function (y) {
-      return '<option value="' + esc(y.id) + '"' + (y.id === x.id ? ' selected' : '') + '>' + esc(clockParts(y.a).t + clockParts(y.a).ap + ', ' + y.title + (y.room ? ' (' + y.room + ')' : '')) + '</option>'; }).join('') + '</select></label>' +
+      return '<option value="' + esc(y.id) + '"' + (y.id === x.id ? ' selected' : '') + '>' + esc(clockParts(y.a).t + clockParts(y.a).ap + ', ' + y.name + (y.room ? ' (' + y.room + ')' : '')) + '</option>'; }).join('') + '</select></label>' +
     '<div class="ci-count"><b>0</b><span>checked in</span></div></div>' +
     '<div class="sc-cam ci-cam"><video playsinline muted></video><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div>' +
     '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
     '<div class="ci-pop" aria-live="polite"></div></div>' +
     '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div><div class="ci-list"></div>' +
-    '<div class="sc-acts"><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button></div>' +
+    '<div class="sc-acts four"><button type="button" class="btn" data-ci-find>' + icon('i-search') + 'Find by Name</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button></div>' +
     '<p class="sc-fine">Staff test: check-ins are kept on this phone. When it goes live they\'re sent as they happen (and kept until the Wi-Fi is back if it drops), and Meeting Trackers reads them in place of TrackPod\'s exports.</p></div></div>', { plain: true });
   el.classList.add('sc-sheet', 'ci-sheet');
   var ses = x.id, popT = null;
   function paint() {
     var mine = myCheckins().filter(function (c) { return c.ses === ses; });
     el.querySelector('.ci-count b').textContent = mine.length;
-    el.querySelector('.ci-list').innerHTML = mine.slice(0, 6).map(function (c) { var w = regLookup(c.reg); var d = new Date(c.at);
-      return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(w ? w.name : 'Registration ' + c.reg) + '</b><i>' + esc(w ? w.company : '') + '</i><em>' + esc(clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</em></div>'; }).join('') +
+    el.querySelector('.ci-list').innerHTML = mine.slice(0, 6).map(function (c) { var w = c.reg ? regLookup(c.reg) : null; var d = new Date(c.at);
+      return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(w ? w.name : c.name || 'Registration ' + c.reg) + '</b><i>' + esc(w ? w.company : c.company || '') + (c.manual ? ' (added by hand)' : '') + '</i><em>' + esc(clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</em></div>'; }).join('') +
       (mine.length > 6 ? '<div class="ci-more">and ' + (mine.length - 6) + ' more</div>' : '');
   }
   function pop(kind, title, sub) {
     var p = el.querySelector('.ci-pop'); clearTimeout(popT);
     p.className = 'ci-pop on ' + kind; p.innerHTML = '<span>' + icon(kind === 'dup' ? 'i-info' : 'i-check') + '</span><b>' + esc(title) + '</b><i>' + esc(sub || '') + '</i>';
     popT = setTimeout(function () { p.className = 'ci-pop'; }, 1600);
+  }
+  /* someone found by name, or added by hand (no name tag, or the tag didn't read) */
+  function addPerson(pp) {
+    if (pp.reg) { add(pp.reg); return; }
+    var all = myCheckins(), k = (pp.name + '|' + (pp.company || '')).toLowerCase();
+    if (all.some(function (c) { return c.ses === ses && !c.reg && (c.name + '|' + (c.company || '')).toLowerCase() === k; })) { rig.again(); pop('dup', 'Already Checked In', pp.name); return; }
+    all.unshift({ ses: ses, reg: '', name: pp.name, title: pp.title || '', company: pp.company || '', manual: !!pp.manual, at: Date.now(), sent: false }); save(checkinsKey(), all);
+    rig.ok(); pop('ok', pp.name, pp.company || ''); paint();
   }
   function add(n) {
     var all = myCheckins(), dup = all.some(function (c) { return c.ses === ses && c.reg === n; }), w = regLookup(n);
@@ -3399,6 +3465,7 @@ function checkinSheet(sid) {
     if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on) rig.ok(); return; }
     if (e.target.closest('[data-ci-type]')) { var n = String(prompt('The number under the barcode on the name tag:') || '').replace(/\D/g, ''); if (n) add(n); return; }
     if (e.target.closest('[data-ci-stats]')) { attendanceSheet(); return; }
+    if (e.target.closest('[data-ci-find]')) { findPerson(addPerson); return; }
     if (e.target.closest('[data-sc-badge]')) { testBadge(); }
   });
 }
@@ -3409,9 +3476,10 @@ function attendanceSheet() {
   function paint() {
     if (!el.isConnected) { clearInterval(t); return; }
     var all = myCheckins(), n = nowAt(), byS = {}, people = {}, cos = {};
-    all.forEach(function (c) { (byS[c.ses] = byS[c.ses] || {})[c.reg] = 1; people[c.reg] = 1; });
-    Object.keys(people).forEach(function (r) { var w = regLookup(r); var k = w && w.company ? w.company : ''; if (k) cos[k] = (cos[k] || 0) + 1; });
-    var ses = Object.keys(byS).map(function (id) { return { x: sessionById(id), n: Object.keys(byS[id]).length }; }).filter(function (s) { return s.x; })
+    var pk = function (c) { return c.reg || 'n:' + (c.name + '|' + (c.company || '')).toLowerCase(); };
+    all.forEach(function (c) { var k = pk(c); (byS[c.ses] = byS[c.ses] || {})[k] = 1; people[k] = c; });
+    Object.keys(people).forEach(function (r) { var c = people[r], w = c.reg ? regLookup(c.reg) : null; var k = w && w.company ? w.company : c.company || ''; if (k) cos[k] = (cos[k] || 0) + 1; });
+    var ses = Object.keys(byS).map(function (id) { return { x: ciById(id), n: Object.keys(byS[id]).length }; }).filter(function (s) { return s.x; })
       .sort(function (a, b) { return a.x.date < b.x.date ? 1 : a.x.date > b.x.date ? -1 : b.x.a - a.x.a; });
     var max = Math.max.apply(null, ses.map(function (s) { return s.n; }).concat([1]));
     var live = ses.filter(function (s) { return s.x.date === n.date && s.x.a <= n.min && s.x.b > n.min; });
@@ -3420,7 +3488,7 @@ function attendanceSheet() {
       '<div class="an-kpis"><div><b>' + Object.keys(people).length + '</b><span>People Checked In</span></div><div><b>' + ses.length + '</b><span>Sessions Scanned</span></div><div><b>' + live.reduce(function (t, s) { return t + s.n; }, 0) + '</b><span>In Sessions Now</span></div></div>' +
       (ses.length ? '<h3 class="wg-h">By Session</h3><div class="an-ses">' + ses.map(function (s) {
         var on = live.indexOf(s) >= 0;
-        return '<button type="button" class="an-row' + (on ? ' live' : '') + '" data-ci-open="' + esc(s.x.id) + '"><span class="an-t"><b>' + esc(s.x.title) + '</b><span>' + esc(DOW[dparts(s.x.date).dow].slice(0, 3) + ', ' + span(s.x.a, s.x.b) + (s.x.room ? ', ' + s.x.room : '')) + (on ? '<em><i></i>On now</em>' : '') + '</span></span><span class="an-n">' + s.n + '</span><span class="an-bar"><i style="width:' + Math.round(s.n / max * 100) + '%"></i></span></button>'; }).join('') + '</div>' : '<div class="mx-empty">' + icon('i-scan') + '<b>No check-ins yet</b><span>Open Session Check-In and scan name tags at the door.</span></div>') +
+        return '<button type="button" class="an-row' + (on ? ' live' : '') + '" data-ci-open="' + esc(s.x.id) + '"><span class="an-t"><b>' + esc(s.x.name) + '</b><span>' + esc(DOW[dparts(s.x.date).dow].slice(0, 3) + ', ' + span(s.x.a, s.x.b) + (s.x.room ? ', ' + s.x.room : '')) + (on ? '<em><i></i>On now</em>' : '') + '</span></span><span class="an-n">' + s.n + '</span><span class="an-bar"><i style="width:' + Math.round(s.n / max * 100) + '%"></i></span></button>'; }).join('') + '</div>' : '<div class="mx-empty">' + icon('i-scan') + '<b>No check-ins yet</b><span>Open Session Check-In and scan name tags at the door.</span></div>') +
       (topCo.length ? '<h3 class="wg-h">Most Checked-In Companies</h3><div class="an-cos">' + topCo.map(function (k) { return '<div><span>' + esc(k) + '</span><b>' + cos[k] + '</b></div>'; }).join('') + '</div>' : '') +
       '<button type="button" class="btn primary scl-new" data-ci-go>' + icon('i-scan') + 'Session Check-In</button>';
   }

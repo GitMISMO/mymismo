@@ -45,6 +45,20 @@ Attendees don't need the app to be scanned.
 - **Plan for Winter**: run TrackPod as usual and the app at a few sessions, compare the counts; if they match, switch
   for Spring.
 
+## Who gets which (Jonna, Nov 27, 2026)
+- **Staff** (MyMISMO and Summit HQ access): Scan a Name Tag, Session Check-In, Attendance Now. Nobody else sees these.
+- **Sponsors**: turned on automatically for a sponsor's registered people (the sponsor companies in Summit HQ's sponsor
+  list for that summit, matched to their registrations): Scan a Name Tag for their own leads only. No check-in or stats.
+- **Attendees (networking)**: any signed-in attendee can scan someone's tag to remember who they met: People I Met, with
+  a note, the person's name, title and company (what the directory already shows), and their profile and Message if
+  they've signed in. Same email rule: only if the person shares it. Needs attendee sign-in (relay request 13).
+
+## Sessions and fixing details
+- Check-in sessions come from Summit HQ: the same sessions and codes as its TrackPod Scanner Sheet (CN-056), so
+  Meeting Trackers matches them like TrackPod's exports. Until that's published, the agenda's sessions.
+- Anything the scanner gets wrong or can't read can be done by hand: Find by Name (the attendee list), Add Someone Not on
+  the List (name, title, company), Type the Number, and the scan card's Name, Title and Company can be fixed.
+
 ## Testing before the relay
 Once Summit HQ adds `reg`, staff can test the whole scan with real Winter 2027 registrations, using two phones and the
 Test Badge screen; scans stay on the phone that scanned until the relay part is live.
