@@ -8,41 +8,580 @@
  "height": 2156,
  "note": "Everything this summit uses is on Floor 3, apart from the Frenchmen rooms, Algiers C and Treme / Marigny on Floor 2.",
  "floors": [
-  {"floor": 3, "label": "Floor 3", "y0": 0, "y1": 650},
-  {"floor": 2, "label": "Floor 2", "y0": 700, "y1": 1345},
-  {"floor": 1, "label": "Floor 1", "y0": 1450, "y1": 2156}
+  {
+   "floor": 3,
+   "label": "Floor 3",
+   "y0": 0,
+   "y1": 650
+  },
+  {
+   "floor": 2,
+   "label": "Floor 2",
+   "y0": 700,
+   "y1": 1345
+  },
+  {
+   "floor": 1,
+   "label": "Floor 1",
+   "y0": 1450,
+   "y1": 2156
+  }
  ],
  "rooms": [
-  {"names": ["La Salle A"], "floor": 3, "x": 221, "y": 495},
-  {"names": ["La Salle B"], "floor": 3, "x": 320, "y": 436},
-  {"names": ["La Salle C"], "floor": 3, "x": 395, "y": 387},
-  {"names": ["La Salle A/B", "La Salle A & B"], "floor": 3, "x": 268, "y": 468},
-  {"names": ["La Salle B/C", "La Salle B & C"], "floor": 3, "x": 357, "y": 412},
-  {"names": ["Pelican I", "Pelican Room I"], "floor": 3, "x": 624, "y": 264},
-  {"names": ["Pelican II", "Pelican Room II"], "floor": 3, "x": 701, "y": 238},
-  {"names": ["Fulton Room", "Fulton"], "floor": 3, "x": 862, "y": 319},
-  {"names": ["Acadian I/II", "Acadian I & II"], "floor": 3, "x": 787, "y": 360},
-  {"names": ["Acadian I", "Acadian Room I"], "floor": 3, "x": 765, "y": 373},
-  {"names": ["Acadian II", "Acadian Room II"], "floor": 3, "x": 808, "y": 346},
-  {"names": ["Poydras Room", "Poydras"], "floor": 3, "x": 914, "y": 288},
-  {"names": ["Algiers C", "Algiers Room C"], "floor": 2, "x": 306, "y": 1100},
-  {"names": ["Algiers B", "Algiers Room B"], "floor": 2, "x": 385, "y": 1053},
-  {"names": ["Algiers A", "Algiers Room A"], "floor": 2, "x": 457, "y": 1009},
-  {"names": ["Frenchmen I & II", "Frenchmen I/II", "Frenchmen Salon"], "floor": 2, "x": 382, "y": 1230},
-  {"names": ["Frenchmen I", "Frenchmen Room I"], "floor": 2, "x": 350, "y": 1205},
-  {"names": ["Frenchmen II", "Frenchmen Room II"], "floor": 2, "x": 413, "y": 1256},
-  {"names": ["Treme / Marigny", "Treme/Marigny"], "floor": 2, "x": 856, "y": 1042},
-  {"names": ["Treme", "Tremé Meeting Room"], "floor": 2, "x": 870, "y": 997},
-  {"names": ["Marigny Atrium", "Marigny Atrium, 2nd Floor", "Marigny"], "floor": 2, "x": 843, "y": 1087},
-  {"names": ["Storyville Room", "Storyville"], "floor": 2, "x": 538, "y": 1263},
-  {"names": ["Bywater Room", "Bywater"], "floor": 2, "x": 196, "y": 1145},
-  {"names": ["Melpomene Meeting Room", "Melpomene"], "floor": 2, "x": 607, "y": 926}
+  {
+   "names": [
+    "La Salle A"
+   ],
+   "floor": 3,
+   "x": 221,
+   "y": 495
+  },
+  {
+   "names": [
+    "La Salle B"
+   ],
+   "floor": 3,
+   "x": 320,
+   "y": 436
+  },
+  {
+   "names": [
+    "La Salle C"
+   ],
+   "floor": 3,
+   "x": 395,
+   "y": 387
+  },
+  {
+   "names": [
+    "La Salle A/B",
+    "La Salle A & B"
+   ],
+   "floor": 3,
+   "x": 268,
+   "y": 468
+  },
+  {
+   "names": [
+    "La Salle B/C",
+    "La Salle B & C"
+   ],
+   "floor": 3,
+   "x": 357,
+   "y": 412
+  },
+  {
+   "names": [
+    "Pelican I",
+    "Pelican Room I"
+   ],
+   "floor": 3,
+   "x": 624,
+   "y": 264
+  },
+  {
+   "names": [
+    "Pelican II",
+    "Pelican Room II"
+   ],
+   "floor": 3,
+   "x": 701,
+   "y": 238
+  },
+  {
+   "names": [
+    "Fulton Room",
+    "Fulton"
+   ],
+   "floor": 3,
+   "x": 862,
+   "y": 319
+  },
+  {
+   "names": [
+    "Acadian I/II",
+    "Acadian I & II"
+   ],
+   "floor": 3,
+   "x": 787,
+   "y": 360
+  },
+  {
+   "names": [
+    "Acadian I",
+    "Acadian Room I"
+   ],
+   "floor": 3,
+   "x": 765,
+   "y": 373
+  },
+  {
+   "names": [
+    "Acadian II",
+    "Acadian Room II"
+   ],
+   "floor": 3,
+   "x": 808,
+   "y": 346
+  },
+  {
+   "names": [
+    "Poydras Room",
+    "Poydras"
+   ],
+   "floor": 3,
+   "x": 914,
+   "y": 288
+  },
+  {
+   "names": [
+    "Algiers C",
+    "Algiers Room C"
+   ],
+   "floor": 2,
+   "x": 306,
+   "y": 1100
+  },
+  {
+   "names": [
+    "Algiers B",
+    "Algiers Room B"
+   ],
+   "floor": 2,
+   "x": 385,
+   "y": 1053
+  },
+  {
+   "names": [
+    "Algiers A",
+    "Algiers Room A"
+   ],
+   "floor": 2,
+   "x": 457,
+   "y": 1009
+  },
+  {
+   "names": [
+    "Frenchmen I & II",
+    "Frenchmen I/II",
+    "Frenchmen Salon"
+   ],
+   "floor": 2,
+   "x": 382,
+   "y": 1230
+  },
+  {
+   "names": [
+    "Frenchmen I",
+    "Frenchmen Room I"
+   ],
+   "floor": 2,
+   "x": 350,
+   "y": 1205
+  },
+  {
+   "names": [
+    "Frenchmen II",
+    "Frenchmen Room II"
+   ],
+   "floor": 2,
+   "x": 413,
+   "y": 1256
+  },
+  {
+   "names": [
+    "Treme / Marigny",
+    "Treme/Marigny"
+   ],
+   "floor": 2,
+   "x": 856,
+   "y": 1042
+  },
+  {
+   "names": [
+    "Treme",
+    "Tremé Meeting Room"
+   ],
+   "floor": 2,
+   "x": 870,
+   "y": 997
+  },
+  {
+   "names": [
+    "Marigny Atrium",
+    "Marigny Atrium, 2nd Floor",
+    "Marigny"
+   ],
+   "floor": 2,
+   "x": 843,
+   "y": 1087
+  },
+  {
+   "names": [
+    "Storyville Room",
+    "Storyville"
+   ],
+   "floor": 2,
+   "x": 538,
+   "y": 1263
+  },
+  {
+   "names": [
+    "Bywater Room",
+    "Bywater"
+   ],
+   "floor": 2,
+   "x": 196,
+   "y": 1145
+  },
+  {
+   "names": [
+    "Melpomene Meeting Room",
+    "Melpomene"
+   ],
+   "floor": 2,
+   "x": 607,
+   "y": 926
+  }
  ],
  "landmarks": [
-  {"label": "Elevators", "floor": 3, "x": 548, "y": 364},
-  {"label": "Elevators", "floor": 2, "x": 563, "y": 1065},
-  {"label": "Elevators", "floor": 1, "x": 552, "y": 1825},
-  {"label": "Front Desk", "floor": 1, "x": 396, "y": 2030},
-  {"label": "Main Entrance", "floor": 1, "x": 120, "y": 2080}
- ]
+  {
+   "label": "Elevators",
+   "floor": 3,
+   "x": 548,
+   "y": 364
+  },
+  {
+   "label": "Elevators",
+   "floor": 2,
+   "x": 563,
+   "y": 1065
+  },
+  {
+   "label": "Elevators",
+   "floor": 1,
+   "x": 552,
+   "y": 1825
+  },
+  {
+   "label": "Front Desk",
+   "floor": 1,
+   "x": 396,
+   "y": 2030
+  },
+  {
+   "label": "Main Entrance",
+   "floor": 1,
+   "x": 120,
+   "y": 2080
+  }
+ ],
+ "walk": {
+  "note": "Walkways traced by hand from the hotel's map for the Walk Me There directions. Floors connect by the elevators (all floors) and the Grand Staircase (Floor 2 to Floor 3, as the map shows). Check the routes once on site.",
+  "nodes": {
+   "ent": [
+    1,
+    215,
+    2005,
+    "the Main Entrance on St. Charles Ave."
+   ],
+   "desk": [
+    1,
+    425,
+    1958,
+    "the Front Desk"
+   ],
+   "l1a": [
+    1,
+    330,
+    1950,
+    ""
+   ],
+   "l1b": [
+    1,
+    445,
+    1895,
+    "the lobby"
+   ],
+   "e1": [
+    1,
+    540,
+    1852,
+    "the elevators"
+   ],
+   "e2": [
+    2,
+    548,
+    1092,
+    "the elevators"
+   ],
+   "h2": [
+    2,
+    520,
+    1118,
+    ""
+   ],
+   "s2": [
+    2,
+    600,
+    1095,
+    "the Grand Staircase"
+   ],
+   "c2a": [
+    2,
+    440,
+    1132,
+    ""
+   ],
+   "c2b": [
+    2,
+    360,
+    1165,
+    ""
+   ],
+   "c2c": [
+    2,
+    262,
+    1192,
+    ""
+   ],
+   "n2a": [
+    2,
+    590,
+    1020,
+    "the Business Center"
+   ],
+   "n2b": [
+    2,
+    612,
+    990,
+    "the restrooms"
+   ],
+   "x2a": [
+    2,
+    665,
+    1045,
+    ""
+   ],
+   "x2b": [
+    2,
+    740,
+    1010,
+    ""
+   ],
+   "e3": [
+    3,
+    540,
+    392,
+    "the elevators"
+   ],
+   "h3": [
+    3,
+    500,
+    402,
+    ""
+   ],
+   "s3": [
+    3,
+    612,
+    398,
+    "the Grand Staircase"
+   ],
+   "w3a": [
+    3,
+    430,
+    362,
+    "the La Salle Pre-Function Area"
+   ],
+   "w3b": [
+    3,
+    338,
+    374,
+    ""
+   ],
+   "w3c": [
+    3,
+    258,
+    413,
+    ""
+   ],
+   "n3a": [
+    3,
+    574,
+    309,
+    "the Pelican Pre-Function Area"
+   ],
+   "n3b": [
+    3,
+    612,
+    330,
+    ""
+   ],
+   "n3c": [
+    3,
+    676,
+    350,
+    "the men's restroom"
+   ],
+   "n3d": [
+    3,
+    722,
+    312,
+    ""
+   ],
+   "n3e": [
+    3,
+    800,
+    270,
+    ""
+   ],
+   "n3f": [
+    3,
+    860,
+    240,
+    ""
+   ]
+  },
+  "edges": [
+   [
+    "ent",
+    "l1a"
+   ],
+   [
+    "desk",
+    "l1a"
+   ],
+   [
+    "l1a",
+    "l1b"
+   ],
+   [
+    "l1b",
+    "e1"
+   ],
+   [
+    "e2",
+    "h2"
+   ],
+   [
+    "h2",
+    "s2"
+   ],
+   [
+    "h2",
+    "c2a"
+   ],
+   [
+    "c2a",
+    "c2b"
+   ],
+   [
+    "c2b",
+    "c2c"
+   ],
+   [
+    "e2",
+    "n2a"
+   ],
+   [
+    "n2a",
+    "n2b"
+   ],
+   [
+    "s2",
+    "x2a"
+   ],
+   [
+    "n2a",
+    "x2a"
+   ],
+   [
+    "x2a",
+    "x2b"
+   ],
+   [
+    "e3",
+    "h3"
+   ],
+   [
+    "e3",
+    "s3"
+   ],
+   [
+    "h3",
+    "w3a"
+   ],
+   [
+    "w3a",
+    "w3b"
+   ],
+   [
+    "w3b",
+    "w3c"
+   ],
+   [
+    "e3",
+    "n3b"
+   ],
+   [
+    "n3a",
+    "n3b"
+   ],
+   [
+    "n3b",
+    "n3c"
+   ],
+   [
+    "n3c",
+    "n3d"
+   ],
+   [
+    "n3d",
+    "n3e"
+   ],
+   [
+    "n3e",
+    "n3f"
+   ],
+   [
+    "s3",
+    "n3b"
+   ]
+  ],
+  "links": [
+   {
+    "a": "e1",
+    "b": "e2",
+    "via": "elevators"
+   },
+   {
+    "a": "e2",
+    "b": "e3",
+    "via": "elevators"
+   },
+   {
+    "a": "s2",
+    "b": "s3",
+    "via": "stairs"
+   }
+  ],
+  "starts": [
+   {
+    "id": "ent",
+    "label": "Main Entrance"
+   },
+   {
+    "id": "desk",
+    "label": "Front Desk"
+   },
+   {
+    "id": "e2",
+    "label": "Elevators, Floor 2"
+   },
+   {
+    "id": "e3",
+    "label": "Elevators, Floor 3"
+   }
+  ]
+ }
 }

@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Walk Me There: a walkthrough on the hotel's floor map. Pick a room (or a session's Walk There) and a starting point; a dot walks the hallways, the map follows it up the floors, and step cards say where to go. Elevators-only option. Routes traced from the hotel's map, to be checked once on site.
 - Nov 27, 2026: Summit tile: the sponsor strip shows only the Platinum sponsors (and any tier above), labeled "Platinum Sponsors" with no count; tapping it still opens every sponsor.
 - Nov 27, 2026: Summit page: the Sessions, Speakers, Sponsors and Starred cards no longer show numbers; they're still the same buttons.
 - Nov 27, 2026: Join a Workgroup tile: light blue fade like Submit an Idea; the date of the next meeting day on its own row, then that day's meetings scrolling up one at a time (name centered, time on its own row), with the bars showing that day's week.
