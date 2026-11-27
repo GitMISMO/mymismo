@@ -401,6 +401,18 @@ def build_faces(about_html, leadership_html):
 def build_wg_sponsors(html):
     """The Workgroup Meeting Schedule page's sponsor tags ("Sponsored by" and the sponsor's logo on a group's card), so the
     app's Join a Workgroup page shows the same sponsors. Each tag belongs to the card whose bold group name comes before it."""
+    # the page's own sponsor list (var SP = {"<group name as in schedule.json>": {n: sponsor, l: logo, h: height}}), which
+    # puts the tags on the cards; else the tags themselves
+    m = re.search(r'var\s+SP\s*=\s*(\{.*?\})\s*;', html, re.S)
+    if m:
+        try:
+            sp = json.loads(re.sub(r'([{,])\s*([A-Za-z_]\w*)\s*:', r'\1"\2":', m.group(1)))
+            out = [{'name': k, 'sponsor': str(v.get('n') or '').strip(), 'logo': str(v.get('l') or '').split('?')[0] if str(v.get('l') or '').startswith('https://') else ''}
+                   for k, v in sp.items() if isinstance(v, dict) and v.get('n')]
+            if out:
+                return {'source': SCHEDULE_URL, 'groups': out}
+        except ValueError:
+            pass
     t = Tree()
     t.feed(html)
     out, seen = [], set()
