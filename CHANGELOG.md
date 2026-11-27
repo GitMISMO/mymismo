@@ -1,6 +1,6 @@
 # MyMISMO Changelog
 
-- Nov 27, 2026: My Profile: "What I'd Like to Talk About" is now "Bio", and attendee cards show it under Bio.
+- Nov 27, 2026: My Profile: "What I'd Like to Talk About" is now "A Few Sentences About You and Your Work", and attendee cards show it under "About" and the person's first name.
 - Nov 26, 2026: Explore: once the room block closes, the card reads "The room block closed on December 14. You can still book a room at the regular rate." and opens a search for the hotel so people can book on its own site.
 - Nov 26, 2026: Explore: more room between the hotel icon and Book Your Room on the countdown card.
 - Nov 26, 2026: Trivia, the Board (Hard): the round clock is 3 minutes (was 4). Relay request 16 updated to match.
