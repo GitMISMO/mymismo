@@ -1620,6 +1620,26 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .phf-big{background:#071d2e; padding:14px; display:grid; place-items:center} .phf-big canvas{width:min(78%, 300px); height:auto; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .phf-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px} .phf-grid canvas{width:100%; height:auto; border-radius:6px; box-shadow:0 2px 8px rgba(13,49,76,.25)}
 .sct-wide{width:100%; margin-top:10px} .sct-wide svg.go{margin-left:auto; width:18px; height:18px}
+.ph-hero{position:relative; overflow:hidden; color:#fff; border:0; padding:18px; gap:12px; background:radial-gradient(120% 70% at 100% 0%, rgba(235,104,52,.55), transparent 60%), radial-gradient(90% 60% at 0% 100%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #071d2e 100%)}
+:root[data-theme="dark"] .ph-hero{background:radial-gradient(120% 70% at 100% 0%, rgba(235,104,52,.45), transparent 60%), radial-gradient(90% 60% at 0% 100%, rgba(116,191,235,.25), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #071d2e 100%)}
+.ph-fan{position:relative; height:190px; margin:2px 0 4px}
+.ph-fan > span{position:absolute; top:8px; left:50%; width:118px; padding:5px 5px 16px; background:#fff; border-radius:4px; box-shadow:0 14px 28px rgba(0,0,0,.4); transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.ph-fan canvas{display:block; width:100%; height:auto; border-radius:2px; background:#0d314c; aspect-ratio:4/5}
+.phf1{transform:translateX(-128%) rotate(-11deg) translateY(14px)} .phf3{transform:translateX(28%) rotate(10deg) translateY(14px)} .phf2{transform:translateX(-50%) rotate(-1deg); z-index:2}
+.ph-hero:hover .phf1{transform:translateX(-138%) rotate(-14deg) translateY(10px)} .ph-hero:hover .phf3{transform:translateX(38%) rotate(13deg) translateY(10px)}
+.ph-flash{position:absolute; inset:-20px; background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.9), transparent 55%); opacity:0; pointer-events:none; animation:ph-flash 7s ease-out 1.2s infinite}
+@keyframes ph-flash{0%, 90%{opacity:0} 92%{opacity:.85} 100%{opacity:0}}
+.ph-say{display:grid; gap:4px; text-align:center} .ph-say b{font-family:var(--cond); font-size:28px; line-height:1.05; letter-spacing:-.01em} .ph-say span{font-size:14px; line-height:1.4; color:#cfe3f1}
+.ph-go{display:flex; align-items:center; justify-content:center; gap:10px; width:100%; min-height:54px; border:0; border-radius:12px; background:linear-gradient(135deg, #f08a5d, #eb6834 55%, #d95926); color:#fff; font:inherit; font-size:17px; font-weight:800; cursor:pointer; box-shadow:0 10px 22px rgba(235,104,52,.35)}
+.ph-go svg{width:22px; height:22px}
+.ph-btns.two{grid-template-columns:1fr 1fr} .ph-hero .ph-btns .btn{background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.25); color:#fff; justify-content:center}
+.ph-hero .ph-ch{border-top:1px solid rgba(255,255,255,.15); padding-top:12px} .ph-ch-h{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px} .ph-hero .ph-ch b{display:inline; color:#fff; font-size:15px; margin:0} .ph-ch-n{font-size:12.5px; font-weight:700; color:#ffb48f}
+.ph-meter{display:block; height:6px; border-radius:3px; background:rgba(255,255,255,.15); overflow:hidden; margin-bottom:10px} .ph-meter i{display:block; height:100%; background:linear-gradient(90deg, #74bfeb, #eb6834); border-radius:3px; transition:width .6s}
+.ph-hero .ph-pr{display:grid; gap:6px; margin:0; padding:0; overflow:visible} .ph-hero .ph-pr button{display:flex; align-items:center; gap:10px; text-align:left; padding:11px 12px; font-size:14.5px; background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.25); color:#fff}
+.ph-hero .ph-pr button:after{content:''; margin-left:auto; width:18px; height:18px; flex:none; opacity:.8; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.5-2.2h5.6L16.3 7h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z' fill='none' stroke='black' stroke-width='1.9'/%3E%3Ccircle cx='12' cy='12.8' r='3.4' fill='none' stroke='black' stroke-width='1.9'/%3E%3C/svg%3E") center / contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.5-2.2h5.6L16.3 7h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z' fill='none' stroke='black' stroke-width='1.9'/%3E%3Ccircle cx='12' cy='12.8' r='3.4' fill='none' stroke='black' stroke-width='1.9'/%3E%3C/svg%3E") center / contain no-repeat}
+.ph-hero .ph-pr button.done{background:#0f7b5c; border-color:#0f7b5c} .ph-hero .ph-pr button.done:before{content:"\2713  "}
+.ph-hero .ph-row{justify-content:center} .ph-hero .linkbtn{color:#a9d8f3}
+@media (prefers-reduced-motion:reduce){ .ph-flash{animation:none} .ph-fan > span{transition:none} }
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -2441,7 +2461,7 @@ function sessCard(x) {
   var sp = sponsorFor(x), live = isLive(x), extra = '';
   if (x.type === 'General Session' && S.gs && S.gs.items.length) {
     var ppl = gsPeople();
-    extra += '<span class="faces">' + ppl.slice(0, 6).map(face).join('') + '</span><span class="spons">' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' sessions, ' + ppl.length + ' speakers</span>';
+    extra += '<span class="faces">' + ppl.slice(0, 6).map(face).join('') + '</span><span class="spons gs-tease">See who\'s on stage, and when</span>';   /* Jonna, Nov 27, 2026: a line that makes you tap, not counts */
   }
   if (groupVideo(x)) extra += '<span class="vchip">' + icon('i-play') + 'Group Video</span>';
   if (SLIDES[x.id]) extra += '<span class="vchip">' + icon('i-file') + 'Slides</span>';
@@ -3442,7 +3462,9 @@ function scanRig(el, onCode) {
   var AC = null; try { var ACx = window.AudioContext || window.webkitAudioContext; if (ACx) { AC = new ACx(); AC.resume && AC.resume(); } } catch (e) {}
   function tone(notes) {
     if (!AC || !load('scan-beep', true)) return;
-    try { notes.forEach(function (n) { var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + n[1]; o.type = 'square'; o.frequency.value = n[0]; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + .08); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + .09); }); } catch (e) {}
+    /* each note: [pitch, start, length, wave, loudness]. Jonna, Nov 27, 2026: like a grocery store checkout scanner, one
+       bright, flat beep for a good scan and a low buzz for a tag already scanned */
+    try { notes.forEach(function (n) { var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + n[1], d = n[2] || .08, v = n[4] || .16; o.type = n[3] || 'square'; o.frequency.value = n[0]; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .005); g.gain.setValueAtTime(v, t + d - .015); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + .01); }); } catch (e) {}
   }
   function hit(n) {
     var now = Date.now(); if (last[n] && now - last[n] < 4000) return; last[n] = now; seen = {};
@@ -3474,7 +3496,7 @@ function scanRig(el, onCode) {
     loop();
   }).catch(function () { var m = el.querySelector('.sc-msg'); if (m) m.innerHTML = '<div class="note">The camera is off for MyMISMO. Allow the camera in your phone\'s settings, or use Type the Number.</div>'; });
   else { var m = el.querySelector('.sc-msg'); if (m) m.innerHTML = '<div class="note">This phone\'s browser can\'t open the camera here. Use Type the Number.</div>'; }
-  return { stop: stop, ok: function () { tone([[1320, 0], [1760, .09]]); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }, again: function () { tone([[660, 0], [660, .14]]); try { navigator.vibrate && navigator.vibrate([30, 40, 30]); } catch (e) {} } };
+  return { stop: stop, ok: function () { tone([[2350, 0, .13, 'square', .11]]); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }, again: function () { tone([[300, 0, .26, 'sawtooth', .12], [304, 0, .26, 'square', .06]]); try { navigator.vibrate && navigator.vibrate([30, 40, 30]); } catch (e) {} } };
 }
 /* the sessions to check people in to: Summit HQ's list, the same sessions and codes as its TrackPod Scanner Sheet
    (CN-056, read with the staff sign-in like the attendee list); until that's published, the agenda */
@@ -3643,7 +3665,7 @@ function phReviewer() {
   var st = staffSession(); if (!st || !appTester()) return false;
   var acc = st.access || {}; return !!(acc['marketing-hq'] || acc.media || st.platformAdmin);
 }
-var PH_PROMPTS = ['A Selfie at the General Sessions', 'You and Someone You Just Met', 'Your Workgroup at the Summit', 'Your Favorite New Orleans Bite', 'The Streetcar', 'Your Team at the Summit', 'Something You Learned Today'];
+var PH_PROMPTS = ['A Selfie at the General Sessions', 'You and Someone You Just Met', 'Your Favorite Bite in Town'];   /* Jonna, Nov 27, 2026: the three people are most likely to do */
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 function phDates() {
   if (!S.first) return ''; var a = dparts(S.first), b = dparts(S.last || S.first);
@@ -3846,11 +3868,40 @@ function phEditor(file, prompt0) {
 function phChanged() { try { window.dispatchEvent(new Event('ph-changed')); if ($('#pg-home') && $('#pg-home').innerHTML) renderPage('home'); } catch (e) {} }
 function phTake(kind, prompt) { phPick(kind, function (fs) { phEditor(fs[0], prompt); }); }
 /* the card on the summit page */
+/* Jonna, Nov 27, 2026 ("jazz up the summit photos section"): a fan of framed photos (yours once you've taken some, else
+   samples in the real frames), one big Take a Photo, and the Photo Challenge with your progress */
 function photosCard() {
-  return '<div class="section-h"><h2>Summit Photos</h2></div><div class="ph-card"><div class="ph-card-top">' + icon('i-camera') + '<span><b>Snap the Summit</b><span>Selfies, friends and ' + esc(S.place || 'the summit') + ', in a summit frame to save or share. Send your best to MISMO.</span></span></div>' +
-    '<div class="ph-btns"><button type="button" class="btn primary" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button><button type="button" class="btn" data-ph-frames>' + icon('i-grid') + 'See the Frames</button></div>' +
-    '<div class="ph-ch"><b>Photo Challenge</b><div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-take="camera" data-ph-prompt="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div>' +
-    '<div class="ph-row"><button type="button" class="linkbtn" data-ph-mine>' + icon('i-image') + 'My Photos' + icon('i-chev') + '</button>' + (phReviewer() ? '<button type="button" class="linkbtn" data-ph-review>' + icon('i-check') + 'Review Submissions' + icon('i-chev') + '</button>' : '') + '</div></div>';
+  setTimeout(phCardPaint, 0);
+  return '<div class="section-h"><h2>Summit Photos</h2></div><div class="ph-card ph-hero">' +
+    '<div class="ph-fan" aria-hidden="true"><span class="phf1"><canvas></canvas></span><span class="phf2"><canvas></canvas></span><span class="phf3"><canvas></canvas></span><i class="ph-flash"></i></div>' +
+    '<div class="ph-say"><b>Snap the Summit</b><span>Selfies, friends and ' + esc(S.place || 'the summit') + ' in a frame made for this summit. Save it, share it, or send your best to MISMO.</span></div>' +
+    '<button type="button" class="ph-go" data-ph-take="camera">' + icon('i-camera') + '<span>Take a Photo</span></button>' +
+    '<div class="ph-btns two"><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button><button type="button" class="btn" data-ph-frames>' + icon('i-grid') + 'See the Frames</button></div>' +
+    '<div class="ph-ch"><div class="ph-ch-h"><b>Photo Challenge</b><span class="ph-ch-n">' + PH_PROMPTS.length + ' to try</span></div><span class="ph-meter" aria-hidden="true"><i style="width:0"></i></span>' +
+      '<div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-take="camera" data-ph-prompt="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div>' +
+    '<div class="ph-row"><button type="button" class="linkbtn" data-ph-mine>' + icon('i-image') + '<span class="ph-mine-l">My Photos</span>' + icon('i-chev') + '</button>' + (phReviewer() ? '<button type="button" class="linkbtn" data-ph-review>' + icon('i-check') + 'Review Submissions' + icon('i-chev') + '</button>' : '') + '</div></div>';
+}
+/* the fan: your three newest photos, or the frames on sample photos; the challenge: which prompts you've done */
+function phCardPaint() {
+  var card = document.querySelector('.ph-hero'); if (!card) return;
+  var cvs = card.querySelectorAll('.ph-fan canvas');
+  phAll(function (l) {
+    l = l.filter(function (p) { return p.sid === (S.sid || '') || !p.sid; });
+    var done = {}; l.forEach(function (p) { if (p.prompt) done[p.prompt] = 1; });
+    var n = PH_PROMPTS.filter(function (p) { return done[p]; }).length;
+    card.querySelector('.ph-ch-n').textContent = n ? n + ' of ' + PH_PROMPTS.length + ' done' : PH_PROMPTS.length + ' to try';
+    card.querySelector('.ph-meter i').style.width = Math.round(n / PH_PROMPTS.length * 100) + '%';
+    card.querySelectorAll('.ph-pr [data-ph-prompt]').forEach(function (b) { b.classList.toggle('done', !!done[b.getAttribute('data-ph-prompt')]); });
+    var ml = card.querySelector('.ph-mine-l'); if (ml) ml.textContent = l.length ? 'My Photos (' + l.length + ')' : 'My Photos';
+    var mine = l.filter(function (p) { return p.blob; }).slice(0, 3);
+    if (mine.length) {
+      mine.forEach(function (p, k) { var im = new Image(); im.onload = function () { var c = cvs[k]; c.width = 216; c.height = 270; c.getContext('2d').drawImage(im, 0, 0, 216, 270); }; im.src = phThumb(p); });
+      for (var k = mine.length; k < 3; k++) phDraw(cvs[k], phSample(['solo', 'group', 'pair'][k]), ['pass', 'instant', 'postcard'][k], '', PH_ART, .2);
+    } else {
+      var paint = function (a) { [['pass', 'solo'], ['instant', 'group'], ['postcard', 'pair']].forEach(function (f, k) { phDraw(cvs[k], phSample(f[1]), f[0], '', a, .2); }); };
+      paint(PH_ART); if (!PH_ART) phAssets(paint);
+    }
+  });
 }
 /* Preview Frames: every frame on a sample photo (or the last one taken); pick one, then take the photo */
 function phFrames() {
@@ -5584,7 +5635,12 @@ function sessionSheet(id) {
   if (x.type === 'General Session' && liveWindow(x)) h += liveCard(x);
   h += slidesBlock(x);
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
-  if (/MISMO Link/i.test(x.title)) h += '<div class="d-h">MISMO Link</div>' + sitePeek(SITE + '/standards-resources/mismo-link', 'mismo-link');
+  function spBlock() { return '<div class="d-h">' + esc(spLabel(x).replace(/ by$/, ' By')) + '</div><div class="list">' + sp.map(function (s) {
+    return '<button type="button" class="sp-card" data-open="sp:' + esc(slug(s.name)) + '" aria-label="' + esc(s.name) + '">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '">' : '<span>' + esc(s.name) + '</span>') + '</button>';
+  }).join('') + '</div>'; }
+  /* Jonna, Nov 27, 2026: MISMO Link's "Powered By" sits right under MISMO Link, the way a workgroup's "Sponsored By" sits under Meet the Group */
+  var spEarly = /MISMO Link/i.test(x.title) && sp.length;
+  if (/MISMO Link/i.test(x.title)) h += '<div class="d-h">MISMO Link</div>' + sitePeek(SITE + '/standards-resources/mismo-link', 'mismo-link') + (spEarly ? spBlock() : '');
   var gv = groupVideo(x);
   var gps = groupPages(x);
   if (gv || gps.length) h += '<div class="d-h">Meet the Group' + (gps.length > 1 ? 's' : '') + '</div>' + (gv ? player(gv.youtube, x.title) : '');
@@ -5607,9 +5663,7 @@ function sessionSheet(id) {
         }).join('') + '</div>' : '') + '</div></div>';
     }).join('') + '</div>';
   }
-  if (sp.length) h += '<div class="d-h">' + esc(spLabel(x).replace(/ by$/, ' By')) + '</div><div class="list">' + sp.map(function (s) {
-    return '<button type="button" class="sp-card" data-open="sp:' + esc(slug(s.name)) + '" aria-label="' + esc(s.name) + '">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '">' : '<span>' + esc(s.name) + '</span>') + '</button>';
-  }).join('') + '</div>';
+  if (sp.length && !spEarly) h += spBlock();
   var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type); });
   if (also.length && also.length < 12) h += '<div class="d-h">Also at This Time</div><div class="list">' + also.map(sessCard).join('') + '</div>';
   var sel = openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });

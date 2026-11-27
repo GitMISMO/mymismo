@@ -1,5 +1,8 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Summit Photos is now a showpiece: a fan of framed photos (yours once you've taken some), a big orange Take a Photo, and a three-part Photo Challenge (a selfie at the General Sessions, you and someone you just met, your favorite bite in town) with your progress.
+- Nov 27, 2026: The name tag scanner sounds like a grocery store checkout: one bright beep for a good scan, a low buzz for a tag already scanned.
+- Nov 27, 2026: MISMO Link Office Hours shows "Powered By" Viant Eye right under MISMO Link, where a workgroup shows "Sponsored By". The General Sessions card says "See who's on stage, and when" instead of counting sessions and speakers.
 - Nov 27, 2026: Join a Workgroup tile has a faded symbol behind it (three people around a table, linked), like the envelope on MISMO Matters and the screen on Webinars.
 - Nov 27, 2026: Around the Hotel opened big: fills the whole screen sideways (and on tablets), and swiping up or down on the map scrolls the page instead of getting stuck.
 - Nov 27, 2026: Sideways layout (browsers and small tablets): MISMO Matters sits on top of Join a Workgroup beside the Summit tile.
