@@ -2127,6 +2127,8 @@ nav.tabbar .badge.on{display:grid}
 .cover.sum:before{background:linear-gradient(180deg, rgba(6,32,47,.1) 0%, rgba(6,32,47,.35) 45%, rgba(6,32,47,.8) 100%)}
 .cover.sum > svg, .cover.sum > .hero-art{position:absolute; inset:0; z-index:0; opacity:.9}
 .cover.sum > .art-fade{position:absolute; z-index:0}
+/* Jonna, Nov 27, 2026: the skyline (and its streetcar) ends just above Find on Map and Walk There */
+.cover.sum:has(.cv-foot) > svg{inset:0 0 auto 0; height:calc(100% - 68px)}
 .cover.sum .k{background:var(--tagc, rgba(255,255,255,.16)); border-color:color-mix(in srgb, var(--tagc, #fff) 70%, #fff)}
 
 .cover .k{display:inline-block; font-size:12.5px; font-weight:700; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:4px; padding:3px 8px}
@@ -6588,7 +6590,7 @@ function openSheet(title, html, opts) {
     '<span class="title">' + (opts.plain ? esc(title) : '') + '</span><button type="button" class="iconbtn close" data-sheet-close aria-label="Close">' + icon('i-x') + '</button></div><div class="sheet-body">' + html + '</div>';
   if (opts.key) el.setAttribute('data-key', opts.key);
   /* Jonna, Nov 27, 2026: a session's pop-up wears the summit's header (navy, the city's skyline and moon); its type shows in its colored tag */
-  var cv = el.querySelector('.cover'); if (cv) { if (S.summit && S.place) { cv.classList.add('sum'); cv.insertAdjacentHTML('afterbegin', summitArt({ moon: [1010, 190, .8] })); } else cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false })); }
+  var cv = el.querySelector('.cover'); if (cv) { if (S.summit && S.place) { cv.classList.add('sum'); cv.insertAdjacentHTML('afterbegin', summitArt({ moon: [880, 70, .72] })); } else cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false })); }
   $('#sheets').appendChild(el);
   stack.push(el);
   var back = $('#sheet-back'); back.hidden = false;
