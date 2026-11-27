@@ -1104,6 +1104,23 @@ svg.wg-go{width:18px; height:18px; color:var(--ink-3)}
 .tvw-b b{font-size:14px} .tvw-b span{font-size:11.5px; color:var(--ink-2); line-height:1.3}
 .tvw-b:active{transform:translateY(1px)}
 /* Head to Head */
+.h2v{display:grid; gap:14px; border-radius:16px; padding:14px; color:#fff; background:radial-gradient(120% 100% at 50% 0%, #4a2412 0%, #1a0d08 55%, #0a0604 100%)}
+.h2v-art{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; padding:10px 6px}
+.h2v-p{justify-self:center; width:64px; height:64px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:14px; border:3px solid; box-shadow:0 0 22px currentColor}
+.h2v-p.a{color:#74bfeb; background:#0d314c} .h2v-p.b{color:#eb6834; background:#3a1a0c}
+.h2v-p span{color:#fff}
+.h2v-mid{display:grid; justify-items:center; gap:6px} .h2v-mid svg{width:34px; height:44px; fill:#f2c14e; filter:drop-shadow(0 0 10px rgba(242,193,78,.7)); animation:h2v-zap 2.4s ease-in-out infinite}
+@keyframes h2v-zap{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.h2v-board{display:grid; grid-template-columns:repeat(4, 12px); gap:3px; padding:5px; border-radius:6px; background:#05101a}
+.h2v-board i{height:9px; border-radius:2px; background:#103c5e; animation:tvb-lit 3.6s ease-in-out infinite; animation-delay:calc(var(--k) * .15s)}
+.h2v-txt{display:grid; gap:8px; justify-items:start} .h2v-txt > b{font-family:var(--cond); font-size:26px; line-height:1} .h2v-txt p{margin:0; color:rgba(255,255,255,.82); font-size:14px; line-height:1.45}
+.tv-go.h2-off{background:linear-gradient(90deg, #f2a04e, #eb6834); margin-top:12px; opacity:.8; cursor:not-allowed}
+.h2-offrow{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px} .h2-offrow .btn{justify-content:center; opacity:.8; cursor:not-allowed}
+.h2-steps{list-style:none; margin:8px 0 0; padding:0; display:grid; gap:8px}
+.h2-steps li{display:grid; grid-template-columns:26px 22px 1fr; gap:10px; align-items:start; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border)}
+.h2-n{width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; background:#eb6834; color:#fff}
+.h2-steps svg{width:20px; height:20px; margin-top:3px; color:#eb6834} .h2-steps b{display:block; font-size:14.5px} .h2-steps div span{font-size:13px; color:var(--ink-2); line-height:1.4}
+@media (prefers-reduced-motion: reduce){ .h2v-mid svg, .h2v-board i{animation:none} }
 .h2{display:grid; gap:10px}
 .h2-load{display:flex; gap:8px; align-items:center; justify-content:center; padding:24px; color:var(--ink-2)} .h2-load svg{width:18px; height:18px}
 .h2-wait{display:grid; justify-items:center; text-align:center; gap:8px; padding:18px 16px 20px; border-radius:16px; color:#fff; background:radial-gradient(120% 120% at 50% 0%, #4a2412 0%, #1a0d08 70%)}
@@ -5419,7 +5436,7 @@ function tvH2HSheet() {
   var el = openSheet('Head to Head', '<div class="sheet-pad tv"><div class="h2" id="tv-h2h"></div></div>', { plain: true });
   el.setAttribute('data-tvhost', 'h2h');
   if (triviaTester()) tvsLobby(el.querySelector('#tv-h2h'));
-  else el.querySelector('#tv-h2h').innerHTML = '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Opens Soon</b><p>Add players as Trivia contacts, challenge them, or let MyMISMO find you an opponent. You both play the same Board; highest score wins.</p></div>';
+  else el.querySelector('#tv-h2h').innerHTML = tvsH2HPreview();
   function lookFor(q) {
     var out = el.querySelector('.h2-found'); if (!out) return;
     if (q.length < 2) { out.innerHTML = ''; return; }
@@ -5464,11 +5481,27 @@ function tvsResume(id, vs) {
     tvsBoard(r.j, id, vs, tvsBackToLobby);
   });
 }
+/* Jonna, Nov 27, 2026: until MISMO's server is on, Head to Head shows how it works, laid out the way it will be, with
+   its buttons there but switched off */
+function tvsH2HPreview() {
+  var steps = [['i-user', 'Sign In to Trivia', 'Once, with a code we email you. Your Trivia name is your first name and last initial.'],
+    ['i-people', 'Add Trivia Contacts', 'Find colleagues by name. Once they accept, you can challenge them any time.'],
+    ['i-play', 'Challenge or Get Matched', 'Pick a contact, or let MyMISMO find you an opponent who\'s waiting.'],
+    ['i-grid', 'Play the Same Board', 'You each play the same 30 squares and Final Square, whenever you like. No deadline.'],
+    ['i-star', 'Highest Score Wins', 'Your record keeps your wins, losses and ties.']];
+  return '<div class="h2v"><div class="h2v-art" aria-hidden="true"><div class="h2v-p a"><span>You</span></div>' +
+    '<div class="h2v-mid"><svg viewBox="0 0 60 80"><path d="M34 2 L14 44 L30 44 L22 78 L48 30 L32 30 L42 2 Z"/></svg><div class="h2v-board">' + Array.apply(null, Array(12)).map(function (z, k) { return '<i style="--k:' + k + '"></i>'; }).join('') + '</div></div>' +
+    '<div class="h2v-p b"><span>?</span></div></div>' +
+    '<div class="h2v-txt"><b>Head to Head</b><p>Take on your colleagues: both play the same Board, and the higher score wins.</p><span class="tvb-chip">' + icon('i-info') + 'Opens when MISMO\'s server is ready</span></div></div>' +
+    '<button type="button" class="tv-go big h2-off" disabled>' + icon('i-play') + 'Find Me an Opponent</button>' +
+    '<div class="h2-offrow"><button type="button" class="btn" disabled>' + icon('i-people') + 'Challenge a Contact</button><button type="button" class="btn" disabled>' + icon('i-user') + 'Sign In to Play</button></div>' +
+    '<h3 class="h2-h">How It Works</h3><ol class="h2-steps">' + steps.map(function (t, k) { return '<li><span class="h2-n">' + (k + 1) + '</span>' + icon(t[0]) + '<div><b>' + t[1] + '</b><span>' + t[2] + '</span></div></li>'; }).join('') + '</ol>';
+}
 /* the Head to Head lobby */
 function tvsLobby(box) {
   box.innerHTML = '<div class="h2-load">' + icon('i-people') + 'Getting your games…</div>';
   tvsReady(function (ready) {
-    if (!ready) { box.innerHTML = '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Head to Head Is Almost Here</b><p>It runs on MISMO\'s server, which is being set up now. Once it\'s on, it opens right here. Until then, play Solo to sharpen up.</p></div>'; return; }
+    if (!ready) { box.innerHTML = tvsH2HPreview(); return; }
     if (!tvsPlayer()) { box.innerHTML = '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Take On Your Colleagues</b><p>Sign in to Trivia once, add players as Trivia contacts, and challenge them. You both play the same Board; highest score wins.</p><button type="button" class="tv-go" data-tvs-signin>' + icon('i-user') + 'Sign In to Play</button></div>'; return; }
     tvsApi('GET', 'h2h').then(function (r) {
       if (!r.ok) { box.innerHTML = '<div class="note">' + esc(r.j.message || 'Head to Head didn\'t load. Try again in a minute.') + '</div>'; return; }
