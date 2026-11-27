@@ -2115,7 +2115,7 @@ nav.tabbar .badge.on{display:grid}
 .iconbtn{border:1px solid var(--border); background:var(--surface); border-radius:7px; width:38px; height:38px; display:grid; place-items:center; cursor:pointer; color:var(--ink); flex:none}
 .iconbtn svg{width:19px; height:19px}
 .sheet-head .iconbtn.close{margin-left:auto}
-.sheet-head .iconbtn.grow{display:none; margin-left:auto} .sheet-head .iconbtn.grow + .close{margin-left:0}
+.sheet-head .iconbtn.grow{display:none; margin-left:auto}
 .iconbtn.grow svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
 .iconbtn.grow .g-in{display:none} html.mm-wide .iconbtn.grow .g-in{display:block} html.mm-wide .iconbtn.grow .g-out{display:none}
 .sheet:not(.plain) .sheet-head{position:absolute; left:0; right:0; top:0}
@@ -2190,7 +2190,7 @@ nav.tabbar .badge.on{display:grid}
 @media (min-width:900px){
   .sheet{left:auto; top:0; width:min(72vw, 880px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
   html.mm-wide .sheet{width:100vw}
-  .sheet-head .iconbtn.grow{display:grid}
+  .sheet-head .iconbtn.grow{display:grid} .sheet-head .iconbtn.grow + .close{margin-left:0}
   .sheet-head .grab{display:none}
 }
 @media (max-width:520px){
@@ -6611,7 +6611,7 @@ function openSheet(title, html, opts) {
     '<span class="title">' + (opts.plain ? esc(title) : '') + '</span>' + growBtn() + '<button type="button" class="iconbtn close" data-sheet-close aria-label="Close">' + icon('i-x') + '</button></div><div class="sheet-body">' + html + '</div>';
   if (opts.key) el.setAttribute('data-key', opts.key);
   /* Jonna, Nov 27, 2026: a session's pop-up wears the summit's header (navy, the city's skyline and moon); its type shows in its colored tag */
-  var cv = el.querySelector('.cover'); if (cv) { if (S.summit && S.place) { cv.classList.add('sum'); cv.insertAdjacentHTML('afterbegin', summitArt({ moon: [930, 100, .72] })); } else cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false })); }
+  var cv = el.querySelector('.cover'); if (cv) { if (S.summit && S.place) { cv.classList.add('sum'); cv.insertAdjacentHTML('afterbegin', summitArt({ moon: [985, 100, .72] })); } else cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false })); }
   $('#sheets').appendChild(el);
   stack.push(el);
   var back = $('#sheet-back'); back.hidden = false;
