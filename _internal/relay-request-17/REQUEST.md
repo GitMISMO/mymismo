@@ -2,7 +2,7 @@
 
 Requested by Jonna, Nov 27, 2026. Builds on relay requests 13 to 16: the same `mymismo` entry in projects.json and the
 same private `GitMISMO/mymismo-data`. Apply 13, 14, 15 and 16 first, then `relay-request-17-mymismo-scan-photos.patch`.
-No new secrets and no new library.
+No new library. One new, optional secret (`MYMISMO_GITHUB_TOKEN`, below), strongly recommended before the Winter Summit.
 
 ## What Jonna Decided
 
@@ -12,7 +12,7 @@ No new secrets and no new library.
   only when the person gave it (typed in from a business card, or their own opt-in later).
 - **Check-ins replace TrackPod's exports.** Check-ins are sent as they happen; when the hotel Wi-Fi drops the phone keeps
   them and sends them later. Each has an id made on the phone, so a retry is never counted twice. Meeting Trackers reads
-  `scan/<summit>/checkins.json` (a Change Notice to Meeting Trackers will follow once this is live).
+  the files in `scan/<summit>/checkins/` (a Change Notice to Meeting Trackers will follow once this is live).
 - **Touchpoints go to Member 360.** Staff touchpoints are also kept together in `scan/<summit>/touchpoints.json` for
   Member 360 to read (Change Notice to follow).
 - **Summit Photos.** Attendees (with the box checked saying MISMO may use the photo) and staff send photos. Only the
@@ -52,7 +52,8 @@ needs write access to that repository's contents (it already writes to the other
 
 ## Where Things Live (GitMISMO/mymismo-data)
 
-- `scan/<summit>/checkins.json` `{ docs: { <id>: { ses, reg, name, title, company, manual, at, by, saved } } }`
+- `scan/<summit>/checkins/<hash of the scanner's email>.json` `{ docs: { <id>: { ses, reg, name, title, company, manual, at, by, saved } } }`,
+  one file per scanner (see Load, below). `GET /scan/checkins` lists the folder and reads only the files that changed.
 - `scan/<summit>/notes/<hash of the scanner's email>.json` each person's Who I Met and touchpoints
 - `scan/<summit>/touchpoints.json` every staff touchpoint, with who logged it (for Member 360)
 - `photos/<summit>/index.json` the submissions and their status; `photos/<summit>/<id>.json` each picture
@@ -65,3 +66,32 @@ existing routes return changes.
 `node test-mymismo17.mjs`: 45 checks (who can scan, helper links limited to one session and summit, no emails in lookups, a retried batch counted once, touchpoints staff
 only and mirrored for Member 360, photos JPEG only, reviewers only, send writes the JPEG and the list to MISMO Media and
 marks them sent, a sent photo can't be changed). Requests 13 to 16's suites still pass with this patch applied.
+`node test-mymismo17-budget.mjs`: 8 checks on MyMISMO's own GitHub budget (below).
+
+## Load: Keeping MyMISMO From Slowing Down Everything Else (added Nov 27, 2026)
+
+Jonna asked for a test of 200 people using MyMISMO at once, and for proof that it can't shut down the other systems.
+
+**What GitHub allows.** One GitHub account gets 5,000 requests an hour, and generally no more than 80 saves a minute
+and 500 saves an hour (GitHub's secondary limits). The relay uses one token for every MISMO system, so all of them share
+those 500 saves. Reads are cheap (the relay asks "has it changed?" and an unchanged answer is nearly free).
+
+**What one busy summit hour costs.** Measured on this relay: an attendee sign-in is 3 saves, a message 1, a profile 1,
+a photo 2, a batch of check-ins 1, Who I Met 1 (2 with a touchpoint), and a Trivia Board game about 25 to 30 (one per
+pick and per answer). 200 active people in a busy hour come to roughly 1,000 saves, about twice what the shared account
+allows, and the other systems would start failing too.
+
+**Fixed in this patch.**
+1. *One check-ins file per scanner.* With one shared file, 15 people scanning at the same moment saved 4 and wasted 50
+   GitHub writes on collisions; 30 saved 5 and wasted 108. With a file each, 30 at once all save, one write each.
+2. *MyMISMO's own GitHub budget.* Set `MYMISMO_GITHUB_TOKEN` to a token from a **separate** GitHub account or a GitHub
+   App (a second token from the same account shares the same limits) with contents write access to
+   `GitMISMO/mymismo-data` and to MISMO Media's `incoming/summit-photos` folder repository. The relay then uses it for
+   MyMISMO's own repository and that one inbox folder only; sign-in, projects.json and every other system keep the main
+   token. Until it is set, MyMISMO is held to `MYMISMO_WRITE_CAP` saves an hour on the shared account (default 250, half
+   the limit), so it can never use up what the other systems need. Past that, MyMISMO's saves answer "not saved" and
+   the app keeps them on the phone and tries again.
+
+**Still needed for a summit-sized crowd.** The cap protects the other systems, but at 250 saves an hour MyMISMO itself
+would turn people away in a busy hour. Relay request 18 moves MyMISMO's busy live data off GitHub.
+

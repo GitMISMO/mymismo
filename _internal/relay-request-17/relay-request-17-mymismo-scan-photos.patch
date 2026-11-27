@@ -1,6 +1,40 @@
---- a/index.mjs
-+++ b/index.mjs
-@@ -2509,7 +2509,8 @@
+--- index.base17.mjs	2026-11-27 13:03:34.925262951 -0700
++++ index.mjs	2026-11-27 14:14:50.937814392 -0700
+@@ -502,12 +502,32 @@
+   console.warn(`GitHub allowance low: ${left} requests left${reset ? ' until ' + new Date(reset).toISOString() : ''}`);
+ }
+ 
++/* MyMISMO's own GitHub account (relay request 17, load test Nov 27, 2026). A summit with hundreds of people on MyMISMO
++ * makes far more saves than the other tools, and GitHub allows one account about 500 saves an hour. So MyMISMO's own
++ * repositories use MYMISMO_GITHUB_TOKEN when it is set (a token for a SEPARATE GitHub account or GitHub App: a second
++ * token from the same account shares the same limits), and the other tools keep the main budget to themselves.
++ * Until it is set, MyMISMO is held to MYMISMO_WRITE_CAP saves an hour (default 250) on the shared account, so it can
++ * never use up what everything else needs; past that its saves answer "busy" and the app keeps them and tries later. */
++const MM_OWN_REPOS = new Set();   /* path starts: MyMISMO's own repository, and only the photos folder of MISMO Media's inbox */
++const mmWrites = [];
++function mmOwnPath(path) { for (const p of MM_OWN_REPOS) if (path.startsWith(p)) return true; return false; }
++function githubTokenFor(path) { return process.env.MYMISMO_GITHUB_TOKEN && mmOwnPath(path) ? process.env.MYMISMO_GITHUB_TOKEN : env('GITHUB_TOKEN'); }
++function mmOverCap(method, path) {
++  if (method === 'GET' || process.env.MYMISMO_GITHUB_TOKEN || !mmOwnPath(path)) return false;
++  const now = Date.now(), cap = Number(process.env.MYMISMO_WRITE_CAP) || 250;
++  while (mmWrites.length && mmWrites[0] < now - 3_600_000) mmWrites.shift();
++  if (mmWrites.length >= cap) return true;
++  mmWrites.push(now); return false;
++}
++const MM17_CI = new Map();   /* each scanner's check-ins file, by its version, so unchanged files aren't read again */
++export function __resetMmBudget() { MM_OWN_REPOS.clear(); mmWrites.length = 0; }
+ async function githubOnce(method, path, body, extra) {
+   let res;
++  if (mmOverCap(method, path)) return { status: 429, json: { message: 'MyMISMO is busy (its hourly share of saves is used up)' }, res: null };
+   const request = fetch(GITHUB_API + path, {
+     method,
+     headers: {
+-      Authorization: `Bearer ${env('GITHUB_TOKEN')}`,
++      Authorization: `Bearer ${githubTokenFor(path)}`,
+       Accept: 'application/vnd.github+json',
+       'Content-Type': 'application/json',
+       'User-Agent': 'mismo-initiative-hub-save-relay',
+@@ -2509,7 +2529,8 @@
      const people = new Map();
      for (const p of Array.isArray(s.people) ? s.people : []) {
        const e = mmStr(p && p.e, 254).toLowerCase(); if (!mmEmailOk(e)) continue;
@@ -10,7 +44,7 @@
      }
      /* Summit HQ's list has MISMO staff twice: their registration (with their title) and the staff roster (just "MISMO").
         The roster entry still signs in, as the same person as their registration, and isn't listed a second time. */
-@@ -2520,7 +2521,8 @@
+@@ -2520,7 +2541,8 @@
        if (keep) for (const e of list) if (plain(people.get(e))) people.get(e).dir = keep;
      }
      const ids = new Map(); for (const [e, p] of people) if (!p.dir) ids.set(mmIdOf(id, e), p);   /* relay request 15: the whole registration list is the directory */
@@ -20,7 +54,7 @@
    }
    mmFeedCache.at = now; mmFeedCache.value = { summits };
    return mmFeedCache.value;
-@@ -3001,6 +3003,265 @@
+@@ -3001,6 +3023,279 @@
    return respond(200, { ok: true, id, sent, failed, removed: gone.length });
  }
  
@@ -39,7 +73,9 @@
 + *        item { id (made on the phone, so a retry after the Wi-Fi drops isn't counted twice), ses, reg | name, title,
 + *               company, manual, at }
 + *   GET  /mymismo/scan/checkins?summit=<id>[&since=<ms>]     -> { items: [{ id, ses, reg, name, company, at }], now }
-+ *        everyone's, for Attendance Now; Meeting Trackers reads scan/<summit>/checkins.json in place of TrackPod's exports
++ *        everyone's, for Attendance Now; Meeting Trackers reads the files in scan/<summit>/checkins/ in place of TrackPod's
++ *        exports. Each scanner (or helper) has its own file there, so thirty scanners at thirty doors never write over
++ *        each other (load test, Nov 27, 2026: with one shared file, 11 of 15 simultaneous scanners had to retry).
 + *   POST /mymismo/scan/notes    { summit, items: [..100] }   -> { ok, saved }
 + *        item { id, kind: 'met' | 'touch' (staff only), reg, name, title, company, rate, note, email, at, deleted }
 + *   GET  /mymismo/scan/notes?summit=<id>                     -> { items } (only your own)
@@ -115,9 +151,20 @@
 +    if (!mmAllowed('scanread', who.email, MM17_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
 +    const summit = mm17Summit(q.summit); if (!summit) return respond(400, { error: 'INVALID' });
 +    if (subPath === '/scan/checkins') {
-+      const r = await readFile(proj.repo, branch, `scan/${summit}/checkins.json`); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++      const ls = await github('GET', `/repos/${proj.repo}/contents/scan/${summit}/checkins?ref=${encodeURIComponent(branch)}`);
++      if (ls.status !== 200 && ls.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
++      /* one listing call, then only the scanners' files that changed since last time (the listing gives each file's
++       * version), read side by side: dozens of people watching Attendance Now cost about one GitHub read each */
++      const docs = {}, files = (ls.status === 200 && Array.isArray(ls.json) ? ls.json : []).filter(f => f && /^[a-f0-9]{20}\.json$/.test(f.name || ''));
++      await Promise.all(files.map(async f => {
++        const key = proj.repo + ':' + summit + ':' + f.name, hit = MM17_CI.get(key);
++        if (hit && f.sha && hit.sha === f.sha) return;
++        const r = await readFile(proj.repo, branch, `scan/${summit}/checkins/${f.name}`); if (r.status !== 200) return;
++        MM17_CI.set(key, { sha: f.sha || r.sha, docs: (r.data && r.data.docs) || {} });
++      }));
++      for (const f of files) { const hit = MM17_CI.get(proj.repo + ':' + summit + ':' + f.name); if (hit) Object.assign(docs, hit.docs); }
 +      const since = Number(q.since) || 0, feed = await mmFeed(proj);
-+      const items = Object.entries((r.data && r.data.docs) || {}).filter(([, c]) => c && (c.saved || 0) > since).map(([id, c]) => {
++      const items = Object.entries(docs).filter(([, c]) => c && (c.saved || 0) > since).map(([id, c]) => {
 +        const p = c.reg && !feed.error ? mm17Person(feed, summit, c.reg) : null;
 +        return { id, ses: c.ses, reg: c.reg || '', name: (p && p.name) || c.name || '', company: (p && p.company) || c.company || '', manual: c.manual === true, at: c.at };
 +      });
@@ -153,7 +200,7 @@
 +      .filter(c => c && MM17_ID.test(c.id) && MM17_SES.test(c.ses) && (c.reg || c.name) && (!helper || c.ses === helper.ses));
 +    if (!items.length) return respond(400, { error: 'INVALID', problems: ['Nothing to check in.'] });
 +    let saved = 0, have = 0;
-+    const w = await updateRepoJson(proj.repo, proj.branch || 'main', `scan/${summit}/checkins.json`, d => {
++    const w = await updateRepoJson(proj.repo, proj.branch || 'main', `scan/${summit}/checkins/${mm17Hash(who.email)}.json`, d => {
 +      d.docs = d.docs && typeof d.docs === 'object' && !Array.isArray(d.docs) ? d.docs : {}; saved = 0;
 +      for (const c of items) { if (d.docs[c.id]) continue; const { id, ...rest } = c; d.docs[id] = { ...rest, by: who.email, saved: now }; saved++; }
 +      have = Object.keys(d.docs).length; return d;
@@ -255,6 +302,7 @@
 +  /* /photos/send: the picks to MISMO Media, only when a reviewer presses Send */
 +  if (!mmAllowed('send', s.email, MM17_LIMITS.send, now)) return respond(429, { error: 'TOO_MANY' });
 +  const inbox = mm17Inbox(raw.mediaInbox); if (!inbox) return respond(503, { error: 'NOT_SET_UP', message: 'MISMO Media’s inbox isn’t set up yet.' });
++  MM_OWN_REPOS.add('/repos/' + inbox.repo + '/contents/' + String(inbox.dir).replace(/^\/+|\/+$/g, '') + '/');   /* the photos go to MISMO Media on MyMISMO's own GitHub budget */
 +  const r = await readFile(proj.repo, branch, `photos/${summit}/index.json`); if (r.status !== 200 && r.status !== 404) return respond(502, { error: 'UNAVAILABLE' });
 +  const picks = Object.entries((r.data && r.data.docs) || {}).filter(([, p]) => p && p.status === 'picked');
 +  if (!picks.length) return respond(400, { error: 'NOTHING_PICKED', message: 'Pick some photos first.' });
@@ -286,7 +334,15 @@
  /* --- slides --- */
  function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
  const mm14slideCache = { at: 0, value: null };
-@@ -4017,6 +4278,7 @@
+@@ -3971,6 +4266,7 @@
+     return respond(503, { error: 'CONFIG_UNAVAILABLE', message: 'Saving is briefly unavailable. Nothing was written — try again in a minute.' });
+   }
+   const subPath = projMatch ? (projMatch[2] || '/') : '/';
++  if (proj && proj.key === MM_PROJECT && proj.repo) MM_OWN_REPOS.add('/repos/' + proj.repo + '/');   /* relay request 17: MyMISMO's saves go on its own GitHub budget */
+   currentProjectKey = proj ? proj.key : null;
+   if (proj) responseOrigin = proj.origin;
+   /* Relay request 11: a public form sent from one of its project's listed websites (formOrigins) is answered to that
+@@ -4017,6 +4313,7 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }

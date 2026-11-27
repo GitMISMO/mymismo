@@ -27,7 +27,8 @@ globalThis.fetch = async (url, opts = {}) => {
   const m = url.match(/^https:\/\/api\.github\.com\/repos\/([^/]+\/[^/]+)\/contents\/([^?]+)/);
   if (!m) return R(404, {});
   const key = m[1] + ':' + decodeURIComponent(m[2]), h = repo[key];
-  if (method === 'GET') { const v = h && h[h.length - 1]; if (!v) return R(404, {}); return R(200, { sha: v.sha, content: v.raw ? v.data : Buffer.from(JSON.stringify(v.data)).toString('base64') }); }
+  if (method === 'GET') { const v = h && h[h.length - 1];
+    if (!v) { const pre = key + '/', names = Object.keys(repo).filter(k => k.startsWith(pre) && !k.slice(pre.length).includes('/')).map(k => ({ name: k.slice(pre.length), type: 'file' })); return names.length ? R(200, names) : R(404, {}); } return R(200, { sha: v.sha, content: v.raw ? v.data : Buffer.from(JSON.stringify(v.data)).toString('base64') }); }
   if (method === 'PUT') { const body = JSON.parse(opts.body), cur = h && h[h.length - 1];
     if ((cur ? cur.sha : undefined) !== (body.sha || undefined)) return R(409, {});
     let data, raw = false; try { data = JSON.parse(Buffer.from(body.content, 'base64').toString()); } catch (e) { data = body.content; raw = true; }
@@ -40,6 +41,7 @@ const J = r => JSON.parse(r.body);
 const call = (m, path, { body, origin = ORIGIN, tok, rawBody } = {}) => { __resetGithubCache(); const [rp, qs] = path.split('?'); return handler({ rawPath: rp, rawQueryString: qs || '', queryStringParameters: qs ? Object.fromEntries(new URLSearchParams(qs)) : undefined, requestContext: { http: { method: m, sourceIp: '203.0.113.1' } },
   headers: { ...(origin ? { origin } : {}), 'content-type': 'application/json', ...(tok ? { authorization: 'Bearer ' + tok } : {}) }, body: rawBody !== undefined ? rawBody : body ? JSON.stringify(body) : undefined }); };
 const file = (p, r = 'Org/MyMismoData') => { const h = repo[r + ':' + p]; return h ? h.at(-1).data : null; };
+const checkins = () => { const docs = {}; for (const k of Object.keys(repo)) if (k.startsWith('Org/MyMismoData:scan/nola/checkins/')) Object.assign(docs, repo[k].at(-1).data.docs); return { docs }; };
 const b64u = b => Buffer.from(b).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 const staffTok = email => { const now = Math.floor(Date.now() / 1000);
   const head = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })), bd = b64u(JSON.stringify({ sub: email, name: 'X', iat: now, exp: now + 3600 }));
@@ -78,9 +80,9 @@ ok('lookup never gives an email', !JSON.stringify(d).includes('@'), d);
 const items = [{ id: 'c-aaaaaa', ses: 'tp:WG01', reg: '1000001', at: Date.now() }, { id: 'c-bbbbbb', ses: 'tp:WG01', name: 'Walk In', company: 'Example Title Co.', manual: true, at: Date.now() }];
 r = await call('POST', '/mymismo/scan/checkins', { tok: FA, body: { summit: 'nola', items } }); d = J(r);
 ok('check-ins saved', r.statusCode === 200 && d.saved === 2 && d.have === 2, d);
-r = await call('POST', '/mymismo/scan/checkins', { tok: ST, body: { summit: 'nola', items } }); d = J(r);
+r = await call('POST', '/mymismo/scan/checkins', { tok: FA, body: { summit: 'nola', items } }); d = J(r);
 ok('the same check-ins sent again aren\'t counted twice', r.statusCode === 200 && d.saved === 0 && d.have === 2, d);
-ok('each check-in records who scanned it', file('scan/nola/checkins.json').docs['c-aaaaaa'].by === 'fac@example.org', file('scan/nola/checkins.json'));
+ok('each check-in records who scanned it', checkins().docs['c-aaaaaa'].by === 'fac@example.org', checkins());
 r = await call('POST', '/mymismo/scan/checkins', { tok: ST, body: { summit: 'nola', items: [{ id: 'short', ses: 'tp:WG01', reg: '1000001' }, { id: 'c-cccccc', ses: '', reg: '1000001' }] } });
 ok('bad check-ins are refused', r.statusCode === 400, r.statusCode);
 r = await call('GET', '/mymismo/scan/checkins?summit=nola', { tok: FA }); d = J(r);
@@ -111,7 +113,7 @@ const HT = d.token;
 r = await call('GET', '/mymismo/scan/me', { tok: HT }); d = J(r);
 ok('the helper scans as a helper, for that session', r.statusCode === 200 && d.role === 'helper' && d.ses === 'tp:WS01' && d.name === 'Rusty', d);
 r = await call('POST', '/mymismo/scan/checkins', { tok: HT, body: { summit: 'nola', items: [{ id: 'c-h11111', ses: 'tp:WS01', reg: '1000002' }, { id: 'c-h22222', ses: 'tp:OTHER', reg: '1000001' }] } }); d = J(r);
-ok('the helper checks people in to that session only', r.statusCode === 200 && d.saved === 1 && file('scan/nola/checkins.json').docs['c-h11111'].by === 'helper:Rusty via fac@example.org' && !file('scan/nola/checkins.json').docs['c-h22222'], d);
+ok('the helper checks people in to that session only', r.statusCode === 200 && d.saved === 1 && checkins().docs['c-h11111'].by === 'helper:Rusty via fac@example.org' && !checkins().docs['c-h22222'], d);
 r = await call('POST', '/mymismo/scan/lookup', { tok: HT, body: { summit: 'nola', regs: ['1000002'] } }); d = J(r);
 ok('the helper sees names', r.statusCode === 200 && d.people['1000002'].name === 'Sam Roe', d);
 r = await call('GET', '/mymismo/scan/checkins?summit=nola', { tok: HT });
