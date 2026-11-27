@@ -1401,6 +1401,9 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .be-spon .bs-ic svg{width:26px; height:26px}
 .be-spon .bs-tx{display:grid; gap:3px}
 .be-spon .bs-tx b{font-size:17px}
+/* Jonna, Nov 27, 2026: the invitation stands out (bright, not faded) wherever it sits */
+a.be-spon .bs-tx > b, .sheet a.be-spon .bs-tx > b{color:#fff; font-size:19px; text-shadow:0 1px 12px rgba(116,191,235,.45)}
+a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .be-spon .bs-tx span{font-size:13.5px; color:rgba(255,255,255,.8); line-height:1.4}
 .be-spon strong{grid-column:2; display:inline-flex; align-items:center; gap:6px; justify-self:start; margin-top:4px; padding:9px 13px; border-radius:8px; background:#74bfeb; color:#06202f; font-size:14px}
 .be-spon strong svg{width:15px; height:15px}
@@ -2126,6 +2129,18 @@ nav.tabbar .badge.on{display:grid}
 .cover:before{content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(6,32,47,.15), rgba(6,32,47,.7))}
 .cover > *{position:relative; z-index:1}
 .cover > .hero-art{position:absolute; z-index:0; opacity:.9}
+.ro-ds{font-size:13px; color:var(--ink-2); margin-top:4px; line-height:1.45}
+.ro-go{display:inline-flex; align-items:center; gap:6px; margin-top:8px; padding:7px 10px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface); color:var(--navy-mid); font:inherit; font-size:13px; font-weight:700; cursor:pointer}
+.ro-go svg{width:15px; height:15px} .ro-go svg.go{width:13px; height:13px}
+.menu{display:grid; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:6px 14px 10px}
+.menu.small{background:transparent; border:0; padding:4px 0 0}
+.menu-h{font-size:12.5px; font-weight:800; color:var(--ink-2); margin:10px 0 2px}
+.menu-i{display:grid; gap:2px; padding:7px 0; border-bottom:1px solid var(--rule)} .menu-i:last-child{border-bottom:0}
+.menu-i b{font-size:15px} .menu-i span{font-size:13px; color:var(--ink-2)}
+.menu-i em{display:flex; flex-wrap:wrap; gap:4px; font-style:normal; margin-top:2px}
+.menu-i em i{font-style:normal; font-size:11px; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(15,123,92,.12); color:var(--good)}
+.menu.small .menu-i{padding:3px 0; border:0} .menu.small .menu-i b{font-size:13px; font-weight:600}
+.menu-soon{display:flex; gap:8px; align-items:center; margin:0; font-size:13.5px; color:var(--ink-2)} .menu-soon svg{width:16px; height:16px; flex:none}
 .cover.sum{background:radial-gradient(120% 90% at 100% 0%, rgba(116,191,235,.30), rgba(116,191,235,0) 55%), radial-gradient(90% 70% at 0% 100%, rgba(20,72,110,.9), rgba(20,72,110,0) 70%), linear-gradient(160deg, #0d314c 0%, #06202f 70%); box-shadow:inset 0 -4px 0 var(--tagc, #74bfeb)}
 .cover.sum:before{background:linear-gradient(180deg, rgba(6,32,47,.1) 0%, rgba(6,32,47,.35) 45%, rgba(6,32,47,.8) 100%)}
 .cover.sum > svg, .cover.sum > .hero-art{position:absolute; inset:0; z-index:0; opacity:.9}
@@ -2538,10 +2553,10 @@ function build(feed, spons) {
   if (!S.place) S.place = s.city || s.name;
   S.sessions = ((s.grid && s.grid.sessions) || []).filter(function (x) { return x.status !== 'cancelled'; }).map(function (x) {
     return { id: x.id, day: x.day || DOW[dparts(x.date).dow], date: x.date, a: mins(x.start), b: mins(x.end), type: x.type || 'Session',
-      title: x.title || '', room: x.room || '', desc: x.desc || '', sponsor: x.sponsor || '' };
+      title: x.title || '', room: x.room || '', desc: x.desc || '', sponsor: x.sponsor || '', menu: x.menu || '' };
   }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });
   S.gs = s.gs || null;
-  if (S.gs) S.gs.items = (S.gs.sessions || []).map(function (g, i) { return { i: i, a: mins(g.start), b: mins(g.end), kind: g.kind || '', title: g.title || '', desc: g.desc || '', sponsor: g.sponsor || '', brk: !!g.brk, people: g.people || [] }; });
+  if (S.gs) S.gs.items = (S.gs.sessions || []).map(function (g, i) { return { i: i, a: mins(g.start), b: mins(g.end), kind: g.kind || '', title: g.title || '', desc: g.desc || '', sponsor: g.sponsor || '', brk: !!g.brk, people: g.people || [], menu: g.menu || '' }; });
   S.sponsors = ((spons && spons.sponsors) || []).map(function (x) { return { name: x.name, tier: x.tier || 'Sponsor', url: x.url || '', logo: x.logo || '', placements: x.placements || [] }; });
   var byName = {};
   if (S.gs) S.gs.items.forEach(function (g) {
@@ -4935,7 +4950,7 @@ function renderExplore() {
     var all = places('all');
     if (all.length) {
       var cat = S.xcat || 'all';
-      h += '<div class="section-h"><h2>Around the Hotel</h2></div><div class="seg">' + [['all', 'Everything'], ['eat', 'Eat and Drink'], ['see', 'Things to Do']].map(function (o) {
+      h += '<div class="section-h" id="x-around"><h2>Around the Hotel</h2></div><div class="seg">' + [['all', 'Everything'], ['eat', 'Eat and Drink'], ['see', 'Things to Do']].map(function (o) {
         return '<button type="button" data-xcat="' + o[0] + '" aria-pressed="' + (cat === o[0]) + '"' + (o[0] !== 'all' ? ' style="--pc:' + PL_COLORS[o[0]] + '"' : '') + '>' + (o[0] !== 'all' ? '<i></i>' : '') + o[1] + '</button>';
       }).join('') + '</div>' + radar();
       [['eat', 'where-to-eat'], ['see', 'what-to-see']].forEach(function (pair) {
@@ -6489,7 +6504,7 @@ function liveSheet() {
   var h = '<div class="live-wrap"><div class="player on live" data-title="General Sessions Live"></div><div class="live-bar"><span class="lv-badge"><i></i>LIVE</span><b>' + esc(cur ? cur.title : 'General Sessions') + '</b></div></div>' +
     '<div class="sheet-pad"><div class="d-h" style="margin-top:4px">Running Order</div><div class="ro">' + (S.gs ? S.gs.items.map(function (g) {
       var cp = clockParts(g.a), now = cur === g;
-      return '<div class="ro-item' + (g.brk ? ' brk' : '') + (now ? ' now' : '') + '"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + '</span></div><div>' + (now ? '<span class="livetag">NOW</span> ' : '') + '<b>' + esc(g.title || g.kind) + '</b></div></div>';
+      return '<div class="ro-item' + (g.brk ? ' brk' : '') + (now ? ' now' : '') + '"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + '</span></div><div>' + (now ? '<span class="livetag">NOW</span> ' : '') + '<b>' + esc(g.title || g.kind) + '</b>' + (g.brk ? brkMore(g) : '') + '</div></div>';
     }).join('') : '') + '</div></div>';
   var el = openSheet('General Sessions Live', h, { plain: true });
   playIn(el.querySelector('.player'), LIVE_CHANNEL, true);
@@ -6666,6 +6681,35 @@ function topSheet() { return stack[stack.length - 1] || null; }
   document.addEventListener('touchend', end, { passive: true }); document.addEventListener('touchcancel', end, { passive: true });
 })();
 
+/* ---------- Menus (Jonna, Nov 27, 2026): breakfasts, lunches, breaks and receptions show their menu once it's set. Summit
+   HQ keeps each meal's menu in Hotel Specs (the one that goes on the hotel's Resume) and publishes it with the session in
+   the agenda feed as menu: plain text, a line per item (CN-066). A heading line ends with a colon; (V), (VG), (GF),
+   (DF) and (N) after an item show as Vegetarian, Vegan, Gluten-Free, Dairy-Free and Contains Nuts. ---------- */
+var MENU_TAGS = { V: 'Vegetarian', VG: 'Vegan', VE: 'Vegan', GF: 'Gluten-Free', DF: 'Dairy-Free', N: 'Contains Nuts', NF: 'Nut-Free' };
+function isFood(x) { return /breakfast|lunch|dinner|reception|break|happy hour|coffee|snack/i.test((x.type || '') + ' ' + (x.title || '')); }
+function menuList(menu, small) {
+  var lines = (Array.isArray(menu) ? menu : String(menu || '').split(/\r?\n/)).map(function (l) { return String(l).replace(/^\s*[-•*·]\s*/, '').trim(); }).filter(Boolean);
+  if (!lines.length) return '';
+  return '<div class="menu' + (small ? ' small' : '') + '">' + lines.map(function (l) {
+    if (/:$/.test(l)) return '<div class="menu-h">' + esc(l.replace(/:$/, '')) + '</div>';
+    var tags = [], m;
+    while ((m = /\s*\((V|VG|VE|GF|DF|N|NF)\)\s*$/i.exec(l))) { tags.unshift(MENU_TAGS[m[1].toUpperCase()]); l = l.slice(0, m.index); }
+    var dash = l.split(/\s+[–—-]\s+/), name = dash[0], desc = dash.slice(1).join(' – ');
+    return '<div class="menu-i"><b>' + esc(name) + '</b>' + (desc ? '<span>' + esc(desc) + '</span>' : '') + (tags.length ? '<em>' + tags.map(function (t) { return '<i>' + esc(t) + '</i>'; }).join('') + '</em>' : '') + '</div>';
+  }).join('') + '</div>';
+}
+/* a break or lunch in the General Sessions running order: the website agenda's words, its menu if it has one, and
+   (Jonna, Nov 27, 2026) the lunch recommendations link opens the app's own Explore page on Eat and Drink instead */
+function brkMore(g) {
+  var d = String(g.desc || ''), url = /https?:\/\/\S+/.exec(d), eat = !!url || /lunch|dinner|eat/i.test(g.kind + ' ' + g.title);
+  if (url) d = d.replace(/\s*(See|Find|Check out)[^.!?]*?(https?:\/\/\S+?)[.!?]?\s*$/i, '').replace(/\s*https?:\/\/\S+/g, '').trim();
+  return (d ? '<div class="ro-ds">' + esc(d) + '</div>' : '') + (g.menu ? menuList(g.menu, true) : '') +
+    (eat && (url || /on your own/i.test(g.desc || '')) ? '<button type="button" class="ro-go" data-go="explore" data-gocat="eat">' + icon('i-fork') + 'See Lunch Spots Near the Hotel' + icon('i-chev', 'go') + '</button>' : '');
+}
+function menuBlock(x) {
+  if (x.menu) return '<div class="d-h">On the Menu</div>' + menuList(x.menu);
+  return isFood(x) ? '<div class="d-h">On the Menu</div><p class="menu-soon">' + icon('i-fork') + 'The menu shows here once it\'s set with the hotel.</p>' : '';
+}
 function sessionSheet(id) {
   var x = sessionById(id); if (!x) return;
   var sp = sponsorFor(x);
@@ -6683,6 +6727,7 @@ function sessionSheet(id) {
   if (x.type === 'General Session' && liveWindow(x)) h += liveCard(x);
   h += slidesBlock(x);
   if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
+  h += menuBlock(x);
   function spBlock() { return '<div class="d-h">' + esc(spLabel(x).replace(/ by$/, ' By')) + '</div><div class="list">' + sp.map(function (s) {
     return '<button type="button" class="sp-card" data-open="sp:' + esc(slug(s.name)) + '" aria-label="' + esc(s.name) + '">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '">' : '<span>' + esc(s.name) + '</span>') + '</button>';
   }).join('') + '</div>'; }
@@ -6700,7 +6745,7 @@ function sessionSheet(id) {
   if (x.type === 'General Session' && S.gs && S.gs.items.length) {
     h += '<div class="d-h">Running Order</div><div class="ro">' + S.gs.items.map(function (g) {
       var cp = clockParts(g.a);
-      if (g.brk) return '<div class="ro-item brk"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + '</span></div><div><b>' + esc(g.title || g.kind) + '</b></div></div>';
+      if (g.brk) return '<div class="ro-item brk"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + '</span></div><div><b>' + esc(g.title || g.kind) + '</b>' + brkMore(g) + '</div></div>';
       var gsp = g.sponsor ? sponsorByName(g.sponsor) : null;
       return '<div class="ro-item"><div class="tm">' + esc(cp.t) + '<span>' + cp.ap + (g.b ? ' to ' + esc(clock(g.b)) : '') + '</span></div><div>' +
         (g.kind ? '<div class="k">' + typeTag(g.kind) + '</div>' : '') + '<div class="tt">' + esc(g.title) + '</div>' + (g.desc ? '<div class="ds">' + esc(g.desc) + '</div>' : '') +
@@ -7430,7 +7475,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-bio')) { var bb = document.getElementById(t.getAttribute('data-bio')); if (bb) { bb.hidden = !bb.hidden; t.innerHTML = icon('i-user') + (bb.hidden ? 'View Bio' : 'Hide Bio'); t.setAttribute('aria-expanded', String(!bb.hidden)); } return; }
   if (t.hasAttribute('data-more')) { var mb = $('#' + t.getAttribute('data-more')); if (mb) { mb.hidden = !mb.hidden; t.textContent = mb.hidden ? 'Read More' : 'Show Less'; t.setAttribute('aria-expanded', String(!mb.hidden)); } return; }
   if (t.hasAttribute('data-go-agenda')) { S.day = t.getAttribute('data-day'); S.q = ''; closeSheet(true); show('agenda'); return; }
-  if (t.hasAttribute('data-go')) { if (t.hasAttribute('data-ptab-go')) S.peopleTab = t.getAttribute('data-ptab-go'); closeSheet(true); show(t.getAttribute('data-go')); return; }
+  if (t.hasAttribute('data-go')) { if (t.hasAttribute('data-ptab-go')) S.peopleTab = t.getAttribute('data-ptab-go'); if (t.hasAttribute('data-gocat')) S.xcat = t.getAttribute('data-gocat'); closeSheet(true); show(t.getAttribute('data-go')); if (t.hasAttribute('data-gocat')) setTimeout(function () { var a = document.getElementById('x-around'); if (a) window.scrollTo({ top: a.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' }); }, 250); return; }
   if (t.hasAttribute('data-star')) { e.stopPropagation(); toggleMine(t.getAttribute('data-star'), t); return; }
   if (t.hasAttribute('data-toggle-mine')) { toggleMine(t.getAttribute('data-toggle-mine')); return; }
   if (t.hasAttribute('data-ics')) {

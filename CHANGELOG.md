@@ -1,5 +1,8 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Menus: breakfasts, lunches, breaks and receptions show On the Menu once Summit HQ publishes the menu from Hotel Specs (CN-066), with Vegetarian, Vegan, Gluten-Free, Dairy-Free and Contains Nuts marked; until then they say the menu shows once it's set with the hotel.
+- Nov 27, 2026: Lunch (and other breaks) in the General Sessions running order show the website agenda's words, and the lunch recommendations link opens the app's Explore page at Eat and Drink instead of the website.
+- Nov 27, 2026: Your Company Could Be Here on the Sponsors page is bright gold instead of faded.
 - Nov 27, 2026: On a computer, every right-hand panel has an Expand Panel button beside the X, like Jonna's other apps: the panel fills the width, and Back to Normal Size returns it. The choice is remembered.
 - Nov 27, 2026: Session pop-ups: the skyline sits higher, so the streetcar rides just above Find on Map and Walk There, and the moon is up at the top.
 - Nov 27, 2026: Summit Recap picture redone as one image: the night sky runs into the New Orleans skyline, the city's name in big outlined letters like Explore's header, the numbers on glass, and up to three of your summit photos as little prints (tap them in Your Photos to pick or take off). Sharing is one button, Share on LinkedIn, beside Save Picture.
