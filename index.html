@@ -188,12 +188,12 @@ main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 .flip .state small{font-size:18px; color:var(--sky-soft); font-weight:600; margin-left:6px}
 .pass-figs{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0 0}
 .pass-figs button{position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; gap:3px; background:linear-gradient(180deg, #123d61, #0b2a44); border:1px solid rgba(116,191,235,.28); border-radius:14px; color:#fff; padding:12px 4px 12px; cursor:pointer; text-align:center; font:inherit; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color .15s, transform .15s}
-@media (max-width:699px){ .pass-figs button{aspect-ratio:1; justify-content:center; padding:6px 2px} }   /* Jonna, Nov 26, 2026: squares on phones */
+@media (max-width:699px){ .pass-figs button{justify-content:center; padding:14px 2px 12px} }
 .pass-figs button:after{content:""; position:absolute; left:18%; right:18%; top:0; height:2px; background:linear-gradient(90deg, transparent, #74bfeb, transparent); opacity:.8}
 .pass-figs button:hover{border-color:rgba(116,191,235,.7); transform:translateY(-1px)}
-.pass-figs svg{width:20px; height:20px; color:#74bfeb; margin-bottom:2px}
+.pass-figs svg{width:24px; height:24px; color:#74bfeb; margin-bottom:4px}
 .pass-figs b{display:block; font-family:var(--cond); font-size:28px; line-height:1.05; color:#fff}
-.pass-figs span{font-size:12px; color:#a9d8f3; font-weight:600}
+.pass-figs span{font-size:13px; color:#fff; font-weight:700}
 
 /* Your week: each day's sessions by type */
 .week{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
@@ -474,8 +474,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .ws-spon{position:relative; z-index:2; align-self:stretch; display:flex; align-items:center; gap:10px; margin:8px -6px -6px; padding:8px 8px 8px 12px; border:1px solid rgba(116,191,235,.28); border-radius:12px; background:rgba(6,32,47,.62); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); color:#fff; font:inherit; text-align:left; cursor:pointer}
 .ws-spon:active{transform:scale(.98)}
 .ws-lbl{display:grid; gap:1px; flex:none}
-.ws-lbl b{font-size:14px} .ws-lbl i{display:flex; align-items:center; gap:2px; font-style:normal; font-size:12.5px; font-weight:600; color:var(--sky)} .ws-lbl svg{width:13px; height:13px}
-.ws-logos{flex:1; display:grid; grid-template-columns:repeat(auto-fit, minmax(60px, 1fr)); grid-template-rows:38px; grid-auto-rows:0; row-gap:0; column-gap:6px; overflow:hidden; min-width:0}
+.ws-lbl b{font-size:13px; line-height:1.15} .ws-spon svg.ws-go{flex:none; width:16px; height:16px; color:var(--sky); margin-left:-4px} .ws-lbl i{display:flex; align-items:center; gap:2px; font-style:normal; font-size:12.5px; font-weight:600; color:var(--sky)} .ws-lbl svg{width:13px; height:13px}
+.ws-logos{flex:1; display:grid; grid-template-columns:repeat(auto-fit, minmax(56px, 1fr)); max-width:500px; margin-left:auto; grid-template-rows:38px; grid-auto-rows:0; row-gap:0; column-gap:6px; overflow:hidden; min-width:0}
 .ws-plate{position:relative; height:38px; border-radius:8px; background:#fff; overflow:hidden}
 .ws-plate img{position:absolute; inset:5px 8px; width:calc(100% - 16px); height:calc(100% - 10px); object-fit:contain; opacity:0; transform:translateY(6px); transition:opacity .6s ease, transform .6s ease}
 .ws-plate img:not([src]), .ws-plate img[src=""]{display:none}
@@ -2237,12 +2237,12 @@ function renderHome() {
     '<div><div class="summit">' + esc(s.name) + '</div><div class="city">' + esc(S.place) + '</div>' +
       '<div class="when"><span>' + icon('i-agenda') + esc(s.dates || '') + '</span>' + (s.city ? '<span>' + icon('i-pin') + esc(s.city) + '</span>' : '') + '</div></div>' +
     '<div class="flip" id="flip">' + flip + '</div></div>' +
-    /* Jonna, Nov 26, 2026: the counts sit under the header, each in its own box */
+    /* Jonna, Nov 26, 2026: under the header, each in its own box; Nov 27: no numbers, just the cards */
     '<div class="pass-figs">' +
-      '<button type="button" data-go="agenda">' + icon('i-agenda') + '<b>' + nonMeal.length + '</b><span>Sessions</span></button>' +
-      '<button type="button" data-go="people">' + icon('i-people') + '<b>' + S.speakers.length + '</b><span>Speakers</span></button>' +
-      '<button type="button" data-sponsors>' + icon('i-handshake') + '<b>' + S.sponsors.length + '</b><span>Sponsors</span></button>' +
-      '<button type="button" data-go="mine">' + icon('i-star') + '<b>' + mine().filter(sessionById).length + '</b><span>Starred</span></button>' +
+      '<button type="button" data-go="agenda">' + icon('i-agenda') + '<span>Sessions</span></button>' +
+      '<button type="button" data-go="people">' + icon('i-people') + '<span>Speakers</span></button>' +
+      '<button type="button" data-sponsors>' + icon('i-handshake') + '<span>Sponsors</span></button>' +
+      '<button type="button" data-go="mine">' + icon('i-star') + '<span>Starred</span></button>' +
     '</div>' + nextCard('home');
 
   var gsl = gsSession();
@@ -3982,10 +3982,13 @@ function bagSheet() {
   });
 }
 /* the summit's sponsors, top level first, as logos for the Summit tile's strip */
+/* Jonna, Nov 27, 2026: only the Platinum sponsors (and any tier above it) on the strip, and no count */
+var TOP_TIERS = ['Title', 'Presenting', 'Diamond', 'Platinum'];
 function summitSponsorLogos() {
-  var out = []; sponsorTiers().forEach(function (t) { t.list.forEach(function (sp) { if (sp.logo && out.indexOf(sp.logo) < 0) out.push(sp.logo); }); });
+  var out = []; sponsorTiers().forEach(function (t) { if (TOP_TIERS.indexOf(t.tier) < 0) return; t.list.forEach(function (sp) { if (sp.logo && out.indexOf(sp.logo) < 0) out.push(sp.logo); }); });
   return out.slice(0, 18);
 }
+function topTierLabel() { var ts = sponsorTiers().map(function (t) { return t.tier; }).filter(function (t) { return TOP_TIERS.indexOf(t) >= 0; }); return ts.length === 1 ? ts[0] + ' Sponsors' : 'Top Sponsors'; }
 /* the strip shows as many plates as fit (three on a phone, six on a wide tile); every few seconds one plate fades to the
    next sponsor not already showing, so every sponsor comes round (still when Reduce Motion is on) */
 setInterval(function () {
@@ -4026,8 +4029,8 @@ function widget(id) {
     return '<div class="wd w-summit wide' + (sl.length ? ' has-spon' : '') + '"><button type="button" class="w-hit" data-go="home" aria-label="' + esc(S.summit.name) + '"></button>' + summitArt() + '<span class="w-head">' + icon('i-s') + '<span>MISMO Summit</span>' + icon('i-chev', 'go') + '</span>' +
       '<span class="w-city">' + esc(S.place) + '</span><span class="w-name">' + esc(S.summit.name) + '</span>' +
       '<span class="w-count">' + big + '</span><span class="w-sub">' + sub + '</span>' +
-      (sl.length ? '<button type="button" class="ws-spon" data-sponsors aria-label="See all ' + S.sponsors.length + ' sponsors"><span class="ws-lbl"><b>' + S.sponsors.length + ' Sponsors</b><i>See All' + icon('i-chev') + '</i></span>' +
-        '<span class="ws-logos" data-logos="' + esc(JSON.stringify(sl)) + '">' + sl.slice(0, 6).map(function (u) { return '<span class="ws-plate"><img class="on" src="' + esc(u) + '" alt=""></span>'; }).join('') + '</span></button>' : '') +
+      (sl.length ? '<button type="button" class="ws-spon" data-sponsors aria-label="See all the sponsors"><span class="ws-lbl"><b>' + esc(topTierLabel()).replace(/ (Sponsors)$/, '<br>$1') + '</b></span>' +
+        '<span class="ws-logos" data-logos="' + esc(JSON.stringify(sl)) + '">' + sl.slice(0, 6).map(function (u) { return '<span class="ws-plate"><img class="on" src="' + esc(u) + '" alt=""></span>'; }).join('') + '</span>' + icon('i-chev', 'ws-go') + '</button>' : '') +
       '</div>' + dashLive() + nextCard('dash');
   }
   if (id === 'micdup') {

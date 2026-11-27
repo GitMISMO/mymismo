@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Summit tile: the sponsor strip shows only the Platinum sponsors (and any tier above), labeled "Platinum Sponsors" with no count; tapping it still opens every sponsor.
+- Nov 27, 2026: Summit page: the Sessions, Speakers, Sponsors and Starred cards no longer show numbers; they're still the same buttons.
 - Nov 27, 2026: Join a Workgroup tile: light blue fade like Submit an Idea; the date of the next meeting day on its own row, then that day's meetings scrolling up one at a time (name centered, time on its own row), with the bars showing that day's week.
 - Nov 27, 2026: Join a Workgroup tile calmed down: a soft sky tile the same height as its neighbors, with who meets next (or now) and a slim bar for each day this week, today marked.
 - Nov 27, 2026: Join a Workgroup tile redone: it takes the color of the topic of the group meeting next (or now) and shows this week as stacks of colored blocks, one per meeting, with today lit and a live meeting glowing.
