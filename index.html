@@ -141,6 +141,13 @@ html[data-season="december"] .mast-in{padding-top:16px}
 main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 .page{display:none}
 .page.on{display:block}
+.s-head{position:relative; overflow:hidden; isolation:isolate; border-radius:14px; color:#fff; margin:6px 0 12px; padding:16px 18px 18px; min-height:96px; display:flex; align-items:flex-end;
+  background:radial-gradient(120% 90% at 100% 0%, rgba(116,191,235,.30), rgba(116,191,235,0) 55%), radial-gradient(90% 70% at 0% 100%, rgba(20,72,110,.9), rgba(20,72,110,0) 70%), linear-gradient(160deg, #0d314c 0%, #06202f 70%)}
+.s-head > .hero-art, .s-head > svg{z-index:0; opacity:.9}
+.s-head .art-fade{z-index:0}
+.s-head-in{position:relative; z-index:1; display:grid; gap:2px}
+.s-head-eye{font-weight:600; color:var(--sky-soft); font-size:14px}
+.s-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); font-weight:700; line-height:1; letter-spacing:-.015em; margin:0; color:#fff}
 .pagehead{display:flex; align-items:baseline; gap:12px; margin:6px 0 12px; flex-wrap:wrap}
 .pagehead h1{font-family:var(--cond); font-size:30px; font-weight:700; letter-spacing:-.01em; line-height:1}
 .pagehead .sub{color:var(--ink-2); font-size:14px}
@@ -1600,7 +1607,7 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .fpin.on span{background:#eb6834; font-size:13px; padding:4px 8px; left:22px}
 @keyframes pinpulse{0%{box-shadow:0 0 0 0 rgba(235,104,52,.7)}100%{box-shadow:0 0 0 18px rgba(235,104,52,0)}}
 /* ---------- Name tag scanning (Jonna, Nov 27, 2026) ---------- */
-.scan-row{display:grid; grid-template-columns:1fr auto; gap:10px; margin:10px 0 0} .pagehead + .scan-row{margin-top:4px} .scan-row.two + .seg, .scan-row.two + *{margin-top:14px}
+.scan-row{display:grid; grid-template-columns:1fr auto; gap:10px; margin:10px 0 0} .pagehead + .scan-row, .s-head + .scan-row{margin-top:4px} .scan-row.two + .seg, .scan-row.two + *{margin-top:14px}
 .scan-go,.scan-mine{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:14px; border:1px solid rgba(116,191,235,.35); background:linear-gradient(120deg, #eb6834, #c9502a); color:#fff; font:inherit; text-align:left; cursor:pointer}
 .scan-go > svg:first-child{width:28px; height:28px; flex:none} .scan-go span{display:grid; gap:2px; flex:1} .scan-go b{font-size:16px} .scan-go span span{font-size:12.5px; opacity:.85} .scan-go svg.go{width:18px; height:18px}
 .scan-mine{background:var(--surface); color:var(--ink); border-color:var(--border); flex-direction:column; justify-content:center; gap:4px; font-weight:700; font-size:12.5px; padding:10px 14px} .scan-mine svg{width:20px; height:20px; color:#eb6834}
@@ -3000,6 +3007,12 @@ function cityArt(place, opts) { place = place || ''; return /new orleans/i.test(
 /* summit art: New Orleans and Salt Lake City get their own; any other city the usual skyline */
 /* Jonna, Nov 26, 2026: every summit header (Summit tile, summit home, Why Attend, Explore postcard, sponsors) uses it;
    the sponsor ones without the streetcar. */
+/* Jonna, Nov 27, 2026: the summit's pages (Agenda, My Schedule, People, Explore) wear the same header as the summit's
+   home card: navy, the city's skyline and the moon, the summit's name over the page's name */
+function summitHead(title) {
+  var g = (G && G.venue) || (S.summit && S.summit.venue) || '';
+  return '<header class="s-head">' + summitArt({ moon: [1132, 82, .95] }) + '<div class="s-head-in"><span class="s-head-eye">' + esc(S.summit ? S.summit.name : '') + (S.place ? ', ' + esc(S.place) : '') + '</span><h1>' + esc(title) + '</h1></div></header>';
+}
 function summitArt(opts) { opts = opts || {}; var a = cityArt(S.place, opts); return a ? a + (opts.noFade ? '' : '<span class="art-fade" aria-hidden="true"></span>') : heroArt(opts); }
 function heroArt(opts) {
   opts = opts || {}; var n = ++ART_N, g = 'ha' + n;
@@ -3078,7 +3091,7 @@ function renderAgenda() {
     if (q && (x.title + ' ' + x.room + ' ' + x.type + ' ' + x.sponsor + ' ' + x.desc).toLowerCase().indexOf(q) < 0) return false;
     return true;
   });
-  var h = '<div class="pagehead"><h1>Agenda</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
+  var h = summitHead('Agenda');
   h += '<div class="days" role="group" aria-label="Day">' + ds.map(function (d) {
     var p = dparts(d.date);
     return '<button type="button" class="day" data-day="' + d.date + '" aria-pressed="' + (d.date === S.day && !q ? 'true' : 'false') + '"><b>' + p.d + '</b><span>' + DOW[p.dow].slice(0, 3) + '</span></button>';
@@ -3096,7 +3109,7 @@ function renderAgenda() {
 /* ---------- My Schedule ---------- */
 function renderMine() {
   var ids = mine(), list = ids.map(sessionById).filter(Boolean).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; });
-  var h = '<div class="pagehead"><h1>My Schedule</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
+  var h = summitHead('My Schedule');
   if (!list.length) {
     return h + '<div class="empty-sched"><span class="es-star">' + icon('i-star') + '</span><b>Your schedule is empty</b><p>Tap the star on any session to add it here. Your schedule stays on this phone, and Add to Calendar puts it in your phone\'s calendar with a reminder before each session.</p>' +
       '<button type="button" class="btn primary" data-go="agenda">' + icon('i-agenda') + 'Browse the Agenda</button></div>';
@@ -3138,7 +3151,7 @@ function renderScanTab() {
     '<p class="sc-fine">' + (role === 'facilitator' ? 'Facilitator test' : 'Staff test') + ': scans and check-ins stay on this phone until scanning goes live.</p></div>';
 }
 function renderPeople() {
-  var h = '<div class="pagehead"><h1>People</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
+  var h = summitHead('People');
   var pv = !A.ready && canPreviewAttendees(), sc = false;   /* Jonna, Nov 27, 2026: no Scan tab; scanning is the top-bar button */
   if (S.peopleTab === 'scan' && !sc) S.peopleTab = 'speakers';
   /* Jonna, Nov 27, 2026: Speakers, Attendees and Scan tabs */
@@ -4808,7 +4821,7 @@ function wifiCard() {
 function renderExplore() {
   var g = guide(), h = '';
   if (!g) {
-    h = '<div class="pagehead"><h1>Explore</h1><div class="sub">' + esc(S.summit.name) + '</div></div><div class="note">The hotel and travel guide for this summit will be here once it\'s on mismo.org.</div>';
+    h = summitHead('Explore') + '<div class="note">The hotel and travel guide for this summit will be here once it\'s on mismo.org.</div>';
   } else {
     var v = gsec('the-venue'), co = cutoff(), city = (S.place || '').toUpperCase();
     h += '<section class="postcard" aria-label="' + esc(g.venue) + '">' + summitArt({ noFade: true, noChurch: true, moon: [1146, 168, .74] }) + '<div class="pc-city" aria-hidden="true">' + esc(city) + '</div><div class="pc-body">' +
