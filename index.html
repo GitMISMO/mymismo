@@ -2425,11 +2425,11 @@ var TIER_COLOR = { Platinum: '#7f93a6', Gold: '#c99a2e', Silver: '#9aa6b1', Bron
 var TYPE_COLOR = {
   'General Session': '#14486e', 'Workshop': 'var(--c2)', 'Community of Practice': 'var(--c1)',
   'Development Workgroup': 'var(--c3)', 'Workgroup': 'var(--c3)', 'Office Hours': 'var(--c4)',
-  'Networking': 'var(--c5)', 'Session': 'var(--c6)', 'Invite Only': '#6d859a', 'Breakfast': '#9bb3c6'
+  'Networking': 'var(--c5)', 'Session': 'var(--c6)', 'Invite Only': '#6d859a', 'Breakfast': '#9bb3c6', 'Lunch': '#e0a25a'
 };
 var COVER_COLOR = {
   'General Session': '#14486e', 'Workshop': '#b84a1f', 'Community of Practice': '#1f6aa5', 'Development Workgroup': '#137a56', 'Workgroup': '#137a56',
-  'Office Hours': '#9a6b00', 'Networking': '#b1456f', 'Session': '#1d6b1d', 'Invite Only': '#4b6478', 'Breakfast': '#4b6478'
+  'Office Hours': '#9a6b00', 'Networking': '#b1456f', 'Session': '#1d6b1d', 'Invite Only': '#4b6478', 'Breakfast': '#4b6478', 'Lunch': '#a85d1c'
 };
 var MEALS = /^(breakfast|lunch|snack|break)/i;
 
@@ -2557,6 +2557,11 @@ function build(feed, spons) {
   }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });
   S.gs = s.gs || null;
   if (S.gs) S.gs.items = (S.gs.sessions || []).map(function (g, i) { return { i: i, a: mins(g.start), b: mins(g.end), kind: g.kind || '', title: g.title || '', desc: g.desc || '', sponsor: g.sponsor || '', brk: !!g.brk, people: g.people || [], menu: g.menu || '' }; });
+  /* Jonna, Nov 27, 2026: lunch is its own line on the Agenda, as on the website (it lives inside the General Sessions) */
+  if (S.gs) { var gsx = S.sessions.filter(function (x) { return x.type === 'General Session'; })[0];
+    if (gsx) S.gs.items.forEach(function (g) { if (!/lunch/i.test(g.kind + ' ' + g.title)) return;
+      S.sessions.push({ id: 'gs-lunch-' + gsx.date + '-' + g.i, day: gsx.day, date: gsx.date, a: g.a, b: g.b || g.a + 60, type: 'Lunch', title: g.title || 'Lunch', room: '', desc: g.desc, sponsor: g.sponsor, menu: g.menu || '', gsItem: g }); });
+    S.sessions.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); }); }
   S.sponsors = ((spons && spons.sponsors) || []).map(function (x) { return { name: x.name, tier: x.tier || 'Sponsor', url: x.url || '', logo: x.logo || '', placements: x.placements || [] }; });
   var byName = {};
   if (S.gs) S.gs.items.forEach(function (g) {
@@ -6700,13 +6705,14 @@ function menuList(menu, small) {
 }
 /* a break or lunch in the General Sessions running order: the website agenda's words, its menu if it has one, and
    (Jonna, Nov 27, 2026) the lunch recommendations link opens the app's own Explore page on Eat and Drink instead */
-function brkMore(g) {
+function brkMore(g, noMenu) {
   var d = String(g.desc || ''), url = /https?:\/\/\S+/.exec(d), eat = !!url || /lunch|dinner|eat/i.test(g.kind + ' ' + g.title);
   if (url) d = d.replace(/\s*(See|Find|Check out)[^.!?]*?(https?:\/\/\S+?)[.!?]?\s*$/i, '').replace(/\s*https?:\/\/\S+/g, '').trim();
-  return (d ? '<div class="ro-ds">' + esc(d) + '</div>' : '') + (g.menu ? menuList(g.menu, true) : '') +
+  return (d ? '<div class="ro-ds">' + esc(d) + '</div>' : '') + (g.menu && !noMenu ? menuList(g.menu, true) : '') +
     (eat && (url || /on your own/i.test(g.desc || '')) ? '<button type="button" class="ro-go" data-go="explore" data-gocat="eat">' + icon('i-fork') + 'See Lunch Spots Near the Hotel' + icon('i-chev', 'go') + '</button>' : '');
 }
 function menuBlock(x) {
+  if (!x.menu && /on your own/i.test(x.desc || '')) return '';   /* lunch on your own has no menu */
   if (x.menu) return '<div class="d-h">On the Menu</div>' + menuList(x.menu);
   return isFood(x) ? '<div class="d-h">On the Menu</div><p class="menu-soon">' + icon('i-fork') + 'The menu shows here once it\'s set with the hotel.</p>' : '';
 }
@@ -6726,7 +6732,7 @@ function sessionSheet(id) {
     '<button type="button" class="btn" data-ics="' + esc(x.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div>';
   if (x.type === 'General Session' && liveWindow(x)) h += liveCard(x);
   h += slidesBlock(x);
-  if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
+  if (x.gsItem) h += '<div class="d-desc lunch">' + brkMore(x.gsItem, true) + '</div>'; else if (x.desc) h += '<div class="d-desc">' + esc(x.desc) + '</div>';
   h += menuBlock(x);
   function spBlock() { return '<div class="d-h">' + esc(spLabel(x).replace(/ by$/, ' By')) + '</div><div class="list">' + sp.map(function (s) {
     return '<button type="button" class="sp-card" data-open="sp:' + esc(slug(s.name)) + '" aria-label="' + esc(s.name) + '">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '">' : '<span>' + esc(s.name) + '</span>') + '</button>';

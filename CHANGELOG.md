@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Lunch is its own line on the Agenda, as on the website (12:05 to 1:30 on the General Sessions day), with the website's words and See Lunch Spots Near the Hotel; it can be starred and added to a calendar.
 - Nov 27, 2026: Menus: breakfasts, lunches, breaks and receptions show On the Menu once Summit HQ publishes the menu from Hotel Specs (CN-066), with Vegetarian, Vegan, Gluten-Free, Dairy-Free and Contains Nuts marked; until then they say the menu shows once it's set with the hotel.
 - Nov 27, 2026: Lunch (and other breaks) in the General Sessions running order show the website agenda's words, and the lunch recommendations link opens the app's Explore page at Eat and Drink instead of the website.
 - Nov 27, 2026: Your Company Could Be Here on the Sponsors page is bright gold instead of faded.
