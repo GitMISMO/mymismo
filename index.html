@@ -519,25 +519,27 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .cal{flex:none; width:50px; border-radius:9px; overflow:hidden; text-align:center; background:var(--surface-2); border:1px solid var(--border)}
 .cal i{display:block; font-style:normal; font-size:11px; font-weight:700; background:#eb6834; color:#fff; padding:2px 0}
 .cal b{display:block; font-family:var(--cond); font-size:24px; line-height:1.25}
-.w-web{color:#fff; border-color:#14486e; background:radial-gradient(120% 80% at 100% 0%, #3a8fd0 0%, #1d63a0 35%, #0d314c 100%)}
-.w-web .w-head, .w-web .w-head svg{color:#cfe8f8}
-.wt-wm{position:absolute; right:-18px; bottom:-22px; z-index:-1; color:#fff; opacity:.07} .wt-wm svg{width:120px; height:120px}
-.wt-stub{display:flex; align-items:flex-end; justify-content:space-between; gap:8px; width:100%; margin-top:2px}
-.wt-day{display:grid; gap:3px; line-height:1} .wt-day i{font-style:normal; font-size:12px; font-weight:800; color:#ffb48f; white-space:nowrap} .wt-day b{font-family:var(--cond); font-size:36px; font-weight:700; letter-spacing:-.01em; white-space:nowrap}
-.wt-time{display:grid; justify-items:end; font-family:var(--cond); font-weight:700; font-size:16px; line-height:1.05; white-space:nowrap} .wt-time i{font-style:normal; font-family:var(--sans, inherit); font-size:11px; font-weight:700; color:#a9d8f3}
-.wt-perf{position:relative; display:block; align-self:stretch; height:0; border-top:2px dashed rgba(255,255,255,.4); margin:6px 0 4px}
+.w-web{background:var(--surface)}
+.wt-top{display:flex; flex-direction:column; gap:6px; align-self:stretch; margin:-16px -16px 0; padding:16px 16px 12px; color:#fff; background:linear-gradient(150deg, #f08a5d 0%, #eb6834 45%, #d95926 100%)}
+.w-web .wt-top .w-head, .w-web .wt-top .w-head svg{color:#fff3ec}
+.wt-wm{position:absolute; right:-18px; bottom:-22px; z-index:-1; color:#eb6834; opacity:.08} .wt-wm svg{width:120px; height:120px}
+.wt-stub{display:flex; align-items:flex-end; justify-content:space-between; gap:8px; width:100%}
+.wt-day{display:grid; gap:3px; line-height:1} .wt-day i{font-style:normal; font-size:12px; font-weight:800; color:#fff3ec; white-space:nowrap} .wt-day b{font-family:var(--cond); font-size:36px; font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.wt-perf{position:relative; display:block; align-self:stretch; height:0; border-top:2px dashed #f3b59a; margin:0 0 6px}
 .wt-perf:before, .wt-perf:after{content:""; position:absolute; top:-12px; width:22px; height:22px; border-radius:50%; background:var(--ground)}
 .wt-perf:before{left:-28px} .wt-perf:after{right:-28px}
-.w-web .w-t{font-size:15.5px; line-height:1.22; -webkit-line-clamp:3; min-width:0; overflow-wrap:break-word; color:#fff}
-.w-web .w-sub{color:#a9d8f3; font-weight:600}
-.w-web .wm-row{border-top-color:rgba(255,255,255,.18)} .w-web .wm-d{color:#fff} .w-web .wm-d i{color:#ffb48f} .w-web .wm-t{color:#e6f4fc}
+.w-web .w-t{font-size:15.5px; line-height:1.22; -webkit-line-clamp:3; min-width:0; overflow-wrap:break-word; color:var(--ink)}
+.w-web .w-sub{color:#d95926; font-weight:700}
+.w-web .wm-d i{color:#eb6834}
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
-.w-mat{position:relative; overflow:hidden; border-color:#0d314c; background:radial-gradient(130% 90% at 88% 0%, #2a6c9c 0%, #0f3a5c 45%, #071d2e 100%); padding-top:14px; padding-bottom:20px}
-.w-mat:before{content:""; position:absolute; inset:0; background:radial-gradient(circle, rgba(169,216,243,.16) 1px, transparent 1.4px) 0 0 / 14px 14px; pointer-events:none}
+.w-mat{position:relative; overflow:hidden; border-color:#3f97d3; background:linear-gradient(155deg, #8ccbf0 0%, #4ea3dc 50%, #2477b8 100%); padding-top:14px; padding-bottom:20px}
+.w-mat:before{content:""; position:absolute; inset:0; background:radial-gradient(circle, rgba(255,255,255,.28) 1px, transparent 1.4px) 0 0 / 14px 14px; pointer-events:none}
+:root[data-theme="dark"] .w-mat{border-color:#1f4a63; background:linear-gradient(155deg, #1d5a86 0%, #14486e 55%, #0f3a5c 100%)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .w-mat{border-color:#1f4a63; background:linear-gradient(155deg, #1d5a86 0%, #14486e 55%, #0f3a5c 100%)} }
 .wm-desk{position:relative; flex:1 1 auto; display:flex; min-height:0; min-width:0; align-self:stretch; margin:2px 2px 0}
-.wm-stack i{position:absolute; inset:4px 2px 0 2px; border-radius:6px; background:#a9d8f3; transform:rotate(5deg); box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.wm-stack i{position:absolute; inset:4px 2px 0 2px; border-radius:6px; background:#0d314c; transform:rotate(5deg); box-shadow:0 4px 12px rgba(13,49,76,.2)}
 .wm-stack i + i{background:#e4f2fb; transform:rotate(2deg)}
-.wm-paper{position:relative; flex:1 1 auto; min-height:0; min-width:0; overflow:hidden; display:flex; flex-direction:column; text-align:left; background:#fff; color:#0d314c; border-radius:6px; padding:10px 11px 11px; transform:rotate(-1.6deg); box-shadow:0 12px 24px rgba(0,0,0,.38); transition:transform .25s ease}
+.wm-paper{position:relative; flex:1 1 auto; min-height:0; min-width:0; overflow:hidden; display:flex; flex-direction:column; text-align:left; background:#fff; color:#0d314c; border-radius:6px; padding:10px 11px 11px; transform:rotate(-1.6deg); box-shadow:0 10px 22px rgba(13,49,76,.3); transition:transform .25s ease}
 .w-mat:hover .wm-paper, .w-mat:active .wm-paper{transform:rotate(0) translateY(-3px)}
 .wm-name{font-family:var(--cond); font-weight:700; font-size:17px; letter-spacing:-.01em; line-height:1; color:#0d314c; white-space:nowrap}
 .wm-date{display:block; border-top:2px solid #0d314c; border-bottom:1px solid #0d314c; margin:5px 0 6px; padding:3px 0 2px; font-size:11px; font-weight:800; color:#eb6834; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
@@ -5156,12 +5158,12 @@ function widget(id) {
   if (id === 'webinars') {
     /* Jonna, Nov 27, 2026 ("needs a glow up"): the next webinar as a ticket: the date on the stub, a tear line, the title */
     var up = upcomingWebinars(), w = up[0], wp = w ? dparts(w.date) : null;
-    return '<button type="button" class="wd w-web" data-webinars><span class="wt-wm" aria-hidden="true">' + icon('i-webinar') + '</span>' + head() +
-      (w ? '<span class="wt-stub"><span class="wt-day"><i>' + DOW[wp.dow] + (w.start ? ', ' + esc(w.start) + ' ET' : '') + '</i><b>' + MONTH[wp.m - 1].slice(0, 3) + ' ' + wp.d + '</b></span></span>' +
+    return '<button type="button" class="wd w-web" data-webinars><span class="wt-wm" aria-hidden="true">' + icon('i-webinar') + '</span><span class="wt-top">' + head() +
+      (w ? '<span class="wt-stub"><span class="wt-day"><i>' + DOW[wp.dow] + (w.start ? ', ' + esc(w.start) + ' ET' : '') + '</i><b>' + MONTH[wp.m - 1].slice(0, 3) + ' ' + wp.d + '</b></span></span></span>' +
         '<span class="wt-perf" aria-hidden="true"></span><span class="w-t">' + esc(w.title) + '</span>' +
         (up.length > 1 ? '<span class="w-more">' + up.slice(1, 4).map(function (x) { var p = dparts(x.date); return '<span class="wm-row"><span class="wm-d"><i>' + MON[p.m - 1] + '</i>' + p.d + '</span><span class="wm-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' : '') +
         (up.length > 1 ? '<span class="w-sub">' + (up.length - 1) + ' more coming up</span>' : '')
-      : '<span class="wt-perf" aria-hidden="true"></span><span class="w-t">None scheduled right now</span><span class="w-sub">New ones show up here</span>') + '</button>';
+      : '</span><span class="wt-perf" aria-hidden="true"></span><span class="w-t">None scheduled right now</span><span class="w-sub">New ones show up here</span>') + '</button>';
   }
   if (id === 'matters') {
     /* Jonna, Nov 27, 2026: "make mismo matters tile look cooler": the latest edition as a printed page on a stack of
