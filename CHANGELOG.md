@@ -1,5 +1,9 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Around the Hotel's big map re-centers when the phone turns back upright, so half of it isn't left off the side.
+- Nov 27, 2026: Works with no Wi-Fi: from three weeks before a summit the phone keeps the floor map, speakers' headshots and sponsors' logos ahead of time, and a quiet bar says when you're offline (your agenda, map, schedule and scans still work; anything new is sent when you're back).
+- Nov 27, 2026: Knows the person: Picked for You (sessions like the ones you starred, and meetings of workgroups you follow) on the Summit page and My Schedule, and a notice when a starred session changes room or time, until you tap Got It.
+- Nov 27, 2026: Your Summit Recap, from the last day: the sessions you starred, the people you met (save them all to your contacts), your photos and challenge, and a recap picture to share. App testers can preview it from the bottom of the Summit page. The General Sessions card says "See Who's on Stage, and When."
 - Nov 27, 2026: Summit page buttons read Sponsors, Agenda, Speakers, Starred. A session's Find on Map and Walk There sit side by side in the same spot on every session; Check People In is gone from sessions (scanning is the top-bar button).
 - Nov 27, 2026: Ready for relay request 17: when Perry turns it on, check-ins, Who I Met and touchpoints are sent every 20 seconds (and as soon as the Wi-Fi is back, never counted twice), facilitators see names, Attendance Now shows everyone's check-ins live, and photos sent to MISMO go up. Until then everything stays on the phone as before.
 - Nov 27, 2026: Snap the Summit is a compact card on the Summit page (a fan of framed photos, the challenge progress) that opens Summit Photos big in its own pop-up. Fixed stray Meeting Trackers text left in Attendance Now.

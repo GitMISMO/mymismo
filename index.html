@@ -1653,6 +1653,17 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ph-mini > svg.go{width:20px; height:20px; color:#fff; opacity:.8}
 .ph-sheet{padding-top:14px} .ph-sheet .ph-hero{border-radius:18px} .ph-sheet .ph-fan{height:230px} .ph-sheet .ph-fan > span{width:140px}
 @media (prefers-reduced-motion:reduce){ .ph-mini:before{animation:none} .phm-fan > span{transition:none} }
+#offline-bar{position:fixed; left:0; right:0; bottom:calc(64px + env(safe-area-inset-bottom)); z-index:39; display:flex; align-items:center; gap:10px; padding:9px 14px; background:#2b2f3a; color:#fff; font-size:13px; line-height:1.35; box-shadow:0 -4px 14px rgba(0,0,0,.2)} #offline-bar[hidden]{display:none} #offline-bar svg{width:18px; height:18px; flex:none; opacity:.8}
+.chg{border:2px solid #eb6834; border-radius:14px; background:color-mix(in srgb, #eb6834 8%, var(--surface)); padding:12px 14px; margin:12px 0; display:grid; gap:8px}
+.chg-h{display:flex; align-items:center; gap:8px; color:#d95926} .chg-h svg{width:18px; height:18px} .chg-h b{font-size:15.5px}
+.chg-row{display:grid; gap:2px; text-align:left; border:0; background:none; padding:6px 0; border-top:1px solid var(--rule); color:var(--ink); font:inherit; cursor:pointer} .chg-row b{font-size:15px} .chg-row span{font-size:13.5px; color:var(--ink-2)}
+.chg-ok{justify-self:start}
+.picks{display:grid; gap:4px} .pick-why{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:#a2701a; margin:4px 0 -2px 72px} .pick-why svg{width:13px; height:13px}
+.rc-card{display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px; align-items:center; width:100%; margin:14px 0 4px; padding:14px; border:0; border-radius:16px; text-align:left; font:inherit; color:#fff; cursor:pointer; background:radial-gradient(90% 120% at 100% 0%, rgba(243,198,79,.45), transparent 60%), linear-gradient(150deg, #14486e, #0d314c 60%, #071d2e)}
+.rc-ic{width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:#f3c64f; color:#0d314c} .rc-ic svg{width:24px; height:24px}
+.rc-tx{display:grid; gap:3px} .rc-tx b{font-family:var(--cond); font-size:19px} .rc-tx span{font-size:13.5px; color:#cfe3f1} .rc-card > svg.go{width:20px; height:20px}
+.rc{display:grid; gap:12px} .rc-pic{background:#071d2e; border-radius:14px; padding:14px; display:grid; place-items:center} .rc-pic img{width:min(100%, 320px); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45); aspect-ratio:4/5; background:#0d314c}
+.rc-met{display:grid; gap:8px} .rc-p{display:grid; gap:2px; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--surface)} .rc-p b{font-size:15px} .rc-p span{font-size:13px; color:var(--ink-2)} .rc-p i{font-size:13.5px; color:var(--ink-2)}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -2456,6 +2467,7 @@ function toggleMine(id, btn) {
   var m = mine(), i = m.indexOf(id);
   if (i >= 0) m.splice(i, 1); else m.push(id);
   save('schedule:' + S.sid, m);
+  if (i < 0) { var sx = sessionById(id), sn = load(seenKey(), {}); if (sx) { sn[id] = snapOf(sx); save(seenKey(), sn); } }
   $$('.star[data-star="' + cssEsc(id) + '"]').forEach(function (b) { b.setAttribute('aria-pressed', i < 0 ? 'true' : 'false'); b.setAttribute('aria-label', (i < 0 ? 'Remove from' : 'Add to') + ' My Schedule'); });
   if (btn && i < 0) { btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); }
   $$('[data-mine-btn="' + cssEsc(id) + '"]').forEach(function (b) { b.innerHTML = mineBtnHtml(id); b.classList.toggle('on-mine', isMine(id)); });
@@ -2465,6 +2477,119 @@ function toggleMine(id, btn) {
 function cssEsc(s) { return String(s).replace(/["\\]/g, '\\$&'); }
 function badge() { var n = mine().filter(sessionById).length, b = $('#mine-badge'); b.textContent = n; b.classList.toggle('on', n > 0); }
 function mineBtnHtml(id) { return icon('i-star') + (isMine(id) ? 'On My Schedule' : 'Add to Schedule'); }
+
+/* ---------- Knows the person (Jonna, Nov 27, 2026) ----------
+   Changed: a starred session that moved room or time since this phone last saw it, said plainly until you tap Got It.
+   Picked for You: sessions like the ones you starred, and the meetings of workgroups you follow. All on this phone. */
+function seenKey() { return 'seen:' + S.sid; }
+function snapOf(x) { return { room: x.room || '', date: x.date, a: x.a, b: x.b, title: x.title }; }
+function schedChanges() {
+  if (!S.sid) return [];
+  var seen = load(seenKey(), {}), out = [], fresh = false;
+  mine().map(sessionById).filter(Boolean).forEach(function (x) {
+    var o = seen[x.id], n = snapOf(x);
+    if (!o) { seen[x.id] = n; fresh = true; return; }
+    var what = [];
+    if (o.room !== n.room && n.room) what.push('now in ' + n.room + (o.room ? ' (was ' + o.room + ')' : ''));
+    if (o.date !== n.date || o.a !== n.a || o.b !== n.b) what.push('now ' + (o.date !== n.date ? longDate(n.date) + ', ' : '') + span(n.a, n.b) + ' (was ' + (o.date !== n.date ? longDate(o.date) + ', ' : '') + span(o.a, o.b) + ')');
+    if (what.length) out.push({ x: x, what: what.join('; ') });
+  });
+  if (fresh) save(seenKey(), seen);
+  return out;
+}
+function changesCard() {
+  var ch = schedChanges(); if (!ch.length) return '';
+  return '<div class="chg" role="status"><div class="chg-h">' + icon('i-bell') + '<b>' + (ch.length === 1 ? 'A Session on Your Schedule Changed' : ch.length + ' Sessions on Your Schedule Changed') + '</b></div>' +
+    ch.map(function (c) { return '<button type="button" class="chg-row" data-open="s:' + esc(c.x.id) + '"><b>' + esc(c.x.title) + '</b><span>' + esc(c.what) + '</span></button>'; }).join('') +
+    '<button type="button" class="btn chg-ok" data-seen-ok>' + icon('i-check') + 'Got It</button></div>';
+}
+function seenOk() { var seen = load(seenKey(), {}); mine().map(sessionById).filter(Boolean).forEach(function (x) { seen[x.id] = snapOf(x); }); save(seenKey(), seen); renderPage(S.page); }
+var PICK_STOP = /^(the|and|for|with|from|into|your|what|how|mismo|session|sessions|workshop|update|summit|community|practice|workgroup|development)$/;
+function pickWords(t) { return String(t || '').toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length > 3 && !PICK_STOP.test(w); }); }
+function picksFor(limit) {
+  var ids = mine(), starred = ids.map(sessionById).filter(Boolean), follow = load('wg-follow', []), n = nowAt();
+  if (!starred.length && !follow.length) return [];
+  var types = {}, words = {};
+  starred.forEach(function (x) { types[x.type] = types[x.type] || x.title; pickWords(x.title).forEach(function (w) { words[w] = x.title; }); });
+  var groups = (typeof wgGroups === 'function' ? wgGroups() : []).filter(function (g) { return follow.indexOf(g.key) >= 0; });
+  return S.sessions.filter(function (x) {
+    return ids.indexOf(x.id) < 0 && !MEALS.test(x.type) && x.type !== 'Invite Only' && (x.date > n.date || (x.date === n.date && x.b > n.min) || n.date < S.first);
+  }).map(function (x) {
+    var score = 0, why = '';
+    var g = groups.filter(function (gr) { var a = gkey(x.title, true), b = gkey(gr.name, true); return a && b && (a === b || a.indexOf(b) === 0 || b.indexOf(a) === 0); })[0];
+    if (g) { score += 6; why = 'You follow this group'; }
+    var hit = pickWords(x.title).filter(function (w) { return words[w]; })[0];
+    if (hit) { score += 3; if (!why) why = 'You starred ' + words[hit]; }
+    if (types[x.type] && !/^(Office Hours|Networking)$/.test(x.type)) { score += 2; if (!why) why = 'You starred ' + types[x.type]; }
+    if (x.type === 'General Session') score += 1;
+    return { x: x, score: score, why: why };
+  }).filter(function (p) { return p.score >= 2 && p.why; })
+    .sort(function (a, b) { return b.score - a.score || (a.x.date < b.x.date ? -1 : a.x.date > b.x.date ? 1 : a.x.a - b.x.a); }).slice(0, limit || 3);
+}
+function picksBlock(limit) {
+  var p = picksFor(limit); if (!p.length) return '';
+  return '<div class="section-h"><h2>Picked for You</h2></div><div class="picks">' + p.map(function (k) {
+    return '<div class="pick"><span class="pick-why">' + icon('i-star') + esc(k.why) + '</span>' + slots([k.x], { withDay: true }) + '</div>'; }).join('') + '</div>';
+}
+
+/* ---------- Your Summit Recap (Jonna, Nov 27, 2026) ----------
+   From the last day of the summit: the sessions you starred (and their slides), the people you met with your notes (save
+   them all to your contacts), your photos and the Photo Challenge, and a recap picture to save or share. All from this
+   phone. App testers can preview it any time from the bottom of the Summit page. */
+function recapReady() { var n = nowAt(); return !!S.summit && n.date >= S.last; }
+function recapCard() {
+  return '<button type="button" class="rc-card" data-recap>' + '<span class="rc-ic">' + icon('i-star') + '</span><span class="rc-tx"><b>Your ' + esc(S.summit.name) + ' Recap</b><span>The sessions you starred, the people you met and your photos, in one place.</span></span>' + icon('i-chev', 'go') + '</button>';
+}
+function recapData(cb) {
+  phAll(function (ph) {
+    ph = ph.filter(function (p) { return (p.sid === S.sid || !p.sid) && p.blob; });
+    var ses = mine().map(sessionById).filter(Boolean).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; });
+    var met = (canScan() ? myScans() : []).map(function (x) { var w = x.reg ? regLookup(x.reg) : null; return { name: x.name || (w && w.name) || '', title: x.title || (w && w.title) || '', company: x.company || (w && w.company) || '', email: x.email || '', note: x.note || '', kind: scanKind(x) }; }).filter(function (x) { return x.name; });
+    var done = {}; ph.forEach(function (p) { if (p.prompt) done[p.prompt] = 1; });
+    cb({ ses: ses, met: met, ph: ph, ch: PH_PROMPTS.filter(function (p) { return done[p]; }).length });
+  });
+}
+function recapPicture(d, cb) {
+  phAssets(function (as) {
+    var cv = document.createElement('canvas'), W = 1080, H = 1350, x; cv.width = W; cv.height = H; x = cv.getContext('2d');
+    var COND = '"IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif', SANS = '"IBM Plex Sans", sans-serif';
+    var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#14486e'); g.addColorStop(.6, '#0d314c'); g.addColorStop(1, '#071d2e'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+    if (as.art) x.drawImage(as.art, 0, 0, 1200, 560, -60, H - 600, 1200, 560);
+    var sh = x.createLinearGradient(0, H - 700, 0, H - 300); sh.addColorStop(0, '#0d314c'); sh.addColorStop(1, 'rgba(13,49,76,0)'); x.fillStyle = sh; x.fillRect(0, H - 700, W, 400);
+    x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(70, 80, 270, 66, 10) : x.rect(70, 80, 270, 66); x.fill(); if (as.logo) x.drawImage(as.logo, 88, 98, 234, 234 * 108 / 708);
+    x.fillStyle = '#a9d8f3'; x.font = '700 40px ' + SANS; x.fillText('My ' + S.summit.name, 70, 240);
+    x.fillStyle = '#fff'; x.font = '700 120px ' + COND; x.fillText(S.place || '', 66, 360);
+    var stats = [[d.ses.length, d.ses.length === 1 ? 'Session' : 'Sessions'], [d.met.length, d.met.length === 1 ? 'Person Met' : 'People Met'], [d.ph.length, d.ph.length === 1 ? 'Photo' : 'Photos']];
+    stats.forEach(function (st, i) { var y = 470 + i * 150; x.fillStyle = i === 2 ? '#eb6834' : '#74bfeb'; x.fillRect(70, y, 10, 112); x.fillStyle = '#fff'; x.font = '700 104px ' + COND; x.fillText(String(st[0]), 110, y + 92); var w = x.measureText(String(st[0])).width; x.fillStyle = '#cfe3f1'; x.font = '600 44px ' + SANS; x.fillText(st[1], 130 + w, y + 88); });
+    if (d.ch) { x.fillStyle = '#ffb48f'; x.font = '700 36px ' + SANS; x.fillText('Photo Challenge: ' + d.ch + ' of ' + PH_PROMPTS.length, 70, 960); }
+    cv.toBlob(function (b) { cb(b); }, 'image/jpeg', .9);
+  });
+}
+function vcards(list) {
+  var e = function (t) { return String(t || '').replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n'); };
+  return list.map(function (p) { var parts = p.name.split(/\s+/), last = parts.length > 1 ? parts.pop() : '', first = parts.join(' ');
+    return ['BEGIN:VCARD', 'VERSION:3.0', 'N:' + e(last) + ';' + e(first) + ';;;', 'FN:' + e(p.name), p.company ? 'ORG:' + e(p.company) : '', p.title ? 'TITLE:' + e(p.title) : '', p.email ? 'EMAIL;TYPE=WORK:' + e(p.email) : '', 'NOTE:' + e('Met at ' + S.summit.name + (p.note ? '. ' + p.note : '')), 'END:VCARD'].filter(Boolean).join('\r\n'); }).join('\r\n');
+}
+function recapSheet() {
+  var el = openSheet('Your Summit Recap', '<div class="sheet-pad rc"><div class="note">Putting your recap together…</div></div>', { plain: true }), box = el.querySelector('.rc'), D = null, pic = null;
+  recapData(function (d) {
+    D = d;
+    box.innerHTML = '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
+      '<div class="ph-acts"><button type="button" class="btn primary" data-rc-share>' + icon('i-share') + 'Share</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
+      '<h3 class="wg-h">Sessions You Starred</h3>' + (d.ses.length ? slots(d.ses, { withDay: true }) : '<div class="note">You didn\'t star any sessions this time.</div>') +
+      (canScan() ? '<div class="sct-h"><h3 class="wg-h">People You Met</h3>' + (d.met.length ? '<button type="button" class="linkbtn" data-rc-vcf>' + icon('i-download') + 'Save All to Contacts</button>' : '') + '</div>' +
+        (d.met.length ? '<div class="rc-met">' + d.met.map(function (p) { return '<div class="rc-p"><b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span>' + (p.note ? '<i>' + esc(p.note) + '</i>' : '') + '</div>'; }).join('') + '</div>' : '<div class="note">Nobody scanned this time.</div>') : '') +
+      '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<div class="ph-grid">' + d.ph.slice(0, 12).map(function (p) { return '<div class="ph-tile"><img alt="" src="' + phThumb(p) + '"></div>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
+      '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
+    recapPicture(d, function (b) { pic = b; var im = box.querySelector('.rc-pic img'); if (im) im.src = URL.createObjectURL(b); });
+  });
+  el.addEventListener('click', function (e) {
+    var name = 'my-' + slug(S.summit.name);
+    if (e.target.closest('[data-rc-save]') && pic) { var a = document.createElement('a'); a.href = URL.createObjectURL(pic); a.download = name + '.jpg'; document.body.appendChild(a); a.click(); a.remove(); return; }
+    if (e.target.closest('[data-rc-share]') && pic) { var f = new File([pic], name + '.jpg', { type: 'image/jpeg' }); if (navigator.canShare && navigator.canShare({ files: [f] })) navigator.share({ files: [f], title: 'My ' + S.summit.name }).catch(function () {}); else mxToast('Sharing isn\'t available here. Save the picture, then share it from your photos.'); return; }
+    if (e.target.closest('[data-rc-vcf]') && D) { var v = document.createElement('a'); v.href = URL.createObjectURL(new Blob([vcards(D.met)], { type: 'text/vcard' })); v.download = 'people-i-met-' + slug(S.summit.name) + '.vcf'; document.body.appendChild(v); v.click(); v.remove(); }
+  });
+}
 
 /* ---------- pieces ---------- */
 function tc(t) { return TYPE_COLOR[t] || 'var(--border-strong)'; }
@@ -2532,6 +2657,8 @@ function renderHome() {
     (during ? photosCard() : '') +   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
     nextCard('home');
 
+  if (recapReady()) h += recapCard();
+  h += changesCard();
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
   h += wifiCard();
@@ -2549,18 +2676,20 @@ function renderHome() {
   var mineList = mine().map(sessionById).filter(Boolean).filter(function (x) { return x.date > n.date || (x.date === n.date && x.b > n.min) || n.date < S.first; })
     .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; });
   if (mineList.length) h += '<div class="section-h"><h2>Next on My Schedule</h2><button type="button" class="linkbtn" data-go="mine">My Schedule&nbsp;→</button></div>' + slots(mineList.slice(0, 3), { withDay: true });
+  h += picksBlock(3);
   var gsx = gsSession();
   if (gsx && !(during && isLive(gsx))) {
     var ppl = gsPeople().filter(function (p) { return p.photo; }).slice(0, 6);
     h += '<div class="section-h"><h2>General Sessions</h2></div><button type="button" class="feature" data-open="s:' + esc(gsx.id) + '">' +
       (ppl.length ? '<div class="ph" style="grid-template-columns:repeat(' + ppl.length + ',1fr)">' + ppl.map(function (p) { return '<img src="' + esc(p.photo) + '" alt="" loading="lazy">'; }).join('') + '</div>' : '') +
-      '<div class="tx"><b>' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' Sessions, ' + gsPeople().length + ' Speakers</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
+      '<div class="tx"><b>See Who\'s on Stage, and When</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
   }
   if (!during) h += photosCard();
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
   /* Jonna, Nov 26, 2026: when the agenda last changed in Summit HQ, and when this phone last got it (the server's time
      on the copy it has, so an offline phone shows the true age of what it's showing) */
+  if (!recapReady() && appTester()) h += '<div class="foot"><button type="button" class="linkbtn" data-recap>Preview: Your Summit Recap</button></div>';
   if (S.updated) h += '<div class="foot">Agenda last changed ' + esc(stamp(S.updated)) + (S.checked ? '<br>App last checked ' + esc(stamp(S.checked)) : '') + '</div>';
   return h;
 }
@@ -2813,6 +2942,7 @@ function renderMine() {
     return h + '<div class="empty-sched"><span class="es-star">' + icon('i-star') + '</span><b>Your schedule is empty</b><p>Tap the star on any session to add it here. Your schedule stays on this phone, and Add to Calendar puts it in your phone\'s calendar with a reminder before each session.</p>' +
       '<button type="button" class="btn primary" data-go="agenda">' + icon('i-agenda') + 'Browse the Agenda</button></div>';
   }
+  h += changesCard();
   h += '<div class="d-actions" style="margin:0 0 4px"><button type="button" class="btn primary" data-ics="all">' + icon('i-cal') + 'Add All to Calendar</button></div>';
   var byDay = {}; list.forEach(function (x) { (byDay[x.date] = byDay[x.date] || []).push(x); });
   Object.keys(byDay).sort().forEach(function (d) {
@@ -2823,7 +2953,9 @@ function renderMine() {
       if (clash.length) h += '<div class="overlap" style="margin-left:72px">Overlaps with ' + esc(clash.map(function (c) { return c.title; }).join(', ')) + '</div>';
     });
   });
-  var worth = S.sessions.filter(function (x) { return /^(General Session|Workshop|Networking|Session)$/.test(x.type) && ids.indexOf(x.id) < 0; });
+  var pk = picksFor(4), pkIds = pk.map(function (p) { return p.x.id; });
+  h += picksBlock(4);
+  var worth = S.sessions.filter(function (x) { return /^(General Session|Workshop|Networking|Session)$/.test(x.type) && ids.indexOf(x.id) < 0 && pkIds.indexOf(x.id) < 0; });
   if (worth.length) h += '<div class="section-h"><h2>Worth Adding</h2><button type="button" class="linkbtn" data-go="agenda">Full Agenda&nbsp;→</button></div>' + slots(worth, { withDay: true });
   return h;
 }
@@ -4076,7 +4208,32 @@ function attendanceSheet() {
   paint(); t = setInterval(paint, 5000);
   el.addEventListener('click', function (e) { var b = e.target.closest('[data-ci-open]'); if (b) { checkinSheet(b.getAttribute('data-ci-open')); return; } if (e.target.closest('[data-ci-go]')) checkinSheet(); });
 }
+/* Works with no Wi-Fi (Jonna, Nov 27, 2026): from three weeks before a summit to its last day, the phone quietly keeps the
+   floor map, the speakers' headshots and the sponsors' logos, so the agenda, map, Walk Me There, your schedule, your
+   name tag and the people you met all work when the hotel Wi-Fi drops. (The app itself and the summit's files are kept
+   by the service worker; pictures are kept once they've loaded, which this does ahead of time.) */
+var WARMED = false;
+function warmOffline() {
+  if (WARMED || !S.summit || navigator.onLine === false) return;
+  var n = nowAt(), d = daysBetween(n.date, S.first); if (d > 21 || n.date > S.last) return;
+  WARMED = true;
+  var urls = [];
+  if (FP && FP.image) urls.push(FP.image);
+  S.speakers.forEach(function (p) { if (p.photo) urls.push(p.photo); });
+  S.sponsors.forEach(function (sp) { if (sp.logo) urls.push(sp.logo); });
+  urls = urls.filter(function (u, i) { return u && urls.indexOf(u) === i; }).slice(0, 300);
+  var i = 0; (function next() { if (i >= urls.length) return; for (var k = 0; k < 6 && i < urls.length; k++, i++) { var im = new Image(); im.decoding = 'async'; im.src = urls[i]; } setTimeout(next, 400); })();
+}
+/* a quiet line at the top while the phone is offline */
+function paintOffline() {
+  var b = document.getElementById('offline-bar'), off = navigator.onLine === false;
+  if (!b) { b = document.createElement('div'); b.id = 'offline-bar'; b.setAttribute('role', 'status'); document.body.appendChild(b); }
+  b.innerHTML = off ? icon('i-wifi') + '<span>No connection. Your agenda, map, schedule and scans still work, and anything new is sent when you\'re back online.</span>' : '';
+  b.hidden = !off; document.body.classList.toggle('is-offline', off);
+}
+window.addEventListener('online', paintOffline); window.addEventListener('offline', paintOffline);
 function loadExtras() {
+  setTimeout(warmOffline, 8000);
   function again(pages) { if (pages.indexOf(S.page) >= 0 && !stack.length) renderPage(S.page); }
   getJSON('data/guide.json').then(function (g) { G = g; again(['explore', 'home', 'dash']); }).catch(function () {});
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
@@ -4177,6 +4334,9 @@ function radarSheet() {
   function center() { var sc = el.querySelector('.rd-scroll'), hint = el.querySelector('.rd-hint'); if (!sc) return; sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2;
     if (hint) hint.textContent = 'Rings show walking time from the hotel. ' + (sc.scrollWidth > sc.clientWidth + 4 ? 'Swipe the map to look around, and tap' : 'Tap') + ' a place for details.'; }
   setTimeout(center, 60);
+  /* Jonna, Nov 27, 2026: turning the phone back upright re-centers the map, so half of it isn't left off the side */
+  var rz = null; function onRz() { if (!el.isConnected) { window.removeEventListener('resize', onRz); return; } clearTimeout(rz); rz = setTimeout(center, 150); }
+  window.addEventListener('resize', onRz);
   el.addEventListener('click', function (e) {
     var b = e.target.closest('[data-rcat]'); if (!b) return;
     S.xcat = b.getAttribute('data-rcat'); el.querySelector('.rd-scroll').innerHTML = radar(true); center();
@@ -5526,6 +5686,7 @@ function providerSheet(slug) {
 }
 function stamp(iso) { var d = new Date(iso); if (isNaN(d)) return ''; var h = d.getHours(), ap = h >= 12 ? 'PM' : 'AM'; return MONTH[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ', ' + (h % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + ap; }
 function webSheet(url, title) {
+  if (navigator.onLine === false) { mxToast('That page needs a connection. Try again when you\'re back online.'); return; }
   var h = '<div class="webframe"><iframe src="' + esc(url) + '" title="' + esc(title) + '"></iframe></div>';
   var el = openSheet(title, h, { plain: true });
   el.classList.add('full');
@@ -6454,6 +6615,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-ph-mine')) { phMine(); return; }
   if (t.hasAttribute('data-ph-frames')) { phFrames(); return; }
   if (t.hasAttribute('data-ph-open')) { phSheet(); return; }
+  if (t.hasAttribute('data-seen-ok')) { seenOk(); return; }
+  if (t.hasAttribute('data-recap')) { recapSheet(); return; }
   if (t.hasAttribute('data-ph-review')) { phReview(); return; }
   if (t.hasAttribute('data-checkin')) { checkinSheet(t.getAttribute('data-checkin')); return; }
   if (t.hasAttribute('data-attend')) { attendanceSheet(); return; }
@@ -6554,6 +6717,7 @@ if (window.MismoBack) [1, 2, 3, 4, 5].forEach(function (depth) { MismoBack.layer
 /* ---------- start ---------- */
 var T0 = Date.now();
 function start() {
+  paintOffline();
   fetch(FEED_AGENDA, { cache: 'no-cache' }).then(function (r) {
     if (!r.ok) throw new Error(FEED_AGENDA + ' ' + r.status);
     S.checked = new Date(Date.parse(r.headers.get('date')) || Date.now()).toISOString(); return r.json();
