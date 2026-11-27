@@ -334,6 +334,7 @@ html[data-season="december"] .days{top:calc(61px + env(safe-area-inset-top))}
 .field label{font-weight:600; font-size:13.5px}
 .field input,.field textarea{border:1px solid var(--border-strong); border-radius:7px; padding:10px 12px; font:inherit; color:var(--ink); background:var(--surface); width:100%}
 .field .hint{color:var(--ink-3); font-size:12.5px}
+.ld-in{border:1px solid var(--border-strong); border-radius:7px; padding:10px 12px; font:inherit; color:var(--ink); background:var(--surface); width:100%; min-width:0}
 .codebox{font-family:var(--cond); font-size:34px; letter-spacing:.35em; text-align:center; font-weight:700; padding:10px 0 10px .35em !important}
 .toggle{display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; cursor:pointer; margin-bottom:12px}
 .toggle input{width:20px; height:20px; margin:2px 0 0; accent-color:var(--navy-mid); flex:none}
@@ -1512,6 +1513,54 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .sct-hero > span:nth-child(2){flex:1; display:grid; gap:3px} .sct-hero b{font-size:19px} .sct-hero span span{font-size:13px; opacity:.9} .sct-hero svg.go{width:20px; height:20px}
 .sct-two{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .sct-h{display:flex; justify-content:space-between; align-items:baseline} .sct-h .linkbtn{display:inline-flex; align-items:center; gap:2px} .sct-h svg{width:16px; height:16px}
+.hub-modes{display:grid; grid-auto-flow:column; grid-auto-columns:1fr; margin:0; border-radius:0; background:#0b2236; border:0; padding:8px 10px 0; gap:6px}
+.hub-modes button{display:flex; align-items:center; justify-content:center; gap:6px; border-radius:10px 10px 0 0; border:0; background:rgba(255,255,255,.08); color:#cfe3f1; font-weight:800; padding:11px 6px} .hub-modes button svg{width:17px; height:17px; margin:0}
+.hub-modes button[aria-selected="true"]{background:#14486e; color:#fff}
+.ci-sheet .ci-top{background:#14486e}
+.ci-pickbtn{flex:1; min-width:0; display:grid; grid-template-columns:1fr auto; column-gap:8px; text-align:left; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.1); color:#fff; font:inherit; cursor:pointer}
+.ci-pk-l{grid-column:1; font-size:11.5px; font-weight:800; color:#a9d8f3} .ci-pickbtn b{grid-column:1; font-size:17px; line-height:1.2} .ci-pk-s{grid-column:1; font-size:13px; color:#cfe3f1} .ci-pickbtn svg.go{grid-column:2; grid-row:1 / span 3; align-self:center; width:20px; height:20px}
+.hub-say{display:flex; gap:12px; align-items:center; color:#fff} .hub-say > svg{width:28px; height:28px; flex:none; color:#a9d8f3} .hub-say span{display:grid; gap:2px} .hub-say b{font-size:17px} .hub-say span span{font-size:13px; color:#cfe3f1}
+.hub-again{position:absolute; inset:0; z-index:3; display:grid; place-content:center; justify-items:center; gap:10px; border:0; background:rgba(6,20,31,.75); color:#fff; font:inherit; cursor:pointer} .hub-again svg{width:44px; height:44px} .hub-again b{font-size:18px}
+.ps{display:grid; gap:10px; padding:12px 16px 20px}
+.ps-days{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none} .ps-days button{flex:none; display:grid; gap:1px; justify-items:center; min-width:72px; padding:8px 10px; border-radius:10px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); font:inherit; cursor:pointer} .ps-days i{font-style:normal; font-size:11.5px; font-weight:700; color:var(--ink-3)} .ps-days b{font-size:14px}
+.ps-days button[aria-pressed="true"]{background:#0d314c; border-color:#0d314c; color:#fff} .ps-days button[aria-pressed="true"] i{color:#a9d8f3}
+.ps-list{display:grid; gap:8px}
+.ps-row{display:grid; grid-template-columns:58px minmax(0, 1fr) auto; gap:12px; align-items:center; padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--ink); font:inherit; text-align:left; cursor:pointer}
+.ps-row[hidden]{display:none}
+.ps-t{text-align:center; font-family:var(--cond); font-weight:800; font-size:20px; line-height:1} .ps-t i{display:block; font-style:normal; font-size:11px; color:var(--ink-3)}
+.ps-n{display:grid; gap:2px; min-width:0} .ps-n b{font-size:15.5px; line-height:1.25} .ps-n span{font-size:13px; color:var(--ink-3)}
+.ps-row em{font-style:normal; font-size:11.5px; font-weight:800; color:#fff; background:#0f7b5c; border-radius:6px; padding:4px 7px} .ps-row svg{width:20px; height:20px; color:#0f7b5c}
+.ps-row.sel{border-color:#0d314c; box-shadow:0 0 0 1px #0d314c inset} .ps-row.on{border-color:#2fd08a}
+.sct-two.three > :first-child{grid-column:1 / -1}
+.an-tr{width:100%; margin:0 0 14px} .an-tr svg.go{margin-left:auto; width:18px; height:18px}
+/* ---------- Summit Photos (Jonna, Nov 27, 2026) ---------- */
+.ph-card{grid-template-columns:minmax(0, 1fr); min-width:0; border:1px solid var(--border); border-radius:16px; background:linear-gradient(160deg, #fff6ee, var(--surface) 55%); padding:16px; display:grid; gap:14px}
+:root[data-theme="dark"] .ph-card{background:linear-gradient(160deg, #2a2117, var(--surface) 55%)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ph-card{background:linear-gradient(160deg, #2a2117, var(--surface) 55%)} }
+.ph-card-top{display:flex; gap:12px; align-items:flex-start} .ph-card-top > svg{width:30px; height:30px; flex:none; color:#d95926} .ph-card-top span{display:grid; gap:3px} .ph-card-top b{font-size:18px} .ph-card-top span span{color:var(--ink-2); font-size:14px; line-height:1.4}
+.ph-btns{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px} .ph-btns .btn svg{flex:none} .ph-card .ph-btns .btn{flex-direction:column; gap:6px; padding:12px 6px; line-height:1.2} .ph-card .ph-btns .btn svg{width:22px; height:22px; margin:0} .phr .ph-btns{grid-template-columns:1fr 1fr} .ph-btns .btn{justify-content:center; text-align:center; white-space:normal; min-width:0}
+.ph-ch b{display:block; font-size:13px; color:var(--ink-3); margin-bottom:6px}
+.ph-pr{display:flex; flex-wrap:wrap; gap:6px} .ph-pr button{border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); border-radius:8px; padding:7px 10px; font:inherit; font-size:13px; font-weight:600; cursor:pointer}
+.ph-pr button[aria-pressed="true"]{background:#d95926; border-color:#d95926; color:#fff}
+.ph-card .ph-pr{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:0 16px} .ph-card .ph-pr button{flex:none}
+.ph-row{display:flex; gap:16px; flex-wrap:wrap} .ph-row .linkbtn{display:inline-flex; align-items:center; gap:6px} .ph-row .linkbtn svg{width:16px; height:16px}
+.ph-ed .ph-cv{background:#071d2e; padding:12px; display:grid; place-items:center} .ph-ed canvas{width:min(100%, 360px); height:auto; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.ph-ed .sheet-pad{display:grid; gap:8px} .ph-ed .ld-h{margin-top:8px}
+.ph-tags{display:flex; flex-wrap:wrap; gap:6px} .ph-tags button{display:inline-flex; align-items:center; gap:4px; border:1px solid var(--border-strong); background:var(--surface-3); color:var(--ink); border-radius:8px; padding:6px 9px; font:inherit; font-size:13px; font-weight:600} .ph-tags svg{width:13px; height:13px} .ph-none{color:var(--ink-3); font-size:13px}
+.ph-tagadd{display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:8px}
+.ph-acts{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px} .ph-acts .btn{justify-content:center}
+.ph-send{margin-top:12px; border:1px solid var(--border); border-radius:14px; padding:14px; background:var(--surface-2); display:grid; gap:8px} .ph-send h3{margin:0; font-size:16px} .ph-send p{margin:0; color:var(--ink-2); font-size:14px}
+.ph-ok{display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.4} .ph-ok input{width:20px; height:20px; margin-top:1px; flex:none} .ph-ok.need{color:var(--bad)}
+.ph-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:10px} .ph-tile{position:relative; border-radius:12px; overflow:hidden; background:var(--surface-3)} .ph-tile img{display:block; width:100%; aspect-ratio:4/5; object-fit:cover}
+.ph-st{position:absolute; left:8px; bottom:8px; background:rgba(7,29,46,.8); color:#fff; font-size:11.5px; font-weight:700; border-radius:6px; padding:4px 7px} .ph-st.sent{background:#0f7b5c}
+.ph-del{position:absolute; top:6px; right:6px; width:32px; height:32px; border-radius:50%; border:0; background:rgba(7,29,46,.7); color:#fff; display:grid; place-items:center} .ph-del svg{width:16px; height:16px}
+.phr{display:grid; gap:12px} .phr-tabs{display:grid; grid-template-columns:repeat(4, minmax(0, 1fr))} .phr-tabs button{font-size:13px; padding:9px 4px; white-space:normal; line-height:1.2} .phr-tabs b{color:#d95926}
+.phr-list{display:grid; gap:12px} .phr-item{display:grid; grid-template-columns:112px minmax(0, 1fr); gap:12px; border:1px solid var(--border); border-radius:14px; padding:10px; background:var(--surface)}
+.phr-item img{width:112px; aspect-ratio:4/5; object-fit:cover; border-radius:8px; grid-row:span 2} .phr-meta{display:grid; gap:3px; align-content:start; min-width:0} .phr-meta b{font-size:15px} .phr-meta span{font-size:13px; color:var(--ink-2)} .phr-meta i{font-size:14px}
+.phr-ok{display:inline-flex; align-items:center; gap:4px; color:var(--good) !important; font-weight:700} .phr-ok svg{width:14px; height:14px}
+.phr-meta textarea{min-height:56px; margin-top:4px; font-size:14px}
+.phr-acts{display:flex; gap:8px; flex-wrap:wrap; align-self:end} .phr-acts .btn{padding:8px 12px}
+.phr-send{width:100%; justify-content:center}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -1943,6 +1992,9 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-badge" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 6V4h6v2M8 11h8M7.5 15h1M10 15h1M12.5 15h1M15 15h1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.5-2.2h5.6L16.3 7h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="12.8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.9"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="9" cy="9.5" r="1.7" fill="currentColor"/><path d="m4 17 5-5 4 4 2.5-2.5L20 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M20.5 3.5 10 14M20.5 3.5l-6.5 17-4-6.5-6.5-4z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></symbol>
 <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-stairs" viewBox="0 0 24 24"><path d="M3 20h5v-4.5h4.5V11H17V6.5h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-elevator" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9.5 3-3 3 3M9 14.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -2409,6 +2461,7 @@ function renderHome() {
       (ppl.length ? '<div class="ph" style="grid-template-columns:repeat(' + ppl.length + ',1fr)">' + ppl.map(function (p) { return '<img src="' + esc(p.photo) + '" alt="" loading="lazy">'; }).join('') + '</div>' : '') +
       '<div class="tx"><b>' + S.gs.items.filter(function (g) { return !g.brk; }).length + ' Sessions, ' + gsPeople().length + ' Speakers</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
   }
+  h += photosCard();
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
   /* Jonna, Nov 26, 2026: when the agenda last changed in Summit HQ, and when this phone last got it (the server's time
@@ -2684,16 +2737,19 @@ function renderMine() {
 /* The Scan tab on People (Jonna, Nov 27, 2026): scanning name tags, your scans, session check-in and live attendance.
    Staff for now; sponsors (their leads) and attendees (people they met) when the relay part is live. */
 function renderScanTab() {
-  var l = myScans(), ci = myCheckins();
+  var l = myScans(), ci = myCheckins(), role = scanRole(), modes = scanModes();
+  var card = function (m, ic, t, d) { return '<button type="button" class="scan-ci" data-scan="' + m + '">' + icon(ic) + '<span><b>' + t + '</b><span>' + d + '</span></span></button>'; };
   return '<div class="sct">' +
-    '<button type="button" class="sct-hero" data-scan><span class="sct-ic">' + icon('i-scan') + '</span><span><b>Scan a Name Tag</b><span>Point your camera at the barcode on someone\'s name tag</span></span>' + icon('i-chev', 'go') + '</button>' +
-    '<div class="sct-two"><button type="button" class="scan-ci" data-checkin>' + icon('i-check') + '<span><b>Session Check‑In</b><span>Scan name tags at the door</span></span></button><button type="button" class="scan-ci" data-attend>' + icon('i-chart') + '<span><b>Attendance Now</b><span>Live counts by session</span></span></button></div>' +
+    '<button type="button" class="sct-hero" data-scan><span class="sct-ic">' + icon('i-scan') + '</span><span><b>Scan Name Tags</b><span>Point your camera at the barcode on someone\'s name tag</span></span>' + icon('i-chev', 'go') + '</button>' +
+    '<div class="sct-two' + (modes.length === 3 ? ' three' : '') + '">' + card('checkin', 'i-check', 'Workgroup Check‑In', 'Scan name tags at the door') + card('met', 'i-people', 'Who I Met', 'Remember someone, with a note') +
+      (modes.indexOf('touch') >= 0 ? card('touch', 'i-handshake', 'Log a Touchpoint', 'A member conversation, for Member 360') : '') + '</div>' +
+    '<div class="sct-two"><button type="button" class="scan-ci" data-attend>' + icon('i-chart') + '<span><b>Attendance Now</b><span>Live counts at the summit</span></span></button><button type="button" class="scan-ci" data-trackers>' + icon('i-agenda') + '<span><b>Meeting Trackers</b><span>Every meeting, any time</span></span></button></div>' +
     '<div class="sct-h"><h3 class="wg-h">My Scans</h3>' + (l.length ? '<button type="button" class="linkbtn" data-scans>See All' + icon('i-chev') + '</button>' : '') + '</div>' +
     (l.length ? '<div class="scl">' + l.slice(0, 4).map(function (x) { var d = new Date(x.at), w = x.reg ? regLookup(x.reg) : null;
-        return '<button type="button" class="scl-row" data-scans><span class="scl-r r-' + esc((x.rate || 'none').toLowerCase()) + '">' + esc(x.rate || '–') + '</span><span class="scl-t"><b>' + esc(x.name || (w && w.name) || 'Registration ' + x.reg) + '</b><span>' + esc([x.company || (w && w.company), x.kind].filter(Boolean).join(', ')) + '</span></span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</i></button>'; }).join('') + '</div>'
-      : '<div class="note">No scans yet. Scan someone\'s name tag and they show up here with your note.</div>') +
+        return '<button type="button" class="scl-row" data-scans><span class="scl-r r-' + esc((x.rate || 'none').toLowerCase()) + '">' + esc(x.rate || '–') + '</span><span class="scl-t"><b>' + esc(x.name || (w && w.name) || 'Registration ' + x.reg) + '</b><span>' + esc([x.company || (w && w.company), scanKind(x)].filter(Boolean).join(', ')) + '</span></span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</i></button>'; }).join('') + '</div>'
+      : '<div class="note">No scans yet. People you met and touchpoints you log show up here with your notes.</div>') +
     (ci.length ? '<p class="sc-fine">' + ci.length + (ci.length === 1 ? ' check-in' : ' check-ins') + ' on this phone. See them in Attendance Now.</p>' : '') +
-    '<p class="sc-fine">Staff test: scans and check-ins stay on this phone until scanning goes live.</p></div>';
+    '<p class="sc-fine">' + (role === 'facilitator' ? 'Facilitator test' : 'Staff test') + ': scans and check-ins stay on this phone until scanning goes live.</p></div>';
 }
 function renderPeople() {
   var h = '<div class="pagehead"><h1>People</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
@@ -3199,7 +3255,17 @@ function c39Row(row) {
 function scansKey() { return 'scans:' + S.sid; }
 function myScans() { return load(scansKey(), []); }
 function saveScans(l) { save(scansKey(), l); }
-function canScan() { return canPreviewAttendees(); }
+/* who can scan (Jonna, Nov 27, 2026): staff (Summit HQ access) and facilitators (Meeting Trackers access), both with
+   MyMISMO; sponsors when the relay part is live */
+function scanRole() {
+  var st = staffSession(); if (!st || !appTester()) return '';
+  var acc = st.access || {};
+  if (acc['summit-hq'] || st.platformAdmin) return 'staff';
+  if (acc['meeting-trackers']) return 'facilitator';
+  return '';
+}
+function canScan() { return !!scanRole(); }
+function scanKind(s) { var k = s.kind || ''; return /engagement|touchpoint/i.test(k) ? 'Touchpoint' : /met/i.test(k) ? 'Someone I Met' : k || 'Touchpoint'; }
 function regLookup(n) { return (PV.byReg && PV.byReg[String(n)]) || null; }
 function myReg() { return PV.myReg || ''; }
 /* Code 39 drawn as an SVG, for the Test Badge */
@@ -3211,69 +3277,6 @@ function c39Svg(v) {
     x += N;
   }
   return '<svg class="c39" viewBox="0 0 ' + (x + 10) + ' 70" preserveAspectRatio="none" role="img" aria-label="Barcode ' + esc(v) + '">' + bars + '</svg>';
-}
-function scanSheet() {
-  if (!PV.state) loadPreviewAttendees();
-  var el = openSheet('Scan a Name Tag', '<div class="scx"><div class="sc-cam"><video playsinline muted></video><canvas hidden></canvas>' +
-    '<div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div><div class="sc-hint">Line up the barcode on the name tag inside the box</div>' +
-    '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
-    '<div class="sc-flash"><span>' + icon('i-check') + '<b>Got It</b></span></div></div>' +
-    '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div>' +
-    '<div class="sc-acts four"><button type="button" class="btn" data-sc-find>' + icon('i-search') + 'Find by Name</button><button type="button" class="btn" data-sc-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button><button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button></div>' +
-    '<p class="sc-fine">Staff test: scans stay on this phone. When scanning goes live, engagement conversations go to Member 360 and sponsors\' leads go to that sponsor.</p></div></div>', { plain: true });
-  el.classList.add('sc-sheet');
-  /* the beep: a short scanner chirp, made on the phone (no sound file); the sound is set up on the tap that opened the
-     scanner, which phones need before they'll play anything */
-  var AC = null; try { var ACx = window.AudioContext || window.webkitAudioContext; if (ACx) { AC = new ACx(); AC.resume && AC.resume(); } } catch (e) {}
-  function beep() {
-    if (!AC || !load('scan-beep', true)) return;
-    try { [[1320, 0], [1760, .09]].forEach(function (n) { var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + n[1]; o.type = 'square'; o.frequency.value = n[0]; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + .08); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + .09); }); } catch (e) {}
-  }
-  var v = el.querySelector('video'), cv = el.querySelector('canvas'), ctx = cv.getContext('2d', { willReadFrequently: true }), stream = null, alive = true, seen = {}, det = null, busy = false;
-  var msg = function (h) { el.querySelector('.sc-msg').innerHTML = h; };
-  function stop() { alive = false; if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; }
-  /* stop the camera when the sheet closes */
-  var mo = new MutationObserver(function () { if (!el.isConnected) { stop(); mo.disconnect(); } }); mo.observe(document.body, { childList: true, subtree: true });
-  function found(n) {
-    if (!alive) return; stop();
-    beep(); try { navigator.vibrate && navigator.vibrate([40, 30, 40]); } catch (e) {}   /* a buzz too, on phones that allow it */
-    var f = el.querySelector('.sc-flash'); f.classList.add('go');
-    setTimeout(function () { leadSheet({ reg: n, at: Date.now() }, true); }, 700);
-  }
-  function scanFrame() {
-    if (!alive || !v.videoWidth) return;
-    var W = 960, H = Math.round(v.videoHeight * W / v.videoWidth); cv.width = W; cv.height = H; ctx.drawImage(v, 0, 0, W, H);
-    var votes = {};
-    for (var y = Math.round(H * .3); y < H * .7; y += 5) {
-      var d = ctx.getImageData(0, y, W, 1).data, row = new Array(W);
-      for (var i = 0; i < W; i++) row[i] = (d[i * 4] * 299 + d[i * 4 + 1] * 587 + d[i * 4 + 2] * 114) / 1000;
-      var r = c39Row(row); if (r && /^\d{5,10}$/.test(r)) votes[r] = (votes[r] || 0) + 1;
-    }
-    Object.keys(votes).forEach(function (k) { seen[k] = (seen[k] || 0) + votes[k]; if (votes[k] >= 2 || seen[k] >= 3) found(k); });
-  }
-  function loop() {
-    if (!alive) return;
-    if (det && !busy) { busy = true; det.detect(v).then(function (codes) { busy = false; var c = (codes || []).filter(function (x) { return /^\d{5,10}$/.test(x.rawValue); })[0]; if (c) found(c.rawValue); }).catch(function () { busy = false; det = null; }); }
-    else scanFrame();
-    setTimeout(loop, 140);
-  }
-  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) msg('<div class="note">This phone\'s browser can\'t open the camera here. Use Type the Number.</div>');
-  else navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false }).then(function (s) {
-    if (!alive) { s.getTracks().forEach(function (t) { t.stop(); }); return; }
-    stream = s; v.srcObject = s; v.play().catch(function () {});
-    try { if ('BarcodeDetector' in window) BarcodeDetector.getSupportedFormats().then(function (f) { if (f.indexOf('code_39') >= 0) det = new BarcodeDetector({ formats: ['code_39'] }); }); } catch (e) {}
-    loop();
-  }).catch(function () { msg('<div class="note">The camera is off for MyMISMO. Allow the camera in your phone\'s settings, or use Type the Number.</div>'); });
-  el.addEventListener('click', function (e) {
-    if (e.target.closest('[data-sc-type]')) {
-      var n = prompt('The number under the barcode on the name tag:'); n = String(n || '').replace(/\D/g, ''); if (n) found(n); return;
-    }
-    var sb = e.target.closest('[data-sc-snd]');
-    if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on) beep(); return; }
-    if (e.target.closest('[data-sc-badge]')) { stop(); testBadge(); return; }
-    if (e.target.closest('[data-sc-find]')) { findPerson(function (pp) { stop(); leadSheet({ reg: pp.reg || '', name: pp.name, title: pp.title || '', company: pp.company || '', manual: !!pp.manual, at: Date.now() }, true); }); return; }
-    if (e.target.closest('[data-sc-list]')) { stop(); scansSheet(); }
-  });
 }
 /* find someone by name in the attendee list, or add someone who isn't on it (Jonna, Nov 27, 2026: no name tag, a tag
    that won't read, or the wrong details) */
@@ -3301,13 +3304,14 @@ function findPerson(cb) {
 }
 /* a scan: who it is, a note, Hot / Warm / Cold, and what kind it is */
 function leadSheet(sc, fresh) {
-  var who = sc.reg ? regLookup(sc.reg) : null, kinds = ['Engagement Conversation', 'Sponsor Lead'];
+  var who = sc.reg ? regLookup(sc.reg) : null, kinds = scanRole() === 'staff' ? ['Touchpoint', 'Someone I Met'] : ['Someone I Met'];
+  sc.kind = sc.kind ? scanKind(sc) : kinds[0];
   if (!who && sc.name) who = { name: sc.name, title: sc.title || '', company: sc.company || '' };
   sc.kind = sc.kind || kinds[0]; sc.rate = sc.rate || '';
   var h = '<div class="ld-top">' + (who ? avatarHtml({ id: 'reg:' + sc.reg, name: who.name, photo: 0 }, 'big') + '<div><b>' + esc(who.name) + '</b><span>' + esc([who.title, who.company].filter(Boolean).join(', ')) + '</span><i>Registration ' + esc(sc.reg) + '</i></div>'
-      : '<span class="ld-q">?</span><div><b>' + (sc.reg ? 'Registration ' + esc(sc.reg) : 'New Person') + '</b><span>' + (PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).') + '</span></div>') + '</div>' +
+      : '<span class="ld-q">?</span><div><b>' + (sc.reg ? 'Registration ' + esc(sc.reg) : 'New Person') + '</b><span>' + (scanRole() === 'facilitator' ? 'Type their name below for now. Names fill in for facilitators once scanning goes live.' : PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).') + '</span></div>') + '</div>' +
     '<div class="sheet-pad ld">' +
-    '<div class="ld-h">This Is</div><div class="seg ld-kind">' + kinds.map(function (k) { return '<button type="button" data-ld-kind="' + esc(k) + '" aria-pressed="' + (sc.kind === k) + '">' + esc(k) + '</button>'; }).join('') + '</div>' +
+    (kinds.length > 1 ? '<div class="ld-h">This Is</div><div class="seg ld-kind">' + kinds.map(function (k) { return '<button type="button" data-ld-kind="' + esc(k) + '" aria-pressed="' + (sc.kind === k) + '">' + esc(k === 'Touchpoint' ? 'A Touchpoint' : k) + '</button>'; }).join('') + '</div>' : '') +
     '<div class="ld-h">How Warm</div><div class="ld-rate">' + ['Hot', 'Warm', 'Cold'].map(function (r) { return '<button type="button" class="r-' + r.toLowerCase() + '" data-ld-rate="' + r + '" aria-pressed="' + (sc.rate === r) + '">' + r + '</button>'; }).join('') + '</div>' +
     '<div class="ld-h">Their Details <span>Fix anything that\'s wrong</span></div><div class="ld-who"><div class="field"><label for="ld-name">Name</label><input id="ld-name" maxlength="120" value="' + esc(sc.name || (who && who.name) || '') + '"></div>' +
     '<div class="field"><label for="ld-title">Title</label><input id="ld-title" maxlength="120" value="' + esc(sc.title || (who && who.title) || '') + '"></div><div class="field"><label for="ld-co">Company</label><input id="ld-co" maxlength="120" value="' + esc(sc.company || (who && who.company) || '') + '"></div></div>' +
@@ -3315,7 +3319,7 @@ function leadSheet(sc, fresh) {
     '<div class="field"><label for="ld-email">Email</label><input id="ld-email" type="email" maxlength="160" placeholder="Only if they gave it to you" value="' + esc(sc.email || '') + '"></div>' +
     '<div class="d-actions"><button class="btn primary" type="button" data-ld-save>' + icon('i-check') + 'Save</button>' + (fresh ? '<button class="btn" type="button" data-ld-again>' + icon('i-scan') + 'Save and Scan Next</button>' : '<button class="btn quiet" type="button" data-ld-del>Delete</button>') + '</div>' +
     '<p class="sc-fine">Staff test: kept on this phone only.</p></div>';
-  var el = openSheet(fresh ? 'New Scan' : 'Scan', h, { plain: true });
+  var el = openSheet(sc.kind === 'Someone I Met' ? 'Who I Met' : sc.kind === 'Touchpoint' ? 'Log a Touchpoint' : 'Scan', h, { plain: true });
   el.classList.add('ld-sheet');
   function keep() {
     sc.note = el.querySelector('#ld-note').value.trim(); sc.email = el.querySelector('#ld-email').value.trim();
@@ -3328,9 +3332,10 @@ function leadSheet(sc, fresh) {
     if ((t = e.target.closest('[data-ld-kind]'))) { sc.kind = t.getAttribute('data-ld-kind'); el.querySelectorAll('[data-ld-kind]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return; }
     if ((t = e.target.closest('[data-ld-rate]'))) { sc.rate = sc.rate === t.getAttribute('data-ld-rate') ? '' : t.getAttribute('data-ld-rate'); el.querySelectorAll('[data-ld-rate]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-ld-rate') === sc.rate)); }); return; }
     if (e.target.closest('[data-ld-save]')) { keep(); closeSheet(); mxToast('Scan saved'); return; }
-    if (e.target.closest('[data-ld-again]')) { keep(); closeSheet(); mxToast('Scan saved'); scanSheet(); return; }
+    if (e.target.closest('[data-ld-again]')) { keep(); closeSheet(); mxToast('Scan saved'); if (!sc.hub) scanHub(null, sc.kind === 'Someone I Met' ? 'met' : 'touch'); return; }
     if (e.target.closest('[data-ld-del]')) { saveScans(myScans().filter(function (x) { return x.at !== sc.at; })); closeSheet(); mxToast('Scan deleted'); var l = document.querySelector('.scl-sheet'); if (l) { closeSheet(); scansSheet(); } }
   });
+  return el;
 }
 function scansSheet() {
   var l = myScans();
@@ -3421,7 +3426,7 @@ function loadCheckinSessions() {
     .then(function (j) {
       var d = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content), function (c) { return c.charCodeAt(0); }))), sm = d.summits && d.summits[S.sid];
       CIS.list = (sm && sm.sessions || []).filter(function (x) { return x.code && x.date && x.start != null; })
-        .map(function (x) { return { id: 'tp:' + x.code, code: x.code, name: x.name, room: x.room || '', date: x.date, a: x.start, b: x.end }; });
+        .map(function (x) { return { id: 'tp:' + x.code, code: x.code, name: x.name, room: x.room || '', fac: x.facilitator || '', date: x.date, a: x.start, b: x.end }; });
       CIS.state = 'ready';
     }).catch(function () { CIS.state = 'none'; });
 }
@@ -3434,64 +3439,289 @@ function checkinDefault() {
   var n = nowAt(), list = ciSessions().filter(function (x) { return x.date === n.date && x.b > n.min; }).sort(function (a, b) { return a.a - b.a; });
   return list.filter(function (x) { return x.a <= n.min + 15; })[0] || list[0] || ciSessions().slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; })[0] || null;
 }
-function checkinSheet(sid) {
-  if (!PV.state) loadPreviewAttendees();
-  if (!CIS.state) { loadCheckinSessions(); }
-  var x = (sid && ciById(sid)) || checkinDefault(); if (!x) { mxToast('No session to check in to'); return; }
-  /* a session from the agenda opens its Summit HQ match (same day, room and start) when there is one */
-  var twin = ciSessions().filter(function (y) { return y.id !== x.id && y.date === x.date && y.a === x.a && rkey(y.room) === rkey(x.room); })[0]; if (CIS.list.length && twin) x = twin;
-  var day = ciSessions().filter(function (y) { return y.date === x.date; }).sort(function (a, b) { return a.a - b.a || String(a.room).localeCompare(String(b.room)); });
-  var el = openSheet('Session Check-In', '<div class="scx ci"><div class="ci-top"><label class="ci-pick"><span>Checking In To</span><select data-ci-ses>' + day.map(function (y) {
-      return '<option value="' + esc(y.id) + '"' + (y.id === x.id ? ' selected' : '') + '>' + esc(clockParts(y.a).t + clockParts(y.a).ap + ', ' + y.name + (y.room ? ' (' + y.room + ')' : '')) + '</option>'; }).join('') + '</select></label>' +
-    '<div class="ci-count"><b>0</b><span>checked in</span></div></div>' +
+/* ---------- One scanner, by role (Jonna, Nov 27, 2026). The camera stays open; the mode at the top decides what a scan
+   does. Staff: Workgroup Check-In, Who I Met, Log a Touchpoint. Facilitators: Workgroup Check-In, Who I Met. Sponsors
+   (when the relay part is live): their leads. ---------- */
+var SCAN_MODES = { checkin: 'Check-In', met: 'Who I Met', touch: 'Touchpoint' };
+function scanModes() { var r = scanRole(); return r === 'staff' ? ['checkin', 'met', 'touch'] : r === 'facilitator' ? ['checkin', 'met'] : []; }
+function scanHub(sid, mode0) {
+  var modes = scanModes(); if (!modes.length) return;
+  if (scanRole() === 'staff' && !PV.state) loadPreviewAttendees();
+  if (!CIS.state) loadCheckinSessions();
+  var mode = modes.indexOf(mode0) >= 0 ? mode0 : modes.indexOf(load('scan-mode', '')) >= 0 ? load('scan-mode', '') : modes[0];
+  var x = (sid && ciById(sid)) || checkinDefault();
+  if (x) { var twin = ciSessions().filter(function (y) { return y.id !== x.id && y.date === x.date && y.a === x.a && rkey(y.room) === rkey(x.room); })[0]; if (CIS.list.length && twin) x = twin; }
+  var ses = x ? x.id : '', popT = null, rig = null, paused = false;
+  var el = openSheet('Scan Name Tags', '<div class="scx ci">' +
+    '<div class="hub-modes seg" role="tablist" aria-label="What a scan does">' + modes.map(function (m) { return '<button type="button" role="tab" data-hub-mode="' + m + '" aria-selected="' + (m === mode) + '">' + icon(m === 'checkin' ? 'i-check' : m === 'met' ? 'i-people' : 'i-handshake') + SCAN_MODES[m] + '</button>'; }).join('') + '</div>' +
+    '<div class="ci-top"></div>' +
     '<div class="sc-cam ci-cam"><video playsinline muted></video><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div>' +
     '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
+    '<button type="button" class="hub-again" data-hub-again hidden>' + icon('i-scan') + '<b>Scan the Next Name Tag</b></button>' +
     '<div class="ci-pop" aria-live="polite"></div></div>' +
-    '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div><div class="ci-list"></div>' +
-    '<div class="sc-acts four"><button type="button" class="btn" data-ci-find>' + icon('i-search') + 'Find by Name</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button><button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button></div>' +
-    '<p class="sc-fine">Staff test: check-ins are kept on this phone. When it goes live they\'re sent as they happen (and kept until the Wi-Fi is back if it drops), and Meeting Trackers reads them in place of TrackPod\'s exports.</p></div></div>', { plain: true });
+    '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div><div class="ci-list"></div><div class="sc-acts four"></div><p class="sc-fine"></p></div></div>', { plain: true });
   el.classList.add('sc-sheet', 'ci-sheet');
-  var ses = x.id, popT = null;
+  function top() {
+    var t = el.querySelector('.ci-top');
+    if (mode === 'checkin') {
+      var y = ses && ciById(ses), n = myCheckins().filter(function (c) { return c.ses === ses; }).length;
+      t.innerHTML = '<button type="button" class="ci-pickbtn" data-ci-pick><span class="ci-pk-l">Checking In To</span>' + (y ? '<b>' + esc(y.name) + '</b><span class="ci-pk-s">' + esc(DOW[dparts(y.date).dow].slice(0, 3) + ', ' + span(y.a, y.b) + (y.room ? ', ' + y.room : '')) + '</span>' : '<b>Pick a Session</b>') + icon('i-chev', 'go') + '</button>' +
+        '<div class="ci-count"><b>' + n + '</b><span>checked in</span></div>';
+    } else {
+      t.innerHTML = '<div class="hub-say">' + icon(mode === 'met' ? 'i-people' : 'i-handshake') + '<span><b>' + (mode === 'met' ? 'Who I Met' : 'Log a Touchpoint') + '</b><span>' +
+        (mode === 'met' ? 'Scan someone\'s name tag to remember them, with a note.' : 'Scan a member\'s name tag to log your conversation. It goes to Member 360 when scanning goes live.') + '</span></span></div>';
+    }
+  }
+  function lower() {
+    var acts = el.querySelector('.sc-acts');
+    acts.innerHTML = '<button type="button" class="btn" data-ci-find>' + icon('i-search') + 'Find by Name</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
+      (mode === 'checkin' ? '<button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button>' : '<button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button>') +
+      '<button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button>';
+    el.querySelector('.sc-fine').textContent = mode === 'checkin' ? 'Staff test: check-ins are kept on this phone. When it goes live they\'re sent as they happen (and kept until the Wi-Fi is back if it drops), and Meeting Trackers reads them in place of TrackPod\'s exports.'
+      : 'Staff test: kept on this phone until scanning goes live.';
+    paint();
+  }
   function paint() {
-    var mine = myCheckins().filter(function (c) { return c.ses === ses; });
-    el.querySelector('.ci-count b').textContent = mine.length;
-    el.querySelector('.ci-list').innerHTML = mine.slice(0, 6).map(function (c) { var w = c.reg ? regLookup(c.reg) : null; var d = new Date(c.at);
-      return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(w ? w.name : c.name || 'Registration ' + c.reg) + '</b><i>' + esc(w ? w.company : c.company || '') + (c.manual ? ' (added by hand)' : '') + '</i><em>' + esc(clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</em></div>'; }).join('') +
-      (mine.length > 6 ? '<div class="ci-more">and ' + (mine.length - 6) + ' more</div>' : '');
+    var list = el.querySelector('.ci-list');
+    if (mode === 'checkin') {
+      var mine = myCheckins().filter(function (c) { return c.ses === ses; }), cnt = el.querySelector('.ci-count b'); if (cnt) cnt.textContent = mine.length;
+      list.innerHTML = mine.slice(0, 6).map(function (c) { var w = c.reg ? regLookup(c.reg) : null; var d = new Date(c.at);
+        return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(w ? w.name : c.name || 'Registration ' + c.reg) + '</b><i>' + esc(w ? w.company : c.company || '') + (c.manual ? ' (added by hand)' : '') + '</i><em>' + esc(clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</em></div>'; }).join('') +
+        (mine.length > 6 ? '<div class="ci-more">and ' + (mine.length - 6) + ' more</div>' : '');
+    } else {
+      var k = mode === 'met' ? 'Someone I Met' : 'Touchpoint', l = myScans().filter(function (s) { return scanKind(s) === k; });
+      list.innerHTML = l.slice(0, 4).map(function (s) { var w = s.reg ? regLookup(s.reg) : null; var d = new Date(s.at);
+        return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(s.name || (w && w.name) || 'Registration ' + s.reg) + '</b><i>' + esc(s.note || s.company || '') + '</i><em>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</em></div>'; }).join('');
+    }
   }
   function pop(kind, title, sub) {
     var p = el.querySelector('.ci-pop'); clearTimeout(popT);
     p.className = 'ci-pop on ' + kind; p.innerHTML = '<span>' + icon(kind === 'dup' ? 'i-info' : 'i-check') + '</span><b>' + esc(title) + '</b><i>' + esc(sub || '') + '</i>';
     popT = setTimeout(function () { p.className = 'ci-pop'; }, 1600);
   }
-  /* someone found by name, or added by hand (no name tag, or the tag didn't read) */
-  function addPerson(pp) {
-    if (pp.reg) { add(pp.reg); return; }
-    var all = myCheckins(), k = (pp.name + '|' + (pp.company || '')).toLowerCase();
-    if (all.some(function (c) { return c.ses === ses && !c.reg && (c.name + '|' + (c.company || '')).toLowerCase() === k; })) { rig.again(); pop('dup', 'Already Checked In', pp.name); return; }
-    all.unshift({ ses: ses, reg: '', name: pp.name, title: pp.title || '', company: pp.company || '', manual: !!pp.manual, at: Date.now(), sent: false }); save(checkinsKey(), all);
-    rig.ok(); pop('ok', pp.name, pp.company || ''); paint();
-  }
-  function add(n) {
-    var all = myCheckins(), dup = all.some(function (c) { return c.ses === ses && c.reg === n; }), w = regLookup(n);
-    if (dup) { rig.again(); pop('dup', 'Already Checked In', w ? w.name : 'Registration ' + n); return; }
-    all.unshift({ ses: ses, reg: n, at: Date.now(), sent: false }); save(checkinsKey(), all);
-    rig.ok(); pop('ok', w ? w.name : 'Registration ' + n, w ? w.company : 'Name fills in when the list catches up');
-    var c = el.querySelector('.ci-count'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
+  function checkIn(pp) {   /* pp: {reg} or {name, company, manual} */
+    if (!ses) { pop('dup', 'Pick a Session First', 'Tap Checking In To'); return; }
+    var all = myCheckins(), w = pp.reg ? regLookup(pp.reg) : null, k = (pp.name + '|' + (pp.company || '')).toLowerCase();
+    var dup = all.some(function (c) { return c.ses === ses && (pp.reg ? c.reg === pp.reg : !c.reg && (c.name + '|' + (c.company || '')).toLowerCase() === k); });
+    if (dup) { rig && rig.again(); pop('dup', 'Already Checked In', w ? w.name : pp.name || 'Registration ' + pp.reg); return; }
+    all.unshift(pp.reg ? { ses: ses, reg: pp.reg, at: Date.now(), sent: false } : { ses: ses, reg: '', name: pp.name, title: pp.title || '', company: pp.company || '', manual: !!pp.manual, at: Date.now(), sent: false }); save(checkinsKey(), all);
+    rig && rig.ok(); pop('ok', w ? w.name : pp.name || 'Registration ' + pp.reg, w ? w.company : pp.company || (pp.reg ? 'Name fills in when the list catches up' : ''));
+    var c = el.querySelector('.ci-count'); if (c) { c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
     paint();
   }
-  var rig = scanRig(el, add);
-  paint();
-  /* names fill in as soon as the attendee list has loaded */
+  /* Who I Met and Touchpoint: the scan opens its card; the camera waits until the card is closed */
+  function card(sc) {
+    if (rig) { rig.ok(); rig.stop(); rig = null; } paused = true;
+    sc.kind = mode === 'met' ? 'Someone I Met' : 'Touchpoint'; sc.hub = true;
+    var le = leadSheet(sc, true);
+    var w = setInterval(function () { if (!el.isConnected) { clearInterval(w); return; } if (!le || !le.isConnected) { clearInterval(w); resume(); paint(); } }, 300);
+  }
+  function onCode(n) { if (mode === 'checkin') checkIn({ reg: n }); else card({ reg: n, at: Date.now() }); }
+  function onPerson(pp) { if (mode === 'checkin') checkIn(pp); else card({ reg: pp.reg || '', name: pp.name, title: pp.title || '', company: pp.company || '', manual: !!pp.manual, at: Date.now() }); }
+  function resume() { paused = false; el.querySelector('[data-hub-again]').hidden = true; if (!rig) rig = scanRig(el, onCode); }
+  function pickSession() {
+    var days = []; ciSessions().forEach(function (y) { if (days.indexOf(y.date) < 0) days.push(y.date); }); days.sort();
+    var cur = (ses && ciById(ses)) || null, d0 = cur ? cur.date : (days.indexOf(nowAt().date) >= 0 ? nowAt().date : days[0]), n = nowAt(), me = (staffSession() || {}).name || '';
+    var pk = openSheet('Pick a Session', '<div class="ps"></div>', { plain: true }), box = pk.querySelector('.ps');
+    function draw(day) {
+      var list = ciSessions().filter(function (y) { return y.date === day; }).sort(function (a, b) { return a.a - b.a || String(a.name).localeCompare(String(b.name)); });
+      var mineFirst = list.filter(function (y) { return y.fac && me && rkey(y.fac) === rkey(me); });
+      var row = function (y) {
+        var on = day === n.date && y.a <= n.min && y.b > n.min, cp = clockParts(y.a);
+        return '<button type="button" class="ps-row' + (y.id === ses ? ' sel' : '') + (on ? ' on' : '') + '" data-ps="' + esc(y.id) + '"><span class="ps-t"><b>' + cp.t + '</b><i>' + cp.ap + '</i></span><span class="ps-n"><b>' + esc(y.name) + '</b><span>' + esc((y.room || '') + (y.fac ? (y.room ? ', ' : '') + y.fac : '')) + '</span></span>' + (on ? '<em>On Now</em>' : y.id === ses ? icon('i-check') : '') + '</button>';
+      };
+      box.innerHTML = '<div class="ps-days">' + days.map(function (d) { var p = dparts(d); return '<button type="button" data-psd="' + d + '" aria-pressed="' + (d === day) + '"><i>' + DOW[p.dow].slice(0, 3) + '</i><b>' + MON[p.m - 1] + ' ' + p.d + '</b></button>'; }).join('') + '</div>' +
+        '<label class="mx-search">' + icon('i-search') + '<input type="search" placeholder="Search sessions and rooms" aria-label="Search sessions"></label>' +
+        (mineFirst.length ? '<h3 class="wg-h">Yours</h3><div class="ps-list">' + mineFirst.map(row).join('') + '</div><h3 class="wg-h">All Sessions</h3>' : '') +
+        '<div class="ps-list ps-all">' + list.map(row).join('') + '</div>';
+      box.querySelector('input').addEventListener('input', function (e) { var q = e.target.value.trim().toLowerCase(); box.querySelectorAll('.ps-all .ps-row').forEach(function (r) { r.hidden = q && r.textContent.toLowerCase().indexOf(q) < 0; }); });
+    }
+    draw(d0);
+    pk.addEventListener('click', function (e) {
+      var t;
+      if ((t = e.target.closest('[data-psd]'))) { draw(t.getAttribute('data-psd')); return; }
+      if ((t = e.target.closest('[data-ps]'))) { ses = t.getAttribute('data-ps'); closeSheet(); top(); paint(); }
+    });
+  }
+  top(); lower(); rig = scanRig(el, onCode);
   var rp = setInterval(function () { if (!el.isConnected) { clearInterval(rp); return; } paint(); }, 3000);
-  el.addEventListener('change', function (e) { if (e.target.matches('[data-ci-ses]')) { ses = e.target.value; paint(); } });
   el.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-hub-mode]'))) { mode = t.getAttribute('data-hub-mode'); save('scan-mode', mode); el.querySelectorAll('[data-hub-mode]').forEach(function (b) { b.setAttribute('aria-selected', String(b === t)); }); top(); lower(); if (!rig) resume(); return; }
     var sb = e.target.closest('[data-sc-snd]');
-    if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on) rig.ok(); return; }
-    if (e.target.closest('[data-ci-type]')) { var n = String(prompt('The number under the barcode on the name tag:') || '').replace(/\D/g, ''); if (n) add(n); return; }
+    if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on && rig) rig.ok(); return; }
+    if (e.target.closest('[data-ci-pick]')) { pickSession(); return; }
+    if (e.target.closest('[data-hub-again]')) { resume(); return; }
+    if (e.target.closest('[data-ci-type]')) { var n = String(prompt('The number under the barcode on the name tag:') || '').replace(/\D/g, ''); if (n) onCode(n); return; }
+    if (e.target.closest('[data-ci-find]')) { findPerson(onPerson); return; }
     if (e.target.closest('[data-ci-stats]')) { attendanceSheet(); return; }
-    if (e.target.closest('[data-ci-find]')) { findPerson(addPerson); return; }
+    if (e.target.closest('[data-sc-list]')) { scansSheet(); return; }
     if (e.target.closest('[data-sc-badge]')) { testBadge(); }
+  });
+}
+function checkinSheet(sid) { scanHub(sid, 'checkin'); }
+function scanSheet() { scanHub(null); }
+/* ---------- Summit Photos (Jonna, Nov 27, 2026). Selfies and photos with friends, in a summit frame, to save or share.
+   People can submit a photo to MISMO; Amy (MISMO Media reviewers) looks through the submissions, picks the ones for
+   MISMO Media, and MISMO Media drafts the post for Amy to approve. Nothing is posted automatically. Until the relay
+   part is live, photos and picks stay on this phone. ---------- */
+var PH_DB = null;
+function phDb(cb) {
+  if (PH_DB) { cb(PH_DB); return; }
+  try {
+    var rq = indexedDB.open('mymismo-photos', 1);
+    rq.onupgradeneeded = function () { rq.result.createObjectStore('p', { keyPath: 'id' }); };
+    rq.onsuccess = function () { PH_DB = rq.result; cb(PH_DB); };
+    rq.onerror = function () { cb(null); };
+  } catch (e) { cb(null); }
+}
+function phAll(cb) { phDb(function (db) { if (!db) { cb([]); return; } var out = [], c = db.transaction('p').objectStore('p').openCursor(); c.onsuccess = function () { var k = c.result; if (k) { out.push(k.value); k.continue(); } else cb(out.sort(function (a, b) { return b.at - a.at; })); }; c.onerror = function () { cb([]); }; }); }
+function phPut(p, cb) { phDb(function (db) { if (!db) { mxToast('This phone can\'t keep photos'); return; } var t = db.transaction('p', 'readwrite'); t.objectStore('p').put(p); t.oncomplete = function () { cb && cb(); }; }); }
+function phDel(id, cb) { phDb(function (db) { if (!db) return; var t = db.transaction('p', 'readwrite'); t.objectStore('p').delete(id); t.oncomplete = function () { cb && cb(); }; }); }
+function phReviewer() {
+  var st = staffSession(); if (!st || !appTester()) return false;
+  var acc = st.access || {}; return !!(acc['marketing-hq'] || acc.media || st.platformAdmin);
+}
+var PH_PROMPTS = ['A Selfie at the General Sessions', 'You and Someone You Just Met', 'Your Workgroup at the Summit', 'Your Favorite New Orleans Bite', 'The Streetcar', 'Your Team at the Summit', 'Something You Learned Today'];
+var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function phDates() {
+  if (!S.first) return ''; var a = dparts(S.first), b = dparts(S.last || S.first);
+  return MONTHS[a.m - 1] + ' ' + a.d + (S.last && S.last !== S.first ? ' to ' + (b.m !== a.m ? MONTHS[b.m - 1] + ' ' : '') + b.d : '') + ', ' + a.y;
+}
+function phLogoImg(cb) {
+  var sym = document.getElementById('mismo-logo'); if (!sym) { cb(null); return; }
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 708 108" width="708" height="108">' + sym.innerHTML + '</svg>';
+  var im = new Image(); im.onload = function () { cb(im); }; im.onerror = function () { cb(null); };
+  im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+/* draws the photo, cropped to 4:5, with the chosen frame */
+function phDraw(cv, img, frame, cap, logo) {
+  var W = 1080, H = 1350, x = cv.getContext('2d'); cv.width = W; cv.height = H;
+  var ff = getComputedStyle(document.body).fontFamily;
+  var band = frame === 'band' ? 250 : 0, ph = H - band;
+  var r = Math.max(W / img.width, ph / img.height), w = img.width * r, h = img.height * r;
+  x.fillStyle = '#071d2e'; x.fillRect(0, 0, W, H);
+  x.drawImage(img, (W - w) / 2, (ph - h) / 2, w, h);
+  var name = (S.summit && S.summit.name) || 'MISMO Summit', where = S.place || '';
+  if (frame === 'band') {
+    var g = x.createLinearGradient(0, ph, 0, H); g.addColorStop(0, '#0e3a5c'); g.addColorStop(1, '#071d2e');
+    x.fillStyle = g; x.fillRect(0, ph, W, band); x.fillStyle = '#74bfeb'; x.fillRect(0, ph, W, 8);
+    x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(56, ph + 62, 300, 74, 10) : x.rect(56, ph + 62, 300, 74); x.fill();
+    if (logo) x.drawImage(logo, 76, ph + 80, 260, 260 * 108 / 708);
+    x.textAlign = 'right'; x.fillStyle = '#ffffff'; x.font = '800 64px ' + ff; x.fillText(where || name, W - 56, ph + 112);
+    x.fillStyle = '#a9d8f3'; x.font = '600 34px ' + ff; x.fillText(name + (phDates() ? ', ' + phDates() : ''), W - 56, ph + 166);
+    if (cap) { x.fillStyle = '#cfe3f1'; x.font = 'italic 500 30px ' + ff; x.fillText(cap.slice(0, 60), W - 56, ph + 212); }
+  } else if (frame === 'badge') {
+    x.font = '800 40px ' + ff; var tw = Math.max(x.measureText(where || name).width, 260) + 60;
+    x.fillStyle = 'rgba(7,29,46,.86)'; x.beginPath(); x.roundRect ? x.roundRect(40, H - 200, tw, 160, 14) : x.rect(40, H - 200, tw, 160); x.fill();
+    x.fillStyle = '#74bfeb'; x.fillRect(40, H - 200, 8, 160);
+    x.fillStyle = '#fff'; x.beginPath(); x.roundRect ? x.roundRect(72, H - 178, 200, 48, 8) : x.rect(72, H - 178, 200, 48); x.fill();
+    if (logo) x.drawImage(logo, 84, H - 166, 176, 176 * 108 / 708);
+    x.textAlign = 'left'; x.fillStyle = '#fff'; x.font = '800 40px ' + ff; x.fillText(where || name, 72, H - 88);
+    x.fillStyle = '#a9d8f3'; x.font = '600 26px ' + ff; x.fillText(name, 72, H - 54);
+  }
+}
+function phPick(kind, cb) {
+  var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+  if (kind === 'selfie') inp.setAttribute('capture', 'user'); else if (kind === 'camera') inp.setAttribute('capture', 'environment'); else inp.multiple = true;
+  inp.style.display = 'none'; document.body.appendChild(inp);
+  inp.addEventListener('change', function () { var fs = [].slice.call(inp.files || []); inp.remove(); if (fs.length) cb(fs); });
+  inp.click();
+}
+function phLoad(file, cb) { var u = URL.createObjectURL(file), im = new Image(); im.onload = function () { cb(im); URL.revokeObjectURL(u); }; im.onerror = function () { mxToast('That photo didn\'t open'); }; im.src = u; }
+function phThumb(p) { return p.url || (p.url = URL.createObjectURL(p.blob)); }
+/* make a framed photo: frame, caption, who's in it, then save, share or send to MISMO */
+function phEditor(file, prompt0) {
+  phLoad(file, function (img) {
+    var frame = load('ph-frame', 'band'), cap = '', tags = [], prompt = prompt0 || '', logo = null, staff = phReviewer();
+    var met = myScans().filter(function (s) { return scanKind(s) === 'Someone I Met' || scanKind(s) === 'Touchpoint'; }).map(function (s) { var w = s.reg ? regLookup(s.reg) : null; return s.name || (w && w.name) || ''; }).filter(Boolean);
+    var el = openSheet('Your Photo', '<div class="ph-ed"><div class="ph-cv"><canvas></canvas></div><div class="sheet-pad">' +
+      '<div class="ld-h">Frame</div><div class="seg ph-fr">' + [['band', 'Summit Frame'], ['badge', 'Corner Badge'], ['none', 'No Frame']].map(function (f) { return '<button type="button" data-ph-fr="' + f[0] + '" aria-pressed="' + (frame === f[0]) + '">' + f[1] + '</button>'; }).join('') + '</div>' +
+      '<label class="ld-h" for="ph-cap">Caption</label><input id="ph-cap" class="ld-in" maxlength="60" placeholder="Say something about it (optional)">' +
+      '<div class="ld-h">Photo Challenge</div><div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-pr="' + esc(p) + '" aria-pressed="' + (p === prompt) + '">' + esc(p) + '</button>'; }).join('') + '</div>' +
+      '<div class="ld-h">Who\'s In It</div><div class="ph-tags"></div><div class="ph-tagadd"><input class="ld-in" id="ph-tag" placeholder="Add a name" list="ph-met"><datalist id="ph-met">' + met.map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist><button type="button" class="btn" data-ph-tag>' + icon('i-plus') + 'Add</button></div>' +
+      '<div class="ph-acts"><button type="button" class="btn primary" data-ph-save>' + icon('i-download') + 'Save to My Photos</button><button type="button" class="btn" data-ph-share>' + icon('i-share') + 'Share</button></div>' +
+      '<div class="ph-send"><h3>' + (staff ? 'Add to the Summit Photos for MISMO Media' : 'Send to MISMO') + '</h3><p>' + (staff ? 'Your photos go straight into the submissions you review.' : 'MISMO may pick it for the summit\'s posts and newsletter.') + '</p>' +
+      (staff ? '' : '<label class="ph-ok"><input type="checkbox" id="ph-ok"><span>MISMO may use this photo in its posts and newsletter, and everyone in it is OK with that.</span></label>') +
+      '<button type="button" class="btn" data-ph-send>' + icon('i-send') + (staff ? 'Add to Submissions' : 'Send to MISMO') + '</button></div></div></div>', { plain: true });
+    var cv = el.querySelector('canvas');
+    function draw() { phDraw(cv, img, frame, cap, logo); }
+    phLogoImg(function (l) { logo = l; draw(); }); draw();
+    function paintTags() { el.querySelector('.ph-tags').innerHTML = tags.length ? tags.map(function (t, i) { return '<button type="button" data-ph-untag="' + i + '">' + esc(t) + icon('i-x') + '</button>'; }).join('') : '<span class="ph-none">Nobody tagged yet</span>'; }
+    paintTags();
+    function blob(cb) { cv.toBlob(function (b) { cb(b); }, 'image/jpeg', .86); }
+    function keep(status, cb) { blob(function (b) { var p = { id: 'ph' + Date.now(), at: Date.now(), sid: S.sid || '', blob: b, frame: frame, caption: cap, tags: tags.slice(), prompt: prompt, status: status, by: staff ? 'staff' : 'attendee', name: (staffSession() || {}).name || (A.me ? ((A.me.first || '') + ' ' + (A.me.last || '')).trim() : ''), consent: status === 'submitted' }; phPut(p, function () { cb && cb(p); }); }); }
+    el.addEventListener('input', function (e) { if (e.target.id === 'ph-cap') { cap = e.target.value; draw(); } });
+    el.addEventListener('click', function (e) {
+      var t;
+      if ((t = e.target.closest('[data-ph-fr]'))) { frame = t.getAttribute('data-ph-fr'); save('ph-frame', frame); el.querySelectorAll('[data-ph-fr]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); draw(); return; }
+      if ((t = e.target.closest('[data-ph-pr]'))) { var v = t.getAttribute('data-ph-pr'); prompt = prompt === v ? '' : v; el.querySelectorAll('[data-ph-pr]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-ph-pr') === prompt)); }); return; }
+      if (e.target.closest('[data-ph-tag]')) { var i = el.querySelector('#ph-tag'), n = i.value.trim(); if (n && tags.indexOf(n) < 0) tags.push(n); i.value = ''; paintTags(); return; }
+      if ((t = e.target.closest('[data-ph-untag]'))) { tags.splice(+t.getAttribute('data-ph-untag'), 1); paintTags(); return; }
+      if (e.target.closest('[data-ph-save]')) { keep('mine', function () { blob(function (b) { var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'mismo-summit-photo.jpg'; document.body.appendChild(a); a.click(); a.remove(); }); closeSheet(); mxToast('Saved to My Photos'); phChanged(); }); return; }
+      if (e.target.closest('[data-ph-share]')) {
+        blob(function (b) { var f = new File([b], 'mismo-summit-photo.jpg', { type: 'image/jpeg' });
+          if (navigator.canShare && navigator.canShare({ files: [f] })) navigator.share({ files: [f], title: (S.summit && S.summit.name) || 'MISMO Summit' }).catch(function () {});
+          else mxToast('Sharing isn\'t available here. Save it, then share it from your photos.'); });
+        return;
+      }
+      if (e.target.closest('[data-ph-send]')) {
+        var ok = el.querySelector('#ph-ok'); if (ok && !ok.checked) { ok.closest('.ph-ok').classList.add('need'); mxToast('Check the box first'); return; }
+        keep('submitted', function () { closeSheet(); mxToast(staff ? 'Added to the submissions' : 'Sent. Thank you!'); phChanged(); });
+      }
+    });
+  });
+}
+function phChanged() { try { window.dispatchEvent(new Event('ph-changed')); if ($('#pg-home') && $('#pg-home').innerHTML) renderPage('home'); } catch (e) {} }
+function phTake(kind, prompt) { phPick(kind, function (fs) { phEditor(fs[0], prompt); }); }
+/* the card on the summit page */
+function photosCard() {
+  return '<div class="section-h"><h2>Summit Photos</h2></div><div class="ph-card"><div class="ph-card-top">' + icon('i-camera') + '<span><b>Snap the Summit</b><span>Selfies, friends and ' + esc(S.place || 'the summit') + ', in a summit frame to save or share. Send your best to MISMO.</span></span></div>' +
+    '<div class="ph-btns"><button type="button" class="btn primary" data-ph-take="selfie">' + icon('i-camera') + 'Take a Selfie</button><button type="button" class="btn" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button></div>' +
+    '<div class="ph-ch"><b>Photo Challenge</b><div class="ph-pr">' + PH_PROMPTS.map(function (p) { return '<button type="button" data-ph-take="selfie" data-ph-prompt="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div>' +
+    '<div class="ph-row"><button type="button" class="linkbtn" data-ph-mine>' + icon('i-image') + 'My Photos' + icon('i-chev') + '</button>' + (phReviewer() ? '<button type="button" class="linkbtn" data-ph-review>' + icon('i-check') + 'Review Submissions' + icon('i-chev') + '</button>' : '') + '</div></div>';
+}
+function phMine() {
+  var el = openSheet('My Photos', '<div class="sheet-pad ph-grid-w"></div>', { plain: true });
+  function paint() { phAll(function (l) { l = l.filter(function (p) { return p.status !== 'passed'; });
+    el.querySelector('.ph-grid-w').innerHTML = l.length ? '<div class="ph-grid">' + l.map(function (p) { return '<div class="ph-tile"><img alt="" src="' + phThumb(p) + '"><span class="ph-st ' + (p.status === 'mine' ? '' : 'sent') + '">' + (p.status === 'mine' ? 'On This Phone' : p.status === 'picked' || p.status === 'to-media' ? 'Picked by MISMO' : 'Sent to MISMO') + '</span><button type="button" class="ph-del" data-ph-del="' + p.id + '" aria-label="Delete this photo">' + icon('i-x') + '</button></div>'; }).join('') + '</div>'
+      : '<div class="note">No photos yet. Take a selfie or a photo with friends from the Summit Photos card.</div>'; }); }
+  paint();
+  el.addEventListener('click', function (e) { var t = e.target.closest('[data-ph-del]'); if (t && confirm('Delete this photo from your phone?')) phDel(t.getAttribute('data-ph-del'), paint); });
+}
+/* Amy's review: pick the ones for MISMO Media, then send the picks (only when she presses Send) */
+function phReview() {
+  if (!phReviewer()) return;
+  var el = openSheet('Summit Photo Submissions', '<div class="sheet-pad phr"></div>', { plain: true }), box = el.querySelector('.phr'), tab = 'new';
+  function paint() { phAll(function (l) {
+    l = l.filter(function (p) { return p.status !== 'mine'; });
+    var by = { new: l.filter(function (p) { return p.status === 'submitted'; }), picked: l.filter(function (p) { return p.status === 'picked'; }), sent: l.filter(function (p) { return p.status === 'to-media'; }), passed: l.filter(function (p) { return p.status === 'passed'; }) };
+    var show = by[tab];
+    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s submissions. When photo sharing goes live, everyone\'s show here. Picks go to MISMO Media only when you press Send, and MISMO Media drafts the post for you to approve. Nothing posts on its own.</span></div>' +
+      '<div class="seg phr-tabs">' + [['new', 'New'], ['picked', 'Picked'], ['sent', 'Sent to MISMO Media'], ['passed', 'Passed']].map(function (t) { return '<button type="button" data-phr-tab="' + t[0] + '" aria-pressed="' + (tab === t[0]) + '">' + t[1] + (by[t[0]].length ? ' <b>' + by[t[0]].length + '</b>' : '') + '</button>'; }).join('') + '</div>' +
+      '<div class="ph-btns"><button type="button" class="btn" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-phr-add>' + icon('i-image') + 'Add From My Photos</button></div>' +
+      (show.length ? '<div class="phr-list">' + show.map(function (p) { var d = new Date(p.at);
+        return '<div class="phr-item"><img alt="" src="' + phThumb(p) + '"><div class="phr-meta"><b>' + esc(p.by === 'staff' ? (p.name || 'MISMO Staff') + ' (Staff)' : p.name || 'An Attendee') + '</b><span>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</span>' +
+          (p.caption ? '<i>"' + esc(p.caption) + '"</i>' : '') + (p.prompt ? '<span>Challenge: ' + esc(p.prompt) + '</span>' : '') + (p.tags && p.tags.length ? '<span>With ' + esc(p.tags.join(', ')) + '</span>' : '') +
+          (p.by !== 'staff' ? '<span class="phr-ok">' + icon('i-check') + 'OK to use</span>' : '') +
+          (tab === 'picked' ? '<textarea class="ld-in" data-phr-note="' + p.id + '" placeholder="Note for MISMO Media (optional)">' + esc(p.note || '') + '</textarea>' : '') + '</div>' +
+          '<div class="phr-acts">' + (tab === 'new' || tab === 'passed' ? '<button type="button" class="btn primary" data-phr="picked" data-id="' + p.id + '">' + icon('i-check') + 'Pick</button>' : '') + (tab !== 'passed' && tab !== 'sent' ? '<button type="button" class="btn" data-phr="passed" data-id="' + p.id + '">Pass</button>' : '') + (tab === 'picked' ? '<button type="button" class="btn" data-phr="submitted" data-id="' + p.id + '">Undo</button>' : '') + '</div></div>'; }).join('') + '</div>'
+        : '<div class="note">' + (tab === 'new' ? 'No new submissions. Photos people send to MISMO show up here.' : tab === 'picked' ? 'Nothing picked yet. Pick photos under New.' : tab === 'sent' ? 'Nothing sent to MISMO Media yet.' : 'Nothing passed.') + '</div>') +
+      (tab === 'picked' && show.length ? '<button type="button" class="btn primary phr-send" data-phr-send>' + icon('i-send') + 'Send ' + show.length + (show.length === 1 ? ' Photo' : ' Photos') + ' to MISMO Media</button><p class="sc-fine">MISMO Media drafts the summit post with these. You review the draft there and decide whether it posts.</p>' : '');
+  }); }
+  paint();
+  function onCh() { if (!el.isConnected) { window.removeEventListener('ph-changed', onCh); return; } paint(); } window.addEventListener('ph-changed', onCh);
+  el.addEventListener('change', function (e) { var t = e.target.closest('[data-phr-note]'); if (t) phAll(function (l) { var p = l.filter(function (x) { return x.id === t.getAttribute('data-phr-note'); })[0]; if (p) { p.note = t.value; delete p.url; phPut(p); } }); });
+  el.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-phr-tab]'))) { tab = t.getAttribute('data-phr-tab'); paint(); return; }
+    if ((t = e.target.closest('[data-phr]'))) { var id = t.getAttribute('data-id'), st = t.getAttribute('data-phr'); phAll(function (l) { var p = l.filter(function (x) { return x.id === id; })[0]; if (p) { p.status = st; delete p.url; phPut(p, paint); } }); return; }
+    if (e.target.closest('[data-phr-add]')) { phPick('pick', function (fs) { var n = 0; fs.forEach(function (f) { phLoad(f, function (im) { var cv = document.createElement('canvas'); phDraw(cv, im, 'none', ''); cv.toBlob(function (b) { phPut({ id: 'ph' + Date.now() + '-' + (n++), at: Date.now(), sid: S.sid || '', blob: b, frame: 'none', caption: '', tags: [], prompt: '', status: 'submitted', by: 'staff', name: (staffSession() || {}).name || '' }, paint); }, 'image/jpeg', .86); }); }); }); return; }
+    if (e.target.closest('[data-phr-send]')) {
+      phAll(function (l) { var picks = l.filter(function (p) { return p.status === 'picked'; }); if (!picks.length) return;
+        if (!confirm('Send ' + picks.length + (picks.length === 1 ? ' photo' : ' photos') + ' to MISMO Media for the summit post draft?')) return;
+        var left = picks.length; picks.forEach(function (p) { p.status = 'to-media'; p.sentAt = Date.now(); delete p.url; phPut(p, function () { if (!--left) { mxToast('Staff test: marked as sent. MISMO Media gets them when photo sharing goes live.'); tab = 'sent'; paint(); } }); }); });
+    }
   });
 }
 /* Attendance Now: counts per session as check-ins come in */
@@ -3510,6 +3740,7 @@ function attendanceSheet() {
     var live = ses.filter(function (s) { return s.x.date === n.date && s.x.a <= n.min && s.x.b > n.min; });
     var topCo = Object.keys(cos).sort(function (a, b) { return cos[b] - cos[a] || a.localeCompare(b); }).slice(0, 5);
     box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>' +
+      '<button type="button" class="scan-ci an-tr" data-trackers>' + icon('i-agenda') + '<span><b>Open Meeting Trackers</b><span>Live tracking for every meeting, summit or not</span></span>' + icon('i-chev', 'go') + '</button>' +
       '<div class="an-kpis"><div><b>' + Object.keys(people).length + '</b><span>People Checked In</span></div><div><b>' + ses.length + '</b><span>Sessions Scanned</span></div><div><b>' + live.reduce(function (t, s) { return t + s.n; }, 0) + '</b><span>In Sessions Now</span></div></div>' +
       (ses.length ? '<h3 class="wg-h">By Session</h3><div class="an-ses">' + ses.map(function (s) {
         var on = live.indexOf(s) >= 0;
@@ -5849,7 +6080,11 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
-  if (t.hasAttribute('data-scan')) { scanSheet(); return; }
+  if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }
+  if (t.hasAttribute('data-ph-take')) { phTake(t.getAttribute('data-ph-take'), t.getAttribute('data-ph-prompt') || ''); return; }
+  if (t.hasAttribute('data-ph-mine')) { phMine(); return; }
+  if (t.hasAttribute('data-ph-review')) { phReview(); return; }
+  if (t.hasAttribute('data-trackers')) { webSheet('/meeting-trackers/', 'Meeting Trackers'); return; }
   if (t.hasAttribute('data-checkin')) { checkinSheet(t.getAttribute('data-checkin')); return; }
   if (t.hasAttribute('data-attend')) { attendanceSheet(); return; }
   if (t.hasAttribute('data-scans')) { scansSheet(); return; }

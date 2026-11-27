@@ -62,3 +62,16 @@ Attendees don't need the app to be scanned.
 ## Testing before the relay
 Once Summit HQ adds `reg`, staff can test the whole scan with real Winter 2027 registrations, using two phones and the
 Test Badge screen; scans stay on the phone that scanned until the relay part is live.
+
+## One scanner, by role (Jonna, Nov 27, 2026)
+- The scan button in the top bar (and Scan Name Tags on People, Scan) opens one scanner with a mode bar at the top.
+  - **Staff** (MyMISMO and Summit HQ access): Check-In, Who I Met, Touchpoint (Log a Touchpoint, which goes to Member 360
+    when scanning goes live).
+  - **Facilitators** (MyMISMO and Meeting Trackers access, no Summit HQ): Check-In and Who I Met. Until the relay part
+    is live they don't see the attendee list, so a scan shows the registration number and they type the name.
+  - **Sponsors**: their own leads, turned on when the relay part is live (unchanged from above).
+- **Session picker**: a big button showing the session name, day, time and room; it opens Pick a Session, with day
+  buttons, search, the session on now marked On Now, and the facilitator's own sessions at the top under Yours once
+  Summit HQ's check-in list carries a `facilitator` field (CN-058).
+- **Meeting Trackers**: staff and facilitators open the live Meeting Trackers (every meeting, any time) from the Scan tab
+  and from Attendance Now.
