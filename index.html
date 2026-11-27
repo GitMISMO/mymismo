@@ -2115,6 +2115,9 @@ nav.tabbar .badge.on{display:grid}
 .iconbtn{border:1px solid var(--border); background:var(--surface); border-radius:7px; width:38px; height:38px; display:grid; place-items:center; cursor:pointer; color:var(--ink); flex:none}
 .iconbtn svg{width:19px; height:19px}
 .sheet-head .iconbtn.close{margin-left:auto}
+.sheet-head .iconbtn.grow{display:none; margin-left:auto} .sheet-head .iconbtn.grow + .close{margin-left:0}
+.iconbtn.grow svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
+.iconbtn.grow .g-in{display:none} html.mm-wide .iconbtn.grow .g-in{display:block} html.mm-wide .iconbtn.grow .g-out{display:none}
 .sheet:not(.plain) .sheet-head{position:absolute; left:0; right:0; top:0}
 .sheet:not(.plain) .iconbtn{background:rgba(6,32,47,.35); border-color:rgba(255,255,255,.25); color:#fff}
 .sheet-body{overflow-y:auto; overflow-x:hidden; flex:1; -webkit-overflow-scrolling:touch}
@@ -2185,7 +2188,9 @@ nav.tabbar .badge.on{display:grid}
   .rail{grid-auto-columns:minmax(260px, 32%)}
 }
 @media (min-width:900px){
-  .sheet{left:auto; top:0; width:min(72vw, 880px); border-radius:0; transform:translateX(100%)}
+  .sheet{left:auto; top:0; width:min(72vw, 880px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
+  html.mm-wide .sheet{width:100vw}
+  .sheet-head .iconbtn.grow{display:grid}
   .sheet-head .grab{display:none}
 }
 @media (max-width:520px){
@@ -6581,13 +6586,29 @@ function show(p, opts) {
 
 /* ---------- detail sheets ---------- */
 var stack = [];
+/* Jonna, Nov 27, 2026: on a computer the pop-ups open as a panel on the right, and, like her other apps, the panel can
+   be expanded to the full width and back. The choice is remembered. */
+var GROW_KEY = 'mymismo.rails.wide';
+try { if (localStorage.getItem(GROW_KEY) === '1') document.documentElement.classList.add('mm-wide'); } catch (e) {}
+function growBtn() {
+  var w = document.documentElement.classList.contains('mm-wide'), t = w ? 'Back to Normal Size' : 'Expand Panel';
+  return '<button type="button" class="iconbtn grow" data-sheet-grow title="' + t + '" aria-label="' + t + '" aria-pressed="' + w + '"><svg class="g-out" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-7 7"/><path d="M10 20H4v-6"/><path d="M4 20l7-7"/></svg><svg class="g-in" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M4 14h6v6"/><path d="M10 14l-7 7"/></svg></button>';
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('[data-sheet-grow]'); if (!b) return;
+  var w = !document.documentElement.classList.contains('mm-wide'); document.documentElement.classList.toggle('mm-wide', w);
+  try { localStorage.setItem(GROW_KEY, w ? '1' : '0'); } catch (er) {}
+  var t = w ? 'Back to Normal Size' : 'Expand Panel';
+  document.querySelectorAll('[data-sheet-grow]').forEach(function (x) { x.title = t; x.setAttribute('aria-label', t); x.setAttribute('aria-pressed', String(w)); });
+  if (typeof fitMore === 'function') setTimeout(fitMore, 300);
+});
 function openSheet(title, html, opts) {
   opts = opts || {};
   var el = document.createElement('div');
   el.className = 'sheet' + (opts.plain ? ' plain' : ''); el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', title);
   if (opts.color) el.style.setProperty('--tagc', opts.color);
   el.innerHTML = '<div class="sheet-head"><span class="grab" aria-hidden="true"></span>' + (stack.length ? '<button type="button" class="iconbtn" data-sheet-back aria-label="Back">' + icon('i-back') + '</button>' : '') +
-    '<span class="title">' + (opts.plain ? esc(title) : '') + '</span><button type="button" class="iconbtn close" data-sheet-close aria-label="Close">' + icon('i-x') + '</button></div><div class="sheet-body">' + html + '</div>';
+    '<span class="title">' + (opts.plain ? esc(title) : '') + '</span>' + growBtn() + '<button type="button" class="iconbtn close" data-sheet-close aria-label="Close">' + icon('i-x') + '</button></div><div class="sheet-body">' + html + '</div>';
   if (opts.key) el.setAttribute('data-key', opts.key);
   /* Jonna, Nov 27, 2026: a session's pop-up wears the summit's header (navy, the city's skyline and moon); its type shows in its colored tag */
   var cv = el.querySelector('.cover'); if (cv) { if (S.summit && S.place) { cv.classList.add('sum'); cv.insertAdjacentHTML('afterbegin', summitArt({ moon: [930, 100, .72] })); } else cv.insertAdjacentHTML('afterbegin', heroArt({ ground: false })); }
