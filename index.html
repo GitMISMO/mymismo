@@ -1097,6 +1097,15 @@ svg.wg-go{width:18px; height:18px; color:var(--ink-3)}
 .tvb-chip.live{background:rgba(27,175,122,.16); border-color:rgba(27,175,122,.55); color:#7fe0b8}
 .tv-go.big{width:100%; justify-content:center; margin-top:4px; font-size:17px; padding:15px 22px}
 .tvb-lock{display:inline-flex; align-items:center; gap:6px; font-style:normal; font-weight:700; color:rgba(255,255,255,.6)} .tvb-lock svg{width:14px; height:14px}
+.tvb-stage{position:relative; padding:6px 0 4px}
+.tvb-stage::after{content:""; position:absolute; inset:10% 8% -6%; background:radial-gradient(closest-side, rgba(242,193,78,.22), transparent); pointer-events:none}
+.tvb-clock{position:absolute; top:-6px; right:-4px; z-index:1; display:inline-flex; align-items:center; gap:4px; padding:5px 9px; border-radius:8px; background:#f2c14e; color:#0d314c; font-family:var(--cond); font-weight:800; font-size:15px; box-shadow:0 6px 16px -6px rgba(242,193,78,.8); transform:rotate(4deg); animation:tvb-tick 2.4s ease-in-out infinite}
+.tvb-clock svg{width:14px; height:14px}
+@keyframes tvb-tick{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-2deg) scale(1.06)}}
+.tv-go.tvb-go{width:100%; margin-top:12px}
+.tv-go.tvb-go.off{opacity:.8; cursor:not-allowed}
+.tvw-b:disabled{opacity:.7; cursor:not-allowed}
+@media (prefers-reduced-motion: reduce){ .tvb-clock{animation:none} }
 .tvw{margin:14px 0 6px}
 .tvw-h{font-size:12.5px; font-weight:800; color:var(--ink-2); margin:0 0 8px}
 .tvw-row{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px}
@@ -1118,8 +1127,9 @@ svg.wg-go{width:18px; height:18px; color:var(--ink-3)}
 .h2-offrow{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px} .h2-offrow .btn{justify-content:center; opacity:.8; cursor:not-allowed}
 .h2-steps{list-style:none; margin:8px 0 0; padding:0; display:grid; gap:8px}
 .h2-steps li{display:grid; grid-template-columns:26px 22px 1fr; gap:10px; align-items:start; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border)}
-.h2-n{width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; background:#eb6834; color:#fff}
-.h2-steps svg{width:20px; height:20px; margin-top:3px; color:#eb6834} .h2-steps b{display:block; font-size:14.5px} .h2-steps div span{font-size:13px; color:var(--ink-2); line-height:1.4}
+.h2-n{width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; background:var(--sc, #eb6834); color:#fff}
+.h2-steps.solo{--sc:#2477b8}
+.h2-steps svg{width:20px; height:20px; margin-top:3px; color:var(--sc, #eb6834)} .h2-steps b{display:block; font-size:14.5px} .h2-steps div span{font-size:13px; color:var(--ink-2); line-height:1.4}
 @media (prefers-reduced-motion: reduce){ .h2v-mid svg, .h2v-board i{animation:none} }
 .h2{display:grid; gap:10px}
 .h2-load{display:flex; gap:8px; align-items:center; justify-content:center; padding:24px; color:var(--ink-2)} .h2-load svg{width:18px; height:18px}
@@ -5411,12 +5421,20 @@ function tvsSolo() {
 /* the Solo pop-up: what the Board is, Play the Board, and the warm-ups; the game then plays right here */
 function tvSoloSheet() {
   var test = triviaTester();
+  /* Jonna, Nov 27, 2026: laid out like Head to Head: a picture card, the big button, Warm Up, then How It Works */
+  var steps = [['i-grid', 'Pick Any Square', 'Six categories, thirty squares. A 200 is an easy question; a 1,000 is a tough one.'],
+    ['i-clock', 'Beat the Clock', 'Three minutes to play as many squares as you can. Each question has its own timer too.'],
+    ['i-check', 'Right Adds, Wrong Subtracts', 'Get it right and the points are yours; get it wrong and they come off. Running out of time on a square costs nothing.'],
+    ['i-star', 'Find the Double Square', 'One square on the Board is worth double. It could be anywhere.'],
+    ['i-cert', 'Finish With the Final Square', 'See its category, wager up to your score, then answer to win or lose your wager.']];
   var el = openSheet('Solo', '<div class="sheet-pad tv tv-solo">' +
-    '<div class="tvb"><div class="tvb-art" aria-hidden="true">' + [0, 1, 2, 3, 4, 5].map(function (k) { return '<span class="tvb-col" style="--k:' + k + '"><i></i>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<em style="--r:' + r + '">' + v + '</em>'; }).join('') + '</span>'; }).join('') + '</div>' +
-    '<div class="tvb-txt"><b>The Board</b><p>Six categories, thirty squares. A 200 is an easy one, a 1,000 is tough, and one square pays double. Three minutes on the clock, then the Final Square.</p>' +
-    '<span class="tvb-chip" id="tvb-chip">' + icon('i-clock') + 'Checking the leaderboard…</span>' +
-    (test ? '<button type="button" class="tv-go big" data-tv-board>' + icon('i-play') + 'Play the Board</button>' : '<em class="tvb-lock">' + icon('i-lock') + 'Opens Soon</em>') + '</div></div>' +
-    (test ? '<div class="tvw"><div class="tvw-h">Warm Up</div><div class="tvw-row">' + [[0, 'Easy Round', '10 questions, 25 seconds each'], [1, 'Quick Round', '10 questions, 20 seconds each'], [3, 'Study', 'No clock, learn as you go']].map(function (w) { var l = TV_LEVELS[w[0]]; return '<button type="button" class="tvw-b" data-tv-warm="' + w[0] + '" style="--lc:' + l.c + '"><b>' + w[1] + '</b><span>' + w[2] + '</span></button>'; }).join('') + '</div></div>' : '') +
+    '<div class="tvb"><div class="tvb-stage"><div class="tvb-art" aria-hidden="true">' + [0, 1, 2, 3, 4, 5].map(function (k) { return '<span class="tvb-col" style="--k:' + k + '"><i></i>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<em style="--r:' + r + '">' + v + '</em>'; }).join('') + '</span>'; }).join('') + '</div>' +
+    '<span class="tvb-clock" aria-hidden="true">' + icon('i-clock') + '3:00</span></div>' +
+    '<div class="tvb-txt"><b>Solo</b><p>Just you, the Board and the clock. Rack up points, nail the Final Square and climb the leaderboard.</p>' +
+    '<span class="tvb-chip" id="tvb-chip">' + icon('i-clock') + 'Checking the leaderboard…</span></div></div>' +
+    (test ? '<button type="button" class="tv-go big tvb-go" data-tv-board>' + icon('i-play') + 'Play the Board</button>' : '<button type="button" class="tv-go big tvb-go off" disabled>' + icon('i-lock') + 'Play the Board: Opens Soon</button>') +
+    '<div class="tvw"><div class="tvw-h">Warm Up</div><div class="tvw-row">' + [[0, 'Easy Round', '10 questions, 25 seconds each'], [1, 'Quick Round', '10 questions, 20 seconds each'], [3, 'Study', 'No clock, learn as you go']].map(function (w) { var l = TV_LEVELS[w[0]]; return '<button type="button" class="tvw-b"' + (test ? ' data-tv-warm="' + w[0] + '"' : ' disabled') + ' style="--lc:' + l.c + '"><b>' + w[1] + '</b><span>' + w[2] + '</span></button>'; }).join('') + '</div></div>' +
+    '<h3 class="h2-h">How It Works</h3><ol class="h2-steps solo">' + steps.map(function (t, k) { return '<li><span class="h2-n">' + (k + 1) + '</span>' + icon(t[0]) + '<div><b>' + t[1] + '</b><span>' + t[2] + '</span></div></li>'; }).join('') + '</ol>' +
     '</div>', { plain: true });
   el.setAttribute('data-tvhost', 'solo');
   var chip = el.querySelector('#tvb-chip');
