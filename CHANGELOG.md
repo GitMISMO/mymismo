@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: The Board of Directors and the Joint Committee say Refreshments (was Food Served), like the breaks.
 - Nov 27, 2026: Tuesday's Morning Break (10:20 to 10:40, between the General Sessions talks) is on the Agenda, so every day has a morning and an afternoon break.
 - Nov 27, 2026: Monday's lunch is 12:00 to 1:30 (it said 1:00, as the website does).
 - Nov 27, 2026: Every break is on the Agenda (Morning, Afternoon and Tuesday's Afternoon Snack Break, at the website's times), marked Refreshments. Sessions with food are marked on the Agenda and in their pop-up: Newcomer Orientation (Lunch Served), the Board of Directors and the Joint Committee (Food Served), receptions (Food and Drinks); each gets On the Menu once the hotel menu is set.

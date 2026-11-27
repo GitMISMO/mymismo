@@ -6729,7 +6729,7 @@ function topSheet() { return stack[stack.length - 1] || null; }
 var MENU_TAGS = { V: 'Vegetarian', VG: 'Vegan', VE: 'Vegan', GF: 'Gluten-Free', DF: 'Dairy-Free', N: 'Contains Nuts', NF: 'Nut-Free' };
 /* Jonna, Nov 27, 2026: the meetings with food: Newcomer Orientation has lunch, the Board and the Joint Committee have food,
    receptions have food and drinks, and breaks often do */
-var FOOD = [[/newcomer orientation/i, 'Lunch Served'], [/board of directors/i, 'Food Served'], [/joint committee/i, 'Food Served'], [/reception|happy hour/i, 'Food and Drinks'], [/break/i, 'Refreshments']];
+var FOOD = [[/newcomer orientation/i, 'Lunch Served'], [/board of directors/i, 'Refreshments'], [/joint committee/i, 'Refreshments'], [/reception|happy hour/i, 'Food and Drinks'], [/break/i, 'Refreshments']];
 function foodNote(x) { var t = (x.type || '') + ' ' + (x.title || ''); if (/breakfast/i.test(t) || x.type === 'Lunch') return ''; for (var i = 0; i < FOOD.length; i++) if (FOOD[i][0].test(t)) return FOOD[i][1]; return ''; }
 function isFood(x) { return /breakfast|lunch|dinner|reception|break|happy hour|coffee|snack/i.test((x.type || '') + ' ' + (x.title || '')) || !!foodNote(x); }
 function menuList(menu, small) {
