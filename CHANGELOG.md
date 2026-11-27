@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Summit page buttons read Sponsors, Agenda, Speakers, Starred. A session's Find on Map and Walk There sit side by side in the same spot on every session; Check People In is gone from sessions (scanning is the top-bar button).
+- Nov 27, 2026: Ready for relay request 17: when Perry turns it on, check-ins, Who I Met and touchpoints are sent every 20 seconds (and as soon as the Wi-Fi is back, never counted twice), facilitators see names, Attendance Now shows everyone's check-ins live, and photos sent to MISMO go up. Until then everything stays on the phone as before.
 - Nov 27, 2026: Snap the Summit is a compact card on the Summit page (a fan of framed photos, the challenge progress) that opens Summit Photos big in its own pop-up. Fixed stray Meeting Trackers text left in Attendance Now.
 - Nov 27, 2026: Summit Photos is now a showpiece: a fan of framed photos (yours once you've taken some), a big orange Take a Photo, and a three-part Photo Challenge (a selfie at the General Sessions, you and someone you just met, your favorite bite in town) with your progress.
 - Nov 27, 2026: The name tag scanner sounds like a grocery store checkout: one bright beep for a good scan, a low buzz for a tag already scanned.

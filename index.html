@@ -1710,6 +1710,7 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .cv-foot{display:flex; align-items:flex-end; gap:10px 12px; flex-wrap:wrap; margin-top:14px}
 .cv-foot:empty{display:none}
 .cv-foot .spline{margin-top:0}
+.sheet .cover .cv-foot{display:grid; grid-template-columns:1fr 1fr; gap:8px; max-width:340px} .sheet .cover .cv-foot .findmap{margin:0; justify-content:center; padding:9px 11px; font-size:14px} .sheet .cover .cv-foot .findmap:only-child{grid-column:1}
 .findmap{margin-left:auto; display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.4); background:rgba(255,255,255,.14); color:#fff; border-radius:6px; padding:6px 11px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap}
 .findmap svg{width:15px; height:15px}
 @media (prefers-reduced-motion: reduce){ .fpin.on i{animation:none} }
@@ -2524,7 +2525,7 @@ function renderHome() {
     /* Jonna, Nov 26, 2026: under the header, each in its own box; Nov 27: no numbers, just the cards */
     '<div class="pass-figs">' +
       '<button type="button" data-sponsors>' + icon('i-handshake') + '<span>Sponsors</span></button>' +
-      '<button type="button" data-go="agenda">' + icon('i-agenda') + '<span>Sessions</span></button>' +
+      '<button type="button" data-go="agenda">' + icon('i-agenda') + '<span>Agenda</span></button>' +
       '<button type="button" data-go="people">' + icon('i-people') + '<span>Speakers</span></button>' +
       '<button type="button" data-go="mine">' + icon('i-star') + '<span>Starred</span></button>' +
     '</div>' +
@@ -3360,7 +3361,7 @@ function scanRole() {
 }
 function canScan() { return !!scanRole(); }
 function scanKind(s) { var k = s.kind || ''; return /engagement|touchpoint/i.test(k) ? 'Touchpoint' : /met/i.test(k) ? 'Someone I Met' : k || 'Touchpoint'; }
-function regLookup(n) { return (PV.byReg && PV.byReg[String(n)]) || null; }
+function regLookup(n) { return (PV.byReg && PV.byReg[String(n)]) || load('scan-names:' + S.sid, {})[String(n)] || null; }   /* names from the relay fill in for facilitators (relay request 17) */
 function myReg() { return PV.myReg || ''; }
 /* Code 39 drawn as an SVG, for the Test Badge */
 function c39Svg(v) {
@@ -3418,7 +3419,7 @@ function leadSheet(sc, fresh) {
   function keep() {
     sc.note = el.querySelector('#ld-note').value.trim(); sc.email = el.querySelector('#ld-email').value.trim();
     sc.name = el.querySelector('#ld-name').value.trim(); sc.title = el.querySelector('#ld-title').value.trim(); sc.company = el.querySelector('#ld-co').value.trim();
-    var orig = sc.reg ? regLookup(sc.reg) : null; sc.edited = !!(orig && (orig.name !== sc.name || orig.title !== sc.title || orig.company !== sc.company));
+    var orig = sc.reg ? regLookup(sc.reg) : null; sc.edited = !!(orig && (orig.name !== sc.name || orig.title !== sc.title || orig.company !== sc.company)); sc.synced = false; setTimeout(scanSync, 300);
     var l = myScans().filter(function (x) { return x.at !== sc.at; }); l.unshift(sc); saveScans(l);
   }
   el.addEventListener('click', function (e) {
@@ -3427,7 +3428,7 @@ function leadSheet(sc, fresh) {
     if ((t = e.target.closest('[data-ld-rate]'))) { sc.rate = sc.rate === t.getAttribute('data-ld-rate') ? '' : t.getAttribute('data-ld-rate'); el.querySelectorAll('[data-ld-rate]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-ld-rate') === sc.rate)); }); return; }
     if (e.target.closest('[data-ld-save]')) { keep(); closeSheet(); mxToast('Scan saved'); return; }
     if (e.target.closest('[data-ld-again]')) { keep(); closeSheet(); mxToast('Scan saved'); if (!sc.hub) scanHub(null, sc.kind === 'Someone I Met' ? 'met' : 'touch'); return; }
-    if (e.target.closest('[data-ld-del]')) { saveScans(myScans().filter(function (x) { return x.at !== sc.at; })); closeSheet(); mxToast('Scan deleted'); var l = document.querySelector('.scl-sheet'); if (l) { closeSheet(); scansSheet(); } }
+    if (e.target.closest('[data-ld-del]')) { if (sc.synced) { var dl = load('scans-del:' + S.sid, []); dl.push({ id: 'n-' + Number(sc.at).toString(36), kind: scanKind(sc) === 'Touchpoint' ? 'touch' : 'met' }); save('scans-del:' + S.sid, dl); setTimeout(scanSync, 300); } saveScans(myScans().filter(function (x) { return x.at !== sc.at; })); closeSheet(); mxToast('Scan deleted'); var l = document.querySelector('.scl-sheet'); if (l) { closeSheet(); scansSheet(); } }
   });
   return el;
 }
@@ -3993,13 +3994,66 @@ function phReview() {
     }
   });
 }
+/* ---------- Sending scans when the relay part is live (relay request 17). Until then every route answers 404 and the
+   phone keeps everything, as in the staff test. Check-ins, Who I Met and touchpoints are sent every 20 seconds (and as
+   soon as the Wi-Fi is back); each check-in has an id made from when it was scanned, so a retry is never counted twice. */
+var SYNC = { live: null, t: 0, busy: false, all: null };
+function scanTok() { try { return window.ResourcesSession && ResourcesSession.token && ResourcesSession.token(); } catch (e) { return null; } }
+function scanApi(method, path, body, tok) {
+  tok = tok || scanTok(); if (!tok) return Promise.reject(new Error('NO_SIGN_IN'));
+  return fetch(RELAY + '/mymismo' + path, { method: method, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: body ? JSON.stringify(body) : undefined })
+    .then(function (r) { if (r.status === 404) { SYNC.live = false; SYNC.t = Date.now(); throw new Error('OFF'); } return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, j: j }; }); });
+}
+function ciId(c) { return 'c-' + Number(c.at || 0).toString(36) + '-' + (c.reg || String(c.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 12) || 'x'); }
+function scanSync() {
+  if (SYNC.busy || !canScan() || !S.sid || navigator.onLine === false || !scanTok()) return;
+  if (SYNC.live === false && Date.now() - SYNC.t < 600000) return;
+  SYNC.busy = true;
+  var un = myCheckins().filter(function (c) { return !c.sent; }).slice(0, 200);
+  (un.length ? scanApi('POST', '/scan/checkins', { summit: S.sid, items: un.map(function (c) { return { id: ciId(c), ses: c.ses, reg: c.reg || '', name: c.name || '', title: c.title || '', company: c.company || '', manual: !!c.manual, at: c.at }; }) })
+    .then(function (r) { if (r.status !== 200) return; SYNC.live = true; var ids = {}; un.forEach(function (c) { ids[ciId(c)] = 1; }); var all = myCheckins(); all.forEach(function (c) { if (ids[ciId(c)]) c.sent = true; }); save(checkinsKey(), all); }) : Promise.resolve())
+  .then(function () {
+    var staff = scanRole() === 'staff', notes = myScans().filter(function (x) { return !x.synced && (staff || scanKind(x) !== 'Touchpoint'); }).slice(0, 100), dels = load('scans-del:' + S.sid, []);
+    if (!notes.length && !dels.length) return;
+    var items = notes.map(function (x) { return { id: 'n-' + Number(x.at).toString(36), kind: scanKind(x) === 'Touchpoint' ? 'touch' : 'met', reg: x.reg || '', name: x.name || '', title: x.title || '', company: x.company || '', rate: x.rate || '', note: x.note || '', email: x.email || '', at: x.at }; })
+      .concat(dels.map(function (d) { return { id: d.id, kind: d.kind, deleted: true }; }));
+    return scanApi('POST', '/scan/notes', { summit: S.sid, items: items }).then(function (r) {
+      if (r.status !== 200) return; SYNC.live = true; var ats = {}; notes.forEach(function (x) { ats[x.at] = 1; });
+      var l = myScans(); l.forEach(function (x) { if (ats[x.at]) x.synced = true; }); saveScans(l); save('scans-del:' + S.sid, []);
+    });
+  })
+  .then(function () {   /* names for registration numbers this phone can't look up itself (facilitators) */
+    var regs = {}; myCheckins().concat(myScans()).forEach(function (c) { if (c.reg && !regLookup(c.reg)) regs[c.reg] = 1; });
+    var list = Object.keys(regs).slice(0, 50); if (!list.length) return;
+    return scanApi('POST', '/scan/lookup', { summit: S.sid, regs: list }).then(function (r) { if (r.status !== 200 || !r.j.people) return; var m = load('scan-names:' + S.sid, {}); Object.keys(r.j.people).forEach(function (k) { m[k] = r.j.people[k]; }); save('scan-names:' + S.sid, m); });
+  })
+  .then(phSync)
+  .catch(function () {}).then(function () { SYNC.busy = false; });
+}
+/* photos sent to MISMO from this phone go up one at a time */
+function phTokFor(p) { return p.by === 'staff' ? scanTok() : (A && A.token) || null; }
+function phSync() {
+  if (SYNC.live === false && Date.now() - SYNC.t < 600000) return;
+  return new Promise(function (done) {
+    phAll(function (l) {
+      var p = l.filter(function (x) { return x.status === 'submitted' && !x.remote && x.blob && phTokFor(x); })[0]; if (!p) { done(); return; }
+      var fr = new FileReader(); fr.onload = function () {
+        scanApi('POST', '/photos', { summit: p.sid || S.sid, data: fr.result, caption: p.caption || '', challenge: p.prompt || '', tags: p.tags || [], consent: true }, phTokFor(p))
+          .then(function (r) { if (r.status === 200 && r.j.id) { p.remote = r.j.id; delete p.url; phPut(p, done); } else done(); }).catch(function () { done(); });
+      };
+      fr.onerror = function () { done(); }; fr.readAsDataURL(p.blob);
+    });
+  });
+}
+setInterval(scanSync, 20000);
+window.addEventListener('online', function () { scanSync(); });
 /* Attendance Now: counts per session as check-ins come in */
 function attendanceSheet() {
   if (!PV.state) loadPreviewAttendees();
   var el = openSheet('Attendance Now', '<div class="sheet-pad an"></div>', { plain: true }), box = el.querySelector('.an'), t = null;
   function paint() {
     if (!el.isConnected) { clearInterval(t); return; }
-    var all = myCheckins(), n = nowAt(), byS = {}, people = {}, cos = {};
+    var all = SYNC.all ? SYNC.all.concat(myCheckins().filter(function (c) { return !c.sent; })) : myCheckins(), n = nowAt(), byS = {}, people = {}, cos = {};
     var pk = function (c) { return c.reg || 'n:' + (c.name + '|' + (c.company || '')).toLowerCase(); };
     all.forEach(function (c) { var k = pk(c); (byS[c.ses] = byS[c.ses] || {})[k] = 1; people[k] = c; });
     Object.keys(people).forEach(function (r) { var c = people[r], w = c.reg ? regLookup(c.reg) : null; var k = w && w.company ? w.company : c.company || ''; if (k) cos[k] = (cos[k] || 0) + 1; });
@@ -4008,7 +4062,7 @@ function attendanceSheet() {
     var max = Math.max.apply(null, ses.map(function (s) { return s.n; }).concat([1]));
     var live = ses.filter(function (s) { return s.x.date === n.date && s.x.a <= n.min && s.x.b > n.min; });
     var topCo = Object.keys(cos).sort(function (a, b) { return cos[b] - cos[a] || a.localeCompare(b); }).slice(0, 5);
-    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>' +
+    box.innerHTML = (SYNC.all ? '<div class="an-note">' + icon('i-info') + '<span><b>Live.</b> Everyone\'s check-ins, as they\'re scanned.</span></div>' : '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s check-ins. When check-in goes live, everyone\'s show here the moment they\'re scanned.</span></div>') +
       '<div class="an-kpis"><div><b>' + Object.keys(people).length + '</b><span>People Checked In</span></div><div><b>' + ses.length + '</b><span>Sessions Scanned</span></div><div><b>' + live.reduce(function (t, s) { return t + s.n; }, 0) + '</b><span>In Sessions Now</span></div></div>' +
       (ses.length ? '<h3 class="wg-h">By Session</h3><div class="an-ses">' + ses.map(function (s) {
         var on = live.indexOf(s) >= 0;
@@ -4016,6 +4070,9 @@ function attendanceSheet() {
       (topCo.length ? '<h3 class="wg-h">Most Checked-In Companies</h3><div class="an-cos">' + topCo.map(function (k) { return '<div><span>' + esc(k) + '</span><b>' + cos[k] + '</b></div>'; }).join('') + '</div>' : '') +
       '<button type="button" class="btn primary scl-new" data-ci-go>' + icon('i-scan') + 'Session Check-In</button>';
   }
+  /* everyone's check-ins when the relay part is live (relay request 17) */
+  function pull() { if (!el.isConnected || !scanTok()) return; scanApi('GET', '/scan/checkins?summit=' + encodeURIComponent(S.sid)).then(function (r) { if (r.status === 200 && Array.isArray(r.j.items)) { SYNC.all = r.j.items; SYNC.live = true; paint(); } }).catch(function () {}); }
+  pull(); var tp = setInterval(function () { if (!el.isConnected) { clearInterval(tp); return; } pull(); }, 10000);
   paint(); t = setInterval(paint, 5000);
   el.addEventListener('click', function (e) { var b = e.target.closest('[data-ci-open]'); if (b) { checkinSheet(b.getAttribute('data-ci-open')); return; } if (e.target.closest('[data-ci-go]')) checkinSheet(); });
 }
@@ -5665,8 +5722,9 @@ function sessionSheet(id) {
     (x.room ? '<div>' + icon('i-pin') + esc(x.room) + (S.summit.city ? ', ' + esc(S.summit.city) : '') + '</div>' : '') +
     (x.type === 'Invite Only' ? '<div>' + icon('i-lock') + 'By invitation</div>' : '') + '</div>' +
     '<div class="cv-foot">' +
+    /* Jonna, Nov 27, 2026: Find on Map and Walk There always side by side in the same spot (scanning is the top-bar button) */
     (x.room && roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">' + icon('i-pin') + 'Find on Map</button>' + (walkData() ? '<button type="button" class="findmap" data-walk="' + esc(x.room) + '">' + icon('i-walk') + 'Walk There</button>' : '') : '') +
-    (canScan() ? '<button type="button" class="findmap" data-checkin="' + esc(x.id) + '">' + icon('i-scan') + 'Check People In</button>' : '') + '</div>' +
+    '</div>' +
     '</div><div class="sheet-pad">';
   h += '<div class="d-actions two"><button type="button" class="btn primary' + (isMine(x.id) ? ' on-mine' : '') + '" data-mine-btn="' + esc(x.id) + '" data-toggle-mine="' + esc(x.id) + '">' + mineBtnHtml(x.id) + '</button>' +
     '<button type="button" class="btn" data-ics="' + esc(x.id) + '">' + icon('i-cal') + 'Add to Calendar</button></div>';
