@@ -849,17 +849,17 @@ html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, 
 .mx-bagbtn b{position:absolute; top:-6px; right:-6px; min-width:20px; height:20px; padding:0 5px; border-radius:10px; background:#f3c64f; color:#0d314c; font-size:11.5px; font-weight:800; display:grid; place-items:center; box-shadow:0 0 0 2px var(--ground)}
 .mx-bagbtn.bump{animation:mx-bump .5s cubic-bezier(.2,.9,.3,1.5)}
 @keyframes mx-bump{30%{transform:scale(1.25) rotate(-6deg)} 60%{transform:scale(.95)}}
-.mx-spot{position:relative; height:clamp(250px, 62vw, 320px); overflow:hidden; background:radial-gradient(120% 130% at 85% 20%, #1f5fa6 0%, #0d314c 55%, #071d2e 100%); color:#fff; touch-action:pan-y}
-.mx-slide{position:absolute; inset:0; display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:8px; padding:22px 18px 34px; opacity:0; transition:opacity .6s ease; pointer-events:none}
+.mx-spot{position:relative; height:clamp(300px, 78vw, 350px); overflow:hidden; background:radial-gradient(120% 130% at 85% 20%, #1f5fa6 0%, #0d314c 55%, #071d2e 100%); color:#fff; touch-action:pan-y}
+.mx-slide{position:absolute; inset:0; display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:8px; padding:20px 18px 48px; opacity:0; transition:opacity .6s ease; pointer-events:none}
 .mx-slide.on{opacity:1; transform:none; pointer-events:auto}
 .mx-sl-tx{display:grid; gap:8px; align-content:center; z-index:1}
 .mx-eye{font-size:12px; font-weight:800; color:#f3c64f}
 .mx-slide h2{font-family:var(--cond); font-weight:800; font-size:clamp(26px, 7.4vw, 40px); line-height:1; margin:0}
 .mx-slide p{margin:0; font-size:13.5px; line-height:1.4; color:rgba(255,255,255,.8); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
-.mx-cta{justify-self:start; display:inline-flex; align-items:center; gap:4px; border:0; border-radius:9px; background:#f3c64f; color:#0d314c; font:inherit; font-weight:800; font-size:14px; padding:10px 12px 10px 14px; cursor:pointer; box-shadow:0 8px 20px -8px rgba(243,198,79,.7)}
+.mx-cta{justify-self:start; margin-top:4px; display:inline-flex; align-items:center; gap:4px; border:0; border-radius:9px; background:#f3c64f; color:#0d314c; font:inherit; font-weight:800; font-size:14px; padding:10px 12px 10px 14px; cursor:pointer; box-shadow:0 8px 20px -8px rgba(243,198,79,.7)}
 .mx-cta svg{width:16px; height:16px}
 .mx-sl-art{position:relative} .mx-sl-art svg{display:block; width:100%; height:auto; border-radius:18px; box-shadow:0 24px 40px -18px rgba(0,0,0,.6)}
-.mx-pips{position:absolute; left:0; right:0; bottom:12px; display:flex; justify-content:center; gap:7px}
+.mx-pips{position:absolute; left:0; right:0; bottom:16px; display:flex; justify-content:center; gap:7px}
 .mx-pips button{width:22px; height:5px; border-radius:3px; border:0; background:rgba(255,255,255,.3); cursor:pointer; transition:width .3s, background .3s}
 .mx-pips button[aria-pressed="true"]{width:38px; background:#f3c64f}
 .mx-main{display:grid; gap:14px}
