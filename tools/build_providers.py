@@ -272,6 +272,12 @@ def main(argv):
                 pass
     except Exception as e:
         print('agenda', e)
+    # the companies on the website agenda's "Sponsored by" and "Powered by" plates (workgroup sponsors like Cotality and
+    # Asurity, MISMO Link's Viant Eye): their sponsor pop-ups show a picture of their website too (Jonna, Nov 27, 2026)
+    try:
+        sites += [t.get('url') for t in json.load(open('data/agenda-tags.json', encoding='utf-8')).get('tags', []) if (t.get('url') or '').startswith('https://')]
+    except Exception as e:
+        print('agenda tags', e)
     # the restaurants and things to do on Explore (from the Hotel and Travel guide): their home pages
     try:
         for sec in json.load(open('data/guide.json', encoding='utf-8')).get('sections', []):

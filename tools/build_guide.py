@@ -251,11 +251,14 @@ def build_event(html):
 
 
 def logo_name(src):
-    """viant-eye-logo_viant-eye-primary-logo….png -> Viant Eye; cotality-logo.png -> Cotality; xactus_logo_color….png -> Xactus"""
+    """viant-eye-logo_viant-eye-primary-logo….png -> Viant Eye; cotality-logo.png -> Cotality; xactus_logo_color….png -> Xactus;
+    4We32U8Sv2l8AyPNC19t_asurity_registered-logo_rgb.png -> Asurity"""
     f = src.rsplit('/', 1)[-1].split('?')[0]
     base = re.split(r'[-_]logo', f, maxsplit=1, flags=re.I)[0]
     base = re.sub(r'\.[a-z]+$', '', base, flags=re.I)
-    return ' '.join(w.capitalize() for w in re.split(r'[-_\s]+', base) if w)
+    base = re.sub(r'^[A-Za-z0-9]{16,}_', '', base)   # the website's upload id in front (4We32U8Sv2l8AyPNC19t_asurity_registered-logo_rgb.png)
+    words = [w for w in re.split(r'[-_\s]+', base) if w and w.lower() not in ('registered', 'rgb', 'cmyk', 'trimmed', 'primary', 'color', 'colour', 'final', 'web', 'hires')]
+    return ' '.join(w.capitalize() for w in words)
 
 
 def build_tags(html):

@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Cotality and Asurity (and every company on the website agenda's Sponsored by and Powered by plates) get the picture of their website in their sponsor pop-up, made by the guide job. Asurity's name reads Asurity (it was being read from its logo's file name).
 - Nov 27, 2026: Receptions say Refreshments (was Food and Drinks).
 - Nov 27, 2026: The Board of Directors and the Joint Committee say Refreshments (was Food Served), like the breaks.
 - Nov 27, 2026: Tuesday's Morning Break (10:20 to 10:40, between the General Sessions talks) is on the Agenda, so every day has a morning and an afternoon break.
