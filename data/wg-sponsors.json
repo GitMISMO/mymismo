@@ -1,9 +1,14 @@
 {
- "updated": "2026-11-27T15:35:06Z",
+ "updated": "2026-11-27T15:37:50Z",
  "source": "https://www.mismo.org/get-involved/meeting-schedule",
  "groups": [
   {
-   "name": "AI Community of Practice",
+   "name": "Mortgage Compliance Dataset DWG",
+   "sponsor": "Asurity",
+   "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/UploadedImages/4We32U8Sv2l8AyPNC19t_asurity_registered-logo_rgb.png"
+  },
+  {
+   "name": "Artificial Intelligence (AI) COP",
    "sponsor": "Cotality",
    "logo": "https://higherlogicdownload.s3.amazonaws.com/MISMO/UploadedImages/JQCdkx6xS66z4BhqW8mF_cotality-logo-trimmed.png"
   }
