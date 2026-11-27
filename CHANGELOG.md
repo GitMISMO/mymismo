@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Join a Workgroup tile has a faded symbol behind it (three people around a table, linked), like the envelope on MISMO Matters and the screen on Webinars.
 - Nov 27, 2026: Around the Hotel opened big: fills the whole screen sideways (and on tablets), and swiping up or down on the map scrolls the page instead of getting stuck.
 - Nov 27, 2026: Sideways layout (browsers and small tablets): MISMO Matters sits on top of Join a Workgroup beside the Summit tile.
 - Nov 27, 2026: Phones stay upright: the Android app (version 2026.11.27) and the installed web app are portrait only; full-screen video still turns sideways. Tablets can still turn.
