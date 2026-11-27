@@ -1664,6 +1664,12 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .rc-tx{display:grid; gap:3px} .rc-tx b{font-family:var(--cond); font-size:19px} .rc-tx span{font-size:13.5px; color:#cfe3f1} .rc-card > svg.go{width:20px; height:20px}
 .rc{display:grid; gap:12px} .rc-pic{background:#071d2e; border-radius:14px; padding:14px; display:grid; place-items:center} .rc-pic img{width:min(100%, 320px); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45); aspect-ratio:4/5; background:#0d314c}
 .rc-met{display:grid; gap:8px} .rc-p{display:grid; gap:2px; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--surface)} .rc-p b{font-size:15px} .rc-p span{font-size:13px; color:var(--ink-2)} .rc-p i{font-size:13.5px; color:var(--ink-2)}
+.wg-fol svg{color:#a2701a} .wg-fol.on{background:#fff6dd; border-color:#e0a83c; color:#7a5310} .wg-fol.on svg{fill:currentColor}
+.wg-tip{display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:12px; background:var(--surface-2); border:1px dashed var(--border-strong); font-size:14px; color:var(--ink-2); margin-bottom:6px} .wg-tip svg{width:18px; height:18px; flex:none; color:#a2701a; margin-top:2px}
+.wg-mine{display:grid; gap:10px; margin-bottom:8px}
+.wgt-star{width:13px; height:13px; color:#a2701a; fill:currentColor; margin-right:4px; vertical-align:-1px}
+.wg-ban{display:flex; align-items:center; gap:12px; justify-content:space-between; margin:0 0 14px; padding:12px 14px; border-radius:14px; border-left:5px solid var(--c); background:var(--surface); border-top:1px solid var(--border); border-right:1px solid var(--border); border-bottom:1px solid var(--border)}
+.wg-ban-t{display:grid; gap:2px; min-width:0} .wg-ban-t b{font-size:15.5px} .wg-ban-t span{font-size:13px; font-weight:700; color:#0f7b5c} .wg-ban-t .wg-dot{display:inline-block; margin-right:6px}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -4607,12 +4613,13 @@ function wgTile() {
     return gs.filter(function (g) { return !g.rule.hold && wgOn(g.rule, iso) && g.cx.indexOf(iso) < 0 && !(iso === now.date && g.t && now.min >= g.t.b); })
       .sort(function (a, b) { return ((a.t || {}).a || 0) - ((b.t || {}).a || 0) || a.name.localeCompare(b.name); });
   };
-  var day = null, list = [];
+  var day = null, list = [], fol = wgFollowing();
   for (var i = 0; i < 60 && !list.length; i++) { day = isoAdd(now.date, i); list = dayOf(day); }
+  list.sort(function (a, b) { return (fol.indexOf(b.key) >= 0) - (fol.indexOf(a.key) >= 0); });   /* the groups you follow first */
   var dd = daysBetween(now.date, day), anyLive = list.some(wgLive);
   var lbl = anyLive ? '<i class="wg-dot"></i>Meeting Now' : (dd === 0 ? 'Today' : dd === 1 ? 'Tomorrow' : DOW[dparts(day).dow]) + ', ' + MON[dparts(day).m - 1] + ' ' + dparts(day).d;
   var ticks = list.map(function (g, k) {
-    return '<span class="wgt' + (k ? '' : ' on') + '" style="--c:' + wgColor(g.topic) + '"><b>' + esc(g.name) + '</b><span>' + (wgLive(g) ? 'On now, ' : '') + esc(String(g.time || '').replace(/ ET$/, '')) + '&nbsp;ET</span></span>';
+    return '<span class="wgt' + (k ? '' : ' on') + '" style="--c:' + wgColor(g.topic) + '"><b>' + (fol.indexOf(g.key) >= 0 ? icon('i-star', 'wgt-star') : '') + esc(g.name) + '</b><span>' + (wgLive(g) ? 'On now, ' : '') + esc(String(g.time || '').replace(/ ET$/, '')) + '&nbsp;ET</span></span>';
   }).join('');
   /* the week of the day shown (so on a Friday afternoon it's next week) */
   var p0 = dparts(day), mon = isoAdd(day, 1 - p0.dow);
@@ -4658,6 +4665,21 @@ function wgCard(g, i) {
     (live ? '<span class="wg-nx live"><i></i>Meeting now</span>' : nx ? '<span class="wg-nx' + (nx.cancelled ? ' x' : '') + '">' + (nx.cancelled ? 'Next one cancelled: ' + wgShort(nx.date) : 'Next: ' + esc(wgWhen(nx.date, g).replace(/, [^,]*ET$/, ''))) + '</span>' : '') +
     icon('i-chev', 'wg-go') + '</button>';
 }
+/* My Workgroups (Jonna, Nov 27, 2026): follow the groups you care about; they lead Join a Workgroup, the home tile, and
+   Picked for You at the summit, and a banner says when one is about to start so you can join in one tap. On this phone. */
+function wgFollowing() { return load('wg-follow', []); }
+function wgIsFollowed(key) { return wgFollowing().indexOf(key) >= 0; }
+function wgToggleFollow(key) { var f = wgFollowing(), i = f.indexOf(key); if (i >= 0) f.splice(i, 1); else f.push(key); save('wg-follow', f); return i < 0; }
+function wgFollowBtn(key) { var on = wgIsFollowed(key); return '<button type="button" class="btn wg-fol' + (on ? ' on' : '') + '" data-wg-follow="' + esc(key) + '" aria-pressed="' + on + '">' + icon('i-star') + (on ? 'Following' : 'Follow') + '</button>'; }
+/* a followed group meeting now or within 15 minutes */
+function wgSoonBanner() {
+  var f = wgFollowing(); if (!f.length || !WGS.sched) return '';
+  var now = etNow(), g = wgGroups().filter(function (x) { return f.indexOf(x.key) >= 0 && !x.rule.hold && x.t && wgOn(x.rule, now.date) && x.cx.indexOf(now.date) < 0 && now.min >= x.t.a - 15 && now.min < x.t.b; })[0];
+  if (!g) return '';
+  var live = now.min >= g.t.a, mins = g.t.a - now.min;
+  return '<div class="wg-ban" style="--c:' + wgColor(g.topic) + '"><span class="wg-ban-t"><i class="wg-dot"></i><b>' + esc(g.name) + '</b><span>' + (live ? 'Meeting now' : 'Starts in ' + mins + (mins === 1 ? ' minute' : ' minutes')) + '</span></span>' +
+    (g.join ? '<a class="btn" href="' + esc(g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + 'Join</a>' : '<button type="button" class="btn" data-wg="' + esc(g.key) + '">Details</button>') + '</div>';
+}
 function wgSheet() {
   var gs = wgGroups(), now = etNow(), dom = 'All', q = '', day = null;
   var el = openSheet('Join a Workgroup', '<div class="wgx"></div>', { plain: true }), box = el.querySelector('.wgx');
@@ -4697,7 +4719,7 @@ function wgSheet() {
     (spot ? '<div class="wg-spot' + (spot.live ? ' live' : '') + '" style="--c:' + wgColor(spot.g.topic) + '"><button type="button" class="wg-hit" data-wg="' + esc(spot.g.key) + '" aria-label="' + esc(spot.g.name) + '"></button><span class="wg-tk' + (spot.live ? ' live' : '') + '">' + (spot.live ? '<i></i>Meeting Now' : 'Up Next') + '</span>' +
       '<b>' + esc(spot.g.name) + '</b><span class="wg-sw">' + esc(spot.live ? spot.g.time : wgWhen(spot.date, spot.g)) + (spot.live ? '' : '<em>' + wgSoon(spot.date, spot.g) + '</em>') + '</span>' +
       (spot.live && spot.g.join ? '<a class="wg-join" href="' + esc(spot.g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + 'Join Now</a>' : '<span class="wg-join">Details' + icon('i-chev') + '</span>') + '</div>' : '') +
-    '<div class="sheet-pad wg-main"><h3 class="wg-h">Coming Up</h3><div class="wg-week">' + dayHtml() + '</div>' +
+    '<div class="sheet-pad wg-main">' + (function () { var f = wgFollowing(), mg = gs.filter(function (g) { return f.indexOf(g.key) >= 0; }); return mg.length ? '<h3 class="wg-h">My Workgroups</h3><div class="wg-mine">' + mg.map(wgCard).join('') + '</div>' : '<div class="wg-tip">' + icon('i-star') + '<span>Tap <b>Follow</b> on a group to keep it at the top here and get a heads-up when it\'s about to meet.</span></div>'; })() + '<h3 class="wg-h">Coming Up</h3><div class="wg-week">' + dayHtml() + '</div>' +
     '<h3 class="wg-h">All Groups</h3><label class="mx-search wg-search">' + icon('i-search') + '<input type="search" placeholder="Search groups and topics" aria-label="Search groups"></label>' +
     '<div class="mx-cats wg-doms" role="group" aria-label="Topic">' + ['All'].concat(doms).map(function (x) { return '<button type="button" data-wg-dom="' + esc(x) + '" aria-pressed="' + (x === dom) + '"' + (x === 'All' ? '' : ' style="--c:' + wgColor(x) + '"') + '>' + esc(x) + '</button>'; }).join('') + '</div>' +
     '<div class="wg-list">' + listHtml() + '</div>' +
@@ -4716,7 +4738,7 @@ function wgDetail(key) {
     (sp ? '<span class="wgd-sp"><i>Sponsored by</i>' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="' + esc(sp.sponsor) + '">' : '<b>' + esc(sp.sponsor) + '</b>') + '</span>' : '') + '</div>' +
     '<div class="sheet-pad wgd">' +
     (g.rule.hold ? '<div class="note">This group\'s meetings are on hold for now.</div>' :
-      '<div class="wgd-act">' + (g.join ? '<a class="btn primary' + (live ? ' wg-livebtn' : '') + '" href="' + esc(g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + (live ? 'Join Now' : 'Join the Meeting') + '</a>' : '') +
+      '<div class="wgd-act">' + wgFollowBtn(g.key) + (g.join ? '<a class="btn primary' + (live ? ' wg-livebtn' : '') + '" href="' + esc(g.join) + '" target="_blank" rel="noopener">' + icon('i-video') + (live ? 'Join Now' : 'Join the Meeting') + '</a>' : '') +
       (feed ? '<button type="button" class="btn" data-wg-cal>' + icon('i-cal') + 'Add to Calendar</button>' : '') + '</div>' +
       (feed ? '<div class="wgd-cals" hidden>' + wgCalLinks(feed, g.name + ' (MISMO)') + '<span>Every meeting, kept up to date, including cancellations.</span></div>' : '')) +
     '<h3 class="wg-h">When It Meets</h3><div class="wgd-when"><b>' + esc(g.cadence) + '</b>' + (g.rule.hold ? '' : '<span>' + esc(g.time) + '</span>') + '</div>' +
@@ -4728,7 +4750,10 @@ function wgDetail(key) {
     (lead.length ? '<h3 class="wg-h">Who Leads It</h3><div class="wgd-lead">' + lead.map(function (l) { return '<div>' + avatarHtml({ id: 'wg:' + l.name, name: l.name, photo: 0 }) + '<span><b>' + esc(l.name) + '</b><span>' + esc(l.role) + (l.company ? ', ' + esc(l.company) : '') + '</span></span></div>'; }).join('') + '</div>' : '') +
     (g.site && g.site.url ? '<a class="btn wgd-page" href="' + esc(g.site.url) + '" target="_blank" rel="noopener">' + icon('i-globe') + 'Visit the Group\'s Page on mismo.org</a>' : '') + '</div>';
   var el = openSheet(g.name, h, { plain: true });
-  el.addEventListener('click', function (e) { if (e.target.closest('[data-wg-cal]')) { var b = el.querySelector('.wgd-cals'); if (b) b.hidden = !b.hidden; } });
+  el.addEventListener('click', function (e) {
+    if (e.target.closest('[data-wg-cal]')) { var b = el.querySelector('.wgd-cals'); if (b) b.hidden = !b.hidden; return; }
+    var fb = e.target.closest('[data-wg-follow]'); if (fb) { var on = wgToggleFollow(g.key); fb.outerHTML = wgFollowBtn(g.key); mxToast(on ? 'Following ' + g.name : 'Not following ' + g.name); if (on && feed) { var c = el.querySelector('.wgd-cals'); if (c) c.hidden = false; } if (S.page === 'dash') renderPage('dash'); }
+  });
 }
 /* ---------- MISMO Trivia (coming soon: waiting on the questions) ---------- */
 var TRIVIA_CATS = [
@@ -5544,7 +5569,7 @@ function widget(id) {
 if (window.matchMedia) ['(min-width:760px)', '(orientation:landscape) and (max-height:540px)'].forEach(function (q) { var m = window.matchMedia(q), f = function () { if (S.page === 'dash' && !stack.length) renderPage('dash'); }; if (m.addEventListener) m.addEventListener('change', f); else if (m.addListener) m.addListener(f); });
 function renderDash() {
   var picks = dashPicks() || [];
-  var h = greetHead();
+  var h = greetHead() + wgSoonBanner();
   if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
   var ws = picks.map(widget).filter(Boolean);
     /* squares come in pairs; a square left on its own goes full width so there's no gap */

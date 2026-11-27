@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: My Workgroups: Follow a workgroup (on its page) to keep it at the top of Join a Workgroup and first on the home tile (with a star), have it count toward Picked for You at the summit, open its calendar links, and get a banner on the home screen from 15 minutes before it meets with one-tap Join.
 - Nov 27, 2026: Around the Hotel's big map re-centers when the phone turns back upright, so half of it isn't left off the side.
 - Nov 27, 2026: Works with no Wi-Fi: from three weeks before a summit the phone keeps the floor map, speakers' headshots and sponsors' logos ahead of time, and a quiet bar says when you're offline (your agenda, map, schedule and scans still work; anything new is sent when you're back).
 - Nov 27, 2026: Knows the person: Picked for You (sessions like the ones you starred, and meetings of workgroups you follow) on the Summit page and My Schedule, and a notice when a starred session changes room or time, until you tap Got It.
