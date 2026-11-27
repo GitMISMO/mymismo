@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Join a Workgroup tile: light blue fade like Submit an Idea; the date of the next meeting day on its own row, then that day's meetings scrolling up one at a time (name centered, time on its own row), with the bars showing that day's week.
 - Nov 27, 2026: Join a Workgroup tile calmed down: a soft sky tile the same height as its neighbors, with who meets next (or now) and a slim bar for each day this week, today marked.
 - Nov 27, 2026: Join a Workgroup tile redone: it takes the color of the topic of the group meeting next (or now) and shows this week as stacks of colored blocks, one per meeting, with today lit and a live meeting glowing.
 - Nov 27, 2026: Dashboard: the summit's sponsors moved onto the MISMO Summit tile, in a strip of logos along its foot that opens the full sponsor list. The Summit Sponsors tile is gone.

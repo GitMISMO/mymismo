@@ -860,13 +860,20 @@ html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, 
 @media (prefers-reduced-motion:reduce){ .mx-slide,.mx-card,.mx-line,.mx-sl-art svg,.mx-steam{animation:none!important; transition:none!important} }
 .mx-fine{font-size:12.5px; color:var(--ink-3); text-align:center; margin:8px 0 0}
 /* ---------- Join a Workgroup (Jonna, Nov 27, 2026) ---------- */
-.w-wg{border:1px solid color-mix(in srgb, var(--sky) 40%, var(--border)); color:var(--ink); background:linear-gradient(165deg, color-mix(in srgb, var(--sky) 10%, var(--surface)) 0%, color-mix(in srgb, var(--sky) 24%, var(--surface)) 100%)}
-.w-wg::after{content:""; position:absolute; z-index:-1; right:-34px; top:-34px; width:120px; height:120px; border-radius:50%; border:16px solid color-mix(in srgb, var(--sky) 22%, transparent); pointer-events:none}
-.w-wg .w-head svg{color:var(--sky)}
-.wg-tnext{display:grid; gap:3px; flex:none}
-.wg-tw{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.w-wg{background:linear-gradient(160deg, color-mix(in srgb, var(--sky) 30%, var(--surface)), var(--surface) 62%)}
+.w-wg .w-head svg{color:#2f8fcc}
 .wg-dot{width:8px; height:8px; border-radius:50%; background:#2fd08a; box-shadow:0 0 0 3px color-mix(in srgb, #2fd08a 25%, transparent); animation:wg-pulse 1.4s ease-in-out infinite}
-.w-wg .w-t{font-size:17px; line-height:1.15; -webkit-line-clamp:2; padding-left:9px; border-left:3px solid var(--c, var(--sky))}
+.wgt-mid{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:6px; align-self:stretch; min-height:0}
+.wgt-day{display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:12.5px; font-weight:800; color:var(--ink-2)}
+.wgt-day > span:first-child{display:flex; align-items:center; gap:6px; min-width:0}
+.wgt-pips{display:flex; gap:3px; flex:none} .wgt-pips i{width:5px; height:5px; border-radius:50%; background:color-mix(in srgb, var(--ink) 22%, transparent); transition:background .3s, transform .3s} .wgt-pips i.on{background:var(--ink); transform:scale(1.2)}
+.wgt-box{position:relative; height:76px; overflow:hidden}
+.wgt{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; gap:3px; padding-left:9px; border-left:3px solid var(--c); opacity:0; transform:translateY(100%); transition:transform .55s cubic-bezier(.2,.8,.2,1), opacity .45s ease}
+.wgt.on{opacity:1; transform:none}
+.wgt.out{opacity:0; transform:translateY(-100%)}
+.wgt b{font-family:var(--cond); font-size:16px; font-weight:700; line-height:1.13; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+.wgt > span{font-size:12.5px; font-weight:700; color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){ .wgt{transition:none} }
 .wgw{margin-top:auto; align-self:stretch; display:grid; grid-template-columns:repeat(5, 1fr) auto; gap:5px; align-items:end}
 .wgw-d{display:grid; justify-items:center; gap:3px}
 .wgw-bar{display:flex; align-items:flex-end; width:100%; height:22px; border-radius:4px; background:color-mix(in srgb, var(--sky) 16%, transparent); overflow:hidden}
@@ -3148,27 +3155,50 @@ function wgSessions(g) {
   if (!g.site || !S.summit) return [];
   return S.sessions.filter(function (x) { return groupPages(x).indexOf(g.site) >= 0; });
 }
-/* the dashboard tile (Jonna, Nov 27, 2026: "something cool and dynamic", then calmer and no taller than its neighbors):
-   a soft sky tile with who meets next (or now) and a slim strip of this week, one small bar per day sized by how many
-   groups meet, with today marked and a live meeting glowing */
+/* the dashboard tile (Jonna, Nov 27, 2026): a light blue tile like Submit an Idea, the same height as its neighbors. The
+   middle names the next meeting day (or "Meeting Now") and scrolls up through every meeting that day, one at a time, with
+   its time on its own row; the foot is a slim bar per day this week, today marked. */
 function wgTile() {
-  var gs = wgGroups(), now = etNow(), up = [];
+  var gs = wgGroups(), now = etNow();
   var head = '<span class="w-head">' + icon('i-people') + '<span>Join a Workgroup</span></span>';
   if (!gs.length) return '<button type="button" class="wd w-wg" data-groups>' + head + '<span class="w-t">Every workgroup, when it meets and how to join</span><span class="w-sub">Open to everyone</span></button>';
-  gs.forEach(function (g) { wgNext(g, 2).forEach(function (o) { if (!o.cancelled) up.push({ g: g, date: o.date }); }); });
-  up.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : ((a.g.t || {}).a || 0) - ((b.g.t || {}).a || 0); });
-  var live = gs.filter(wgLive), first = live[0] ? { g: live[0], date: now.date } : up[0];
-  var p0 = dparts(now.date), mon = isoAdd(now.date, p0.dow === 0 ? 1 : p0.dow === 6 ? 2 : 1 - p0.dow);
-  var counts = [0, 1, 2, 3, 4].map(function (i) { var iso = isoAdd(mon, i); return { iso: iso, n: gs.filter(function (g) { return !g.rule.hold && wgOn(g.rule, iso) && g.cx.indexOf(iso) < 0; }).length }; });
+  /* the day to show: today while any meeting is still to come or on, else the next day with a meeting */
+  var dayOf = function (iso) {
+    return gs.filter(function (g) { return !g.rule.hold && wgOn(g.rule, iso) && g.cx.indexOf(iso) < 0 && !(iso === now.date && g.t && now.min >= g.t.b); })
+      .sort(function (a, b) { return ((a.t || {}).a || 0) - ((b.t || {}).a || 0) || a.name.localeCompare(b.name); });
+  };
+  var day = null, list = [];
+  for (var i = 0; i < 60 && !list.length; i++) { day = isoAdd(now.date, i); list = dayOf(day); }
+  var dd = daysBetween(now.date, day), anyLive = list.some(wgLive);
+  var lbl = anyLive ? '<i class="wg-dot"></i>Meeting Now' : (dd === 0 ? 'Today' : dd === 1 ? 'Tomorrow' : DOW[dparts(day).dow]) + ', ' + MON[dparts(day).m - 1] + ' ' + dparts(day).d;
+  var ticks = list.map(function (g, k) {
+    return '<span class="wgt' + (k ? '' : ' on') + '" style="--c:' + wgColor(g.topic) + '"><b>' + esc(g.name) + '</b><span>' + (wgLive(g) ? 'On now, ' : '') + esc(String(g.time || '').replace(/ ET$/, '')) + '&nbsp;ET</span></span>';
+  }).join('');
+  /* the week of the day shown (so on a Friday afternoon it's next week) */
+  var p0 = dparts(day), mon = isoAdd(day, 1 - p0.dow);
+  var counts = [0, 1, 2, 3, 4].map(function (j) { var iso = isoAdd(mon, j); return { iso: iso, n: gs.filter(function (g) { return !g.rule.hold && wgOn(g.rule, iso) && g.cx.indexOf(iso) < 0; }).length }; });
   var max = Math.max.apply(null, counts.map(function (c) { return c.n; }).concat([1])), total = counts.reduce(function (t, c) { return t + c.n; }, 0);
+  var wk = mon <= now.date ? 'this week' : 'next week';
   return '<button type="button" class="wd w-wg" data-groups>' + head +
-    (first ? '<span class="wg-tnext"><span class="wg-tw">' + (live.length ? '<i class="wg-dot"></i>Meeting now, ' + esc(first.g.time) : 'Up next ' + esc(wgWhen(first.date, first.g).replace(/^Today/, 'today').replace(/^Tomorrow/, 'tomorrow'))).replace(/ ET$/, '&nbsp;ET') + '</span>' +
-      '<span class="w-t" style="--c:' + wgColor(first.g.topic) + '">' + esc(first.g.name) + '</span></span>' : '') +
-    '<span class="wgw" aria-label="' + total + ' meetings this week">' + counts.map(function (c, i) {
-      var cls = c.iso === now.date ? ' today' : c.iso < now.date ? ' past' : '';
-      return '<span class="wgw-d' + cls + (live.length && c.iso === now.date ? ' live' : '') + '"><span class="wgw-bar"><em style="--h:' + Math.round(c.n / max * 100) + '%;--d:' + (i * 60) + 'ms"></em></span><i>' + DOW[dparts(c.iso).dow].slice(0, 1) + '</i></span>'; }).join('') +
-    '<span class="wgw-n"><b>' + total + '</b>this week</span></span></button>';
+    '<span class="wgt-mid"><span class="wgt-day"><span>' + lbl + '</span>' + (list.length > 1 ? '<span class="wgt-pips" aria-label="' + list.length + ' meetings">' + list.map(function (x, k) { return '<i' + (k ? '' : ' class="on"') + '></i>'; }).join('') + '</span>' : '') + '</span>' +
+    '<span class="wgt-box" aria-live="off">' + ticks + '</span></span>' +
+    '<span class="wgw" aria-label="' + total + ' meetings this week">' + counts.map(function (c, j) {
+      var cls = c.iso === day ? ' today' : c.iso < now.date ? ' past' : '';
+      return '<span class="wgw-d' + cls + (anyLive && c.iso === now.date ? ' live' : '') + '"><span class="wgw-bar"><em style="--h:' + Math.round(c.n / max * 100) + '%;--d:' + (j * 60) + 'ms"></em></span><i>' + DOW[dparts(c.iso).dow].slice(0, 1) + '</i></span>'; }).join('') +
+    '<span class="wgw-n"><b>' + total + '</b>' + wk + '</span></span></button>';
 }
+/* the tile's meetings scroll up, one every few seconds (with Reduce Motion on they change without moving) */
+setInterval(function () {
+  if (document.hidden) return;
+  document.querySelectorAll('.wgt-box').forEach(function (box) {
+    var it = box.querySelectorAll('.wgt'); if (it.length < 2) return;
+    var on = box.querySelector('.wgt.on'), i = Array.prototype.indexOf.call(it, on), j = (i + 1) % it.length, nx = it[j];
+    it.forEach(function (x) { x.classList.remove('out'); });
+    if (on) { on.classList.remove('on'); on.classList.add('out'); }
+    nx.classList.add('on');
+    var pips = box.parentNode.querySelectorAll('.wgt-pips i'); pips.forEach(function (p, k) { p.classList.toggle('on', k === j); });
+  });
+}, 3200);
 function wgCard(g, i) {
   var nx = wgNext(g, 1)[0], sp = wgSponsor(g), live = wgLive(g);
   return '<button type="button" class="wg-card" data-wg="' + esc(g.key) + '" style="--c:' + wgColor(g.topic) + ';--i:' + (i || 0) + '">' +
