@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Scanning moved off the Summit page: People now has Speakers, Attendees and Scan tabs (Scan a Name Tag, Session Check-In, Attendance Now and your latest scans), and a scan button sits in the top bar next to Settings. Staff only for now.
 - Nov 27, 2026: Scanning by hand: Find by Name (from the attendee list) and Add Someone Not on the List, in both Scan a Name Tag and Session Check-In; the scan card's name, title and company can be fixed. Check-In reads its sessions from Summit HQ's TrackPod list once Summit HQ publishes it (CN-056), and uses the agenda until then.
 - Nov 27, 2026: Session Check-In and Attendance Now (staff test): scan name tags at a session's door one after another (beep, name, running count, Already Checked In for repeats), and see live counts by session, who's in sessions now and the companies with the most people. Kept on the phone until the relay part is live; meant to replace TrackPod's exports.
 - Nov 27, 2026: Name tag scanning: a successful scan now flashes the screen green with a big check and "Got It", plays a short scanner beep (Beep On / Off on the camera screen, remembered) and buzzes on phones that allow it.
