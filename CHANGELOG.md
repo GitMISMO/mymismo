@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: New looks for two home tiles. Certifications is a certificate: guilloche lines, a seal, the count with a bar splitting organizations and professionals, what's new this month, and (on bigger screens) who was certified most recently. Webinars is a ticket: the day, time and date on the stub, a tear line, then the title. Pick a Frame: Name Badge now shows one person and the group photo is four friends side by side.
 - Nov 27, 2026: Pick a Frame shows a mix of sample photos (one person, two, and a group of five) so you can see how each frame looks with a selfie or a crowd.
 - Nov 27, 2026: New look for the MISMO Matters tile: the latest edition as a printed page with its masthead and date, sitting on a stack of past editions on navy, with an airmail edge. The page straightens up when you tap it.
 - Nov 27, 2026: Home tiles reordered: Summit, then MISMO Matters and Join a Workgroup, Mic'd Up where it was, then Certifications and Webinars. On a phone held upright the Webinars tile puts the date above the title so long words aren't cut off.

@@ -519,9 +519,18 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .cal{flex:none; width:50px; border-radius:9px; overflow:hidden; text-align:center; background:var(--surface-2); border:1px solid var(--border)}
 .cal i{display:block; font-style:normal; font-size:11px; font-weight:700; background:#eb6834; color:#fff; padding:2px 0}
 .cal b{display:block; font-family:var(--cond); font-size:24px; line-height:1.25}
-.w-web .w-t{font-size:16.5px; -webkit-line-clamp:4; min-width:0; overflow-wrap:break-word} .w-web .w-row{min-width:0; max-width:100%} .w-web .w-row > :first-child{flex:none}
-.w-web{container-type:inline-size}
-@container (max-width:175px){ .w-web .w-row{flex-direction:column; gap:8px} }   /* a narrow tile (a phone held upright) puts the date above the title, so long words aren't cut */
+.w-web{color:#fff; border-color:#14486e; background:radial-gradient(120% 80% at 100% 0%, #3a8fd0 0%, #1d63a0 35%, #0d314c 100%)}
+.w-web .w-head, .w-web .w-head svg{color:#cfe8f8}
+.wt-wm{position:absolute; right:-18px; bottom:-22px; z-index:-1; color:#fff; opacity:.07} .wt-wm svg{width:120px; height:120px}
+.wt-stub{display:flex; align-items:flex-end; justify-content:space-between; gap:8px; width:100%; margin-top:2px}
+.wt-day{display:grid; gap:3px; line-height:1} .wt-day i{font-style:normal; font-size:12px; font-weight:800; color:#ffb48f; white-space:nowrap} .wt-day b{font-family:var(--cond); font-size:36px; font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.wt-time{display:grid; justify-items:end; font-family:var(--cond); font-weight:700; font-size:16px; line-height:1.05; white-space:nowrap} .wt-time i{font-style:normal; font-family:var(--sans, inherit); font-size:11px; font-weight:700; color:#a9d8f3}
+.wt-perf{position:relative; display:block; align-self:stretch; height:0; border-top:2px dashed rgba(255,255,255,.4); margin:6px 0 4px}
+.wt-perf:before, .wt-perf:after{content:""; position:absolute; top:-12px; width:22px; height:22px; border-radius:50%; background:var(--ground)}
+.wt-perf:before{left:-28px} .wt-perf:after{right:-28px}
+.w-web .w-t{font-size:15.5px; line-height:1.22; -webkit-line-clamp:3; min-width:0; overflow-wrap:break-word; color:#fff}
+.w-web .w-sub{color:#a9d8f3; font-weight:600}
+.w-web .wm-row{border-top-color:rgba(255,255,255,.18)} .w-web .wm-d{color:#fff} .w-web .wm-d i{color:#ffb48f} .w-web .wm-t{color:#e6f4fc}
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
 .w-mat{position:relative; overflow:hidden; border-color:#0d314c; background:radial-gradient(130% 90% at 88% 0%, #2a6c9c 0%, #0f3a5c 45%, #071d2e 100%); padding-top:14px; padding-bottom:20px}
 .w-mat:before{content:""; position:absolute; inset:0; background:radial-gradient(circle, rgba(169,216,243,.16) 1px, transparent 1.4px) 0 0 / 14px 14px; pointer-events:none}
@@ -538,6 +547,20 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .wm-air{position:absolute; left:0; right:0; bottom:0; height:8px; background:repeating-linear-gradient(-45deg, #74bfeb 0 10px, #fff 10px 14px, #eb6834 14px 24px, #fff 24px 28px)}
 @media (prefers-reduced-motion: reduce){ .wm-paper{transition:none} }
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
+.w-cert{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cg fill='none' stroke='%2374bfeb' stroke-opacity='.28' stroke-width='.8'%3E%3Cpath d='M0 30 Q15 8 30 30 T60 30 T90 30 T120 30'/%3E%3Cpath d='M0 30 Q15 52 30 30 T60 30 T90 30 T120 30'/%3E%3Cpath d='M0 20 Q15 -2 30 20 T60 20 T90 20 T120 20'/%3E%3Cpath d='M0 40 Q15 62 30 40 T60 40 T90 40 T120 40'/%3E%3C/g%3E%3C/svg%3E") 0 100% / 120px 60px repeat-x, linear-gradient(165deg, color-mix(in srgb, #eda100 16%, var(--surface)), var(--surface) 58%)}
+.ct-row{display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px}
+.w-cert .w-num{display:grid; line-height:1} .w-cert .w-num b{font-size:46px} .w-cert .w-num i{font-style:normal; font-size:12px; font-weight:800; color:#a2701a; margin-top:2px}
+.ct-seal{width:44px; height:53px; flex:none; margin:-4px -2px -6px 0; filter:drop-shadow(0 4px 6px rgba(13,49,76,.25)); transform:rotate(8deg)}
+.ct-bar{display:flex; width:100%; height:7px; border-radius:4px; overflow:hidden; background:#74bfeb; margin-top:2px} .ct-bar i{display:block; background:#0d314c}
+.ct-key{display:grid; gap:2px; font-size:12.5px; font-weight:600; color:var(--ink-2)} .ct-key span{display:flex; align-items:center; gap:6px} .ct-key i{width:9px; height:9px; border-radius:2px} .ct-key .k1{background:#0d314c} .ct-key .k2{background:#74bfeb}
+:root[data-theme="dark"] .ct-key .k1, :root[data-theme="dark"] .ct-bar i{background:#a9d8f3} 
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ct-key .k1, :root:not([data-theme="light"]) .ct-bar i{background:#a9d8f3} }
+:root[data-theme="dark"] .ct-bar{background:#2477b8} :root[data-theme="dark"] .ct-key .k2{background:#2477b8}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ct-bar, :root:not([data-theme="light"]) .ct-key .k2{background:#2477b8} }
+.ct-prog{font-style:normal; font-weight:500; color:var(--ink-3)} .w-cert .wm-t{-webkit-line-clamp:1; font-size:13px} .w-cert .wm-row{padding-top:4px} .w-cert .w-more{margin-top:6px; gap:4px}
+.ct-seal{transition:none} :root[data-theme="dark"] .ct-seal{filter:drop-shadow(0 0 8px rgba(116,191,235,.45))}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .ct-seal{filter:drop-shadow(0 0 8px rgba(116,191,235,.45))} }
+.w-cert .w-new{margin-top:auto; padding-top:5px; line-height:1.3; border-top:1px dashed var(--border-strong); width:100%}
 .w-logos{position:relative; width:100%; height:64px; margin-top:4px}
 /* the dashboard's sponsor tile: the logo fills all the room between the title and the line below, centered */
 .w-spon .w-logos{flex:1 1 auto; align-self:stretch; width:auto; height:auto; min-height:96px; margin:6px 0 8px; background:#fff; border-radius:12px}
@@ -3736,7 +3759,7 @@ function phDraw(cv, img, frame, cap, A0, scale) {
   }
 }
 /* sample photos for Pick a Frame (Jonna, Nov 27, 2026: one person, two, and a group of five, so the previews vary) */
-var PH_SAMPLE = { pass: 'solo', night: 'group', postcard: 'pair', instant: 'solo', badge: 'group', none: 'pair' };
+var PH_SAMPLE = { pass: 'solo', night: 'group', postcard: 'pair', instant: 'group', badge: 'solo', none: 'pair' };
 function phSample(kind) {
   var c = document.createElement('canvas'); c.width = 1080; c.height = 1350; var x = c.getContext('2d');
   var sky = { solo: ['#8fd0f2', '#4f8fc0', '#1d3c5c'], pair: ['#f6b26b', '#e07a5f', '#3d405b'], group: ['#ffd58a', '#c86b85', '#2b2f55'] }[kind || 'pair'];
@@ -3744,9 +3767,9 @@ function phSample(kind) {
   [[180, 260, 90], [880, 200, 60], [760, 420, 110], [300, 520, 70], [960, 600, 50], [520, 160, 40]].forEach(function (b) { x.globalAlpha = .3; x.fillStyle = '#fff4dc'; x.beginPath(); x.arc(b[0], b[1], b[2], 0, 7); x.fill(); }); x.globalAlpha = 1;
   /* people: x, head y, head size, color; back row first */
   var ppl = kind === 'solo' ? [[540, 600, 1.45, '#22324a']]
-    : kind === 'group' ? [[300, 560, .82, '#2b2d42'], [540, 520, .86, '#1d3557'], [780, 560, .82, '#3a2e4f'], [180, 720, .9, '#24344d'], [420, 700, .92, '#2f2a44'], [660, 700, .92, '#1b2f4a'], [900, 720, .9, '#33283f']].slice(0, 6).filter(function (p2, i2) { return i2 !== 1; })
+    : kind === 'group' ? [[205, 640, .74, '#2b2d42'], [425, 585, .78, '#1d3557'], [655, 610, .76, '#4a3a5f'], [880, 650, .74, '#24485f']]   /* four friends, side by side */
     : [[380, 640, 1, '#2b2d42'], [700, 600, 1, '#1d3557']];
-  ppl.forEach(function (p2) { var r = 120 * p2[2]; x.fillStyle = p2[3]; x.beginPath(); x.arc(p2[0], p2[1], r, 0, 7); x.fill(); x.beginPath(); x.ellipse(p2[0], p2[1] + r * 4.3, r * 2.1, r * 3.35, 0, Math.PI, 0); x.fill(); });
+  ppl.forEach(function (p2) { var r = 120 * p2[2]; x.fillStyle = p2[3]; x.strokeStyle = 'rgba(255,255,255,.18)'; x.lineWidth = 3; x.beginPath(); x.ellipse(p2[0], p2[1] + r * 4.3, r * (kind === 'group' ? 1.6 : 2.1), r * 3.35, 0, Math.PI, 0); x.fill(); x.stroke(); x.beginPath(); x.arc(p2[0], p2[1], r, 0, 7); x.fill(); x.stroke(); });
   return c;
 }
 function phPick(kind, cb) {
@@ -5131,10 +5154,14 @@ function widget(id) {
       head('MISMO Mic\'d Up') + '<span class="play">' + icon('i-play') + '</span><span class="w-foot"><span class="lbl">Latest Episode</span><b>' + (ep ? esc(ep.title) : 'The weekly video show') + '</b></span></button>';
   }
   if (id === 'webinars') {
-    var up = upcomingWebinars(), w = up[0];
-    return '<button type="button" class="wd w-web" data-webinars>' + head() + (w ? '<span class="w-row">' + calBlock(w.date) + '<span class="w-t">' + esc(w.title) + '</span></span>' +
-      (up.length > 1 ? '<span class="w-more">' + up.slice(1, 4).map(function (x) { var p = dparts(x.date); return '<span class="wm-row"><span class="wm-d"><i>' + MON[p.m - 1] + '</i>' + p.d + '</span><span class="wm-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' : '') +
-      '<span class="w-sub">' + esc(w.start || '') + ' ET' + (up.length > 1 ? ', ' + (up.length - 1) + ' more coming up' : '') + '</span>' : '<span class="w-t">None scheduled right now</span><span class="w-sub">New ones show up here</span>') + '</button>';
+    /* Jonna, Nov 27, 2026 ("needs a glow up"): the next webinar as a ticket: the date on the stub, a tear line, the title */
+    var up = upcomingWebinars(), w = up[0], wp = w ? dparts(w.date) : null;
+    return '<button type="button" class="wd w-web" data-webinars><span class="wt-wm" aria-hidden="true">' + icon('i-webinar') + '</span>' + head() +
+      (w ? '<span class="wt-stub"><span class="wt-day"><i>' + DOW[wp.dow] + (w.start ? ', ' + esc(w.start) + ' ET' : '') + '</i><b>' + MONTH[wp.m - 1].slice(0, 3) + ' ' + wp.d + '</b></span></span>' +
+        '<span class="wt-perf" aria-hidden="true"></span><span class="w-t">' + esc(w.title) + '</span>' +
+        (up.length > 1 ? '<span class="w-more">' + up.slice(1, 4).map(function (x) { var p = dparts(x.date); return '<span class="wm-row"><span class="wm-d"><i>' + MON[p.m - 1] + '</i>' + p.d + '</span><span class="wm-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' : '') +
+        (up.length > 1 ? '<span class="w-sub">' + (up.length - 1) + ' more coming up</span>' : '')
+      : '<span class="wt-perf" aria-hidden="true"></span><span class="w-t">None scheduled right now</span><span class="w-sub">New ones show up here</span>') + '</button>';
   }
   if (id === 'matters') {
     /* Jonna, Nov 27, 2026: "make mismo matters tile look cooler": the latest edition as a printed page on a stack of
@@ -5156,8 +5183,15 @@ function widget(id) {
     var no = Object.keys(orgs).length, all = no + ppl;
     var fresh = ((CERT && CERT.certifications) || []).filter(function (c) { return String(c.certifiedOn || '').slice(0, 7) === ym && !/^renewal/i.test(c.type || ''); });
     var fo = []; fresh.forEach(function (c) { if (fo.indexOf(c.org) < 0) fo.push(c.org); });
-    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="w-num"><b>' + (all || '') + '</b></span><span class="w-sub">' + (all ? 'Certified: ' + no + ' organizations and ' + ppl + ' professionals' : 'Certified products and professionals') + '</span>' +
-      (CERT ? '<span class="w-new"><b>' + fresh.length + '</b> new in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
+    /* Jonna, Nov 27, 2026 ("needs a glow up"): a certificate: guilloche lines, a seal, and the split between
+       organizations and professionals */
+    var seal = '<svg class="ct-seal" viewBox="0 0 80 96" aria-hidden="true"><path d="M26,56 L16,94 L28,86 L34,96 L42,60 Z" fill="#14486e"/><path d="M54,56 L64,94 L52,86 L46,96 L38,60 Z" fill="#74bfeb"/>' +
+      '<path d="' + (function () { var d = '', n = 18; for (var k = 0; k < n * 2; k++) { var a = Math.PI * k / n - Math.PI / 2, r = k % 2 ? 31 : 36; d += (k ? 'L' : 'M') + (40 + r * Math.cos(a)).toFixed(1) + ',' + (38 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })() + '" fill="#0d314c"/>' +
+      '<circle cx="40" cy="38" r="26" fill="none" stroke="#eda100" stroke-width="2.5"/><circle cx="40" cy="38" r="21" fill="none" stroke="#74bfeb" stroke-width="1" stroke-dasharray="2 3"/><path d="M30,38.5 L37,45.5 L51,31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    return '<button type="button" class="wd w-cert" data-certs>' + head() + '<span class="ct-row"><span class="w-num"><b>' + (all || '') + '</b><i>Certified</i></span>' + seal + '</span>' +
+      '' + (all ? '<span class="ct-bar" aria-hidden="true"><i style="width:' + Math.max(6, Math.round(no / all * 100)) + '%"></i></span><span class="ct-key"><span><i class="k1"></i>' + no + ' Organizations</span><span><i class="k2"></i>' + ppl + ' Professionals</span></span>' : '<span class="w-sub">Certified products and professionals</span>') +
+      (CERT && CERT.certifications && CERT.certifications.length ? '<span class="w-more"><span class="wm-k">Recently Certified</span>' + CERT.certifications.filter(function (c) { return !/^renewal/i.test(c.type || ''); }).slice().sort(function (a, b) { return String(b.certifiedOn || '') < String(a.certifiedOn || '') ? -1 : 1; }).slice(0, 4).map(function (c) { var d = String(c.certifiedOn || ''); return '<span class="wm-row"><span class="wm-t">' + esc(c.org || '') + (c.product || c.program ? '<i class="ct-prog">, ' + esc(c.product || c.program) + '</i>' : '') + '</span></span>'; }).join('') + '</span>' : '') +
+      (CERT ? '<span class="w-new"><b>' + fresh.length + ' new</b> in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
   if (id === 'groups') return wgTile();
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
