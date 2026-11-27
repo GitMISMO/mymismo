@@ -81,3 +81,11 @@ The relay part for scanning and Summit Photos is written and tested: `_internal/
 checks). The app already uses it: when Perry turns it on, check-ins, Who I Met and touchpoints are sent every 20 seconds
 and when the Wi-Fi comes back (never counted twice), facilitators get names, Attendance Now shows everyone's check-ins live,
 and photos sent to MISMO go up for Amy's review. Sponsors' own lead scanning is a later request.
+
+## Other events (Jonna, Nov 27, 2026)
+MBA's events (for example MBA Annual) use the same Expo Logic name tags. In Who I Met and Log a Touchpoint, staff pick
+the event ("At"); each event keeps its own scans, sent under its own id (ev-<name>) once relay request 17 is live, so
+touchpoints from MBA Annual reach Member 360 the same way. Names fill in from that event's registration report, loaded as
+a CSV on the phone (registration or badge number, name, title, company; emails are never read). A summit's lookups never
+apply to another event's numbers. If MBA shares the report with MISMO, it could be loaded once for everyone through the
+relay instead of on each phone (a later request).

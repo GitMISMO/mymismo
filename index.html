@@ -69,7 +69,7 @@
   --navy:#0d314c; --sky:#74bfeb; --navy-deep:#06202f; --navy-mid:#14486e; --sky-soft:#a9d8f3; --sky-wash:#e4f2fb;
   --ground:#f1f6fa; --surface:#ffffff; --surface-2:#f6fafd; --surface-3:#e9f1f8;
   --border:#d5e2ed; --border-strong:#adc4d6; --rule:#e5eef5;
-  --ink:#0d314c; --ink-2:#456179; --ink-3:#7794aa;
+  --ink:#0d314c; --ink-2:#456179; --ink-3:#56708a;   /* Nov 27, 2026: darker than the brand's #7794aa so small grey text passes 4.5:1 */
   --good:#0f7b5c; --bad:#b3372c; --warn:#a2701a;
   --link:#14486e; --accent-fill:#0d314c; --accent-ink:#ffffff; --star:#d99a00; --sel:#e4f2fb;
   --c1:#2477b8; --c2:#eb6834; --c3:#1baf7a; --c4:#eda100; --c5:#e87ba4; --c6:#008300;
@@ -529,7 +529,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .wt-perf:before, .wt-perf:after{content:""; position:absolute; top:-12px; width:22px; height:22px; border-radius:50%; background:var(--ground)}
 .wt-perf:before{left:-28px} .wt-perf:after{right:-28px}
 .w-web .w-t{font-size:15px; line-height:1.22; -webkit-line-clamp:2; min-width:0; overflow-wrap:break-word; color:var(--ink)}
-.w-web .w-sub{color:#d95926; font-weight:700}
+.w-web .w-sub{color:#b8471a; font-weight:700}
+:root[data-theme="dark"] .w-web .w-sub{color:#f08a5d}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .w-web .w-sub{color:#f08a5d} }
 .w-web .wm-d i{color:#eb6834}
 .w-ed{font-family:var(--cond); font-weight:700; font-size:15px; color:var(--link)}
 .w-mat{position:relative; overflow:hidden; border-color:#3f97d3; background:linear-gradient(155deg, #8ccbf0 0%, #4ea3dc 50%, #2477b8 100%); padding-top:14px; padding-bottom:16px}
@@ -543,7 +545,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .wm-paper{position:relative; flex:1 1 auto; min-height:0; min-width:0; overflow:hidden; display:flex; flex-direction:column; text-align:left; background:#fff; color:#0d314c; border-radius:6px; padding:10px 11px 11px; transform:rotate(-1.6deg); box-shadow:0 10px 22px rgba(13,49,76,.3); transition:transform .25s ease}
 .w-mat:hover .wm-paper, .w-mat:active .wm-paper{transform:rotate(0) translateY(-3px)}
 .wm-name{font-family:var(--cond); font-weight:700; font-size:17px; letter-spacing:-.01em; line-height:1; color:#0d314c; white-space:nowrap}
-.wm-date{display:block; border-top:2px solid #0d314c; border-bottom:1px solid #0d314c; margin:5px 0 6px; padding:3px 0 2px; font-size:11px; font-weight:800; color:#eb6834; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.wm-date{display:block; border-top:2px solid #0d314c; border-bottom:1px solid #0d314c; margin:5px 0 6px; padding:3px 0 2px; font-size:11px; font-weight:800; color:#c4511f; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .wm-kick{font-size:11.5px; font-style:italic; font-weight:600; color:#456179; margin-bottom:2px}
 .w-mat .w-t{font-size:15.5px; line-height:1.22; color:#0d314c; -webkit-line-clamp:3}
 .wm-paper .wm-p{color:#456179} .wm-paper .wm-k{color:#7794aa} .wm-paper .wm-li{color:#14486e; border-top-color:#e5eef5}
@@ -1670,6 +1672,14 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .wgt-star{width:13px; height:13px; color:#a2701a; fill:currentColor; margin-right:4px; vertical-align:-1px}
 .wg-ban{display:flex; align-items:center; gap:12px; justify-content:space-between; margin:0 0 14px; padding:12px 14px; border-radius:14px; border-left:5px solid var(--c); background:var(--surface); border-top:1px solid var(--border); border-right:1px solid var(--border); border-bottom:1px solid var(--border)}
 .wg-ban-t{display:grid; gap:2px; min-width:0} .wg-ban-t b{font-size:15.5px} .wg-ban-t span{font-size:13px; font-weight:700; color:#0f7b5c} .wg-ban-t .wg-dot{display:inline-block; margin-right:6px}
+/* accessibility pass (Nov 27, 2026): bigger tap targets without changing the look, nothing under 11px */
+.linkbtn{padding-top:10px; padding-bottom:10px; margin-top:-10px; margin-bottom:-10px}
+.chip{min-height:38px}
+.wgw-d i{font-size:11px} .bk-n span{font-size:11px}
+.hub-ev{display:flex; align-items:center; gap:8px; width:100%; margin-bottom:10px; padding:9px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.1); color:#cfe3f1; font:inherit; font-size:14px; text-align:left; cursor:pointer} .hub-ev b{color:#fff} .hub-ev svg{width:16px; height:16px; flex:none} .hub-ev svg.go{margin-left:auto}
+.ci-sheet .ci-top:has(.hub-ev){display:block}
+.evs{display:grid; gap:10px} .ev-row{display:grid; gap:8px; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--surface); text-align:left; font:inherit; color:var(--ink); cursor:pointer} .ev-row.on{border-color:#0d314c; box-shadow:0 0 0 1px #0d314c inset}
+.ev-row b, .ev-hit b{display:block; font-size:15.5px} .ev-row span, .ev-hit span{font-size:13px; color:var(--ink-2)} .ev-hit{border:0; background:none; padding:0; text-align:left; font:inherit; color:inherit; cursor:pointer} .ev-load{justify-self:start}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -2550,7 +2560,7 @@ function recapData(cb) {
   phAll(function (ph) {
     ph = ph.filter(function (p) { return (p.sid === S.sid || !p.sid) && p.blob; });
     var ses = mine().map(sessionById).filter(Boolean).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : a.a - b.a; });
-    var met = (canScan() ? myScans() : []).map(function (x) { var w = x.reg ? regLookup(x.reg) : null; return { name: x.name || (w && w.name) || '', title: x.title || (w && w.title) || '', company: x.company || (w && w.company) || '', email: x.email || '', note: x.note || '', kind: scanKind(x) }; }).filter(function (x) { return x.name; });
+    var met = (canScan() ? myScans(S.sid) : []).map(function (x) { var w = x.reg ? regLookup(x.reg) : null; return { name: x.name || (w && w.name) || '', title: x.title || (w && w.title) || '', company: x.company || (w && w.company) || '', email: x.email || '', note: x.note || '', kind: scanKind(x) }; }).filter(function (x) { return x.name; });
     var done = {}; ph.forEach(function (p) { if (p.prompt) done[p.prompt] = 1; });
     cb({ ses: ses, met: met, ph: ph, ch: PH_PROMPTS.filter(function (p) { return done[p]; }).length });
   });
@@ -2986,7 +2996,7 @@ function renderScanTab() {
 }
 function renderPeople() {
   var h = '<div class="pagehead"><h1>People</h1><div class="sub">' + esc(S.summit.name) + '</div></div>';
-  var pv = !A.ready && canPreviewAttendees(), sc = canScan();
+  var pv = !A.ready && canPreviewAttendees(), sc = false;   /* Jonna, Nov 27, 2026: no Scan tab; scanning is the top-bar button */
   if (S.peopleTab === 'scan' && !sc) S.peopleTab = 'speakers';
   /* Jonna, Nov 27, 2026: Speakers, Attendees and Scan tabs */
   if (A.ready || pv || sc) h += '<div class="seg" role="group" aria-label="Show"><button type="button" data-ptab="speakers" aria-pressed="' + (S.peopleTab === 'speakers') + '">Speakers</button>' +
@@ -3485,9 +3495,86 @@ function c39Row(row) {
    scan a summit name tag, see who it is from Summit HQ's attendee list (its registration number, CN-055), add a note and
    Hot / Warm / Cold, and keep it. In this test, scans stay on this phone. When it goes live, engagement conversations go
    to Member 360 and sponsors' leads to that sponsor; sponsors get an email only if the attendee chose to share it. ---------- */
-function scansKey() { return 'scans:' + S.sid; }
-function myScans() { return load(scansKey(), []); }
-function saveScans(l) { save(scansKey(), l); }
+/* Other events (Jonna, Nov 27, 2026): MBA's events use the same Expo Logic name tags, so staff can scan Who I Met and
+   touchpoints at, say, MBA Annual. Each event keeps its own scans. Names fill in from that event's registration report
+   (a CSV the staff member loads on their phone; kept on the phone only, and emails are never read from it). A MISMO
+   Summit's lookups never apply to another event's numbers, since the two lists can share numbers. */
+function scanEvents() { return load('scan-events', []); }
+function scanEvent() { var e = load('scan-event', ''); return e && scanEvents().some(function (x) { return x.id === e; }) ? e : ''; }
+function scanEventName(id) { var e = scanEvents().filter(function (x) { return x.id === id; })[0]; return e ? e.name : (S.summit ? S.summit.name : 'This Summit'); }
+function scansKey(ev) { return 'scans:' + (ev === undefined ? (scanEvent() || S.sid) : ev); }
+function myScans(ev) { return load(scansKey(ev), []); }
+function saveScans(l, ev) { save(scansKey(ev), l); }
+function evLookup(ev, n) { var m = load('ev-list:' + ev, null), r = m && m[String(n)]; return r ? { name: r[0], title: r[1] || '', company: r[2] || '' } : null; }
+function scanLookup(n) { var ev = scanEvent(); return ev ? evLookup(ev, n) : regLookup(n); }
+/* a registration report saved as CSV: finds the registration number, name, title and company columns by their headings */
+function csvRows(t) {
+  var rows = [], row = [], f = '', q = false;
+  for (var i = 0; i < t.length; i++) {
+    var ch = t[i];
+    if (q) { if (ch === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+    else f += ch;
+  }
+  if (f || row.length) { row.push(f); rows.push(row); }
+  return rows.filter(function (r) { return r.some(function (c) { return c.trim(); }); });
+}
+function evLoadList(ev, text) {
+  var rows = csvRows(String(text).replace(/^﻿/, '')); if (rows.length < 2) return 0;
+  var h = rows[0].map(function (x) { return x.toLowerCase().replace(/[^a-z]/g, ''); });
+  var col = function (re) { for (var i = 0; i < h.length; i++) if (re.test(h[i])) return i; return -1; };
+  var ri = col(/^(registrationid|regid|registrationnumber|regnumber|badgeid|badgenumber|barcode|registrantid|attendeeid)$/);
+  if (ri < 0) ri = col(/(registration|badge|barcode).*(id|number|no)$/);
+  var fn = col(/^(firstname|first|fname|givenname)$/), ln = col(/^(lastname|last|lname|surname|familyname)$/), nm = col(/^(name|fullname|attendeename|registrantname)$/);
+  var ti = col(/^(title|jobtitle|position)$/), co = col(/^(company|organization|organisation|companyname|org|employer)$/);
+  if (ri < 0 || (nm < 0 && fn < 0)) return -1;
+  var m = {}, n = 0;
+  rows.slice(1).forEach(function (r) {
+    var id = String(r[ri] || '').replace(/\D/g, ''); if (!id) return;
+    var name = nm >= 0 ? r[nm] : [r[fn], ln >= 0 ? r[ln] : ''].join(' '); name = String(name || '').trim(); if (!name) return;
+    m[id] = [name.slice(0, 120), ti >= 0 ? String(r[ti] || '').trim().slice(0, 120) : '', co >= 0 ? String(r[co] || '').trim().slice(0, 120) : '']; n++;
+  });
+  try { save('ev-list:' + ev, m); } catch (e) { return -2; }
+  return n;
+}
+function scanEventSheet(done) {
+  var el = openSheet('Where Are You Scanning?', '<div class="sheet-pad evs"></div>', { plain: true }), box = el.querySelector('.evs');
+  function paint() {
+    var cur = scanEvent(), evs = scanEvents();
+    box.innerHTML = '<p class="sc-fine" style="margin-top:0">Who I Met and touchpoints are kept for each event. MBA\'s events use the same name tags.</p>' +
+      '<button type="button" class="ev-row' + (cur ? '' : ' on') + '" data-ev=""><b>' + esc(S.summit ? S.summit.name : 'This Summit') + '</b><span>Names fill in from the summit\'s registration list</span></button>' +
+      evs.map(function (e) {
+        var m = load('ev-list:' + e.id, null), n = m ? Object.keys(m).length : 0;
+        return '<div class="ev-row' + (cur === e.id ? ' on' : '') + '"><button type="button" class="ev-hit" data-ev="' + esc(e.id) + '"><b>' + esc(e.name) + '</b><span>' + (n ? n.toLocaleString() + ' people on its registration list' : 'No registration list yet, so you\'ll type names') + '</span></button>' +
+          '<button type="button" class="btn ev-load" data-ev-load="' + esc(e.id) + '">' + icon('i-download') + (n ? 'Replace the List' : 'Load Its Registration Report') + '</button></div>';
+      }).join('') +
+      '<button type="button" class="btn" data-ev-add>' + icon('i-plus') + 'Add Another Event</button>' +
+      '<p class="sc-fine">The registration report: save it as a CSV with the registration (badge) number, name, title and company. It stays on this phone, and emails are never read from it.</p>';
+  }
+  paint();
+  el.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-ev-load]'))) {
+      var id = t.getAttribute('data-ev-load'), inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.csv,text/csv'; inp.style.display = 'none'; document.body.appendChild(inp);
+      inp.addEventListener('change', function () {
+        var f = inp.files && inp.files[0]; inp.remove(); if (!f) return;
+        var fr = new FileReader();
+        fr.onload = function () { var n = evLoadList(id, String(fr.result || '')); mxToast(n > 0 ? n.toLocaleString() + ' people loaded' : n === -1 ? 'Couldn\'t find the registration number and name columns' : n === -2 ? 'That list is too big for this phone' : 'Nothing found in that file'); paint(); };
+        fr.readAsText(f);
+      });
+      inp.click(); return;
+    }
+    if (e.target.closest('[data-ev-add]')) {
+      var nm = String(prompt('The event\'s name, for example MBA Annual 2027:') || '').trim().slice(0, 60); if (!nm) return;
+      var id2 = ('ev-' + slug(nm)).slice(0, 31).replace(/-+$/, ''), evs = scanEvents();
+      if (!evs.some(function (x) { return x.id === id2; })) evs.unshift({ id: id2, name: nm });
+      save('scan-events', evs); save('scan-event', id2); paint(); return;
+    }
+    if ((t = e.target.closest('[data-ev]'))) { save('scan-event', t.getAttribute('data-ev')); closeSheet(); if (done) done(); }
+  });
+}
 /* who can scan (Jonna, Nov 27, 2026): staff (Summit HQ access) and facilitators (Meeting Trackers access), both with
    MyMISMO; sponsors when the relay part is live */
 function scanRole() {
@@ -3513,15 +3600,17 @@ function c39Svg(v) {
 }
 /* find someone by name in the attendee list, or add someone who isn't on it (Jonna, Nov 27, 2026: no name tag, a tag
    that won't read, or the wrong details) */
-function findPerson(cb) {
-  if (!PV.state) loadPreviewAttendees();
+function findPerson(cb, other) {
+  /* at another event (other: true and an event picked), the people on that event's registration report */
+  var ev = other ? scanEvent() : '', evm = ev ? load('ev-list:' + ev, {}) : null, evp = evm ? Object.keys(evm).map(function (k) { return { reg: k, name: evm[k][0], title: evm[k][1], company: evm[k][2] }; }) : null;
+  if (!ev && !PV.state) loadPreviewAttendees();
   var el = openSheet('Find by Name', '<div class="sheet-pad fp"><label class="mx-search">' + icon('i-search') + '<input type="search" placeholder="Type a name or company" aria-label="Find by name" autocomplete="off"></label><div class="fp-list"></div>' +
     '<details class="fp-add"><summary>' + icon('i-plus') + 'Add Someone Not on the List</summary><div class="field"><label for="fp-n">Name</label><input id="fp-n" maxlength="120" autocomplete="off"></div><div class="field"><label for="fp-t">Title</label><input id="fp-t" maxlength="120" autocomplete="off"></div><div class="field"><label for="fp-c">Company</label><input id="fp-c" maxlength="120" autocomplete="off"></div><button type="button" class="btn primary" data-fp-add>Add</button></details></div>', { plain: true });
   var inp = el.querySelector('input[type=search]'), list = el.querySelector('.fp-list'), hits = [];
   function paint() {
     var q = inp.value.trim().toLowerCase();
-    if (PV.state !== 'ready') { list.innerHTML = '<div class="note">Loading the attendee list…</div>'; return; }
-    hits = q.length < 2 ? [] : PV.people.filter(function (p) { return (p.name + ' ' + p.company).toLowerCase().indexOf(q) >= 0; }).slice(0, 30);
+    if (!evp && PV.state !== 'ready') { list.innerHTML = '<div class="note">Loading the attendee list…</div>'; return; }
+    hits = q.length < 2 ? [] : (evp || PV.people).filter(function (p) { return (p.name + ' ' + p.company).toLowerCase().indexOf(q) >= 0; }).slice(0, 30);
     list.innerHTML = q.length < 2 ? '<p class="sc-fine">Type at least two letters.</p>' : hits.length ? hits.map(function (p, i) { return '<button type="button" class="fp-row" data-fp="' + i + '"><b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span></button>'; }).join('') : '<p class="sc-fine">No one by that name. Use Add Someone Not on the List.</p>';
   }
   inp.addEventListener('input', paint); paint(); setTimeout(function () { inp.focus(); }, 300);
@@ -3537,7 +3626,7 @@ function findPerson(cb) {
 }
 /* a scan: who it is, a note, Hot / Warm / Cold, and what kind it is */
 function leadSheet(sc, fresh) {
-  var who = sc.reg ? regLookup(sc.reg) : null, kinds = scanRole() === 'staff' ? ['Touchpoint', 'Someone I Met'] : ['Someone I Met'];
+  var who = sc.reg ? scanLookup(sc.reg) : null, kinds = scanRole() === 'staff' ? ['Touchpoint', 'Someone I Met'] : ['Someone I Met'];
   sc.kind = sc.kind ? scanKind(sc) : kinds[0];
   if (!who && sc.name) who = { name: sc.name, title: sc.title || '', company: sc.company || '' };
   sc.kind = sc.kind || kinds[0]; sc.rate = sc.rate || '';
@@ -3557,7 +3646,7 @@ function leadSheet(sc, fresh) {
   function keep() {
     sc.note = el.querySelector('#ld-note').value.trim(); sc.email = el.querySelector('#ld-email').value.trim();
     sc.name = el.querySelector('#ld-name').value.trim(); sc.title = el.querySelector('#ld-title').value.trim(); sc.company = el.querySelector('#ld-co').value.trim();
-    var orig = sc.reg ? regLookup(sc.reg) : null; sc.edited = !!(orig && (orig.name !== sc.name || orig.title !== sc.title || orig.company !== sc.company)); sc.synced = false; setTimeout(scanSync, 300);
+    var orig = sc.reg ? scanLookup(sc.reg) : null; sc.edited = !!(orig && (orig.name !== sc.name || orig.title !== sc.title || orig.company !== sc.company)); sc.synced = false; setTimeout(scanSync, 300);
     var l = myScans().filter(function (x) { return x.at !== sc.at; }); l.unshift(sc); saveScans(l);
   }
   el.addEventListener('click', function (e) {
@@ -3566,14 +3655,14 @@ function leadSheet(sc, fresh) {
     if ((t = e.target.closest('[data-ld-rate]'))) { sc.rate = sc.rate === t.getAttribute('data-ld-rate') ? '' : t.getAttribute('data-ld-rate'); el.querySelectorAll('[data-ld-rate]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-ld-rate') === sc.rate)); }); return; }
     if (e.target.closest('[data-ld-save]')) { keep(); closeSheet(); mxToast('Scan saved'); return; }
     if (e.target.closest('[data-ld-again]')) { keep(); closeSheet(); mxToast('Scan saved'); if (!sc.hub) scanHub(null, sc.kind === 'Someone I Met' ? 'met' : 'touch'); return; }
-    if (e.target.closest('[data-ld-del]')) { if (sc.synced) { var dl = load('scans-del:' + S.sid, []); dl.push({ id: 'n-' + Number(sc.at).toString(36), kind: scanKind(sc) === 'Touchpoint' ? 'touch' : 'met' }); save('scans-del:' + S.sid, dl); setTimeout(scanSync, 300); } saveScans(myScans().filter(function (x) { return x.at !== sc.at; })); closeSheet(); mxToast('Scan deleted'); var l = document.querySelector('.scl-sheet'); if (l) { closeSheet(); scansSheet(); } }
+    if (e.target.closest('[data-ld-del]')) { if (sc.synced) { var dl = load('scans-del:' + (scanEvent() || S.sid), []); dl.push({ id: 'n-' + Number(sc.at).toString(36), kind: scanKind(sc) === 'Touchpoint' ? 'touch' : 'met' }); save('scans-del:' + (scanEvent() || S.sid), dl); setTimeout(scanSync, 300); } saveScans(myScans().filter(function (x) { return x.at !== sc.at; })); closeSheet(); mxToast('Scan deleted'); var l = document.querySelector('.scl-sheet'); if (l) { closeSheet(); scansSheet(); } }
   });
   return el;
 }
 function scansSheet() {
   var l = myScans();
   /* names fill in once the list has them */
-  l.forEach(function (s) { var w = regLookup(s.reg); if (w && !s.name) { s.name = w.name; s.title = w.title; s.company = w.company; } });
+  l.forEach(function (s) { var w = scanLookup(s.reg); if (w && !s.name) { s.name = w.name; s.title = w.title; s.company = w.company; } });
   var el = openSheet('My Scans', '<div class="sheet-pad scl">' + (l.length ? '<div class="scl-top"><span>' + l.length + (l.length === 1 ? ' scan' : ' scans') + ' on this phone</span><button type="button" class="btn" data-scl-csv>' + icon('i-download') + 'Download</button></div>' +
     l.map(function (s) { var d = new Date(s.at);
       return '<button type="button" class="scl-row" data-scl="' + s.at + '"><span class="scl-r r-' + esc((s.rate || 'none').toLowerCase()) + '">' + esc(s.rate || '–') + '</span><span class="scl-t"><b>' + esc(s.name || 'Registration ' + s.reg) + '</b><span>' + esc([s.company, s.kind].filter(Boolean).join(', ')) + '</span>' + (s.note ? '<em>' + esc(s.note) + '</em>' : '') + '</span><i>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</i></button>'; }).join('')
@@ -3703,7 +3792,8 @@ function scanHub(sid, mode0) {
       t.innerHTML = '<button type="button" class="ci-pickbtn" data-ci-pick><span class="ci-pk-l">Checking In To</span>' + (y ? '<b>' + esc(y.name) + '</b><span class="ci-pk-s">' + esc(DOW[dparts(y.date).dow].slice(0, 3) + ', ' + span(y.a, y.b) + (y.room ? ', ' + y.room : '')) + '</span>' : '<b>Pick a Session</b>') + icon('i-chev', 'go') + '</button>' +
         '<div class="ci-count"><b>' + n + '</b><span>checked in</span></div>';
     } else {
-      t.innerHTML = '<div class="hub-say">' + icon(mode === 'met' ? 'i-people' : 'i-handshake') + '<span><b>' + (mode === 'met' ? 'Who I Met' : 'Log a Touchpoint') + '</b><span>' +
+      t.innerHTML = '<button type="button" class="hub-ev" data-hub-ev>' + icon('i-pin') + '<span>At <b>' + esc(scanEventName(scanEvent())) + '</b></span>' + icon('i-chev', 'go') + '</button>' +
+        '<div class="hub-say">' + icon(mode === 'met' ? 'i-people' : 'i-handshake') + '<span><b>' + (mode === 'met' ? 'Who I Met' : 'Log a Touchpoint') + '</b><span>' +
         (mode === 'met' ? 'Scan someone\'s name tag to remember them, with a note.' : 'Scan a member\'s name tag to log your conversation. It goes to Member 360 when scanning goes live.') + '</span></span></div>';
     }
   }
@@ -3725,7 +3815,7 @@ function scanHub(sid, mode0) {
         (mine.length > 6 ? '<div class="ci-more">and ' + (mine.length - 6) + ' more</div>' : '');
     } else {
       var k = mode === 'met' ? 'Someone I Met' : 'Touchpoint', l = myScans().filter(function (s) { return scanKind(s) === k; });
-      list.innerHTML = l.slice(0, 4).map(function (s) { var w = s.reg ? regLookup(s.reg) : null; var d = new Date(s.at);
+      list.innerHTML = l.slice(0, 4).map(function (s) { var w = s.reg ? scanLookup(s.reg) : null; var d = new Date(s.at);
         return '<div class="ci-row"><span>' + icon('i-check') + '</span><b>' + esc(s.name || (w && w.name) || 'Registration ' + s.reg) + '</b><i>' + esc(s.note || s.company || '') + '</i><em>' + esc(MON[d.getMonth()] + ' ' + d.getDate()) + '</em></div>'; }).join('');
     }
   }
@@ -3786,9 +3876,10 @@ function scanHub(sid, mode0) {
     var sb = e.target.closest('[data-sc-snd]');
     if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on && rig) rig.ok(); return; }
     if (e.target.closest('[data-ci-pick]')) { pickSession(); return; }
+    if (e.target.closest('[data-hub-ev]')) { scanEventSheet(function () { top(); paint(); }); return; }
     if (e.target.closest('[data-hub-again]')) { resume(); return; }
     if (e.target.closest('[data-ci-type]')) { var n = String(prompt('The number under the barcode on the name tag:') || '').replace(/\D/g, ''); if (n) onCode(n); return; }
-    if (e.target.closest('[data-ci-find]')) { findPerson(onPerson); return; }
+    if (e.target.closest('[data-ci-find]')) { findPerson(onPerson, mode !== 'checkin'); return; }
     if (e.target.closest('[data-ci-stats]')) { attendanceSheet(); return; }
     if (e.target.closest('[data-sc-list]')) { scansSheet(); return; }
     if (e.target.closest('[data-sc-badge]')) { testBadge(); }
@@ -4151,17 +4242,20 @@ function scanSync() {
   (un.length ? scanApi('POST', '/scan/checkins', { summit: S.sid, items: un.map(function (c) { return { id: ciId(c), ses: c.ses, reg: c.reg || '', name: c.name || '', title: c.title || '', company: c.company || '', manual: !!c.manual, at: c.at }; }) })
     .then(function (r) { if (r.status !== 200) return; SYNC.live = true; var ids = {}; un.forEach(function (c) { ids[ciId(c)] = 1; }); var all = myCheckins(); all.forEach(function (c) { if (ids[ciId(c)]) c.sent = true; }); save(checkinsKey(), all); }) : Promise.resolve())
   .then(function () {
-    var staff = scanRole() === 'staff', notes = myScans().filter(function (x) { return !x.synced && (staff || scanKind(x) !== 'Touchpoint'); }).slice(0, 100), dels = load('scans-del:' + S.sid, []);
-    if (!notes.length && !dels.length) return;
-    var items = notes.map(function (x) { return { id: 'n-' + Number(x.at).toString(36), kind: scanKind(x) === 'Touchpoint' ? 'touch' : 'met', reg: x.reg || '', name: x.name || '', title: x.title || '', company: x.company || '', rate: x.rate || '', note: x.note || '', email: x.email || '', at: x.at }; })
-      .concat(dels.map(function (d) { return { id: d.id, kind: d.kind, deleted: true }; }));
-    return scanApi('POST', '/scan/notes', { summit: S.sid, items: items }).then(function (r) {
-      if (r.status !== 200) return; SYNC.live = true; var ats = {}; notes.forEach(function (x) { ats[x.at] = 1; });
-      var l = myScans(); l.forEach(function (x) { if (ats[x.at]) x.synced = true; }); saveScans(l); save('scans-del:' + S.sid, []);
-    });
+    var staff = scanRole() === 'staff';
+    return [S.sid].concat(scanEvents().map(function (e) { return e.id; })).reduce(function (pr, ev) { return pr.then(function () {
+      var notes = myScans(ev).filter(function (x) { return !x.synced && (staff || scanKind(x) !== 'Touchpoint'); }).slice(0, 100), dels = load('scans-del:' + ev, []);
+      if (!notes.length && !dels.length) return;
+      var items = notes.map(function (x) { return { id: 'n-' + Number(x.at).toString(36), kind: scanKind(x) === 'Touchpoint' ? 'touch' : 'met', reg: x.reg || '', name: x.name || '', title: x.title || '', company: x.company || '', rate: x.rate || '', note: x.note || '', email: x.email || '', at: x.at }; })
+        .concat(dels.map(function (d) { return { id: d.id, kind: d.kind, deleted: true }; }));
+      return scanApi('POST', '/scan/notes', { summit: ev, items: items }).then(function (r) {
+        if (r.status !== 200) return; SYNC.live = true; var ats = {}; notes.forEach(function (x) { ats[x.at] = 1; });
+        var l = myScans(ev); l.forEach(function (x) { if (ats[x.at]) x.synced = true; }); saveScans(l, ev); save('scans-del:' + ev, []);
+      });
+    }); }, Promise.resolve());
   })
   .then(function () {   /* names for registration numbers this phone can't look up itself (facilitators) */
-    var regs = {}; myCheckins().concat(myScans()).forEach(function (c) { if (c.reg && !regLookup(c.reg)) regs[c.reg] = 1; });
+    var regs = {}; myCheckins().concat(myScans(S.sid)).forEach(function (c) { if (c.reg && !regLookup(c.reg)) regs[c.reg] = 1; });
     var list = Object.keys(regs).slice(0, 50); if (!list.length) return;
     return scanApi('POST', '/scan/lookup', { summit: S.sid, regs: list }).then(function (r) { if (r.status !== 200 || !r.j.people) return; var m = load('scan-names:' + S.sid, {}); Object.keys(r.j.people).forEach(function (k) { m[k] = r.j.people[k]; }); save('scan-names:' + S.sid, m); });
   })

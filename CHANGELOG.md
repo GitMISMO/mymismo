@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Scan at other events: in Who I Met and Log a Touchpoint, tap "At" to pick the event (for example MBA Annual, which uses the same name tags). Each event keeps its own scans; load the event's registration report (CSV) and names, titles and companies fill in from it. The report stays on the phone and emails are never read from it. The People page's Scan tab is gone (scanning is the top-bar button).
+- Nov 27, 2026: Accessibility pass: small grey text is darker so it's easier to read (4.5:1), small orange text too, links and filter chips are easier to tap, and nothing is smaller than 11 points. Every button and picture has a name for screen readers.
 - Nov 27, 2026: My Workgroups: Follow a workgroup (on its page) to keep it at the top of Join a Workgroup and first on the home tile (with a star), have it count toward Picked for You at the summit, open its calendar links, and get a banner on the home screen from 15 minutes before it meets with one-tap Join.
 - Nov 27, 2026: Around the Hotel's big map re-centers when the phone turns back upright, so half of it isn't left off the side.
 - Nov 27, 2026: Works with no Wi-Fi: from three weeks before a summit the phone keeps the floor map, speakers' headshots and sponsors' logos ahead of time, and a quiet bar says when you're offline (your agenda, map, schedule and scans still work; anything new is sent when you're back).
