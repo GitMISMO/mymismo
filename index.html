@@ -584,7 +584,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-idea .w-head svg{color:#c99a2e}
 .wd.solo{min-height:120px}
 @media (min-width:760px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .w-summit.wide{grid-column:span 4} .wd.solo{grid-column:span 2} }
-@media (orientation:landscape) and (max-height:540px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .wd.solo{grid-column:span 2} }
+@media (orientation:landscape) and (max-height:540px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .wd.solo{grid-column:span 2}
+  /* Jonna, Nov 27, 2026: beside the Summit tile, MISMO Matters sits on top of Join a Workgroup */
+  .dash-grid .w-summit.wide{grid-row:span 2} .dash-grid .w-mat, .dash-grid .w-wg{grid-column:span 2} }
 
 /* ---------- Explore ---------- */
 .postcard{position:relative; overflow:hidden; isolation:isolate; border-radius:20px; color:#fff; background:#071d2e; min-height:360px; display:flex; flex-direction:column; justify-content:flex-end}
@@ -5241,7 +5243,7 @@ function renderDash() {
   if (mq('(min-width:760px)') || mq('(orientation:landscape) and (max-height:540px)')) {
     var units = 0, big = mq('(min-width:760px)') && !mq('(orientation:landscape) and (max-height:540px)');   /* on a phone on its side the Summit tile spans two, not four */
     ws.forEach(function (w) { (w.match(/class="(?:wd|nextsum) [^"]*"|class="nextsum[^"]*"/g) || []).forEach(function (c) {
-      units += /w-summit/.test(c) ? (big ? 4 : 2) : /\bwide\b/.test(c) ? 2 : 1; }); });
+      units += /w-summit/.test(c) ? 4 : (!big && /w-mat|w-wg/.test(c)) ? 2 : /\bwide\b/.test(c) ? 2 : 1; }); });
     var rem = (4 - units % 4) % 4, last = ws.length - 1;
     /* Jonna, Nov 26, 2026: squares stay in their pairs (Submit an Idea beside mismo.org). Two short: a wide tile at the end
        goes full width, or the last pair of squares widens together. */

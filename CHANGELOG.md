@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Sideways layout (browsers and small tablets): MISMO Matters sits on top of Join a Workgroup beside the Summit tile.
 - Nov 27, 2026: Phones stay upright: the Android app (version 2026.11.27) and the installed web app are portrait only; full-screen video still turns sideways. Tablets can still turn.
 - Nov 27, 2026: Phone on its side (and tablets): when Join a Workgroup stands as tall as the Summit tile it lists the day's meetings from the top instead of scrolling one at a time in the middle of an empty tile.
 - Nov 27, 2026: Certifications and Webinars are now the same height as MISMO Matters and Join a Workgroup on a phone held upright (Certifications: the count and seal, organizations and professionals on two short lines, what's new; Webinars: the orange stub and a two-line title). MISMO Matters lost the dots and the airmail stripe: bright blue with a soft light and a faint envelope behind the page.
