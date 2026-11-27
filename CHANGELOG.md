@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Pick a Frame shows a mix of sample photos (one person, two, and a group of five) so you can see how each frame looks with a selfie or a crowd.
 - Nov 27, 2026: New look for the MISMO Matters tile: the latest edition as a printed page with its masthead and date, sitting on a stack of past editions on navy, with an airmail edge. The page straightens up when you tap it.
 - Nov 27, 2026: Home tiles reordered: Summit, then MISMO Matters and Join a Workgroup, Mic'd Up where it was, then Certifications and Webinars. On a phone held upright the Webinars tile puts the date above the title so long words aren't cut off.
 - Nov 27, 2026: Summit Photos: six new frames drawn from the app's own city art (Summit Pass, Night Out, Postcard, Instant, Name Badge, No Frame), a See the Frames preview to pick one, one Take a Photo button (flip to selfie in the camera), and once the summit starts the photos card sits right under the four buttons. The four buttons now read Sponsors, Sessions, Speakers, Starred. Facilitators see Attendance Now for every session and workgroup, same as staff; the Meeting Trackers link is gone.

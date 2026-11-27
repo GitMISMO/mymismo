@@ -3735,12 +3735,18 @@ function phDraw(cv, img, frame, cap, A0, scale) {
     return;
   }
 }
-/* a sample photo for Preview Frames: a warm evening scene with two friends */
-function phSample() {
+/* sample photos for Pick a Frame (Jonna, Nov 27, 2026: one person, two, and a group of five, so the previews vary) */
+var PH_SAMPLE = { pass: 'solo', night: 'group', postcard: 'pair', instant: 'solo', badge: 'group', none: 'pair' };
+function phSample(kind) {
   var c = document.createElement('canvas'); c.width = 1080; c.height = 1350; var x = c.getContext('2d');
-  var g = x.createLinearGradient(0, 0, 0, 1350); g.addColorStop(0, '#f6b26b'); g.addColorStop(.55, '#e07a5f'); g.addColorStop(1, '#3d405b'); x.fillStyle = g; x.fillRect(0, 0, 1080, 1350);
-  [[180, 260, 90, '#ffe7b0'], [880, 200, 60, '#fff3d6'], [760, 420, 110, '#ffd9a0'], [300, 520, 70, '#ffe2bf'], [960, 600, 50, '#fff0d0']].forEach(function (b) { x.globalAlpha = .35; x.fillStyle = b[3]; x.beginPath(); x.arc(b[0], b[1], b[2], 0, 7); x.fill(); }); x.globalAlpha = 1;
-  [[380, 640, '#2b2d42'], [700, 600, '#1d3557']].forEach(function (p) { x.fillStyle = p[2]; x.beginPath(); x.arc(p[0], p[1], 120, 0, 7); x.fill(); x.beginPath(); x.ellipse(p[0], p[1] + 520, 250, 400, 0, Math.PI, 0); x.fill(); });
+  var sky = { solo: ['#8fd0f2', '#4f8fc0', '#1d3c5c'], pair: ['#f6b26b', '#e07a5f', '#3d405b'], group: ['#ffd58a', '#c86b85', '#2b2f55'] }[kind || 'pair'];
+  var g = x.createLinearGradient(0, 0, 0, 1350); g.addColorStop(0, sky[0]); g.addColorStop(.55, sky[1]); g.addColorStop(1, sky[2]); x.fillStyle = g; x.fillRect(0, 0, 1080, 1350);
+  [[180, 260, 90], [880, 200, 60], [760, 420, 110], [300, 520, 70], [960, 600, 50], [520, 160, 40]].forEach(function (b) { x.globalAlpha = .3; x.fillStyle = '#fff4dc'; x.beginPath(); x.arc(b[0], b[1], b[2], 0, 7); x.fill(); }); x.globalAlpha = 1;
+  /* people: x, head y, head size, color; back row first */
+  var ppl = kind === 'solo' ? [[540, 600, 1.45, '#22324a']]
+    : kind === 'group' ? [[300, 560, .82, '#2b2d42'], [540, 520, .86, '#1d3557'], [780, 560, .82, '#3a2e4f'], [180, 720, .9, '#24344d'], [420, 700, .92, '#2f2a44'], [660, 700, .92, '#1b2f4a'], [900, 720, .9, '#33283f']].slice(0, 6).filter(function (p2, i2) { return i2 !== 1; })
+    : [[380, 640, 1, '#2b2d42'], [700, 600, 1, '#1d3557']];
+  ppl.forEach(function (p2) { var r = 120 * p2[2]; x.fillStyle = p2[3]; x.beginPath(); x.arc(p2[0], p2[1], r, 0, 7); x.fill(); x.beginPath(); x.ellipse(p2[0], p2[1] + r * 4.3, r * 2.1, r * 3.35, 0, Math.PI, 0); x.fill(); });
   return c;
 }
 function phPick(kind, cb) {
@@ -3807,10 +3813,10 @@ function photosCard() {
 }
 /* Preview Frames: every frame on a sample photo (or the last one taken); pick one, then take the photo */
 function phFrames() {
-  var cur = load('ph-frame', 'pass'), src = phSample();
+  var cur = load('ph-frame', 'pass'), SM = { solo: phSample('solo'), pair: phSample('pair'), group: phSample('group') };
   var el = openSheet('Pick a Frame', '<div class="phf"><div class="phf-big"><canvas></canvas></div><div class="sheet-pad"><div class="phf-grid">' + PH_FRAMES.map(function (f) { return '<button type="button" data-phf="' + f[0] + '" aria-pressed="' + (cur === f[0]) + '"><canvas></canvas><span>' + f[1] + '</span></button>'; }).join('') + '</div>' +
     '<div class="ph-acts"><button type="button" class="btn primary" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-ph-take="pick">' + icon('i-image') + 'From My Photos</button></div><p class="sc-fine">Your pick is used next time; you can change it on the photo too.</p></div></div>', { plain: true });
-  function paint(a) { phDraw(el.querySelector('.phf-big canvas'), src, cur, '', a, .5); el.querySelectorAll('[data-phf]').forEach(function (b) { phDraw(b.querySelector('canvas'), src, b.getAttribute('data-phf'), '', a, .25); }); }
+  function paint(a) { phDraw(el.querySelector('.phf-big canvas'), SM[PH_SAMPLE[cur]], cur, '', a, .5); el.querySelectorAll('[data-phf]').forEach(function (b) { var f = b.getAttribute('data-phf'); phDraw(b.querySelector('canvas'), SM[PH_SAMPLE[f]], f, '', a, .25); }); }
   paint(PH_ART); phAssets(paint);
   el.addEventListener('click', function (e) { var t = e.target.closest('[data-phf]'); if (!t) return; cur = t.getAttribute('data-phf'); save('ph-frame', cur); el.querySelectorAll('[data-phf]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); paint(PH_ART); });
 }
