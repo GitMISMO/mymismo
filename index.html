@@ -918,6 +918,11 @@ html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, 
 .wgt b{font-family:var(--cond); font-size:16px; font-weight:700; line-height:1.13; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
 .wgt > span{font-size:12.5px; font-weight:700; color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){ .wgt{transition:none} }
+.wgt-tall .wgt-mid{justify-content:flex-start; margin-top:6px} .wgt-tall .wgt-pips{display:none}
+.wgt-tall .wgt-box{flex:1 1 0; height:auto; min-height:0; display:flex; flex-direction:column; gap:10px}
+.wgt-tall .wgt{position:static; opacity:1; transform:none; flex:none; transition:none}
+.wgt-tall .wgt b{-webkit-line-clamp:2; font-size:15.5px}
+.wgt-more{font-size:12.5px; font-weight:700; color:var(--ink-3); padding-left:12px}
 .wgw{margin-top:auto; align-self:stretch; display:grid; grid-template-columns:repeat(5, 1fr) auto; gap:5px; align-items:end}
 .wgw-d{display:grid; justify-items:center; gap:3px}
 .wgw-bar{display:flex; align-items:flex-end; width:100%; height:22px; border-radius:4px; background:color-mix(in srgb, var(--sky) 16%, transparent); overflow:hidden}
@@ -4311,6 +4316,7 @@ function wgTile() {
 setInterval(function () {
   if (document.hidden) return;
   document.querySelectorAll('.wgt-box').forEach(function (box) {
+    if (box.closest('.wgt-tall')) return;
     var it = box.querySelectorAll('.wgt'); if (it.length < 2) return;
     var on = box.querySelector('.wgt.on'), i = Array.prototype.indexOf.call(it, on), j = (i + 1) % it.length, nx = it[j];
     it.forEach(function (x) { x.classList.remove('out'); });
@@ -5468,6 +5474,18 @@ function renderPage(p) {
 }
 /* a tile's extra lines show only as many whole lines as fit: nothing cut in half, no heading left on its own */
 function fitMore() {
+  /* Jonna, Nov 27, 2026 ("landscape looks weird"): a Join a Workgroup tile taller than its usual size (beside the Summit
+     tile, a phone on its side, a tablet) lists the day's meetings instead of scrolling one at a time in the middle */
+  $$('#pg-dash .w-wg').forEach(function (t) {
+    var mid = t.querySelector('.wgt-mid'), box = t.querySelector('.wgt-box'); if (!mid || !box) return;
+    t.classList.remove('wgt-tall'); box.querySelectorAll('.wgt').forEach(function (x) { x.style.display = ''; });
+    if (mid.clientHeight < 190) return;
+    t.classList.add('wgt-tall');
+    var bottom = box.getBoundingClientRect().bottom + 1, shown = 0, all = box.querySelectorAll('.wgt');
+    all.forEach(function (x) { if (x.getBoundingClientRect().bottom > bottom) x.style.display = 'none'; else shown++; });
+    var more = t.querySelector('.wgt-more'); if (more) more.remove();
+    if (shown < all.length) { if (shown) all[shown - 1].style.display = 'none'; box.insertAdjacentHTML('beforeend', '<span class="wgt-more">and ' + (all.length - shown + 1) + ' more</span>'); }
+  });
   $$('#pg-dash .w-more').forEach(function (m) {
     var kids = Array.prototype.slice.call(m.children); kids.forEach(function (k) { k.style.display = ''; k.style.webkitLineClamp = ''; });
     if (!m.offsetHeight) return;
