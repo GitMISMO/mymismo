@@ -1,5 +1,8 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Let Someone Help: in Check-In, staff and facilitators make a link for a helper (a volunteer, or a chair who likes to scan) that opens MyMISMO's scanner for that one session for 2 to 12 hours, no sign-in needed; each check-in shows it came from them (relay request 17 adds the route).
+- Nov 27, 2026: Handheld Bluetooth scanners work in the scanner: pair one with the phone, keep the scanner open, and each scan counts like a camera scan.
+- Nov 27, 2026: Amy's Summit Photo Submissions read everyone's submissions from the relay when photo sharing goes live (this phone's until then). American spelling for "Canceled"; "The Latest Edition".
 - Nov 27, 2026: Scan at other events: in Who I Met and Log a Touchpoint, tap "At" to pick the event (for example MBA Annual, which uses the same name tags). Each event keeps its own scans; load the event's registration report (CSV) and names, titles and companies fill in from it. The report stays on the phone and emails are never read from it. The People page's Scan tab is gone (scanning is the top-bar button).
 - Nov 27, 2026: Accessibility pass: small grey text is darker so it's easier to read (4.5:1), small orange text too, links and filter chips are easier to tap, and nothing is smaller than 11 points. Every button and picture has a name for screen readers.
 - Nov 27, 2026: My Workgroups: Follow a workgroup (on its page) to keep it at the top of Join a Workgroup and first on the home tile (with a star), have it count toward Picked for You at the summit, open its calendar links, and get a banner on the home screen from 15 minutes before it meets with one-tap Join.

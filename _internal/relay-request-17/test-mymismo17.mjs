@@ -103,6 +103,26 @@ ok('each person reads only their own notes', d.items.length === 1 && d.items[0].
 r = await call('POST', '/mymismo/scan/notes', { tok: ST, body: { summit: 'nola', items: [{ id: 'n-333333', kind: 'touch', deleted: true }] } });
 ok('deleting a touchpoint takes it off the Member 360 list too', r.statusCode === 200 && !file('scan/nola/touchpoints.json').docs['n-333333'], file('scan/nola/touchpoints.json'));
 
+
+/* ---------- helpers: one session, a few hours ---------- */
+r = await call('POST', '/mymismo/scan/helper', { tok: FA, body: { summit: 'nola', ses: 'tp:WS01', name: 'Rusty', hours: 4 } }); d = J(r);
+ok('a facilitator makes a helper link', r.statusCode === 200 && typeof d.token === 'string', d);
+const HT = d.token;
+r = await call('GET', '/mymismo/scan/me', { tok: HT }); d = J(r);
+ok('the helper scans as a helper, for that session', r.statusCode === 200 && d.role === 'helper' && d.ses === 'tp:WS01' && d.name === 'Rusty', d);
+r = await call('POST', '/mymismo/scan/checkins', { tok: HT, body: { summit: 'nola', items: [{ id: 'c-h11111', ses: 'tp:WS01', reg: '1000002' }, { id: 'c-h22222', ses: 'tp:OTHER', reg: '1000001' }] } }); d = J(r);
+ok('the helper checks people in to that session only', r.statusCode === 200 && d.saved === 1 && file('scan/nola/checkins.json').docs['c-h11111'].by === 'helper:Rusty via fac@example.org' && !file('scan/nola/checkins.json').docs['c-h22222'], d);
+r = await call('POST', '/mymismo/scan/lookup', { tok: HT, body: { summit: 'nola', regs: ['1000002'] } }); d = J(r);
+ok('the helper sees names', r.statusCode === 200 && d.people['1000002'].name === 'Sam Roe', d);
+r = await call('GET', '/mymismo/scan/checkins?summit=nola', { tok: HT });
+ok('the helper can\'t read everyone\'s check-ins', r.statusCode === 403, r.statusCode);
+r = await call('POST', '/mymismo/scan/notes', { tok: HT, body: { summit: 'nola', items: [{ id: 'n-h33333', kind: 'met', name: 'X' }] } });
+ok('the helper can\'t save notes', r.statusCode === 403, r.statusCode);
+r = await call('POST', '/mymismo/scan/helper', { tok: HT, body: { summit: 'nola', ses: 'tp:WS01', name: 'Someone Else' } });
+ok('a helper can\'t make more helpers', r.statusCode === 403, r.statusCode);
+r = await call('POST', '/mymismo/scan/checkins', { tok: HT, body: { summit: 'other', items: [{ id: 'c-h44444', ses: 'tp:WS01', reg: '1000002' }] } });
+ok('the helper link is for that summit only', r.statusCode === 403, r.statusCode);
+
 /* ---------- Summit Photos ---------- */
 const JPG = 'data:image/jpeg;base64,' + Buffer.alloc(3000, 7).toString('base64');
 r = await call('POST', '/mymismo/photos', { body: { summit: 'nola', data: JPG } });

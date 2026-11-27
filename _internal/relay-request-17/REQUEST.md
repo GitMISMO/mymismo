@@ -43,6 +43,7 @@ needs write access to that repository's contents (it already writes to the other
 | `GET /mymismo/scan/checkins?summit=&since=` | staff or facilitator | Everyone's check-ins for Attendance Now, with names; no emails. |
 | `POST /mymismo/scan/notes` | staff or facilitator | `{ summit, items: [up to 100 { id, kind: 'met' or 'touch', reg, name, title, company, rate, note, email, at, deleted }] }`. Touchpoints are staff only. |
 | `GET /mymismo/scan/notes?summit=` | staff or facilitator | Only your own. |
+| `POST /mymismo/scan/helper` | staff or facilitator | `{ summit, ses, name, hours (1 to 12) }` → `{ token, exp }`: a link that lets someone else (a volunteer, a chair who likes to scan) check people in to that one session for those hours. With it, only `/scan/me`, `/scan/lookup` and `POST /scan/checkins` for that session work; each check-in records `helper:<name> via <who made the link>`. |
 | `POST /mymismo/photos` | signed-in attendee or staff with MyMISMO | `{ summit, data (JPEG data: URL, up to about 1.6 MB), caption, challenge, tags, consent }` → `{ ok, id }`. 30 an hour each. |
 | `GET /mymismo/photos/list?summit=` | mediaReviewers | Every submission, newest first, without the picture data. |
 | `GET /mymismo/photos/one?summit=&id=` | mediaReviewers | `{ s }`, the picture. |
@@ -61,6 +62,6 @@ existing routes return changes.
 
 ## Checks
 
-`node test-mymismo17.mjs`: 37 checks (who can scan, no emails in lookups, a retried batch counted once, touchpoints staff
+`node test-mymismo17.mjs`: 45 checks (who can scan, helper links limited to one session and summit, no emails in lookups, a retried batch counted once, touchpoints staff
 only and mirrored for Member 360, photos JPEG only, reviewers only, send writes the JPEG and the list to MISMO Media and
 marks them sent, a sent photo can't be changed). Requests 13 to 16's suites still pass with this patch applied.

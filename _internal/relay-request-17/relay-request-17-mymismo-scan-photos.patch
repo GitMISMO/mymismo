@@ -20,7 +20,7 @@
    }
    mmFeedCache.at = now; mmFeedCache.value = { summits };
    return mmFeedCache.value;
-@@ -3001,6 +3003,243 @@
+@@ -3001,6 +3003,265 @@
    return respond(200, { ok: true, id, sent, failed, removed: gone.length });
  }
  
@@ -89,14 +89,28 @@
 +  if (!process.env.AUTH_SECRET) return respond(500, { error: 'NO_AUTH_SECRET' });
 +  return photos ? mm17Photos(method, subPath, event, proj, headers, raw) : mm17Scan(method, subPath, event, proj, headers);
 +}
++/* Helpers (Jonna, Nov 27, 2026): staff or a facilitator can let someone else check people in to one session for a few
++ * hours (a big workshop, or a chair who likes to scan): POST /scan/helper { summit, ses, name, hours (1-12) } gives a
++ * link token. With it, /scan/me, /scan/lookup and /scan/checkins work for that session only; nothing else. */
++const mm17HelperSecret = () => createHmac('sha256', process.env.AUTH_SECRET || '').update('mymismo-scan-helper-v1').digest('hex');
++function mm17Helper(headers) {
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  if (!auth.startsWith('Bearer ') || !process.env.AUTH_SECRET) return null;
++  const t = verifyToken(auth.slice(7).trim(), mm17HelperSecret());
++  if (t.error || t.kind !== 'mymismo-helper' || !MM_SUMMIT.test(String(t.s)) || !MM17_SES.test(String(t.ses))) return null;
++  return { role: 'helper', email: 'helper:' + mmStr(t.n, 60) + ' via ' + mmStr(t.by, 254), name: mmStr(t.n, 60), summit: t.s, ses: t.ses };
++}
 +async function mm17Scan(method, subPath, event, proj, headers) {
-+  const want = { '/scan/me': 'GET', '/scan/lookup': 'POST', '/scan/checkins': method === 'GET' ? 'GET' : 'POST', '/scan/notes': method === 'GET' ? 'GET' : 'POST' }[subPath];
++  const want = { '/scan/me': 'GET', '/scan/lookup': 'POST', '/scan/helper': 'POST', '/scan/checkins': method === 'GET' ? 'GET' : 'POST', '/scan/notes': method === 'GET' ? 'GET' : 'POST' }[subPath];
 +  if (!want) return respond(404, { error: 'NOT_FOUND' });
 +  if (method !== want) return respond(405, { error: 'METHOD' });
-+  const who = await mm17Staff(headers); if (who.error) return who.error;
++  const helper = mm17Helper(headers);
++  const who = helper || await mm17Staff(headers); if (who.error) return who.error;
 +  if (!who.role) return respond(403, { error: 'NOT_ALLOWED', message: 'Scanning is for MISMO staff and facilitators.' });
++  if (helper && !['/scan/me', '/scan/lookup', '/scan/checkins'].includes(subPath)) return respond(403, { error: 'NOT_ALLOWED' });
++  if (helper && method === 'GET' && subPath !== '/scan/me') return respond(403, { error: 'NOT_ALLOWED' });
 +  const now = Date.now(), branch = proj.branch || 'main', q = event.queryStringParameters || {};
-+  if (subPath === '/scan/me') return respond(200, { role: who.role, name: who.name });
++  if (subPath === '/scan/me') return respond(200, { role: who.role, name: who.name, ...(helper ? { summit: helper.summit, ses: helper.ses } : {}) });
 +  if (method === 'GET') {
 +    if (!mmAllowed('scanread', who.email, MM17_LIMITS.read, now)) return respond(429, { error: 'TOO_MANY' });
 +    const summit = mm17Summit(q.summit); if (!summit) return respond(400, { error: 'INVALID' });
@@ -115,6 +129,14 @@
 +  if (String(event.body || '').length > 64_000) return respond(413, { error: 'TOO_LARGE' });   /* a batch of check-ins is bigger than MyMISMO's usual 16 KB */
 +  const parsed = parseBody(event, 64_000); if (parsed.error) return parsed.error;
 +  const b = parsed.body && typeof parsed.body === 'object' && !Array.isArray(parsed.body) ? parsed.body : {}, summit = mm17Summit(b.summit); if (!summit) return respond(400, { error: 'INVALID', problems: ['Which summit?'] });
++  if (helper && summit !== helper.summit) return respond(403, { error: 'NOT_ALLOWED' });
++  if (subPath === '/scan/helper') {
++    const ses = mmStr(b.ses, 60), name = mmStr(b.name, 60), hours = Math.max(1, Math.min(12, Math.round(Number(b.hours) || 4)));
++    if (!MM17_SES.test(ses) || !name) return respond(400, { error: 'INVALID', problems: ['A helper needs a name and a session.'] });
++    if (!mmAllowed('helper', who.email, 30, now)) return respond(429, { error: 'TOO_MANY' });
++    const exp = Math.floor(now / 1000) + hours * 3600;
++    return respond(200, { token: signToken({ kind: 'mymismo-helper', s: summit, ses, n: name, by: who.email, iat: Math.floor(now / 1000), exp }, mm17HelperSecret()), exp });
++  }
 +  if (subPath === '/scan/lookup') {
 +    if (!mmAllowed('lookup', who.email, MM17_LIMITS.lookup, now)) return respond(429, { error: 'TOO_MANY' });
 +    const regs = (Array.isArray(b.regs) ? b.regs : []).map(x => mmStr(x, 12)).filter(x => MM17_REG.test(x)).slice(0, 50);
@@ -128,7 +150,7 @@
 +      id: mmStr(c.id, 40), ses: mmStr(c.ses, 60), reg: MM17_REG.test(mmStr(c.reg, 12)) ? mmStr(c.reg, 12) : '',
 +      name: mmStr(c.name, 120), title: mmStr(c.title, 120), company: mmStr(c.company, 120), manual: c.manual === true,
 +      at: Number.isFinite(Number(c.at)) ? Math.min(Number(c.at), now) : now } : null)
-+      .filter(c => c && MM17_ID.test(c.id) && MM17_SES.test(c.ses) && (c.reg || c.name));
++      .filter(c => c && MM17_ID.test(c.id) && MM17_SES.test(c.ses) && (c.reg || c.name) && (!helper || c.ses === helper.ses));
 +    if (!items.length) return respond(400, { error: 'INVALID', problems: ['Nothing to check in.'] });
 +    let saved = 0, have = 0;
 +    const w = await updateRepoJson(proj.repo, proj.branch || 'main', `scan/${summit}/checkins.json`, d => {
@@ -264,7 +286,7 @@
  /* --- slides --- */
  function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
  const mm14slideCache = { at: 0, value: null };
-@@ -4017,6 +4256,7 @@
+@@ -4017,6 +4278,7 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }

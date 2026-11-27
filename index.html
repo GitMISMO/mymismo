@@ -1680,6 +1680,11 @@ img.avatar.big, .avatar.big{width:104px; height:104px; border-radius:12px}
 .ci-sheet .ci-top:has(.hub-ev){display:block}
 .evs{display:grid; gap:10px} .ev-row{display:grid; gap:8px; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--surface); text-align:left; font:inherit; color:var(--ink); cursor:pointer} .ev-row.on{border-color:#0d314c; box-shadow:0 0 0 1px #0d314c inset}
 .ev-row b, .ev-hit b{display:block; font-size:15.5px} .ev-row span, .ev-hit span{font-size:13px; color:var(--ink-2)} .ev-hit{border:0; background:none; padding:0; text-align:left; font:inherit; color:inherit; cursor:pointer} .ev-load{justify-self:start}
+.hlp{display:grid; gap:10px} .hlp-s{margin:0; display:grid; gap:2px} .hlp-s b{font-size:17px} .hlp-s span{font-size:13.5px; color:var(--ink-2)}
+.hlp-link{display:grid; gap:8px; padding:12px 14px; border-radius:12px; background:var(--surface-2); border:1px solid var(--border)} .hlp-link span{font-size:13.5px; color:var(--ink-2)}
+.hub-help{grid-column:1 / -1; justify-content:center}
+.sc-acts.two{grid-template-columns:1fr 1fr}
+.hlp-fixed{cursor:default}
 /* ---------- Walk Me There (Jonna, Nov 27, 2026) ---------- */
 .fm-walk{display:flex; flex-wrap:wrap; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface)} .fm-walk:empty{display:none}
 .fm-walk .btn{display:inline-flex; align-items:center; gap:8px} .fm-walk svg{width:18px; height:18px}
@@ -3578,11 +3583,59 @@ function scanEventSheet(done) {
 /* who can scan (Jonna, Nov 27, 2026): staff (Summit HQ access) and facilitators (Meeting Trackers access), both with
    MyMISMO; sponsors when the relay part is live */
 function scanRole() {
-  var st = staffSession(); if (!st || !appTester()) return '';
-  var acc = st.access || {};
-  if (acc['summit-hq'] || st.platformAdmin) return 'staff';
-  if (acc['meeting-trackers']) return 'facilitator';
-  return '';
+  var st = staffSession(), acc = (st && st.access) || {};
+  if (st && appTester() && (acc['summit-hq'] || st.platformAdmin)) return 'staff';
+  if (st && appTester() && acc['meeting-trackers']) return 'facilitator';
+  return helperPass() ? 'helper' : '';
+}
+/* Helpers (Jonna, Nov 27, 2026): staff or a facilitator can let someone else check people in to one session for a few
+   hours (a big workshop, or a chair who likes to scan). They send a link; it opens MyMISMO with the scanner for that
+   session only. The pass is kept on the helper's phone until it runs out. */
+function helperPass() {
+  var h = load('scan-helper', null); if (!h || !h.ses || !h.exp) return null;
+  if (h.exp * 1000 <= Date.now()) { save('scan-helper', null); return null; }
+  if (S.sid && h.s && h.s !== S.sid) return null;
+  return h;
+}
+function helperFromUrl() {
+  var m = /[?&]helper=([^&#]+)/.exec(location.search); if (!m) return;
+  try {
+    var tok = decodeURIComponent(m[1]), body = tok.split('.')[1], j = JSON.parse(atob(body.replace(/-/g, '+').replace(/_/g, '/')));
+    if (j && j.kind === 'mymismo-helper' && j.ses && j.exp * 1000 > Date.now()) { save('scan-helper', { token: tok, s: j.s, ses: j.ses, n: j.n || '', exp: j.exp, test: !!j.test }); HELPER_NEW = true; }
+  } catch (e) {}
+  try { history.replaceState(null, '', location.pathname + location.search.replace(/[?&]helper=[^&#]+/, '').replace(/^&/, '?') + location.hash); } catch (e) {}
+}
+var HELPER_NEW = false;
+helperFromUrl();
+function helperSheet(ses) {
+  var x = ciById(ses); if (!x) { mxToast('Pick a session first'); return; }
+  var el = openSheet('Let Someone Help', '<div class="sheet-pad hlp"><p class="hlp-s"><b>' + esc(x.name) + '</b><span>' + esc(DOW[dparts(x.date).dow] + ', ' + span(x.a, x.b) + (x.room ? ', ' + x.room : '')) + '</span></p>' +
+    '<div class="field"><label for="hlp-n">Their Name</label><input id="hlp-n" maxlength="60" autocomplete="off" placeholder="For example, Rusty"></div>' +
+    '<div class="ld-h">For How Long</div><div class="seg hlp-h">' + [2, 4, 8, 12].map(function (h) { return '<button type="button" data-hlp-h="' + h + '" aria-pressed="' + (h === 4) + '">' + h + ' Hours</button>'; }).join('') + '</div>' +
+    '<button type="button" class="btn primary" data-hlp-make>' + icon('i-link') + 'Make Their Link</button><div class="hlp-out"></div>' +
+    '<p class="sc-fine">Their link opens MyMISMO with the scanner for this session only, for the time you pick. They don\'t need a MISMO sign-in. Each check-in shows it came from them.</p></div>', { plain: true });
+  var hours = 4;
+  el.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-hlp-h]'))) { hours = +t.getAttribute('data-hlp-h'); el.querySelectorAll('[data-hlp-h]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); }); return; }
+    if (e.target.closest('[data-hlp-make]')) {
+      var nm = el.querySelector('#hlp-n').value.trim(); if (!nm) { el.querySelector('#hlp-n').focus(); mxToast('Add their name'); return; }
+      var show = function (tok, test) {
+        var url = location.origin + location.pathname + '?helper=' + encodeURIComponent(tok), until = new Date(Date.now() + hours * 3600000);
+        el.querySelector('.hlp-out').innerHTML = '<div class="hlp-link"><b>' + esc(nm) + '\'s Link</b><span>Works until ' + esc(clockParts(until.getHours() * 60 + until.getMinutes()).t + clockParts(until.getHours() * 60 + until.getMinutes()).ap) + '.' + (test ? ' Staff test: their check-ins stay on their phone until scanning goes live.' : '') + '</span>' +
+          '<div class="ph-acts"><button type="button" class="btn primary" data-hlp-share>' + icon('i-share') + 'Send It</button><button type="button" class="btn" data-hlp-copy>' + icon('i-link') + 'Copy</button></div></div>';
+        el._url = url;
+      };
+      scanApi('POST', '/scan/helper', { summit: S.sid, ses: ses, name: nm, hours: hours }).then(function (r) { if (r.status === 200 && r.j.token) show(r.j.token, false); else throw new Error('x'); })
+        .catch(function () {   /* until the relay part is live: a test link the helper's phone accepts, kept on that phone */
+          var b64 = function (o) { return btoa(JSON.stringify(o)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+          show('t.' + b64({ kind: 'mymismo-helper', s: S.sid, ses: ses, n: nm, exp: Math.floor(Date.now() / 1000) + hours * 3600, test: true }) + '.t', true);
+        });
+      return;
+    }
+    if (e.target.closest('[data-hlp-share]') && el._url) { if (navigator.share) navigator.share({ title: 'Check people in for MISMO', text: 'Tap to check people in to ' + x.name + ' with MyMISMO:', url: el._url }).catch(function () {}); else { try { navigator.clipboard.writeText(el._url); mxToast('Link copied'); } catch (er) {} } return; }
+    if (e.target.closest('[data-hlp-copy]') && el._url) { try { navigator.clipboard.writeText(el._url).then(function () { mxToast('Link copied'); }); } catch (er) { prompt('Copy their link:', el._url); } }
+  });
 }
 function canScan() { return !!scanRole(); }
 function scanKind(s) { var k = s.kind || ''; return /engagement|touchpoint/i.test(k) ? 'Touchpoint' : /met/i.test(k) ? 'Someone I Met' : k || 'Touchpoint'; }
@@ -3603,9 +3656,11 @@ function c39Svg(v) {
 function findPerson(cb, other) {
   /* at another event (other: true and an event picked), the people on that event's registration report */
   var ev = other ? scanEvent() : '', evm = ev ? load('ev-list:' + ev, {}) : null, evp = evm ? Object.keys(evm).map(function (k) { return { reg: k, name: evm[k][0], title: evm[k][1], company: evm[k][2] }; }) : null;
-  if (!ev && !PV.state) loadPreviewAttendees();
+  if (!ev && !canPreviewAttendees()) evp = [];   /* facilitators and helpers can't search the list: add by hand */
+  if (!ev && !evp && !PV.state) loadPreviewAttendees();
   var el = openSheet('Find by Name', '<div class="sheet-pad fp"><label class="mx-search">' + icon('i-search') + '<input type="search" placeholder="Type a name or company" aria-label="Find by name" autocomplete="off"></label><div class="fp-list"></div>' +
     '<details class="fp-add"><summary>' + icon('i-plus') + 'Add Someone Not on the List</summary><div class="field"><label for="fp-n">Name</label><input id="fp-n" maxlength="120" autocomplete="off"></div><div class="field"><label for="fp-t">Title</label><input id="fp-t" maxlength="120" autocomplete="off"></div><div class="field"><label for="fp-c">Company</label><input id="fp-c" maxlength="120" autocomplete="off"></div><button type="button" class="btn primary" data-fp-add>Add</button></details></div>', { plain: true });
+  if (evp && !evp.length) { el.querySelector('.fp-add').open = true; var sl = el.querySelector('.fp .mx-search'); if (sl) sl.hidden = true; el.querySelector('.fp-list').hidden = true; var tt = el.querySelector('.sheet-head .title'); if (tt) tt.textContent = 'Add by Hand'; }
   var inp = el.querySelector('input[type=search]'), list = el.querySelector('.fp-list'), hits = [];
   function paint() {
     var q = inp.value.trim().toLowerCase();
@@ -3767,7 +3822,7 @@ function checkinDefault() {
    does. Staff: Workgroup Check-In, Who I Met, Log a Touchpoint. Facilitators: Workgroup Check-In, Who I Met. Sponsors
    (when the relay part is live): their leads. ---------- */
 var SCAN_MODES = { checkin: 'Check-In', met: 'Who I Met', touch: 'Touchpoint' };
-function scanModes() { var r = scanRole(); return r === 'staff' ? ['checkin', 'met', 'touch'] : r === 'facilitator' ? ['checkin', 'met'] : []; }
+function scanModes() { var r = scanRole(); return r === 'staff' ? ['checkin', 'met', 'touch'] : r === 'facilitator' ? ['checkin', 'met'] : r === 'helper' ? ['checkin'] : []; }
 function scanHub(sid, mode0) {
   var modes = scanModes(); if (!modes.length) return;
   if (scanRole() === 'staff' && !PV.state) loadPreviewAttendees();
@@ -3775,9 +3830,11 @@ function scanHub(sid, mode0) {
   var mode = modes.indexOf(mode0) >= 0 ? mode0 : modes.indexOf(load('scan-mode', '')) >= 0 ? load('scan-mode', '') : modes[0];
   var x = (sid && ciById(sid)) || checkinDefault();
   if (x) { var twin = ciSessions().filter(function (y) { return y.id !== x.id && y.date === x.date && y.a === x.a && rkey(y.room) === rkey(x.room); })[0]; if (CIS.list.length && twin) x = twin; }
-  var ses = x ? x.id : '', popT = null, rig = null, paused = false;
-  var el = openSheet('Scan Name Tags', '<div class="scx ci">' +
-    '<div class="hub-modes seg" role="tablist" aria-label="What a scan does">' + modes.map(function (m) { return '<button type="button" role="tab" data-hub-mode="' + m + '" aria-selected="' + (m === mode) + '">' + icon(m === 'checkin' ? 'i-check' : m === 'met' ? 'i-people' : 'i-handshake') + SCAN_MODES[m] + '</button>'; }).join('') + '</div>' +
+  var hp = scanRole() === 'helper' ? helperPass() : null;
+  if (hp) { x = ciById(hp.ses) || x; }
+  var ses = hp ? hp.ses : x ? x.id : '', popT = null, rig = null, paused = false;
+  var el = openSheet(hp ? 'Check People In' : 'Scan Name Tags', '<div class="scx ci">' +
+    (modes.length < 2 ? '' : '<div class="hub-modes seg" role="tablist" aria-label="What a scan does">' + modes.map(function (m) { return '<button type="button" role="tab" data-hub-mode="' + m + '" aria-selected="' + (m === mode) + '">' + icon(m === 'checkin' ? 'i-check' : m === 'met' ? 'i-people' : 'i-handshake') + SCAN_MODES[m] + '</button>'; }).join('') + '</div>') +
     '<div class="ci-top"></div>' +
     '<div class="sc-cam ci-cam"><video playsinline muted></video><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div>' +
     '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
@@ -3789,7 +3846,7 @@ function scanHub(sid, mode0) {
     var t = el.querySelector('.ci-top');
     if (mode === 'checkin') {
       var y = ses && ciById(ses), n = myCheckins().filter(function (c) { return c.ses === ses; }).length;
-      t.innerHTML = '<button type="button" class="ci-pickbtn" data-ci-pick><span class="ci-pk-l">Checking In To</span>' + (y ? '<b>' + esc(y.name) + '</b><span class="ci-pk-s">' + esc(DOW[dparts(y.date).dow].slice(0, 3) + ', ' + span(y.a, y.b) + (y.room ? ', ' + y.room : '')) + '</span>' : '<b>Pick a Session</b>') + icon('i-chev', 'go') + '</button>' +
+      t.innerHTML = (hp ? '<div class="ci-pickbtn hlp-fixed"><span class="ci-pk-l">' + esc(hp.n ? hp.n + ', you\'re checking people in to' : 'Checking In To') + '</span>' : '<button type="button" class="ci-pickbtn" data-ci-pick><span class="ci-pk-l">Checking In To</span>') + (y ? '<b>' + esc(y.name) + '</b><span class="ci-pk-s">' + esc(DOW[dparts(y.date).dow].slice(0, 3) + ', ' + span(y.a, y.b) + (y.room ? ', ' + y.room : '')) + '</span>' : '<b>' + (hp ? 'Your Session' : 'Pick a Session') + '</b>') + (hp ? '</div>' : icon('i-chev', 'go') + '</button>') +
         '<div class="ci-count"><b>' + n + '</b><span>checked in</span></div>';
     } else {
       t.innerHTML = '<button type="button" class="hub-ev" data-hub-ev>' + icon('i-pin') + '<span>At <b>' + esc(scanEventName(scanEvent())) + '</b></span>' + icon('i-chev', 'go') + '</button>' +
@@ -3799,11 +3856,13 @@ function scanHub(sid, mode0) {
   }
   function lower() {
     var acts = el.querySelector('.sc-acts');
-    acts.innerHTML = '<button type="button" class="btn" data-ci-find>' + icon('i-search') + 'Find by Name</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
-      (mode === 'checkin' ? '<button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button>' : '<button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button>') +
-      '<button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button>';
-    el.querySelector('.sc-fine').textContent = mode === 'checkin' ? 'Staff test: check-ins are kept on this phone. When it goes live they\'re sent as they happen (and kept until the Wi-Fi is back if it drops), and Meeting Trackers reads them in place of TrackPod\'s exports.'
-      : 'Staff test: kept on this phone until scanning goes live.';
+    acts.className = 'sc-acts ' + (hp ? 'two' : 'four');
+    acts.innerHTML = '<button type="button" class="btn" data-ci-find>' + icon('i-search') + (hp ? 'Add by Hand' : 'Find by Name') + '</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
+      (hp ? '' : (mode === 'checkin' ? '<button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button>' : '<button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button>') +
+      '<button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button>') +
+      (!hp && mode === 'checkin' ? '<button type="button" class="btn hub-help" data-hub-help>' + icon('i-people') + 'Let Someone Help With This Session</button>' : '');
+    el.querySelector('.sc-fine').textContent = (mode === 'checkin' ? 'A handheld Bluetooth scanner works too: pair it with this phone, keep this screen open, and scan. ' : '') + (hp ? (hp.test ? 'Staff test: your check-ins stay on this phone until scanning goes live.' : 'Your check-ins go to MISMO as you scan.') : mode === 'checkin' ? 'Staff test: check-ins are kept on this phone. When it goes live they\'re sent as they happen (and kept until the Wi-Fi is back if it drops), and Meeting Trackers reads them in place of TrackPod\'s exports.'
+      : 'Staff test: kept on this phone until scanning goes live.');
     paint();
   }
   function paint() {
@@ -3869,6 +3928,17 @@ function scanHub(sid, mode0) {
     });
   }
   top(); lower(); rig = scanRig(el, onCode);
+  /* a handheld Bluetooth scanner types the number and presses Enter (Jonna, Nov 27, 2026); typing in a field is left alone */
+  var kb = '', kbAt = 0;
+  function onKey(e) {
+    if (!el.isConnected) { document.removeEventListener('keydown', onKey, true); return; }
+    if (el !== topSheet()) return;
+    var tg = e.target; if (tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.isContentEditable)) return;
+    var now = Date.now(); if (now - kbAt > 300) kb = ''; kbAt = now;
+    if (/^[0-9]$/.test(e.key)) { kb += e.key; e.preventDefault(); return; }
+    if ((e.key === 'Enter' || e.key === 'Tab') && kb.length >= 5) { var code = kb; kb = ''; e.preventDefault(); onCode(code); }
+  }
+  document.addEventListener('keydown', onKey, true);
   var rp = setInterval(function () { if (!el.isConnected) { clearInterval(rp); return; } paint(); }, 3000);
   el.addEventListener('click', function (e) {
     var t;
@@ -3877,6 +3947,7 @@ function scanHub(sid, mode0) {
     if (sb) { var on = !load('scan-beep', true); save('scan-beep', on); sb.setAttribute('aria-pressed', String(on)); sb.querySelector('span').textContent = on ? 'Beep On' : 'Beep Off'; if (on && rig) rig.ok(); return; }
     if (e.target.closest('[data-ci-pick]')) { pickSession(); return; }
     if (e.target.closest('[data-hub-ev]')) { scanEventSheet(function () { top(); paint(); }); return; }
+    if (e.target.closest('[data-hub-help]')) { helperSheet(ses); return; }
     if (e.target.closest('[data-hub-again]')) { resume(); return; }
     if (e.target.closest('[data-ci-type]')) { var n = String(prompt('The number under the barcode on the name tag:') || '').replace(/\D/g, ''); if (n) onCode(n); return; }
     if (e.target.closest('[data-ci-find]')) { findPerson(onPerson, mode !== 'checkin'); return; }
@@ -4189,37 +4260,66 @@ function phMine() {
   el.addEventListener('click', function (e) { var t = e.target.closest('[data-ph-del]'); if (t && confirm('Delete this photo from your phone?')) phDel(t.getAttribute('data-ph-del'), paint); });
 }
 /* Amy's review: pick the ones for MISMO Media, then send the picks (only when she presses Send) */
+/* Amy's review. When the relay part is live (relay request 17) it shows everyone's submissions from the relay; until then,
+   this phone's. Picks go to MISMO Media only when she presses Send. */
 function phReview() {
   if (!phReviewer()) return;
-  var el = openSheet('Summit Photo Submissions', '<div class="sheet-pad phr"></div>', { plain: true }), box = el.querySelector('.phr'), tab = 'new';
-  function paint() { phAll(function (l) {
-    l = l.filter(function (p) { return p.status !== 'mine'; });
-    var by = { new: l.filter(function (p) { return p.status === 'submitted'; }), picked: l.filter(function (p) { return p.status === 'picked'; }), sent: l.filter(function (p) { return p.status === 'to-media'; }), passed: l.filter(function (p) { return p.status === 'passed'; }) };
+  var el = openSheet('Summit Photo Submissions', '<div class="sheet-pad phr"><div class="note">Getting the submissions…</div></div>', { plain: true }), box = el.querySelector('.phr'), tab = 'new', remote = false, RL = [], RPH = {};
+  var TAB = { new: ['submitted', 'new'], picked: ['picked'], sent: ['to-media', 'sent'], passed: ['passed'] };
+  function norm(p, isRemote) { return { id: p.id, by: p.by, name: p.name, caption: p.caption, prompt: isRemote ? p.challenge : p.prompt, tags: p.tags || [], at: p.at, note: p.note || '', status: p.status, img: isRemote ? (RPH[p.id] || '') : phThumb(p), raw: p }; }
+  function items(cb) {
+    if (remote) { cb(RL.map(function (p) { return norm(p, true); })); return; }
+    phAll(function (l) { cb(l.filter(function (p) { return p.status !== 'mine'; }).map(function (p) { return norm(p, false); })); });
+  }
+  function pull(then) {
+    if (!scanTok()) { then && then(); return; }
+    scanApi('GET', '/photos/list?summit=' + encodeURIComponent(S.sid)).then(function (r) { if (r.status === 200 && Array.isArray(r.j.items)) { remote = true; RL = r.j.items; } then && then(); }).catch(function () { then && then(); });
+  }
+  function thumbs() {
+    if (!remote) return;
+    box.querySelectorAll('img[data-rph]').forEach(function (im) { var id = im.getAttribute('data-rph'); if (RPH[id]) { im.src = RPH[id]; return; }
+      scanApi('GET', '/photos/one?summit=' + encodeURIComponent(S.sid) + '&id=' + encodeURIComponent(id)).then(function (r) { if (r.status === 200 && r.j.s) { RPH[id] = r.j.s; box.querySelectorAll('img[data-rph="' + id + '"]').forEach(function (x) { x.src = r.j.s; }); } }).catch(function () {}); });
+  }
+  function paint() { items(function (l) {
+    var by = {}; Object.keys(TAB).forEach(function (k) { by[k] = l.filter(function (p) { return TAB[k].indexOf(p.status) >= 0; }); });
     var show = by[tab];
-    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span><b>Staff test.</b> These are this phone\'s submissions. When photo sharing goes live, everyone\'s show here. Picks go to MISMO Media only when you press Send, and MISMO Media drafts the post for you to approve. Nothing posts on its own.</span></div>' +
+    box.innerHTML = '<div class="an-note">' + icon('i-info') + '<span>' + (remote ? '<b>Everyone\'s submissions.</b> ' : '<b>Staff test.</b> These are this phone\'s submissions. When photo sharing goes live, everyone\'s show here. ') + 'Picks go to MISMO Media only when you press Send, and MISMO Media drafts the post for you to approve. Nothing posts on its own.</span></div>' +
       '<div class="seg phr-tabs">' + [['new', 'New'], ['picked', 'Picked'], ['sent', 'Sent to MISMO Media'], ['passed', 'Passed']].map(function (t) { return '<button type="button" data-phr-tab="' + t[0] + '" aria-pressed="' + (tab === t[0]) + '">' + t[1] + (by[t[0]].length ? ' <b>' + by[t[0]].length + '</b>' : '') + '</button>'; }).join('') + '</div>' +
       '<div class="ph-btns"><button type="button" class="btn" data-ph-take="camera">' + icon('i-camera') + 'Take a Photo</button><button type="button" class="btn" data-phr-add>' + icon('i-image') + 'Add From My Photos</button></div>' +
       (show.length ? '<div class="phr-list">' + show.map(function (p) { var d = new Date(p.at);
-        return '<div class="phr-item"><img alt="" src="' + phThumb(p) + '"><div class="phr-meta"><b>' + esc(p.by === 'staff' ? (p.name || 'MISMO Staff') + ' (Staff)' : p.name || 'An Attendee') + '</b><span>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</span>' +
-          (p.caption ? '<i>"' + esc(p.caption) + '"</i>' : '') + (p.prompt ? '<span>Challenge: ' + esc(p.prompt) + '</span>' : '') + (p.tags && p.tags.length ? '<span>With ' + esc(p.tags.join(', ')) + '</span>' : '') +
+        return '<div class="phr-item"><img alt="" ' + (remote ? 'data-rph="' + esc(p.id) + '" src="' + esc(p.img) + '"' : 'src="' + p.img + '"') + '><div class="phr-meta"><b>' + esc(p.by === 'staff' ? (p.name || 'MISMO Staff') + ' (Staff)' : p.name || 'An Attendee') + '</b><span>' + esc(MON[d.getMonth()] + ' ' + d.getDate() + ', ' + clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap) + '</span>' +
+          (p.caption ? '<i>"' + esc(p.caption) + '"</i>' : '') + (p.prompt ? '<span>Challenge: ' + esc(p.prompt) + '</span>' : '') + (p.tags.length ? '<span>With ' + esc(p.tags.join(', ')) + '</span>' : '') +
           (p.by !== 'staff' ? '<span class="phr-ok">' + icon('i-check') + 'OK to use</span>' : '') +
-          (tab === 'picked' ? '<textarea class="ld-in" data-phr-note="' + p.id + '" placeholder="Note for MISMO Media (optional)">' + esc(p.note || '') + '</textarea>' : '') + '</div>' +
-          '<div class="phr-acts">' + (tab === 'new' || tab === 'passed' ? '<button type="button" class="btn primary" data-phr="picked" data-id="' + p.id + '">' + icon('i-check') + 'Pick</button>' : '') + (tab !== 'passed' && tab !== 'sent' ? '<button type="button" class="btn" data-phr="passed" data-id="' + p.id + '">Pass</button>' : '') + (tab === 'picked' ? '<button type="button" class="btn" data-phr="submitted" data-id="' + p.id + '">Undo</button>' : '') + '</div></div>'; }).join('') + '</div>'
+          (tab === 'picked' ? '<textarea class="ld-in" data-phr-note="' + esc(p.id) + '" placeholder="Note for MISMO Media (optional)">' + esc(p.note) + '</textarea>' : '') + '</div>' +
+          '<div class="phr-acts">' + (tab === 'new' || tab === 'passed' ? '<button type="button" class="btn primary" data-phr="picked" data-id="' + esc(p.id) + '">' + icon('i-check') + 'Pick</button>' : '') + (tab !== 'passed' && tab !== 'sent' ? '<button type="button" class="btn" data-phr="passed" data-id="' + esc(p.id) + '">Pass</button>' : '') + (tab === 'picked' ? '<button type="button" class="btn" data-phr="new" data-id="' + esc(p.id) + '">Undo</button>' : '') + '</div></div>'; }).join('') + '</div>'
         : '<div class="note">' + (tab === 'new' ? 'No new submissions. Photos people send to MISMO show up here.' : tab === 'picked' ? 'Nothing picked yet. Pick photos under New.' : tab === 'sent' ? 'Nothing sent to MISMO Media yet.' : 'Nothing passed.') + '</div>') +
       (tab === 'picked' && show.length ? '<button type="button" class="btn primary phr-send" data-phr-send>' + icon('i-send') + 'Send ' + show.length + (show.length === 1 ? ' Photo' : ' Photos') + ' to MISMO Media</button><p class="sc-fine">MISMO Media drafts the summit post with these. You review the draft there and decide whether it posts.</p>' : '');
+    thumbs();
   }); }
-  paint();
-  function onCh() { if (!el.isConnected) { window.removeEventListener('ph-changed', onCh); return; } paint(); } window.addEventListener('ph-changed', onCh);
-  el.addEventListener('change', function (e) { var t = e.target.closest('[data-phr-note]'); if (t) phAll(function (l) { var p = l.filter(function (x) { return x.id === t.getAttribute('data-phr-note'); })[0]; if (p) { p.note = t.value; delete p.url; phPut(p); } }); });
+  pull(paint);
+  var rt = setInterval(function () { if (!el.isConnected) { clearInterval(rt); return; } if (remote) pull(paint); }, 30000);
+  function onCh() { if (!el.isConnected) { window.removeEventListener('ph-changed', onCh); return; } if (remote) setTimeout(function () { pull(paint); }, 4000); else paint(); } window.addEventListener('ph-changed', onCh);
+  function setStatus(id, st, note) {
+    if (remote) { var p = RL.filter(function (x) { return x.id === id; })[0]; if (p) { p.status = st; if (note !== undefined) p.note = note; } paint();
+      scanApi('POST', '/photos/review', { summit: S.sid, id: id, status: st, note: note !== undefined ? note : (p && p.note) || '' }).then(function (r) { if (r.status !== 200) { mxToast('That didn\'t save. Try again.'); pull(paint); } }).catch(function () { mxToast('That didn\'t save. Try again.'); pull(paint); });
+      return; }
+    phAll(function (l) { var q = l.filter(function (x) { return x.id === id; })[0]; if (q) { q.status = st === 'new' ? 'submitted' : st; if (note !== undefined) q.note = note; delete q.url; phPut(q, paint); } });
+  }
+  el.addEventListener('change', function (e) { var t = e.target.closest('[data-phr-note]'); if (!t) return; var id = t.getAttribute('data-phr-note');
+    if (remote) setStatus(id, 'picked', t.value); else phAll(function (l) { var p = l.filter(function (x) { return x.id === id; })[0]; if (p) { p.note = t.value; delete p.url; phPut(p); } }); });
   el.addEventListener('click', function (e) {
     var t;
     if ((t = e.target.closest('[data-phr-tab]'))) { tab = t.getAttribute('data-phr-tab'); paint(); return; }
-    if ((t = e.target.closest('[data-phr]'))) { var id = t.getAttribute('data-id'), st = t.getAttribute('data-phr'); phAll(function (l) { var p = l.filter(function (x) { return x.id === id; })[0]; if (p) { p.status = st; delete p.url; phPut(p, paint); } }); return; }
-    if (e.target.closest('[data-phr-add]')) { phPick('pick', function (fs) { var n = 0; fs.forEach(function (f) { phLoad(f, function (im) { var cv = document.createElement('canvas'); phDraw(cv, im, 'none', ''); cv.toBlob(function (b) { phPut({ id: 'ph' + Date.now() + '-' + (n++), at: Date.now(), sid: S.sid || '', blob: b, frame: 'none', caption: '', tags: [], prompt: '', status: 'submitted', by: 'staff', name: (staffSession() || {}).name || '' }, paint); }, 'image/jpeg', .86); }); }); }); return; }
+    if ((t = e.target.closest('[data-phr]'))) { setStatus(t.getAttribute('data-id'), t.getAttribute('data-phr')); return; }
+    if (e.target.closest('[data-phr-add]')) { phPick('pick', function (fs) { var n = 0; fs.forEach(function (f) { phLoad(f, function (im) { var cv = document.createElement('canvas'); phDraw(cv, im, 'none', ''); cv.toBlob(function (b) { phPut({ id: 'ph' + Date.now() + '-' + (n++), at: Date.now(), sid: S.sid || '', blob: b, frame: 'none', caption: '', tags: [], prompt: '', status: 'submitted', by: 'staff', name: (staffSession() || {}).name || '' }, function () { phChanged(); setTimeout(scanSync, 300); }); }, 'image/jpeg', .86); }); }); }); return; }
     if (e.target.closest('[data-phr-send]')) {
-      phAll(function (l) { var picks = l.filter(function (p) { return p.status === 'picked'; }); if (!picks.length) return;
+      items(function (l) { var picks = l.filter(function (p) { return p.status === 'picked'; }); if (!picks.length) return;
         if (!confirm('Send ' + picks.length + (picks.length === 1 ? ' photo' : ' photos') + ' to MISMO Media for the summit post draft?')) return;
-        var left = picks.length; picks.forEach(function (p) { p.status = 'to-media'; p.sentAt = Date.now(); delete p.url; phPut(p, function () { if (!--left) { mxToast('Staff test: marked as sent. MISMO Media gets them when photo sharing goes live.'); tab = 'sent'; paint(); } }); }); });
+        if (remote) {
+          scanApi('POST', '/photos/send', { summit: S.sid }).then(function (r) { if (r.status === 200) { mxToast('Sent ' + r.j.count + (r.j.count === 1 ? ' photo' : ' photos') + ' to MISMO Media'); tab = 'sent'; pull(paint); } else mxToast((r.j && r.j.message) || 'Those couldn\'t be sent just now. Try again.'); }).catch(function () { mxToast('Those couldn\'t be sent just now. Try again.'); });
+          return;
+        }
+        var left = picks.length; picks.forEach(function (n) { var p = n.raw; p.status = 'to-media'; p.sentAt = Date.now(); delete p.url; phPut(p, function () { if (!--left) { mxToast('Staff test: marked as sent. MISMO Media gets them when photo sharing goes live.'); tab = 'sent'; paint(); } }); }); });
     }
   });
 }
@@ -4227,7 +4327,7 @@ function phReview() {
    phone keeps everything, as in the staff test. Check-ins, Who I Met and touchpoints are sent every 20 seconds (and as
    soon as the Wi-Fi is back); each check-in has an id made from when it was scanned, so a retry is never counted twice. */
 var SYNC = { live: null, t: 0, busy: false, all: null };
-function scanTok() { try { return window.ResourcesSession && ResourcesSession.token && ResourcesSession.token(); } catch (e) { return null; } }
+function scanTok() { var t = null; try { t = window.ResourcesSession && ResourcesSession.token && ResourcesSession.token(); } catch (e) {} if (t && (scanRole() === 'staff' || scanRole() === 'facilitator')) return t; var h = helperPass(); return h && !h.test ? h.token : t; }
 function scanApi(method, path, body, tok) {
   tok = tok || scanTok(); if (!tok) return Promise.reject(new Error('NO_SIGN_IN'));
   return fetch(RELAY + '/mymismo' + path, { method: method, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: body ? JSON.stringify(body) : undefined })
@@ -4334,6 +4434,7 @@ function paintOffline() {
 window.addEventListener('online', paintOffline); window.addEventListener('offline', paintOffline);
 function loadExtras() {
   setTimeout(warmOffline, 8000);
+  if (HELPER_NEW && canScan()) { HELPER_NEW = false; setTimeout(function () { var h = helperPass(); mxToast('You can check people in until ' + (function (d) { return clockParts(d.getHours() * 60 + d.getMinutes()).t + clockParts(d.getHours() * 60 + d.getMinutes()).ap; })(new Date(h.exp * 1000))); scanHub(null, 'checkin'); }, 800); }
   function again(pages) { if (pages.indexOf(S.page) >= 0 && !stack.length) renderPage(S.page); }
   getJSON('data/guide.json').then(function (g) { G = g; again(['explore', 'home', 'dash']); }).catch(function () {});
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
@@ -4799,7 +4900,7 @@ function wgSheet() {
       return '<button type="button" role="tab" data-wg-day="' + x + '" aria-selected="' + (x === day) + '"' + (i === 5 ? ' class="wk2"' : '') + '><i>' + (x === now.date ? 'Today' : DOW[p.dow].slice(0, 3)) + '</i><b>' + p.d + '</b><span class="wg-dots">' + (n ? new Array(Math.min(n, 4) + 1).join('<em></em>') : '') + '</span></button>'; }).join('') + '</div>' +
       '<div class="wg-tl">' + (ms.length ? ms.map(function (m, i) { var past = day === now.date && m.g.t && now.min >= m.g.t.b, lv = wgLive(m.g) && day === now.date;
         return '<button type="button" class="wg-slot' + (m.x ? ' x' : '') + (past ? ' past' : '') + (lv ? ' live' : '') + '" data-wg="' + esc(m.g.key) + '" style="--c:' + wgColor(m.g.topic) + ';--i:' + i + '">' +
-          '<span class="wg-at">' + (m.g.t ? clockParts(m.g.t.a).t + '<i>' + clockParts(m.g.t.a).ap + '</i>' : '') + '</span><span class="wg-sb"><b>' + esc(m.g.name) + '</b><span>' + (m.x ? 'Cancelled' : lv ? 'Meeting now' : esc(m.g.time) + ', ' + esc(m.g.topic || '')) + '</span></span>' + icon('i-chev', 'wg-go') + '</button>'; }).join('')
+          '<span class="wg-at">' + (m.g.t ? clockParts(m.g.t.a).t + '<i>' + clockParts(m.g.t.a).ap + '</i>' : '') + '</span><span class="wg-sb"><b>' + esc(m.g.name) + '</b><span>' + (m.x ? 'Canceled' : lv ? 'Meeting now' : esc(m.g.time) + ', ' + esc(m.g.topic || '')) + '</span></span>' + icon('i-chev', 'wg-go') + '</button>'; }).join('')
         : '<div class="wg-none">No meetings on ' + esc(longDate(day)) + '.</div>') + '</div>';
   }
   function listHtml() {
@@ -4836,7 +4937,7 @@ function wgDetail(key) {
       (feed ? '<button type="button" class="btn" data-wg-cal>' + icon('i-cal') + 'Add to Calendar</button>' : '') + '</div>' +
       (feed ? '<div class="wgd-cals" hidden>' + wgCalLinks(feed, g.name + ' (MISMO)') + '<span>Every meeting, kept up to date, including cancellations.</span></div>' : '')) +
     '<h3 class="wg-h">When It Meets</h3><div class="wgd-when"><b>' + esc(g.cadence) + '</b>' + (g.rule.hold ? '' : '<span>' + esc(g.time) + '</span>') + '</div>' +
-    (nx.length ? '<div class="wgd-dates">' + nx.map(function (o) { var p = dparts(o.date); return '<span class="' + (o.cancelled ? 'x' : '') + '"><i>' + DOW[p.dow].slice(0, 3) + '</i><b>' + MON[p.m - 1] + ' ' + p.d + '</b>' + (o.cancelled ? '<em>Cancelled</em>' : '') + '</span>'; }).join('') + '</div>' : '') +
+    (nx.length ? '<div class="wgd-dates">' + nx.map(function (o) { var p = dparts(o.date); return '<span class="' + (o.cancelled ? 'x' : '') + '"><i>' + DOW[p.dow].slice(0, 3) + '</i><b>' + MON[p.m - 1] + ' ' + p.d + '</b>' + (o.cancelled ? '<em>Canceled</em>' : '') + '</span>'; }).join('') + '</div>' : '') +
     (ss.length ? '<h3 class="wg-h">At the ' + esc(S.summit.name) + '</h3>' + ss.map(function (x) { return '<button type="button" class="wgd-ses" data-open="s:' + esc(x.id) + '">' + calBlock(x.date) + '<span><b>' + esc(x.title) + '</b><span>' + esc(span(x.a, x.b)) + (x.room ? ', ' + esc(x.room) : '') + '</span></span>' + icon('i-chev', 'wg-go') + '</button>'; }).join('') : '') +
     (g.site && g.site.about ? '<h3 class="wg-h">What It Does</h3><p class="wgd-about">' + esc(g.site.about) + '</p>' : '') +
     (ag && ag.items && ag.items.length ? '<h3 class="wg-h">Working On Now</h3><div class="wgd-ag">' + ag.items.map(function (it) { return '<div><span class="wgd-st">' + esc(it[0]) + '</span><b>' + esc(it[1]) + '</b><p>' + esc(it[2] || '') + '</p></div>'; }).join('') + '</div>' +
@@ -5725,7 +5826,7 @@ function sameSite(u) { return /^https:\/\/resources\.mismo\.org\//.test(u) || /^
 function readLink(u, title) { return sameSite(u) ? '<button type="button" class="btn primary" data-web="' + esc(u) + '" data-web-title="' + esc(title) + '">' + icon('i-mail') + 'Read It</button>' : '<a class="btn primary" href="' + esc(u) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Read It</a>'; }
 function mattersSheet() {
   var eds = (MM && MM.editions) || [], ed = eds[0];
-  var h = '<div class="sheet-pad">' + (ed ? '<article class="mat-hero"><div class="mh-lbl">' + esc(ed.label) + '</div>' + (ed.vieauxPoint ? '<div class="mh-k">The Vieaux Point</div><h2>' + esc(ed.vieauxPoint.title) + '</h2><p>' + esc(ed.vieauxPoint.summary || '') + '</p>' : '<h2>The latest edition</h2>') +
+  var h = '<div class="sheet-pad">' + (ed ? '<article class="mat-hero"><div class="mh-lbl">' + esc(ed.label) + '</div>' + (ed.vieauxPoint ? '<div class="mh-k">The Vieaux Point</div><h2>' + esc(ed.vieauxPoint.title) + '</h2><p>' + esc(ed.vieauxPoint.summary || '') + '</p>' : '<h2>The Latest Edition</h2>') +
     '<div class="d-actions">' + readLink(ed.url, 'MISMO Matters, ' + ed.label) + '</div></article>' : '<div class="note">The editions couldn\'t be loaded just now.</div>') +
     (eds.length > 1 ? '<div class="section-h"><h2>Past Editions</h2></div><div class="list">' + eds.slice(1).map(function (e) {
       return sameSite(e.url) ? '<button type="button" class="row" data-web="' + esc(e.url) + '" data-web-title="' + esc('MISMO Matters, ' + e.label) + '"><b>' + esc(e.label) + '</b>' + icon('i-chev') + '</button>' : '<a class="row" href="' + esc(e.url) + '" target="_blank" rel="noopener"><b>' + esc(e.label) + '</b>' + icon('i-link') + '</a>';
