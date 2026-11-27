@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Monday's lunch is 12:00 to 1:30 (it said 1:00, as the website does).
 - Nov 27, 2026: Every break is on the Agenda (Morning, Afternoon and Tuesday's Afternoon Snack Break, at the website's times), marked Refreshments. Sessions with food are marked on the Agenda and in their pop-up: Newcomer Orientation (Lunch Served), the Board of Directors and the Joint Committee (Food Served), receptions (Food and Drinks); each gets On the Menu once the hotel menu is set.
 - Nov 27, 2026: Lunch on Monday (12:00 to 1:00), Wednesday and Thursday (12:00 to 1:30) is on the Agenda, as on the website, with the same words as Tuesday's and See Lunch Spots Near the Hotel (kept in data/agenda-extras.json until Summit HQ's feed carries them, CN-067). A lunch's Also at This Time leaves out the General Sessions, which break for lunch.
 - Nov 27, 2026: MISMO Trivia: Solo and Head to Head each open their own pop-up (the Board and Warm Up, or the Head to Head lobby), and the game plays right in that pop-up instead of in another box on top. Back to Head to Head brings the lobby back in the same pop-up.
