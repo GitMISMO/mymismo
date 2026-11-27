@@ -3738,7 +3738,7 @@ function scanRole() {
   if (st && appTester() && (acc['summit-hq'] || st.platformAdmin)) return 'staff';
   if (st && appTester() && acc['meeting-trackers']) return 'facilitator';
   if (helperPass()) return 'helper';
-  return A && A.token ? 'attendee' : '';   /* Jonna, Nov 27, 2026: signed-in attendees get Who I Met (scan, picture or both), kept on their phone */
+  var nd = S.summit ? nowAt().date : ''; return S.summit && ((A && A.token) || (nd >= S.first && nd <= S.last)) ? 'attendee' : '';   /* Jonna, Nov 27, 2026: everyone at a summit gets Who I Met (scan, picture or both), kept on their phone; signed-in attendees also get names from tags */
 }
 /* Helpers (Jonna, Nov 27, 2026): staff or a facilitator can let someone else check people in to one session for a few
    hours (a big workshop, or a chair who likes to scan). They send a link; it opens MyMISMO with the scanner for that
@@ -3854,7 +3854,7 @@ function leadSheet(sc, fresh) {
   if (!who && sc.name) who = { name: sc.name, title: sc.title || '', company: sc.company || '' };
   sc.kind = sc.kind || kinds[0]; sc.rate = sc.rate || '';
   var att = scanRole() === 'attendee';
-  var unknown = att ? (sc.reg ? 'Their name fills in from their name tag when you\'re online. You can type it below too.' : 'Add their name below so you remember.')
+  var unknown = att ? (sc.reg ? (A && A.token ? 'Their name fills in from their name tag when you\'re online. You can type it below too.' : 'Type their name below. Sign in to MyMISMO and names fill in from name tags.') : 'Add their name below so you remember.')
     : scanRole() === 'facilitator' ? 'Type their name below for now. Names fill in for facilitators once scanning goes live.' : PV.state === 'ready' && !PV.hasReg ? 'Names show here once Summit HQ adds registration numbers to the attendee list.' : 'Not on the ' + esc(S.summit ? S.summit.name : 'summit') + ' list yet. It\'s kept, and the name fills in when the list catches up (onsite registrations do).';
   var h = '<div class="ld-top">' + (sc.pic ? metThumb(sc, 'met-big') : who ? avatarHtml({ id: 'reg:' + sc.reg, name: who.name, photo: 0 }, 'big') : '<span class="ld-q">?</span>') +
     (who ? '<div><b>' + esc(who.name) + '</b><span>' + esc([who.title, who.company].filter(Boolean).join(', ')) + '</span>' + (sc.reg ? '<i>Registration ' + esc(sc.reg) + '</i>' : '') + '</div>'
@@ -4032,7 +4032,7 @@ function scanHub(sid, mode0) {
     } else {
       t.innerHTML = (att ? '' : '<button type="button" class="hub-ev" data-hub-ev>' + icon('i-pin') + '<span>At <b>' + esc(scanEventName(scanEvent())) + '</b></span>' + icon('i-chev', 'go') + '</button>') +
         '<div class="hub-say">' + icon(mode === 'met' ? 'i-people' : 'i-handshake') + '<span><b>' + (mode === 'met' ? 'Who I Met' : 'Log a Touchpoint') + '</b><span>' +
-        (mode === 'met' ? (att ? 'Scan their name tag, take a picture together, or both, so you remember who you met.' : 'Scan someone\'s name tag to remember them, with a note.') : 'Scan a member\'s name tag to log your conversation. It goes to Member 360 when scanning goes live.') + '</span></span></div>';
+        (mode === 'met' ? 'Scan their name tag, take a picture together, or both, so you remember who you met.' : 'Scan a member\'s name tag to log your conversation. It goes to Member 360 when scanning goes live.') + '</span></span></div>';
     }
   }
   function lower() {
@@ -4044,9 +4044,9 @@ function scanHub(sid, mode0) {
       el.querySelector('.sc-fine').textContent = 'Kept on this phone only. Nobody else sees who you met, your pictures or your notes.';
       return;
     }
-    acts.innerHTML = '<button type="button" class="btn" data-ci-find>' + icon('i-search') + (hp ? 'Add by Hand' : 'Find by Name') + '</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
-      (hp ? '' : (mode === 'checkin' ? '<button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button>' : '<button type="button" class="btn" data-sc-list>' + icon('i-list') + 'My Scans</button>') +
-      '<button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button>') +
+    acts.innerHTML = (mode !== 'checkin' ? '<button type="button" class="btn primary" data-met-pic>' + icon('i-camera') + 'Take a Picture</button>' : '') +
+      '<button type="button" class="btn" data-ci-find>' + icon('i-search') + (hp ? 'Add by Hand' : 'Find by Name') + '</button><button type="button" class="btn" data-ci-type>' + icon('i-edit') + 'Type the Number</button>' +
+      (hp ? '' : (mode === 'checkin' ? '<button type="button" class="btn" data-ci-stats>' + icon('i-chart') + 'Attendance Now</button><button type="button" class="btn" data-sc-badge>' + icon('i-badge') + 'My Test Badge</button>' : '<button type="button" class="btn" data-sc-list>' + icon('i-list') + (mode === 'met' ? 'Who I Met' : 'My Scans') + '</button>')) +
       (!hp && mode === 'checkin' ? '<button type="button" class="btn hub-help" data-hub-help>' + icon('i-people') + 'Let Someone Help With This Session</button>' : '');
     el.querySelector('.sc-fine').textContent = (mode === 'checkin' ? 'A handheld Bluetooth scanner works too: pair it with this phone, keep this screen open, and scan. ' : '') + (hp ? (hp.test ? 'Staff test: your check-ins stay on this phone until scanning goes live.' : 'Your check-ins go to MISMO as you scan.') : mode === 'checkin' ? 'Staff test: check-ins are kept on this phone. When it goes live they\'re sent as they happen (and kept until the Wi-Fi is back if it drops), and Meeting Trackers reads them in place of TrackPod\'s exports.'
       : 'Staff test: kept on this phone until scanning goes live.');
