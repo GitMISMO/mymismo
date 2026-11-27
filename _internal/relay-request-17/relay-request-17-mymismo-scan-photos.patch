@@ -1,5 +1,5 @@
 --- index.base17.mjs	2026-11-27 13:03:34.925262951 -0700
-+++ index.mjs	2026-11-27 14:14:50.937814392 -0700
++++ index.mjs	2026-11-27 14:22:15.483833080 -0700
 @@ -502,12 +502,32 @@
    console.warn(`GitHub allowance low: ${left} requests left${reset ? ' until ' + new Date(reset).toISOString() : ''}`);
  }
@@ -54,7 +54,7 @@
    }
    mmFeedCache.at = now; mmFeedCache.value = { summits };
    return mmFeedCache.value;
-@@ -3001,6 +3023,279 @@
+@@ -3001,6 +3023,325 @@
    return respond(200, { ok: true, id, sent, failed, removed: gone.length });
  }
  
@@ -234,6 +234,52 @@
 +  }
 +  return respond(200, { ok: true, saved: items.length });
 +}
++/* GET /mymismo/staff/stats[?summit=]  (Jonna, Nov 27, 2026: everything about MyMISMO lives in MISMO Media, with its
++ * numbers on the Results page). Counts only: no names, emails or message text. The same people as Attendee Reports and
++ * MISMO Trivia (alertSenders). With no summit, every summit in the attendee list. Trivia's numbers come from
++ * /staff/trivia, which MISMO Media already reads for its MISMO Trivia tab.
++ *   -> { at, phones: { summitAlerts, newsAlerts }, summits: [{ summit, signedIn, conversations, messages, alertsSent,
++ *        alertsDelivered, checkins, sessions, scanners, met, touchpoints, photos: { submitted, picked, passed, sent },
++ *        reports: { total, open } }] } */
++async function mm17Stats(event, proj, headers) {
++  const raw = (await projects().catch(() => ({})))[MM_PROJECT]; if (!raw) return respond(404, { error: 'NOT_FOUND' });
++  if (headers['origin'] !== proj.origin) return respond(403, { error: 'ORIGIN' });
++  const auth = headers['authorization'] || headers['Authorization'] || '';
++  const t = auth.startsWith('Bearer ') && process.env.AUTH_SECRET ? verifyToken(auth.slice(7).trim(), process.env.AUTH_SECRET) : { error: 'NO' };
++  const staff = (Array.isArray(raw.alertSenders) ? raw.alertSenders : []).map(x => String(x).toLowerCase());
++  if (t.error || !t.sub || t.kind || !staff.includes(String(t.sub).toLowerCase())) return respond(403, { error: 'NOT_ALLOWED' });
++  const dir = await loadAccess();
++  if (dir.error || !personByEmail(dir.people, t.sub) || tokenIsStale(t, personByEmail(dir.people, t.sub))) return respond(401, { error: 'SIGN_IN' });
++  const branch = proj.branch || 'main', q = mmStr((event.queryStringParameters || {}).summit, 31);
++  let ids = [q];
++  if (!q) { const feed = await mmFeed(proj); if (feed.error) return respond(502, { error: 'UNAVAILABLE' }); ids = Object.keys(feed.summits); }
++  else if (!MM_SUMMIT.test(q)) return respond(400, { error: 'INVALID' });
++  const docsOf = r => (r.status === 200 && r.data && r.data.docs && typeof r.data.docs === 'object' && !Array.isArray(r.data.docs)) ? r.data.docs : {};
++  const listDir = async path => { const ls = await github('GET', `/repos/${proj.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`); return ls.status === 200 && Array.isArray(ls.json) ? ls.json.filter(f => f && /^[a-f0-9]{20}\.json$/.test(f.name || '')).map(f => f.name) : []; };
++  const [subs, alerts] = await Promise.all([readFile(proj.repo, branch, MM14_SUBS), readFile(proj.repo, branch, MM14_ALERTS)]);
++  if ([subs, alerts].some(r => r.status !== 200 && r.status !== 404)) return respond(502, { error: 'UNAVAILABLE' });
++  const subList = Object.values(docsOf(subs)), sent = (alerts.status === 200 && alerts.data && Array.isArray(alerts.data.alerts)) ? alerts.data.alerts : [];
++  const out = [];
++  for (const summit of ids) {
++    const [ppl, msg, rep, ph, tp] = await Promise.all([mmPeoplePath(summit), mmMsgPath(summit), `att/${summit}/reports.json`, `photos/${summit}/index.json`, `scan/${summit}/touchpoints.json`].map(x => readFile(proj.repo, branch, x)));
++    if ([ppl, msg, rep, ph, tp].some(r => r.status !== 200 && r.status !== 404)) return respond(502, { error: 'UNAVAILABLE' });
++    const people = Object.values(docsOf(ppl)).filter(x => x && !x.deleted && !x.review);
++    const threads = Object.values(docsOf(msg)).filter(x => x && Array.isArray(x.m));
++    const reports = (rep.status === 200 && rep.data && Array.isArray(rep.data.reports)) ? rep.data.reports : [];
++    const photos = Object.values(docsOf(ph)), count = st => photos.filter(x => x && x.status === st).length;
++    const ci = {}; for (const f of await listDir(`scan/${summit}/checkins`)) { const r = await readFile(proj.repo, branch, `scan/${summit}/checkins/${f}`); Object.assign(ci, docsOf(r)); }
++    const cis = Object.values(ci);
++    let met = 0; for (const f of await listDir(`scan/${summit}/notes`)) { const r = await readFile(proj.repo, branch, `scan/${summit}/notes/${f}`); met += Object.values(docsOf(r)).filter(x => x && !x.deleted && x.kind === 'met').length; }
++    const mine = sent.filter(a => a && a.summit === summit);
++    out.push({ summit, signedIn: people.length, conversations: threads.length, messages: threads.reduce((n, x) => n + x.m.length, 0),
++      alertsSent: mine.length, alertsDelivered: mine.reduce((n, a) => n + (Number(a.sent) || 0), 0),
++      checkins: cis.length, sessions: new Set(cis.map(c => c && c.ses)).size, scanners: new Set(cis.map(c => c && c.by)).size,
++      met, touchpoints: Object.values(docsOf(tp)).filter(x => x && !x.deleted).length,
++      photos: { submitted: photos.length, picked: count('picked'), passed: count('passed'), sent: count('sent') },
++      reports: { total: reports.length, open: reports.filter(x => x && x.status === 'open').length } });
++  }
++  return respond(200, { at: Date.now(), phones: { summitAlerts: subList.filter(x => x && x.summit).length, newsAlerts: subList.filter(x => x && x.news === true).length }, summits: out });
++}
 +async function mm17Photos(method, subPath, event, proj, headers, raw) {
 +  const now = Date.now(), branch = proj.branch || 'main', q = event.queryStringParameters || {};
 +  if (subPath === '/photos') {
@@ -334,7 +380,7 @@
  /* --- slides --- */
  function mm14slidesFeed(raw) { return raw ? feedOf(raw.slidesFeed) : null; }
  const mm14slideCache = { at: 0, value: null };
-@@ -3971,6 +4266,7 @@
+@@ -3971,6 +4312,7 @@
      return respond(503, { error: 'CONFIG_UNAVAILABLE', message: 'Saving is briefly unavailable. Nothing was written — try again in a minute.' });
    }
    const subPath = projMatch ? (projMatch[2] || '/') : '/';
@@ -342,7 +388,7 @@
    currentProjectKey = proj ? proj.key : null;
    if (proj) responseOrigin = proj.origin;
    /* Relay request 11: a public form sent from one of its project's listed websites (formOrigins) is answered to that
-@@ -4017,6 +4313,7 @@
+@@ -4017,12 +4359,18 @@
      if (method !== 'POST') return respond(405, { error: 'METHOD' });
      return subPath === '/poll/view' ? schedView(event, proj, headers) : schedAnswer(event, proj, headers);
    }
@@ -350,3 +396,14 @@
    if (subPath.startsWith('/trivia/')) return mm15Route(method, subPath, event, proj, headers);   /* relay request 15: MyMISMO Trivia */
    if (subPath === '/staff/trivia') {   /* relay request 15: MISMO Trivia in Team HQ */
      if (!proj || proj.key !== MM_PROJECT) return respond(404, { error: 'NOT_FOUND' });
+     if (method !== 'GET' && method !== 'POST') return respond(405, { error: 'METHOD' });
+     return mm15StaffTrivia(method, event, proj, headers);
+   }
++  if (subPath === '/staff/stats') {   /* relay request 17: MyMISMO's numbers for MISMO Media's Results page */
++    if (!proj || proj.key !== MM_PROJECT) return respond(404, { error: 'NOT_FOUND' });
++    if (method !== 'GET') return respond(405, { error: 'METHOD' });
++    return mm17Stats(event, proj, headers);
++  }
+   if (subPath === '/staff/reports') {   /* relay request 15: attendee reports for the MISMO team */
+     const mm = await mmConfig(proj).catch(() => null); if (!mm) return respond(404, { error: 'NOT_FOUND' });
+     if (method !== 'GET' && method !== 'POST') return respond(405, { error: 'METHOD' });

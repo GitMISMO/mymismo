@@ -156,5 +156,20 @@ ok('the sent photo is marked sent', file('photos/nola/index.json').docs[pid].sta
 r = await call('POST', '/mymismo/photos/review', { tok: ST, body: { summit: 'nola', id: pid, status: 'new' } });
 ok('a sent photo can\'t be changed', r.statusCode === 404, r.statusCode);
 
+/* ---- MyMISMO's numbers for MISMO Media's Results page (Jonna, Nov 27, 2026) ---- */
+setProjects({ ...ENTRY, scan: true, photos: true, alertSenders: ['staff@example.org'], mediaReviewers: ['Staff@example.org'], mediaInbox: { repo: 'Org/MediaData', dir: 'incoming/summit-photos' } }); __resetMyMismoLimits();
+put('Org/MyMismoData:att/nola/people.json', { docs: { a1: { name: 'Pat Lee' }, a2: { name: 'Sam Roe', hidden: true }, a3: { deleted: true }, r1: { name: 'App Review', review: true } } });
+put('Org/MyMismoData:att/nola/messages.json', { docs: { 'a1|a2': { p: ['a1', 'a2'], m: [{ f: 'a1', t: 'Hello', at: 1 }, { f: 'a2', t: 'Hi', at: 2 }] } } });
+put('Org/MyMismoData:push/subs.json', { docs: { x1: { summit: 'nola', news: true }, x2: { summit: '', news: true }, x3: { summit: 'nola' } } });
+put('Org/MyMismoData:push/alerts.json', { alerts: [{ summit: 'nola', title: 'Room change', sent: 40 }, { summit: 'other', sent: 9 }] });
+r = await call('GET', '/mymismo/staff/stats?summit=nola', { tok: FA }); ok('stats are only for the MISMO team people (alertSenders)', r.statusCode === 403, r.statusCode);
+r = await call('GET', '/mymismo/staff/stats?summit=nola', { tok: ST }); d = J(r); const sn = (d.summits || [])[0] || {};
+ok('stats count people signed in (not deleted accounts or the store reviewer)', r.statusCode === 200 && sn.signedIn === 2, d);
+ok('stats count conversations and messages, never their words', sn.conversations === 1 && sn.messages === 2 && !JSON.stringify(d).includes('Hello'), sn);
+ok('stats count phones with alerts on and alerts sent for the summit', d.phones && d.phones.summitAlerts === 2 && d.phones.newsAlerts === 2 && sn.alertsSent === 1 && sn.alertsDelivered === 40, d);
+ok('stats count check-ins, sessions and scanners from every scanner\'s file', sn.checkins >= 3 && sn.sessions >= 1 && sn.scanners >= 2, sn);
+ok('stats count photos by where they are', sn.photos && sn.photos.submitted >= 1 && sn.photos.sent >= 1, sn.photos);
+ok('stats carry no names or emails', !/@|Pat Lee|Sam Roe/.test(JSON.stringify(d)), d);
+
 console.log(failed ? `\n${failed} FAILED` : '\nall passed');
 process.exit(failed ? 1 : 0);

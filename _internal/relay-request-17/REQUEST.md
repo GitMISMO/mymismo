@@ -49,6 +49,7 @@ needs write access to that repository's contents (it already writes to the other
 | `GET /mymismo/photos/one?summit=&id=` | mediaReviewers | `{ s }`, the picture. |
 | `POST /mymismo/photos/review` | mediaReviewers | `{ summit, id, status: 'new', 'picked' or 'passed', note }`. A sent photo can't be changed. |
 | `POST /mymismo/photos/send` | mediaReviewers | Sends every picked photo to `mediaInbox`: `<dir>/<summit>/<batch>/<id>.jpg` plus `<dir>/<summit>/<batch>.json` (the list, with each reviewer's note). |
+| `GET /mymismo/staff/stats?summit=` | alertSenders | MyMISMO's numbers for MISMO Media's Results page (CN-061), counts only, no names, emails or message text: people signed in, conversations and messages, phones with alerts on, alerts sent, check-ins, sessions, scanners, Who I Met, touchpoints, photos by status, reports. Leave out `summit` for every summit. |
 
 ## Where Things Live (GitMISMO/mymismo-data)
 
@@ -63,7 +64,7 @@ existing routes return changes.
 
 ## Checks
 
-`node test-mymismo17.mjs`: 45 checks (who can scan, helper links limited to one session and summit, no emails in lookups, a retried batch counted once, touchpoints staff
+`node test-mymismo17.mjs`: 52 checks (including the stats route) (who can scan, helper links limited to one session and summit, no emails in lookups, a retried batch counted once, touchpoints staff
 only and mirrored for Member 360, photos JPEG only, reviewers only, send writes the JPEG and the list to MISMO Media and
 marks them sent, a sent photo can't be changed). Requests 13 to 16's suites still pass with this patch applied.
 `node test-mymismo17-budget.mjs`: 8 checks on MyMISMO's own GitHub budget (below).

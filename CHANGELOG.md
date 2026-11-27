@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: The MISMO team's side of MyMISMO (Attendee Reports, MISMO Trivia, and new MyMISMO numbers for the Results page) moves from Team HQ to MISMO Media (CN-061, CN-062); relay request 17 adds the counts-only stats route.
 - Nov 27, 2026: Getting around: pull a pop-up down to close it (from its top bar, or anywhere once it's scrolled to the top), and tap the tab you're already on to jump back to its top, like other phone apps.
 - Nov 27, 2026: Summit Photos: the Name Badge frame has no lanyard and a smaller name tag; Night Out now says "Out Tonight In New Orleans" with "Wish you were here."
 - Nov 27, 2026: Trivia works offline: its questions are kept on the phone as soon as the app opens, so every level (and the Board) plays in airplane mode.
