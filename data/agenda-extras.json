@@ -1,5 +1,5 @@
 {
-  "note": "Rows the website agenda (mismo.org/events/agenda) shows that aren't in Summit HQ's agenda feed yet. Copied from the website Nov 27, 2026; Monday's lunch is 12:00 to 1:30 per Jonna (the website said 1:00). Remove a row once the feed carries it (CN-067).",
+  "note": "Rows the website agenda (mismo.org/events/agenda) shows that aren't in Summit HQ's agenda feed yet. Copied from the website Nov 27, 2026; Monday's lunch is 12:00 to 1:30 per Jonna (the website said 1:00); Tuesday's Morning Break is the 10:20 to 10:40 gap in the General Sessions running order (a morning and an afternoon break every day, per Jonna). Remove a row once the feed carries it (CN-067).",
   "summits": {
     "nola": {
       "lunches": [
@@ -31,6 +31,12 @@
           "start": "2:45 PM",
           "end": "3:05 PM",
           "title": "Afternoon Break"
+        },
+        {
+          "date": "2027-01-12",
+          "start": "10:20 AM",
+          "end": "10:40 AM",
+          "title": "Morning Break"
         },
         {
           "date": "2027-01-12",
