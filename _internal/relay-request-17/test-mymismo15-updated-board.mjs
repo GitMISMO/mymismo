@@ -1,0 +1,319 @@
+/* MyMISMO Trivia leaderboard and championship (relay request 15). Run: node test-mymismo15.mjs.
+ * A stand-in GitHub and mail flow, as test-mymismo14.mjs. Every person, address and question here is made up. */
+const ORIGIN = 'https://resources.example';
+Object.assign(process.env, { GITHUB_TOKEN: 'ghp_test', AUTH_SECRET: 'mymismo-test-secret', PROJECTS_REPO: 'Org/Config', DIRECTORY_REPO: 'Org/Accounts', MAIL_FLOW_URL: 'https://flow.example/mail' });
+let N = 100; const sha = () => (N++).toString(16).padEnd(40, 'c'); const repo = {};
+const put = (key, data, message = 'seed') => { (repo[key] = repo[key] || []).push({ sha: sha(), data, message }); };
+const realNow = Date.now; let T = Date.parse('2027-01-20T15:00:00Z'); Date.now = () => T;
+const ENTRY = { repo: 'Org/MyMismoData', origin: ORIGIN, writable: [] };
+const setProjects = entry => { put('Org/Config:projects.json', { mymismo: entry }); __resetProjectsCache(); };
+put('Org/Accounts:access.json', { people: {} });
+const CATS = ['Standards', 'Life of Loan', 'Glossary', 'How MISMO Works', 'Certs', 'Mortgage'];
+const QS = [];
+CATS.forEach((c, i) => { for (let k = 0; k < 8; k++) QS.push({ id: `h${i}-${k}`, cat: c, q: `Hard ${c} ${k}?`, choices: ['A' + k, 'B' + k, 'C' + k, 'D' + k], answer: k % 4, level: 3, source: 'https://example.org/s' }); });
+CATS.forEach((c, i) => { for (let k = 0; k < 6; k++) QS.push({ id: `m${i}-${k}`, cat: c, q: `Medium ${c} ${k}?`, choices: ['A' + k, 'B' + k, 'C' + k, 'D' + k], answer: (k + 1) % 4, level: 2, source: 'https://example.org/s' }); });
+QS.push({ id: 'e1', cat: 'Standards', q: 'Easy?', choices: ['a', 'b', 'c', 'd'], answer: 0, level: 1 });
+put('Org/MyMismoData:trivia/questions.json', { questions: QS });
+const mails = [];
+const R = (status, j) => ({ status, ok: status < 300, headers: { get: () => null }, json: async () => j, text: async () => '' });
+globalThis.fetch = async (url, opts = {}) => {
+  const method = (opts.method || 'GET').toUpperCase();
+  if (url === 'https://flow.example/mail') { mails.push(JSON.parse(opts.body)); return R(202, {}); }
+  const m = url.match(/^https:\/\/api\.github\.com\/repos\/([^/]+\/[^/]+)\/contents\/([^?]+)/);
+  if (!m) return R(404, {});
+  const key = m[1] + ':' + decodeURIComponent(m[2]), h = repo[key];
+  if (method === 'GET') { const v = h && h[h.length - 1]; if (!v) return R(404, {}); return R(200, { sha: v.sha, content: Buffer.from(JSON.stringify(v.data)).toString('base64') }); }
+  if (method === 'PUT') { const body = JSON.parse(opts.body), cur = h && h[h.length - 1];
+    if ((cur ? cur.sha : undefined) !== (body.sha || undefined)) return R(409, {});
+    put(key, JSON.parse(Buffer.from(body.content, 'base64').toString()), body.message); return R(200, { content: { sha: repo[key].at(-1).sha } }); }
+  return R(405, {});
+};
+const { handler, __resetProjectsCache, __resetGithubCache, __resetMyMismoLimits, __resetMyMismo15 } = await import('./index.mjs');
+let failed = 0, passed = 0; const ok = (n, c, d) => { if (!c) failed++; else passed++; console.log((c ? 'PASS ' : 'FAIL ') + n + (c || d === undefined ? '' : '  ' + JSON.stringify(d).slice(0, 400))); };
+const J = r => JSON.parse(r.body);
+const call = (m, path, { body, origin = ORIGIN, ip = '203.0.113.1', tok } = {}) => { __resetGithubCache(); const [rp, qs] = path.split('?'); return handler({ rawPath: rp, rawQueryString: qs || '', queryStringParameters: qs ? Object.fromEntries(new URLSearchParams(qs)) : undefined, requestContext: { http: { method: m, sourceIp: ip } },
+  headers: { ...(origin ? { origin } : {}), 'content-type': 'application/json', ...(tok ? { authorization: 'Bearer ' + tok } : {}) }, body: body ? JSON.stringify(body) : undefined }); };
+const file = p => { const h = repo['Org/MyMismoData:' + p]; return h ? h.at(-1).data : null; };
+const codeFor = email => { const mm = mails.filter(x => x.to === email).at(-1); return mm && (mm.subject.match(/^(\d{6}) /) || [])[1]; };
+const bank = new Map(QS.map(q => [q.q, q]));
+async function signIn(email, first, last, ip = '203.0.113.9') {
+  await call('POST', '/mymismo/trivia/code', { body: { email, startedAt: T - 9000 }, ip });
+  return J(await call('POST', '/mymismo/trivia/verify', { body: { email, code: codeFor(email.toLowerCase()), first, last }, ip }));
+}
+/* plays a Board: right on the first n squares (the 200s across, then the 400s), then ends it */
+const CELLS = [0, 1, 2, 3, 4].flatMap(rw => [0, 1, 2, 3, 4, 5].map(c => c + '-' + rw));
+async function play(tok, right, ms = 3000) {
+  const st = J(await call('POST', '/mymismo/trivia/play/start', { tok, body: {} }));
+  let last;
+  for (let i = 0; i < right; i++) {
+    const q = J(await call('POST', '/mymismo/trivia/play/pick', { tok, body: { cell: CELLS[i] } })), real = bank.get(q.q); T += ms;
+    last = J(await call('POST', '/mymismo/trivia/play/answer', { tok, body: { cell: CELLS[i], choice: q.choices.indexOf(real.choices[real.answer]) } }));
+  }
+  last = J(await call('POST', '/mymismo/trivia/play/end', { tok, body: {} }));
+  return { st, last };
+}
+let r, d;
+
+/* switched off until trivia: true */
+setProjects(ENTRY);
+r = await call('GET', '/mymismo/trivia/ready'); ok('off: 404 until trivia is true', r.statusCode === 404);
+setProjects({ ...ENTRY, trivia: true });
+r = await call('GET', '/mymismo/trivia/ready'); d = J(r);
+ok('ready: month and quarter in Eastern time', r.statusCode === 200 && d.month === '2027-01' && d.quarter === '2027-Q1' && d.board.secs === 20 && !d.headToHead && d.champ === null, d);
+r = await call('GET', '/mymismo/trivia/nope'); ok('unknown route 404', r.statusCode === 404);
+r = await call('GET', '/mymismo/trivia/play/start'); ok('wrong method 405', r.statusCode === 405);
+
+/* sign-in */
+r = await call('POST', '/mymismo/trivia/code', { body: { email: 'pat@example.org', startedAt: T - 9000 }, origin: 'https://evil.example' }); ok('code: other site refused', r.statusCode === 403);
+r = await call('POST', '/mymismo/trivia/code', { body: { email: 'pat@example.org', startedAt: T - 9000, website: 'x' } }); ok('code: robot gets ok, nothing sent', r.statusCode === 200 && mails.length === 0);
+r = await call('POST', '/mymismo/trivia/code', { body: { email: 'pat@example.org', startedAt: T - 500 } }); ok('code: too fast gets ok, nothing sent', r.statusCode === 200 && mails.length === 0);
+r = await call('POST', '/mymismo/trivia/code', { body: { email: 'not an email', startedAt: T - 9000 } }); ok('code: bad email 400', r.statusCode === 400);
+r = await call('POST', '/mymismo/trivia/code', { body: { email: 'Pat@Example.org', startedAt: T - 9000 } });
+ok('code: anyone gets a code by email', r.statusCode === 200 && mails.length === 1 && mails[0].kind === 'mymismo-trivia-code' && /^\d{6} is your MyMISMO Trivia sign-in code$/.test(mails[0].subject), mails);
+ok('code: only a hash is kept, no email', !JSON.stringify(file('trivia/codes.json')).includes('example.org') && !JSON.stringify(file('trivia/codes.json')).includes(codeFor('pat@example.org')));
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'pat@example.org', code: '000000', first: 'Pat', last: 'Lee' } });
+ok('verify: wrong code 401', r.statusCode === 401 || codeFor('pat@example.org') === '000000');
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'pat@example.org', code: codeFor('pat@example.org'), first: 'Pat', last: 'lee' } }); d = J(r);
+const pat = d.token;
+ok('verify: token and name shown as first name and last initial', r.statusCode === 200 && pat && d.me.name === 'Pat L.', d);
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'pat@example.org', code: codeFor('pat@example.org'), first: 'Pat', last: 'Lee' } });
+ok('verify: a code works once', r.statusCode === 401);
+ok('players.json keeps no email', !JSON.stringify(file('trivia/players.json')).includes('@'));
+await call('POST', '/mymismo/trivia/code', { body: { email: 'sam@example.org', startedAt: T - 9000 }, ip: '203.0.113.20' });
+for (let i = 0; i < 5; i++) await call('POST', '/mymismo/trivia/verify', { body: { email: 'sam@example.org', code: '12345' + i, first: 'Sam' }, ip: '203.0.113.21' });
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'sam@example.org', code: codeFor('sam@example.org'), first: 'Sam' }, ip: '203.0.113.21' });
+ok('verify: a code is spent after 5 wrong tries', r.statusCode === 401 || ['123450','123451','123452','123453','123454'].includes(codeFor('sam@example.org')));
+
+/* tokens: an attendee or staff-style token can't play */
+r = await call('POST', '/mymismo/trivia/play/start', { body: {} }); ok('board: needs sign-in', r.statusCode === 401);
+r = await call('POST', '/mymismo/trivia/play/start', { body: {}, tok: 'a.b.c' }); ok('board: a bad token is refused', r.statusCode === 401);
+r = await call('POST', '/mymismo/trivia/play/start', { body: {}, tok: pat, origin: 'https://evil.example' }); ok('board: other site refused', r.statusCode === 403);
+
+/* the Board: the monthly leaderboard game */
+r = await call('POST', '/mymismo/trivia/play/start', { tok: pat, body: {} }); d = J(r);
+ok('board: six categories, five values, no questions handed out yet', r.statusCode === 200 && d.cats.length === 6 && d.values.join() === '200,400,600,800,1000' && d.squares === 30 && !r.body.includes('Hard ') && !r.body.includes('Medium '), d);
+const pl0 = file('trivia/plays.json').docs, myPlay = Object.values(pl0)[0];
+ok('board: 200s easy (when there are easy ones), then Medium, 800 and 1,000 Hard, all different', Object.entries(myPlay.cells).every(([k, x]) => { const q = QS.find(y => y.id === x.id), r = Number(k[2]); return q.level === (r >= 3 ? 3 : r === 0 && q.cat === 'Standards' ? 1 : 2); }) && new Set(Object.values(myPlay.cells).map(x => x.id)).size === 30);
+const dblCell = Object.keys(myPlay.cells).find(k => myPlay.cells[k].dbl);
+ok('board: one hidden Double square, worth 600 or more', Object.values(myPlay.cells).filter(x => x.dbl).length === 1 && myPlay.cells[dblCell].value >= 600);
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: '0-4', choice: 0 } }); ok('board: answer only a square you opened', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '0-4' } }); d = J(r);
+ok('board: opening a square shows its question, without the answer', r.statusCode === 200 && d.choices.length === 4 && !('answer' in d) && d.left === 20000 && (d.value === 1000 || d.value === 2000), d);
+const q04 = d, real04 = bank.get(q04.q);
+T += 4000;
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '0-4' } }); ok('board: opening it again never restarts the clock', J(r).left === 16000, J(r));
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '1-0' } }); ok('board: answer the open square first', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: '0-4', choice: q04.choices.indexOf(real04.choices[real04.answer]) } }); d = J(r);
+ok('board: right adds the square’s value', d.right === true && d.points === q04.value && d.total === q04.value && d.done === false, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '0-4' } }); ok('board: a square is played once', r.statusCode === 409);
+let wrongCell = ['1-0', '2-0'].find(c => c !== dblCell);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: wrongCell } }); d = J(r); const qw = bank.get(d.q);
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: wrongCell, choice: (d.choices.indexOf(qw.choices[qw.answer]) + 1) % 4 } }); d = J(r);
+ok('board: wrong takes the value away', d.right === false && d.points === -200 && d.total === q04.value - 200, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '3-0' } }); d = J(r); const ql = bank.get(d.q);
+T += 22000;
+r = await call('POST', '/mymismo/trivia/play/answer', { tok: pat, body: { cell: '3-0', choice: d.choices.indexOf(ql.choices[ql.answer]) } }); d = J(r);
+ok('board: past 20 seconds (plus 1) scores 0, right or not, and costs nothing', d.right === false && d.points === 0 && d.late === true && d.total === q04.value - 200, d);
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: pat, body: { cell: '4-0' } }); T += 30000;
+r = await call('GET', '/mymismo/trivia/play', { tok: pat }); d = J(r);
+ok('board: pick up where you left off; a square left open past its time counts as no answer', d.active === true && d.open === null && d.played['4-0'] && d.played['4-0'].points === 0 && Object.keys(d.played).length === 4 && !r.body.includes('Hard '), d);
+const sam = (await signIn('sam2@example.org', 'Sam', 'Roe')).token;
+r = await call('POST', '/mymismo/trivia/play/pick', { tok: sam, body: { cell: '0-0' } }); ok('board: someone else’s board isn’t yours to play', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/play/end', { tok: pat, body: {} }); d = J(r);
+ok('board: ending it puts the score on January’s leaderboard', d.done === true && d.saved === true && d.month === '2027-01' && d.best === q04.value - 200, d);
+ok('board: removed once ended', !file('trivia/plays.json').docs[Object.keys(pl0)[0]]);
+ok('seen: the questions played are remembered', Object.values(file('trivia/seen.json').docs)[0].length === 4);
+
+/* a new board prefers questions not seen yet, and starting one scores an unfinished one */
+r = await call('POST', '/mymismo/trivia/play/start', { tok: pat, body: {} });
+const seen1 = Object.values(file('trivia/seen.json').docs)[0], pl1 = Object.values(file('trivia/plays.json').docs)[0];
+ok('board: the next board leaves out questions already seen', Object.values(pl1.cells).every(x => !seen1.includes(x.id)));
+
+/* best round only */
+T += 60000; await play(pat, 10, 1000);
+let bd = file('trivia/board-2027-01.json').docs; const patId = Object.keys(bd).find(k => bd[k].name === 'Pat L.');
+const best = bd[patId].best;
+T += 60000; await play(pat, 2, 1000);
+bd = file('trivia/board-2027-01.json').docs;
+ok('board: keeps only the single best board', bd[patId].best === best && best === 2800 && bd[patId].rounds === 3, bd[patId]);
+T += 60000; await play(sam, 10, 2000);
+r = await call('GET', '/mymismo/trivia/board?month=2027-01', { tok: sam }); d = J(r);
+ok('board: ranked, names only, and “me”', r.statusCode === 200 && d.rows.length === 2 && d.rows[0].name === 'Pat L.' && d.rows[1].name === 'Sam R.' && d.me && d.me.rank === 2 && !r.body.includes('@'), d);
+r = await call('GET', '/mymismo/trivia/board?month=2027-13'); ok('board: bad month 400', r.statusCode === 400);
+
+/* the board starts over each month (Eastern time: 11:30 PM Jan 31 in New York is still January) */
+T = Date.parse('2027-02-01T04:30:00Z');
+r = await call('GET', '/mymismo/trivia/ready'); ok('month: Eastern time decides', J(r).month === '2027-01');
+T = Date.parse('2027-02-10T15:00:00Z');
+r = await call('GET', '/mymismo/trivia/board'); ok('board: starts over in February', J(r).month === '2027-02' && J(r).rows.length === 0);
+await play(pat, 10, 1000); T += 60000; await play(sam, 6, 1000);
+const alex = (await signIn('alex@example.org', 'Alex', 'Kim', '203.0.113.40')).token;
+T = Date.parse('2027-03-05T15:00:00Z'); await play(pat, 10, 1000); T += 60000; await play(alex, 4, 5000); T += 60000; await play(sam, 3, 5000);
+
+/* championship: Pat won January, February and March; the runner-up rule fills the other spots */
+const OPENS = '2027-04-05T13:00:00Z', CLOSES = '2027-04-12T04:00:00Z';
+setProjects({ ...ENTRY, trivia: true, triviaChamp: { quarter: '2027-Q1', opens: OPENS, closes: CLOSES, minutes: 15 } });
+T = Date.parse('2027-04-01T15:00:00Z');
+r = await call('GET', '/mymismo/trivia/champ', { tok: alex }); d = J(r);
+ok('champ: finalists by month with the runner-up rule', d.set && d.open === false && d.finalists.map(f => f.name + ' ' + f.month).join(', ') === 'Pat L. 2027-01, Sam R. 2027-02, Alex K. 2027-03' && d.me.finalist === true, d);
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: pat, body: {} }); ok('champ: not before the window', r.statusCode === 409 && J(r).error === 'NOT_OPEN');
+T = Date.parse('2027-04-06T15:00:00Z');
+const other = (await signIn('jo@example.org', 'Jo', 'Doe', '203.0.113.50')).token;
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: other, body: {} }); ok('champ: only finalists', r.statusCode === 403);
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: pat, body: {} }); d = J(r);
+ok('champ: start shows the board, no questions, and a 15-minute deadline', r.statusCode === 200 && d.cats.length === 6 && d.values.join() === '200,400,600,800,1000' && d.left === 900000 && !r.body.includes('Hard '), d);
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: pat, body: {} }); ok('champ: one try only', r.statusCode === 409 && J(r).error === 'ALREADY');
+r = await call('POST', '/mymismo/trivia/champ/pick', { tok: pat, body: { cell: '0-4' } }); d = J(r);
+ok('champ: pick shows the question', r.statusCode === 200 && d.value === 1000 && d.choices.length === 4 && !('answer' in d), d);
+const cq = bank.get(d.q);
+r = await call('POST', '/mymismo/trivia/champ/pick', { tok: pat, body: { cell: '1-0' } }); ok('champ: answer the open square first', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/champ/answer', { tok: pat, body: { cell: '0-4', choice: d.choices.indexOf(cq.choices[cq.answer]) } }); d = J(r);
+ok('champ: right adds the square’s value', d.right === true && d.points === 1000 && d.total === 1000, d);
+r = await call('POST', '/mymismo/trivia/champ/pick', { tok: pat, body: { cell: '0-4' } }); ok('champ: a square is played once', r.statusCode === 409);
+r = await call('POST', '/mymismo/trivia/champ/pick', { tok: pat, body: { cell: '2-1' } }); d = J(r); const cq2 = bank.get(d.q);
+r = await call('POST', '/mymismo/trivia/champ/answer', { tok: pat, body: { cell: '2-1', choice: (d.choices.indexOf(cq2.choices[cq2.answer]) + 1) % 4 } }); d = J(r);
+ok('champ: wrong adds 0', d.right === false && d.points === 0 && d.total === 1000, d);
+T += 16 * 60000;
+r = await call('POST', '/mymismo/trivia/champ/pick', { tok: pat, body: { cell: '3-0' } }); ok('champ: the clock runs on the server; refused after time', r.statusCode === 409 && J(r).error === 'TIME');
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: sam, body: {} }); d = J(r); ok('champ: another finalist starts on their own phone', r.statusCode === 200);
+T = Date.parse(CLOSES) - 60000;
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: alex, body: {} }); d = J(r);
+ok('champ: a late start ends when the window closes', r.statusCode === 200 && d.left === 60000, d);
+T = Date.parse(CLOSES) + 1000;
+r = await call('GET', '/mymismo/trivia/champ'); d = J(r);
+ok('champ: standings after the window closes', d.open === false && d.standings && d.standings[0].name === 'Pat L.' && d.standings[0].total === 1000 && d.standings.length === 3, d);
+r = await call('POST', '/mymismo/trivia/champ/start', { tok: sam, body: {} }); ok('champ: closed', r.statusCode === 409);
+
+/* deleting an account */
+r = await call('POST', '/mymismo/trivia/delete', { tok: sam, body: {} });
+const samGone = !JSON.stringify(file('trivia/players.json')).includes('Sam R.') && !JSON.stringify(file('trivia/board-2027-01.json')).includes('Sam R.') && !JSON.stringify(file('trivia/board-2027-02.json')).includes('Sam R.');
+ok('delete: name and scores removed', r.statusCode === 200 && samGone);
+
+/* nothing secret in the repository files a page could read */
+const all = JSON.stringify(Object.fromEntries(Object.entries(repo).filter(([k]) => k.startsWith('Org/MyMismoData:trivia/') && !k.endsWith('questions.json')).map(([k, v]) => [k, v.at(-1).data])));
+ok('no email address saved anywhere', !all.includes('@example.org'));
+
+/* app store rules for attendees: report, delete, word filter (Apple 1.2 and 5.1.1(v), Google Play user data policy) */
+T = realNow();
+const FIRST = new Date(T + 17 * 86400000).toISOString().slice(0, 10), LAST = new Date(T + 20 * 86400000).toISOString().slice(0, 10);
+put('Org/SummitData:data/feed-mymismo-attendees.json', { updated: new Date(T).toISOString(), summits: { nola: { name: '2027 Winter Summit', first: FIRST, last: LAST, people: [
+  { e: 'pat@lender.example', first: 'Pat', last: 'Lee', company: 'Lender Co', title: 'CTO' }, { e: 'alex@vendor.example', first: 'Alex', last: 'Kim', company: 'Vendor LLC', title: 'Engineer' }] } } });
+setProjects({ ...ENTRY, trivia: true, attendees: true, attendeeFeed: { repo: 'Org/SummitData', path: 'data/feed-mymismo-attendees.json' }, blockedWords: ['frobnicate'] });
+__resetMyMismoLimits();
+async function attIn(email, ip) {
+  await call('POST', '/mymismo/att/code', { body: { email, summit: 'nola', startedAt: T - 9000 }, ip });
+  return J(await call('POST', '/mymismo/att/verify', { body: { email, summit: 'nola', code: codeFor(email) }, ip }));
+}
+const ap = await attIn('pat@lender.example', '203.0.113.60'), aa = await attIn('alex@vendor.example', '203.0.113.61');
+ok('attendees signed in', !!(ap.token && aa.token), [ap, aa]);
+await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { listed: true } });
+await call('PUT', '/mymismo/att/profile', { tok: aa.token, body: { listed: true } });
+r = await call('POST', '/mymismo/att/message', { tok: ap.token, body: { to: aa.me.id, text: 'Good to meet you at the panel.' } });
+ok('message: ordinary words go through', r.statusCode === 200, J(r));
+r = await call('POST', '/mymismo/att/message', { tok: aa.token, body: { to: ap.me.id, text: 'What the F-U-C-K, fuck this' } });
+ok('filter: profanity in a message is refused', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS', J(r));
+r = await call('PUT', '/mymismo/att/profile', { tok: aa.token, body: { about: 'I frobnicate loans.' } });
+ok('filter: MISMO’s own blockedWords apply to profiles', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS', J(r));
+r = await call('PUT', '/mymismo/att/profile', { tok: aa.token, body: { about: 'Scunthorpe classic assessment' } });
+ok('filter: whole words only (no false alarms inside other words)', r.statusCode === 200, J(r));
+r = await call('POST', '/mymismo/att/report', { tok: ap.token, body: { id: aa.me.id, reason: 'harassment', note: 'Rude messages' } });
+const reps = file('att/nola/reports.json');
+ok('report: kept for the MISMO team', r.statusCode === 200 && reps.reports.length === 1 && reps.reports[0].reason === 'harassment' && reps.reports[0].status === 'open', reps);
+r = await call('POST', '/mymismo/att/report', { tok: ap.token, body: { id: ap.me.id } }); ok('report: can’t report yourself', r.statusCode === 400);
+await call('POST', '/mymismo/att/block', { tok: ap.token, body: { id: aa.me.id, on: true } });
+r = await call('POST', '/mymismo/att/delete', { tok: aa.token, body: {} });
+const ppl = file('att/nola/people.json').docs, msgs = file('att/nola/messages.json').docs;
+ok('delete: profile, conversations and blocks naming them are gone (only a hidden marker stays)', r.statusCode === 200 && Object.keys(ppl[aa.me.id]).sort().join() === 'at,deleted,hidden' && Object.values(msgs).every(t => !t.p.includes(aa.me.id)) && !(ppl[ap.me.id].blocked || []).includes(aa.me.id), { ppl, msgs });
+r = await call('GET', '/mymismo/att/me', { tok: aa.token }); ok('delete: their old sign-in no longer works', r.statusCode === 401);
+
+/* directory from the registration list, headshots and contact details */
+r = await call('GET', '/mymismo/att/directory', { tok: ap.token }); d = J(r);
+ok('directory: a deleted attendee no longer shows, even though still registered', r.statusCode === 200 && !d.people.some(x => x.name === 'Alex Kim'), d);
+const PNG = 'data:image/png;base64,' + Buffer.from('x'.repeat(300)).toString('base64');
+r = await call('PUT', '/mymismo/att/my-photo', { tok: ap.token, body: { data: PNG } }); d = J(r);
+ok('photo: saved, and the profile says it has one', r.statusCode === 200 && d.me.photo > 0, d);
+r = await call('PUT', '/mymismo/att/my-photo', { tok: ap.token, body: { data: 'javascript:alert(1)' } }); ok('photo: anything but an image is refused', r.statusCode === 400);
+r = await call('PUT', '/mymismo/att/my-photo', { tok: ap.token, body: { data: 'data:image/png;base64,' + 'A'.repeat(170000) } }); ok('photo: too large is refused', r.statusCode === 413);
+r = await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { phone: '+1 (202) 555-0100', website: 'https://lender.example', showEmail: true } }); d = J(r);
+ok('contact details: phone, website and showing their email are saved', r.statusCode === 200 && d.me.phone === '+1 (202) 555-0100' && d.me.website === 'https://lender.example' && d.me.showEmail === true, d);
+r = await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { phone: 'call me maybe' } }); ok('contact details: a phone with letters is refused', r.statusCode === 400);
+const at2 = await attIn('alex@vendor.example', '203.0.113.62');
+ok('a deleted attendee can sign in again as a new account', !!at2.token && at2.me.listed === true, at2);
+r = await call('GET', '/mymismo/att/directory', { tok: at2.token }); d = J(r); const patCard = d.people.find(x => x.name === "Pat Lee");
+ok('directory: shows the email only because Pat chose to, with the phone, website and a photo version', patCard && patCard.email === "pat@lender.example" && patCard.phone && patCard.website && patCard.photo > 0, patCard);
+r = await call('GET', '/mymismo/att/photo?id=' + ap.me.id, { tok: at2.token }); ok('photo: another signed-in attendee can see it', r.statusCode === 200 && J(r).s === PNG);
+r = await call('GET', '/mymismo/att/photo?id=' + ap.me.id); ok('photo: nobody signed out can', r.statusCode === 401);
+await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { listed: false } });
+r = await call('GET', '/mymismo/att/photo?id=' + ap.me.id, { tok: at2.token }); ok('photo: hidden once they hide themselves', r.statusCode === 404);
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'z@example.org', code: '123456', first: 'Fuck', last: 'X' } });
+ok('filter: trivia names too', r.statusCode === 400 && J(r).error === 'NOT_ALLOWED_WORDS');
+
+/* the MISMO team sees reports (staff sign-in, alertSenders only) */
+put('Org/Accounts:access.json', { people: { 'jc@example.org': { name: 'Jonna C', access: { mymismo: 'admin' }, group: 'staff' } } });
+setProjects({ ...ENTRY, trivia: true, attendees: true, attendeeFeed: { repo: 'Org/SummitData', path: 'data/feed-mymismo-attendees.json' }, alertSenders: ['jc@example.org'] });
+const { createHmac: hm } = await import('node:crypto');
+const b64u = x => Buffer.from(x).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const staffTok = email => { const now = Math.floor(T / 1000) + 5; const head = b64u(JSON.stringify({ alg: 'HS256', typ: 'JWT' })), bd = b64u(JSON.stringify({ sub: email, name: 'X', iat: now, exp: now + 3600 }));
+  return head + '.' + bd + '.' + b64u(hm('sha256', process.env.AUTH_SECRET).update(head + '.' + bd).digest()); };
+r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: ap.token }); ok('reports: an attendee can’t read them', r.statusCode === 403);
+r = await call('GET', '/mymismo/staff/reports?summit=nola', { tok: staffTok('jc@example.org') }); d = J(r);
+ok('reports: the MISMO team sees them with names', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].byName === 'Pat Lee' && d.reports[0].aboutName === 'Alex Kim', d);
+r = await call('POST', '/mymismo/staff/reports', { tok: staffTok('jc@example.org'), body: { summit: 'nola', id: d.reports[0].id, status: 'closed', action: 'Spoke with both.' } });
+ok('reports: closing one is saved', r.statusCode === 200 && file('att/nola/reports.json').reports[0].status === 'closed');
+r = await call('GET', '/mymismo/staff/reports', { tok: staffTok('jc@example.org') }); d = J(r);
+ok('reports: with no summit, every summit’s (for Team HQ), with the open count', r.statusCode === 200 && d.reports.length === 1 && d.reports[0].summit === 'nola' && d.open === 0, d);
+
+/* the app reviewers' sign-in (projects.json reviewAccount): fixed code, no email, hidden, sees only MISMO's contacts, never on the board */
+const { createHash: ch } = await import('node:crypto');
+setProjects({ ...ENTRY, trivia: true, attendees: true, attendeeFeed: { repo: 'Org/SummitData', path: 'data/feed-mymismo-attendees.json' }, alertSenders: ['jc@example.org'],
+  reviewAccount: { email: 'appreview@example.org', codeSha256: ch('sha256').update('mymismo-review:246810').digest('hex'), contacts: ['pat@lender.example'] } });
+await call('PUT', '/mymismo/att/profile', { tok: ap.token, body: { listed: true } });
+const before = mails.length;
+r = await call('POST', '/mymismo/att/code', { body: { email: 'appreview@example.org', summit: 'nola', startedAt: T - 9000 }, ip: '203.0.113.80' });
+ok('review: asking for a code sends no email', r.statusCode === 200 && mails.length === before);
+r = await call('POST', '/mymismo/att/verify', { body: { email: 'appreview@example.org', summit: 'nola', code: '111111' }, ip: '203.0.113.80' }); ok('review: a wrong code is refused', r.statusCode === 401);
+r = await call('POST', '/mymismo/att/verify', { body: { email: 'appreview@example.org', summit: 'nola', code: '246810' }, ip: '203.0.113.80' }); d = J(r); const RV = d.token;
+ok('review: the fixed code signs in, hidden', r.statusCode === 200 && d.me.name === 'App Review' && d.me.listed === false, d);
+r = await call('GET', '/mymismo/att/directory', { tok: RV }); d = J(r);
+ok('review: sees only MISMO’s contacts, never real attendees', r.statusCode === 200 && d.people.length === 1 && d.people[0].name === 'Pat Lee', d);
+r = await call('GET', '/mymismo/att/directory', { tok: at2.token }); ok('review: nobody else sees the reviewer', !J(r).people.some(x => x.name === 'App Review'));
+r = await call('POST', '/mymismo/att/message', { tok: RV, body: { to: at2.me.id, text: 'Hello' } }); ok('review: can’t message anyone but the contacts', r.statusCode === 403);
+r = await call('POST', '/mymismo/att/message', { tok: RV, body: { to: ap.me.id, text: 'Testing messages for app review.' } }); ok('review: can message a contact', r.statusCode === 200, J(r));
+r = await call('POST', '/mymismo/trivia/verify', { body: { email: 'appreview@example.org', code: '246810', first: 'Any', last: 'Name' }, ip: '203.0.113.81' }); d = J(r);
+ok('review: trivia sign-in with the same fixed code', r.statusCode === 200 && d.me.name === 'App Review', d);
+T = Date.parse('2027-01-21T15:00:00Z'); __resetMyMismoLimits();
+const rvRound = await play(d.token, 10, 1000);
+ok('review: a reviewer’s board is never on the leaderboard', rvRound.last.done === true && rvRound.last.saved === false && !JSON.stringify(file('trivia/board-2027-01.json')).includes('App Review'), rvRound.last);
+
+T = realNow();
+/* MISMO staff are in Summit HQ's list twice: their registration (with their title) and the staff roster ("MISMO" only) */
+put('Org/SummitData:data/feed-mymismo-attendees.json', { updated: new Date(T).toISOString(), summits: { nola: { name: '2027 Winter Summit', first: FIRST, last: LAST, people: [
+  { e: 'pat@lender.example', first: 'Pat', last: 'Lee', company: 'Lender Co', title: 'CTO' },
+  { e: 'alex@vendor.example', first: 'Alex', last: 'Kim', company: 'Vendor LLC', title: 'Engineer' },
+  { e: 'jray@mba.example', first: 'Jordan', last: 'Ray', company: 'MISMO', title: 'Director' }, { e: 'jray@mismo.example', first: 'Jordan', last: 'Ray', company: 'MISMO', title: '' },
+  { e: 'sam@mismo.example', first: 'Sam', last: 'Solo', company: 'MISMO', title: '' }] } } });
+__resetMyMismoLimits();
+const viewer = await attIn('pat@lender.example', '203.0.113.65');
+r = await call('GET', '/mymismo/att/directory', { tok: viewer.token }); d = J(r);
+const jr = d.people.filter(x => x.name === 'Jordan Ray');
+ok('staff: listed once, with their title, not again as just "MISMO"', jr.length === 1 && jr[0].title === 'Director', d.people);
+ok('staff: someone only on the staff roster is still listed', d.people.filter(x => x.name === 'Sam Solo').length === 1, d.people);
+const js = await attIn('jray@mismo.example', '203.0.113.63'), jm = await attIn('jray@mba.example', '203.0.113.64');
+ok('staff: signing in with the roster address is the same person as their registration', js.token && jm.token && js.me.id === jm.me.id && js.me.title === 'Director', [js.me, jm.me]);
+r = await call('GET', '/mymismo/att/directory', { tok: viewer.token }); d = J(r);
+ok('staff: still listed once after signing in both ways', d.people.filter(x => x.name === 'Jordan Ray').length === 1, d.people);
+
+/* Team HQ: monthly winners, the quarter's finalists and setting the championship */
+T = Date.parse('2027-04-02T15:00:00Z');
+r = await call('GET', '/mymismo/staff/trivia', { tok: pat }); ok('team: a player token can’t read it', r.statusCode === 403);
+r = await call('GET', '/mymismo/staff/trivia', { tok: staffTok('jc@example.org') }); d = J(r);
+const jan = d.boards && d.boards.find(b => b.month === '2027-01');
+ok('team: months with their winners, this quarter and last with finalists', r.statusCode === 200 && d.quarter === '2027-Q2' && jan && jan.top[0].name === 'Pat L.' && d.quarters[1].quarter === '2027-Q1' && d.quarters[1].finalists.length === 3, d);
+r = await call('POST', '/mymismo/staff/trivia', { tok: staffTok('jc@example.org'), body: { champ: { quarter: '2027-Q1', opens: '2027-04-01T00:00:00Z', closes: '2027-03-01T00:00:00Z', minutes: 15 } } });
+ok('team: closing before opening is refused', r.statusCode === 400);
+r = await call('POST', '/mymismo/staff/trivia', { tok: staffTok('jc@example.org'), body: { champ: { quarter: '2027-Q2', opens: '2027-07-06T13:00:00Z', closes: '2027-07-13T04:00:00Z', minutes: 20 } } }); d = J(r);
+ok('team: setting the championship is saved with who set it', r.statusCode === 200 && file('trivia/settings.json').champ.minutes === 20 && file('trivia/settings.json').setBy === 'jc@example.org', d);
+r = await call('GET', '/mymismo/trivia/ready'); d = J(r);
+ok('team: the app sees the championship Team HQ set (over projects.json)', d.champ && d.champ.quarter === '2027-Q2' && d.champ.minutes === 20, d);
+Date.now = realNow;
+console.log(`\n${passed} passed, ${failed} failed`); process.exit(failed ? 1 : 0);

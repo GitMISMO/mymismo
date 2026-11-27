@@ -105,3 +105,10 @@ Each email address still gets only 3 codes an hour and each code only its few tr
 1,500 an hour, below what one Outlook mailbox sends (30 a minute). Request 13's test for the old limit is updated in
 `test-mymismo13-updated-limits.mjs` (use it in place of `test-mymismo.mjs` once this patch is on).
 
+
+## The Board's Difficulty (added Nov 27, 2026)
+
+Jonna wants the Board to work like the game show: the value sets how hard the question is. This patch changes request
+15's board deal (`mm15PlayBoard`) so 200s are easy questions (when there are easy ones), 400s and 600s medium, and 800s
+and 1,000s hard. Request 15's test for the old mix is updated in `test-mymismo15-updated-board.mjs` (use it in place of
+`test-mymismo15.mjs` once this patch is on). Players never pick categories; only the Final Square shows its category.

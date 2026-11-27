@@ -1,5 +1,5 @@
 --- index.base17.mjs	2026-11-27 13:03:34.925262951 -0700
-+++ index.base18.mjs	2026-11-27 14:40:31.194272399 -0700
++++ index.base18.mjs	2026-11-27 14:49:40.398449762 -0700
 @@ -502,12 +502,32 @@
    console.warn(`GitHub allowance low: ${left} requests left${reset ? ' until ' + new Date(reset).toISOString() : ''}`);
  }
@@ -433,6 +433,15 @@
  /* Jonna, Nov 25-26, 2026: Hard is played on the Board; the monthly leaderboard and Head to Head are both the Board */
  const MM15_NET_MS = 1000, MM15_PLAY_SECS = 20, MM15_PLAY_STALE = 86_400_000;
  /* relay request 16 (Jonna, Nov 26, 2026): a 3-minute round clock on the Board, then the Final Square: the category,
+@@ -3213,7 +3580,7 @@
+  * the month's board (the month it was started) if it's their best. One board at a time per player, kept in
+  * trivia/plays.json; starting a new board scores an unfinished one first. The clock runs on the server. */
+ function mm15PlayBoard(qs, seen, finals) {
+-  const have = new Set(seen), pool = qs.filter(q => !q.champ), want = [[2, 3, 1], [2, 3, 1], [3, 2, 1], [3, 2, 1], [3, 2, 1]];
++  const have = new Set(seen), pool = qs.filter(q => !q.champ), want = [[1, 2, 3], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 2, 1]];   /* Jonna, Nov 27, 2026: 200 easy, up to 1,000 hard */
+   const cats = [...new Set(pool.map(q => q.cat))].filter(c => pool.filter(q => q.cat === c).length >= MM15_VALUES.length).slice(0, 6);
+   if (cats.length < 6) return null;
+   const used = new Set(), cells = {};
 @@ -3971,6 +4338,7 @@
      return respond(503, { error: 'CONFIG_UNAVAILABLE', message: 'Saving is briefly unavailable. Nothing was written — try again in a minute.' });
    }

@@ -1046,6 +1046,119 @@ svg.wg-go{width:18px; height:18px; color:var(--ink-3)}
 .tv-hex polygon{fill:#0d314c; stroke:#74bfeb; stroke-width:3; filter:drop-shadow(0 0 10px rgba(116,191,235,.7))}
 .tv-hex{transform-origin:150px 150px; animation:tv-bob 3.2s ease-in-out infinite}
 .tv-hex text{font-family:var(--cond); font-weight:800; font-size:60px; fill:#fff}
+/* ---- MISMO Trivia, Nov 27, 2026: two doors (Solo, Head to Head), the Board card, Warm Up, the lobby and the stage ---- */
+.hp{position:absolute; left:-9999px; width:1px; height:1px; opacity:0}
+.tvm{display:grid; grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr); align-items:stretch; gap:6px; margin:2px 0 14px}
+.tvm-b{--mc:#74bfeb; position:relative; overflow:hidden; display:grid; justify-items:center; align-content:start; gap:2px; padding:12px 8px 14px; border-radius:16px; border:2px solid rgba(116,191,235,.18); background:radial-gradient(120% 90% at 50% 0%, #17507a 0%, #0a2638 55%, #06151f 100%); color:#fff; font:inherit; cursor:pointer; transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, filter .2s ease; filter:saturate(.55) brightness(.82)}
+.tvm-b.h2h{--mc:#eb6834}
+.tvm-b b{font-family:var(--cond); font-size:22px; letter-spacing:.01em; line-height:1.1}
+.tvm-b span{font-size:12px; color:rgba(255,255,255,.72); line-height:1.3; text-align:center}
+.tvm-art{width:100%; max-width:120px; height:auto; margin-bottom:2px}
+.tvm-art circle, .tvm-art path{fill:rgba(255,255,255,.88)}
+.tvm-art .beam{fill:url(#none); fill:color-mix(in srgb, var(--mc) 30%, transparent)}
+.tvm-art .bolt{fill:#f2c14e}
+.tvm-b.on{filter:none; border-color:var(--mc); transform:translateY(-2px); box-shadow:0 0 0 4px color-mix(in srgb, var(--mc) 18%, transparent), 0 14px 30px -14px var(--mc)}
+.tvm-b.on::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.16) 46%, transparent 62%); background-size:250% 100%; animation:tvm-sheen 3.6s ease-in-out infinite}
+.tvm-b.on .tvm-art .beam{animation:tvm-beam 2.8s ease-in-out infinite; transform-origin:60px 0}
+@keyframes tvm-sheen{0%{background-position:120% 0}60%,100%{background-position:-60% 0}}
+@keyframes tvm-beam{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.tvm-vs{align-self:center; width:30px; height:30px; display:grid; place-items:center; border-radius:50%; background:var(--surface); border:1px solid var(--border); color:var(--ink-2); font-size:11.5px; font-weight:800}
+.tvb{display:grid; gap:14px; border-radius:16px; padding:14px; color:#fff; background:radial-gradient(130% 110% at 50% 0%, #14486e 0%, #071d2e 65%, #040f18 100%)}
+.tvb-art{display:grid; grid-template-columns:repeat(6, minmax(0, 1fr)); gap:4px; padding:8px; border-radius:10px; background:#05101a; box-shadow:inset 0 0 0 1px rgba(116,191,235,.2)}
+.tvb-col{display:grid; gap:4px}
+.tvb-col i{height:10px; border-radius:3px; background:#1d5c8c}
+.tvb-col em{display:grid; place-items:center; height:22px; border-radius:4px; background:#103c5e; color:#f2c14e; font-style:normal; font-family:var(--cond); font-weight:800; font-size:clamp(9px, 2.6vw, 12px); animation:tvb-lit 4.2s ease-in-out infinite; animation-delay:calc(var(--k) * .12s + var(--r) * .18s)}
+@keyframes tvb-lit{0%,70%,100%{background:#103c5e; box-shadow:none}78%{background:#1f6fae; box-shadow:0 0 10px rgba(116,191,235,.7)}}
+.tvb-txt{display:grid; gap:8px; justify-items:start}
+.tvb-txt > b{font-family:var(--cond); font-size:26px; line-height:1}
+.tvb-txt p{margin:0; color:rgba(255,255,255,.8); font-size:14px; line-height:1.45}
+.tvb-chip{display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:6px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:rgba(255,255,255,.82); font-size:12.5px; font-weight:700}
+.tvb-chip svg{width:14px; height:14px; flex:none}
+.tvb-chip.live{background:rgba(27,175,122,.16); border-color:rgba(27,175,122,.55); color:#7fe0b8}
+.tv-go.big{width:100%; justify-content:center; margin-top:4px; font-size:17px; padding:15px 22px}
+.tvb-lock{display:inline-flex; align-items:center; gap:6px; font-style:normal; font-weight:700; color:rgba(255,255,255,.6)} .tvb-lock svg{width:14px; height:14px}
+.tvw{margin:14px 0 6px}
+.tvw-h{font-size:12.5px; font-weight:800; color:var(--ink-2); margin:0 0 8px}
+.tvw-row{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px}
+.tvw-b{display:grid; gap:3px; align-content:start; text-align:left; padding:10px 10px 11px; border-radius:12px; border:1px solid var(--border); border-left:4px solid var(--lc); background:var(--surface); color:var(--ink); font:inherit; cursor:pointer}
+.tvw-b b{font-size:14px} .tvw-b span{font-size:11.5px; color:var(--ink-2); line-height:1.3}
+.tvw-b:active{transform:translateY(1px)}
+/* Head to Head */
+.h2{display:grid; gap:10px}
+.h2-load{display:flex; gap:8px; align-items:center; justify-content:center; padding:24px; color:var(--ink-2)} .h2-load svg{width:18px; height:18px}
+.h2-wait{display:grid; justify-items:center; text-align:center; gap:8px; padding:18px 16px 20px; border-radius:16px; color:#fff; background:radial-gradient(120% 120% at 50% 0%, #4a2412 0%, #1a0d08 70%)}
+.h2-wait b{font-family:var(--cond); font-size:24px} .h2-wait p{margin:0; color:rgba(255,255,255,.8); font-size:14px; line-height:1.45; max-width:34ch}
+.h2-vs{display:flex; align-items:center; gap:10px}
+.h2-vs span{width:52px; height:52px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; background:#0d314c; border:2px solid #74bfeb}
+.h2-vs span:last-child{border-color:#eb6834; background:#3a1a0c}
+.h2-vs i{font-style:normal; font-family:var(--cond); font-weight:800; font-size:26px; color:#f2c14e; text-shadow:0 0 12px rgba(242,193,78,.6)}
+.h2-me{display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; padding:12px 14px; border-radius:14px; color:#fff; background:linear-gradient(120deg, #0d314c, #3a1a0c)}
+.h2-me b{display:block; font-size:16px} .h2-me div > span{font-size:12px; color:rgba(255,255,255,.7)}
+.h2-rec{display:flex; gap:10px} .h2-rec span{display:grid; justify-items:center; font-size:11px; color:rgba(255,255,255,.7)} .h2-rec b{font-family:var(--cond); font-size:22px; color:#fff}
+.h2-av{width:34px; height:34px; border-radius:50%; display:grid; place-items:center; flex:none; background:#eb6834; color:#fff; font-weight:800}
+.h2-av.big{width:44px; height:44px; font-size:18px; background:#74bfeb; color:#06202f}
+.h2-start{display:grid; justify-items:center; gap:6px; text-align:center} .h2-start .tv-go{margin:0; width:100%; justify-content:center; background:linear-gradient(90deg, #f2a04e, #eb6834)} .h2-start span{font-size:12.5px; color:var(--ink-2)}
+.h2-h{font-size:13px; font-weight:800; color:var(--ink-2); margin:8px 0 0}
+.h2-g, .h2-c{display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:10px; align-items:center; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border)}
+.h2-g b, .h2-c b{display:block; font-size:14.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.h2-g i{display:block; font-style:normal; font-size:12px; color:var(--ink-2)}
+.h2-g.your-turn, .h2-g.playing{border-color:#eb6834; box-shadow:0 6px 18px -12px #eb6834}
+.h2-c.ask{border-color:#74bfeb} .h2-note{grid-column:2; font-size:12px; color:var(--ink-2); margin-top:-6px}
+.h2-c.ask{grid-template-columns:auto minmax(0, 1fr) auto} .h2-c.ask .h2-acts{grid-row:1 / span 2; grid-column:3}
+.h2-acts{display:flex; gap:6px}
+.h2-btn{border:1px solid var(--border-strong); background:var(--surface-2); color:var(--ink); border-radius:8px; padding:7px 12px; font:inherit; font-size:13px; font-weight:700; cursor:pointer}
+.h2-btn.go{background:#eb6834; border-color:#eb6834; color:#fff}
+.h2-st{font-size:12px; font-weight:700; color:var(--ink-3)}
+.h2-res{font-weight:800; font-size:12.5px; padding:4px 9px; border-radius:6px} .h2-res.won{background:rgba(27,175,122,.15); color:var(--good)} .h2-res.lost{background:rgba(179,55,44,.12); color:var(--bad)} .h2-res.tie{background:var(--surface-3); color:var(--ink-2)}
+.h2-empty, .h2-sent{margin:0; font-size:13px; color:var(--ink-2)}
+.h2-add{display:grid; gap:8px} .h2-add input{width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); font:inherit}
+.h2-found{display:grid; gap:8px}
+/* the leaderboard stage */
+.lb{position:relative; overflow:hidden; isolation:isolate; margin-top:18px; border-radius:18px; padding:0 14px 16px; color:#fff; background:radial-gradient(120% 80% at 50% 0%, #1a4f7a 0%, #0a2235 50%, #050d15 100%); box-shadow:inset 0 0 0 1px rgba(242,193,78,.25)}
+.lb-bulbs{display:flex; justify-content:space-between; padding:9px 4px 0}
+.lb-bulbs i{width:7px; height:7px; border-radius:50%; background:#f2c14e; box-shadow:0 0 6px #f2c14e; animation:lb-chase 1.6s linear infinite; animation-delay:calc(var(--b) * -.07s)}
+@keyframes lb-chase{0%,100%{opacity:1}50%{opacity:.25; box-shadow:none}}
+.lb-head{display:grid; justify-items:center; gap:3px; text-align:center; margin:12px 0 4px}
+.lb-mo{font-size:12px; font-weight:800; color:#f2c14e; letter-spacing:.04em}
+.lb-head > b{font-family:var(--cond); font-size:clamp(26px, 7.5vw, 34px); line-height:1; background:linear-gradient(180deg, #fff 30%, #a9d8f3); -webkit-background-clip:text; background-clip:text; color:transparent}
+.lb-reset{display:inline-flex; align-items:center; gap:5px; font-size:12px; color:rgba(255,255,255,.7)} .lb-reset svg{width:13px; height:13px}
+.lb-stage{position:relative; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:end; gap:8px; padding-top:30px; margin:0 -2px}
+.lb-beam{position:absolute; top:-40px; width:46%; height:260px; background:linear-gradient(180deg, rgba(169,216,243,.28), transparent 75%); clip-path:polygon(46% 0, 54% 0, 100% 100%, 0 100%); pointer-events:none; z-index:-1; animation:lb-sweep 7s ease-in-out infinite; transform-origin:50% 0}
+.lb-beam.l{left:2%} .lb-beam.r{right:2%; animation-delay:-3.5s}
+@keyframes lb-sweep{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+.lb-step{position:relative; display:grid; justify-items:center; gap:4px; text-align:center; min-width:0}
+.lb-crown{width:34px; height:24px; margin-bottom:-4px; filter:drop-shadow(0 0 8px rgba(242,193,78,.8)); animation:lb-float 2.6s ease-in-out infinite} .lb-crown path{fill:#f2c14e}
+@keyframes lb-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.lb-disc{width:52px; height:52px; border-radius:50%; display:grid; place-items:center; font-family:var(--cond); font-weight:800; font-size:22px; color:#06202f; background:radial-gradient(circle at 35% 30%, #fff, var(--m) 60%); box-shadow:0 0 0 3px rgba(255,255,255,.12), 0 0 18px color-mix(in srgb, var(--m) 70%, transparent)}
+.lb-step.s1 .lb-disc{width:66px; height:66px; font-size:28px}
+.lb-name{font-size:13px; line-height:1.2; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.lb-pts{font-family:var(--cond); font-weight:800; font-size:17px; color:var(--m)}
+.lb-plinth{width:100%; display:grid; place-items:center; border-radius:10px 10px 4px 4px; background:linear-gradient(180deg, color-mix(in srgb, var(--m) 85%, #fff), color-mix(in srgb, var(--m) 40%, #06202f)); box-shadow:inset 0 2px 0 rgba(255,255,255,.5), 0 10px 24px -10px var(--m)}
+.lb-plinth em{font-style:normal; font-family:var(--cond); font-weight:800; font-size:30px; color:#06202f; text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.lb-step.s1 .lb-plinth{height:96px} .lb-step.s2 .lb-plinth{height:70px} .lb-step.s3 .lb-plinth{height:52px}
+.lb.pre .lb-disc{background:rgba(255,255,255,.08); color:rgba(255,255,255,.75); border:2px dashed var(--m); box-shadow:none}
+.lb.pre .lb-name{color:rgba(255,255,255,.65)}
+.lb-list{list-style:none; margin:12px 0 0; padding:0; display:grid; gap:6px}
+.lb-list li{display:grid; grid-template-columns:30px minmax(0, 1fr) auto auto; gap:10px; align-items:center; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.06)}
+.lb-list li.you{background:rgba(116,191,235,.18); box-shadow:inset 0 0 0 1px #74bfeb}
+.lb-rk{width:26px; height:26px; display:grid; place-items:center; border-radius:6px; background:rgba(242,193,78,.16); color:#f2c14e; font-weight:800; font-size:13px}
+.lb-list b{font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap} .lb-list i{font-style:normal; font-size:12px; color:rgba(255,255,255,.6)} .lb-sc{font-family:var(--cond); font-weight:800; font-size:17px}
+.lb-you{display:flex; gap:8px; align-items:center; margin-top:12px; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,.07); font-size:13.5px; line-height:1.4} .lb-you svg{width:18px; height:18px; flex:none; color:#f2c14e} .lb-you b{color:#f2c14e}
+.tvs-in{display:grid; gap:14px} .tvs-in form{display:grid; gap:10px} .tvs-in .tv-go{justify-content:center; width:100%; margin-top:4px}
+.tvs-in-top{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; padding:14px; border-radius:14px; color:#fff; background:radial-gradient(120% 120% at 50% 0%, #14486e, #071d2e)} .tvs-in-top svg{width:30px; height:30px; color:#f2c14e} .tvs-in-top b{display:block; font-family:var(--cond); font-size:20px} .tvs-in-top span{font-size:13px; color:rgba(255,255,255,.8)}
+.tvs-two{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.tb-c.wait{animation:tb-wait .7s ease-in-out infinite alternate} @keyframes tb-wait{to{filter:brightness(1.6)}}
+.tg-srv{color:rgba(255,255,255,.85); font-weight:600}
+@media (prefers-reduced-motion: reduce){ .tvm-b.on::after, .tvm-art .beam, .tvb-col em, .lb-bulbs i, .lb-beam, .lb-crown, .tb-c.wait{animation:none !important} }
+.tv-bulb{fill:#f2c14e; animation:tv-chase 1.8s linear infinite; animation-delay:calc(var(--b) * -.06s)}
+@keyframes tv-chase{0%,100%{opacity:1}50%{opacity:.2}}
+.tv-mini{opacity:.9} .tv-mini rect{fill:#103c5e; animation:tv-wave 3.6s ease-in-out infinite; animation-delay:calc(var(--c) * .15s + var(--r) * .2s)}
+@keyframes tv-wave{0%,60%,100%{fill:#103c5e}72%{fill:#2a7fc0}}
+.tv-hex.big .hx{fill:url(#tvhx); stroke:#f2c14e; stroke-width:3.5; filter:drop-shadow(0 0 14px rgba(242,193,78,.55))}
+.tv-hex.big text{font-family:var(--cond); font-weight:800; font-size:78px; filter:drop-shadow(0 3px 0 #6b4700)}
+.tv-sheen{fill:rgba(255,255,255,.22); transform-box:fill-box; transform-origin:center; animation:tv-sheen 4s ease-in-out infinite}
+@keyframes tv-sheen{0%,55%{transform:translateX(-80px) rotate(20deg)}85%,100%{transform:translateX(200px) rotate(20deg)}}
+@media (prefers-reduced-motion: reduce){ .tv-bulb, .tv-mini rect, .tv-sheen{animation:none !important} }
 @keyframes tv-spin{to{transform:rotate(360deg)}}
 @keyframes tv-pulse{0%,100%{transform:scale(1); opacity:.22}50%{transform:scale(1.45); opacity:.05}}
 @keyframes tv-breathe{0%,100%{opacity:.75}50%{opacity:1}}
@@ -5068,49 +5181,210 @@ function triviaOrbit(big) {
   }).join('');
   return '<svg class="tv-orbit' + (big ? ' big' : '') + '" viewBox="0 0 300 300" aria-hidden="true"><defs><radialGradient id="tvg' + (big ? 'b' : 's') + '"><stop offset="0" stop-color="#74bfeb" stop-opacity=".55"/><stop offset="1" stop-color="#74bfeb" stop-opacity="0"/></radialGradient></defs>' +
     '<circle cx="150" cy="150" r="140" fill="url(#tvg' + (big ? 'b' : 's') + ')" class="tv-glow"/><circle cx="150" cy="150" r="104" class="tv-ring"/><circle cx="150" cy="150" r="66" class="tv-ring in"/>' +
+    (big ? tvMarquee() : '') +
     '<g class="tv-spin">' + orbs + '</g>' +
-    '<g class="tv-hex"><polygon points="150,104 190,127 190,173 150,196 110,173 110,127"/><text x="150" y="168" text-anchor="middle">?</text></g></svg>';
+    (big ? '<g class="tv-hex big"><defs><linearGradient id="tvhx" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d5c8c"/><stop offset="1" stop-color="#071d2e"/></linearGradient><linearGradient id="tvq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4cf"/><stop offset=".55" stop-color="#f2c14e"/><stop offset="1" stop-color="#c98500"/></linearGradient><clipPath id="tvhc"><polygon points="150,98 196,124.5 196,175.5 150,202 104,175.5 104,124.5"/></clipPath></defs>' +
+      '<polygon class="hx" points="150,98 196,124.5 196,175.5 150,202 104,175.5 104,124.5"/><g clip-path="url(#tvhc)"><rect class="tv-sheen" x="60" y="90" width="40" height="130" transform="rotate(20 150 150)"/></g>' +
+      '<text x="150" y="172" text-anchor="middle" fill="url(#tvq)">?</text></g></svg>'
+    : '<g class="tv-hex"><polygon points="150,104 190,127 190,173 150,196 110,173 110,127"/><text x="150" y="168" text-anchor="middle">?</text></g></svg>');
 }
-function triviaSheet() {
-  var test = triviaTester(), ts = load('trivia-test', { best: 0, games: 0 });
-  var h = '<section class="tv-hero">' + triviaOrbit(true) + '<div class="tv-hin"><span class="tv-soon">Beta</span><h2>MISMO Trivia</h2><p>How well do you know MISMO? Test yourself, then take on your colleagues.</p>' +
-    '<span class="tv-tnote">' + (test ? 'You\'re one of the beta testers. Questions are still being added. Pick yours below.' : 'Being tested by a small group before it opens to everyone.') + '</span>' + '</div></section><div class="sheet-pad tv">';
-  h += test ? '<div class="d-h">Pick Your Questions</div><div class="tv-cats pick" role="radiogroup" aria-label="Category">' + [['', 'Mixed', '#74bfeb', 'A bit of everything']].concat(TRIVIA_CATS).map(function (c, i) {
-      var on = load('trivia-cat', '') === c[0];
-      return '<button type="button" class="tv-cat' + (c[0] ? '' : ' mixed') + (on ? ' on' : '') + '" data-tv-cat="' + esc(c[0]) + '" role="radio" aria-checked="' + on + '" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0] || c[1]) + '</b><span>' + esc(c[0] ? c[1] : c[3]) + '</span>' + icon('i-check') + '</button>';
+/* ---------- MISMO Trivia on MISMO's server (relay requests 15 and 16) ----------
+   Jonna, Nov 27, 2026: Solo and Head to Head open to MISMO staff and the people invited to test MyMISMO. Players sign in
+   to Trivia with an emailed code (a Trivia name: first name and last initial on the leaderboard). The server deals each
+   Board and checks each answer, so the leaderboard can be trusted. Until the server is ready, Solo plays the Board on
+   the phone for practice and Head to Head says it's on its way. */
+var TVS = { ready: null, at: 0 };
+function tvsPlayer() { var p = load('trivia-player', null); return p && p.token && Date.parse(p.exp) > Date.now() ? p : null; }
+function tvsApi(method, path, body) {
+  var p = tvsPlayer(), h = { 'Content-Type': 'application/json' }; if (p) h.Authorization = 'Bearer ' + p.token;
+  return fetch(RELAY + '/mymismo/trivia/' + path, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined })
+    .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (r.status === 401 && p) drop('trivia-player'); return { ok: r.ok, status: r.status, j: j }; }); })
+    .catch(function () { return { ok: false, status: 0, j: { message: navigator.onLine === false ? 'You\'re offline. This needs a connection.' : 'MISMO\'s server didn\'t answer. Try again in a minute.' } }; });
+}
+function tvsReady(cb) {
+  if (TVS.ready !== null && Date.now() - TVS.at < 60000) return cb(TVS.ready);
+  tvsApi('GET', 'ready').then(function (r) { TVS.ready = r.ok && r.j && r.j.ok ? r.j : false; TVS.at = Date.now(); cb(TVS.ready); });
+}
+function tvsSignIn(done) {
+  var started = Date.now(), em = (A && A.me && A.me.email) || '';
+  var el = openSheet('Sign In to Play', '<div class="sheet-pad tvs-in"><div class="tvs-in-top">' + icon('i-star') + '<div><b>Play for Real</b><span>Your scores go on the leaderboard and Head to Head games. We email you a code; nothing else is sent.</span></div></div>' +
+    '<form data-tvs-a><div class="field"><label for="tvs-e">Email</label><input id="tvs-e" type="email" autocomplete="email" required maxlength="254" value="' + esc(em) + '"></div>' +
+    '<div class="tvs-two"><div class="field"><label for="tvs-f">First Name</label><input id="tvs-f" autocomplete="given-name" required maxlength="40"></div><div class="field"><label for="tvs-l">Last Name</label><input id="tvs-l" autocomplete="family-name" required maxlength="40"></div></div>' +
+    '<input type="text" id="tvs-w" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true"><p class="sc-fine">The leaderboard shows your first name and last initial.</p>' +
+    '<button type="submit" class="tv-go">' + icon('i-mail') + 'Email Me a Code</button></form>' +
+    '<form data-tvs-b hidden><div class="field"><label for="tvs-c">The 6-Digit Code</label><input id="tvs-c" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>' +
+    '<button type="submit" class="tv-go">' + icon('i-check') + 'Sign In</button><button type="button" class="linkbtn" data-tvs-back>Use a different email</button></form></div>', { plain: true });
+  var fa = el.querySelector('[data-tvs-a]'), fb = el.querySelector('[data-tvs-b]');
+  fa.addEventListener('submit', function (e) {
+    e.preventDefault(); var b = fa.querySelector('button'); b.disabled = true;
+    var wait = Math.max(0, 3200 - (Date.now() - started));
+    setTimeout(function () {
+      tvsApi('POST', 'code', { email: el.querySelector('#tvs-e').value.trim(), startedAt: started, website: el.querySelector('#tvs-w').value }).then(function (r) {
+        b.disabled = false; if (!r.ok) { mxToast(r.j.message || 'That didn\'t go through. Try again.'); return; }
+        fa.hidden = true; fb.hidden = false; el.querySelector('#tvs-c').focus(); mxToast('Check your email for the code');
+      });
+    }, wait);
+  });
+  fb.addEventListener('submit', function (e) {
+    e.preventDefault(); var b = fb.querySelector('button'); b.disabled = true;
+    tvsApi('POST', 'verify', { email: el.querySelector('#tvs-e').value.trim(), code: el.querySelector('#tvs-c').value.trim(), first: el.querySelector('#tvs-f').value.trim(), last: el.querySelector('#tvs-l').value.trim() }).then(function (r) {
+      b.disabled = false;
+      if (!r.ok || !r.j.token) { mxToast((r.j.problems && r.j.problems[0]) || r.j.message || 'That code didn\'t work. Check it and try again.'); return; }
+      save('trivia-player', { token: r.j.token, me: r.j.me, exp: r.j.expiresAt }); closeSheet(); mxToast('Signed in as ' + ((r.j.me && r.j.me.name) || 'a player')); if (done) done();
+    });
+  });
+  el.querySelector('[data-tvs-back]').addEventListener('click', function () { fb.hidden = true; fa.hidden = false; });
+}
+/* start or pick up a Board on the server; game: a Head to Head game id */
+function tvsBoard(view, game, vs, again) { triviaBoard(null, { view: view, game: game || '', vs: vs || '', again: again }); }
+function tvsSolo() {
+  if (!tvsPlayer()) { tvsSignIn(tvsSolo); return; }
+  tvsApi('POST', 'play/start', {}).then(function (r) { if (!r.ok) { mxToast(r.j.message || 'The Board didn\'t load. Try again.'); return; } tvsBoard(r.j, '', '', tvsSolo); });
+}
+/* after a Head to Head board: back to the lobby that's already open under it (or open it) */
+function tvsBackToLobby() {
+  var t = topSheet();
+  if (t && t.getAttribute('data-key') === 'trivia') { var b = t.querySelector('[data-tvm="h2h"]'); if (b) b.click(); else tvsLobby(t.querySelector('#tv-h2h')); var lb = t.querySelector('#tv-lb'); if (lb) tvsFillBoard(lb, load('trivia-test', {})); }
+  else triviaSheet('h2h');
+}
+function tvsH2HGo(path, body) {
+  tvsApi('POST', path, body || {}).then(function (r) {
+    if (!r.ok) { mxToast(r.j.message || 'That didn\'t go through. Try again.'); return; }
+    tvsBoard(r.j, r.j.game, r.j.opponent, tvsBackToLobby);
+  });
+}
+function tvsResume(id, vs) {
+  tvsApi('GET', 'play?game=' + encodeURIComponent(id)).then(function (r) {
+    if (!r.ok || !r.j.active) { mxToast('That game finished.'); return; }
+    tvsBoard(r.j, id, vs, tvsBackToLobby);
+  });
+}
+/* the Head to Head lobby */
+function tvsLobby(box) {
+  box.innerHTML = '<div class="h2-load">' + icon('i-people') + 'Getting your games…</div>';
+  tvsReady(function (ready) {
+    if (!ready) { box.innerHTML = '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Head to Head Is Almost Here</b><p>It runs on MISMO\'s server, which is being set up now. Once it\'s on, it opens right here. Until then, play Solo to sharpen up.</p></div>'; return; }
+    if (!tvsPlayer()) { box.innerHTML = '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Take On Your Colleagues</b><p>Sign in to Trivia once, add players as Trivia contacts, and challenge them. You both play the same Board; highest score wins.</p><button type="button" class="tv-go" data-tvs-signin>' + icon('i-user') + 'Sign In to Play</button></div>'; return; }
+    tvsApi('GET', 'h2h').then(function (r) {
+      if (!r.ok) { box.innerHTML = '<div class="note">' + esc(r.j.message || 'Head to Head didn\'t load. Try again in a minute.') + '</div>'; return; }
+      var d = r.j, me = (tvsPlayer().me || {}).name || 'You';
+      var row = function (g) {
+        var act = g.state === 'your-turn' ? '<button type="button" class="h2-btn go" data-h2-play="' + esc(g.id) + '" data-vs="' + esc(g.opponent || '') + '">Play</button><button type="button" class="h2-btn" data-h2-decline="' + esc(g.id) + '">Pass</button>'
+          : g.state === 'playing' ? '<button type="button" class="h2-btn go" data-h2-resume="' + esc(g.id) + '" data-vs="' + esc(g.opponent || '') + '">Keep Playing</button>'
+          : g.state === 'waiting' ? '<span class="h2-st">Their turn</span>'
+          : g.result ? '<span class="h2-res ' + g.result + '">' + (g.result === 'won' ? 'Won' : g.result === 'lost' ? 'Lost' : 'Tie') + '</span>' : '<span class="h2-st">' + esc(g.state) + '</span>';
+        var sc = g.result ? '<i>' + (g.you ? g.you.total.toLocaleString() : '0') + ' to ' + (g.them ? g.them.total.toLocaleString() : '0') + '</i>' : g.you ? '<i>Your score: ' + g.you.total.toLocaleString() + '</i>' : '<i>' + (g.mode === 'open' ? 'Anyone can take this one' : 'New board') + '</i>';
+        return '<div class="h2-g ' + esc(g.state) + '"><span class="h2-av">' + esc((g.opponent || '?').slice(0, 1)) + '</span><div><b>' + esc(g.opponent || 'Waiting for an opponent') + '</b>' + sc + '</div><div class="h2-acts">' + act + '</div></div>';
+      };
+      var turn = d.games.filter(function (g) { return g.state === 'your-turn' || g.state === 'playing'; }), wait = d.games.filter(function (g) { return g.state === 'waiting'; }), done = d.games.filter(function (g) { return g.result; }).slice(0, 8);
+      box.innerHTML = '<div class="h2-me"><span class="h2-av big">' + esc(me.slice(0, 1)) + '</span><div><b>' + esc(me) + '</b><span>Head to Head record</span></div><div class="h2-rec"><span><b>' + d.tally.won + '</b>Won</span><span><b>' + d.tally.lost + '</b>Lost</span><span><b>' + d.tally.tied + '</b>Tied</span></div></div>' +
+        '<div class="h2-start"><button type="button" class="tv-go" data-h2-find>' + icon('i-play') + 'Find Me an Opponent</button><span>' + (d.openGames ? d.openGames + ' player' + (d.openGames === 1 ? ' is' : 's are') + ' waiting for one now' : 'You play first; the next player who asks gets your Board') + '</span></div>' +
+        (turn.length ? '<h3 class="h2-h">Your Turn</h3>' + turn.map(row).join('') : '') +
+        (wait.length ? '<h3 class="h2-h">Waiting on Them</h3>' + wait.map(row).join('') : '') +
+        '<h3 class="h2-h">Trivia Contacts</h3>' +
+        (d.requests.length ? d.requests.map(function (c) { return '<div class="h2-c ask"><span class="h2-av">' + esc(c.name.slice(0, 1)) + '</span><b>' + esc(c.name) + '</b><span class="h2-note">wants to play</span><div class="h2-acts"><button type="button" class="h2-btn go" data-h2-accept="' + esc(c.id) + '">Accept</button><button type="button" class="h2-btn" data-h2-no="' + esc(c.id) + '">No Thanks</button></div></div>'; }).join('') : '') +
+        (d.contacts.length ? d.contacts.map(function (c) { return '<div class="h2-c"><span class="h2-av">' + esc(c.name.slice(0, 1)) + '</span><b>' + esc(c.name) + '</b><div class="h2-acts"><button type="button" class="h2-btn go" data-h2-challenge="' + esc(c.id) + '">Challenge</button></div></div>'; }).join('') : '<p class="h2-empty">Add the people you want to play. Once they accept, challenge them any time.</p>') +
+        (d.sent.length ? '<p class="h2-sent">Waiting for ' + d.sent.map(function (c) { return esc(c.name); }).join(', ') + ' to accept.</p>' : '') +
+        '<div class="h2-add"><input type="search" placeholder="Find a player by name" data-h2-q aria-label="Find a player by name"><div class="h2-found"></div></div>' +
+        (done.length ? '<h3 class="h2-h">Finished</h3>' + done.map(row).join('') : '');
+    });
+  });
+}
+/* the leaderboard: a game-show stage with the month's top three on the podium and the rest of the top 10 below */
+function tvsBoardMarkup(rows, me, live, ts) {
+  var now = nowAt(), d = new Date(), next = new Date(d.getFullYear(), d.getMonth() + 1, 1), days = Math.max(1, Math.ceil((next - d) / 86400000));
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var top = [rows[1], rows[0], rows[2]], cls = ['s2', 's1', 's3'], medal = ['#c9d2db', '#f2c14e', '#d08a5a'];
+  var bulbs = ''; for (var i = 0; i < 22; i++) bulbs += '<i style="--b:' + i + '"></i>';
+  return '<section class="lb' + (live ? '' : ' pre') + '"><div class="lb-bulbs" aria-hidden="true">' + bulbs + '</div>' +
+    '<div class="lb-head"><span class="lb-mo">' + MONTHS[d.getMonth()] + ' Leaderboard</span><b>Who Rules the Board</b><span class="lb-reset">' + icon('i-clock') + 'Resets in ' + days + ' day' + (days === 1 ? '' : 's') + '</span></div>' +
+    '<div class="lb-stage"><span class="lb-beam l" aria-hidden="true"></span><span class="lb-beam r" aria-hidden="true"></span>' +
+    top.map(function (p, k) {
+      var n = [2, 1, 3][k];
+      return '<div class="lb-step ' + cls[k] + '" style="--m:' + medal[k] + '">' + (n === 1 ? '<svg class="lb-crown" viewBox="0 0 48 32" aria-hidden="true"><path d="M4 28 L8 8 L18 18 L24 4 L30 18 L40 8 L44 28 Z"/></svg>' : '') +
+        '<span class="lb-disc">' + (p ? esc(p.name.slice(0, 1)) : '?') + '</span><b class="lb-name">' + (p ? esc(p.name) : live ? 'Open Spot' : 'Could Be You') + '</b><span class="lb-pts">' + (p ? p.score.toLocaleString() : '&mdash;') + '</span>' +
+        '<span class="lb-plinth"><em>' + n + '</em></span></div>';
     }).join('') + '</div>' +
-    '<div class="tv-playbox"><div class="tv-pick-h">Difficulty</div><div class="tv-levels" role="radiogroup" aria-label="Difficulty">' + TV_LEVELS.map(function (l, k) { return '<button type="button" class="tv-lv' + (k === load('trivia-level', 1) ? ' on' : '') + '" data-tv-level="' + k + '" role="radio" aria-checked="' + (k === load('trivia-level', 1)) + '" style="--lc:' + l.c + '"><b>' + l.name + '</b><span>' + (l.study ? 'No clock' : l.board ? 'The Board' : l.secs + ' sec') + '</span><em>' + (l.study ? 'Learn' : l.board ? '6 &times; 5' : l.mult + '&times;') + '</em></button>'; }).join('') + '</div>' +
-    '<button type="button" class="tv-go" data-tv-play>' + icon('i-play') + 'Play a Beta Round</button><span class="tv-tnote" id="tv-lbnote"></span></div>' :
-    '<div class="d-h">Categories</div><div class="tv-cats">' + TRIVIA_CATS.map(function (c, i) { return '<div class="tv-cat" style="--oc:' + c[2] + ';--i:' + i + '"><i></i><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>'; }).join('') + '</div>';
-  h += '<div class="tv-modes">' +
-    '<div class="tv-mode" style="--mc:#74bfeb"><span class="tv-mi">' + icon('i-star') + '</span><b>Solo</b><span>Play on your own, keep score and beat your best.</span><em>' + icon('i-lock') + 'Opens Soon</em></div>' +
-    '<div class="tv-mode" style="--mc:#eb6834"><span class="tv-mi">' + icon('i-people') + '</span><b>Head to Head</b><span>Add players as Trivia contacts; once they accept, challenge them, or let MyMISMO find you an opponent. You both play the same Board, with no deadline; highest score wins.</span><em>' + icon('i-lock') + 'Opens Soon</em></div></div>';
-  h += '<div class="d-h">Leaderboard</div><div class="tv-board"><div class="tv-podium">' + [[2, '#c0c7cf', 'Second'], [1, '#e2b33c', 'First'], [3, '#c58a5b', 'Third']].map(function (p) {
-      return '<div class="tv-step s' + p[0] + '" style="--pc:' + p[1] + '"><span class="tv-av">?</span><span class="tv-ped"><b>' + p[0] + '</b></span></div>'; }).join('') +
-    '</div><div class="tv-facts"><span>' + icon('i-cal') + 'New Every Month</span><span>' + icon('i-star') + 'Your Best Board</span><span>' + icon('i-grid') + 'Hard, on the Board</span></div></div>';
-  var shortCat = ['Standards', 'Life of Loan', 'Glossary', 'MISMO', 'Certs', 'Mortgage'];
-  /* Jonna, Nov 25, 2026: the Quarterly Championship is off the page for now. */
-    '<div class="tc-board" aria-hidden="true">' + shortCat.map(function (c, k) { return '<div class="tc-col" style="--k:' + k + '"><span class="tc-cat">' + esc(c) + '</span>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<span class="tc-cell" style="--r:' + r + '">' + v + '</span>'; }).join('') + '</div>'; }).join('') + '</div>' +
-    '<div class="tv-facts"><span>' + icon('i-people') + '3 Monthly Champs</span><span>' + icon('i-clock') + 'One Timed Try</span><span>' + icon('i-cert') + 'Prize at the Summit</span></div><em>' + icon('i-lock') + 'Opens Soon</em></section>';
-  h += test && ts.games ? '<div class="d-h">Your Beta Rounds</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b || '&mdash;') + '</b><span>Best ' + (l.board ? 'Board' : l.name) + '</span></div>'; }).join('') + '</div><p class="tv-tplayed">' + ts.games + (ts.games === 1 ? ' round' : ' rounds') + ' played, most right ' + (ts.bestRight || 0) + ' of 10</p>' :
-    '<div class="d-h">Your Scores</div><div class="tv-stats"><div><b>&mdash;</b><span>Best Score</span></div><div><b>&mdash;</b><span>Games Played</span></div><div><b>&mdash;</b><span>Head to Head Wins</span></div></div>';
-  h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions. Trivia opens here once they\'re in.</div></div>';
-  var el = openSheet('MISMO Trivia', h, { plain: true });
-  function lbNote() {
-    var n = el.querySelector('#tv-lbnote'); if (!n) return;
-    var board = !!(TV_LEVELS[load('trivia-level', 1)] || {}).board, go = el.querySelector('[data-tv-play]'), cats = el.querySelector('.tv-cats.pick');
-    if (go) go.innerHTML = icon('i-play') + (board ? 'Play the Board' : 'Play a Beta Round');
-    if (cats) cats.classList.toggle('off', board);
-    n.innerHTML = board ? '<span class="tv-counts">' + icon('i-check') + 'Counts for the Leaderboard</span> Six categories, pick your squares, 200 to 1,000 points each.' : 'Easy and Medium: 10 questions against the clock, for practice.';
+    (rows.length > 3 ? '<ol class="lb-list" start="4">' + rows.slice(3, 10).map(function (p) { return '<li' + (me && me.rank === p.rank ? ' class="you"' : '') + '><span class="lb-rk">' + p.rank + '</span><b>' + esc(p.name) + '</b><i>' + p.right + ' right</i><span class="lb-sc">' + p.score.toLocaleString() + '</span></li>'; }).join('') + '</ol>' : '') +
+    (live ? (me ? '<div class="lb-you">' + icon('i-star') + '<span>You\'re <b>#' + me.rank + '</b> this month with <b>' + me.score.toLocaleString() + '</b></span></div>' : '<div class="lb-you">' + icon('i-play') + '<span>Play the Board to get on it. Your best Board this month counts.</span></div>')
+      : '<div class="lb-you">' + icon('i-info') + '<span>The leaderboard opens with MISMO\'s server.' + (ts && ts.byLevel && ts.byLevel.Hard ? ' Your practice best: <b>' + ts.byLevel.Hard.toLocaleString() + '</b>' : ' Play Solo now to practice.') + '</span></div>') +
+    '</section>';
+}
+function tvsFillBoard(box, ts) {
+  box.innerHTML = tvsBoardMarkup([], null, false, ts);
+  tvsReady(function (ready) {
+    if (!ready) return;
+    tvsApi('GET', 'board').then(function (r) { if (r.ok && r.j) box.innerHTML = tvsBoardMarkup(r.j.rows || [], r.j.me || null, true, ts); });
+  });
+}
+/* the big Trivia graphic (Jonna, Nov 27, 2026: plus it up): a ring of chasing marquee bulbs and a little Board behind
+   the question mark, its squares lighting up in a wave */
+function tvMarquee() {
+  var b = '', n = 30; for (var i = 0; i < n; i++) { var a = i / n * Math.PI * 2; b += '<circle class="tv-bulb" cx="' + (150 + 132 * Math.cos(a)).toFixed(1) + '" cy="' + (150 + 132 * Math.sin(a)).toFixed(1) + '" r="3.6" style="--b:' + i + '"/>'; }
+  var g = '<g class="tv-mini">'; for (var c = 0; c < 6; c++) for (var r = 0; r < 5; r++) g += '<rect x="' + (65.75 + c * 28.5).toFixed(2) + '" y="' + (95 + r * 22.5) + '" width="26" height="20" rx="3" style="--c:' + c + ';--r:' + r + '"/>';
+  return '<g class="tv-bulbs">' + b + '</g>' + g + '</g>';
+}
+function triviaSheet(tab0) {
+  var test = triviaTester(), ts = load('trivia-test', { best: 0, games: 0 }), tab = tab0 || load('trivia-tab', 'solo');
+  var h = '<section class="tv-hero">' + triviaOrbit(true) + '<div class="tv-hin"><span class="tv-soon">Beta</span><h2>MISMO Trivia</h2><p>How well do you know MISMO? Test yourself, then take on your colleagues.</p>' +
+    '<span class="tv-tnote">' + (test ? 'You\'re one of the beta testers. Questions are still being added.' : 'Being tested by a small group before it opens to everyone.') + '</span></div></section><div class="sheet-pad tv">';
+  /* Jonna, Nov 27, 2026: two ways to play, picked like a game show's big doors; no category picking (only the Final
+     Square shows one), and the Board's values set how hard each question is */
+  h += '<div class="tvm" role="tablist" aria-label="How to play">' +
+    '<button type="button" class="tvm-b solo' + (tab === 'solo' ? ' on' : '') + '" role="tab" aria-selected="' + (tab === 'solo') + '" data-tvm="solo"><svg class="tvm-art" viewBox="0 0 120 80" aria-hidden="true"><path class="beam" d="M60 0 L30 80 L90 80 Z"/><circle cx="60" cy="38" r="10"/><path d="M42 74 C44 56 76 56 78 74 Z"/></svg><b>Solo</b><span>The Board, for the leaderboard</span></button>' +
+    '<span class="tvm-vs" aria-hidden="true">or</span>' +
+    '<button type="button" class="tvm-b h2h' + (tab === 'h2h' ? ' on' : '') + '" role="tab" aria-selected="' + (tab === 'h2h') + '" data-tvm="h2h"><svg class="tvm-art" viewBox="0 0 120 80" aria-hidden="true"><circle cx="36" cy="36" r="9"/><path d="M20 72 C22 56 50 56 52 72 Z"/><circle cx="84" cy="36" r="9"/><path d="M68 72 C70 56 98 56 100 72 Z"/><path class="bolt" d="M62 18 L54 40 L62 40 L56 60 L70 34 L62 34 L68 18 Z"/></svg><b>Head to Head</b><span>Same Board, highest score wins</span></button></div>';
+  h += '<div class="tvm-p" data-panel="solo"' + (tab === 'solo' ? '' : ' hidden') + '>' +
+    '<div class="tvb"><div class="tvb-art" aria-hidden="true">' + [0, 1, 2, 3, 4, 5].map(function (k) { return '<span class="tvb-col" style="--k:' + k + '"><i></i>' + [200, 400, 600, 800, 1000].map(function (v, r) { return '<em style="--r:' + r + '">' + v + '</em>'; }).join('') + '</span>'; }).join('') + '</div>' +
+    '<div class="tvb-txt"><b>The Board</b><p>Six categories, thirty squares. A 200 is an easy one, a 1,000 is tough, and one square pays double. Three minutes on the clock, then the Final Square.</p>' +
+    '<span class="tvb-chip" id="tvb-chip">' + icon('i-clock') + 'Checking the leaderboard…</span>' +
+    (test ? '<button type="button" class="tv-go big" data-tv-board>' + icon('i-play') + 'Play the Board</button>' : '<em class="tvb-lock">' + icon('i-lock') + 'Opens Soon</em>') + '</div></div>' +
+    (test ? '<div class="tvw"><div class="tvw-h">Warm Up</div><div class="tvw-row">' + [[0, 'Easy Round', '10 questions, 25 seconds each'], [1, 'Quick Round', '10 questions, 20 seconds each'], [3, 'Study', 'No clock, learn as you go']].map(function (w) { var l = TV_LEVELS[w[0]]; return '<button type="button" class="tvw-b" data-tv-warm="' + w[0] + '" style="--lc:' + l.c + '"><b>' + w[1] + '</b><span>' + w[2] + '</span></button>'; }).join('') + '</div></div>' : '') +
+    '</div>';
+  h += '<div class="tvm-p" data-panel="h2h"' + (tab === 'h2h' ? '' : ' hidden') + '><div class="h2" id="tv-h2h">' + (test ? '' : '<div class="h2-wait"><div class="h2-vs" aria-hidden="true"><span>You</span><i>VS</i><span>?</span></div><b>Opens Soon</b><p>Add players as Trivia contacts, challenge them, or let MyMISMO find you an opponent. You both play the same Board; highest score wins.</p></div>') + '</div></div>';
+  h += '<div id="tv-lb"></div>';
+  h += test && ts.games ? '<div class="d-h">Your Practice</div><div class="tv-stats">' + TV_LEVELS.filter(function (l) { return !l.study; }).map(function (l) { var b = (ts.byLevel || {})[l.name]; return '<div style="border-top:4px solid ' + l.c + '"><b>' + (b ? b.toLocaleString() : '&mdash;') + '</b><span>Best ' + (l.board ? 'Board' : l.name === 'Easy' ? 'Easy Round' : 'Quick Round') + '</span></div>'; }).join('') + '</div>' : '';
+  h += '<div class="note" style="margin-top:14px">The questions are being written from the Bootcamp, AMSP and CMSP material, plus MISMO and mortgage questions.</div></div>';
+  var el = openSheet('MISMO Trivia', h, { plain: true, key: 'trivia' });
+  tvsFillBoard(el.querySelector('#tv-lb'), ts);
+  var chip = el.querySelector('#tvb-chip');
+  tvsReady(function (ready) {
+    if (!chip) return;
+    chip.innerHTML = ready ? (tvsPlayer() ? icon('i-check') + 'Counts for the leaderboard' : icon('i-user') + 'Sign in once, and it counts for the leaderboard') : icon('i-info') + 'Practice for now: the leaderboard opens with MISMO\'s server';
+    chip.classList.toggle('live', !!ready);
+  });
+  if (test && tab === 'h2h') tvsLobby(el.querySelector('#tv-h2h'));
+  function lookFor(q) {
+    var out = el.querySelector('.h2-found'); if (!out) return;
+    if (q.length < 2) { out.innerHTML = ''; return; }
+    tvsApi('GET', 'h2h/players?q=' + encodeURIComponent(q)).then(function (r) {
+      var l = (r.ok && r.j.players) || [];
+      out.innerHTML = l.length ? l.map(function (p) { return '<div class="h2-c"><span class="h2-av">' + esc(p.name.slice(0, 1)) + '</span><b>' + esc(p.name) + '</b><div class="h2-acts"><button type="button" class="h2-btn go" data-h2-add="' + esc(p.id) + '">Add</button></div></div>'; }).join('') : '<p class="h2-empty">No players by that name yet. They show up once they\'ve signed in to Trivia.</p>';
+    });
   }
-  lbNote();
+  var qT = null;
+  el.addEventListener('input', function (e) { if (e.target.matches('[data-h2-q]')) { clearTimeout(qT); var v = e.target.value.trim(); qT = setTimeout(function () { lookFor(v); }, 300); } });
+  function contact(id, action, msg) { tvsApi('POST', 'h2h/contact', { to: id, action: action }).then(function (r) { if (!r.ok) { mxToast(r.j.message || 'That didn\'t go through.'); return; } if (msg) mxToast(msg); tvsLobby(el.querySelector('#tv-h2h')); }); }
   el.addEventListener('click', function (e) {
-    var lv = e.target.closest('[data-tv-level]');
-    var cp = e.target.closest('[data-tv-cat]');
-    if (cp || lv) setTimeout(lbNote, 0);
-    if (cp) { save('trivia-cat', cp.getAttribute('data-tv-cat')); el.querySelectorAll('[data-tv-cat]').forEach(function (b) { var on = b === cp; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); return; }
-    if (lv) { save('trivia-level', +lv.getAttribute('data-tv-level')); el.querySelectorAll('[data-tv-level]').forEach(function (b) { var on = b === lv; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); return; }
-    if (e.target.closest('[data-tv-play]')) { TVSFX.wake(); triviaPlay(); }
+    var t;
+    if ((t = e.target.closest('[data-tvm]'))) {
+      var k = t.getAttribute('data-tvm'); save('trivia-tab', k); TVSFX.wake && TVSFX.wake();
+      el.querySelectorAll('[data-tvm]').forEach(function (b) { var on = b === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+      el.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== k; });
+      if (k === 'h2h' && test) tvsLobby(el.querySelector('#tv-h2h'));
+      return;
+    }
+    if (e.target.closest('[data-tv-board]')) { TVSFX.wake(); tvsReady(function (ready) { if (ready) tvsSolo(); else { save('trivia-level', 2); save('trivia-cat', ''); triviaPlay(); } }); return; }
+    if ((t = e.target.closest('[data-tv-warm]'))) { TVSFX.wake(); save('trivia-level', +t.getAttribute('data-tv-warm')); save('trivia-cat', ''); triviaPlay(); return; }
+    if (e.target.closest('[data-tvs-signin]')) { tvsSignIn(function () { tvsLobby(el.querySelector('#tv-h2h')); }); return; }
+    if (e.target.closest('[data-h2-find]')) { tvsH2HGo('h2h/find'); return; }
+    if ((t = e.target.closest('[data-h2-challenge]'))) { tvsH2HGo('h2h/challenge', { to: t.getAttribute('data-h2-challenge') }); return; }
+    if ((t = e.target.closest('[data-h2-play]'))) { tvsH2HGo('h2h/play', { game: t.getAttribute('data-h2-play') }); return; }
+    if ((t = e.target.closest('[data-h2-resume]'))) { tvsResume(t.getAttribute('data-h2-resume'), t.getAttribute('data-vs')); return; }
+    if ((t = e.target.closest('[data-h2-decline]'))) { tvsApi('POST', 'h2h/decline', { game: t.getAttribute('data-h2-decline') }).then(function () { tvsLobby(el.querySelector('#tv-h2h')); }); return; }
+    if ((t = e.target.closest('[data-h2-add]'))) { contact(t.getAttribute('data-h2-add'), 'add', 'Request sent'); return; }
+    if ((t = e.target.closest('[data-h2-accept]'))) { contact(t.getAttribute('data-h2-accept'), 'accept', 'You\'re Trivia contacts now'); return; }
+    if ((t = e.target.closest('[data-h2-no]'))) { contact(t.getAttribute('data-h2-no'), 'decline'); return; }
   });
 }
 /* Test Run: MISMO staff signed in, or a link with ?trivia=test. Draft questions only; nothing leaves the phone. */
@@ -5302,9 +5576,10 @@ var TVVOICE = {
   prime: function () { try { if (this.on() && !this.primed) { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); this.primed = true; } } catch (e) {} }
 };
 if (TVVOICE.ok()) try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function () {}; } catch (e) {}
-function triviaBoard(all) {
+function triviaBoard(all, srv) {
+  all = all || [];
   var lvl = TV_LEVELS.filter(function (l) { return l.board; })[0], SECS = lvl.secs, seen = load('trivia-seen', []), used = [];
-  var want = [[2, 3, 1], [2, 3, 1], [3, 2, 1], [3, 2, 1], [3, 2, 1]];   /* 200 and 400: Medium questions first; 600 up: Hard */
+  var want = [[1, 2, 3], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 2, 1]];   /* Jonna, Nov 27, 2026: 200s easy, up to 1,000s hard */
   var cats = TRIVIA_CATS.map(function (c) { return c[0]; }).filter(function (c) { return all.some(function (q) { return q.cat === c; }); });
   var cells = cats.map(function (c) {
     return TB_VALUES.map(function (v, r) {
@@ -5322,7 +5597,14 @@ function triviaBoard(all) {
   });
   var live = []; cells.forEach(function (col) { col.forEach(function (x) { if (x) live.push(x); }); });
   var dbl = shuffle(live.filter(function (x) { return x.v >= 600; }))[0]; if (dbl) dbl.dbl = true;
-  var st = { score: 0, right: 0, played: 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true, lastDone = null, lastSec = 0;
+  /* on MISMO's server (relay requests 15 and 16): the server deals the board and checks each answer, so a Solo board
+     counts for the leaderboard and a Head to Head board for the game; the screens are the same */
+  if (srv) {
+    var V = srv.view || {}; cats = (V.cats || []).slice();
+    cells = cats.map(function (c, k) { return (V.values || TB_VALUES).map(function (v, r) { var pd = V.played && V.played[k + '-' + r]; return { q: { cat: c }, v: v, srv: k + '-' + r, done: !!pd, ok: !!(pd && pd.right) }; }); });
+    live = []; cells.forEach(function (col) { col.forEach(function (x) { live.push(x); }); });
+  }
+  var st = { score: srv ? (srv.view.total || 0) : 0, right: srv ? (srv.view.right || 0) : 0, played: srv ? Object.keys(srv.view.played || {}).length : 0, log: [] }, timer = null, t0 = 0, locked = false, cur = null, firstPaint = true, lastDone = null, lastSec = 0;
   /* Jonna, Nov 26, 2026: a 3-minute round clock (was 6, then 4), then the Final Square */
   var ROUND_MS = 3 * 60 * 1000, roundEnd = 0, roundOver = false, roundT = null, inFinal = false;
   function mmss(ms) { var t = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
@@ -5355,7 +5637,7 @@ function triviaBoard(all) {
     if (!back) {   /* the board lighting up: a blip per square, as it flips on */
       var ms = []; box.querySelectorAll('.tb-c').forEach(function (c) { ms.push(parseInt(c.style.getPropertyValue('--rd'), 10) || 0); });
       cats.forEach(function (c, i) { TVSFX.head(i); }); TVSFX.fill(ms.sort(function (a, b) { return a - b; }));
-      roundEnd = Date.now() + ROUND_MS + 1600; roundT = setInterval(roundTick, 250);   /* the round starts once the board has lit up */
+      roundEnd = Date.now() + (srv && srv.view.roundLeft != null ? srv.view.roundLeft : ROUND_MS + 1600); roundT = setInterval(roundTick, 250);   /* the round starts once the board has lit up */
     }
     firstPaint = false; lastDone = null;
     if (back) box.scrollTop = 0;
@@ -5364,7 +5646,20 @@ function triviaBoard(all) {
      card sits; the board fades away under it, then the clock, the score and the four questions ease in around it
      (Jonna, Nov 26, 2026) */
   function open(k, r) {
-    var x = cells[k][r]; if (!x || x.done || cur) return; cur = x; locked = true;
+    var x = cells[k][r]; if (!x || x.done || cur) return;
+    if (srv && !x.got) {   /* the server hands out the square's answer and the four questions */
+      if (srv.busy) return; srv.busy = true;
+      var tl = box.querySelector('[data-tb="' + k + '-' + r + '"]'); if (tl) tl.classList.add('wait');
+      tvsApi('POST', 'play/pick', { cell: x.srv, game: srv.game }).then(function (res) {
+        srv.busy = false; if (tl) tl.classList.remove('wait'); var d = res.j || {};
+        if (!res.ok) { mxToast(d.message || 'That square didn\'t load. Try it again.'); return; }
+        if (d.final || d.done || d.roundOver) { if (d.final) toFinal('time', d.final); else { st.srvDone = d; end(); } return; }
+        x.got = true; x.q = { cat: d.cat, q: d.q, clue: d.clue || '' }; x.choices = d.choices; x.resp = d.responses || null; x.dbl = !!d.double; x.v = d.double ? d.value / 2 : d.value;
+        open(k, r);
+      });
+      return;
+    }
+    cur = x; locked = true;
     TVVOICE.prime();
     var tile = box.querySelector('[data-tb="' + k + '-' + r + '"]'), board = box.querySelector('.tb');
     var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -5419,32 +5714,47 @@ function triviaBoard(all) {
     timer = requestAnimationFrame(tick);
   }
   function answer(n) {
-    if (locked || !cur) return; locked = true; cancelAnimationFrame(timer);
-    var x = cur, val = x.dbl ? x.v * 2 : x.v, ok = n === x.right, pts = ok ? val : (n < 0 ? 0 : -val);
-    x.done = true; x.ok = ok; lastDone = x; st.played++; if (ok) st.right++; st.score += pts;
+    if (locked || !cur) return;
+    if (srv && !cur.res) {   /* the server says whether it's right */
+      locked = true; cancelAnimationFrame(timer); var xx = cur;
+      tvsApi('POST', 'play/answer', { cell: xx.srv, choice: n < 0 ? -1 : n, game: srv.game }).then(function (res) {
+        var d = res.j || {}; if (!res.ok) d = { right: false, answer: -1, points: 0, total: st.score };
+        xx.res = d; xx.right = d.answer; locked = false; answer(n);
+      });
+      return;
+    }
+    locked = true; cancelAnimationFrame(timer);
+    var x = cur, val = x.dbl ? x.v * 2 : x.v, ok = srv ? !!x.res.right : n === x.right, pts = srv ? (x.res.points || 0) : ok ? val : (n < 0 ? 0 : -val);
+    x.done = true; x.ok = ok; lastDone = x; st.played++; if (ok) st.right++; st.score += pts; if (srv && x.res.total != null) st.score = x.res.total;
     TVVOICE.stop(); if (ok) TVSFX.right(); else if (n < 0) TVSFX.timeup(); else TVSFX.wrong();
     var said = x.resp || x.choices;
     st.log.push({ q: x.q, ok: ok, pick: n >= 0 ? said[n] : '', right: said[x.right], pts: pts, clue: x.resp ? x.q.clue : '' });
-    seen.push(x.q.id); save('trivia-seen', seen.filter(function (v, i, a) { return a.indexOf(v) === i; }));
+    if (!srv) { seen.push(x.q.id); save('trivia-seen', seen.filter(function (v, i, a) { return a.indexOf(v) === i; })); }
     box.querySelectorAll('.tg-a').forEach(function (b, i) { b.disabled = true; if (i === x.right) b.classList.add('right'); else if (i === n) b.classList.add('wrong'); else b.classList.add('dim'); });
     var fx = document.createElement('div'); fx.className = 'tg-fx ' + (ok ? 'ok' : 'no');
-    fx.innerHTML = ok ? '<b>+' + val.toLocaleString() + '</b><span>Correct!</span>' : '<b>' + (n < 0 ? 'Time\'s Up' : '&minus;' + val.toLocaleString()) + '</b><span>' + esc(said[x.right]) + '</span>';
+    fx.innerHTML = ok ? '<b>+' + val.toLocaleString() + '</b><span>Correct!</span>' : '<b>' + (n < 0 ? 'Time\'s Up' : '&minus;' + val.toLocaleString()) + '</b><span>' + esc(said[x.right] || '') + '</span>';
     box.appendChild(fx);
     var sc = box.querySelector('#tg-sc'); if (sc) sc.textContent = st.score.toLocaleString();
     setTimeout(function () {
       var w = box.querySelector('.tb-clue-wrap'); if (w) w.classList.add('leave');
-      setTimeout(function () { if (roundOver || st.played >= live.length) toFinal(roundOver ? 'time' : 'done'); else paintBoard(); }, 280);
+      setTimeout(function () { if (srv) { if (x.res.final) toFinal(x.res.roundOver ? 'time' : 'done', x.res.final); else if (x.res.done) { st.srvDone = x.res; end(); } else if (roundOver) toFinal('time'); else paintBoard(); } else if (roundOver || st.played >= live.length) toFinal(roundOver ? 'time' : 'done'); else paintBoard(); }, 280);
     }, ok ? 1300 : 2600);
   }
   /* ---- the Final Square (Jonna, Nov 26, 2026): see the category, wager up to your score (up to 1,000 if you're at
      zero or below), hear the answer, then 30 seconds to type the question. Right adds the wager, wrong takes it away. */
   var FIN_SECS = 30, fin = null;
-  function toFinal(why) {
-    if (inFinal) return; inFinal = true; clearInterval(roundT); TVVOICE.stop(); cur = null;
+  function toFinal(why, sf) {
+    if (inFinal) return;
+    if (srv && !sf) {   /* End Game or the round clock: the server says whether there's a Final Square */
+      inFinal = true; clearInterval(roundT);
+      tvsApi('POST', 'play/end', { game: srv.game }).then(function (res) { var d = res.j || {}; inFinal = false; if (d.final) toFinal(why, d.final); else { st.srvDone = d; if (d.total != null) st.score = d.total; end(); } });
+      return;
+    }
+    inFinal = true; clearInterval(roundT); TVVOICE.stop(); cur = null;
     var pool = (TQ && TQ.finals) || [], seenF = load('trivia-finals-seen', []);
-    var f = shuffle(pool.filter(function (x) { return seenF.indexOf(x.id) < 0; }))[0] || shuffle(pool.slice())[0];
-    if (!f || !st.played) { end(); return; }
-    var maxW = st.score > 0 ? st.score : 1000, col = catColor(f.cat);
+    var f = srv ? { cat: sf.cat, id: '', answers: [] } : shuffle(pool.filter(function (x) { return seenF.indexOf(x.id) < 0; }))[0] || shuffle(pool.slice())[0];
+    if (!f || (!srv && !st.played)) { end(); return; }
+    var maxW = srv ? sf.max : st.score > 0 ? st.score : 1000, col = catColor(f.cat);
     fin = { f: f, maxW: maxW, wager: Math.min(maxW, Math.round(maxW / 2 / 100) * 100) };
     box.innerHTML = '<div class="fs">' + (why === 'time' ? '<div class="fs-why">' + icon('i-clock') + 'Time\'s up on the board</div>' : '') +
       '<div class="fs-title">Final Square</div>' +
@@ -5500,10 +5810,17 @@ function triviaBoard(all) {
     });
   }
   function finalAnswer(timedOut) {
-    if (!fin || fin.done) return; fin.done = true; cancelAnimationFrame(fin.raf); TVVOICE.stop();
-    var inp = box.querySelector('#fs-in'), typed = inp ? inp.value.trim() : '', ok = finalRight(typed, fin.f.answers || []);
-    var pts = ok ? fin.wager : -fin.wager; st.score += pts;
-    var seenF = load('trivia-finals-seen', []); seenF.push(fin.f.id); save('trivia-finals-seen', seenF.slice(-40));
+    if (!fin || fin.done) return;
+    if (srv && !fin.res) {   /* the server checks the typed question */
+      fin.done = true; cancelAnimationFrame(fin.raf); TVVOICE.stop(); var i0 = box.querySelector('#fs-in'); fin.typed = i0 ? i0.value.trim() : '';
+      tvsApi('POST', 'play/say', { text: fin.typed, game: srv.game }).then(function (res) { fin.res = res.j || {}; fin.done = false; finalAnswer(timedOut); });
+      return;
+    }
+    fin.done = true; cancelAnimationFrame(fin.raf); TVVOICE.stop();
+    var inp = box.querySelector('#fs-in'), typed = srv ? fin.typed : inp ? inp.value.trim() : '', ok = srv ? !!fin.res.right : finalRight(typed, fin.f.answers || []);
+    var pts = srv ? (fin.res.points || 0) : ok ? fin.wager : -fin.wager; st.score += pts;
+    if (srv) { if (fin.res.total != null) st.score = fin.res.total; fin.f.response = fin.res.response || ''; fin.f.source = fin.res.source || ''; st.srvDone = fin.res; }
+    else { var seenF = load('trivia-finals-seen', []); seenF.push(fin.f.id); save('trivia-finals-seen', seenF.slice(-40)); }
     st.log.push({ q: { q: fin.f.clue, source: fin.f.source }, ok: ok, pick: typed, right: fin.f.response, pts: pts, clue: 'Final Square: ' + fin.f.clue });
     if (ok) TVSFX.right(); else if (timedOut && !typed) TVSFX.timeup(); else TVSFX.wrong();
     box.innerHTML = '<div class="fs fs-res ' + (ok ? 'ok' : 'no') + '"><div class="fs-title">' + (ok ? 'Correct!' : timedOut && !typed ? 'Time\'s Up' : 'Not Quite') + '</div>' +
@@ -5519,12 +5836,15 @@ function triviaBoard(all) {
     TVVOICE.stop(); clearInterval(roundT); inFinal = false;
     cancelAnimationFrame(timer);
     var ts = load('trivia-test', { best: 0, games: 0 }); ts.byLevel = ts.byLevel || {};
-    var newBest = st.played > 0 && st.score > (ts.byLevel.Hard || 0);
-    ts.games = (ts.games || 0) + 1; ts.bestRight = Math.max(ts.bestRight || 0, st.right); if (st.played) ts.byLevel.Hard = Math.max(ts.byLevel.Hard || 0, st.score); save('trivia-test', ts);
+    var newBest = !srv && st.played > 0 && st.score > (ts.byLevel.Hard || 0);
+    if (!srv) { ts.games = (ts.games || 0) + 1; ts.bestRight = Math.max(ts.bestRight || 0, st.right); if (st.played) ts.byLevel.Hard = Math.max(ts.byLevel.Hard || 0, st.score); save('trivia-test', ts); }
+    if (srv) { var lbs = document.getElementById('tv-lb'); if (lbs) tvsFillBoard(lbs, ts); }   /* the leaderboard under this shows the new score */
+    var sg = srv && st.srvDone && st.srvDone.game, res = sg && sg.result, srvSay = !srv ? '' : srv.game ? (res === 'won' ? 'You Won!' : res === 'lost' ? (srv.vs || 'They') + ' Won' : res === 'tie' ? 'It\'s a Tie' : 'Your Score Is In') : 'On the Leaderboard';
+    var srvLine = !srv ? '' : srv.game ? (res ? 'You ' + (sg.you ? sg.you.total.toLocaleString() : st.score.toLocaleString()) + ', ' + (srv.vs || 'them') + ' ' + (sg.them ? sg.them.total.toLocaleString() : '?') + '.' : 'Sent to ' + String(srv.vs || 'your opponent').replace(/\.$/, '') + '. You\'ll see who won once they play.') : 'Your best Board this month is what counts.';
     box.innerHTML = '<div class="tg-end">' + (newBest ? '<div class="tg-confetti" aria-hidden="true">' + Array.apply(null, Array(28)).map(function (z, n) { return '<i style="--x:' + (Math.random() * 100).toFixed(1) + '%;--d:' + (Math.random() * 0.8).toFixed(2) + 's;--c:' + TRIVIA_CATS[n % 6][2] + '"></i>'; }).join('') + '</div>' : '') +
-      '<span class="tg-lvl" style="--lc:' + lvl.c + '">The Board</span><span class="tv-soon">' + (newBest ? 'New Board Best!' : 'Game Over') + '</span><div class="tg-big">' + st.score.toLocaleString() + '</div>' +
-      '<p>' + st.right + ' of ' + st.played + ' right, ' + st.played + ' of ' + live.length + ' squares played</p>' +
-      '<div class="tg-btns"><button type="button" class="btn primary" data-tb-again>' + icon('i-play') + 'New Board</button>' + (st.log.length ? '<button type="button" class="btn" data-tv-review>See the Answers</button>' : '') + '</div>' +
+      '<span class="tg-lvl" style="--lc:' + lvl.c + '">' + (srv && srv.game ? 'Head to Head' : 'The Board') + '</span><span class="tv-soon">' + (srv ? esc(srvSay) : newBest ? 'New Board Best!' : 'Game Over') + '</span><div class="tg-big">' + st.score.toLocaleString() + '</div>' +
+      '<p>' + st.right + ' of ' + st.played + ' right, ' + st.played + ' of ' + live.length + ' squares played</p>' + (srv ? '<p class="tg-srv">' + esc(srvLine) + '</p>' : '') +
+      '<div class="tg-btns"><button type="button" class="btn primary" data-tb-again>' + icon('i-play') + (srv && srv.game ? 'Back to Head to Head' : 'New Board') + '</button>' + (st.log.length ? '<button type="button" class="btn" data-tv-review>See the Answers</button>' : '') + '</div>' +
       '<div class="tg-review" id="tg-review" hidden>' + st.log.map(function (r, n) { return '<div class="tg-r ' + (r.ok ? 'ok' : 'no') + '"><b>' + (n + 1) + '. ' + esc(r.clue || r.q.q) + '</b><span>' + (r.ok ? 'You got it: ' : (r.pick ? 'You said ' + esc(r.pick) + '. ' : 'No answer. ') + 'Answer: ') + esc(r.right) + '</span><a href="' + esc(r.q.source) + '" target="_blank" rel="noopener">Source' + icon('i-link') + '</a></div>'; }).join('') + '</div></div>';
     countUp(box);
   }
@@ -5532,9 +5852,15 @@ function triviaBoard(all) {
     var c = e.target.closest('[data-tb]'); if (c) { var kr = c.getAttribute('data-tb').split('-'); open(+kr[0], +kr[1]); return; }
     var a = e.target.closest('[data-a]'); if (a) { answer(+a.getAttribute('data-a')); return; }
     var fq = e.target.closest('[data-fs-q]'); if (fq) { setWager(fin.maxW * +fq.getAttribute('data-fs-q')); return; }
-    if (e.target.closest('[data-fs-lock]')) { TVVOICE.stop(); finalClue(); return; }
+    if (e.target.closest('[data-fs-lock]')) {
+      TVVOICE.stop();
+      if (srv) { if (fin.locking) return; fin.locking = true; tvsApi('POST', 'play/wager', { wager: fin.wager, game: srv.game }).then(function (res) { var d = res.j || {}; fin.locking = false; if (!res.ok) { mxToast(d.message || 'That didn\'t go through. Try again.'); return; } fin.f.clue = d.clue; fin.wager = d.wager; finalClue(); }); }
+      else finalClue();
+      return;
+    }
+    if (e.target.closest('[data-fs-skip]') && srv) { tvsApi('POST', 'play/skip', { game: srv.game }).then(function (res) { st.srvDone = res.j || {}; if (st.srvDone.total != null) st.score = st.srvDone.total; end(); }); return; }
     if (e.target.closest('[data-fs-skip]') || e.target.closest('[data-fs-done]')) { end(); return; }
-    if (e.target.closest('[data-tb-end]')) { if (st.played) toFinal('end'); else end(); return; }
+    if (e.target.closest('[data-tb-end]')) { if (st.played || srv) toFinal('end'); else end(); return; }
     var tg = e.target.closest('[data-tb-sound],[data-tb-voice]');
     if (tg) {
       var k = tg.hasAttribute('data-tb-sound') ? 'tv-sound' : 'tv-voice', on = load(k, true) === false;
@@ -5543,7 +5869,7 @@ function triviaBoard(all) {
       if (k === 'tv-voice' && on) TVVOICE.say('Let’s play.');
       return;
     }
-    if (e.target.closest('[data-tb-again]')) { closeSheet(false); triviaBoard(all); return; }
+    if (e.target.closest('[data-tb-again]')) { closeSheet(false); if (srv) { if (srv.again) srv.again(); } else triviaBoard(all); return; }
     if (e.target.closest('[data-tv-review]')) { var r = box.querySelector('#tg-review'); r.hidden = !r.hidden; }
   });
   paintBoard();

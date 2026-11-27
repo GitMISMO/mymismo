@@ -1,5 +1,5 @@
---- index.base18.mjs	2026-11-27 14:40:31.194272399 -0700
-+++ index.mjs	2026-11-27 14:40:31.304836457 -0700
+--- index.base18.mjs	2026-11-27 14:49:40.398449762 -0700
++++ index.mjs	2026-11-27 14:49:40.381017405 -0700
 @@ -502,6 +502,98 @@
    console.warn(`GitHub allowance low: ${left} requests left${reset ? ' until ' + new Date(reset).toISOString() : ''}`);
  }
