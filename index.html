@@ -123,6 +123,12 @@ body:not(.dash) .lplate:active{transform:scale(.95)}
 .lplate .santa{position:absolute; display:none; pointer-events:none; left:-9px; top:-12px; width:28px; height:28px}
 html[data-season="december"] .lplate .santa{display:block}
 html[data-season="december"] .mast-in{padding-top:16px}
+/* Jonna, Nov 27, 2026: the MyMISMO brand: "My" in sky blue right before the MISMO logo plate, on every screen size (the
+   logo itself is untouched) */
+.my-tag{font-family:var(--cond); font-weight:700; font-size:25px; line-height:1; letter-spacing:-.01em; color:#74bfeb; margin-right:-4px; white-space:nowrap}
+@media (max-width:389px){ .mast-in{gap:7px; padding-left:11px; padding-right:11px} .my-tag{font-size:21px; margin-right:-3px} .mast-in .lplate{padding:6px 8px} .mast-in .lplate .wordmark{height:16px} .mast-right{gap:5px} }
+.ld-lock{display:flex; align-items:center; justify-content:center; gap:10px} .ld-lock .my-tag{font-size:calc(min(240px, 50vmin) * .24); margin-right:0} #loading .ld-lock .lplate .wordmark{width:min(240px, 50vmin)}
+.mast-in .vrule, .mast-in .appname{display:none !important}
 .vrule{width:1px; align-self:stretch; background:rgba(116,191,235,.4)}
 .appname{color:var(--sky-soft); font-weight:500; font-size:16px; white-space:nowrap}
 .mast-right{margin-left:auto; display:flex; align-items:center; gap:6px}
@@ -2467,7 +2473,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 
 <div id="loading" role="status" aria-live="polite">
   <div class="in">
-    <div class="lplate"><svg class="wordmark" data-mismo-logo role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg></div>
+    <div class="ld-lock"><span class="my-tag" aria-hidden="true">My</span><div class="lplate"><svg class="wordmark" data-mismo-logo role="img" aria-label="MyMISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg></div></div>
     <div class="bar"><i></i></div>
     <div class="errtxt" id="loaderr"></div>
   </div>
@@ -2475,7 +2481,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 
 <header class="mast">
   <div class="mast-in">
-    <button type="button" class="lplate" id="dash-btn" aria-label="My Dashboard"><svg class="wordmark" data-mismo-logo role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg><svg class="santa" viewBox="0 0 100 100" aria-hidden="true"><use href="#mismo-hat"/></svg></button>
+    <span class="my-tag" aria-hidden="true">My</span><button type="button" class="lplate" id="dash-btn" aria-label="MyMISMO: My Dashboard"><svg class="wordmark" data-mismo-logo role="img" aria-label="MISMO" viewBox="0 0 708 108"><use href="#mismo-logo"/></svg><svg class="santa" viewBox="0 0 100 100" aria-hidden="true"><use href="#mismo-hat"/></svg></button>
     <div class="vrule" aria-hidden="true"></div>
     <div class="appname" id="appname">MyMISMO</div>
     <div class="mast-right">
