@@ -490,9 +490,11 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .dash-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; grid-auto-flow:dense; --half-h:206px}
 /* Jonna, Nov 28, 2026: every half-width tile is the same, locked height (MISMO Matters, Join a Workgroup, Certified, Webinars set it) */
 .dash-grid > .wd:not(.wide):not(.solo){height:var(--half-h); min-height:0}
+/* and a second, shorter locked size for the small pair, Submit an Idea and mismo.org */
+.dash-grid{--short-h:166px}
+.dash-grid > .w-idea:not(.wide):not(.solo), .dash-grid > .w-site:not(.wide):not(.solo){height:var(--short-h)}
 @media (max-width:374px){ .dash-grid{--half-h:225px} }
-@media (max-width:480px){ .w-site .w-t{font-size:17.5px; -webkit-line-clamp:2} }   /* room for the first mismo.org link at the locked size */
-@media (min-width:760px){ .dash-grid{--half-h:210px} }
+@media (min-width:760px){ .dash-grid{--half-h:210px; --short-h:190px} }
 .wd{position:relative; overflow:hidden; isolation:isolate; display:flex; flex-direction:column; align-items:flex-start; gap:6px; text-align:left; border-radius:18px; padding:16px; min-height:150px; cursor:pointer; text-decoration:none;
   background:var(--surface); border:1px solid var(--border); color:var(--ink); box-shadow:var(--shadow); font:inherit}
 .wd.wide{grid-column:1 / -1}
