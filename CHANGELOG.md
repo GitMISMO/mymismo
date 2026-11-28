@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: The two membership tiles are shorter on phones held upright (about a quarter less tall).
 - Nov 28, 2026: Who I Met: the yellow Take a Picture button on the camera is gone; Take a Picture is the square under the camera.
 - Nov 28, 2026: Membership questions go to membership@mismo.org (Membership for Industry, the Innovation Investment Fund page and the Champions Lounge).
 - Nov 28, 2026: Less gold: the Membership for Industry tile is a plain card with its colored chart, the Industry page header glows sky and green, and the Champions Lounge membership cards match the tiles (sky blue for Lenders, plain for Industry). Gold stays for buttons and the top level.

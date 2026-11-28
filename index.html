@@ -2040,6 +2040,17 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .wm-col:nth-child(2) i{animation-delay:.08s} .wm-col:nth-child(3) i{animation-delay:.16s} .wm-col:nth-child(4) i{animation-delay:.24s; box-shadow:0 6px 16px -6px #c98500}
 .wm-col small{font-size:10.5px; font-weight:700; color:var(--ink-3); white-space:nowrap}
 @keyframes wm-rise{from{height:0; min-height:0}}
+/* Jonna, Nov 28, 2026: shorter on portrait phones */
+@media (max-width:480px){
+  .w-mem{min-height:0; padding:13px 13px 12px; gap:4px}
+  .w-mem .w-head{font-size:12.5px; line-height:1.2}
+  .w-mem .wm-big{font-size:38px; margin-top:2px}
+  .w-mem .wm-unit{font-size:12px}
+  .w-mem.lend .w-s{font-size:12px; margin-top:6px}
+  .wm-chart{height:74px; margin:4px 0 0; gap:4px}
+  .wm-col em{font-size:10.5px} .wm-col small{font-size:9.5px}
+  .w-mem.ind .w-t{font-size:16px; line-height:1.15}
+}
 /* Champions Lounge: the two paths */
 .lg-paths{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .lg-path{display:grid; gap:4px; justify-items:start; align-content:start; text-align:left; padding:14px 13px; border-radius:14px; border:0; color:#fff; font:inherit; cursor:pointer; background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
@@ -6851,7 +6862,7 @@ function widget(id) {
       (CERT ? '<span class="w-new"><b>' + fresh.length + ' new</b> in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
   if (id === 'groups') return wgTile();
-  if (id === 'lenders') return '<button type="button" class="wd w-mem lend" data-mem-open="iif">' + head() + '<span class="wm-big">$0.75</span><span class="wm-unit">per loan</span><span class="w-s">The Innovation Investment Fund is the lender path to membership.</span>' + memRails() + '</button>';
+  if (id === 'lenders') return '<button type="button" class="wd w-mem lend" data-mem-open="iif">' + head() + '<span class="wm-big">$0.75</span><span class="wm-unit">per loan</span><span class="w-s">Through the Innovation Investment Fund</span>' + memRails() + '</button>';
   if (id === 'industry') return '<button type="button" class="wd w-mem ind" data-mem-open="ind">' + head() + '<span class="wm-chart" aria-hidden="true">' + MEM.levels.map(function (l) { return '<span class="wm-col" style="--h:' + Math.max(14, Math.round(l.price / 55000 * 100)) + '%;--bc:' + l.c + '"><em>$' + (l.price / 1000) + 'K</em><i></i><small>' + esc(l.name.replace(' Champion', '').replace('Corporate', 'Corp.').replace('Associate', 'Assoc.').replace('Executive', 'Exec.')) + '</small></span>'; }).join('') + '</span><span class="w-t">Compare 4 Levels</span></button>';
   if (id === 'sponsor') return '<a class="wd w-spon wide" href="' + PROSP_URL + '">' + head() + '<span class="w-t">Sponsor a MISMO Summit</span><span class="wsp-sub">Put your company in front of the people who build the mortgage industry\'s standards.</span><span class="wsp-go">See the Opportunities' + icon('i-chev') + '</span><span class="wsp-art" aria-hidden="true">' + icon('i-banner') + '</span></a>';
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
