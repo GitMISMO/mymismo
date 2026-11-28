@@ -2163,7 +2163,11 @@ nav.tabbar .badge.on{display:grid}
 .iconbtn{border:1px solid var(--border); background:var(--surface); border-radius:7px; width:38px; height:38px; display:grid; place-items:center; cursor:pointer; color:var(--ink); flex:none}
 .iconbtn svg{width:19px; height:19px}
 .sheet-head .iconbtn.close{margin-left:auto}
-.sheet-head .iconbtn.grow{display:none; margin-left:auto}
+.sheet-head .iconbtn.grow{display:grid; margin-left:auto} .sheet-head .iconbtn.grow + .close{margin-left:0}
+/* Jonna, Nov 27, 2026: phones get the same Expand Panel button: the pop-up fills the whole screen */
+html.mm-wide .sheet{top:0; border-radius:0}
+html.mm-wide .sheet-head{padding-top:calc(12px + env(safe-area-inset-top))}
+html.mm-wide .sheet-head .grab{display:none}
 .iconbtn.grow svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
 .iconbtn.grow .g-in{display:none} html.mm-wide .iconbtn.grow .g-in{display:block} html.mm-wide .iconbtn.grow .g-out{display:none}
 .sheet:not(.plain) .sheet-head{position:absolute; left:0; right:0; top:0}
@@ -2251,7 +2255,6 @@ nav.tabbar .badge.on{display:grid}
 @media (min-width:900px){
   .sheet{left:auto; top:0; width:min(72vw, 880px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
   html.mm-wide .sheet{width:100vw}
-  .sheet-head .iconbtn.grow{display:grid} .sheet-head .iconbtn.grow + .close{margin-left:0}
   .sheet-head .grab{display:none}
 }
 @media (max-width:520px){
@@ -2280,7 +2283,8 @@ nav.tabbar .badge.on{display:grid}
   .grid2{grid-template-columns:1fr 1fr}
   .rail{grid-auto-columns:minmax(250px, 46%)}
   .days{top:calc(50px + env(safe-area-inset-top))}
-  .sheet{left:auto; top:0; width:min(78vw, 760px); border-radius:0; transform:translateX(100%)}
+  .sheet{left:auto; top:0; width:min(78vw, 760px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
+  html.mm-wide .sheet{width:100vw}
   .sheet-head .grab{display:none}
   .faces-grid{grid-template-columns:repeat(auto-fill, minmax(140px,1fr))}
 }

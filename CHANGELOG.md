@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Phones and tablets get the Expand Panel button too: on a phone the pop-up fills the whole screen, and on a tablet the side panel opens full width. It remembers your choice, like on the computer.
 - Nov 27, 2026: MISMO Trivia's line when picking dashboard tiles now reads "Play the Board, take on your colleagues and climb the leaderboard."
 - Nov 27, 2026: Solo is laid out like Head to Head: the Board picture with a 3:00 clock badge, a full-width Play the Board button, Warm Up, and How It Works in five steps (Pick Any Square, Beat the Clock, Right Adds and Wrong Subtracts, the Double Square, the Final Square).
 - Nov 27, 2026: MISMO Merch: the featured banner is a bit taller, so the Shop It button no longer crowds the bottom edge or the slide markers.
