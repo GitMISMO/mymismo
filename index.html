@@ -1829,8 +1829,6 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .ph-card .ph-pr{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin:0 -16px; padding:0 16px} .ph-card .ph-pr button{flex:none}
 .ph-row{display:flex; gap:16px; flex-wrap:wrap} .ph-row .linkbtn{display:inline-flex; align-items:center; gap:6px} .ph-row .linkbtn svg{width:16px; height:16px}
 .ph-ed .ph-cv{background:#071d2e; padding:12px; display:grid; place-items:center}
-.hub-pic{position:absolute; left:12px; bottom:12px; z-index:3; display:inline-flex; align-items:center; gap:7px; padding:10px 14px; border-radius:10px; border:0; background:#f2c14e; color:#06202f; font:inherit; font-weight:800; font-size:14px; box-shadow:0 6px 18px rgba(0,0,0,.4); cursor:pointer}
-.hub-pic svg{width:18px; height:18px}
 .met-picrow{display:flex; gap:8px; flex-wrap:wrap; padding:12px 16px 0} .met-picrow .btn{flex:1 1 auto}
 .ld-top .met-big{width:64px; height:64px; border-radius:12px; object-fit:cover; flex:none; box-shadow:0 2px 8px rgba(13,49,76,.25)}
 .met-row{width:34px; height:34px; border-radius:8px; object-fit:cover; flex:none}
@@ -4599,7 +4597,6 @@ function scanHub(sid, mode0) {
     '<div class="ci-top"></div>' +
     '<div class="sc-cam ci-cam"><video playsinline muted></video><div class="sc-frame"><i></i><i></i><i></i><i></i><span class="sc-line"></span></div>' +
     '<button type="button" class="sc-snd" data-sc-snd aria-pressed="' + (load('scan-beep', true) ? 'true' : 'false') + '">' + icon('i-sound') + '<span>' + (load('scan-beep', true) ? 'Beep On' : 'Beep Off') + '</span></button>' +
-    '<button type="button" class="hub-pic" data-met-pic hidden>' + icon('i-camera') + '<span>Take a Picture</span></button>' +
     '<button type="button" class="hub-again" data-hub-again hidden>' + icon('i-scan') + '<b>Scan the Next Name Tag</b></button>' +
     '<div class="ci-pop" aria-live="polite"></div></div>' +
     '<div class="sheet-pad sc-pad"><div class="sc-msg" role="status"></div><div class="ci-list"></div><div class="sc-acts four"></div><p class="sc-fine"></p></div></div>', { plain: true });
@@ -4617,7 +4614,7 @@ function scanHub(sid, mode0) {
     }
   }
   function lower() {
-    var hpBtn = el.querySelector('.hub-pic'); if (hpBtn) hpBtn.hidden = mode === 'checkin';   /* Who I Met: the picture button sits right on the camera */
+    /* Jonna, Nov 28, 2026: Take a Picture is one of the squares below the camera; no second button on the camera */
     var acts = el.querySelector('.sc-acts');
     acts.className = 'sc-acts ' + (hp ? 'two' : 'four');
     if (att) {
