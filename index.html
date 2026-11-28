@@ -502,6 +502,28 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .dh-date{color:var(--ink-2); font-weight:600; font-size:13.5px; display:flex; align-items:center; flex-wrap:wrap; gap:4px 10px}
 .dh-wx{display:inline-flex; align-items:center; gap:5px; color:var(--ink-2); font:inherit; font-size:13px}
 .dh-wx svg{width:17px; height:17px; color:var(--link)} .dh-wx b{font-weight:800; color:var(--ink)} .dh-wx > span{color:var(--ink-3); font-weight:600}
+.dh-wx.go{padding:2px 4px 2px 6px; border-radius:6px; border:1px solid transparent; background:none; cursor:pointer}
+.dh-wx.go:hover{border-color:var(--border); background:var(--surface)} .dh-wx.go > svg:last-child{width:13px; height:13px; color:var(--ink-3)}
+.wxs{display:grid; grid-template-columns:minmax(0, 1fr); gap:8px; padding:14px 14px 20px}
+.wxs-load{display:flex; gap:10px; align-items:center; padding:30px 10px; color:var(--ink-2)} .wxs-load svg{width:26px; height:26px; color:var(--link)}
+.wxs-now{position:relative; overflow:hidden; border-radius:18px; padding:16px; color:#fff; background:radial-gradient(90% 80% at 85% 10%, rgba(255,214,120,.55), transparent 55%), linear-gradient(170deg, #4ea9e2 0%, #2a87c8 55%, #1d6aa6 100%)}
+.wxs-now.night{background:radial-gradient(70% 60% at 85% 10%, rgba(169,216,243,.3), transparent 60%), linear-gradient(170deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.wxs-now span, .wxs-now b{color:#fff}
+.wxs-where{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; opacity:.9} .wxs-where svg{width:14px; height:14px}
+.wxs-big{display:flex; align-items:center; gap:12px; margin-top:6px} .wxs-big svg{width:54px; height:54px} .wxs-big b{font-family:var(--cond); font-size:76px; line-height:1; font-weight:800; letter-spacing:-.03em}
+.wxs-say b{display:block; font-size:19px} .wxs-say span{font-size:13.5px; opacity:.9}
+.wxs-facts{display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,.25)}
+.wxs-facts span{display:grid; gap:1px; font-size:11px; opacity:.92} .wxs-facts b{font-size:14px}
+.wxs-hrs{display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x proximity}
+.wxs-h{flex:none; width:58px; display:grid; justify-items:center; gap:4px; padding:10px 4px; border-radius:12px; background:var(--surface); border:1px solid var(--border); scroll-snap-align:start}
+.wxs-h.now{border-color:var(--link); background:color-mix(in srgb, var(--link) 10%, var(--surface))}
+.wxs-h span{font-size:11px; font-weight:700; color:var(--ink-3)} .wxs-h svg{width:22px; height:22px; color:var(--link)} .wxs-h b{font-size:15px} .wxs-h em{font-style:normal; font-size:10.5px; font-weight:700; color:#2477b8; min-height:13px}
+.wxs-days{display:grid; border-radius:14px; background:var(--surface); border:1px solid var(--border); overflow:hidden}
+.wxs-d{display:grid; grid-template-columns:52px 24px 34px 36px 1fr 36px; gap:8px; align-items:center; padding:10px 12px} .wxs-d + .wxs-d{border-top:1px solid var(--rule)}
+.wxs-d b{font-size:14px} .wxs-d svg{width:22px; height:22px; color:var(--link)} .wxs-d em{font-style:normal; font-size:11px; font-weight:700; color:#2477b8}
+.wxs-lo{text-align:right; color:var(--ink-3); font-weight:600} .wxs-hi{font-weight:800}
+.wxs-bar{position:relative; height:6px; border-radius:3px; background:var(--surface-3)} .wxs-bar i{position:absolute; top:0; bottom:0; border-radius:3px; background:linear-gradient(90deg, #74bfeb, #f2c14e)}
+.wxs-twc{margin-top:10px; justify-content:center} .wxs-fine{margin:4px 0 0; font-size:12px; color:var(--ink-3); text-align:center}
 .dh-wx.ask{padding:2px 8px 2px 6px; border-radius:6px; border:1px solid var(--border); background:var(--surface); cursor:pointer; color:var(--link); font-weight:700}
 .dh-wx.ask > span{color:var(--link)}
 .dash-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); line-height:1; letter-spacing:-.02em; margin-top:3px}
@@ -2097,51 +2119,49 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 @media (prefers-reduced-motion: reduce){ .wm-house .cn{animation:none} }
 
 /* ==== News (Jonna, Nov 28, 2026): a press room tile, in Webinars' old spot ==== */
-.w-news .nw-flip{min-height:118px}
+.w-news{--nw:#d55181; color:var(--ink); padding-bottom:40px; background:radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--nw) 22%, transparent) 1px, transparent 1.6px) 0 0/9px 9px, var(--surface)}
+.w-news .w-head svg{color:var(--nw)}
+.nw-live{margin-left:auto; padding:2px 6px; border-radius:5px; font-style:normal; font-size:10.5px; font-weight:800; color:#fff; background:var(--nw)}
+.nw-stack{position:relative; flex:1 1 auto; align-self:stretch; min-height:0; margin-top:8px; overflow:hidden}
+.nw-sh{position:absolute; inset:0; display:flex; flex-direction:column; gap:8px; animation:nw-roll 15s cubic-bezier(.5,0,.2,1) infinite}
+.nw-sh:nth-child(1){animation-delay:0s} .nw-sh:nth-child(2){animation-delay:-10s} .nw-sh:nth-child(3){animation-delay:-5s}
+@keyframes nw-roll{0%,29%{transform:none; opacity:1} 33.3%{transform:translateY(-26px); opacity:0} 33.4%,96%{transform:translateY(26px); opacity:0} 100%{transform:none; opacity:1}}
+.w-news.still .nw-sh{animation:none} .w-news.still .nw-sh:nth-child(n+2){display:none}
+.nw-stamp{align-self:flex-start; display:inline-flex; align-items:baseline; gap:4px; padding:3px 7px 3px 6px; border:2px solid var(--nw); border-radius:6px; color:var(--nw); font-size:11px; font-weight:800; transform:rotate(-4deg); line-height:1}
+.nw-stamp b{font-family:var(--cond); font-size:20px; font-weight:800}
+.nw-t{font-family:var(--cond); font-size:15px; line-height:1.18; font-weight:800; color:var(--ink); display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+.nw-tick{position:absolute; left:0; right:0; bottom:0; height:28px; display:flex; align-items:stretch; background:var(--nw); color:#fff}
+.nw-tl{flex:none; display:flex; align-items:center; gap:5px; padding:0 9px 0 12px; background:#0d314c; font-size:11px; font-weight:800; clip-path:polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%)}
+.nw-tl i{width:6px; height:6px; border-radius:50%; background:#fff; animation:nw-blink 1.6s ease-in-out infinite}
+@keyframes nw-blink{50%{opacity:.25}}
+.nw-tw{flex:1; min-width:0; overflow:hidden; display:flex; align-items:center; -webkit-mask:linear-gradient(90deg, transparent, #000 12px, #000 88%, transparent); mask:linear-gradient(90deg, transparent, #000 12px, #000 88%, transparent)}
+.nw-crawl{display:flex; white-space:nowrap; animation:nw-crawl 70s linear infinite; font-size:12px; font-weight:700}
+.nw-crawl span{padding:0 12px} .nw-crawl span::after{content:"/"; margin-left:24px; opacity:.55}
+@keyframes nw-crawl{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 .w-news{container-type:inline-size}
-@container (min-width:300px){ .w-news .nw-d b{font-size:54px} .w-news .nw-d i{font-size:16px} .w-news .nw-t{font-size:18px; line-height:1.25; -webkit-line-clamp:3; max-width:34ch} }
-.w-news.wide .nw-flip{min-height:92px}
-.w-news{color:#fff; border:0; background:radial-gradient(120% 70% at 100% 0%, rgba(116,191,235,.32), transparent 60%), linear-gradient(170deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
-.w-news .w-head, .w-news .w-head svg{color:#a9d8f3}
-.nw-new{font-style:normal; margin-left:auto; padding:2px 6px; border-radius:5px; background:#74bfeb; color:#06202f; font-size:10.5px; font-weight:800}
-.nw-press{position:absolute; inset:auto -10px -6px auto; width:min(70%, 130px); height:auto; z-index:0; opacity:.18; pointer-events:none}
-.nw-press path{stroke:#a9d8f3; stroke-width:2; stroke-dasharray:3 5}
-.w-news > *:not(svg){position:relative; z-index:1}
-.nw-flip{position:relative; flex:1 1 auto; align-self:stretch; min-height:0; margin-top:6px}
-.nw-it{position:absolute; inset:0; display:flex; flex-direction:column; gap:6px; opacity:0; animation:nw-cycle calc(var(--n) * 4.5s) infinite; animation-delay:calc(var(--i) * 4.5s)}
-.w-news[style*="--n:1"] .nw-it{opacity:1; animation:none}
-@keyframes nw-cycle{0%{opacity:0; transform:translateY(10px)} 4%,30%{opacity:1; transform:none} 34%,100%{opacity:0; transform:translateY(-8px)}}
-.nw-d{display:flex; align-items:baseline; gap:5px; line-height:1}
-.nw-d b{font-family:var(--cond); font-weight:800; font-size:38px; color:#fff; letter-spacing:-.02em}
-.nw-d i{font-style:normal; font-size:13px; font-weight:800; color:#74bfeb}
-.nw-t{font-size:13px; line-height:1.3; font-weight:700; color:#e4f2fb; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden}
-.nw-dots{display:flex; gap:5px; margin-top:6px}
-.nw-dots i{width:16px; height:3px; border-radius:2px; background:rgba(255,255,255,.22); overflow:hidden; position:relative}
-.nw-dots i::after{content:""; position:absolute; inset:0; background:#74bfeb; transform:scaleX(0); transform-origin:left; animation:nw-dot calc(var(--n) * 4.5s) linear infinite; animation-delay:calc(var(--i) * 4.5s)}
-.w-news[style*="--n:1"] .nw-dots{display:none}
-@keyframes nw-dot{0%{transform:scaleX(0)} 33%{transform:scaleX(1)} 33.1%,100%{transform:scaleX(0)}}
-@media (prefers-reduced-motion: reduce){ .nw-it{animation:none} .nw-it:first-child{opacity:1} .nw-dots{display:none} }
+@container (min-width:300px){ .w-news .nw-t{font-size:21px; -webkit-line-clamp:3} .w-news .nw-stamp b{font-size:24px} }
+@media (prefers-reduced-motion: reduce){ .nw-sh, .nw-crawl, .nw-tl i{animation:none} .nw-sh:nth-child(n+2){display:none} }
 /* the News sheet: a front page */
-.nws{display:grid; gap:12px; padding:14px 14px 18px}
-.nws-front{position:relative; overflow:hidden; isolation:isolate; border-radius:18px; padding:16px; color:#fff; background:radial-gradient(90% 70% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(165deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
-.nws-front > *:not(svg){position:relative; z-index:1}
-.nws-mast{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; padding-bottom:10px; margin-bottom:14px; border-bottom:3px double rgba(169,216,243,.5)}
-.nws-mast span{font-size:10.5px; font-weight:700; color:#a9d8f3} .nws-mast span:last-child{text-align:right}
-.nws-mast b{font-family:var(--cond); font-size:28px; line-height:1; letter-spacing:-.01em}
-.nws-lead{display:grid; grid-template-columns:auto 1fr; gap:14px; color:#fff; text-decoration:none}
-.nws-cal{display:grid; justify-items:center; align-content:start; align-self:start; min-width:62px; padding:8px 6px 7px; border-radius:12px; background:#fff; color:#0d314c; box-shadow:0 10px 22px -12px rgba(0,0,0,.6); line-height:1}
-.nws-cal b{font-family:var(--cond); font-size:34px; font-weight:800} .nws-cal i{font-style:normal; font-size:12px; font-weight:800; color:#2477b8} .nws-cal em{font-style:normal; font-size:10.5px; font-weight:700; color:#7794aa; margin-top:2px}
-.nws-cal.sm{min-width:48px; padding:6px 4px; background:var(--surface-2); border:1px solid var(--border); box-shadow:none; color:var(--ink)} .nws-cal.sm b{font-size:24px}
-.nws-lt{display:grid; gap:6px; justify-items:start} .nws-lt b{font-family:var(--cond); font-size:21px; line-height:1.15} .nws-lt > span{font-size:13.5px; line-height:1.45; color:#cfe3f1}
-.nws-k{font-style:normal; font-size:11px; font-weight:800; color:#74bfeb}
-.nws-go{display:inline-flex; align-items:center; gap:4px; margin-top:4px; font-style:normal; font-size:13.5px; font-weight:800; color:#74bfeb} .nws-go svg{width:15px; height:15px}
+.nws{--nw:#d55181; display:grid; grid-template-columns:minmax(0, 1fr); gap:12px; padding:0 14px 18px}
+.nws-tick{position:relative; height:30px; margin:0 -14px; border-radius:0}
+.nws-front{position:relative; overflow:hidden; border-radius:16px; padding:14px 16px 18px; color:var(--ink); border:1px solid var(--border); background:radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--nw) 18%, transparent) 1px, transparent 1.6px) 0 0/10px 10px, var(--surface); box-shadow:0 14px 30px -22px rgba(13,49,76,.6)}
+.nws-mast{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; padding-bottom:10px; margin-bottom:16px; border-bottom:3px double var(--border-strong)}
+.nws-mast span{font-size:10.5px; font-weight:700; color:var(--ink-3)} .nws-mast span:last-child{text-align:right}
+.nws-mast b{font-family:var(--cond); font-size:30px; line-height:1; letter-spacing:-.01em; color:var(--ink)}
+.nws-lead{display:grid; gap:10px; color:var(--ink); text-decoration:none}
+.nws-cal{display:inline-flex; align-items:baseline; gap:5px; justify-self:start; align-self:start; padding:4px 9px 4px 8px; border:2px solid var(--nw); border-radius:7px; color:var(--nw); transform:rotate(-3deg); line-height:1; font-weight:800}
+.nws-cal b{font-family:var(--cond); font-size:30px; font-weight:800} .nws-cal i{font-style:normal; font-size:13px} .nws-cal em{font-style:normal; font-size:12px; opacity:.8}
+.nws-cal.sm{padding:3px 6px; border-width:1.5px; transform:rotate(-3deg)} .nws-cal.sm b{font-size:20px} .nws-cal.sm i{font-size:11px}
+.nws-lt{display:grid; gap:8px; justify-items:start} .nws-lt b{font-family:var(--cond); font-size:clamp(24px, 6.6vw, 32px); line-height:1.08; letter-spacing:-.01em} .nws-lt > span{font-size:14px; line-height:1.5; color:var(--ink-2)}
+.nws-k{font-style:normal; font-size:11px; font-weight:800; color:var(--nw)}
+.nws-go{display:inline-flex; align-items:center; gap:5px; margin-top:6px; padding:10px 14px 10px 16px; border-radius:9px; font-style:normal; font-size:14px; font-weight:800; color:#fff; background:var(--nw); box-shadow:0 10px 20px -12px var(--nw)} .nws-go svg{width:15px; height:15px}
 .nws-mh{display:flex; align-items:baseline; gap:8px; margin:10px 2px 0} .nws-mh b{font-family:var(--cond); font-size:20px} .nws-mh span{font-size:12px; font-weight:700; color:var(--ink-3)}
 .nws-list{display:grid; gap:8px}
-.nws-it{display:grid; grid-template-columns:auto 1fr 16px; gap:12px; align-items:center; padding:12px; border-radius:14px; background:var(--surface); border:1px solid var(--border); color:var(--ink); text-decoration:none}
+.nws-it{display:grid; grid-template-columns:62px 1fr 16px; gap:10px; align-items:center; padding:12px; border-radius:14px; background:var(--surface); border:1px solid var(--border); color:var(--ink); text-decoration:none}
 .nws-it > svg{width:16px; height:16px; color:var(--ink-3)}
 .nws-tx b{display:block; font-size:14.5px; line-height:1.3} .nws-tx span{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:3px; font-size:12.5px; line-height:1.4; color:var(--ink-2)}
-.nws-all{display:grid; grid-template-columns:22px 1fr 16px; gap:12px; align-items:center; margin-top:6px; padding:14px; border-radius:14px; background:color-mix(in srgb, #74bfeb 16%, var(--surface)); border:1px solid var(--border); color:var(--ink); text-decoration:none; font-size:12.5px; color:var(--ink-2)}
-.nws-all b{display:block; font-size:15px; color:var(--ink)} .nws-all > svg{width:20px; height:20px; color:var(--link)} .nws-all > svg:last-child{width:16px; height:16px}
+.nws-all{display:grid; grid-template-columns:22px 1fr 16px; gap:12px; align-items:center; margin-top:6px; padding:14px; border-radius:14px; background:color-mix(in srgb, var(--nw) 10%, var(--surface)); border:1px solid var(--border); color:var(--ink); text-decoration:none; font-size:12.5px; color:var(--ink-2)}
+.nws-all b{display:block; font-size:15px; color:var(--ink)} .nws-all > svg{width:20px; height:20px; color:var(--nw)} .nws-all > svg:last-child{width:16px; height:16px}
 /* Champions Lounge: the two paths */
 .lg-paths{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .lg-path{display:grid; gap:4px; justify-items:start; align-content:start; text-align:left; padding:14px 13px; border-radius:14px; border:0; color:#fff; font:inherit; cursor:pointer; background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
@@ -5578,8 +5598,8 @@ var DASH = [
   { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-banner' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
-  { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' },
-  { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' }
+  { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
+  { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' }
 ];
 function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'sponsor' && !prospOn()) && !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE) && !(d.id === 'merch' && (STORE_RELEASE || !appTester())); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
@@ -5620,9 +5640,19 @@ function wxChip() {
   var w = load('wx-now', null);
   if (!w || Date.now() - w.at > 30 * 60000) setTimeout(wxFetch, 0);
   if (!w) return '<span class="dh-wx" data-wx-slot>' + (WX.fail ? '<button type="button" class="dh-wx ask" data-wx-retry>' + icon('wx-cloud') + '<span>Weather: Try Again</span></button>' : '') + '</span>';
-  return '<span class="dh-wx" data-wx-slot title="' + esc(wxWord(w.code)) + '">' + icon(wxIcon(w.code)) + '<b>' + Math.round(w.t) + '\u00b0</b><span>H ' + Math.round(w.hi) + '\u00b0 L ' + Math.round(w.lo) + '\u00b0</span></span>';
+  return '<button type="button" class="dh-wx go" data-wx-slot data-wx-open aria-label="Weather: ' + esc(wxWord(w.code)) + ', ' + Math.round(w.t) + ' degrees. Open the forecast">' + icon(wxIcon(w.code)) + '<b>' + Math.round(w.t) + '\u00b0</b><span>H ' + Math.round(w.hi) + '\u00b0 L ' + Math.round(w.lo) + '\u00b0</span>' + icon('i-chev') + '</button>';
 }
 function wxFetch() {
+  if (!wxLoc() || WX.busy) return; WX.busy = true;
+  var go = function () { WX.busy = false; wxGet(); };
+  try {
+    if (navigator.permissions && navigator.geolocation) navigator.permissions.query({ name: 'geolocation' }).then(function (st) {
+      if (st.state !== 'granted') return go();
+      navigator.geolocation.getCurrentPosition(function (p) { save('wx-loc', { lat: Math.round(p.coords.latitude * 100) / 100, lon: Math.round(p.coords.longitude * 100) / 100 }); go(); }, go, { enableHighAccuracy: false, timeout: 10000, maximumAge: 30 * 60000 });
+    }, go); else go();
+  } catch (e) { go(); }
+}
+function wxGet() {
   var l = wxLoc(); if (!l || WX.busy) return; WX.busy = true;
   fetch('https://api.open-meteo.com/v1/forecast?latitude=' + l.lat + '&longitude=' + l.lon + '&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto&forecast_days=1')
     .then(function (r) { return r.ok ? r.json() : null; })
@@ -5631,6 +5661,35 @@ function wxFetch() {
       save('wx-now', { at: Date.now(), t: j.current.temperature_2m, code: j.current.weather_code, hi: j.daily.temperature_2m_max[0], lo: j.daily.temperature_2m_min[0] });
       WX.fail = false; wxPaint();
     }, function () { WX.busy = false; WX.fail = true; wxPaint(); });
+}
+/* Jonna, Nov 28, 2026: tapping the weather opens the forecast where you are (at the summit, the summit city): now,
+   the next 24 hours and the week, with The Weather Channel one tap away */
+var DOW3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function wxSheet() {
+  var l = wxLoc(); if (!l) return;
+  var el = openSheet('Weather', '<div class="wxs"><div class="wxs-load">' + icon('wx-cloud') + '<span>Getting the forecast\u2026</span></div></div>', { plain: true });
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=' + l.lat + '&longitude=' + l.lon + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,is_day&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      var box = el.querySelector('.wxs'); if (!box) return;
+      if (!j || !j.current || !j.hourly || !j.daily) { box.innerHTML = '<div class="wxs-load">' + icon('wx-cloud') + '<span>The forecast didn\'t load. Try again in a minute.</span></div>'; return; }
+      var c = j.current, D = j.daily, H = j.hourly;
+      var now = c.time.slice(0, 13), start = Math.max(0, H.time.findIndex(function (t) { return t.slice(0, 13) >= now; }));
+      var hrs = H.time.slice(start, start + 24).map(function (t, i) { var k = start + i, h = +t.slice(11, 13);
+        return '<div class="wxs-h' + (i ? '' : ' now') + '"><span>' + (i ? (h % 12 || 12) + (h < 12 ? ' AM' : ' PM') : 'Now') + '</span>' + icon(wxIcon(H.weather_code[k])) + '<b>' + Math.round(H.temperature_2m[k]) + '\u00b0</b><em>' + (H.precipitation_probability[k] >= 20 ? H.precipitation_probability[k] + '%' : '') + '</em></div>'; }).join('');
+      var lo = Math.min.apply(null, D.temperature_2m_min), hi = Math.max.apply(null, D.temperature_2m_max), span = Math.max(1, hi - lo);
+      var days = D.time.map(function (t, i) { var d = new Date(t + 'T12:00:00');
+        return '<div class="wxs-d"><b>' + (i ? DOW3[d.getDay()] : 'Today') + '</b>' + icon(wxIcon(D.weather_code[i])) + '<em>' + (D.precipitation_probability_max[i] >= 20 ? D.precipitation_probability_max[i] + '%' : '') + '</em><span class="wxs-lo">' + Math.round(D.temperature_2m_min[i]) + '\u00b0</span>' +
+          '<span class="wxs-bar"><i style="left:' + ((D.temperature_2m_min[i] - lo) / span * 100).toFixed(1) + '%;right:' + ((hi - D.temperature_2m_max[i]) / span * 100).toFixed(1) + '%"></i></span><span class="wxs-hi">' + Math.round(D.temperature_2m_max[i]) + '\u00b0</span></div>'; }).join('');
+      var tm = function (x) { var h = +x.slice(11, 13), m = x.slice(14, 16); return (h % 12 || 12) + ':' + m + (h < 12 ? ' AM' : ' PM'); };
+      box.innerHTML = '<section class="wxs-now ' + (c.is_day ? 'day' : 'night') + '"><span class="wxs-where">' + icon('i-pin') + 'Where you are now</span><div class="wxs-big">' + icon(wxIcon(c.weather_code)) + '<b>' + Math.round(c.temperature_2m) + '\u00b0</b></div>' +
+          '<div class="wxs-say"><b>' + esc(wxWord(c.weather_code)) + '</b><span>Feels like ' + Math.round(c.apparent_temperature) + '\u00b0 \u2022 H ' + Math.round(D.temperature_2m_max[0]) + '\u00b0 L ' + Math.round(D.temperature_2m_min[0]) + '\u00b0</span></div>' +
+          '<div class="wxs-facts"><span><b>' + Math.round(c.wind_speed_10m) + ' mph</b>Wind</span><span><b>' + Math.round(c.relative_humidity_2m) + '%</b>Humidity</span><span><b>' + tm(D.sunrise[0]) + '</b>Sunrise</span><span><b>' + tm(D.sunset[0]) + '</b>Sunset</span></div></section>' +
+        '<div class="d-h">Next 24 Hours</div><div class="wxs-hrs">' + hrs + '</div>' +
+        '<div class="d-h">This Week</div><div class="wxs-days">' + days + '</div>' +
+        '<a class="btn primary wxs-twc" href="https://weather.com/weather/today/l/' + l.lat + ',' + l.lon + '" target="_blank" rel="noopener">' + icon('i-link') + 'Open The Weather Channel</a>' +
+        '<p class="wxs-fine">Forecast from Open-Meteo. The Weather Channel opens in its app if you have it.</p>';
+    }, function () { var box = el.querySelector('.wxs'); if (box) box.innerHTML = '<div class="wxs-load">' + icon('wx-cloud') + '<span>The forecast didn\'t load. Try again in a minute.</span></div>'; });
 }
 /* the date line is on My Dashboard and the summit Home: refresh every copy */
 function wxPaint() { document.querySelectorAll('[data-wx-slot], [data-wx-ask]').forEach(function (el) { el.outerHTML = wxChip(); }); }
@@ -7139,19 +7198,21 @@ function newsDate(iso) { var p = String(iso).split('-'); return { d: +p[2], m: M
 function newsFresh(iso) { return (Date.now() - new Date(iso + 'T12:00:00').getTime()) < 14 * 864e5; }
 function newsTile() {
   if (!NEWS || !NEWS.items || !NEWS.items.length) return '';
-  var top = NEWS.items.slice(0, 3), n = top.length;
-  return '<button type="button" class="wd w-news" data-news style="--n:' + n + '"><span class="w-head">' + icon('i-news') + '<span>News</span>' + (newsFresh(top[0].date) ? '<em class="nw-new">New</em>' : '') + '</span>' +
-    '<span class="nw-flip">' + top.map(function (x, i) { var d = newsDate(x.date);
-      return '<span class="nw-it" style="--i:' + i + '"><span class="nw-d"><b>' + d.d + '</b><i>' + d.m + '</i></span><span class="nw-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' +
-    '<span class="nw-dots" aria-hidden="true">' + top.map(function (x, i) { return '<i style="--i:' + i + '"></i>'; }).join('') + '</span>' +
-    '<svg class="nw-press" viewBox="0 0 120 80" aria-hidden="true"><path d="M0 14h120M0 30h120M0 46h120M0 62h120M0 78h120"/></svg></button>';
+  /* Jonna, Nov 28, 2026: a press-room look all its own: a fanned stack of releases that deals the next one to the
+     front, and a ticker crawling the headlines along the bottom */
+  var top = NEWS.items.slice(0, 3), n = top.length, crawl = NEWS.items.slice(0, 6).map(function (x) { return '<span>' + esc(x.title) + '</span>'; }).join('');
+  return '<button type="button" class="wd w-news' + (n < 3 ? ' still' : '') + '" data-news><span class="w-head">' + icon('i-news') + '<span>News</span>' + (newsFresh(top[0].date) ? '<em class="nw-live">New</em>' : '') + '</span>' +
+    '<span class="nw-stack">' + top.map(function (x, i) { var d = newsDate(x.date);
+      return '<span class="nw-sh" style="--i:' + i + '"><span class="nw-stamp"><b>' + d.d + '</b>' + d.m + '</span><span class="nw-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' +
+    '<span class="nw-tick" aria-hidden="true"><b class="nw-tl"><i></i>Press</b><span class="nw-tw"><span class="nw-crawl">' + crawl + crawl + '</span></span></span></button>';
 }
 function newsSheet() {
   if (!NEWS) return;
   var it = NEWS.items, lead = it[0], d = newsDate(lead.date), rest = it.slice(1), months = {};
   var today = new Date(), stamp = DOW[today.getDay()] + ', ' + MONTH[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
   var h = '<div class="nws">' +
-    '<section class="nws-front">' + memRails() + '<div class="nws-mast"><span>' + esc(stamp) + '</span><b>MISMO News</b><span>Press Releases</span></div>' +
+    '<div class="nw-tick nws-tick" aria-hidden="true"><b class="nw-tl"><i></i>Latest</b><span class="nw-tw"><span class="nw-crawl">' + it.slice(0, 8).map(function (x) { return '<span>' + esc(x.title) + '</span>'; }).join('').repeat(2) + '</span></span></div>' +
+    '<section class="nws-front"><div class="nws-mast"><span>' + esc(stamp) + '</span><b>MISMO News</b><span>Press Releases</span></div>' +
       '<a class="nws-lead" href="' + esc(lead.url) + '" target="_blank" rel="noopener"><span class="nws-cal"><b>' + d.d + '</b><i>' + d.m + '</i><em>' + d.y + '</em></span>' +
       '<span class="nws-lt">' + (newsFresh(lead.date) ? '<em class="nw-new">New</em>' : '<em class="nws-k">Latest</em>') + '<b>' + esc(lead.title) + '</b>' + (lead.summary ? '<span>' + esc(lead.summary) + '</span>' : '') +
       '<i class="nws-go">Read the Release' + icon('i-chev') + '</i></span></a></section>';
@@ -8428,6 +8489,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge'), t.getAttribute('data-lounge-day')); return; }
   if (t.hasAttribute('data-news')) { newsSheet(); return; }
   if (t.hasAttribute('data-wx-ask')) { wxAsk(t); return; }
+  if (t.hasAttribute('data-wx-open')) { wxSheet(); return; }
   if (t.hasAttribute('data-wx-retry')) { WX.fail = false; wxPaint(); wxFetch(); return; }
   if (t.hasAttribute('data-mem-open')) { if (t.getAttribute('data-mem-open') === 'iif') iifSheet(); else industrySheet(); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
