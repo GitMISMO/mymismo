@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Who I Met: taking a picture makes a camera shutter sound instead of the scanner beep. The scan beep is louder and crisper, like a store's handheld scanner gun. Beep Off turns both off.
 - Nov 27, 2026: Newcomer Orientation's food note says Lunch Provided instead of Lunch Served.
 - Nov 27, 2026: Dark mode: See Lunch Spots Near the Hotel is light blue instead of dark navy, and the selected tab's icon in the bottom bar is light blue too when the phone itself is set to dark.
 - Nov 27, 2026: MISMO Mic'd Up has its own icon: the classic broadcast mic from the newsletter's Mic'd Up header (grille, band, holder and stand), drawn in the same line style as the app's other icons. It shows on the dashboard tile, in the tile picker and on the episode pop-up.

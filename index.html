@@ -4056,8 +4056,29 @@ function findPerson(cb, other) {
   });
 }
 /* Who I Met pictures (Jonna, Nov 27, 2026): a small square copy kept with the person on this phone (about 25 KB), never sent */
+/* Jonna, Nov 27, 2026: taking a picture sounds like a camera (a shutter's click-clack), not the scanner beep */
+var CAM_AC = null;
+function camSound() {
+  if (!load('scan-beep', true)) return;
+  try {
+    var A = window.AudioContext || window.webkitAudioContext; if (!A) return;
+    CAM_AC = CAM_AC || new A(); var ac = CAM_AC; ac.resume && ac.resume();
+    var len = Math.round(ac.sampleRate * .06), buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    [[0, 4200, .55], [.075, 2600, .45]].forEach(function (k) {
+      var src = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain(), t = ac.currentTime + .01 + k[0];
+      src.buffer = buf; f.type = 'bandpass'; f.frequency.value = k[1]; f.Q.value = .9; g.gain.value = k[2];
+      src.connect(f); f.connect(g); g.connect(ac.destination); src.start(t);
+    });
+    var o = ac.createOscillator(), og = ac.createGain(), t0 = ac.currentTime + .01;
+    o.type = 'sine'; o.frequency.setValueAtTime(180, t0); o.frequency.exponentialRampToValueAtTime(70, t0 + .07);
+    og.gain.setValueAtTime(.25, t0); og.gain.exponentialRampToValueAtTime(.0001, t0 + .08); o.connect(og); og.connect(ac.destination); o.start(t0); o.stop(t0 + .1);
+    navigator.vibrate && navigator.vibrate(20);
+  } catch (e) {}
+}
 function metPicture(cb) {
-  phPick('camera', function (fs) { phLoad(fs[0], function (img) {
+  try { var A0 = window.AudioContext || window.webkitAudioContext; if (A0 && !CAM_AC) CAM_AC = new A0(); } catch (e) {}   /* made on the tap, so phones allow the sound later */
+  phPick('camera', function (fs) { camSound(); phLoad(fs[0], function (img) {
     var c = document.createElement('canvas'), n = 360, x = c.getContext('2d'), w = img.naturalWidth || img.width, h = img.naturalHeight || img.height, m = Math.min(w, h);
     c.width = n; c.height = n; x.drawImage(img, (w - m) / 2, Math.max(0, (h - m) / 3), m, m, 0, 0, n, n); cb(c.toDataURL('image/jpeg', .72));
   }); });
@@ -4164,7 +4185,8 @@ function scanRig(el, onCode) {
     if (!AC || !load('scan-beep', true)) return;
     /* each note: [pitch, start, length, wave, loudness]. Jonna, Nov 27, 2026: like a grocery store checkout scanner, one
        bright, flat beep for a good scan and a low buzz for a tag already scanned */
-    try { notes.forEach(function (n) { var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + n[1], d = n[2] || .08, v = n[4] || .16; o.type = n[3] || 'square'; o.frequency.value = n[0]; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .005); g.gain.setValueAtTime(v, t + d - .015); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + .01); }); } catch (e) {}
+    try { if (!AC.mm) { AC.mm = AC.createDynamicsCompressor(); AC.mm.threshold.value = -18; AC.mm.ratio.value = 6; var mg = AC.createGain(); mg.gain.value = 1.8; AC.mm.connect(mg); mg.connect(AC.destination); }
+      notes.forEach(function (n) { var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + n[1], d = n[2] || .08, v = n[4] || .16; o.type = n[3] || 'square'; o.frequency.value = n[0]; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .004); g.gain.setValueAtTime(v, t + d - .012); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(AC.mm); o.start(t); o.stop(t + d + .01); }); } catch (e) {}
   }
   function hit(n) {
     var now = Date.now(); if (last[n] && now - last[n] < 4000) return; last[n] = now; seen = {};
@@ -4196,7 +4218,9 @@ function scanRig(el, onCode) {
     loop();
   }).catch(function () { var m = el.querySelector('.sc-msg'); if (m) m.innerHTML = '<div class="note">The camera is off for MyMISMO. Allow the camera in your phone\'s settings, or use Type the Number.</div>'; });
   else { var m = el.querySelector('.sc-msg'); if (m) m.innerHTML = '<div class="note">This phone\'s browser can\'t open the camera here. Use Type the Number.</div>'; }
-  return { stop: stop, ok: function () { tone([[2350, 0, .13, 'square', .11]]); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }, again: function () { tone([[300, 0, .26, 'sawtooth', .12], [304, 0, .26, 'square', .06]]); try { navigator.vibrate && navigator.vibrate([30, 40, 30]); } catch (e) {} } };
+  /* Jonna, Nov 27, 2026: louder and crisper, like a store's handheld scanner gun: one clean high beep, a pure tone and a
+     square layered so it cuts through a noisy room */
+  return { stop: stop, ok: function () { tone([[2730, 0, .12, 'square', .2], [2730, 0, .12, 'sine', .3], [5460, 0, .12, 'sine', .05]]); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }, again: function () { tone([[300, 0, .26, 'sawtooth', .12], [304, 0, .26, 'square', .06]]); try { navigator.vibrate && navigator.vibrate([30, 40, 30]); } catch (e) {} } };
 }
 /* the sessions to check people in to: Summit HQ's list, the same sessions and codes as its TrackPod Scanner Sheet
    (CN-056, read with the staff sign-in like the attendee list); until that's published, the agenda */
@@ -4308,7 +4332,7 @@ function scanHub(sid, mode0) {
   }
   /* Who I Met and Touchpoint: the scan opens its card; the camera waits until the card is closed */
   function card(sc) {
-    if (rig) { rig.ok(); rig.stop(); rig = null; } paused = true;
+    if (rig) { if (!sc.pic) rig.ok(); rig.stop(); rig = null; } paused = true;   /* a picture already made its camera sound */
     sc.kind = mode === 'met' ? 'Someone I Met' : 'Touchpoint'; sc.hub = true;
     var le = leadSheet(sc, true);
     var w = setInterval(function () { if (!el.isConnected) { clearInterval(w); return; } if (!le || !le.isConnected) { clearInterval(w); resume(); paint(); } }, 300);
