@@ -487,7 +487,12 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .dash-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:8px 0 16px}
 .dh-date{color:var(--ink-2); font-weight:600; font-size:13.5px}
 .dash-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); line-height:1; letter-spacing:-.02em; margin-top:3px}
-.dash-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; grid-auto-flow:dense}
+.dash-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; grid-auto-flow:dense; --half-h:206px}
+/* Jonna, Nov 28, 2026: every half-width tile is the same, locked height (MISMO Matters, Join a Workgroup, Certified, Webinars set it) */
+.dash-grid > .wd:not(.wide):not(.solo){height:var(--half-h); min-height:0}
+@media (max-width:374px){ .dash-grid{--half-h:225px} }
+@media (max-width:480px){ .w-site .w-t{font-size:17.5px; -webkit-line-clamp:2} }   /* room for the first mismo.org link at the locked size */
+@media (min-width:760px){ .dash-grid{--half-h:210px} }
 .wd{position:relative; overflow:hidden; isolation:isolate; display:flex; flex-direction:column; align-items:flex-start; gap:6px; text-align:left; border-radius:18px; padding:16px; min-height:150px; cursor:pointer; text-decoration:none;
   background:var(--surface); border:1px solid var(--border); color:var(--ink); box-shadow:var(--shadow); font:inherit}
 .wd.wide{grid-column:1 / -1}
@@ -2033,21 +2038,22 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .w-mem.lend .w-s{color:#fff; font-size:12.5px; line-height:1.35; margin-top:auto}
 /* Industry: a plain card, like the tiles around it; the four colored bars carry the color (Jonna, Nov 28: gold kept for buttons and the top level) */
 .w-mem.ind .w-t{align-self:center; text-align:center; margin-top:auto; color:var(--ink)}
-.wm-chart{align-self:stretch; display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; align-items:end; height:104px; margin:8px 0 2px; padding:0 2px}
-.wm-col{display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; gap:3px}
+.wm-chart{align-self:stretch; display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; align-items:stretch; height:104px; margin:8px 0 2px; padding:0 2px}
+.wm-col{display:flex; flex-direction:column; justify-content:flex-end; align-items:center; min-height:0; gap:3px}
 .wm-col em{font-style:normal; font-size:11.5px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums}
-.wm-col i{flex:none; width:100%; max-width:30px; height:calc(var(--h) * .68); min-height:8px; border-radius:5px 5px 2px 2px; background:var(--bc); animation:wm-rise .8s cubic-bezier(.2,.8,.2,1) both}
+.wm-col i{flex:0 1 calc(var(--h) * .68); width:100%; max-width:30px; height:0; min-height:8px; border-radius:5px 5px 2px 2px; background:var(--bc); animation:wm-rise .8s cubic-bezier(.2,.8,.2,1) both}
 .wm-col:nth-child(2) i{animation-delay:.08s} .wm-col:nth-child(3) i{animation-delay:.16s} .wm-col:nth-child(4) i{animation-delay:.24s; box-shadow:0 6px 16px -6px #c98500}
 .wm-col small{font-size:10.5px; font-weight:700; color:var(--ink-3); white-space:nowrap}
-@keyframes wm-rise{from{height:0; min-height:0}}
-/* Jonna, Nov 28, 2026: shorter on portrait phones */
-@media (max-width:480px){
-  .w-mem{min-height:0; padding:13px 13px 12px; gap:4px}
+@keyframes wm-rise{from{flex-basis:0; min-height:0}}
+/* Jonna, Nov 28, 2026: compact, so they fit the locked half-tile size */
+.w-mem .wm-chart{flex:1 1 auto; height:auto; min-height:74px}
+@media all{
+  .w-mem{min-height:0; gap:4px}
   .w-mem .w-head{font-size:12.5px; line-height:1.2}
-  .w-mem .wm-big{font-size:38px; margin-top:2px}
+  .w-mem .wm-big{font-size:44px; margin-top:4px}
   .w-mem .wm-unit{font-size:12px}
-  .w-mem.lend .w-s{font-size:12px; margin-top:6px}
-  .wm-chart{height:74px; margin:4px 0 0; gap:4px}
+  .w-mem.lend .w-s{font-size:12.5px; margin-top:auto}
+  .wm-chart{margin:4px 0 0; gap:4px}
   .wm-col em{font-size:10.5px} .wm-col small{font-size:9.5px}
   .w-mem.ind .w-t{font-size:16px; line-height:1.15}
 }
