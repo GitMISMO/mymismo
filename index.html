@@ -2023,19 +2023,27 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 @keyframes mm-grow{from{width:0}}
 .mm-core{list-style:none; margin:0; padding:14px 16px; display:grid; gap:9px; border-radius:14px; background:var(--surface); border:1px solid var(--border)}
 /* tiles */
-.w-mem{position:relative; overflow:hidden; isolation:isolate; color:#fff; border:0; text-align:left}
-.w-mem.lend{background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.4), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
-.w-mem.ind{background:radial-gradient(90% 90% at 100% 0%, rgba(242,193,78,.4), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
-.w-mem .w-head, .w-mem .w-head svg{color:#a9d8f3} .w-mem.ind .w-head svg{color:#f2c14e}
+.w-mem{position:relative; overflow:hidden; isolation:isolate; text-align:left}
 .w-mem > *:not(svg){position:relative; z-index:1}
-.w-mem .mm-rails{opacity:.8}
-.w-mem .wm-big{font-family:var(--cond); font-weight:800; font-size:44px; line-height:.95; color:#f2c14e; margin-top:6px; text-shadow:0 0 20px rgba(242,193,78,.4)}
-.w-mem .wm-unit{font-size:13px; font-weight:700; color:#fff}
-.w-mem .w-s{color:#cfe3f1; font-size:12.5px; line-height:1.35; margin-top:auto}
-.w-mem .w-t{color:#fff}
-.wm-bars{display:flex; align-items:flex-end; gap:5px; height:46px; margin:8px 0 6px}
-.wm-bars i{width:16px; height:var(--h); border-radius:4px 4px 2px 2px; background:var(--bc); animation:wm-rise .8s cubic-bezier(.2,.8,.2,1) both} .wm-bars i:nth-child(2){animation-delay:.08s} .wm-bars i:nth-child(3){animation-delay:.16s} .wm-bars i:nth-child(4){animation-delay:.24s; box-shadow:0 0 14px rgba(242,193,78,.6)}
-@keyframes wm-rise{from{height:0}}
+/* Lenders: MISMO sky, so it stands apart from the navy tiles around it */
+.w-mem.lend{border:0; color:#fff; background:radial-gradient(80% 70% at 100% 0%, rgba(255,255,255,.35), transparent 60%), linear-gradient(155deg, #4ea9e2 0%, #2a87c8 55%, #1d6aa6 100%)}
+.w-mem.lend .w-head, .w-mem.lend .w-head svg{color:#fff}
+.w-mem.lend .mm-rails path{stroke:#fff; opacity:.3}
+.w-mem.lend .mm-rails path:nth-child(3n){stroke:#f2c14e; opacity:.55}
+.w-mem .wm-big{font-family:var(--cond); font-weight:800; font-size:46px; line-height:.95; color:#fff; margin-top:6px; text-shadow:0 2px 0 rgba(13,49,76,.25), 0 0 22px rgba(13,49,76,.25)}
+.w-mem .wm-unit{font-size:13px; font-weight:800; color:#0d314c; background:#f2c14e; padding:2px 7px; border-radius:5px}
+.w-mem.lend .w-s{color:#fff; font-size:12.5px; line-height:1.35; margin-top:auto}
+/* Industry: a light card with a warm gold wash, the levels as a centered chart */
+.w-mem.ind{background:linear-gradient(165deg, color-mix(in srgb, #f2c14e 22%, var(--surface)) 0%, var(--surface) 70%)}
+.w-mem.ind .w-head svg{color:#c98500}
+.w-mem.ind .w-t{align-self:center; text-align:center; margin-top:auto; color:var(--ink)}
+.wm-chart{align-self:stretch; display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; align-items:end; height:104px; margin:8px 0 2px; padding:0 2px}
+.wm-col{display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; gap:3px}
+.wm-col em{font-style:normal; font-size:11.5px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums}
+.wm-col i{flex:none; width:100%; max-width:30px; height:calc(var(--h) * .68); min-height:8px; border-radius:5px 5px 2px 2px; background:var(--bc); animation:wm-rise .8s cubic-bezier(.2,.8,.2,1) both}
+.wm-col:nth-child(2) i{animation-delay:.08s} .wm-col:nth-child(3) i{animation-delay:.16s} .wm-col:nth-child(4) i{animation-delay:.24s; box-shadow:0 6px 16px -6px #c98500}
+.wm-col small{font-size:10.5px; font-weight:700; color:var(--ink-3); white-space:nowrap}
+@keyframes wm-rise{from{height:0; min-height:0}}
 /* Champions Lounge: the two paths */
 .lg-paths{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .lg-path{display:grid; gap:4px; justify-items:start; align-content:start; text-align:left; padding:14px 13px; border-radius:14px; border:0; color:#fff; font:inherit; cursor:pointer; background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
@@ -2043,7 +2051,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .lg-path > svg{width:22px; height:22px; color:#f2c14e} .lg-path b{font-size:15px; line-height:1.2} .lg-path span{font-size:12.5px; color:#cfe3f1; line-height:1.35}
 .lg-path em{display:inline-flex; align-items:center; gap:3px; margin-top:6px; font-style:normal; font-size:13px; font-weight:800; color:#f2c14e} .lg-path em svg{width:14px; height:14px}
 @media (max-width:359px){ .lg-paths, .mm-why{grid-template-columns:1fr} }
-@media (prefers-reduced-motion: reduce){ .mm-rails path, .mm-words span, .mm-bars i::before, .wm-bars i{animation:none} }
+@media (prefers-reduced-motion: reduce){ .mm-rails path, .mm-words span, .mm-bars i::after, .wm-col i{animation:none} }
 .rc-fw-go{width:100%; justify-content:center; gap:10px; border:1px solid #6d3ba8; color:#fff; background:linear-gradient(100deg, #4b1f72, #6d3ba8 40%, #1d7a45 75%, #b8891f); font-weight:800}
 .rc-fw-dots{display:inline-flex; gap:3px} .rc-fw-dots i{width:7px; height:7px; border-radius:50%; background:#f2c14e} .rc-fw-dots i:nth-child(1){background:#b36bff} .rc-fw-dots i:nth-child(2){background:#3ddc84}
 .lg-here{list-style:none; margin:0 0 6px; padding:0; display:grid; gap:8px} .lg-here li{display:grid; grid-template-columns:20px 1fr; gap:10px; align-items:start; font-size:14px; line-height:1.45} .lg-here svg{width:18px; height:18px; margin-top:2px; color:var(--link)}
@@ -6846,7 +6854,7 @@ function widget(id) {
   }
   if (id === 'groups') return wgTile();
   if (id === 'lenders') return '<button type="button" class="wd w-mem lend" data-mem-open="iif">' + head() + '<span class="wm-big">$0.75</span><span class="wm-unit">per loan</span><span class="w-s">The Innovation Investment Fund is the lender path to membership.</span>' + memRails() + '</button>';
-  if (id === 'industry') return '<button type="button" class="wd w-mem ind" data-mem-open="ind">' + head() + '<span class="wm-bars" aria-hidden="true">' + MEM.levels.map(function (l, i) { return '<i style="--h:' + [30, 48, 70, 100][i] + '%;--bc:' + l.c + '"></i>'; }).join('') + '</span><span class="w-t">Compare 4 Levels</span><span class="w-s">Corporate to Chair Champion.</span></button>';
+  if (id === 'industry') return '<button type="button" class="wd w-mem ind" data-mem-open="ind">' + head() + '<span class="wm-chart" aria-hidden="true">' + MEM.levels.map(function (l) { return '<span class="wm-col" style="--h:' + Math.max(14, Math.round(l.price / 55000 * 100)) + '%;--bc:' + l.c + '"><em>$' + (l.price / 1000) + 'K</em><i></i><small>' + esc(l.name.replace(' Champion', '').replace('Corporate', 'Corp.').replace('Associate', 'Assoc.').replace('Executive', 'Exec.')) + '</small></span>'; }).join('') + '</span><span class="w-t">Compare 4 Levels</span></button>';
   if (id === 'sponsor') return '<a class="wd w-spon wide" href="' + PROSP_URL + '">' + head() + '<span class="w-t">Sponsor a MISMO Summit</span><span class="wsp-sub">Put your company in front of the people who build the mortgage industry\'s standards.</span><span class="wsp-go">See the Opportunities' + icon('i-chev') + '</span><span class="wsp-art" aria-hidden="true">' + icon('i-banner') + '</span></a>';
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
   if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
