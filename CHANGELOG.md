@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: On a computer, My Dashboard shows Open MyMISMO on Your Phone beside the greeting: a QR code (the QR Code Manager's 7MZEEJ, which sends people to resources.mismo.org/mymismo/) so people point their phone's camera at it instead of typing the address. Hidden on phones and in the installed app.
 - Nov 27, 2026: Book Your Room no longer says "Left to book the MISMO rate." It says when the room block closes.
 - Nov 27, 2026: The banner on the Sponsor a Summit button beside See All Sponsors is gold, to match its gold outline and words.
 - Nov 27, 2026: Sponsor a Summit has its own symbol: an event banner on two poles with a star (Jonna tried a spotlight and preferred the banner), on the dashboard tile, in the tile list and on the Sponsor a Summit button by the sponsors.

@@ -454,6 +454,13 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 /* ---------- My Dashboard ---------- */
 .w-new{display:block; margin-top:6px; font-size:12.5px; color:var(--ink-2)}
 .w-new b{color:var(--good); font-weight:700}
+.qr-phone{display:none}
+@media (min-width:900px) and (hover:hover){
+  .qr-phone{display:flex; align-items:center; gap:14px; max-width:430px; padding:10px 14px 10px 10px; border-radius:14px; background:var(--surface); border:1px solid var(--border); box-shadow:0 6px 18px -12px rgba(13,49,76,.4)}
+  .qr-phone svg{flex:none; width:96px; height:96px; border-radius:6px; border:1px solid var(--border)}
+  .qr-phone b{display:flex; align-items:center; gap:7px; font-size:15px; color:var(--ink)} .qr-phone b svg{width:17px; height:17px; border:0; color:var(--link)}
+  .qr-phone span{display:block; margin-top:4px; font-size:13px; line-height:1.4; color:var(--ink-2)}
+}
 .dash-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:8px 0 16px}
 .dh-date{color:var(--ink-2); font-weight:600; font-size:13.5px}
 .dash-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); line-height:1; letter-spacing:-.02em; margin-top:3px}
@@ -5329,9 +5336,19 @@ function firstName() {
   var was = load('staff-was', ''); if (was && was !== 'yes' && !load('myname', '')) return String(was).split(/\s+/)[0];   /* staff whose sign-in ended */
   return load('myname', '');   /* anyone else: the name they gave in Settings, kept on this phone */
 }
-function greetHead() {
+/* Jonna, Nov 27, 2026: on a computer, My Dashboard shows a QR code so people can open MyMISMO on their phone by pointing
+   the camera instead of typing the address. The code is the QR Code Manager's 7MZEEJ (resources.mismo.org/qr/?c=7MZEEJ,
+   Website placement, no end date), which sends people to resources.mismo.org/mymismo/; its link can change there without
+   a new code. */
+var QR_PHONE = '11111110000111000111001111111,10000010000001010010101000001,10111010011010000100101011101,10111010001001100000001011101,10111010000111101110001011101,10000010100011011111001000001,11111110101010101010101111111,00000000001010100101000000000,10010110110010100000110100000,10100100001011000000101001001,11100111100101001101010101110,00110100000001011011100110110,10100111101010010101111001011,01011000001011001111100000000,00110110101101000010101001111,01000001111011000101111101010,10001010101111100100110100010,01111101101010101000011101001,10010010001111000100101110011,00000000001111000111100000011,10110010010110110011111110100,00000000101011000001100010111,11111110010001101100101010010,10000010111101001011100011110,10111010011110111100111110000,10111010110000101111101111110,10111010010001101110000011101,10000010001000000110100110010,11111110110101001100110010010';
+function qrPhone() {
+  var d = ''; QR_PHONE.split(',').forEach(function (r, y) { for (var x = 0; x < r.length; x++) if (r[x] === '1') d += 'M' + (x + 2) + ' ' + (y + 2) + 'h1v1h-1z'; });
+  return '<div class="qr-phone" aria-label="Open MyMISMO on your phone"><svg viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR code for MyMISMO"><rect width="33" height="33" fill="#fff"/><path fill="#0d314c" d="' + d + '"/></svg>' +
+    '<div><b>' + icon('i-camera') + 'Open MyMISMO on Your Phone</b><span>Point your phone\'s camera at the code, then tap the link. Add it to your home screen to open it like an app.</span></div></div>';
+}
+function greetHead(qr) {
   var n = new Date(), f = firstName();
-  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1>' + (f ? '' : '<button type="button" class="linkbtn dh-name" data-myname>Add Your Name</button>') + '</div></div>';
+  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1>' + (f ? '' : '<button type="button" class="linkbtn dh-name" data-myname>Add Your Name</button>') + '</div>' + (qr && !standalone() ? qrPhone() : '') + '</div>';
 }
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
 /* the AI Webinar Series with MBA Education, as the website's Education page lists it (data/ai-webinars.json, kept fresh by
@@ -6704,7 +6721,7 @@ function widget(id) {
 if (window.matchMedia) ['(min-width:760px)', '(orientation:landscape) and (max-height:540px)'].forEach(function (q) { var m = window.matchMedia(q), f = function () { if (S.page === 'dash' && !stack.length) renderPage('dash'); }; if (m.addEventListener) m.addEventListener('change', f); else if (m.addListener) m.addListener(f); });
 function renderDash() {
   var picks = dashPicks() || [];
-  var h = greetHead() + wgSoonBanner();
+  var h = greetHead(true) + wgSoonBanner();
   if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
   if (recapOnDash()) h += recapCard('dash');
   var ws = picks.map(widget).filter(Boolean);
