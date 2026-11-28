@@ -620,6 +620,10 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   :root:not([data-theme="light"]) .w-spon .w-logos img.solid{inset:14% 10%; width:80%; height:72%; padding:8px 12px; border-radius:10px; box-shadow:0 8px 20px -10px rgba(0,0,0,.6)} }
 .w-logos img{position:absolute; inset:0; margin:auto; max-width:85%; max-height:52px; object-fit:contain; background:#fff; border-radius:8px; padding:6px 10px; opacity:0; animation:logo-cycle calc(var(--n) * 2.6s) infinite; animation-delay:calc(var(--i) * 2.6s - .5s)}
 @keyframes logo-cycle{0%{opacity:0; transform:translateY(6px)} 4%,22%{opacity:1; transform:none} 28%,100%{opacity:0; transform:translateY(-6px)}}
+.w-spon{min-height:130px; color:#fff; border:0; background:radial-gradient(90% 130% at 100% 0%, rgba(242,193,78,.5), transparent 60%), linear-gradient(150deg, #14486e, #0d314c 60%, #071d2e)}
+.w-spon .w-head, .w-spon .w-head svg{color:#f2c14e} .w-spon .w-t{color:#fff; max-width:70%} .wsp-sub{font-size:13.5px; line-height:1.4; color:#cfe3f1; max-width:72%}
+.wsp-go{display:inline-flex; align-items:center; gap:4px; margin-top:4px; padding:8px 11px 8px 13px; border-radius:9px; background:#f2c14e; color:#0d314c; font-weight:800; font-size:14px} .wsp-go svg{width:15px; height:15px}
+.wsp-art{position:absolute; right:-14px; bottom:-20px; z-index:-1; color:#f2c14e; opacity:.22} .wsp-art svg{width:130px; height:130px}
 .w-idea{background:linear-gradient(160deg, color-mix(in srgb, #f0b93a 18%, var(--surface)), var(--surface) 60%)}
 .w-idea .w-head svg{color:#c99a2e}
 .wd.solo{min-height:120px}
@@ -1619,6 +1623,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .spband{position:relative; overflow:hidden; isolation:isolate; margin:28px -14px 8px; border-radius:0; color:#fff; background:#071d2e; padding:24px 0 22px; box-shadow:0 18px 40px -22px rgba(6,32,47,.7)}
 .spband > .hero-art{z-index:-1; opacity:.9}
 .spband h2{font-family:var(--cond); font-size:clamp(26px, 7.5vw, 38px); line-height:1.05; letter-spacing:-.015em; text-align:center; margin:0 16px 18px}
+.sb-acts{display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:16px} .sb-acts .sb-all{margin:0; text-decoration:none} .sb-all.sb-be{border-color:rgba(242,193,78,.7); background:rgba(242,193,78,.16); color:#ffe7a3}
 .sb-all{display:flex; align-items:center; gap:7px; margin:16px auto 0; padding:10px 16px; border-radius:8px; border:1px solid rgba(116,191,235,.55); background:rgba(116,191,235,.12); color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer}
 .sb-all:hover{background:rgba(116,191,235,.22)}
 .sb-all svg{width:17px; height:17px; color:#74bfeb}
@@ -2521,6 +2526,11 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
    ------------------------------------------------------------------ */
 
 var FEED_AGENDA = '/summit-agenda/agenda.json';
+/* Jonna, Nov 27, 2026 (CN-072): Sponsor a Summit opens the Sponsorship Portal's phone prospectus in the same window, so the
+   phone's Back comes back here. It shows while any program is published on MyMISMO, and until that file exists (Series +
+   Winter is on). */
+var PROSP = null, PROSP_URL = 'https://resources.mismo.org/Sponsorship-Prospectus/app/?from=mymismo';
+function prospOn() { if (!PROSP || !PROSP.pages) return true; return Object.keys(PROSP.pages).some(function (k) { return PROSP.pages[k] === true; }); }
 var FEED_SPONSORS = function (slug) { return '/sponsors/' + slug + '.json'; };
 var RELAY = 'https://rgvdi67cg27o5kcmiytcqbqnrm0hmztx.lambda-url.us-east-1.on.aws';   /* the same save relay as /assets/session.js */
 var STORE = 'tools:mymismo:';
@@ -3653,7 +3663,7 @@ function sponsorBand() {
      level (Platinum); the page refreshing itself every minute carries on from where it was instead of jumping back. */
   return '<section class="spband" aria-label="Sponsors">' + heroArt({ city: false }) + '<h2>Thank You to Our Sponsors</h2>' +   /* Jonna, Nov 27, 2026: no skyline here */
     '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '" data-dur="' + dur + '"><div class="run">' + run.map(tile).join('') + '</div></div>' +
-    '<button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button></section>';
+    '<div class="sb-acts"><button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button>' + (prospOn() ? '<a class="sb-all sb-be" href="' + PROSP_URL + '">' + icon('i-star') + 'Sponsor a Summit</a>' : '') + '</div></section>';
 }
 /* Jonna, Nov 26, 2026: the sponsor band glides on its own, and people can swipe it back and forth (or drag it with a
    mouse). It pauses while touched and carries on a few seconds after. Endless both ways: the list runs twice, so
@@ -5082,6 +5092,8 @@ function loadExtras() {
   getJSON('data/workgroups.json').then(function (w) { WG = w; again(['agenda', 'mine', 'home']); }).catch(function () {});
   getJSON('data/agenda-tags.json').then(function (t) { TAGS = t; again(['home', 'agenda', 'mine', 'explore', 'dash', 'people']); }).catch(function () {});
   getJSON('/podcast/micdup.json').then(function (m) { MU = m; mergeNews(); again(['dash']); }).catch(function () {});
+  /* CN-072: the phone prospectus offers only the programs the Sponsorship Portal has on; with none on, no Sponsor a Summit */
+  fetch('/sponsors/prospectus-app.json', { cache: 'no-store' }).then(function (r) { if (r.status === 404) return null; return r.ok ? r.json() : null; }).then(function (j) { if (j && j.pages) { PROSP = j; again(['dash', 'explore']); } }).catch(function () {});
   getJSON('/marketing-hq/matters/editions.json').then(function (m) { MM = m; again(['dash']); }).catch(function () {});
   /* Join a Workgroup: Meeting Trackers' published schedule, leaders, agendas and calendars, and the website's workgroup sponsors */
   getJSON('/meeting-trackers/schedule.json').then(function (d) { WGS.sched = d; again(['dash']); }).catch(function () {});
@@ -5289,11 +5301,12 @@ var DASH = [
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Play the Board, take on your colleagues and climb the leaderboard', icon: 'i-star' },
+  { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-sponsor' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
   { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' }
 ];
-function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE) && !(d.id === 'merch' && (STORE_RELEASE || !appTester())); }).map(function (d) { return d.id; }); }
+function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'sponsor' && !prospOn()) && !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE) && !(d.id === 'merch' && (STORE_RELEASE || !appTester())); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
 function staffSession() { try { return window.ResourcesSession && ResourcesSession.current(); } catch (e) { return null; } }
 /* Jonna, Nov 25, 2026: the early features (Trivia Test Run, the attendee preview) are only for people given MyMISMO in
@@ -6665,6 +6678,7 @@ function widget(id) {
       (CERT ? '<span class="w-new"><b>' + fresh.length + ' new</b> in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
   if (id === 'groups') return wgTile();
+  if (id === 'sponsor') return '<a class="wd w-spon wide" href="' + PROSP_URL + '">' + head() + '<span class="w-t">Sponsor a MISMO Summit</span><span class="wsp-sub">Put your company in front of the people who build the mortgage industry\'s standards.</span><span class="wsp-go">See the Opportunities' + icon('i-chev') + '</span><span class="wsp-art" aria-hidden="true">' + icon('i-sponsor') + '</span></a>';
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
   if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
     var show = ['hoodie', 'mug', 'cap', 'tote', 'tee', 'bottle'].map(function (k) { return MERCH.filter(function (p) { return p.id === k; })[0]; });
