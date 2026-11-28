@@ -5422,7 +5422,9 @@ function loadExtras() {
   function again(pages) { if (pages.indexOf(S.page) >= 0 && !stack.length) renderPage(S.page); }
   getJSON('data/guide.json').then(function (g) { G = g; again(['explore', 'home', 'dash']); }).catch(function () {});
   getJSON('data/event.json').then(function (e) { EV = e; again(['home']); }).catch(function () {});
-  if (S.sid) getJSON('data/floorplan/' + S.sid + '.json').then(function (f) { FP = f; again(['explore', 'home']); }).catch(function () {});
+  if (S.sid) getJSON('data/floorplan/' + S.sid + '.json').then(function (f) { FP = f; again(['explore', 'home']);
+    /* Jonna, Nov 28, 2026: fetch the hotel map picture now, so Find on Map and Walk There work offline even if the map was never opened */
+    if (f && f.image) { var im = new Image(); im.decoding = 'async'; im.src = f.image; } }).catch(function () {});
   getJSON('data/logo-bg.json').then(function (l) { LOGOBG = l; again(['dash']); }).catch(function () {});
   getJSON('data/ai-webinars.json').then(function (a) { AIW = a; again(['dash']); }).catch(function () {});
   getJSON('data/workgroups.json').then(function (w) { WG = w; again(['agenda', 'mine', 'home']); }).catch(function () {});
@@ -5635,10 +5637,10 @@ function renderExplore() {
 var DASH = [
   { id: 'summit', name: 'MISMO Summit', desc: 'The agenda, your schedule, speakers, the hotel and more', icon: 'i-s' },
   { id: 'matters', name: 'MISMO Matters', desc: 'The monthly newsletter and The Vieaux Point', icon: 'i-mail' },
-  { id: 'groups', name: 'Join a Workgroup', desc: 'Every workgroup, when it meets and how to join', icon: 'i-people' },
-  { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-mic' },
-  { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'news', name: 'News', desc: 'MISMO press releases', icon: 'i-news' },
+  { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-mic' },
+  { id: 'groups', name: 'Join a Workgroup', desc: 'Every workgroup, when it meets and how to join', icon: 'i-people' },
+  { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Play the Board, take on your colleagues and climb the leaderboard', icon: 'i-star' },
   { id: 'lenders', name: 'Membership for Lenders', desc: 'The Innovation Investment Fund: $0.75 per loan', icon: 'i-handshake' },
   { id: 'industry', name: 'Membership for Industry', desc: 'Compare membership levels, from Corporate to Chair Champion', icon: 'i-people' },

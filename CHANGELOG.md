@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: Find on Map and Walk There work offline even if the map was never opened (the hotel map picture is kept on the phone as soon as the app loads).
+- Nov 28, 2026: My Dashboard order: News beside MISMO Matters; Join a Workgroup and Certifications side by side under Mic'd Up.
 - Nov 28, 2026: One Sign In for everyone: enter your email and MyMISMO picks the sign-in (a MISMO or MBA email gets the MISMO Resources sign-in and the staff chip; attendees get their email code; contractors have a link).
 - Nov 28, 2026: Offline, the attendee list says you're offline (not that you need Summit HQ access) and loads again on its own; speaker headshots are kept on the phone once seen online, and show initials instead of a blank when they can't load.
 - Nov 28, 2026: The weather pop-up no longer links to The Weather Channel; MyMISMO's own forecast covers it.
