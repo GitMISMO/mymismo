@@ -2864,7 +2864,8 @@ function recapReady() { var n = nowAt(); return !!S.summit && n.date >= S.last; 
    the summit ends it shows the Example (to get people going) and opens on Example and Mine So Far; from the last day it
    shows their own recap picture and opens on theirs. On the Summit page and My Dashboard, until 30 days after. */
 var RC_HERO = { key: '', url: '', n: null, busy: false, ex: '' };
-function recapOnDash() { if (!S.summit) return false; var l = dparts(S.last), e = new Date(l.y, l.m - 1, l.d + 30), n = dparts(nowAt().date); return new Date(n.y, n.m - 1, n.d) <= e; }
+/* Jonna, Nov 27, 2026: on My Dashboard only once the recap is ready, for 14 days; before that it lives under Summit Photos */
+function recapOnDash() { if (!S.summit || !recapReady()) return false; var l = dparts(S.last), e = new Date(l.y, l.m - 1, l.d + 14), n = dparts(nowAt().date); return new Date(n.y, n.m - 1, n.d) <= e; }
 function recapCard(where) {
   var n = RC_HERO.n, ready = recapReady(), u = ready ? RC_HERO.url : RC_HERO.ex;
   setTimeout(recapHeroFill, 0);
@@ -3174,7 +3175,7 @@ function renderHome() {
       '<button type="button" data-go="people">' + icon('i-people') + '<span>Speakers</span></button>' +
       '<button type="button" data-go="mine">' + icon('i-star') + '<span>Starred</span></button>' +
     '</div>' +
-    (during ? photosCard() + recapCard('home') : recapReady() ? recapCard('home') : '') +   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
+    (during ? photosCard() + recapCard('home') : '') +   /* the recap always sits right under Summit Photos */   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
     nextCard('home');
 
   h += changesCard();
@@ -3203,7 +3204,7 @@ function renderHome() {
       (ppl.length ? '<div class="ph" style="grid-template-columns:repeat(' + ppl.length + ',1fr)">' + ppl.map(function (p) { return '<img src="' + esc(p.photo) + '" alt="" loading="lazy">'; }).join('') + '</div>' : '') +
       '<div class="tx"><b>See Who\'s on Stage, and When</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
   }
-  if (!during) h += photosCard() + (recapReady() ? '' : recapCard('home'));
+  if (!during) h += photosCard() + recapCard('home');
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
   /* Jonna, Nov 27, 2026: when the agenda last changed moved to Settings, as Last Update */
