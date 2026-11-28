@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: mismo.org places start with MISMO FRAME and MISMO Link.
 - Nov 28, 2026: My Dashboard's weather shows just the current temperature; tap it for the forecast.
 - Nov 28, 2026: Phones turn again: on its side a phone shows the same layout as upright, in one phone-width column (no stretched tiles or side rail).
 - Nov 28, 2026: The weather pop-up comes alive: a moving sky for the current conditions (sun, clouds, rain, snow, lightning or stars), the next 24 hours as a temperature line, the week's ranges colored by temperature, and today's sun path. On a computer the date line shows just the temperature.
