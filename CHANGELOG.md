@@ -1,5 +1,8 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: The MISMO Matters tile is a mini version of the newsletter: its navy masthead with the MISMO logo and "MISMO Matters," the date bar, the President's Vieaux Point band and Brian's photo beside the headline. Brian's photo (the one the newsletter runs) also replaces his initials in the Vieaux Point pop-up.
+- Nov 27, 2026: Expand Panel shows on computers, tablets and phones turned sideways, but not on phones held upright (the pop-up already fills the width there).
+- Nov 27, 2026: Settings has Delete My Trivia Account for anyone signed in to Trivia (the app stores require an in-app delete for any account made in the app; the Delete Your Data page already pointed here).
 - Nov 27, 2026: The MISMO Trivia tile on the dashboard now says "Play the Board, take on your colleagues" (short enough to keep the tile the same height on phones).
 - Nov 27, 2026: Phones and tablets get the Expand Panel button too: on a phone the pop-up fills the whole screen, and on a tablet the side panel opens full width. It remembers your choice, like on the computer.
 - Nov 27, 2026: MISMO Trivia's line when picking dashboard tiles now reads "Play the Board, take on your colleagues and climb the leaderboard."

@@ -54,7 +54,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Roboto+Slab:wght@300&display=swap">
 <script>
 (function () {
   try { var t = localStorage.getItem('mismo.portal.theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -559,6 +559,22 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-mat .w-t{font-size:15.5px; line-height:1.22; color:#0d314c; -webkit-line-clamp:3}
 .wm-paper .wm-p{color:#456179} .wm-paper .wm-k{color:#7794aa} .wm-paper .wm-li{color:#14486e; border-top-color:#e5eef5}
 @media (prefers-reduced-motion: reduce){ .wm-paper{transition:none} }
+/* the mini MISMO Matters */
+.wm-paper.nl{padding:0; border-radius:5px; container-type:inline-size}
+@container (max-width:200px){ .nl-vp .pre{display:none} }
+.nl-vp b{font-weight:inherit}
+.nl-mast{position:relative; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:7px 13px 6px 9px; background:linear-gradient(160deg, #0f3654, #0d314c 60%, #0a2a42)}
+.nl-mast:after{content:""; position:absolute; top:0; right:0; width:5px; height:100%; background:#4ea3dc}
+.nl-logo{--logo-body:#fff; --logo-s:#74bfeb; width:clamp(52px, 38%, 92px); height:auto; flex:none}
+.nl-name{font-family:"Roboto Slab", Rockwell, "Zilla Slab", Georgia, serif; font-weight:300; font-size:clamp(13px, 3.6vw, 17px); line-height:1.02; color:#fff; letter-spacing:.01em}
+.nl-date{display:block; line-height:1.2; padding:3px 9px; background:#0a2a42; border-bottom:2px solid #74bfeb; font-family:"IBM Plex Mono", ui-monospace, Consolas, monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#a9d8f3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.nl-vp{display:flex; align-items:center; gap:5px; line-height:1.2; padding:3px 9px; background:linear-gradient(100deg, #0d314c, #14486e); font-weight:700; font-size:10.5px; color:#fff; white-space:nowrap; overflow:hidden}
+.nl-vp i{width:9px; height:2px; background:#74bfeb; flex:none} .nl-vp em{font-style:normal; color:#74bfeb}
+.nl-body{display:flex; gap:7px; align-items:flex-start; padding:6px 9px 0; flex:0 1 auto; min-height:0; overflow:hidden}
+.nl-face{flex:none; width:30px; height:36px; border-radius:3px; object-fit:cover; object-position:50% 20%; margin-top:2px}
+.w-mat .nl-body .w-t{font-size:13.5px; line-height:1.2; -webkit-line-clamp:4}
+.wm-paper.nl .w-more{padding:6px 10px 0}
+
 .w-num b{font-family:var(--cond); font-size:54px; line-height:1; color:var(--link)}
 .w-cert{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cg fill='none' stroke='%2374bfeb' stroke-opacity='.28' stroke-width='.8'%3E%3Cpath d='M0 30 Q15 8 30 30 T60 30 T90 30 T120 30'/%3E%3Cpath d='M0 30 Q15 52 30 30 T60 30 T90 30 T120 30'/%3E%3Cpath d='M0 20 Q15 -2 30 20 T60 20 T90 20 T120 20'/%3E%3Cpath d='M0 40 Q15 62 30 40 T60 40 T90 40 T120 40'/%3E%3C/g%3E%3C/svg%3E") 0 100% / 120px 60px repeat-x, linear-gradient(165deg, color-mix(in srgb, #eda100 16%, var(--surface)), var(--surface) 58%)}
 .ct-row{display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px}
@@ -763,6 +779,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .mat-hero.vp h2{font-size:clamp(26px, 7.5vw, 34px); margin:6px 0 10px; max-width:24ch; text-wrap:balance}
 .mat-hero.vp p{max-width:44ch}
 .vp-by{display:flex; align-items:center; gap:10px; margin:0 0 16px} .vp-av{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; color:#06202f; background:linear-gradient(135deg, #a9d8f3, #74bfeb); box-shadow:0 0 0 3px rgba(116,191,235,.25)}
+.vp-av{position:relative; overflow:hidden} .vp-av img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 18%}
 .vp-by span:last-child{display:grid; line-height:1.2} .vp-by b{font-size:14px} .vp-by i{font-style:normal; font-size:12px; color:rgba(255,255,255,.7)}
 @media (prefers-reduced-motion: reduce){ .mat-hero.vp, .vp-q{animation:none} }
 .mat-hero{position:relative; overflow:hidden; border-radius:16px; padding:20px; color:#fff; background:linear-gradient(150deg, #14486e, #06202f 70%)}
@@ -2163,11 +2180,9 @@ nav.tabbar .badge.on{display:grid}
 .iconbtn{border:1px solid var(--border); background:var(--surface); border-radius:7px; width:38px; height:38px; display:grid; place-items:center; cursor:pointer; color:var(--ink); flex:none}
 .iconbtn svg{width:19px; height:19px}
 .sheet-head .iconbtn.close{margin-left:auto}
-.sheet-head .iconbtn.grow{display:grid; margin-left:auto} .sheet-head .iconbtn.grow + .close{margin-left:0}
-/* Jonna, Nov 27, 2026: phones get the same Expand Panel button: the pop-up fills the whole screen */
-html.mm-wide .sheet{top:0; border-radius:0}
-html.mm-wide .sheet-head{padding-top:calc(12px + env(safe-area-inset-top))}
-html.mm-wide .sheet-head .grab{display:none}
+.sheet-head .iconbtn.grow{display:none; margin-left:auto}
+/* Jonna, Nov 27, 2026: Expand Panel shows wherever the pop-up is a side panel: computers, tablets, and phones turned sideways
+   (not phones held upright, where the pop-up already fills the width) */
 .iconbtn.grow svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
 .iconbtn.grow .g-in{display:none} html.mm-wide .iconbtn.grow .g-in{display:block} html.mm-wide .iconbtn.grow .g-out{display:none}
 .sheet:not(.plain) .sheet-head{position:absolute; left:0; right:0; top:0}
@@ -2255,6 +2270,7 @@ html.mm-wide .sheet-head .grab{display:none}
 @media (min-width:900px){
   .sheet{left:auto; top:0; width:min(72vw, 880px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
   html.mm-wide .sheet{width:100vw}
+  .sheet-head .iconbtn.grow{display:grid} .sheet-head .iconbtn.grow + .close{margin-left:0}
   .sheet-head .grab{display:none}
 }
 @media (max-width:520px){
@@ -2285,6 +2301,7 @@ html.mm-wide .sheet-head .grab{display:none}
   .days{top:calc(50px + env(safe-area-inset-top))}
   .sheet{left:auto; top:0; width:min(78vw, 760px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
   html.mm-wide .sheet{width:100vw}
+  .sheet-head .iconbtn.grow{display:grid} .sheet-head .iconbtn.grow + .close{margin-left:0}
   .sheet-head .grab{display:none}
   .faces-grid{grid-template-columns:repeat(auto-fill, minmax(140px,1fr))}
 }
@@ -6375,12 +6392,16 @@ function widget(id) {
     /* Jonna, Nov 27, 2026: "make mismo matters tile look cooler": the latest edition as a printed page on a stack of
        past ones, on navy, with an airmail edge */
     var ed = MM && MM.editions && MM.editions[0], vp = ed && ed.vieauxPoint;
-    return '<button type="button" class="wd w-mat" data-matters><span class="wm-desk"><span class="wm-stack" aria-hidden="true"><i></i><i></i></span><span class="wm-paper">' +
-      '<span class="wm-name">MISMO Matters</span><span class="wm-date">' + esc(ed ? ed.label : 'Monthly Newsletter') + '</span>' +
-      (ed ? (vp ? '<span class="wm-kick">The Vieaux Point</span><span class="w-t">' + esc(vp.title) + '</span>' : '<span class="w-t">The ' + esc(ed.label) + ' edition</span>') +
+    /* Jonna, Nov 27, 2026: the paper is a mini MISMO Matters: its navy masthead, the date bar, the Vieaux Point band
+       and Brian's photo beside the headline */
+    return '<button type="button" class="wd w-mat" data-matters><span class="wm-desk"><span class="wm-stack" aria-hidden="true"><i></i><i></i></span><span class="wm-paper nl">' +
+      '<span class="nl-mast"><svg class="nl-logo" viewBox="0 0 708 108" aria-hidden="true"><use href="#mismo-logo"/></svg><span class="nl-name">MISMO<br>Matters</span></span>' +
+      '<span class="nl-date">' + esc(ed ? ed.label : 'Monthly Newsletter') + '</span>' +
+      (ed ? (vp ? '<span class="nl-vp"><i></i><b class="pre">President\u2019s</b> <em>Vieaux Point</em></span>' : '') + '<span class="nl-body">' +
+        (vp ? '<img class="nl-face" src="' + BV_PHOTO + '" alt="" loading="lazy" onerror="this.remove()"><span class="w-t">' + esc(vp.title) + '</span>' : '<span class="w-t">The ' + esc(ed.label) + ' edition</span>') + '</span>' +
         '<span class="w-more">' + (vp && vp.summary ? '<span class="wm-p">' + esc(vp.summary) + '</span>' : '') +
         (MM.editions.length > 1 ? '<span class="wm-k wm-past">Past Editions</span>' + MM.editions.slice(1, 4).map(function (e) { return '<span class="wm-li">' + esc(e.label) + '</span>'; }).join('') : '') + '</span>'
-      : '<span class="w-t">The monthly newsletter</span>') +
+      : '<span class="nl-body"><span class="w-t">The monthly newsletter</span></span>') +
       '</span></span><span class="wm-env" aria-hidden="true">' + icon('i-mail') + '</span></button>';
   }
   if (id === 'trivia') return '<button type="button" class="wd w-trivia wide" data-trivia>' + triviaOrbit(false) + '<span class="w-head">' + icon('i-star') + '<span>MISMO Trivia</span></span><span class="tv-wt">How well do you know MISMO?</span><span class="tv-ws">Play the Board, take on your colleagues</span><span class="tv-soon">Beta</span></button>';
@@ -6477,11 +6498,13 @@ function webinarsSheet() {
 }
 function sameSite(u) { return /^https:\/\/resources\.mismo\.org\//.test(u) || /^\//.test(u); }
 function readLink(u, title) { return sameSite(u) ? '<button type="button" class="btn primary" data-web="' + esc(u) + '" data-web-title="' + esc(title) + '">' + icon('i-mail') + 'Read It</button>' : '<a class="btn primary" href="' + esc(u) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Read It</a>'; }
+/* Brian's photo, as MISMO Matters runs it beside The Vieaux Point */
+var BV_PHOTO = 'https://higherlogicdownload.s3.amazonaws.com/MISMO/02543d2e-502a-4e6e-91e0-38c2c168f75a/UploadedImages/MISMO_Brand_2026/BrianImageForMM.jpg';
 function mattersSheet() {
   var eds = (MM && MM.editions) || [], ed = eds[0];
   var h = '<div class="sheet-pad">' + (ed ? '<article class="mat-hero' + (ed.vieauxPoint ? ' vp' : '') + '">' + (ed.vieauxPoint ? '<span class="vp-ghost" aria-hidden="true">VIEAUX<br>POINT</span><svg class="vp-q" viewBox="0 0 120 100" aria-hidden="true"><path d="M8 92 C8 52 22 22 52 8 L58 18 C40 30 34 46 34 58 L52 58 L52 92 Z M66 92 C66 52 80 22 110 8 L116 18 C98 30 92 46 92 58 L110 58 L110 92 Z"/></svg>' : '') +
       '<div class="mh-lbl">' + icon('i-mail') + esc(ed.label) + '</div>' + (ed.vieauxPoint ? '<div class="mh-k"><i></i>The Vieaux Point</div><h2>' + esc(ed.vieauxPoint.title) + '</h2><p>' + esc(ed.vieauxPoint.summary || '') + '</p>' +
-      '<div class="vp-by"><span class="vp-av">BV</span><span><b>Brian Vieaux</b><i>MISMO President</i></span></div>' : '<h2>The Latest Edition</h2>') +
+      '<div class="vp-by"><span class="vp-av">BV<img src="' + BV_PHOTO + '" alt="" onerror="this.remove()"></span><span><b>Brian Vieaux</b><i>MISMO President</i></span></div>' : '<h2>The Latest Edition</h2>') +
     '<div class="d-actions">' + readLink(ed.url, 'MISMO Matters, ' + ed.label) + '</div></article>' : '<div class="note">The editions couldn\'t be loaded just now.</div>') +
     (eds.length > 1 ? '<div class="section-h"><h2>Past Editions</h2></div><div class="list">' + eds.slice(1).map(function (e) {
       return sameSite(e.url) ? '<button type="button" class="row" data-web="' + esc(e.url) + '" data-web-title="' + esc('MISMO Matters, ' + e.label) + '"><b>' + esc(e.label) + '</b>' + icon('i-chev') + '</button>' : '<a class="row" href="' + esc(e.url) + '" target="_blank" rel="noopener"><b>' + esc(e.label) + '</b>' + icon('i-link') + '</a>';
@@ -7169,6 +7192,8 @@ function settingsSheet() {
   h += '<div class="d-h">Account</div><div class="set-card">';
   if (S.summit && A.ready) h += A.token && A.me ? setRow('i-user', esc(A.me.name || 'Signed in'), 'Signed in as a summit attendee', '<button type="button" class="btn small" data-set="profile">Profile</button>') :
     setRow('i-user', 'Summit Attendees', 'Sign in with your registration email to message other attendees and get presentations.', '<button type="button" class="btn small primary" data-set="att-in">Sign In</button>');
+  /* Nov 27, 2026: app store rule: an account you can make in the app, you can delete in the app (delete-account/ points here) */
+  if (tvsPlayer()) h += setRow('i-x', 'Delete My Trivia Account', 'Deletes your player name, scores, Head to Head games, Trivia contacts and question history.', '<button type="button" class="btn small" data-set="tv-delete">Delete</button>');
   if (S.summit && A.ready && A.token && A.me) h += setRow('i-x', 'Delete My Attendee Account', 'Removes you from the attendee list and deletes your messages. You can sign in again later as a new account.', '<button type="button" class="btn small" data-set="att-delete">Delete</button>');
   if (!st && !(A.me && A.me.first)) h += '<div class="set-row"><span class="set-ic">' + icon('i-user') + '</span><div class="set-tx"><b>Your Name</b><span>For your greeting. Kept on this phone only.</span>' +
     '<input type="text" id="set-name" class="set-input" maxlength="30" autocomplete="given-name" placeholder="First name" value="' + esc(load('myname', '')) + '"></div></div>';
@@ -7231,6 +7256,14 @@ function settingsSheet() {
     else if (k === 'staff-out') { save('staff-was', ''); ResourcesSession.signOut(); paintStaff(); again(); }
     else if (k === 'att-in') { closeSheet(false); signInSheet(); }
     else if (k === 'profile') { closeSheet(false); profileSheet(false); }
+    else if (k === 'tv-delete') {
+      if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); return; }
+      b.disabled = true; b.textContent = 'Deleting';
+      tvsApi('POST', 'delete', {}).then(function (r) {
+        if (!r.ok) { b.disabled = false; b.textContent = 'Try Again'; mxToast((r.j && r.j.message) || 'That didn\'t go through. Try again in a minute.'); return; }
+        drop('trivia-player'); closeSheet(true); openSheet('Trivia Account Deleted', '<div class="sheet-pad"><p style="margin-top:0">Your player name, scores, Head to Head games, Trivia contacts and question history have been deleted. Practice rounds still work, and you can sign in again later as a new player.</p></div>', { plain: true });
+      });
+    }
     else if (k === 'att-delete') {
       if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); return; }
       b.disabled = true; b.textContent = 'Deleting';
