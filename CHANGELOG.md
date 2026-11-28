@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: New home screen icon: the whole MISMO under the Speed My (option C), on iPhone, Android and computers.
 - Nov 28, 2026: Every half-width tile on My Dashboard is now the same, locked height (MISMO Matters, Join a Workgroup, Certifications, Webinars, both Membership tiles, Submit an Idea and mismo.org), on phones and computers.
 - Nov 28, 2026: The two membership tiles are shorter on phones held upright (about a quarter less tall).
 - Nov 28, 2026: Who I Met: the yellow Take a Picture button on the camera is gone; Take a Picture is the square under the camera.
