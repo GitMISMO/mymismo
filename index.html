@@ -6383,7 +6383,7 @@ function widget(id) {
       : '<span class="w-t">The monthly newsletter</span>') +
       '</span></span><span class="wm-env" aria-hidden="true">' + icon('i-mail') + '</span></button>';
   }
-  if (id === 'trivia') return '<button type="button" class="wd w-trivia wide" data-trivia>' + triviaOrbit(false) + '<span class="w-head">' + icon('i-star') + '<span>MISMO Trivia</span></span><span class="tv-wt">How well do you know MISMO?</span><span class="tv-ws">Solo and head to head, with a leaderboard</span><span class="tv-soon">Beta</span></button>';
+  if (id === 'trivia') return '<button type="button" class="wd w-trivia wide" data-trivia>' + triviaOrbit(false) + '<span class="w-head">' + icon('i-star') + '<span>MISMO Trivia</span></span><span class="tv-wt">How well do you know MISMO?</span><span class="tv-ws">Play the Board, take on your colleagues and climb the leaderboard</span><span class="tv-soon">Beta</span></button>';
   if (id === 'certs') {
     var pg = (PRG && PRG.programs) || [], orgs = {}, ppl = 0, now = new Date(), ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
     pg.forEach(function (p) { p.members.forEach(function (m) { orgs[m.slug] = 1; }); });
