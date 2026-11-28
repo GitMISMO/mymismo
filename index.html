@@ -1932,7 +1932,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .mm-rails path:nth-child(3n){stroke:#f2c14e; opacity:.22}
 @keyframes mm-flow{to{stroke-dashoffset:-200}}
 .mm-hero{overflow:hidden; isolation:isolate; padding:22px 18px 20px; border-radius:18px; color:#fff; background:radial-gradient(90% 70% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
-.mm-hero.gold{background:radial-gradient(90% 70% at 100% 0%, rgba(242,193,78,.38), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.mm-hero.gold{background:radial-gradient(90% 70% at 0% 100%, rgba(27,175,122,.28), transparent 60%), radial-gradient(90% 70% at 100% 0%, rgba(116,191,235,.3), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
 .mm-hero > *:not(svg){position:relative; z-index:1}
 .mm-kick{display:inline-flex; align-items:center; gap:7px; padding:5px 10px; border-radius:7px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); font-size:12.5px; font-weight:700; color:#cfe3f1}
 .mm-kick svg{width:15px; height:15px; color:#f2c14e}
@@ -2033,9 +2033,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .w-mem .wm-big{font-family:var(--cond); font-weight:800; font-size:46px; line-height:.95; color:#fff; margin-top:6px; text-shadow:0 2px 0 rgba(13,49,76,.25), 0 0 22px rgba(13,49,76,.25)}
 .w-mem .wm-unit{font-size:13px; font-weight:800; color:#0d314c; background:#f2c14e; padding:2px 7px; border-radius:5px}
 .w-mem.lend .w-s{color:#fff; font-size:12.5px; line-height:1.35; margin-top:auto}
-/* Industry: a light card with a warm gold wash, the levels as a centered chart */
-.w-mem.ind{background:linear-gradient(165deg, color-mix(in srgb, #f2c14e 22%, var(--surface)) 0%, var(--surface) 70%)}
-.w-mem.ind .w-head svg{color:#c98500}
+/* Industry: a plain card, like the tiles around it; the four colored bars carry the color (Jonna, Nov 28: gold kept for buttons and the top level) */
 .w-mem.ind .w-t{align-self:center; text-align:center; margin-top:auto; color:var(--ink)}
 .wm-chart{align-self:stretch; display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; align-items:end; height:104px; margin:8px 0 2px; padding:0 2px}
 .wm-col{display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; gap:3px}
@@ -2047,7 +2045,10 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 /* Champions Lounge: the two paths */
 .lg-paths{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .lg-path{display:grid; gap:4px; justify-items:start; align-content:start; text-align:left; padding:14px 13px; border-radius:14px; border:0; color:#fff; font:inherit; cursor:pointer; background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
-.lg-path.ind{background:radial-gradient(90% 90% at 100% 0%, rgba(242,193,78,.38), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
+.lg-path.lend{background:radial-gradient(80% 70% at 100% 0%, rgba(255,255,255,.3), transparent 60%), linear-gradient(155deg, #4ea9e2 0%, #2a87c8 55%, #1d6aa6 100%)}
+.lg-path.lend > svg, .lg-path.lend em{color:#fff} .lg-path.lend span{color:#eaf6fd}
+.lg-path.ind{background:var(--surface); border:1px solid var(--border); color:var(--ink)}
+.lg-path.ind > svg, .lg-path.ind em{color:var(--link)} .lg-path.ind span{color:var(--ink-2)}
 .lg-path > svg{width:22px; height:22px; color:#f2c14e} .lg-path b{font-size:15px; line-height:1.2} .lg-path span{font-size:12.5px; color:#cfe3f1; line-height:1.35}
 .lg-path em{display:inline-flex; align-items:center; gap:3px; margin-top:6px; font-style:normal; font-size:13px; font-weight:800; color:#f2c14e} .lg-path em svg{width:14px; height:14px}
 @media (max-width:359px){ .lg-paths, .mm-why{grid-template-columns:1fr} }

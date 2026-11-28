@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: Less gold: the Membership for Industry tile is a plain card with its colored chart, the Industry page header glows sky and green, and the Champions Lounge membership cards match the tiles (sky blue for Lenders, plain for Industry). Gold stays for buttons and the top level.
 - Nov 28, 2026: Membership tiles restyled: Lenders in MISMO sky blue, Industry as a light card with a bigger, centered chart of the four levels and their prices.
 - Nov 28, 2026: Membership for Lenders and Membership for Industry, side by side on My Dashboard above Sponsor a Summit, and in the Champions Lounge. Lenders opens a phone version of the Innovation Investment Fund page with a fee calculator; Industry opens Compare Levels, where picking a level lights it up across every benefit, with Apply for Membership.
 - Nov 28, 2026: Android home screen icon: no more square-inside-a-square (the shape-fitting version of the icon is now one continuous background with MISMO running off the edge). On computers, the My sits right up against MISMO, the same as on phones.
