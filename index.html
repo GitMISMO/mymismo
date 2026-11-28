@@ -2096,18 +2096,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .wm-chart{border-bottom:0}
 @media (prefers-reduced-motion: reduce){ .wm-house .cn{animation:none} }
 
-/* ==== News (Jonna, Nov 28, 2026): a press room tile, a third of a row beside MISMO Merch ==== */
-.wd.duo{display:grid; grid-template-columns:2fr 1fr; gap:12px; padding:0; background:none; border:0; box-shadow:none; border-radius:0; overflow:visible; cursor:default; min-height:0; height:auto}
-@media (min-width:760px){ .dash-grid > .wd.duo{grid-column:1 / -1} }
-@media (orientation:landscape) and (max-height:540px){ .dash-grid > .wd.duo{grid-column:1 / -1} }
-.wd.duo > .wd{min-width:0; min-height:206px}
-.w-merch.in-duo{container-type:inline-size}
-@container (max-width:320px){
-  .w-merch.in-duo .mx-wt{max-width:none; font-size:24px}
-  .w-merch.in-duo .mx-ws{max-width:none; font-size:12.5px}
-  .w-merch.in-duo .mx-shelf{bottom:10px; right:4px; width:36%; --c:.5}
-  .w-merch.in-duo .mx-sh:nth-child(n+3){display:none}
-}
+/* ==== News (Jonna, Nov 28, 2026): a press room tile, in Webinars' old spot ==== */
 .w-news .nw-flip{min-height:118px}
 .w-news{container-type:inline-size}
 @container (min-width:300px){ .w-news .nw-d b{font-size:54px} .w-news .nw-d i{font-size:16px} .w-news .nw-t{font-size:18px; line-height:1.25; -webkit-line-clamp:3; max-width:34ch} }
@@ -2754,6 +2743,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
       <button class="mast-icon" id="scan-btn" type="button" aria-label="Scan a Name Tag" data-scan hidden><svg aria-hidden="true"><use href="#i-scan"/></svg></button>
       <button class="mast-icon" id="bell-btn" type="button" aria-label="Notifications"><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="dot" id="bell-dot"></span></button>
       <button class="mast-icon me-btn" id="me-btn" type="button" aria-label="Account and Settings" aria-haspopup="menu" aria-expanded="false"><svg aria-hidden="true"><use href="#i-user"/></svg></button>
+      <button class="mast-icon" id="set-btn" type="button" aria-label="Settings" hidden><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
       <div id="rs-account" hidden></div>
       <button class="theme-btn" id="theme-btn" type="button" hidden>Dark</button>
     </div>
@@ -5581,7 +5571,7 @@ var DASH = [
   { id: 'groups', name: 'Join a Workgroup', desc: 'Every workgroup, when it meets and how to join', icon: 'i-people' },
   { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-mic' },
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
-  { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
+  { id: 'news', name: 'News', desc: 'MISMO press releases', icon: 'i-news' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Play the Board, take on your colleagues and climb the leaderboard', icon: 'i-star' },
   { id: 'lenders', name: 'Membership for Lenders', desc: 'The Innovation Investment Fund: $0.75 per loan', icon: 'i-handshake' },
   { id: 'industry', name: 'Membership for Industry', desc: 'Compare membership levels, from Corporate to Chair Champion', icon: 'i-people' },
@@ -5589,7 +5579,7 @@ var DASH = [
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
   { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' },
-  { id: 'news', name: 'News', desc: 'MISMO press releases', icon: 'i-news' }
+  { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' }
 ];
 function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'sponsor' && !prospOn()) && !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE) && !(d.id === 'merch' && (STORE_RELEASE || !appTester())); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
@@ -7030,10 +7020,6 @@ function renderDash() {
   if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
   if (recapOnDash()) h += recapCard('dash');
   var ws = picks.map(widget).filter(Boolean);
-  /* Jonna, Nov 28, 2026: MISMO Merch two-thirds and News one-third share a row; without Merch, News runs wide */
-  var mi = -1, ni = -1; ws.forEach(function (w, i) { if (/class="wd w-merch/.test(w)) mi = i; if (/class="wd w-news/.test(w)) ni = i; });
-  if (mi >= 0 && ni >= 0) { ws[mi] = '<div class="wd duo wide">' + ws[mi].replace('class="wd w-merch wide"', 'class="wd in-duo w-merch"') + ws[ni].replace('class="wd w-news"', 'class="wd in-duo w-news"') + '</div>'; ws.splice(ni, 1); }
-  else if (ni >= 0) ws[ni] = ws[ni].replace('class="wd w-news"', 'class="wd w-news wide"');
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
   if (sq % 2 === 1) { for (var i = ws.length - 1; i >= 0; i--) if (ws[i].indexOf(' wide') < 0) { ws[i] = ws[i].replace(/class="wd /, 'class="wd wide solo '); break; } }
@@ -8076,7 +8062,7 @@ function settingsSheet() {
 /* Jonna, Nov 26, 2026: a staff sign-in ends after 8 hours (the rule for every MISMO Resources tool). MyMISMO remembers
    that this phone had one, and the dashboard offers Sign In again at the top, so nobody has to go to another tool for it.
    Signing out on purpose forgets it. */
-function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = true; paintMe(); if (st) save('staff-was', st.name || 'yes'); if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
+function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; paintMe(); if (st) save('staff-was', st.name || 'yes'); if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
 if (window.ResourcesSession) { try { ResourcesSession.onChange(function () { paintStaff(); }); } catch (e) {} }
 paintStaff(false);
 
@@ -8141,7 +8127,10 @@ function paintScanBtn() { var b = document.getElementById('scan-btn'); if (b) b.
    sign-ins and Settings; the bell sits beside it for notifications */
 function paintMe() {
   var b = document.getElementById('me-btn'); if (!b) return;
-  var st = staffSession(), nm = (st && st.name) || (A.token && A.me && A.me.name) || '';
+  var st = staffSession(), g = document.getElementById('set-btn');
+  /* Jonna, Nov 28, 2026: staff and contractors keep the sign-in chip (with their tools) and the gear for Settings */
+  b.hidden = !!st; if (g) g.hidden = !st; if (st) closeMe();
+  var nm = (A.token && A.me && A.me.name) || '';
   b.innerHTML = nm ? '<span class="ini-chip">' + esc(initials(nm)) + '</span>' : icon('i-user');
   b.classList.toggle('in', !!nm);
 }
@@ -8515,6 +8504,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-day')) { S.day = t.getAttribute('data-day'); S.q = ''; renderPage('agenda'); return; }
   if (t.hasAttribute('data-type')) { S.type = t.getAttribute('data-type'); renderPage('agenda'); return; }
   if (t.id === 'me-btn') { meMenu(); return; }
+  if (t.id === 'set-btn') { settingsSheet(); return; }
   if (t.hasAttribute('data-myname')) { S.focusName = true; settingsSheet(); return; }
   if (t.id === 'acct-btn') { if (A.token) profileSheet(false); else signInSheet(); return; }
   if (t.id === 'msg-btn') { inboxSheet(); return; }
