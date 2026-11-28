@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Sponsors page: Your Company Could Be Here now opens the phone prospectus (See the Sponsorship Opportunities) in the same window, so Back returns to MyMISMO, instead of the full prospectus in a new tab.
 - Nov 27, 2026: Break times follow Summit HQ (the website reads Summit HQ): Monday's Afternoon Break is 2:50 to 3:10, and Tuesday's is the Afternoon Break, 3:40 to 4:00 (was the website's 2:45 to 3:15 Snack Break).
 - Nov 27, 2026: Agenda breaks: once Summit HQ's feed carries a day's breaks (CN-069), the feed's rows are used for that day and MyMISMO's own copy steps aside, so a break never shows twice.
 - Nov 27, 2026: Sponsor a Summit (CN-072): a dashboard tile and a button beside See All Sponsors open the Sponsorship Portal's phone prospectus (resources.mismo.org/Sponsorship-Prospectus/app/?from=mymismo) in the same window, so Back returns to MyMISMO. They show while any program is published on MyMISMO in /sponsors/prospectus-app.json, and until that file exists (Series + Winter is on).

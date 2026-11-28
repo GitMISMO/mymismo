@@ -3720,10 +3720,10 @@ function spWhat(sp) {
   return out;
 }
 /* Jonna, Nov 25, 2026: the Sponsors page invites companies to sponsor, pointing to the current prospectus */
-var PROSPECTUS = 'https://resources.mismo.org/Sponsorship-Prospectus/';
 function becomeSponsor(foot) {
-  return '<a class="be-spon' + (foot ? ' foot' : '') + '" href="' + PROSPECTUS + '" target="_blank" rel="noopener"><span class="bs-ic">' + icon('i-sponsor') + '</span><span class="bs-tx"><b>' + (foot ? 'Your Company Could Be Here' : 'Become a Sponsor') + '</b>' +
-    '<span>Put your company in front of the people who build the mortgage industry\'s standards, at every MISMO Summit.</span></span><strong>See the Sponsorship Prospectus' + icon('i-link') + '</strong></a>';
+  /* Jonna, Nov 27, 2026: opens the phone prospectus (CN-072) in the same window, so Back comes back here */
+  return '<a class="be-spon' + (foot ? ' foot' : '') + '" href="' + PROSP_URL + '"><span class="bs-ic">' + icon('i-sponsor') + '</span><span class="bs-tx"><b>' + (foot ? 'Your Company Could Be Here' : 'Become a Sponsor') + '</b>' +
+    '<span>Put your company in front of the people who build the mortgage industry\'s standards, at every MISMO Summit.</span></span><strong>See the Sponsorship Opportunities' + icon('i-chev') + '</strong></a>';
 }
 function renderSponsors() {
   var tiers = sponsorTiers(), all = [].concat.apply([], tiers.map(function (t) { return t.list; })).filter(function (sp) { return sp.logo; }), pts = partners();
