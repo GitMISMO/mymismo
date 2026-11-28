@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: The MyMISMO brand, Speed style (Jonna's pick): a bold slanted white "My" with blue speed lines and a soft glow, right before the MISMO logo plate, in the top bar (the lines streak in when the app opens) and on the opening screen. New home screen icon (the Speed "My" above the blue S) for Android, iPhone and the install banner, and new iPhone launch screens with the lockup. The MISMO logo itself is unchanged.
 - Nov 27, 2026: The MyMISMO brand: "My" in sky blue right before the MISMO logo, in the top bar on every screen size (phones showed only the MISMO logo) and on the opening screen. The separate MyMISMO label beside the logo on computers is gone, since the lockup says it. The logo itself is unchanged.
 - Nov 27, 2026: On a computer, the Install MyMISMO banner and the Install MyMISMO row in Settings are gone (the dashboard's QR code sends people to their phone instead). Phones still get them until MyMISMO is in the app stores.
 - Nov 27, 2026: On a computer, My Dashboard shows Open MyMISMO on Your Phone beside the greeting: a QR code (the QR Code Manager's 7MZEEJ, which sends people to resources.mismo.org/mymismo/) so people point their phone's camera at it instead of typing the address. Hidden on phones and in the installed app.
