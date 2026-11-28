@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Dark mode: See Lunch Spots Near the Hotel is light blue instead of dark navy, and the selected tab's icon in the bottom bar is light blue too when the phone itself is set to dark.
 - Nov 27, 2026: MISMO Mic'd Up has its own icon: the classic broadcast mic from the newsletter's Mic'd Up header (grille, band, holder and stand), drawn in the same line style as the app's other icons. It shows on the dashboard tile, in the tile picker and on the episode pop-up.
 - Nov 27, 2026: The Champions Lounge row opens its own pop-up, with the summit header like a session's: the days it's open, the room, Find on Map and Walk There (once the room is on the floor plan), and Become a MISMO Champion: the three Champion levels with their prices and benefits from mismo.org/membership, Apply for Membership, Compare All Levels, the Innovation Investment Fund for lenders and info@mismo.org.
 - Nov 27, 2026: Once Trivia goes live (TRIVIA_LIVE), Solo and Head to Head open to everyone, the store build included; before, the store build would have kept showing Opens Soon.
