@@ -71,6 +71,11 @@ The app shows the next summit whose last day hasn't passed. A person's starred s
 
 - **Who can play (Nov 25, 2026):** anyone can download MyMISMO (it is headed for the Apple App Store and Google Play). What's public on mismo.org stays public in the app; what needs a website sign-in still needs one. Practice rounds are open to everyone; ranked rounds need a sign-in with an emailed six-digit code, and players can delete their account in the app. Relay request 15 (_internal/relay-request-15) has the patch and 57 checks.
 
+## Store Privacy Answers and Permission Messages (Nov 28, 2026)
+- **Location (weather by the date):** asked only after someone taps Show Weather; rounded to about a mile, kept on the phone, sent to Open-Meteo for the forecast (and to weather.com only if they tap Open The Weather Channel). Apple App Privacy: Coarse Location, App Functionality, not linked to the user, not used for tracking. Google Play Data safety: Approximate location, collected, optional, App functionality, not shared. Privacy policy wording: CN-080.
+- **Permission messages for the iPhone build:** NSCameraUsageDescription "MyMISMO uses the camera to scan name tags, take summit photos and add pictures to Who I Met." and NSLocationWhenInUseUsageDescription "MyMISMO uses your rough location to show the weather where you are."
+- **Payments:** Pay the Fund, Apply for Membership and Sponsor a Summit open MISMO's own pages for memberships and sponsorships used outside the app, so no in-app purchase is involved.
+
 ## Screen Orientation (Jonna, Nov 27, 2026)
 - **Phones: portrait only.** The Android app (store/android/twa-manifest.json) and the installed web app (manifest.webmanifest) are set to portrait. Full-screen video (Mic'd Up, the General Sessions live stream) still turns sideways and turns back when it closes.
 - **Tablets: any way up.** Android 16 and later let large screens turn whatever the app asks, and the iPhone build must list iPad as supporting all four orientations (Apple requires it for iPad multitasking). For the iPhone build: UISupportedInterfaceOrientations = portrait only; UISupportedInterfaceOrientations~ipad = all four.
