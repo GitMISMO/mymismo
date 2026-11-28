@@ -1874,29 +1874,16 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .chg-row{display:grid; gap:2px; text-align:left; border:0; background:none; padding:6px 0; border-top:1px solid var(--rule); color:var(--ink); font:inherit; cursor:pointer} .chg-row b{font-size:15px} .chg-row span{font-size:13.5px; color:var(--ink-2)}
 .chg-ok{justify-self:start}
 .picks{display:grid; gap:4px} .pick-why{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:#a2701a; margin:4px 0 -2px 72px} .pick-why svg{width:13px; height:13px}
-.rc-hero{position:relative; overflow:hidden; isolation:isolate; display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:12px; align-items:center; width:100%; margin:14px 0 4px; padding:18px 16px 18px 18px; border:1px solid rgba(242,193,78,.45); border-radius:18px; text-align:left; font:inherit; color:#fff; cursor:pointer; background:radial-gradient(80% 120% at 100% 0%, rgba(242,193,78,.38), transparent 60%), radial-gradient(70% 90% at 0% 100%, rgba(116,191,235,.25), transparent 60%), linear-gradient(150deg, #14486e, #0d314c 55%, #06202f); box-shadow:0 14px 30px -16px rgba(6,32,47,.7)}
+.rc-hero{position:relative; overflow:hidden; display:grid; grid-template-columns:auto minmax(0, 1fr) auto; align-items:center; gap:14px; width:100%; margin-top:14px; padding:12px 12px 12px 16px; border:0; border-radius:16px; color:#fff; text-align:left; font:inherit; cursor:pointer;
+  background:radial-gradient(90% 120% at 100% 0%, rgba(242,193,78,.45), transparent 60%), linear-gradient(150deg, #14486e 0%, #0d314c 60%, #071d2e 100%); box-shadow:0 8px 20px rgba(13,49,76,.25)}
 .rc-hero.dash{margin:0 0 14px}
-.rc-sparks{position:absolute; inset:0; z-index:-1; pointer-events:none}
-.rc-sparks i{position:absolute; width:4px; height:4px; border-radius:50%; background:#f2c14e; left:calc(4% + var(--i) * 6.6%); top:calc(12% + var(--t) * 1%); opacity:.0; animation:rc-twinkle 3.2s ease-in-out infinite; animation-delay:calc(var(--i) * .23s)}
-.rc-sparks i:nth-child(3n){background:#74bfeb} .rc-sparks i:nth-child(4n){width:3px; height:3px; background:#fff}
-@keyframes rc-twinkle{0%,100%{opacity:0; transform:scale(.6)}50%{opacity:.9; transform:scale(1.3)}}
-.rc-h-tx{display:grid; gap:8px; justify-items:start; min-width:0}
-.rc-h-eye{display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:6px; background:#f2c14e; color:#0d314c; font-size:12.5px; font-weight:800} .rc-h-eye svg{width:14px; height:14px; --star-fill:#0d314c}
-.rc-h-tx > b{font-family:var(--cond); font-size:clamp(22px, 6vw, 28px); line-height:1.05}
-.rc-h-stats{display:flex; gap:14px; flex-wrap:wrap} .rc-h-stats span{display:grid; font-size:11.5px; font-weight:600; color:#cfe3f1; line-height:1.15} .rc-h-stats b{font-family:var(--cond); font-size:26px; color:#fff}
-.rc-h-stats span:nth-child(1) b{color:#a9d8f3} .rc-h-stats span:nth-child(2) b{color:#7fe0b8} .rc-h-stats span:nth-child(3) b{color:#ffb38f}
-.rc-h-go{display:inline-flex; align-items:center; gap:4px; margin-top:2px; padding:9px 12px 9px 14px; border-radius:9px; background:#f2c14e; color:#0d314c; font-weight:800; font-size:14.5px; box-shadow:0 8px 18px -8px rgba(242,193,78,.8)} .rc-h-go svg{width:16px; height:16px}
-.rc-thumb{width:clamp(104px, 30vw, 150px); margin-right:4px; aspect-ratio:4 / 5; padding:6px 6px 16px; background:#fbfaf6; border-radius:4px; transform:rotate(4deg); box-shadow:0 16px 28px -10px rgba(0,0,0,.6); transition:transform .3s ease}
+.rc-thumb{width:62px; aspect-ratio:4 / 5; padding:3px 3px 9px; background:#fbfaf6; border-radius:3px; transform:rotate(-5deg); box-shadow:0 8px 16px -6px rgba(0,0,0,.55); transition:transform .3s ease; margin:2px 6px 2px 4px}
 .rc-thumb img{display:block; width:100%; height:100%; object-fit:cover; background:#0b2c46}
-.rc-hero:hover .rc-thumb, .rc-hero:active .rc-thumb{transform:rotate(0) scale(1.04)}
-@media (min-width:760px){
-  .rc-hero{padding:20px 24px}
-  .rc-h-tx{grid-template-columns:auto minmax(0, 1fr); grid-template-areas:"eye stats" "title stats" "go stats"; column-gap:28px; align-items:center}
-  .rc-h-eye{grid-area:eye} .rc-h-tx > b{grid-area:title; font-size:30px} .rc-h-go{grid-area:go}
-  .rc-h-stats{grid-area:stats; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; align-self:stretch; justify-self:stretch}
-  .rc-h-stats span{align-content:center; padding:12px 16px; border-radius:14px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); font-size:14px}
-  .rc-h-stats b{font-size:48px; line-height:1}
-}
+.rc-hero:hover .rc-thumb, .rc-hero:active .rc-thumb{transform:rotate(0) scale(1.05)}
+.rc-h-tx{display:grid; gap:3px; min-width:0} .rc-h-tx b{display:flex; align-items:center; gap:7px; font-family:var(--cond); font-size:20px; line-height:1.1; color:#f2c14e; white-space:nowrap} .rc-h-tx b svg{width:18px; height:18px; flex:none; --star-fill:#f2c14e}
+.rc-h-sub{font-size:14px; color:#cfe3f1; line-height:1.35} .rc-h-n{font-size:12.5px; font-weight:800; color:#fff; margin-top:2px}
+.rc-hero > svg.go{width:20px; height:20px; color:#fff; opacity:.8}
+@media (prefers-reduced-motion: reduce){ .rc-thumb{transition:none} }
 .rc-nums{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px}
 .rc-nums div{display:grid; gap:2px; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--c)}
 .rc-nums b{font-family:var(--cond); font-size:30px; line-height:1} .rc-nums span{font-size:12.5px; color:var(--ink-2); font-weight:600}
@@ -2873,27 +2860,34 @@ function picksBlock(limit) {
    them all to your contacts), your photos and the Photo Challenge, and a recap picture to save or share. All from this
    phone. App testers can preview it any time from the bottom of the Summit page. */
 function recapReady() { var n = nowAt(); return !!S.summit && n.date >= S.last; }
-/* Jonna, Nov 27, 2026: "it should be a very cool thing": the recap card shows their own recap picture as a print, their
-   numbers, and a gold See My Recap. Everyone sees it from the summit's last day, on the Summit page and (for 30 days)
-   at the top of My Dashboard. */
-var RC_HERO = { key: '', url: '', n: null, busy: false };
-function recapOnDash() { if (!S.summit || !recapReady()) return false; var l = dparts(S.last), e = new Date(l.y, l.m - 1, l.d + 30), n = dparts(nowAt().date); return new Date(n.y, n.m - 1, n.d) <= e; }
+/* Jonna, Nov 27, 2026: the recap for everyone, the whole time, as a strip the size of the Summit Photos card: before
+   the summit ends it shows the Example (to get people going) and opens on Example and Mine So Far; from the last day it
+   shows their own recap picture and opens on theirs. On the Summit page and My Dashboard, until 30 days after. */
+var RC_HERO = { key: '', url: '', n: null, busy: false, ex: '' };
+function recapOnDash() { if (!S.summit) return false; var l = dparts(S.last), e = new Date(l.y, l.m - 1, l.d + 30), n = dparts(nowAt().date); return new Date(n.y, n.m - 1, n.d) <= e; }
 function recapCard(where) {
-  var n = RC_HERO.n;
+  var n = RC_HERO.n, ready = recapReady(), u = ready ? RC_HERO.url : RC_HERO.ex;
   setTimeout(recapHeroFill, 0);
-  return '<button type="button" class="rc-hero' + (where === 'dash' ? ' dash' : '') + '" data-recap><span class="rc-sparks" aria-hidden="true">' + Array.apply(null, Array(14)).map(function (z, i) { return '<i style="--i:' + i + ';--t:' + (i * 37 % 76) + '"></i>'; }).join('') + '</span>' +
-    '<span class="rc-h-tx"><span class="rc-h-eye">' + icon('i-star') + 'Your Recap Is Ready</span><b>My ' + esc(S.summit.name) + '</b>' +
-    '<span class="rc-h-stats">' + [['ses', 'Sessions'], ['met', 'People Met'], ['ph', 'Photos']].map(function (k) { return '<span><b data-rch="' + k[0] + '">' + (n ? n[k[0]] : '–') + '</b>' + k[1] + '</span>'; }).join('') + '</span>' +
-    '<span class="rc-h-go">See My Recap' + icon('i-chev') + '</span></span>' +
-    '<span class="rc-thumb" aria-hidden="true"><img alt=""' + (RC_HERO.url ? ' src="' + RC_HERO.url + '"' : '') + '></span></button>';
+  return '<button type="button" class="rc-hero' + (where === 'dash' ? ' dash' : '') + '" data-recap>' +
+    '<span class="rc-thumb" aria-hidden="true"><img alt=""' + (u ? ' src="' + u + '"' : '') + '></span>' +
+    '<span class="rc-h-tx"><b>' + icon('i-star') + (ready ? 'Your Recap Is Ready' : 'Your Summit Recap') + '</b>' +
+    '<span class="rc-h-sub">' + (ready ? 'Your sessions, the people you met and your photos, in one picture to share.' : 'See an example, then watch yours fill in as you go.') + '</span>' +
+    '<span class="rc-h-n" data-rch-line>' + recapLine(n, ready) + '</span></span>' + icon('i-chev', 'go') + '</button>';
+}
+function recapLine(n, ready) {
+  if (!n || (!n.ses && !n.met && !n.ph)) return ready ? 'See My Recap' : 'See the Example';
+  var w = function (k, one, many) { return k + ' ' + (k === 1 ? one : many); };
+  return (ready ? '' : 'So far: ') + w(n.ses, 'session', 'sessions') + ', ' + w(n.met, 'person', 'people') + ', ' + w(n.ph, 'photo', 'photos');
 }
 function recapHeroFill() {
   if (RC_HERO.busy || !document.querySelector('.rc-hero')) return;
   RC_HERO.busy = true;
+  var ready = recapReady();
   recapData(function (d) {
     var n = { ses: d.ses.length, met: d.met.length, ph: d.ph.length }, key = S.sid + ':' + n.ses + ':' + n.met + ':' + n.ph + ':' + d.ch;
-    function paint() { RC_HERO.busy = false; document.querySelectorAll('.rc-hero').forEach(function (c) { c.querySelectorAll('[data-rch]').forEach(function (b) { b.textContent = n[b.getAttribute('data-rch')]; }); var im = c.querySelector('.rc-thumb img'); if (im && RC_HERO.url && im.getAttribute('src') !== RC_HERO.url) im.src = RC_HERO.url; }); }
     RC_HERO.n = n;
+    function paint() { RC_HERO.busy = false; var u = ready ? RC_HERO.url : RC_HERO.ex; document.querySelectorAll('.rc-hero').forEach(function (c) { var l = c.querySelector('[data-rch-line]'); if (l) l.textContent = recapLine(n, ready); var im = c.querySelector('.rc-thumb img'); if (im && u && im.getAttribute('src') !== u) im.src = u; }); }
+    if (!ready) { if (RC_HERO.ex) { paint(); return; } recapExamplePic(function (b) { RC_HERO.ex = URL.createObjectURL(b); paint(); }); return; }
     if (RC_HERO.key === key && RC_HERO.url) { paint(); return; }
     recapPicture(d, function (b) { if (RC_HERO.url) URL.revokeObjectURL(RC_HERO.url); RC_HERO.url = URL.createObjectURL(b); RC_HERO.key = key; paint(); }, d.ph.slice(0, 3).map(function (p) { return p.blob; }));
   });
@@ -3012,12 +3006,16 @@ function vcards(list) {
    numbers, three framed photos as prints and the Photo Challenge badge. It's marked Example and can't be shared. */
 function recapExample(box) {
   box.innerHTML = '<div class="rc-ex-note">' + icon('i-info') + '<span><b>Example.</b> A recap filled out after a busy summit: 7 sessions starred, 12 people met, 9 photos, three of them as prints, and the Photo Challenge done. Yours fills in from what you do in MyMISMO.</span></div><div class="rc-pic ex"><img alt="An example summit recap picture"></div>';
+  if (RC_HERO.ex) { box.querySelector('.rc-pic img').src = RC_HERO.ex; return; }
+  recapExamplePic(function (b) { RC_HERO.ex = URL.createObjectURL(b); var im = box.querySelector('.rc-pic img'); if (im) im.src = RC_HERO.ex; });
+}
+function recapExamplePic(cb) {
   phAssets(function (as) {
     var fr = [['pass', 'solo'], ['night', 'group'], ['postcard', 'pair']], blobs = [], left = fr.length;
     fr.forEach(function (f, k) { var c = document.createElement('canvas'); phDraw(c, phSample(f[1]), f[0], '', as, .5); c.toBlob(function (b) { blobs[k] = b; if (--left === 0) go(); }, 'image/jpeg', .85); });
     function go() {
       var n = function (k, nm) { return Array.apply(null, Array(k)).map(function (z, i) { return { name: nm ? nm[i % nm.length] : 'x' }; }); };
-      recapPicture({ ses: n(7), met: n(12, ['Example']), ph: n(9), ch: PH_PROMPTS.length }, function (b) { var im = box.querySelector('.rc-pic img'); if (im) im.src = URL.createObjectURL(b); }, blobs);
+      recapPicture({ ses: n(7), met: n(12, ['Example']), ph: n(9), ch: PH_PROMPTS.length }, cb, blobs);
     }
   });
 }
@@ -3176,10 +3174,9 @@ function renderHome() {
       '<button type="button" data-go="people">' + icon('i-people') + '<span>Speakers</span></button>' +
       '<button type="button" data-go="mine">' + icon('i-star') + '<span>Starred</span></button>' +
     '</div>' +
-    (during ? photosCard() : '') +   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
+    (during ? photosCard() + recapCard('home') : recapReady() ? recapCard('home') : '') +   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
     nextCard('home');
 
-  if (recapReady()) h += recapCard('home');
   h += changesCard();
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
@@ -3206,10 +3203,9 @@ function renderHome() {
       (ppl.length ? '<div class="ph" style="grid-template-columns:repeat(' + ppl.length + ',1fr)">' + ppl.map(function (p) { return '<img src="' + esc(p.photo) + '" alt="" loading="lazy">'; }).join('') + '</div>' : '') +
       '<div class="tx"><b>See Who\'s on Stage, and When</b><div>' + esc(longDate(gsx.date)) + ', ' + esc(span(gsx.a, gsx.b)) + ', ' + esc(gsx.room) + '</div></div></button>';
   }
-  if (!during) h += photosCard();
+  if (!during) h += photosCard() + (recapReady() ? '' : recapCard('home'));
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
-  if (!recapReady() && appTester()) h += '<div class="foot"><button type="button" class="linkbtn" data-recap>Preview: Your Summit Recap</button></div>';
   /* Jonna, Nov 27, 2026: when the agenda last changed moved to Settings, as Last Update */
   return h;
 }
@@ -6683,8 +6679,8 @@ if (window.matchMedia) ['(min-width:760px)', '(orientation:landscape) and (max-h
 function renderDash() {
   var picks = dashPicks() || [];
   var h = greetHead() + wgSoonBanner();
-  if (recapOnDash()) h += recapCard('dash');
   if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
+  if (recapOnDash()) h += recapCard('dash');
   var ws = picks.map(widget).filter(Boolean);
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
