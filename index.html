@@ -2638,6 +2638,11 @@ function build(feed, spons) {
     return { id: x.id, day: x.day || DOW[dparts(x.date).dow], date: x.date, a: mins(x.start), b: mins(x.end), type: x.type || 'Session',
       title: x.title || '', room: x.room || '', desc: x.desc || '', sponsor: x.sponsor || '', menu: x.menu || '' };
   }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });
+  /* CN-070: the Champions Lounge comes from the feed's summits.<id>.lounges once agenda.json carries it; until then the
+     copy in data/agenda-extras.json (CN-069). One entry per room, so a lounge that moves mid-week shows the right room each day. */
+  S.lounges = (Array.isArray(s.lounges) ? s.lounges : (((XTRA && XTRA.summits && XTRA.summits[pick.id]) || {}).lounges || [])).filter(function (x) { return x && x.title; }).map(function (x) {
+    return { title: String(x.title), room: String(x.room || ''), desc: String(x.desc || ''), days: Array.isArray(x.days) ? x.days.filter(function (d) { return /^\d{4}-\d{2}-\d{2}$/.test(d); }) : null };
+  });
   S.gs = s.gs || null;
   if (S.gs) S.gs.items = (S.gs.sessions || []).map(function (g, i) { return { i: i, a: mins(g.start), b: mins(g.end), kind: g.kind || '', title: g.title || '', desc: g.desc || '', sponsor: g.sponsor || '', brk: !!g.brk, people: g.people || [], menu: g.menu || '' }; });
   /* Jonna, Nov 27, 2026: lunch is its own line on the Agenda, as on the website (it lives inside the General Sessions) */
@@ -3355,17 +3360,17 @@ function renderAgenda() {
   if (!q && !S.type) h += lounges(S.day);
   return h + slots(list, { withDay: !!q });
 }
-function loungeList(day) { return (((XTRA && XTRA.summits && XTRA.summits[S.sid]) || {}).lounges || []).filter(function (x) { return x && (!day || !x.days || x.days.indexOf(day) >= 0); }); }
+function loungeList(day) { return (S.lounges || []).filter(function (x) { return x && (!day || !x.days || x.days.indexOf(day) >= 0); }); }
 function lounges(day) {
   return loungeList(day).map(function (x) {
-    return '<button type="button" class="lounge" data-lounge="' + esc(x.title) + '"><span class="lg-ic">' + icon('i-star') + '</span><span class="lg-tx"><b>' + esc(x.title) + '</b><span>' + esc(x.desc || '') + '</span>' +
+    return '<button type="button" class="lounge" data-lounge="' + esc(x.title) + '" data-lounge-day="' + esc(day || '') + '"><span class="lg-ic">' + icon('i-star') + '</span><span class="lg-tx"><b>' + esc(x.title) + '</b><span>' + esc(x.desc || '') + '</span>' +
       (x.room ? '<span class="lg-rm">' + icon('i-pin') + esc(x.room) + '</span>' : '') + '</span>' + icon('i-chev', 'lg-go') + '</button>';
   }).join('');
 }
 /* Jonna, Nov 27, 2026: the Champions Lounge pop-up, like a session's: where it is, Find on Map and Walk There, and how a
    company becomes a MISMO Champion (from mismo.org/membership, kept in data/agenda-extras.json) */
-function loungeSheet(title) {
-  var x = loungeList('').filter(function (l) { return l.title === title; })[0]; if (!x) return;
+function loungeSheet(title, day) {
+  var x = loungeList(day || '').filter(function (l) { return l.title === title; })[0] || loungeList('').filter(function (l) { return l.title === title; })[0]; if (!x) return;
   var ds = (x.days || []).slice().sort(), m = (XTRA && XTRA.membership) || null;
   var when = ds.length ? (ds.length > 1 ? DOW[dparts(ds[0]).dow] + ' to ' + DOW[dparts(ds[ds.length - 1]).dow] + ', ' + (function (a, b) { return MONTH[a.m - 1] + ' ' + a.d + ' to ' + (b.m !== a.m ? MONTH[b.m - 1] + ' ' : '') + b.d; })(dparts(ds[0]), dparts(ds[ds.length - 1])) : longDate(ds[0])) : '';
   var h = '<div class="cover"><span class="k">For MISMO Champions</span><h2>' + esc(x.title) + '</h2>' +
@@ -7727,7 +7732,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-slide')) { downloadSlide(t); return; }
   if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
-  if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge')); return; }
+  if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge'), t.getAttribute('data-lounge-day')); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
   if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }
   if (t.hasAttribute('data-ph-take')) { phTake(t.getAttribute('data-ph-take'), t.getAttribute('data-ph-prompt') || ''); return; }

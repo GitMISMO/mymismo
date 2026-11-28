@@ -20,7 +20,7 @@ This first part is the **summit section**: it replaces what MISMO uses the share
 
 Nothing is typed into this app. It reads only public feeds already on resources.mismo.org:
 
-- `/summit-agenda/agenda.json`: Summit HQ's website agenda (the week from the Summit HQ Schedule, once Show on the Website Agenda is on for that summit, and the General Sessions running order with speakers and headshots). Built by `GitMISMO.github.io/summit-agenda/build-agenda.mjs`.
+- `/summit-agenda/agenda.json`: Summit HQ's website agenda (the week from the Summit HQ Schedule, once Show on the Website Agenda is on for that summit, and the General Sessions running order with speakers and headshots). Built by `GitMISMO.github.io/summit-agenda/build-agenda.mjs`. The Champions Lounge row at the top of each Agenda day comes from its `summits.<id>.lounges` (title, room, days, desc; CN-070) once it carries them; until then from `lounges` in `data/agenda-extras.json` (CN-069), which is dropped once the feed has them.
 - `/sponsors/<season>-<year>.json` (for example `winter-2027.json`): the Sponsorship Portal's approved sponsors, with tier, logo, website and sponsored sessions.
 - `data/guide.json`: the website's Hotel and Travel page (www.mismo.org/events/hotel), copied twice a day by `.github/workflows/guide.yml` running `tools/build_guide.py`. Shown only when its dates match the summit's. If the page can't be read, nothing is written and the job fails.
 - `/podcast/micdup.json`: MISMO Media's Mic'd Up episode list (YouTube ids, titles, dates).
