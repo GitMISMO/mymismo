@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Agenda: the Champions Lounge (Elevator Prefunction) sits at the top of each day, Monday to Thursday, with no time, so MISMO Champions know where it is (CN-069 asks Summit HQ to carry it in the feed). A morning or afternoon break no longer lists other sessions under Also at This Time, since nothing takes place during the breaks.
 - Nov 27, 2026: The MISMO Matters tile is a mini version of the newsletter: its navy masthead with the MISMO logo and "MISMO Matters," the date bar, the President's Vieaux Point band and Brian's photo beside the headline. Brian's photo (the one the newsletter runs) also replaces his initials in the Vieaux Point pop-up.
 - Nov 27, 2026: Expand Panel shows on computers, tablets and phones turned sideways, but not on phones held upright (the pop-up already fills the width there).
 - Nov 27, 2026: Settings has Delete My Trivia Account for anyone signed in to Trivia (the app stores require an in-app delete for any account made in the app; the Delete Your Data page already pointed here).

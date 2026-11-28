@@ -1,5 +1,5 @@
 {
-  "note": "Rows the website agenda (mismo.org/events/agenda) shows that aren't in Summit HQ's agenda feed yet. Copied from the website Nov 27, 2026; Monday's lunch is 12:00 to 1:30 per Jonna (the website said 1:00); Tuesday's Morning Break is the 10:20 to 10:40 gap in the General Sessions running order (a morning and an afternoon break every day, per Jonna). Remove a row once the feed carries it (CN-067).",
+  "note": "Rows the website agenda (mismo.org/events/agenda) shows that aren't in Summit HQ's agenda feed yet. Copied from the website Nov 27, 2026; Monday's lunch is 12:00 to 1:30 per Jonna (the website said 1:00); Tuesday's Morning Break is the 10:20 to 10:40 gap in the General Sessions running order (a morning and an afternoon break every day, per Jonna). Remove a row once the feed carries it (CN-067). Lounges have no time: they show at the top of each day they're open (Champions Lounge: Elevator Prefunction, Monday to Thursday, from the hotel resume in Summit HQ; CN-069).",
   "summits": {
     "nola": {
       "lunches": [
@@ -67,6 +67,19 @@
           "start": "2:50 PM",
           "end": "3:10 PM",
           "title": "Afternoon Break"
+        }
+      ],
+      "lounges": [
+        {
+          "title": "Champions Lounge",
+          "room": "Elevator Prefunction",
+          "days": [
+            "2027-01-11",
+            "2027-01-12",
+            "2027-01-13",
+            "2027-01-14"
+          ],
+          "desc": "A benefit for MISMO Champions, open every day of the summit."
         }
       ]
     }

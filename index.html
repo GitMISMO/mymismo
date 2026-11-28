@@ -559,6 +559,11 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-mat .w-t{font-size:15.5px; line-height:1.22; color:#0d314c; -webkit-line-clamp:3}
 .wm-paper .wm-p{color:#456179} .wm-paper .wm-k{color:#7794aa} .wm-paper .wm-li{color:#14486e; border-top-color:#e5eef5}
 @media (prefers-reduced-motion: reduce){ .wm-paper{transition:none} }
+.lounge{display:flex; align-items:center; gap:12px; margin:0 0 12px; padding:12px 14px; border-radius:12px; background:linear-gradient(100deg, #0d314c, #14486e); color:#fff; border:1px solid #f2c14e55}
+.lg-ic{flex:none; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:#f2c14e; color:#0d314c} .lg-ic svg{width:19px; height:19px; --star-fill:#0d314c}
+.lg-tx{flex:1; min-width:0; display:grid; gap:2px} .lg-tx b{font-size:15.5px} .lg-tx > span{font-size:13px; color:rgba(255,255,255,.8); line-height:1.35}
+.lg-tx .lg-rm{display:inline-flex; align-items:center; gap:4px; font-weight:700; color:#f2c14e; margin-top:2px} .lg-rm svg{width:14px; height:14px}
+.lounge .btn{flex:none; background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.3); color:#fff}
 /* the mini MISMO Matters */
 .wm-paper.nl{padding:0; border-radius:5px; container-type:inline-size}
 @container (max-width:200px){ .nl-vp .pre{display:none} }
@@ -3283,7 +3288,17 @@ function renderAgenda() {
     h += '<div class="note">Nothing matches <b>' + esc(S.q || S.type) + '</b>' + (q ? '' : ' on ' + esc(longDate(S.day))) + '. Here is the whole of ' + esc(longDate(S.day)) + '.</div>';
     list = S.sessions.filter(function (x) { return x.date === S.day; });
   }
+  /* Jonna, Nov 27, 2026: the Champions Lounge has no time; it sits at the top of each day it's open so Champions know where it is */
+  if (!q && !S.type) h += lounges(S.day);
   return h + slots(list, { withDay: !!q });
+}
+function lounges(day) {
+  var l = (((XTRA && XTRA.summits && XTRA.summits[S.sid]) || {}).lounges || []).filter(function (x) { return x && (!x.days || x.days.indexOf(day) >= 0); });
+  return l.map(function (x) {
+    return '<div class="lounge"><span class="lg-ic">' + icon('i-star') + '</span><div class="lg-tx"><b>' + esc(x.title) + '</b><span>' + esc(x.desc || '') + '</span>' +
+      (x.room ? '<span class="lg-rm">' + icon('i-pin') + esc(x.room) + '</span>' : '') + '</div>' +
+      (x.room && roomPin(x.room) ? '<button type="button" class="btn small" data-map="' + esc(x.room) + '">Find on Map</button>' : '') + '</div>';
+  }).join('');
 }
 
 /* ---------- My Schedule ---------- */
@@ -6903,7 +6918,8 @@ function sessionSheet(id) {
     }).join('') + '</div>';
   }
   if (sp.length && !spEarly) h += spBlock();
-  var also = S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type) && !((x.type === 'Lunch' || x.type === 'Break') && y.type === 'General Session'); });   /* the General Sessions break for lunch */
+  /* Jonna, Nov 27, 2026: nothing takes place during the morning and afternoon breaks */
+  var also = x.type === 'Break' ? [] : S.sessions.filter(function (y) { return y !== x && y.date === x.date && y.a < x.b && x.a < y.b && !MEALS.test(y.type) && !((x.type === 'Lunch' || x.type === 'Break') && y.type === 'General Session'); });   /* the General Sessions break for lunch */
   if (also.length && also.length < 12) h += '<div class="d-h">Also at This Time</div><div class="list">' + also.map(sessCard).join('') + '</div>';
   var sel = openSheet(x.title, h + '</div>', { color: COVER_COLOR[x.type] || '#14486e' });
   watchPeeks(sel);
