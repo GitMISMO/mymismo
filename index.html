@@ -2407,6 +2407,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 8.5-2 5-5 2 2-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 21l2-6 3 3v3M8 12l2-4 4 1 2 4M12 15l-1-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="8.2" y="2.2" width="7.6" height="11.6" rx="3.8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10.6 4v8M13.4 4v8M9.3 5.3h5.4M9.3 10.7h5.4" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/><path d="M7.5 8h9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M5.6 9.8a6.4 6.4 0 0 0 12.8 0M12 16.2v4.2M8.6 20.8h6.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-voice" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 16h-7l-4.5 3.5V16H5a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 5 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
@@ -5101,7 +5102,7 @@ var DASH = [
   { id: 'summit', name: 'MISMO Summit', desc: 'The agenda, your schedule, speakers, the hotel and more', icon: 'i-s' },
   { id: 'matters', name: 'MISMO Matters', desc: 'The monthly newsletter and The Vieaux Point', icon: 'i-mail' },
   { id: 'groups', name: 'Join a Workgroup', desc: 'Every workgroup, when it meets and how to join', icon: 'i-people' },
-  { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-play' },
+  { id: 'micdup', name: 'MISMO Mic\'d Up', desc: 'The video show, played right in the app', icon: 'i-mic' },
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Play the Board, take on your colleagues and climb the leaderboard', icon: 'i-star' },
@@ -6704,7 +6705,7 @@ function micdupSheet(startId) {
   var eps = (MU && MU.episodes) || [];
   if (!eps.length) { openSheet('MISMO Mic\'d Up', '<div class="sheet-pad"><div class="note">The episodes couldn\'t be loaded just now. Try again in a minute.</div></div>', { plain: true }); return; }
   var cur = eps.filter(function (e) { return e.id === startId; })[0] || eps[0];
-  function now(e) { return '<div class="mic-now"><span class="mic-k">' + icon('i-play') + (e === eps[0] ? 'Latest Episode' : 'Now Playing') + '</span><h2>' + esc(e.title) + '</h2><span class="mic-d">' + esc(epDate(e.published)) + (e.duration ? ', ' + esc(e.duration) : '') + '</span></div>'; }
+  function now(e) { return '<div class="mic-now"><span class="mic-k">' + icon('i-mic') + (e === eps[0] ? 'Latest Episode' : 'Now Playing') + '</span><h2>' + esc(e.title) + '</h2><span class="mic-d">' + esc(epDate(e.published)) + (e.duration ? ', ' + esc(e.duration) : '') + '</span></div>'; }
   var h = '<section class="mic-hero">' + heroArt() + '<div class="mic-brand"><b>MISMO Mic\'d Up</b><span>' + eps.length + ' episodes</span></div>' +
     '<div class="mic-stage">' + player(cur.id, cur.title) + '</div><div id="mic-now">' + now(cur) + '</div></section>' +
     '<div class="sheet-pad"><div class="d-h" style="margin-top:4px">All Episodes</div><div class="eps" id="eps">' + eps.map(function (e) { return epRow(e, e === cur); }).join('') + '</div></div>';

@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: MISMO Mic'd Up has its own icon: the classic broadcast mic from the newsletter's Mic'd Up header (grille, band, holder and stand), drawn in the same line style as the app's other icons. It shows on the dashboard tile, in the tile picker and on the episode pop-up.
 - Nov 27, 2026: The Champions Lounge row opens its own pop-up, with the summit header like a session's: the days it's open, the room, Find on Map and Walk There (once the room is on the floor plan), and Become a MISMO Champion: the three Champion levels with their prices and benefits from mismo.org/membership, Apply for Membership, Compare All Levels, the Innovation Investment Fund for lenders and info@mismo.org.
 - Nov 27, 2026: Once Trivia goes live (TRIVIA_LIVE), Solo and Head to Head open to everyone, the store build included; before, the store build would have kept showing Opens Soon.
 - Nov 27, 2026: Agenda: the Champions Lounge (Elevator Prefunction) sits at the top of each day, Monday to Thursday, with no time, so MISMO Champions know where it is (CN-069 asks Summit HQ to carry it in the feed). A morning or afternoon break no longer lists other sessions under Also at This Time, since nothing takes place during the breaks.
