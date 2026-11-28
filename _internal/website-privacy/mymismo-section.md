@@ -46,7 +46,6 @@ I Met. Pictures stay on your phone unless you choose to send them.
 The app uses your phone's location only if you tap Show Weather on My Dashboard. After that, while the app is open, it
 asks your phone for your rough location when it updates the weather (about every 30 minutes), rounds it to about a mile
 and keeps it on your phone. That rounded location is sent to Open-Meteo, a free weather service, to get the forecast; it
-isn't sent to MISMO and isn't linked to your name. If you tap Open The Weather Channel, the same rounded location opens
-that forecast on weather.com. You can turn this off in Settings, Weather by the Date, which removes it from your phone.
+isn't sent to MISMO and isn't linked to your name. You can turn this off in Settings, Weather by the Date, which removes it from your phone.
 
 MyMISMO is made for mortgage industry professionals and isn't meant for children under 13.

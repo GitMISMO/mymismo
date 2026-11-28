@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: The weather pop-up no longer links to The Weather Channel; MyMISMO's own forecast covers it.
 - Nov 28, 2026: mismo.org places start with MISMO FRAME and MISMO Link.
 - Nov 28, 2026: My Dashboard's weather shows just the current temperature; tap it for the forecast.
 - Nov 28, 2026: Phones turn again: on its side a phone shows the same layout as upright, in one phone-width column (no stretched tiles or side rail).
