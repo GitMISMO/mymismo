@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Final Square: after you lock in your wager the clue screen starts at the top (it opened scrolled partway down), and when the keyboard comes up the clue stays in view with the answer box just above the keyboard.
 - Nov 27, 2026: Your Summit Recap is a showpiece: from the summit's last day everyone sees a big card (their own recap picture as a tilted print, twinkling sparks, their sessions, people met and photos, and a gold See My Recap) on the Summit page and, for 30 days, at the top of My Dashboard. Opening it the first time sets off confetti, and the numbers count up. The agenda's last-changed and last-checked times moved from the bottom of the Summit page to Settings, as Last Update.
 - Nov 27, 2026: Summit Recap: the Photo Challenge is a real badge on the recap picture: a gold starburst seal with a camera, PHOTO CHALLENGE around the top, ribbon tails and a banner (ALL 3 DONE, or how many). In the preview before the summit ends, the recap opens on an Example filled out (7 sessions, 12 people, 9 photos, three framed prints and the badge), marked Example and with no share buttons; Mine So Far shows your own.
 - Nov 27, 2026: Who I Met: taking a picture makes a camera shutter sound instead of the scanner beep. The scan beep is louder and crisper, like a store's handheld scanner gun. Beep Off turns both off.

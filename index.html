@@ -6190,11 +6190,23 @@ function triviaBoard(all, srv) {
       '<div class="fs-quick"><button type="button" data-fs-q="0">Nothing</button><button type="button" data-fs-q="0.5">Half</button><button type="button" data-fs-q="1">All of It</button></div>' +
       '<button type="button" class="tv-go fs-lock" data-fs-lock>' + icon('i-check') + 'Lock In My Wager</button>' +
       '<button type="button" class="linkbtn fs-skip" data-fs-skip>Skip the Final Square</button></div></div>';
+    fsTop();
     TVSFX.dbl();
     TVVOICE.say((why === 'time' ? 'Time\'s up on the board. ' : '') + 'It\'s time for the Final Square. The category is ' + f.cat + '. How much will you wager?');
     var r = box.querySelector('#fs-r'); r.addEventListener('input', function () { setWager(+r.value); });
   }
   function setWager(v) { fin.wager = Math.max(0, Math.min(fin.maxW, Math.round(v))); var b = box.querySelector('#fs-w'); if (b) b.textContent = fin.wager.toLocaleString(); var r = box.querySelector('#fs-r'); if (r && +r.value !== fin.wager) r.value = fin.wager; }
+  /* Jonna, Nov 27, 2026: the Final Square screens start at the top (the wager screen left the pop-up scrolled down), and
+     when the keyboard opens the clue stays in view with the answer box just above the keyboard */
+  function fsScroller() { return box.closest('.sheet-body') || document.scrollingElement; }
+  function fsTop() { var sc = fsScroller(); if (sc) sc.scrollTop = 0; box.scrollTop = 0; }
+  function fsFit() {
+    var sc = fsScroller(), card = box.querySelector('.fs-card'), form = box.querySelector('.fs-form'); if (!sc || !card || !form) return;
+    var r0 = sc === document.scrollingElement ? { top: 0, bottom: innerHeight } : sc.getBoundingClientRect(), vb = window.visualViewport ? visualViewport.height + visualViewport.offsetTop : innerHeight;
+    var bottom = Math.min(r0.bottom, vb), formB = form.getBoundingClientRect().bottom, cardT = card.getBoundingClientRect().top;
+    var need = formB + 12 - bottom; if (need <= 0) return;
+    sc.scrollTop += Math.min(need, Math.max(0, cardT - r0.top - 8));   /* never past the top of the clue */
+  }
   function finalClue() {
     var f = fin.f, col = catColor(f.cat); TVSFX.right();
     box.innerHTML = '<div class="tb-clue-wrap fs-play"><div class="tg-top">' + scoreHtml() + '<span class="fs-bet">Wager <b>' + fin.wager.toLocaleString() + '</b></span>' +
@@ -6202,11 +6214,13 @@ function triviaBoard(all, srv) {
       '<div class="tb-clue fs-card" style="--cc:' + col + '"><div class="tb-clue-h"><span class="tb-clue-cat"><i></i>' + esc(f.cat) + '</span><span class="tb-clue-v">Final Square</span></div><h3>' + esc(f.clue) + '</h3></div>' +
       '<form class="fs-form" data-fs-form><label class="sr" for="fs-in">Your question</label><input id="fs-in" type="text" autocomplete="off" autocapitalize="sentences" spellcheck="false" maxlength="120" placeholder="What is …" disabled>' +
       '<button type="submit" class="tv-go" disabled>' + icon('i-check') + 'Submit</button></form><p class="tb-ask">Type it as a question. Spelling slips are fine.</p></div>';
+    fsTop();
     TVSFX.open();
     TVVOICE.say(f.clue, function () {
       if (!inFinal) return;
       var inp = box.querySelector('#fs-in'), btn = box.querySelector('.fs-form button'); if (!inp) return;
-      inp.disabled = false; btn.disabled = false; inp.focus();
+      inp.disabled = false; btn.disabled = false; try { inp.focus({ preventScroll: true }); } catch (er) { inp.focus(); }
+      fsTop(); setTimeout(fsFit, 350); if (window.visualViewport) { var vvF = function () { if (!box.querySelector('.fs-form')) { visualViewport.removeEventListener('resize', vvF); return; } fsFit(); }; visualViewport.addEventListener('resize', vvF); }
       var t0f = performance.now(), last = 0;
       (function ft() {
         var ring = box.querySelector('#tg-ring'), sx = box.querySelector('#tg-secs'); if (!ring || fin.done) return;
