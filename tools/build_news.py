@@ -26,6 +26,7 @@ class News(HTMLParser):
         if tag == 'a' and 'nwc' in cls:
             self.cur = {'url': a.get('href') or '', 'date': '', 'title': '', 'summary': ''}; self.depth = 0; return
         if self.cur is None: return
+        if self.field: self.cur[self.field] += ' '   # words in separate elements (a list, a line break) keep a space between them
         if tag == 'a': self.depth += 1
         if tag == 'span' and 'nwd' in cls: self.field = 'date'
         elif tag in ('h3', 'h4'): self.field = 'title'

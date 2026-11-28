@@ -136,6 +136,11 @@ html[data-season="december"] .mast-in{padding-top:16px}
 .mm-my{animation:mm-in .55s cubic-bezier(.2,.9,.3,1.2) both}
 @keyframes mm-streak{from{stroke-dashoffset:90}to{stroke-dashoffset:0}}
 @keyframes mm-in{from{transform:translateX(-18px); opacity:0}to{transform:none; opacity:1}}
+.mast-in .my-mark{cursor:pointer}
+/* Jonna, Nov 28, 2026: tapping MyMISMO in the top bar plays the opening screen's streak again */
+.my-mark.go .mm-lines path{animation-name:mm-streak2} .my-mark.go .mm-my{animation-name:mm-in2}
+@keyframes mm-streak2{from{stroke-dashoffset:90}to{stroke-dashoffset:0}}
+@keyframes mm-in2{from{transform:translateX(-18px); opacity:0}to{transform:none; opacity:1}}
 @media (prefers-reduced-motion: reduce){ .mm-lines path, .mm-my{animation:none} }
 @media (max-width:480px){ .mast-in{gap:6px; padding-left:10px; padding-right:12px} .my-mark{height:19px; margin-left:-2px} .mast-in .lplate{padding:6px 8px} .mast-in .lplate .wordmark{height:15px} .mast-right{gap:5px} }
 @media (max-width:370px){ .my-mark{height:16px} .mast-in .lplate .wordmark{height:13px} .mast-icon{width:34px; height:34px} }
@@ -153,6 +158,15 @@ html[data-season="december"] .mast-in{padding-top:16px}
 @media (max-width:359px){ .mast-in{gap:6px; padding-left:10px; padding-right:10px} .lplate{padding:6px 8px} .lplate .wordmark{height:15px} .mast-right{gap:4px} .mast-icon{width:36px; height:36px} .mast-right .rs-signin{padding:0 10px; height:36px; font-size:13.5px} }
 .theme-btn{background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; border-radius:5px; padding:5px 10px; font-size:11.5px; cursor:pointer; font-family:inherit; white-space:nowrap}
 .theme-btn:hover{background:rgba(255,255,255,.18)}
+.me-btn.in{border-color:rgba(116,191,235,.55); background:rgba(116,191,235,.18)}
+.me-btn .ini-chip{font-size:13px; font-weight:800; letter-spacing:.02em}
+.me-menu{position:fixed; z-index:400; min-width:232px; max-width:calc(100vw - 16px); padding:6px; border-radius:12px; background:var(--surface); border:1px solid var(--border); box-shadow:0 18px 40px -12px rgba(6,32,47,.45); animation:me-in .14s ease-out}
+@keyframes me-in{from{opacity:0; transform:translateY(-4px)}}
+.me-head{display:flex; gap:10px; align-items:center; padding:10px 10px 12px; border-bottom:1px solid var(--rule); margin-bottom:4px}
+.me-av{flex:none; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:#14486e; color:#fff; font-weight:800; font-size:14px} .me-av svg{width:20px; height:20px}
+.me-head b{display:block; font-size:15px; color:var(--ink)} .me-head div span{display:block; font-size:12px; color:var(--ink-3); overflow-wrap:anywhere}
+.me-row{display:flex; align-items:center; gap:12px; width:100%; padding:11px 10px; border:0; border-radius:8px; background:none; color:var(--ink); font:inherit; font-size:15px; font-weight:600; text-align:left; cursor:pointer}
+.me-row svg{width:19px; height:19px; color:var(--link)} .me-row:hover, .me-row:focus-visible{background:var(--surface-2); outline:none}
 .mast-icon{position:relative; width:40px; height:40px; display:grid; place-items:center; border-radius:4px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.1); color:#fff; cursor:pointer}
 .mast-icon svg{width:20px; height:20px}
 .theme-btn[hidden]{display:none !important}   /* dark mode lives in Settings */
@@ -485,7 +499,11 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .qr-phone span{display:block; margin-top:4px; font-size:13px; line-height:1.4; color:var(--ink-2)}
 }
 .dash-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:8px 0 16px}
-.dh-date{color:var(--ink-2); font-weight:600; font-size:13.5px}
+.dh-date{color:var(--ink-2); font-weight:600; font-size:13.5px; display:flex; align-items:center; flex-wrap:wrap; gap:4px 10px}
+.dh-wx{display:inline-flex; align-items:center; gap:5px; color:var(--ink-2); font:inherit; font-size:13px}
+.dh-wx svg{width:17px; height:17px; color:var(--link)} .dh-wx b{font-weight:800; color:var(--ink)} .dh-wx > span{color:var(--ink-3); font-weight:600}
+.dh-wx.ask{padding:2px 8px 2px 6px; border-radius:6px; border:1px solid var(--border); background:var(--surface); cursor:pointer; color:var(--link); font-weight:700}
+.dh-wx.ask > span{color:var(--link)}
 .dash-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); line-height:1; letter-spacing:-.02em; margin-top:3px}
 .dash-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; grid-auto-flow:dense; --half-h:206px}
 /* Jonna, Nov 28, 2026: every half-width tile is the same, locked height (MISMO Matters, Join a Workgroup, Certified, Webinars set it) */
@@ -2071,12 +2089,70 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .w-mem.lend .w-s{max-width:58%; font-weight:600}
 .wm-col i{max-width:48px}
 .w-mem.lend{container-type:inline-size}
-@container (max-width:249px){ .w-mem.lend .w-s{display:none} .wm-house{width:68%} }
+@container (max-width:249px){ .w-mem.lend .w-s{max-width:none; font-size:11.5px; line-height:1.25; font-weight:700; text-shadow:0 1px 6px rgba(13,49,76,.45)} .wm-house{width:62%} }
 
 .wm-col:last-child em{color:#c98500}
 .wm-col:last-child::before{content:""; width:16px; height:16px; margin-bottom:1px; background:#c98500; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z'/%3E%3C/svg%3E") center/contain no-repeat}
 .wm-chart{border-bottom:0}
 @media (prefers-reduced-motion: reduce){ .wm-house .cn{animation:none} }
+
+/* ==== News (Jonna, Nov 28, 2026): a press room tile, a third of a row beside MISMO Merch ==== */
+.wd.duo{display:grid; grid-template-columns:2fr 1fr; gap:12px; padding:0; background:none; border:0; box-shadow:none; border-radius:0; overflow:visible; cursor:default; min-height:0; height:auto}
+@media (min-width:760px){ .dash-grid > .wd.duo{grid-column:1 / -1} }
+@media (orientation:landscape) and (max-height:540px){ .dash-grid > .wd.duo{grid-column:1 / -1} }
+.wd.duo > .wd{min-width:0; min-height:206px}
+.w-merch.in-duo{container-type:inline-size}
+@container (max-width:320px){
+  .w-merch.in-duo .mx-wt{max-width:none; font-size:24px}
+  .w-merch.in-duo .mx-ws{max-width:none; font-size:12.5px}
+  .w-merch.in-duo .mx-shelf{bottom:10px; right:4px; width:36%; --c:.5}
+  .w-merch.in-duo .mx-sh:nth-child(n+3){display:none}
+}
+.w-news .nw-flip{min-height:118px}
+.w-news{container-type:inline-size}
+@container (min-width:300px){ .w-news .nw-d b{font-size:54px} .w-news .nw-d i{font-size:16px} .w-news .nw-t{font-size:18px; line-height:1.25; -webkit-line-clamp:3; max-width:34ch} }
+.w-news.wide .nw-flip{min-height:92px}
+.w-news{color:#fff; border:0; background:radial-gradient(120% 70% at 100% 0%, rgba(116,191,235,.32), transparent 60%), linear-gradient(170deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.w-news .w-head, .w-news .w-head svg{color:#a9d8f3}
+.nw-new{font-style:normal; margin-left:auto; padding:2px 6px; border-radius:5px; background:#74bfeb; color:#06202f; font-size:10.5px; font-weight:800}
+.nw-press{position:absolute; inset:auto -10px -6px auto; width:min(70%, 130px); height:auto; z-index:0; opacity:.18; pointer-events:none}
+.nw-press path{stroke:#a9d8f3; stroke-width:2; stroke-dasharray:3 5}
+.w-news > *:not(svg){position:relative; z-index:1}
+.nw-flip{position:relative; flex:1 1 auto; align-self:stretch; min-height:0; margin-top:6px}
+.nw-it{position:absolute; inset:0; display:flex; flex-direction:column; gap:6px; opacity:0; animation:nw-cycle calc(var(--n) * 4.5s) infinite; animation-delay:calc(var(--i) * 4.5s)}
+.w-news[style*="--n:1"] .nw-it{opacity:1; animation:none}
+@keyframes nw-cycle{0%{opacity:0; transform:translateY(10px)} 4%,30%{opacity:1; transform:none} 34%,100%{opacity:0; transform:translateY(-8px)}}
+.nw-d{display:flex; align-items:baseline; gap:5px; line-height:1}
+.nw-d b{font-family:var(--cond); font-weight:800; font-size:38px; color:#fff; letter-spacing:-.02em}
+.nw-d i{font-style:normal; font-size:13px; font-weight:800; color:#74bfeb}
+.nw-t{font-size:13px; line-height:1.3; font-weight:700; color:#e4f2fb; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden}
+.nw-dots{display:flex; gap:5px; margin-top:6px}
+.nw-dots i{width:16px; height:3px; border-radius:2px; background:rgba(255,255,255,.22); overflow:hidden; position:relative}
+.nw-dots i::after{content:""; position:absolute; inset:0; background:#74bfeb; transform:scaleX(0); transform-origin:left; animation:nw-dot calc(var(--n) * 4.5s) linear infinite; animation-delay:calc(var(--i) * 4.5s)}
+.w-news[style*="--n:1"] .nw-dots{display:none}
+@keyframes nw-dot{0%{transform:scaleX(0)} 33%{transform:scaleX(1)} 33.1%,100%{transform:scaleX(0)}}
+@media (prefers-reduced-motion: reduce){ .nw-it{animation:none} .nw-it:first-child{opacity:1} .nw-dots{display:none} }
+/* the News sheet: a front page */
+.nws{display:grid; gap:12px; padding:14px 14px 18px}
+.nws-front{position:relative; overflow:hidden; isolation:isolate; border-radius:18px; padding:16px; color:#fff; background:radial-gradient(90% 70% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(165deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.nws-front > *:not(svg){position:relative; z-index:1}
+.nws-mast{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; padding-bottom:10px; margin-bottom:14px; border-bottom:3px double rgba(169,216,243,.5)}
+.nws-mast span{font-size:10.5px; font-weight:700; color:#a9d8f3} .nws-mast span:last-child{text-align:right}
+.nws-mast b{font-family:var(--cond); font-size:28px; line-height:1; letter-spacing:-.01em}
+.nws-lead{display:grid; grid-template-columns:auto 1fr; gap:14px; color:#fff; text-decoration:none}
+.nws-cal{display:grid; justify-items:center; align-content:start; align-self:start; min-width:62px; padding:8px 6px 7px; border-radius:12px; background:#fff; color:#0d314c; box-shadow:0 10px 22px -12px rgba(0,0,0,.6); line-height:1}
+.nws-cal b{font-family:var(--cond); font-size:34px; font-weight:800} .nws-cal i{font-style:normal; font-size:12px; font-weight:800; color:#2477b8} .nws-cal em{font-style:normal; font-size:10.5px; font-weight:700; color:#7794aa; margin-top:2px}
+.nws-cal.sm{min-width:48px; padding:6px 4px; background:var(--surface-2); border:1px solid var(--border); box-shadow:none; color:var(--ink)} .nws-cal.sm b{font-size:24px}
+.nws-lt{display:grid; gap:6px; justify-items:start} .nws-lt b{font-family:var(--cond); font-size:21px; line-height:1.15} .nws-lt > span{font-size:13.5px; line-height:1.45; color:#cfe3f1}
+.nws-k{font-style:normal; font-size:11px; font-weight:800; color:#74bfeb}
+.nws-go{display:inline-flex; align-items:center; gap:4px; margin-top:4px; font-style:normal; font-size:13.5px; font-weight:800; color:#74bfeb} .nws-go svg{width:15px; height:15px}
+.nws-mh{display:flex; align-items:baseline; gap:8px; margin:10px 2px 0} .nws-mh b{font-family:var(--cond); font-size:20px} .nws-mh span{font-size:12px; font-weight:700; color:var(--ink-3)}
+.nws-list{display:grid; gap:8px}
+.nws-it{display:grid; grid-template-columns:auto 1fr 16px; gap:12px; align-items:center; padding:12px; border-radius:14px; background:var(--surface); border:1px solid var(--border); color:var(--ink); text-decoration:none}
+.nws-it > svg{width:16px; height:16px; color:var(--ink-3)}
+.nws-tx b{display:block; font-size:14.5px; line-height:1.3} .nws-tx span{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:3px; font-size:12.5px; line-height:1.4; color:var(--ink-2)}
+.nws-all{display:grid; grid-template-columns:22px 1fr 16px; gap:12px; align-items:center; margin-top:6px; padding:14px; border-radius:14px; background:color-mix(in srgb, #74bfeb 16%, var(--surface)); border:1px solid var(--border); color:var(--ink); text-decoration:none; font-size:12.5px; color:var(--ink-2)}
+.nws-all b{display:block; font-size:15px; color:var(--ink)} .nws-all > svg{width:20px; height:20px; color:var(--link)} .nws-all > svg:last-child{width:16px; height:16px}
 /* Champions Lounge: the two paths */
 .lg-paths{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .lg-path{display:grid; gap:4px; justify-items:start; align-content:start; text-align:left; padding:14px 13px; border-radius:14px; border:0; color:#fff; font:inherit; cursor:pointer; background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
@@ -2626,6 +2702,11 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-webinar" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 21h8M12 17v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m10.2 8 4.3 2.5-4.3 2.5z" fill="currentColor"/></symbol>
 <symbol id="i-plane" viewBox="0 0 24 24"><path d="M10.5 13.5 3 11l1.2-1.6 8 .9 4.6-5.1c.8-.9 2.4-1.3 3-.7.6.6.2 2.2-.7 3l-5.1 4.6.9 8L13.3 21l-2.5-7.5-3.6 3.2.4 2.6-1.2 1-1.6-3.2L1.6 15.5l1-1.2 2.6.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
 <symbol id="i-tram" viewBox="0 0 24 24"><rect x="5.5" y="6" width="13" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 12.5h13M9 3h6M12 3v3M8.5 15.3h.01M15.5 15.3h.01M8 18l-2 3M16 18l2 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="wx-clear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="wx-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10.5a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.2A3.4 3.4 0 0 0 7 18.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="wx-rain" viewBox="0 0 24 24"><path d="M7 15h10.5a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.2A3.4 3.4 0 0 0 7 15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 18l-1 2.5M12.5 18l-1 2.5M16.5 18l-1 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="wx-snow" viewBox="0 0 24 24"><path d="M7 14h10.5a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.2A3.4 3.4 0 0 0 7 14z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 18.5h.01M12 20h.01M15.5 18.5h.01M10 21.5h.01M14 21.5h.01" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+<symbol id="wx-storm" viewBox="0 0 24 24"><path d="M7 14h10.5a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.2A3.4 3.4 0 0 0 7 14z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m12.5 15-2 3.5h3l-2 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 2v1.5M2 9h1.5M4 4l1 1M14 4l-1 1M4 14l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10 20h8.5a3.5 3.5 0 0 0 .3-7 5 5 0 0 0-9.4 1A3 3 0 0 0 10 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-fork" viewBox="0 0 24 24"><path d="M7 3v7M4.5 3v5a2.5 2.5 0 0 0 5 0V3M7 10v11M17 21V3c-2.2 1-3.5 3.6-3.5 7v4H17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
@@ -2642,6 +2723,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-tag" viewBox="0 0 24 24"><path d="M5.5 8h13l-1 12.5h-11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 10V7a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
 <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.7.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-news" viewBox="0 0 24 24"><path d="M4 5.5h13v13a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM17 9h3v9.5a2 2 0 0 1-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 9h7v4H7zM7 16h7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
 <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 <symbol id="i-hotel" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 10h4a1 1 0 0 1 1 1v10M3 21h18M8 8h3M8 12h3M8 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
@@ -2666,11 +2748,12 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
     <div class="vrule" aria-hidden="true"></div>
     <div class="appname" id="appname">MyMISMO</div>
     <div class="mast-right">
-      <button class="mast-icon" id="bell-btn" type="button" aria-label="Alerts" hidden><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="dot" id="bell-dot"></span></button>
+
       <button class="mast-icon" id="msg-btn" type="button" aria-label="Messages" hidden><svg aria-hidden="true"><use href="#i-chat"/></svg><span class="dot" id="msg-dot"></span></button>
       <button class="mast-icon" id="acct-btn" type="button" aria-label="Sign in" hidden><svg aria-hidden="true"><use href="#i-user"/></svg></button>
       <button class="mast-icon" id="scan-btn" type="button" aria-label="Scan a Name Tag" data-scan hidden><svg aria-hidden="true"><use href="#i-scan"/></svg></button>
-      <button class="mast-icon" id="set-btn" type="button" aria-label="Settings"><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
+      <button class="mast-icon" id="bell-btn" type="button" aria-label="Notifications"><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="dot" id="bell-dot"></span></button>
+      <button class="mast-icon me-btn" id="me-btn" type="button" aria-label="Account and Settings" aria-haspopup="menu" aria-expanded="false"><svg aria-hidden="true"><use href="#i-user"/></svg></button>
       <div id="rs-account" hidden></div>
       <button class="theme-btn" id="theme-btn" type="button" hidden>Dark</button>
     </div>
@@ -3945,13 +4028,13 @@ var SITE_LINKS = [
   ['Standards and Resources', '/standards-resources', 'The MISMO standards and how to use them'],
   ['Resource Library', '/mismolibraries', 'Work products and downloads'],
   ['Business Glossary', '/glossary', 'Terms used across the mortgage industry'],
-  ['Certifications', '/standards-resources/certification', 'Certified providers and how to apply'],
+  ['Digital Mortgage Resource Center', '/standards-resources/digital-mortgage-resource-center', 'eMortgage adoption, MERS figures and bill tracking'],
   ['MISMO Link', '/standards-resources/mismo-link', 'MISMO’s AI for the standards'],
-  ['Communities and Workgroups', '/get-involved/workgroups', 'Where the standards are built'],
-  ['Membership', '/membership', 'Benefits, levels and joining'],
-  ['News', '/about-mismo/news', 'MISMO in the news and announcements']
+  ['Boot Camp', '/events/boot-camp', 'Get up to speed on MISMO, the first step to AMSP'],
+  ['MISMO FRAME', '/mismo-frame', 'The Framework for Responsible AI in the Mortgage Ecosystem'],
+  ['Contributor Awards', '/about-mismo/contributor-awards', 'Honoring the volunteers behind the standards']
 ];
-var MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null, FACES = null;
+var NEWS = null, MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null, FACES = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -5304,6 +5387,7 @@ function loadExtras() {
   getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
   getJSON('data/peeks/index.json').then(function (p) { PEEKS = p; }).catch(function () {});
   getJSON('data/programs.json').then(function (p) { PRG = p; again(['dash']); }).catch(function () {});
+  getJSON('data/news.json').then(function (n) { if (n && n.items && n.items.length) { NEWS = n; again(['dash']); } }).catch(function () {});
   getJSON('data/faces.json').then(function (f) { FACES = f; FACE_IX = null; again(['people']); }).catch(function () {});
 }
 function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
@@ -5504,7 +5588,8 @@ var DASH = [
   { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-banner' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
-  { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' }
+  { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' },
+  { id: 'news', name: 'News', desc: 'MISMO press releases', icon: 'i-news' }
 ];
 function dashPicks() { return DASH.filter(function (d) { return !(d.id === 'sponsor' && !prospOn()) && !(d.id === 'trivia' && STORE_RELEASE && !TRIVIA_LIVE) && !(d.id === 'merch' && (STORE_RELEASE || !appTester())); }).map(function (d) { return d.id; }); }
 /* First name of whoever is signed in: MISMO staff and contractors (the shared resources.mismo.org sign-in), else the attendee */
@@ -5531,7 +5616,39 @@ function qrPhone() {
 }
 function greetHead(qr) {
   var n = new Date(), f = firstName();
-  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1>' + (f ? '' : '<button type="button" class="linkbtn dh-name" data-myname>Add Your Name</button>') + '</div>' + (qr && !standalone() ? qrPhone() : '') + '</div>';
+  return '<div class="dash-head"><div><div class="dh-date">' + esc(DOW[n.getDay()] + ', ' + MONTH[n.getMonth()] + ' ' + n.getDate()) + wxChip() + '</div><h1>' + greet() + (f ? ', ' + esc(f) : '') + '</h1>' + (f ? '' : '<button type="button" class="linkbtn dh-name" data-myname>Add Your Name</button>') + '</div>' + (qr && !standalone() ? qrPhone() : '') + '</div>';
+}
+/* ---------- Local weather by the date (Jonna, Nov 28, 2026) ----------
+   Only after someone taps Show Weather: the phone gives its rough location once (rounded to about a mile, kept on this
+   phone), and the forecast comes from Open-Meteo (free, no account). Turned off in Settings. */
+var WX = { busy: false };
+function wxLoc() { var l = load('wx-loc', null); return l && typeof l.lat === 'number' ? l : null; }
+function wxIcon(c) { return c === 0 || c === 1 ? 'wx-clear' : c >= 95 ? 'wx-storm' : (c >= 71 && c <= 77) || c === 85 || c === 86 ? 'wx-snow' : (c >= 51 && c <= 67) || (c >= 80 && c <= 82) ? 'wx-rain' : 'wx-cloud'; }
+function wxWord(c) { return c === 0 ? 'Clear' : c <= 2 ? 'Partly cloudy' : c === 3 ? 'Cloudy' : c <= 48 ? 'Fog' : c <= 57 ? 'Drizzle' : c <= 67 ? 'Rain' : c <= 77 ? 'Snow' : c <= 82 ? 'Showers' : c <= 86 ? 'Snow showers' : 'Thunderstorms'; }
+function wxChip() {
+  if (!wxLoc()) return load('wx-off', false) ? '' : '<button type="button" class="dh-wx ask" data-wx-ask>' + icon('wx-clear') + '<span>Show Weather</span></button>';
+  var w = load('wx-now', null);
+  if (!w || Date.now() - w.at > 30 * 60000) setTimeout(wxFetch, 0);
+  if (!w) return '<span class="dh-wx" id="dh-wx"></span>';
+  return '<span class="dh-wx" id="dh-wx" title="' + esc(wxWord(w.code)) + '">' + icon(wxIcon(w.code)) + '<b>' + Math.round(w.t) + '\u00b0</b><span>H ' + Math.round(w.hi) + '\u00b0 L ' + Math.round(w.lo) + '\u00b0</span></span>';
+}
+function wxFetch() {
+  var l = wxLoc(); if (!l || WX.busy) return; WX.busy = true;
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=' + l.lat + '&longitude=' + l.lon + '&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto&forecast_days=1')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      WX.busy = false; if (!j || !j.current || !j.daily) return;
+      save('wx-now', { at: Date.now(), t: j.current.temperature_2m, code: j.current.weather_code, hi: j.daily.temperature_2m_max[0], lo: j.daily.temperature_2m_min[0] });
+      var el = document.getElementById('dh-wx'); if (el) el.outerHTML = wxChip();
+    }, function () { WX.busy = false; });
+}
+function wxAsk(btn) {
+  if (!navigator.geolocation) { mxToast('This phone can\'t share its location'); return; }
+  if (btn) btn.querySelector('span').textContent = 'Finding You\u2026';
+  navigator.geolocation.getCurrentPosition(function (p) {
+    save('wx-loc', { lat: Math.round(p.coords.latitude * 100) / 100, lon: Math.round(p.coords.longitude * 100) / 100 }); save('wx-off', false);
+    if (btn) btn.outerHTML = '<span class="dh-wx" id="dh-wx"></span>'; wxFetch();
+  }, function () { if (btn) btn.querySelector('span').textContent = 'Show Weather'; mxToast('Location is off for MyMISMO, so the weather can\'t show'); }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 6 * 3600000 });
 }
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
 /* the AI Webinar Series with MBA Education, as the website's Education page lists it (data/ai-webinars.json, kept fresh by
@@ -6901,6 +7018,7 @@ function widget(id) {
       '<span class="mx-shelf" aria-hidden="true">' + show.map(function (p, i) { return '<span class="mx-sh" style="--i:' + i + '">' + merchArt(p) + '</span>'; }).join('') + '</span>' +
       '<span class="mx-go">Shop Now' + icon('i-chev') + '</span></button>';
   }
+  if (id === 'news') return newsTile();
   if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-more">' + SITE_LINKS.slice(0, 5).map(function (l) { return '<span class="wm-li">' + esc(l[0]) + '</span>'; }).join('') + '</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
   return '';
 }
@@ -6912,6 +7030,10 @@ function renderDash() {
   if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
   if (recapOnDash()) h += recapCard('dash');
   var ws = picks.map(widget).filter(Boolean);
+  /* Jonna, Nov 28, 2026: MISMO Merch two-thirds and News one-third share a row; without Merch, News runs wide */
+  var mi = -1, ni = -1; ws.forEach(function (w, i) { if (/class="wd w-merch/.test(w)) mi = i; if (/class="wd w-news/.test(w)) ni = i; });
+  if (mi >= 0 && ni >= 0) { ws[mi] = '<div class="wd duo wide">' + ws[mi].replace('class="wd w-merch wide"', 'class="wd in-duo w-merch"') + ws[ni].replace('class="wd w-news"', 'class="wd in-duo w-news"') + '</div>'; ws.splice(ni, 1); }
+  else if (ni >= 0) ws[ni] = ws[ni].replace('class="wd w-news"', 'class="wd w-news wide"');
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
   var sq = ws.filter(function (x) { return x.indexOf(' wide') < 0; }).length;
   if (sq % 2 === 1) { for (var i = ws.length - 1; i >= 0; i--) if (ws[i].indexOf(' wide') < 0) { ws[i] = ws[i].replace(/class="wd /, 'class="wd wide solo '); break; } }
@@ -6921,11 +7043,11 @@ function renderDash() {
   if (mq('(min-width:760px)') || mq('(orientation:landscape) and (max-height:540px)')) {
     var units = 0, big = mq('(min-width:760px)') && !mq('(orientation:landscape) and (max-height:540px)');   /* on a phone on its side the Summit tile spans two, not four */
     ws.forEach(function (w) { (w.match(/class="(?:wd|nextsum) [^"]*"|class="nextsum[^"]*"/g) || []).forEach(function (c) {
-      units += /w-summit/.test(c) ? 4 : (!big && /w-mat|w-wg/.test(c)) ? 2 : /\bwide\b/.test(c) ? 2 : 1; }); });
+      units += /in-duo/.test(c) ? 0 : /\bduo\b/.test(c) ? 4 : /w-summit/.test(c) ? 4 : (!big && /w-mat|w-wg/.test(c)) ? 2 : /\bwide\b/.test(c) ? 2 : 1; }); });
     var rem = (4 - units % 4) % 4, last = ws.length - 1;
     /* Jonna, Nov 26, 2026: squares stay in their pairs (Submit an Idea beside mismo.org). Two short: a wide tile at the end
        goes full width, or the last pair of squares widens together. */
-    if (rem === 2 && last >= 0 && / wide/.test(ws[last]) && !/w-summit/.test(ws[last])) ws[last] = ws[last].replace(/class="wd /, 'class="wd full ');
+    if (rem === 2 && last >= 0 && / wide/.test(ws[last]) && !/w-summit|wd duo/.test(ws[last])) ws[last] = ws[last].replace(/class="wd /, 'class="wd full ');
     else if (rem === 2) { for (var j = last, n = 0; j >= 0 && n < 2; j--) if (ws[j].indexOf(' wide') < 0) { ws[j] = ws[j].replace(/class="wd /, 'class="wd grow '); n++; } }
   }
   h += '<div class="dash-grid">' + ws.join('') + '</div>';
@@ -7023,6 +7145,37 @@ var MEM = {
 };
 function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
 /* data streams flowing across a membership hero or tile */
+/* ---------- News (Jonna, Nov 28, 2026): the website's News page, newest first, read by the guide job ---------- */
+var MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function newsDate(iso) { var p = String(iso).split('-'); return { d: +p[2], m: MON3[+p[1] - 1], y: p[0], long: MONTH[+p[1] - 1] + ' ' + (+p[2]) + ', ' + p[0] }; }
+function newsFresh(iso) { return (Date.now() - new Date(iso + 'T12:00:00').getTime()) < 14 * 864e5; }
+function newsTile() {
+  if (!NEWS || !NEWS.items || !NEWS.items.length) return '';
+  var top = NEWS.items.slice(0, 3), n = top.length;
+  return '<button type="button" class="wd w-news" data-news style="--n:' + n + '"><span class="w-head">' + icon('i-news') + '<span>News</span>' + (newsFresh(top[0].date) ? '<em class="nw-new">New</em>' : '') + '</span>' +
+    '<span class="nw-flip">' + top.map(function (x, i) { var d = newsDate(x.date);
+      return '<span class="nw-it" style="--i:' + i + '"><span class="nw-d"><b>' + d.d + '</b><i>' + d.m + '</i></span><span class="nw-t">' + esc(x.title) + '</span></span>'; }).join('') + '</span>' +
+    '<span class="nw-dots" aria-hidden="true">' + top.map(function (x, i) { return '<i style="--i:' + i + '"></i>'; }).join('') + '</span>' +
+    '<svg class="nw-press" viewBox="0 0 120 80" aria-hidden="true"><path d="M0 14h120M0 30h120M0 46h120M0 62h120M0 78h120"/></svg></button>';
+}
+function newsSheet() {
+  if (!NEWS) return;
+  var it = NEWS.items, lead = it[0], d = newsDate(lead.date), rest = it.slice(1), months = {};
+  var today = new Date(), stamp = DOW[today.getDay()] + ', ' + MONTH[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+  var h = '<div class="nws">' +
+    '<section class="nws-front">' + memRails() + '<div class="nws-mast"><span>' + esc(stamp) + '</span><b>MISMO News</b><span>Press Releases</span></div>' +
+      '<a class="nws-lead" href="' + esc(lead.url) + '" target="_blank" rel="noopener"><span class="nws-cal"><b>' + d.d + '</b><i>' + d.m + '</i><em>' + d.y + '</em></span>' +
+      '<span class="nws-lt">' + (newsFresh(lead.date) ? '<em class="nw-new">New</em>' : '<em class="nws-k">Latest</em>') + '<b>' + esc(lead.title) + '</b>' + (lead.summary ? '<span>' + esc(lead.summary) + '</span>' : '') +
+      '<i class="nws-go">Read the Release' + icon('i-chev') + '</i></span></a></section>';
+  rest.forEach(function (x) { var k = x.date.slice(0, 7); (months[k] = months[k] || []).push(x); });
+  Object.keys(months).sort().reverse().forEach(function (k) {
+    var p = k.split('-');
+    h += '<div class="nws-mh"><b>' + MONTH[+p[1] - 1] + '</b><span>' + p[0] + '</span></div><div class="nws-list">' + months[k].map(function (x, i) { var dd = newsDate(x.date);
+      return '<a class="nws-it" href="' + esc(x.url) + '" target="_blank" rel="noopener" style="--i:' + i + '"><span class="nws-cal sm"><b>' + dd.d + '</b><i>' + dd.m + '</i></span><span class="nws-tx"><b>' + esc(x.title) + '</b>' + (x.summary ? '<span>' + esc(x.summary) + '</span>' : '') + '</span>' + icon('i-chev') + '</a>'; }).join('') + '</div>';
+  });
+  h += '<a class="nws-all" href="' + SITE + '/about-mismo/news" target="_blank" rel="noopener">' + icon('i-globe') + '<span><b>All MISMO News</b>Every release, by year, on mismo.org</span>' + icon('i-chev') + '</a></div>';
+  openSheet('News', h, { plain: true });
+}
 function memHouse() {
   return '<svg class="wm-house" viewBox="0 0 160 150" aria-hidden="true"><path class="hs" d="M18 82 80 30l62 52"/><path class="hs" d="M34 70v74h92V70"/><path class="hs" d="M68 144v-36h24v36"/><path class="hs" d="M112 52V36h12v26"/>' +
     '<g class="cn"><circle cx="80" cy="72" r="20"/><text x="80" y="80">$</text></g></svg>';
@@ -7299,9 +7452,10 @@ function micdupSheet(startId) {
   if (startId) setTimeout(function () { var pl = el.querySelector('.mic-stage .player'); if (pl) playIn(pl, cur.id); }, 320);
 }
 function episodeSheet(id) { micdupSheet(id); }
-var SITE_ICON = { '/standards-resources': ['i-file', '#2477b8'], '/mismolibraries': ['i-agenda', '#1baf7a'], '/glossary': ['i-search', '#eda100'], '/standards-resources/certification': ['i-cert', '#eb6834'], '/standards-resources/mismo-link': ['i-bulb', '#74bfeb'], '/get-involved/workgroups': ['i-people', '#e87ba4'], '/membership': ['i-handshake', '#008300'], '/about-mismo/news': ['i-mail', '#7f93a6'] };
+var SITE_ICON = { '/standards-resources': ['i-file', '#2477b8'], '/mismolibraries': ['i-agenda', '#1baf7a'], '/glossary': ['i-search', '#eda100'], '/standards-resources/certification': ['i-cert', '#eb6834'], '/standards-resources/mismo-link': ['i-bulb', '#74bfeb'], '/get-involved/workgroups': ['i-people', '#e87ba4'], '/membership': ['i-handshake', '#008300'], '/about-mismo/news': ['i-mail', '#7f93a6'],
+  '/standards-resources/digital-mortgage-resource-center': ['i-chart', '#eb6834'], '/events/boot-camp': ['i-cert', '#e87ba4'], '/mismo-frame': ['i-lock', '#008300'], '/about-mismo/contributor-awards': ['i-star', '#7f93a6'] };
 function siteSheet() {
-  var h = '<section class="site-hero">' + heroArt() + '<div class="site-in"><span class="site-k">' + icon('i-globe') + 'www.mismo.org</span><h2>Everything MISMO, One Tap Away</h2><p>The standards, the library, the glossary and how to get involved.</p></div></section>' +
+  var h = '<section class="site-hero">' + heroArt() + '<div class="site-in"><span class="site-k">' + icon('i-globe') + 'www.mismo.org</span><h2>Everything MISMO, One Tap Away</h2><p>The standards, the library, FRAME, Boot Camp and more.</p></div></section>' +
     '<div class="sheet-pad"><div class="site-grid">' + SITE_LINKS.map(function (l, i) {
       var ic = SITE_ICON[l[1]] || ['i-link', '#2477b8'];
       return '<a class="site-tile" href="' + SITE + l[1] + '" target="_blank" rel="noopener" style="--c:' + ic[1] + ';--i:' + i + '"><span class="st-ic">' + icon(ic[0]) + '</span><b>' + esc(l[0]) + '</b><span>' + esc(l[2]) + '</span><span class="st-go">' + icon('i-link') + '</span></a>';
@@ -7712,7 +7866,7 @@ function checkPush() {
     var key = r.ok && r.j && r.j.publicKey ? r.j.publicKey : '';
     PUSH.key = key; PUSH.newsReady = !!key;
     PUSH.ready = !!(key && S.sid && (r.j.summits || []).indexOf(S.sid) >= 0);
-    $('#bell-btn').hidden = !PUSH.ready;
+    /* the bell is always in the top bar now (Jonna, Nov 28, 2026); alerts themselves open during a summit */
     if (!key) return;
     loadNews();
     if (PUSH.ready) loadAlerts();
@@ -7803,13 +7957,14 @@ function alertsSheet() {
   save('alerts-seen:' + S.sid, Date.now()); $('#bell-dot').classList.remove('on');
   var h = '<div class="sheet-pad">';
   if (PUSH.on) h += '<div class="al-state on">' + icon('i-bell') + '<div><b>Alerts are on</b><span>You\'ll get room changes and news from the MISMO team during the summit.</span></div><button type="button" class="btn small" data-alerts-off>Turn Off</button></div>';
+  else if (!PUSH.ready) h += '<div class="al-state">' + icon('i-bell') + '<div><b>Summit alerts</b><span>During a summit, the MISMO team sends room changes and news here. You can turn them on once the summit is in the app.</span></div></div>';
   else if (IOS && !standalone()) h += '<div class="al-state">' + icon('i-bell') + '<div><b>Get alerts on your iPhone</b><span>Add MyMISMO to your Home Screen first: tap Share, then Add to Home Screen. Open it from there and turn alerts on.</span></div></div>';
   else if (pushSupported()) h += '<div class="al-state">' + icon('i-bell') + '<div><b>Turn on alerts</b><span>Room changes and news from the MISMO team, right on your phone. Nothing else.</span></div><button type="button" class="btn primary" data-alerts-on>Turn On Alerts</button></div>';
   h += '<div class="d-h">Alerts</div>' + (PUSH.alerts.length ? '<div class="alerts">' + PUSH.alerts.map(function (a) {
     var x = a.session && sessionById(a.session);
     return '<article class="al"><div class="al-t"><b>' + esc(a.title) + '</b><em>' + esc(stamp(new Date(a.at).toISOString())) + '</em></div><p>' + esc(a.body) + '</p>' + (x ? '<button type="button" class="linkbtn" data-open="s:' + esc(x.id) + '">' + esc(x.title) + '</button>' : '') + '</article>';
   }).join('') + '</div>' : '<div class="note">No alerts yet. The MISMO team sends them during the summit.</div>');
-  openSheet('Alerts', h + '</div>', { plain: true });
+  openSheet('Notifications', h + '</div>', { plain: true });
 }
 
 /* ---------- Settings ---------- */
@@ -7854,6 +8009,7 @@ function settingsSheet() {
       n ? '<button type="button" class="btn small" data-set="clear-sched">Clear</button>' : '') + '</div>';
   }
   h += '<div class="d-h">Privacy</div><div class="set-card">' + setRow('i-lock', 'What MyMISMO keeps', 'Your schedule and settings stay on this phone. MyMISMO doesn\'t track what you do or share it with anyone. Everyone registered for a summit is in the attendee directory with their name, title and company, for other signed-in attendees. You can hide yourself in My Profile.') +
+    setRow('wx-clear', 'Weather by the Date', wxLoc() ? 'On. Uses your rough location, kept on this phone; the forecast comes from Open-Meteo.' : 'Off. Tap Show Weather on My Dashboard to turn it on.', wxLoc() ? '<button type="button" class="btn small" data-set="wx-off">Turn Off</button>' : '') +
     setRow('i-file', 'Clear Saved Data', 'Signs you out and removes your schedule and settings from this phone.', '<button type="button" class="btn small" data-set="clear-all">Clear</button>') +
     '<a class="set-row link" href="https://www.mismo.org/privacy-policy#mymismo" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-lock') + '</span><div class="set-tx"><b>Privacy Policy</b><span>What MyMISMO collects, why, and how to delete it</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="delete-account/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-x') + '</span><div class="set-tx"><b>Delete Your Data</b><span>How to delete a MyMISMO account and its data</span></div>' + icon('i-chev') + '</a></div>';
@@ -7906,6 +8062,7 @@ function settingsSheet() {
     else if (k === 'clear-sched') {
       if (b.getAttribute('data-sure')) { save('schedule:' + S.sid, []); badge(); renderPage(S.page); again(); }
       else { b.setAttribute('data-sure', '1'); b.textContent = 'Tap to Confirm'; b.classList.add('danger'); }
+    } else if (k === 'wx-off') { save('wx-loc', null); save('wx-now', null); save('wx-off', true); closeSheet(false); renderPage(S.page); mxToast('Weather is off');
     } else if (k === 'clear-all') {
       if (b.getAttribute('data-sure')) {
         try { Object.keys(localStorage).forEach(function (key) { if (key.indexOf(STORE) === 0) localStorage.removeItem(key); }); } catch (x) {}
@@ -7919,7 +8076,7 @@ function settingsSheet() {
 /* Jonna, Nov 26, 2026: a staff sign-in ends after 8 hours (the rule for every MISMO Resources tool). MyMISMO remembers
    that this phone had one, and the dashboard offers Sign In again at the top, so nobody has to go to another tool for it.
    Signing out on purpose forgets it. */
-function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = !st; if (st) save('staff-was', st.name || 'yes'); if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
+function paintStaff(rerender) { var st = staffSession(), box = $('#rs-account'); if (box) box.hidden = true; paintMe(); if (st) save('staff-was', st.name || 'yes'); if (!st) { PV.state = ''; PV.people = []; } if (rerender !== false && (S.page === 'dash' || S.page === 'home' || S.page === 'people')) renderPage(S.page); }
 if (window.ResourcesSession) { try { ResourcesSession.onChange(function () { paintStaff(); }); } catch (e) {} }
 paintStaff(false);
 
@@ -7980,10 +8137,51 @@ function signOutLocal(expired) {
 }
 /* the scan button in the top bar (Jonna, Nov 27, 2026): only for people who can scan, during a summit's app */
 function paintScanBtn() { var b = document.getElementById('scan-btn'); if (b) b.hidden = !(S.summit && canScan()); }
+/* Jonna, Nov 28, 2026: like most apps, one account button (your initials once signed in) opens a menu with your
+   sign-ins and Settings; the bell sits beside it for notifications */
+function paintMe() {
+  var b = document.getElementById('me-btn'); if (!b) return;
+  var st = staffSession(), nm = (st && st.name) || (A.token && A.me && A.me.name) || '';
+  b.innerHTML = nm ? '<span class="ini-chip">' + esc(initials(nm)) + '</span>' : icon('i-user');
+  b.classList.toggle('in', !!nm);
+}
+function meMenu() {
+  var old = document.getElementById('me-menu'); if (old) { closeMe(); return; }
+  var st = staffSession(), att = A.token && A.me, rows = '';
+  var nm = (st && st.name) || (att && A.me.name) || '';
+  var sub = st ? 'MISMO staff' + (st.email ? ', ' + st.email : '') : att ? 'Summit attendee' : 'Not signed in';
+  function row(k, ic, t) { return '<button type="button" role="menuitem" class="me-row" data-me="' + k + '">' + icon(ic) + '<span>' + t + '</span></button>'; }
+  if (att) rows += row('profile', 'i-user', 'My Profile');
+  else if (S.summit && A.ready) rows += row('att-in', 'i-user', 'Attendee Sign In');
+  if (!st) rows += row('staff-in', 'i-lock', 'MISMO Staff Sign In');
+  rows += row('settings', 'i-gear', 'Settings');
+  if (st) rows += row('staff-out', 'i-x', 'Sign Out');
+  var m = document.createElement('div'); m.id = 'me-menu'; m.className = 'me-menu'; m.setAttribute('role', 'menu');
+  m.innerHTML = '<div class="me-head"><span class="me-av">' + (nm ? esc(initials(nm)) : icon('i-user')) + '</span><div><b>' + esc(nm || 'Welcome') + '</b><span>' + esc(sub) + '</span></div></div>' + rows;
+  document.body.appendChild(m);
+  var r = document.getElementById('me-btn').getBoundingClientRect();
+  m.style.top = Math.round(r.bottom + 8) + 'px'; m.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + 'px';
+  document.getElementById('me-btn').setAttribute('aria-expanded', 'true');
+  m.addEventListener('click', function (e) {
+    var k = e.target.closest('[data-me]'); if (!k) return; k = k.getAttribute('data-me'); closeMe();
+    if (k === 'settings') settingsSheet();
+    else if (k === 'profile') profileSheet(false);
+    else if (k === 'att-in') signInSheet();
+    else if (k === 'staff-in') ResourcesSession.signIn().then(function () { paintStaff(); }, function () {});
+    else if (k === 'staff-out') { save('staff-was', ''); ResourcesSession.signOut(); paintStaff(); }
+  });
+  var f = m.querySelector('.me-row'); if (f) f.focus();
+}
+function zoomMark() { var m = document.querySelector('.mast-in .my-mark'); if (!m) return; m.classList.remove('go'); void m.getBoundingClientRect(); m.classList.add('go'); }
+document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.mast-in .my-mark')) { var b = document.getElementById('dash-btn'); if (b) b.click(); } });
+function closeMe() { var m = document.getElementById('me-menu'); if (m) m.remove(); var b = document.getElementById('me-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }
+document.addEventListener('click', function (e) { if (!e.target.closest('#me-menu, #me-btn')) closeMe(); }, true);
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMe(); });
+window.addEventListener('resize', closeMe);
 function paintAccount() {
-  paintScanBtn();
+  paintScanBtn(); paintMe();
   var ab = $('#acct-btn'), mb = $('#msg-btn');
-  ab.hidden = !A.ready; mb.hidden = !(A.ready && A.token);
+  ab.hidden = true; mb.hidden = !(A.ready && A.token);
   ab.setAttribute('aria-label', A.token ? 'My Profile' : 'Sign In');
   ab.innerHTML = A.token && A.me ? '<span class="ini-chip">' + esc(initials(A.me.name)) + '</span>' : icon('i-user');
   unreadDot();
@@ -8227,7 +8425,7 @@ document.addEventListener('click', function (e) {
   var dot = e.target.closest && e.target.closest('g[data-place]'); if (dot) { placeSheet(dot.getAttribute('data-place')); return; }
   if (e.target.closest && e.target.closest('.radar:not(.big)')) { radarSheet(); return; }
   var t = e.target.closest('button, a'); if (!t) return;
-  if (t.id === 'dash-btn') { if (S.page === 'dash' && !stack.length && window.scrollY > 0) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; } closeSheet(true); show('dash'); return; }
+  if (t.id === 'dash-btn') { zoomMark(); if (S.page === 'dash' && !stack.length && window.scrollY > 0) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; } closeSheet(true); show('dash'); return; }
   /* like other apps: tapping the tab you're already on goes back to its top */
   if (t.hasAttribute('data-hq')) { var hq = t.getAttribute('data-hq'); if (hq === S.page && !stack.length && window.scrollY > 0) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; } show(hq); return; }
   if (t.id === 'bell-btn') { alertsSheet(); return; }
@@ -8237,6 +8435,8 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge'), t.getAttribute('data-lounge-day')); return; }
+  if (t.hasAttribute('data-news')) { newsSheet(); return; }
+  if (t.hasAttribute('data-wx-ask')) { wxAsk(t); return; }
   if (t.hasAttribute('data-mem-open')) { if (t.getAttribute('data-mem-open') === 'iif') iifSheet(); else industrySheet(); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
   if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }
@@ -8314,7 +8514,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-sheet-back')) { closeSheet(false); return; }
   if (t.hasAttribute('data-day')) { S.day = t.getAttribute('data-day'); S.q = ''; renderPage('agenda'); return; }
   if (t.hasAttribute('data-type')) { S.type = t.getAttribute('data-type'); renderPage('agenda'); return; }
-  if (t.id === 'set-btn') { settingsSheet(); return; }
+  if (t.id === 'me-btn') { meMenu(); return; }
   if (t.hasAttribute('data-myname')) { S.focusName = true; settingsSheet(); return; }
   if (t.id === 'acct-btn') { if (A.token) profileSheet(false); else signInSheet(); return; }
   if (t.id === 'msg-btn') { inboxSheet(); return; }

@@ -1,5 +1,10 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: News on My Dashboard: a third of a row beside MISMO Merch (wide on its own), cycling the latest press releases from mismo.org's News page, with a front-page News view. The guide job reads the page twice a day.
+- Nov 28, 2026: Top bar: one account button (your initials once signed in) opens a menu with your sign-ins and Settings; the bell for notifications sits beside it.
+- Nov 28, 2026: mismo.org links: MISMO FRAME, Digital Mortgage Resource Center, Boot Camp and Contributor Awards replace Membership, Certifications, Communities and News.
+- Nov 28, 2026: Weather by the date on My Dashboard, after you tap Show Weather (rough location kept on the phone; Turn Off in Settings).
+- Nov 28, 2026: Tapping MyMISMO in the top bar plays the streak from the opening screen. The Lenders tile shows "The Innovation Investment Fund" on phones again.
 - Nov 28, 2026: Membership tiles filled with pictures instead of words: a house with a gold $ coin on Lenders, wider bars and a star over Chair Champion on Industry.
 - Nov 28, 2026: My Dashboard has two locked tile sizes: the regular half tile, and a shorter one for Submit an Idea and mismo.org (back to their earlier size).
 - Nov 28, 2026: New home screen icon: the whole MISMO under the Speed My (option C), on iPhone, Android and computers.
