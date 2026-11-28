@@ -1901,6 +1901,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .rc-nums div{display:grid; gap:2px; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--c)}
 .rc-nums b{font-family:var(--cond); font-size:30px; line-height:1} .rc-nums span{font-size:12.5px; color:var(--ink-2); font-weight:600}
 .rc{position:relative}
+.rc-fw{position:absolute; left:0; top:0; width:100%; z-index:5; pointer-events:none; transition:opacity .4s ease}
 .rc-conf{position:absolute; inset:-10px 0 auto; height:0; z-index:5; pointer-events:none}
 /* Jonna, Nov 27, 2026: real-looking confetti (thin strips, dots and little flakes that flutter and drift), not blocks */
 .rc-conf i{position:absolute; left:var(--x); top:0; background:var(--c); opacity:0; animation:rc-fall var(--t) cubic-bezier(.25,.6,.45,1) forwards, rc-flut .5s ease-in-out infinite alternate; animation-delay:var(--d), var(--d)}
@@ -3017,6 +3018,38 @@ function recapExample(box) {
     }
   });
 }
+/* Jonna, Nov 27, 2026: the first time someone opens their recap after the summit, fireworks over it: Mardi Gras purple,
+   green and gold for New Orleans (MISMO's blues, gold and orange elsewhere). Rockets climb, burst and fall away in about
+   four seconds; nothing for people who've asked their phone to cut down on motion. */
+function recapFireworks(host) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var nola = /new orleans/i.test(S.place || ''), pal = nola ? ['#8e3fd1', '#b36bff', '#1fae55', '#3ddc84', '#f2c14e', '#ffd86b'] : ['#74bfeb', '#2477b8', '#f2c14e', '#eb6834', '#ffffff'];
+  var cv = document.createElement('canvas'), W = host.clientWidth || 360, H = Math.min(640, Math.max(420, W * 1.4)), dpr = Math.min(2, window.devicePixelRatio || 1), x = cv.getContext('2d');
+  cv.className = 'rc-fw'; cv.setAttribute('aria-hidden', 'true'); cv.width = W * dpr; cv.height = H * dpr; cv.style.height = H + 'px'; x.scale(dpr, dpr); host.appendChild(cv);
+  var rockets = [], parts = [], t0 = performance.now(), plan = [0, 380, 700, 1050, 1350, 1700, 2050, 2350];
+  plan.forEach(function (at, i) { rockets.push({ at: at, x: W * (.15 + ((i * 0.37) % 1) * .7), y: H, ty: H * (.14 + ((i * .53) % 1) * .3), c: pal[i % pal.length], c2: pal[(i + 2) % pal.length], up: false, done: false }); });
+  function burst(r) {
+    var n = 70 + Math.round(Math.random() * 30), sp = 2.2 + Math.random() * 1.6;
+    for (var i = 0; i < n; i++) { var a = Math.PI * 2 * i / n + Math.random() * .1, v = sp * (.55 + Math.random() * .5); parts.push({ x: r.x, y: r.ty, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, fade: .010 + Math.random() * .008, c: Math.random() < .2 ? '#fff3c4' : (i % 3 ? r.c : r.c2), s: 1.6 + Math.random() * 1.4, tw: Math.random() < .35 }); }
+  }
+  (function frame(now) {
+    var el = now - t0; if (!cv.isConnected) return;
+    x.globalCompositeOperation = 'destination-out'; x.fillStyle = 'rgba(0,0,0,.22)'; x.fillRect(0, 0, W, H); x.globalCompositeOperation = 'lighter';
+    rockets.forEach(function (r) {
+      if (r.done || el < r.at) return;
+      var k = Math.min(1, (el - r.at) / 650), yy = H - (H - r.ty) * (1 - Math.pow(1 - k, 2.2));
+      x.fillStyle = '#fff1c2'; x.beginPath(); x.arc(r.x, yy, 2.2, 0, 7); x.fill(); x.fillStyle = r.c; x.globalAlpha = .5; x.fillRect(r.x - 1, yy, 2, 14); x.globalAlpha = 1;
+      if (k >= 1) { r.done = true; burst(r); }
+    });
+    parts.forEach(function (q) {
+      if (q.life <= 0) return;
+      q.vx *= .985; q.vy = q.vy * .985 + .045; q.x += q.vx; q.y += q.vy; q.life -= q.fade;
+      x.globalAlpha = Math.max(0, q.life) * (q.tw ? .4 + Math.random() * .6 : 1); x.fillStyle = q.c; x.beginPath(); x.arc(q.x, q.y, q.s * (.6 + q.life * .5), 0, 7); x.fill();
+    });
+    x.globalAlpha = 1;
+    if (el < 5200) requestAnimationFrame(frame); else { cv.style.opacity = '0'; setTimeout(function () { cv.remove(); }, 400); }
+  })(t0);
+}
 function recapSheet() {
   var el = openSheet('Your Summit Recap', '<div class="sheet-pad"><div class="rc-tabs"></div><div class="rc"><div class="note">Putting your recap together…</div></div></div>', { plain: true }), box = el.querySelector('.rc'), D = null, pic = null;
   var sel = [];
@@ -3035,9 +3068,7 @@ function recapSheet() {
     D = d; sel = d.ph.slice(0, 3).map(function (p, i) { return i; });
     /* the celebration is saved for the real thing: the first time someone opens their recap after the summit (not the preview) */
     var first = recapReady() && !load('recap-seen:' + S.sid, false); if (recapReady()) save('recap-seen:' + S.sid, true);
-    box.innerHTML = (first ? '<div class="rc-conf" aria-hidden="true">' + Array.apply(null, Array(60)).map(function (x, n) {
-        var sh = ['strip', 'dot', 'flake'][n % 3];
-        return '<i class="' + sh + '" style="--x:' + (Math.random() * 100).toFixed(1) + '%;--d:' + (Math.random() * 1.2).toFixed(2) + 's;--t:' + (2.4 + Math.random() * 1.6).toFixed(2) + 's;--s:' + (Math.random() * 60 - 30).toFixed(0) + 'px;--r:' + (Math.random() * 720 - 360).toFixed(0) + 'deg;--c:' + ['#f2c14e', '#74bfeb', '#eb6834', '#4fc79b', '#e87ba4', '#ffffff'][n % 6] + '"></i>'; }).join('') + '</div>' : '') +
+    box.innerHTML =
       '<div class="rc-nums">' + [[d.ses.length, 'Sessions', '#74bfeb'], [d.met.length, 'People Met', '#4fc79b'], [d.ph.length, 'Photos', '#eb6834']].map(function (k) { return '<div style="--c:' + k[2] + '"><b data-count="' + k[0] + '">' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>' +
       '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
       '<div class="ph-acts"><button type="button" class="btn primary rc-li" data-rc-li>' + icon('i-send') + 'Share on LinkedIn</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
@@ -3047,6 +3078,7 @@ function recapSheet() {
       '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<p class="rc-hint">Tap up to three to put them on your recap picture as little prints. Tap again to take one off.</p><div class="ph-grid rc-pick">' + d.ph.slice(0, 12).map(function (p, i) { return '<button type="button" class="ph-tile' + (sel.indexOf(i) >= 0 ? ' on' : '') + '" data-rc-ph="' + i + '" aria-pressed="' + (sel.indexOf(i) >= 0) + '"><img alt="" src="' + phThumb(p) + '"><i>' + (sel.indexOf(i) + 1 || '') + '</i></button>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
       '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
     countUp(box); draw();
+    if (first) recapFireworks(box);
   }); }
   el.addEventListener('click', function (e) {
     var name = 'my-' + slug(S.summit.name), tp = e.target.closest('[data-rc-ph]');
