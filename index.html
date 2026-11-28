@@ -2638,9 +2638,11 @@ function build(feed, spons) {
     return { id: x.id, day: x.day || DOW[dparts(x.date).dow], date: x.date, a: mins(x.start), b: mins(x.end), type: x.type || 'Session',
       title: x.title || '', room: x.room || '', desc: x.desc || '', sponsor: x.sponsor || '', menu: x.menu || '' };
   }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });
-  /* CN-070: the Champions Lounge comes from the feed's summits.<id>.lounges once agenda.json carries it; until then the
-     copy in data/agenda-extras.json (CN-069). One entry per room, so a lounge that moves mid-week shows the right room each day. */
-  S.lounges = (Array.isArray(s.lounges) ? s.lounges : (((XTRA && XTRA.summits && XTRA.summits[pick.id]) || {}).lounges || [])).filter(function (x) { return x && x.title; }).map(function (x) {
+  /* CN-070/CN-071: the Champions Lounge comes from the feed's summits.<id>.lounges. A missing lounges field means no lounges,
+     once Summit HQ's feed has been written with lounges (its CN-070 change went live 2026-11-28T01:30Z). Until that first
+     rewrite, the copy in data/agenda-extras.json (CN-069) stands in. One entry per room, so a mid-week move shows the right room each day. */
+  var lgNew = String(feed.sourceUpdated || '') >= '2026-11-28T01:30' || Object.keys(feed.summits || {}).some(function (k) { return feed.summits[k] && Array.isArray(feed.summits[k].lounges); });
+  S.lounges = (Array.isArray(s.lounges) ? s.lounges : lgNew ? [] : (((XTRA && XTRA.summits && XTRA.summits[pick.id]) || {}).lounges || [])).filter(function (x) { return x && x.title; }).map(function (x) {
     return { title: String(x.title), room: String(x.room || ''), desc: String(x.desc || ''), days: Array.isArray(x.days) ? x.days.filter(function (d) { return /^\d{4}-\d{2}-\d{2}$/.test(d); }) : null };
   });
   S.gs = s.gs || null;
