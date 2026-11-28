@@ -1,5 +1,5 @@
 {
-  "note": "Rows the website agenda (mismo.org/events/agenda) shows that aren't in Summit HQ's agenda feed yet. Copied from the website Nov 27, 2026; Monday's lunch is 12:00 to 1:30 per Jonna (the website said 1:00); Tuesday's Morning Break is the 10:20 to 10:40 gap in the General Sessions running order (a morning and an afternoon break every day, per Jonna). Remove a row once the feed carries it (CN-067). Lounges have no time: they show at the top of each day they're open (Champions Lounge: Elevator Prefunction, Monday to Thursday, from the hotel resume in Summit HQ; CN-069). The app uses agenda.json's summits.<id>.lounges instead as soon as Summit HQ's feed is rewritten with them (sourceUpdated from 2026-11-28T01:30Z, or any summit carrying lounges); from then a missing lounges field means none and this copy is ignored (CN-070, CN-071); then remove lounges here. Elevator Prefunction has no pin in data/floorplan/nola.json: the hotel's map has no spot by that name. membership: the Champion levels from mismo.org/membership, for the Champions Lounge pop-up; check it against that page when prices change.",
+  "note": "Rows the website agenda (mismo.org/events/agenda) shows that aren't in Summit HQ's agenda feed yet. Copied from the website Nov 27, 2026; Monday's lunch is 12:00 to 1:30 per Jonna (the website said 1:00); Break times are Summit HQ's (the website reads Summit HQ, per Jonna, Nov 27, 2026): Monday, Wednesday and Thursday 10:20 to 10:40 and 2:50 to 3:10; Tuesday 10:20 to 10:40 and 3:40 to 4:00 from the General Sessions running order (CN-069). Remove a row once the feed carries it (CN-067). Lounges have no time: they show at the top of each day they're open (Champions Lounge: Elevator Prefunction, Monday to Thursday, from the hotel resume in Summit HQ; CN-069). The app uses agenda.json's summits.<id>.lounges instead as soon as Summit HQ's feed is rewritten with them (sourceUpdated from 2026-11-28T01:30Z, or any summit carrying lounges); from then a missing lounges field means none and this copy is ignored (CN-070, CN-071); then remove lounges here. Elevator Prefunction has no pin in data/floorplan/nola.json: the hotel's map has no spot by that name. membership: the Champion levels from mismo.org/membership, for the Champions Lounge pop-up; check it against that page when prices change.",
   "summits": {
     "nola": {
       "lunches": [
@@ -28,8 +28,8 @@
         },
         {
           "date": "2027-01-11",
-          "start": "2:45 PM",
-          "end": "3:05 PM",
+          "start": "2:50 PM",
+          "end": "3:10 PM",
           "title": "Afternoon Break"
         },
         {
@@ -40,9 +40,9 @@
         },
         {
           "date": "2027-01-12",
-          "start": "2:45 PM",
-          "end": "3:15 PM",
-          "title": "Afternoon Snack Break"
+          "start": "3:40 PM",
+          "end": "4:00 PM",
+          "title": "Afternoon Break"
         },
         {
           "date": "2027-01-13",
