@@ -2454,6 +2454,7 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 9.2a14 14 0 0 1 19 0M5.6 12.6a9.5 9.5 0 0 1 12.8 0M8.8 16a5 5 0 0 1 6.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.3" r="1.4" fill="currentColor"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></g></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c.8-4.3 4-6.6 8-6.6s7.2 2.3 8 6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-banner" viewBox="0 0 24 24"><path d="M5 3.5v17M19 3.5v17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M5 5h14v9.5l-7 2.5-7-2.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m12 7.6.95 1.9 2.1.3-1.5 1.5.35 2.1L12 12.4l-1.9 1 .35-2.1-1.5-1.5 2.1-.3z" fill="currentColor"/></symbol>
 <symbol id="i-handshake" viewBox="0 0 24 24"><path d="M2.5 11.5 6 8l3 1 3-2.5 3 1 3.5-.5 3 3.5M2.5 11.5l3.5 4 2 .5 3 2.5c.8.6 1.8.4 2.3-.4l3.2-4.6M21.5 11l-3 3.6M9 9l-2.5 3.5c-.5.8.2 1.9 1.2 1.7L12 13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
 
@@ -3669,7 +3670,7 @@ function sponsorBand() {
      level (Platinum); the page refreshing itself every minute carries on from where it was instead of jumping back. */
   return '<section class="spband" aria-label="Sponsors">' + heroArt({ city: false }) + '<h2>Thank You to Our Sponsors</h2>' +   /* Jonna, Nov 27, 2026: no skyline here */
     '<div class="sb-run' + (list.length > 2 ? ' go' : '') + '" data-dur="' + dur + '"><div class="run">' + run.map(tile).join('') + '</div></div>' +
-    '<div class="sb-acts"><button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button>' + (prospOn() ? '<a class="sb-all sb-be" href="' + PROSP_URL + '">' + icon('i-star') + 'Sponsor a Summit</a>' : '') + '</div></section>';
+    '<div class="sb-acts"><button type="button" class="sb-all" data-sponsors>' + icon('i-sponsor') + 'See All Sponsors</button>' + (prospOn() ? '<a class="sb-all sb-be" href="' + PROSP_URL + '">' + icon('i-banner') + 'Sponsor a Summit</a>' : '') + '</div></section>';
 }
 /* Jonna, Nov 26, 2026: the sponsor band glides on its own, and people can swipe it back and forth (or drag it with a
    mouse). It pauses while touched and carries on a few seconds after. Endless both ways: the list runs twice, so
@@ -5309,7 +5310,7 @@ var DASH = [
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Play the Board, take on your colleagues and climb the leaderboard', icon: 'i-star' },
-  { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-sponsor' },
+  { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-banner' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
   { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' }
@@ -6686,7 +6687,7 @@ function widget(id) {
       (CERT ? '<span class="w-new"><b>' + fresh.length + ' new</b> in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
   if (id === 'groups') return wgTile();
-  if (id === 'sponsor') return '<a class="wd w-spon wide" href="' + PROSP_URL + '">' + head() + '<span class="w-t">Sponsor a MISMO Summit</span><span class="wsp-sub">Put your company in front of the people who build the mortgage industry\'s standards.</span><span class="wsp-go">See the Opportunities' + icon('i-chev') + '</span><span class="wsp-art" aria-hidden="true">' + icon('i-sponsor') + '</span></a>';
+  if (id === 'sponsor') return '<a class="wd w-spon wide" href="' + PROSP_URL + '">' + head() + '<span class="w-t">Sponsor a MISMO Summit</span><span class="wsp-sub">Put your company in front of the people who build the mortgage industry\'s standards.</span><span class="wsp-go">See the Opportunities' + icon('i-chev') + '</span><span class="wsp-art" aria-hidden="true">' + icon('i-banner') + '</span></a>';
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
   if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
     var show = ['hoodie', 'mug', 'cap', 'tote', 'tee', 'bottle'].map(function (k) { return MERCH.filter(function (p) { return p.id === k; })[0]; });
