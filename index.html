@@ -2089,7 +2089,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .w-mem.lend .w-s{max-width:58%; font-weight:600}
 .wm-col i{max-width:48px}
 .w-mem.lend{container-type:inline-size}
-@container (max-width:249px){ .w-mem.lend .w-s{max-width:none; font-size:11.5px; line-height:1.25; font-weight:700; text-shadow:0 1px 6px rgba(13,49,76,.45)} .wm-house{width:62%} }
+@container (max-width:249px){ .w-mem.lend .w-s{max-width:56%; font-size:11.5px; line-height:1.25; font-weight:700; text-shadow:0 1px 6px rgba(13,49,76,.45)} .wm-house{width:62%} }
 
 .wm-col:last-child em{color:#c98500}
 .wm-col:last-child::before{content:""; width:16px; height:16px; margin-bottom:1px; background:#c98500; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -5619,25 +5619,27 @@ function wxChip() {
   if (!wxLoc()) return load('wx-off', false) ? '' : '<button type="button" class="dh-wx ask" data-wx-ask>' + icon('wx-clear') + '<span>Show Weather</span></button>';
   var w = load('wx-now', null);
   if (!w || Date.now() - w.at > 30 * 60000) setTimeout(wxFetch, 0);
-  if (!w) return '<span class="dh-wx" id="dh-wx"></span>';
-  return '<span class="dh-wx" id="dh-wx" title="' + esc(wxWord(w.code)) + '">' + icon(wxIcon(w.code)) + '<b>' + Math.round(w.t) + '\u00b0</b><span>H ' + Math.round(w.hi) + '\u00b0 L ' + Math.round(w.lo) + '\u00b0</span></span>';
+  if (!w) return '<span class="dh-wx" data-wx-slot>' + (WX.fail ? '<button type="button" class="dh-wx ask" data-wx-retry>' + icon('wx-cloud') + '<span>Weather: Try Again</span></button>' : '') + '</span>';
+  return '<span class="dh-wx" data-wx-slot title="' + esc(wxWord(w.code)) + '">' + icon(wxIcon(w.code)) + '<b>' + Math.round(w.t) + '\u00b0</b><span>H ' + Math.round(w.hi) + '\u00b0 L ' + Math.round(w.lo) + '\u00b0</span></span>';
 }
 function wxFetch() {
   var l = wxLoc(); if (!l || WX.busy) return; WX.busy = true;
   fetch('https://api.open-meteo.com/v1/forecast?latitude=' + l.lat + '&longitude=' + l.lon + '&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto&forecast_days=1')
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (j) {
-      WX.busy = false; if (!j || !j.current || !j.daily) return;
+      WX.busy = false; if (!j || !j.current || !j.daily) { WX.fail = true; wxPaint(); return; }
       save('wx-now', { at: Date.now(), t: j.current.temperature_2m, code: j.current.weather_code, hi: j.daily.temperature_2m_max[0], lo: j.daily.temperature_2m_min[0] });
-      var el = document.getElementById('dh-wx'); if (el) el.outerHTML = wxChip();
-    }, function () { WX.busy = false; });
+      WX.fail = false; wxPaint();
+    }, function () { WX.busy = false; WX.fail = true; wxPaint(); });
 }
+/* the date line is on My Dashboard and the summit Home: refresh every copy */
+function wxPaint() { document.querySelectorAll('[data-wx-slot], [data-wx-ask]').forEach(function (el) { el.outerHTML = wxChip(); }); }
 function wxAsk(btn) {
   if (!navigator.geolocation) { mxToast('This phone can\'t share its location'); return; }
   if (btn) btn.querySelector('span').textContent = 'Finding You\u2026';
   navigator.geolocation.getCurrentPosition(function (p) {
     save('wx-loc', { lat: Math.round(p.coords.latitude * 100) / 100, lon: Math.round(p.coords.longitude * 100) / 100 }); save('wx-off', false);
-    if (btn) btn.outerHTML = '<span class="dh-wx" id="dh-wx"></span>'; wxFetch();
+    WX.fail = false; wxPaint(); wxFetch();
   }, function () { if (btn) btn.querySelector('span').textContent = 'Show Weather'; mxToast('Location is off for MyMISMO, so the weather can\'t show'); }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 6 * 3600000 });
 }
 function greet() { var h = new Date().getHours(); return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'; }
@@ -8426,6 +8428,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge'), t.getAttribute('data-lounge-day')); return; }
   if (t.hasAttribute('data-news')) { newsSheet(); return; }
   if (t.hasAttribute('data-wx-ask')) { wxAsk(t); return; }
+  if (t.hasAttribute('data-wx-retry')) { WX.fail = false; wxPaint(); wxFetch(); return; }
   if (t.hasAttribute('data-mem-open')) { if (t.getAttribute('data-mem-open') === 'iif') iifSheet(); else industrySheet(); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
   if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }

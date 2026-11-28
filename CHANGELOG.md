@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: Weather by the date now shows on every copy of the date line (it could land on the hidden summit Home instead), and offers Try Again if the forecast can't load. The Lenders tile's words wrap clear of the coin. Privacy wording for the weather added for the website.
 - Nov 28, 2026: MISMO Merch is back to full width like Sponsor a Summit; News takes Webinars' spot beside Certifications and Webinars moves to the bottom. Staff and contractors keep their sign-in chip and the gear for Settings; everyone else has the account menu.
 - Nov 28, 2026: News on My Dashboard: a third of a row beside MISMO Merch (wide on its own), cycling the latest press releases from mismo.org's News page, with a front-page News view. The guide job reads the page twice a day.
 - Nov 28, 2026: Top bar: one account button (your initials once signed in) opens a menu with your sign-ins and Settings; the bell for notifications sits beside it.

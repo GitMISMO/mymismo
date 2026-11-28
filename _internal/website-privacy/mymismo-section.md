@@ -43,4 +43,9 @@ https://resources.mismo.org/mymismo/delete-account/ or by writing to info@mismo.
 The app uses your phone's camera only when you choose to: to scan name tags, take summit photos or add a picture to Who
 I Met. Pictures stay on your phone unless you choose to send them.
 
+The app uses your phone's location only if you tap Show Weather on My Dashboard: it asks your phone for your rough
+location once, rounds it to about a mile and keeps it on your phone. That rounded location is sent to Open-Meteo, a free
+weather service, to get the day's forecast; it isn't sent to MISMO and isn't linked to your name. You can turn it off in
+Settings, Weather by the Date, which removes it from your phone.
+
 MyMISMO is made for mortgage industry professionals and isn't meant for children under 13.
