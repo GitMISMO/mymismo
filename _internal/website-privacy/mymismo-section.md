@@ -20,8 +20,15 @@ you and doesn't track what you do in the app. Your schedule, settings and the na
 - **Notifications:** if you turn on Summit Alerts or MISMO Matters and Mic'd Up notifications, the delivery address your
   phone's notification service gives the app (it doesn't name you). Turning them off removes it. Notifications are
   always your choice, are off until you turn them on, and the app works the same without them.
-- **MISMO Trivia ranked play:** the name you give (shown as first name and last initial), your scores and which
-  questions you've had.
+- **MISMO Trivia ranked play and Head to Head:** the name you give (shown as first name and last initial), your scores,
+  which questions you've had, your Trivia contacts and your Head to Head games.
+- **Summit photos you send:** the photos you choose to send to MISMO from Summit Photos, with your name, so MISMO can
+  share summit highlights. Photos you don't send stay on your phone.
+- **Name tag scanning:** when MISMO staff or a session leader scans your name tag at a session, the session and the
+  registration number on your tag, to count attendance. When MISMO staff scan it in conversation, your registration
+  number and their note, for MISMO's follow-up. When another attendee scans your tag, they see your name, title and
+  company, never your email, unless you've hidden yourself from the directory.
+- **Who I Met:** the names, notes and pictures you add stay on your phone.
 - **Sign-in codes:** only a scrambled copy of the six-digit code, which expires after 15 minutes.
 
 The only email the app sends is the sign-in code you ask for. GitHub, Amazon Web Services, Microsoft (the code email) and
@@ -29,7 +36,11 @@ Apple or Google (notifications) process this information only to run the app for
 us to.
 
 **Deleting your information:** in the app, Settings, Delete My Attendee Account removes your profile, headshot, messages
-and blocks that name you, and hides you from the directory. You can also ask at
+and blocks that name you, and hides you from the directory; Settings, Delete My Trivia Account removes your Trivia name,
+scores, Head to Head games, Trivia contacts and question history. You can also ask at
 https://resources.mismo.org/mymismo/delete-account/ or by writing to info@mismo.org.
+
+The app uses your phone's camera only when you choose to: to scan name tags, take summit photos or add a picture to Who
+I Met. Pictures stay on your phone unless you choose to send them.
 
 MyMISMO is made for mortgage industry professionals and isn't meant for children under 13.
