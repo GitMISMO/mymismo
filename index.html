@@ -1877,7 +1877,9 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .rc-card{display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px; align-items:center; width:100%; margin:14px 0 4px; padding:14px; border:0; border-radius:16px; text-align:left; font:inherit; color:#fff; cursor:pointer; background:radial-gradient(90% 120% at 100% 0%, rgba(243,198,79,.45), transparent 60%), linear-gradient(150deg, #14486e, #0d314c 60%, #071d2e)}
 .rc-ic{width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:#f3c64f; color:#0d314c} .rc-ic svg{width:24px; height:24px}
 .rc-tx{display:grid; gap:3px} .rc-tx b{font-family:var(--cond); font-size:19px} .rc-tx span{font-size:13.5px; color:#cfe3f1} .rc-card > svg.go{width:20px; height:20px}
-.rc{display:grid; gap:12px} .rc-pic{background:#071d2e; border-radius:14px; padding:14px; display:grid; place-items:center} .rc-pic img{width:min(100%, 320px); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45); aspect-ratio:4/5; background:#0d314c}
+.rc{display:grid; gap:12px} .rc-tabs:not(:empty){margin-bottom:12px} .rc-seg{display:grid; grid-template-columns:1fr 1fr}
+.rc-ex-note{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:10px; background:var(--sky-wash); border:1px solid var(--border); color:var(--ink); font-size:13.5px; line-height:1.45} .rc-ex-note svg{width:18px; height:18px; flex:none; margin-top:1px; color:var(--link)}
+:root[data-theme="dark"] .rc-ex-note{background:var(--surface-2)} @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .rc-ex-note{background:var(--surface-2)} } .rc-pic{background:#071d2e; border-radius:14px; padding:14px; display:grid; place-items:center} .rc-pic img{width:min(100%, 320px); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.45); aspect-ratio:4/5; background:#0d314c}
 .rc-met{display:grid; gap:8px} .rc-p{display:grid; gap:2px; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--surface)} .rc-p b{font-size:15px} .rc-p span{font-size:13px; color:var(--ink-2)} .rc-p i{font-size:13.5px; color:var(--ink-2)}
 .wgd-top{position:relative} .wgd-top h2{padding-right:58px}
 .wg-star{position:absolute; top:12px; right:12px; z-index:2; display:grid; justify-items:center; gap:1px; min-width:48px; padding:6px 6px 4px; border-radius:10px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.14); color:#fff; font:inherit; font-size:10.5px; font-weight:700; cursor:pointer; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
@@ -2896,7 +2898,37 @@ function recapPicture(d, cb, picks) {
         x.fillStyle = '#fff'; x.font = '600 40px ' + SANS; var names = d.met.slice(0, 4).map(function (m) { return String(m.name || '').split(/\s+/)[0]; }).filter(Boolean).join(', ') + (d.met.length > 4 ? ' and more' : '');
         fit(names, '600', 40, SANS, W - 140); x.fillText(names, 66, y2 + 124);
       }
-      if (d.ch) { x.fillStyle = '#eb6834'; rr(60, H - 132, 470, 66, 12); x.fill(); x.fillStyle = '#fff'; x.font = '700 32px ' + SANS; x.fillText('Photo Challenge: ' + d.ch + ' of ' + PH_PROMPTS.length, 84, H - 88); }
+      /* Jonna, Nov 27, 2026: the Photo Challenge as a real badge: a gold starburst seal with a camera, PHOTO CHALLENGE
+         around the top, ribbon tails, and a banner with how many they did (ALL DONE when they finished) */
+      if (d.ch) (function () {
+        var cx = 156, cy = H - 178, R = 98, all = d.ch >= PH_PROMPTS.length, k2, a;
+        x.save();
+        [[-1, '#c4511f'], [1, '#eb6834']].forEach(function (t) {   /* ribbon tails */
+          var bx = cx + t[0] * 34; x.fillStyle = t[1]; x.beginPath(); x.moveTo(bx - 26, cy + 20); x.lineTo(bx + 26, cy + 20); x.lineTo(bx + 26 + t[0] * 22, cy + R + 64); x.lineTo(bx + t[0] * 22, cy + R + 44); x.lineTo(bx - 26 + t[0] * 22, cy + R + 64); x.closePath(); x.fill();
+        });
+        x.shadowColor = 'rgba(0,0,0,.5)'; x.shadowBlur = 30; x.shadowOffsetY = 10;
+        var sg = x.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, R); sg.addColorStop(0, '#ffe7a3'); sg.addColorStop(.55, '#f2c14e'); sg.addColorStop(1, '#c98500');
+        x.fillStyle = sg; x.beginPath();
+        for (k2 = 0; k2 < 56; k2++) { a = -Math.PI / 2 + k2 * Math.PI / 28; var rr2 = k2 % 2 ? R * .9 : R; x[k2 ? 'lineTo' : 'moveTo'](cx + Math.cos(a) * rr2, cy + Math.sin(a) * rr2); }
+        x.closePath(); x.fill(); x.restore();
+        var dg = x.createLinearGradient(cx, cy - R, cx, cy + R); dg.addColorStop(0, '#1d5a86'); dg.addColorStop(1, '#0a2a42');
+        x.fillStyle = dg; x.beginPath(); x.arc(cx, cy, R * .78, 0, Math.PI * 2); x.fill();
+        x.lineWidth = 4; x.strokeStyle = '#f2c14e'; x.stroke();
+        x.lineWidth = 1.5; x.strokeStyle = 'rgba(242,193,78,.55)'; x.setLineDash([3, 5]); x.beginPath(); x.arc(cx, cy, R * .7, 0, Math.PI * 2); x.stroke(); x.setLineDash([]);
+        /* PHOTO CHALLENGE around the top */
+        var txt = 'PHOTO CHALLENGE', step = .2; x.fillStyle = '#ffe7a3'; x.font = '700 15px ' + SANS; x.textAlign = 'center'; x.textBaseline = 'middle';
+        for (k2 = 0; k2 < txt.length; k2++) { a = -Math.PI / 2 + (k2 - (txt.length - 1) / 2) * step; x.save(); x.translate(cx + Math.cos(a) * R * .57, cy + Math.sin(a) * R * .57); x.rotate(a + Math.PI / 2); x.fillText(txt[k2], 0, 0); x.restore(); }
+        /* the camera */
+        x.save(); x.translate(cx, cy - 2); x.fillStyle = '#fff'; rr(-30, -16, 60, 40, 8); x.fill(); rr(-12, -24, 24, 10, 3); x.fill();
+        x.fillStyle = '#0d314c'; x.beginPath(); x.arc(0, 4, 13, 0, Math.PI * 2); x.fill(); x.fillStyle = '#74bfeb'; x.beginPath(); x.arc(0, 4, 8, 0, Math.PI * 2); x.fill();
+        x.fillStyle = '#fff'; x.beginPath(); x.arc(-3, 1, 2.6, 0, Math.PI * 2); x.fill(); x.fillStyle = '#f2c14e'; x.beginPath(); x.arc(21, -9, 3, 0, Math.PI * 2); x.fill(); x.restore();
+        /* the banner */
+        var by = cy + R * .5, bw = R * 2.35, bh = 44, lbl = all ? 'ALL ' + PH_PROMPTS.length + ' DONE' : d.ch + ' OF ' + PH_PROMPTS.length + ' DONE';
+        x.fillStyle = '#9c3d16'; [[-1], [1]].forEach(function (t) { var ex = cx + t[0] * bw / 2; x.beginPath(); x.moveTo(ex - t[0] * 24, by + 8); x.lineTo(ex + t[0] * 18, by + 8); x.lineTo(ex + t[0] * 6, by + 8 + bh / 2); x.lineTo(ex + t[0] * 18, by + 8 + bh); x.lineTo(ex - t[0] * 24, by + 8 + bh); x.closePath(); x.fill(); });
+        x.save(); x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 10; x.fillStyle = '#eb6834'; rr(cx - bw / 2 + 14, by, bw - 28, bh, 4); x.fill(); x.restore();
+        x.fillStyle = '#fff'; x.font = '800 24px ' + COND; x.fillText(lbl, cx, by + bh / 2 + 1);
+        x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+      })();
       x.fillStyle = 'rgba(255,255,255,.85)'; x.font = '700 30px ' + SANS; x.textAlign = 'right'; x.fillText('#MISMO', W - 64, H - 88); x.textAlign = 'left';
       cv.toBlob(function (b) { cb(b); }, 'image/jpeg', .9);
     }
@@ -2909,11 +2941,34 @@ function vcards(list) {
   return list.map(function (p) { var parts = p.name.split(/\s+/), last = parts.length > 1 ? parts.pop() : '', first = parts.join(' ');
     return ['BEGIN:VCARD', 'VERSION:3.0', 'N:' + e(last) + ';' + e(first) + ';;;', 'FN:' + e(p.name), p.company ? 'ORG:' + e(p.company) : '', p.title ? 'TITLE:' + e(p.title) : '', p.email ? 'EMAIL;TYPE=WORK:' + e(p.email) : '', 'NOTE:' + e('Met at ' + S.summit.name + (p.note ? '. ' + p.note : '')), p.pic && /^data:image\/jpeg;base64,/.test(p.pic) ? ('PHOTO;ENCODING=b;TYPE=JPEG:' + p.pic.split(',')[1]).replace(/(.{74})/g, '$1\r\n ') : '', 'END:VCARD'].filter(Boolean).join('\r\n'); }).join('\r\n');
 }
+/* Jonna, Nov 27, 2026: in the preview (before the summit ends), an Example shows a recap filled out: a busy week's
+   numbers, three framed photos as prints and the Photo Challenge badge. It's marked Example and can't be shared. */
+function recapExample(box) {
+  box.innerHTML = '<div class="rc-ex-note">' + icon('i-info') + '<span><b>Example.</b> A recap filled out after a busy summit: 7 sessions starred, 12 people met, 9 photos, three of them as prints, and the Photo Challenge done. Yours fills in from what you do in MyMISMO.</span></div><div class="rc-pic ex"><img alt="An example summit recap picture"></div>';
+  phAssets(function (as) {
+    var fr = [['pass', 'solo'], ['night', 'group'], ['postcard', 'pair']], blobs = [], left = fr.length;
+    fr.forEach(function (f, k) { var c = document.createElement('canvas'); phDraw(c, phSample(f[1]), f[0], '', as, .5); c.toBlob(function (b) { blobs[k] = b; if (--left === 0) go(); }, 'image/jpeg', .85); });
+    function go() {
+      var n = function (k, nm) { return Array.apply(null, Array(k)).map(function (z, i) { return { name: nm ? nm[i % nm.length] : 'x' }; }); };
+      recapPicture({ ses: n(7), met: n(12, ['Example']), ph: n(9), ch: PH_PROMPTS.length }, function (b) { var im = box.querySelector('.rc-pic img'); if (im) im.src = URL.createObjectURL(b); }, blobs);
+    }
+  });
+}
 function recapSheet() {
-  var el = openSheet('Your Summit Recap', '<div class="sheet-pad rc"><div class="note">Putting your recap together…</div></div>', { plain: true }), box = el.querySelector('.rc'), D = null, pic = null;
+  var el = openSheet('Your Summit Recap', '<div class="sheet-pad"><div class="rc-tabs"></div><div class="rc"><div class="note">Putting your recap together…</div></div></div>', { plain: true }), box = el.querySelector('.rc'), D = null, pic = null;
   var sel = [];
+  if (!recapReady()) {   /* the preview: Example or Mine */
+    var tabs = el.querySelector('.rc-tabs');
+    tabs.innerHTML = '<div class="seg rc-seg"><button type="button" data-rc-tab="ex" aria-pressed="true">Example</button><button type="button" data-rc-tab="me" aria-pressed="false">Mine So Far</button></div>';
+    tabs.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-rc-tab]'); if (!b) return; var t = b.getAttribute('data-rc-tab');
+      tabs.querySelectorAll('[data-rc-tab]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      if (t === 'ex') { D = null; pic = null; recapExample(box); } else { box.innerHTML = '<div class="note">Putting your recap together…</div>'; build(); }
+    });
+    recapExample(box);
+  } else build();
   function draw() { var im = box.querySelector('.rc-pic img'); if (im) im.style.opacity = '.55'; recapPicture(D, function (b) { pic = b; var im2 = box.querySelector('.rc-pic img'); if (im2) { im2.src = URL.createObjectURL(b); im2.style.opacity = ''; } }, sel.map(function (i) { return D.ph[i] && D.ph[i].blob; }).filter(Boolean)); }
-  recapData(function (d) {
+  function build() { recapData(function (d) {
     D = d; sel = d.ph.slice(0, 3).map(function (p, i) { return i; });
     box.innerHTML = '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
       '<div class="ph-acts"><button type="button" class="btn primary rc-li" data-rc-li>' + icon('i-send') + 'Share on LinkedIn</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
@@ -2923,7 +2978,7 @@ function recapSheet() {
       '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<p class="rc-hint">Tap up to three to put them on your recap picture as little prints. Tap again to take one off.</p><div class="ph-grid rc-pick">' + d.ph.slice(0, 12).map(function (p, i) { return '<button type="button" class="ph-tile' + (sel.indexOf(i) >= 0 ? ' on' : '') + '" data-rc-ph="' + i + '" aria-pressed="' + (sel.indexOf(i) >= 0) + '"><img alt="" src="' + phThumb(p) + '"><i>' + (sel.indexOf(i) + 1 || '') + '</i></button>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
       '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
     draw();
-  });
+  }); }
   el.addEventListener('click', function (e) {
     var name = 'my-' + slug(S.summit.name), tp = e.target.closest('[data-rc-ph]');
     if (tp && D) {

@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Summit Recap: the Photo Challenge is a real badge on the recap picture: a gold starburst seal with a camera, PHOTO CHALLENGE around the top, ribbon tails and a banner (ALL 3 DONE, or how many). In the preview before the summit ends, the recap opens on an Example filled out (7 sessions, 12 people, 9 photos, three framed prints and the badge), marked Example and with no share buttons; Mine So Far shows your own.
 - Nov 27, 2026: Who I Met: taking a picture makes a camera shutter sound instead of the scanner beep. The scan beep is louder and crisper, like a store's handheld scanner gun. Beep Off turns both off.
 - Nov 27, 2026: Newcomer Orientation's food note says Lunch Provided instead of Lunch Served.
 - Nov 27, 2026: Dark mode: See Lunch Spots Near the Hotel is light blue instead of dark navy, and the selected tab's icon in the bottom bar is light blue too when the phone itself is set to dark.
