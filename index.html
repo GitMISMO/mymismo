@@ -129,7 +129,8 @@ html[data-season="december"] .mast-in{padding-top:16px}
 /* the My sits on the same line as MISMO: its box includes the y's tail, so it's nudged down */
 .mast-in .my-mark, .ld-lock .my-mark{transform:translateY(10.5%)}
 /* one word: MyMISMO, the My right up against MISMO */
-.mast-in .my-mark + .lplate.bare{margin-left:-5px}
+.mast-in .my-mark + .lplate.bare{margin-left:-9.5px}
+@media (max-width:480px){ .mast-in .my-mark + .lplate.bare{margin-left:-5px} }
 .mm-lines path{stroke-dasharray:90; stroke-dashoffset:0; animation:mm-streak .7s cubic-bezier(.2,.8,.2,1) both .15s}
 .mm-lines path:nth-child(2){animation-delay:.22s} .mm-lines path:nth-child(3){animation-delay:.28s}
 .mm-my{animation:mm-in .55s cubic-bezier(.2,.9,.3,1.2) both}

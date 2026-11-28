@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: Android home screen icon: no more square-inside-a-square (the shape-fitting version of the icon is now one continuous background with MISMO running off the edge). On computers, the My sits right up against MISMO, the same as on phones.
 - Nov 27, 2026: Opening screen and iPhone launch screens: the My is the same size next to MISMO as in the top bar (it was a little bigger).
 - Nov 27, 2026: MyMISMO reads as one word: the MISMO logo is white with its blue S and no white box, right up against the Speed "My", which is sized and lined up to sit on the same line, in the top bar, the opening screen and the iPhone launch screens.
 - Nov 27, 2026: New home screen icon (Jonna's pick, A): the Speed "My" on top and the MISMO wordmark (white, blue S) running off the right edge of the icon.
