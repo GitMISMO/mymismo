@@ -77,6 +77,6 @@ The app shows the next summit whose last day hasn't passed. A person's starred s
 - **Payments:** Pay the Fund, Apply for Membership and Sponsor a Summit open MISMO's own pages for memberships and sponsorships used outside the app, so no in-app purchase is involved.
 
 ## Screen Orientation (Jonna, Nov 27, 2026)
-- **Phones: portrait only.** The Android app (store/android/twa-manifest.json) and the installed web app (manifest.webmanifest) are set to portrait. Full-screen video (Mic'd Up, the General Sessions live stream) still turns sideways and turns back when it closes.
+- **Phones: any way up (Jonna, Nov 28, 2026).** The Android app (store/android/twa-manifest.json, takes effect with the next Android build) and the installed web app (manifest.webmanifest) are set to any. On its side a phone shows the same layout as upright: one phone-width column in the middle, with the top bar, tab bar and pop-ups lined up with it (no rail, no four-across tiles). Wide layouts need a screen at least 541 pixels tall.
 - **Tablets: any way up.** Android 16 and later let large screens turn whatever the app asks, and the iPhone build must list iPad as supporting all four orientations (Apple requires it for iPad multitasking). For the iPhone build: UISupportedInterfaceOrientations = portrait only; UISupportedInterfaceOrientations~ipad = all four.
 - The landscape layout stays in the page for anyone using it in a browser or on a tablet.

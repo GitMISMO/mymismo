@@ -4,7 +4,7 @@
   "name": "MyMISMO",
   "launcherName": "MyMISMO",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "themeColor": "#0d314c",
   "themeColorDark": "#06202f",
   "navigationColor": "#0d314c",

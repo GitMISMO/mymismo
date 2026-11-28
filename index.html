@@ -158,6 +158,9 @@ html[data-season="december"] .mast-in{padding-top:16px}
 @media (max-width:359px){ .mast-in{gap:6px; padding-left:10px; padding-right:10px} .lplate{padding:6px 8px} .lplate .wordmark{height:15px} .mast-right{gap:4px} .mast-icon{width:36px; height:36px} .mast-right .rs-signin{padding:0 10px; height:36px; font-size:13.5px} }
 .theme-btn{background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; border-radius:5px; padding:5px 10px; font-size:11.5px; cursor:pointer; font-family:inherit; white-space:nowrap}
 .theme-btn:hover{background:rgba(255,255,255,.18)}
+.w-site .w-t{font-size:17.5px; -webkit-line-clamp:3}
+@media (max-width:374px){ .w-site .w-t{font-size:15.5px} }
+.wgd-mc{display:block; margin-top:6px; font-size:12px; color:var(--ink-3); text-align:center}
 .me-btn.in{border-color:rgba(116,191,235,.55); background:rgba(116,191,235,.18)}
 .me-btn .ini-chip{font-size:13px; font-weight:800; letter-spacing:.02em}
 .me-menu{position:fixed; z-index:400; min-width:232px; max-width:calc(100vw - 16px); padding:6px; border-radius:12px; background:var(--surface); border:1px solid var(--border); box-shadow:0 18px 40px -12px rgba(6,32,47,.45); animation:me-in .14s ease-out}
@@ -266,7 +269,7 @@ main{max-width:1240px; margin:0 auto; padding:14px 14px 28px; overflow-x:clip}
 /* Session cards */
 .list{display:grid; gap:8px}
 .grid2{display:grid; gap:8px; grid-template-columns:1fr}
-@media (min-width:760px){ .grid2{grid-template-columns:1fr 1fr} }
+@media (min-width:760px) and (min-height:541px){ .grid2{grid-template-columns:1fr 1fr} }
 .slot{display:grid; grid-template-columns:54px 1fr; gap:10px; margin-top:12px}
 .slot .tm{font-family:var(--cond); font-weight:700; font-size:18px; line-height:1.1; color:var(--ink); padding-top:10px; position:relative}
 .slot .tm small{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; font-weight:600; color:var(--ink-3)}
@@ -468,7 +471,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .wl-body p{margin:0 0 10px; font-size:15.5px; line-height:1.6}
 .wl-lede{font-size:16.5px !important}
 .wl-glance{display:grid; gap:10px; margin-top:12px}
-@media (min-width:640px){ .wl-glance{grid-template-columns:repeat(auto-fit, minmax(240px,1fr))} }
+@media (min-width:640px) and (min-height:541px){ .wl-glance{grid-template-columns:repeat(auto-fit, minmax(240px,1fr))} }
 .wl-g{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--border); border-left:5px solid var(--wc); border-radius:14px; padding:12px 14px; box-shadow:var(--shadow); animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 80ms)}
 .wl-cal{display:flex; gap:5px}
 .wl-cal .cal{display:grid; flex:none; width:46px; border-radius:8px; overflow:hidden; background:var(--surface); border:1px solid var(--border); text-align:center; box-shadow:0 2px 6px -3px rgba(6,32,47,.35)}
@@ -486,13 +489,13 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .wl-btns .btn{justify-content:center; margin:0}
 .wl-reg{grid-column:1 / -1; background:var(--sky); border-color:var(--sky); color:#06202f; font-weight:700}
 .wl-ghost{background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.35); color:#fff}
-@media (min-width:640px){ .wl-btns{grid-template-columns:repeat(3, max-content)} .wl-reg{grid-column:auto} .wl-btns .btn{padding-left:20px; padding-right:20px} }
+@media (min-width:640px) and (min-height:541px){ .wl-btns{grid-template-columns:repeat(3, max-content)} .wl-reg{grid-column:auto} .wl-btns .btn{padding-left:20px; padding-right:20px} }
 
 /* ---------- My Dashboard ---------- */
 .w-new{display:block; margin-top:6px; font-size:12.5px; color:var(--ink-2)}
 .w-new b{color:var(--good); font-weight:700}
 .qr-phone{display:none}
-@media (min-width:900px) and (hover:hover){
+@media (min-width:900px) and (min-height:541px) and (hover:hover){
   .qr-phone{display:flex; align-items:center; gap:14px; max-width:430px; padding:10px 14px 10px 10px; border-radius:14px; background:var(--surface); border:1px solid var(--border); box-shadow:0 6px 18px -12px rgba(13,49,76,.4)}
   .qr-phone svg{flex:none; width:96px; height:96px; border-radius:6px; border:1px solid var(--border)}
   .qr-phone b{display:flex; align-items:center; gap:7px; font-size:15px; color:var(--ink)} .qr-phone b svg{width:17px; height:17px; border:0; color:var(--link)}
@@ -506,24 +509,74 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .dh-wx.go:hover{border-color:var(--border); background:var(--surface)} .dh-wx.go > svg:last-child{width:13px; height:13px; color:var(--ink-3)}
 .wxs{display:grid; grid-template-columns:minmax(0, 1fr); gap:8px; padding:14px 14px 20px}
 .wxs-load{display:flex; gap:10px; align-items:center; padding:30px 10px; color:var(--ink-2)} .wxs-load svg{width:26px; height:26px; color:var(--link)}
-.wxs-now{position:relative; overflow:hidden; border-radius:18px; padding:16px; color:#fff; background:radial-gradient(90% 80% at 85% 10%, rgba(255,214,120,.55), transparent 55%), linear-gradient(170deg, #4ea9e2 0%, #2a87c8 55%, #1d6aa6 100%)}
-.wxs-now.night{background:radial-gradient(70% 60% at 85% 10%, rgba(169,216,243,.3), transparent 60%), linear-gradient(170deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.wxs-now{position:relative; overflow:hidden; isolation:isolate; border-radius:22px; min-height:300px; color:#fff; background:linear-gradient(175deg, #5bb6ec 0%, #2f8fd0 55%, #1d6aa6 100%); box-shadow:0 24px 40px -26px rgba(13,49,76,.8)}
+.wxs-now.k-cloud.day{background:linear-gradient(175deg, #8fb4cf 0%, #5d87a8 55%, #3d6585 100%)}
+.wxs-now.k-rain, .wxs-now.k-storm{background:linear-gradient(175deg, #5a7189 0%, #34495e 55%, #1f2f40 100%)}
+.wxs-now.k-snow{background:linear-gradient(175deg, #c9e3f4 0%, #8cbbe0 55%, #5f93c4 100%)}
+.wxs-now.night{background:linear-gradient(175deg, #1b3a63 0%, #0d2440 55%, #06142a 100%)}
+.wxs-now.night.k-rain, .wxs-now.night.k-storm{background:linear-gradient(175deg, #23344a 0%, #121d2c 60%, #070d16 100%)}
+.wxs-scene{position:absolute; inset:0; width:100%; height:100%; z-index:-1}
+.sc-sun .glow{fill:#ffd66b; opacity:.35; filter:blur(14px); animation:sc-glow 4s ease-in-out infinite}
+.sc-sun .core{fill:#ffe08a}
+.sc-sun .rays{stroke:#ffe08a; stroke-width:5; stroke-linecap:round; transform-origin:300px 60px; animation:sc-spin 30s linear infinite}
+@keyframes sc-spin{to{transform:rotate(360deg)}} @keyframes sc-glow{50%{opacity:.6}}
+.sc-clouds path{fill:rgba(255,255,255,.88)} .sc-clouds.heavy path{fill:rgba(225,234,242,.82)}
+.sc-clouds .c1{animation:sc-drift 26s ease-in-out infinite alternate} .sc-clouds .c2{opacity:.8; animation:sc-drift 34s ease-in-out infinite alternate-reverse} .sc-clouds .c3{opacity:.65; animation:sc-drift 20s ease-in-out infinite alternate}
+@keyframes sc-drift{from{transform:translateX(-24px)} to{transform:translateX(36px)}}
+.sc-rain path{stroke:rgba(200,228,250,.75); stroke-width:2; stroke-linecap:round; animation:sc-fall .9s linear infinite; animation-delay:calc(var(--i) * -.13s)}
+@keyframes sc-fall{from{transform:translate(0, -20px); opacity:0} 15%{opacity:1} to{transform:translate(-14px, 210px); opacity:.2}}
+.sc-snow circle{fill:#fff; animation:sc-flake 6s linear infinite; animation-delay:calc(var(--i) * -.75s)}
+@keyframes sc-flake{from{transform:translate(0, -10px)} 50%{transform:translate(8px, 100px)} to{transform:translate(-6px, 210px)}}
+.sc-bolt{fill:#ffe08a; opacity:0; animation:sc-flash 5s infinite} @keyframes sc-flash{0%,88%,100%{opacity:0} 89%,93%{opacity:1} 91%{opacity:.2}}
+.sc-stars circle{fill:#fff; animation:sc-twinkle 3s ease-in-out infinite; animation-delay:calc(var(--i) * -.4s)} @keyframes sc-twinkle{50%{opacity:.25}}
+.sc-moon circle{fill:#f4f1e1} .sc-moon .cut{fill:#1b3a63}
+.wxs-now.night .sc-clouds path{fill:rgba(170,190,215,.35)}
+.wxs-in{position:relative; padding:18px 18px 16px; display:grid; justify-items:start; text-align:left; gap:2px; text-shadow:0 2px 12px rgba(6,32,47,.35)}
 .wxs-now span, .wxs-now b{color:#fff}
-.wxs-where{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; opacity:.9} .wxs-where svg{width:14px; height:14px}
-.wxs-big{display:flex; align-items:center; gap:12px; margin-top:6px} .wxs-big svg{width:54px; height:54px} .wxs-big b{font-family:var(--cond); font-size:76px; line-height:1; font-weight:800; letter-spacing:-.03em}
-.wxs-say b{display:block; font-size:19px} .wxs-say span{font-size:13.5px; opacity:.9}
-.wxs-facts{display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,.25)}
-.wxs-facts span{display:grid; gap:1px; font-size:11px; opacity:.92} .wxs-facts b{font-size:14px}
-.wxs-hrs{display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x proximity}
-.wxs-h{flex:none; width:58px; display:grid; justify-items:center; gap:4px; padding:10px 4px; border-radius:12px; background:var(--surface); border:1px solid var(--border); scroll-snap-align:start}
-.wxs-h.now{border-color:var(--link); background:color-mix(in srgb, var(--link) 10%, var(--surface))}
-.wxs-h span{font-size:11px; font-weight:700; color:var(--ink-3)} .wxs-h svg{width:22px; height:22px; color:var(--link)} .wxs-h b{font-size:15px} .wxs-h em{font-style:normal; font-size:10.5px; font-weight:700; color:#2477b8; min-height:13px}
-.wxs-days{display:grid; border-radius:14px; background:var(--surface); border:1px solid var(--border); overflow:hidden}
-.wxs-d{display:grid; grid-template-columns:52px 24px 34px 36px 1fr 36px; gap:8px; align-items:center; padding:10px 12px} .wxs-d + .wxs-d{border-top:1px solid var(--rule)}
-.wxs-d b{font-size:14px} .wxs-d svg{width:22px; height:22px; color:var(--link)} .wxs-d em{font-style:normal; font-size:11px; font-weight:700; color:#2477b8}
+.wxs-where{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; opacity:.92} .wxs-where svg{width:14px; height:14px}
+.wxs-big{display:flex; align-items:flex-start; margin:18px 0 0; line-height:.82}
+.wxs-big b{font-family:var(--cond); font-size:112px; font-weight:800; letter-spacing:-.05em; font-variant-numeric:tabular-nums}
+.wxs-big sup{font-size:22px; font-weight:800; margin:10px 0 0 4px}
+.wxs-say{margin-top:10px} .wxs-say b{display:block; font-size:22px; font-weight:800} .wxs-say span{font-size:14px; opacity:.92}
+.wxs-facts{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+.wxs-facts > span{display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border-radius:10px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.26); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); font-size:11.5px; font-weight:600; text-shadow:none}
+.wxs-facts > span svg{width:16px; height:16px} .wxs-facts b{font-size:14px}
+.wxs-hours{overflow-x:auto; margin:0 -14px; padding:0 14px 6px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch}
+.wxs-hscroll{width:var(--w); border-radius:16px; background:var(--surface); border:1px solid var(--border); padding:6px 0 10px}
+.wxs-graph{display:block}
+.wxs-graph .ln{fill:none; stroke-width:3.5; stroke-linecap:round; stroke-dasharray:3000; stroke-dashoffset:3000; animation:wx-draw 1.6s cubic-bezier(.3,.7,.3,1) .2s forwards}
+@keyframes wx-draw{to{stroke-dashoffset:0}}
+.wxs-graph .ar{opacity:0; animation:wx-fade .8s ease .9s forwards} @keyframes wx-fade{to{opacity:1}}
+.wxs-graph .pt{fill:var(--surface); stroke:var(--ink-3); stroke-width:1.5} .wxs-graph .pt.now{fill:#f2c14e; stroke:#fff; stroke-width:2}
+.wxs-graph text{font:800 12.5px var(--cond, inherit); fill:var(--ink); text-anchor:middle}
+.wxs-hrs{display:flex}
+.wxs-h{flex:none; width:56px; display:grid; justify-items:center; gap:4px; scroll-snap-align:start}
+.wxs-h span{font-size:11px; font-weight:700; color:var(--ink-3)} .wxs-h.now span{color:var(--ink)}
+.wxs-h svg{width:21px; height:21px; color:var(--link)}
+.wxs-h i{width:4px; height:18px; border-radius:2px; background:linear-gradient(to top, #2477b8 var(--p), var(--surface-3) var(--p))}
+.wxs-h em{font-style:normal; font-size:10.5px; font-weight:800; color:#2477b8; min-height:13px}
+.wxs-days{display:grid; border-radius:16px; background:var(--surface); border:1px solid var(--border); overflow:hidden}
+.wxs-d{display:grid; grid-template-columns:50px 24px 34px 34px 1fr 34px; gap:8px; align-items:center; padding:11px 12px; animation:wx-in .45s ease both; animation-delay:calc(var(--i) * 60ms)}
+@keyframes wx-in{from{opacity:0; transform:translateY(6px)}}
+.wxs-d + .wxs-d{border-top:1px solid var(--rule)}
+.wxs-d b{font-size:14px} .wxs-d svg{width:22px; height:22px; color:var(--link)} .wxs-d em{font-style:normal; font-size:11px; font-weight:800; color:#2477b8}
 .wxs-lo{text-align:right; color:var(--ink-3); font-weight:600} .wxs-hi{font-weight:800}
-.wxs-bar{position:relative; height:6px; border-radius:3px; background:var(--surface-3)} .wxs-bar i{position:absolute; top:0; bottom:0; border-radius:3px; background:linear-gradient(90deg, #74bfeb, #f2c14e)}
+.wxs-bar{position:relative; height:7px; border-radius:4px; background:var(--surface-3)}
+.wxs-bar i{position:absolute; top:0; bottom:0; border-radius:4px; animation:wx-grow .8s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 60ms + .2s); transform-origin:left}
+@keyframes wx-grow{from{transform:scaleX(0)}}
+.wxs-bar u{position:absolute; top:50%; width:11px; height:11px; margin:-5.5px 0 0 -5.5px; border-radius:50%; background:#fff; border:2.5px solid var(--ink)}
+.wxs-sunbox{margin-top:6px; padding:14px 14px 12px; border-radius:16px; background:var(--surface); border:1px solid var(--border)}
+.wxs-arc{display:block; width:100%; max-width:360px; margin:0 auto}
+.wxs-arc .base{fill:none; stroke:var(--border-strong); stroke-width:2; stroke-dasharray:4 6}
+.wxs-arc .done{fill:none; stroke:#f2c14e; stroke-width:3.5; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1; animation:wx-sun 1.4s ease .3s forwards}
+@keyframes wx-sun{to{stroke-dashoffset:calc(1 - var(--f))}}
+.wxs-arc line{stroke:var(--rule); stroke-width:2}
+.wxs-arc .sun{fill:#f2c14e; stroke:#fff; stroke-width:3; filter:drop-shadow(0 0 8px rgba(242,193,78,.8))}
+.wxs-sunt{display:flex; justify-content:space-between; margin-top:4px} .wxs-sunt span{display:grid; font-size:11.5px; color:var(--ink-3); font-weight:600} .wxs-sunt span:last-child{text-align:right} .wxs-sunt b{font-size:15px; color:var(--ink)}
 .wxs-twc{margin-top:10px; justify-content:center} .wxs-fine{margin:4px 0 0; font-size:12px; color:var(--ink-3); text-align:center}
+@media (prefers-reduced-motion: reduce){ .wxs-scene *, .wxs-graph .ln, .wxs-graph .ar, .wxs-d, .wxs-bar i, .wxs-arc .done{animation:none !important} .wxs-graph .ln{stroke-dashoffset:0} .wxs-graph .ar{opacity:1} .wxs-arc .done{stroke-dashoffset:calc(1 - var(--f))} }
+/* Jonna, Nov 28, 2026: on a computer the date line shows just the temperature (the pop-up has the rest) */
+@media (min-width:760px) and (min-height:541px){ .dh-wx.go > span{display:none} }
 .dh-wx.ask{padding:2px 8px 2px 6px; border-radius:6px; border:1px solid var(--border); background:var(--surface); cursor:pointer; color:var(--link); font-weight:700}
 .dh-wx.ask > span{color:var(--link)}
 .dash-head h1{font-family:var(--cond); font-size:clamp(32px, 9vw, 44px); line-height:1; letter-spacing:-.02em; margin-top:3px}
@@ -534,7 +587,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .dash-grid{--short-h:166px}
 .dash-grid > .w-idea:not(.wide):not(.solo), .dash-grid > .w-site:not(.wide):not(.solo){height:var(--short-h)}
 @media (max-width:374px){ .dash-grid{--half-h:225px} }
-@media (min-width:760px){ .dash-grid{--half-h:210px; --short-h:190px} }
+@media (min-width:760px) and (min-height:541px){ .dash-grid{--half-h:210px; --short-h:190px} }
 .wd{position:relative; overflow:hidden; isolation:isolate; display:flex; flex-direction:column; align-items:flex-start; gap:6px; text-align:left; border-radius:18px; padding:16px; min-height:150px; cursor:pointer; text-decoration:none;
   background:var(--surface); border:1px solid var(--border); color:var(--ink); box-shadow:var(--shadow); font:inherit}
 .wd.wide{grid-column:1 / -1}
@@ -598,7 +651,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
   .wm-art{align-self:flex-end; margin-top:auto; opacity:.9}
   .wm-art svg{width:52px; height:52px; color:#e2b33c; filter:drop-shadow(0 0 14px rgba(240,185,58,.45))}
 }
-@media (min-width:760px), (orientation:landscape) and (max-height:540px){
+@media (min-width:760px) and (min-height:541px){
   .dash-grid .wd.grow{grid-column:span 2}
   .dash-grid .wd.full{grid-column:1 / -1}
 }
@@ -704,8 +757,8 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-idea{background:linear-gradient(160deg, color-mix(in srgb, #f0b93a 18%, var(--surface)), var(--surface) 60%)}
 .w-idea .w-head svg{color:#c99a2e}
 .wd.solo{min-height:120px}
-@media (min-width:760px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .w-summit.wide{grid-column:span 4} .wd.solo{grid-column:span 2} }
-@media (orientation:landscape) and (max-height:540px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .wd.solo{grid-column:span 2}
+@media (min-width:760px) and (min-height:541px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .w-summit.wide{grid-column:span 4} .wd.solo{grid-column:span 2} }
+@media (max-width:0px){ .dash-grid{grid-template-columns:repeat(4,1fr)} .wd.wide{grid-column:span 2} .wd.solo{grid-column:span 2}
   /* Jonna, Nov 27, 2026: beside the Summit tile, MISMO Matters sits on top of Join a Workgroup */
   .dash-grid .w-summit.wide{grid-row:span 2} .dash-grid .w-mat, .dash-grid .w-wg{grid-column:span 2} }
 
@@ -806,7 +859,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .cover .d-meta{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:10px; font-size:14px; color:rgba(255,255,255,.92)}
 .cover .d-meta span{display:inline-flex; gap:6px; align-items:center}
 .cover .d-meta svg{width:16px; height:16px}
-@media (min-width:760px){ .prail,.info-rail{grid-auto-columns:minmax(260px, 32%)} .radar{margin:0 auto} }
+@media (min-width:760px) and (min-height:541px){ .prail,.info-rail{grid-auto-columns:minmax(260px, 32%)} .radar{margin:0 auto} }
 
 /* ---------- Players ---------- */
 .player{position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; box-shadow:0 10px 30px rgba(6,32,47,.25)}
@@ -1625,7 +1678,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .tg-qn{float:right; font-size:12.5px; color:rgba(255,255,255,.55); font-weight:600}
 .tg-card h3{font-family:var(--cond); font-size:clamp(22px, 6vw, 28px); line-height:1.15; margin-top:10px; clear:both}
 .tg-ans{display:grid; gap:9px}
-@media (min-width:640px){ .tg-ans{grid-template-columns:1fr 1fr} }
+@media (min-width:640px) and (min-height:541px){ .tg-ans{grid-template-columns:1fr 1fr} }
 .tg-a{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; text-align:left; background:#fff; color:#0d314c; border:0; border-radius:12px; padding:12px 14px; font:inherit; font-weight:600; font-size:15.5px; cursor:pointer; box-shadow:0 8px 20px -12px rgba(0,0,0,.6); animation:tile-in .35s cubic-bezier(.2,.8,.2,1) both; animation-delay:var(--d); transition:transform .12s ease, background .2s ease, opacity .2s ease}
 .tg-a:active{transform:scale(.97)}
 .tg-l{width:32px; height:32px; border-radius:8px; display:grid; place-items:center; background:#e4f2fb; font-weight:800; color:#14486e}
@@ -2348,7 +2401,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .st-go{position:absolute; right:12px; bottom:12px; color:var(--ink-3)}
 .st-go svg{width:15px; height:15px}
 @keyframes tile-in{from{opacity:0; transform:translateY(12px) scale(.98)}}
-@media (min-width:640px){ .site-grid{grid-template-columns:repeat(4,1fr)} }
+@media (min-width:640px) and (min-height:541px){ .site-grid{grid-template-columns:repeat(4,1fr)} }
 
 /* ---------- Certifications ---------- */
 .cert-hero{position:relative; isolation:isolate; overflow:hidden; background:#071d2e; color:#fff; padding:22px 18px 20px}
@@ -2361,7 +2414,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .cert-hero p{color:rgba(255,255,255,.85); margin:0 0 16px; max-width:34ch; font-size:14.5px}
 .cert-nums{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .cert-nums div:last-child:nth-child(odd){grid-column:1 / -1}
-@media (min-width:640px){ .cert-nums{grid-template-columns:repeat(4,1fr)} .cert-nums div:last-child:nth-child(odd){grid-column:auto} }
+@media (min-width:640px) and (min-height:541px){ .cert-nums{grid-template-columns:repeat(4,1fr)} .cert-nums div:last-child:nth-child(odd){grid-column:auto} }
 .cert-nums div{background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:10px 12px; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
 .cert-nums b{display:block; font-family:var(--cond); font-size:36px; line-height:1; color:var(--sky)}
 .cert-nums span{font-size:12px; font-weight:600; color:rgba(255,255,255,.85)}
@@ -2432,7 +2485,7 @@ button.tl-c:hover{border-color:var(--border-strong)}
 
 /* Certification tiles */
 .ctiles{display:grid; gap:12px}
-@media (min-width:640px){ .ctiles{grid-template-columns:1fr 1fr} .ctile.wide{grid-column:1 / -1} }
+@media (min-width:640px) and (min-height:541px){ .ctiles{grid-template-columns:1fr 1fr} .ctile.wide{grid-column:1 / -1} }
 .ctile{position:relative; overflow:hidden; background:var(--surface); border:1px solid var(--border); border-top:5px solid var(--c); border-radius:16px; padding:14px; box-shadow:var(--shadow); animation:tile-in .45s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i) * 60ms)}
 .ctile:before{content:""; position:absolute; right:-40px; top:-40px; width:130px; height:130px; border-radius:50%; background:var(--c); opacity:.08}
 .ct-h{display:flex; gap:12px; align-items:center}
@@ -2586,13 +2639,13 @@ nav.tabbar .badge.on{display:grid}
 #loading .errtxt{color:#fff; max-width:320px; text-align:center; display:none; position:absolute; top:calc(100% + 20px); left:50%; transform:translateX(-50%); width:80vw}
 
 /* ---------- Sizes and orientation ---------- */
-@media (min-width:700px){
+@media (min-width:700px) and (min-height:541px){
   .pass{grid-template-columns:1.35fr 1fr; align-items:end; padding:28px 26px 22px; column-gap:26px}
   .pass .flip{justify-content:flex-end; padding-bottom:0; flex-wrap:nowrap}
   .pass-figs{grid-column:auto; margin:12px 0 0}
   .rail{grid-auto-columns:minmax(260px, 32%)}
 }
-@media (min-width:900px){
+@media (min-width:900px) and (min-height:541px){
   .sheet{left:auto; top:0; width:min(72vw, 880px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
   html.mm-wide .sheet{width:100vw}
   .sheet-head .iconbtn.grow{display:grid} .sheet-head .iconbtn.grow + .close{margin-left:0}
@@ -2608,27 +2661,15 @@ nav.tabbar .badge.on{display:grid}
 }
 @media (max-width:440px){ .appname{display:none} .vrule{display:none} }
 @media (max-width:420px){ body:not(.dash) .theme-btn{display:none} }
-/* Landscape phones: the tab bar becomes a rail down the left so the screen keeps its height */
+/* Jonna, Nov 28, 2026: phones turn again, and on its side a phone shows the same app it does upright (no rail, no
+   stretched tiles): one phone-width column in the middle, the bars and pop-ups lined up with it */
 @media (orientation:landscape) and (max-height:540px){
-  :root{--rail-w:calc(84px + env(safe-area-inset-left)); --tabbar-h:0px}
-  body{padding-bottom:env(safe-area-inset-bottom)}
-  nav.tabbar{top:0; right:auto; width:var(--rail-w); border-top:0; border-right:1px solid var(--border); padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) env(safe-area-inset-left)}
-  nav.tabbar .in{grid-template-columns:1fr; grid-auto-rows:1fr; height:100%; max-width:none}
-  nav.tabbar button[aria-current]:before{top:22%; bottom:22%; left:auto; right:0; width:3px; height:auto; border-radius:2px 0 0 2px}
-  .mast-in{padding-left:max(14px, env(safe-area-inset-left))}
-  .pass{grid-template-columns:1.3fr 1fr; align-items:end; padding:18px 20px 20px; column-gap:18px}
-  .pass .city{font-size:clamp(48px, 10vw, 96px)}
-  .pass .flip{justify-content:flex-end; padding-bottom:0; flex-wrap:nowrap; gap:10px}
-  .pass .flip .tile{width:clamp(30px, 3.6vw, 46px); height:clamp(42px, 5vw, 62px); font-size:clamp(28px, 3.4vw, 40px)}
-  .pass-figs{grid-column:auto; margin:12px 0 0}
-  .grid2{grid-template-columns:1fr 1fr}
-  .rail{grid-auto-columns:minmax(250px, 46%)}
-  .days{top:calc(50px + env(safe-area-inset-top))}
-  .sheet{left:auto; top:0; width:min(78vw, 760px); border-radius:0; transform:translateX(100%); transition-property:transform, width}
-  html.mm-wide .sheet{width:100vw}
-  .sheet-head .iconbtn.grow{display:grid} .sheet-head .iconbtn.grow + .close{margin-left:0}
-  .sheet-head .grab{display:none}
-  .faces-grid{grid-template-columns:repeat(auto-fill, minmax(140px,1fr))}
+  :root{--col:min(100vw, 500px); --colx:calc((100vw - var(--col)) / 2)}
+  main{max-width:var(--col)}
+  .mast-in{max-width:var(--col); margin:0 auto}
+  nav.tabbar .in{max-width:var(--col)}
+  .sheet{left:var(--colx); right:var(--colx); top:calc(10px + env(safe-area-inset-top))}
+  #offline-bar{left:var(--colx); right:var(--colx)}
 }
 @media (prefers-reduced-motion: reduce){ .sheet,.sheet-back{transition:none} #loading .bar i{animation:none} .flip .tile.go b,.star.pop svg{animation:none} }
 </style>
@@ -2711,6 +2752,9 @@ c57 -33 76 -84 76 -200 0 -116 -19 -167 -76 -200 -32 -19 -52 -20 -294 -20
 <symbol id="i-webinar" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 21h8M12 17v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m10.2 8 4.3 2.5-4.3 2.5z" fill="currentColor"/></symbol>
 <symbol id="i-plane" viewBox="0 0 24 24"><path d="M10.5 13.5 3 11l1.2-1.6 8 .9 4.6-5.1c.8-.9 2.4-1.3 3-.7.6.6.2 2.2-.7 3l-5.1 4.6.9 8L13.3 21l-2.5-7.5-3.6 3.2.4 2.6-1.2 1-1.6-3.2L1.6 15.5l1-1.2 2.6.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
 <symbol id="i-tram" viewBox="0 0 24 24"><rect x="5.5" y="6" width="13" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 12.5h13M9 3h6M12 3v3M8.5 15.3h.01M15.5 15.3h.01M8 18l-2 3M16 18l2 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="wx-wind" viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="wx-drop" viewBox="0 0 24 24"><path d="M12 3.5s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="wx-moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="wx-clear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="wx-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10.5a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.2A3.4 3.4 0 0 0 7 18.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="wx-rain" viewBox="0 0 24 24"><path d="M7 15h10.5a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.2A3.4 3.4 0 0 0 7 15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 18l-1 2.5M12.5 18l-1 2.5M16.5 18l-1 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
@@ -3048,6 +3092,8 @@ function groupFor(title) {
   return near.length === 1 ? near[0] : null;
 }
 /* a session can hold more than one group ("Servicing COP + Servicing Transfers DWG") */
+/* Jonna, Nov 28, 2026: a group's own MISMO Connect community (members-only, data/connect.json) instead of its mismo.org page */
+function connectFor(g) { return g && g.name && CONNECT && CONNECT.groups ? CONNECT.groups[g.name] || '' : ''; }
 function groupPages(x) {
   var out = [];
   String(x.title || '').split(/\s+\+\s+|\s*\/\s*/).forEach(function (part) { var g = groupFor(part); if (g && out.indexOf(g) < 0) out.push(g); });
@@ -4036,15 +4082,15 @@ var G = null, MU = null;
 var SITE = 'https://www.mismo.org';
 var SITE_LINKS = [
   ['Standards and Resources', '/standards-resources', 'The MISMO standards and how to use them'],
-  ['Resource Library', '/mismolibraries', 'Work products and downloads'],
-  ['Business Glossary', '/glossary', 'Terms used across the mortgage industry'],
   ['Digital Mortgage Resource Center', '/standards-resources/digital-mortgage-resource-center', 'eMortgage adoption, MERS figures and bill tracking'],
-  ['MISMO Link', '/standards-resources/mismo-link', 'MISMO’s AI for the standards'],
-  ['Boot Camp', '/events/boot-camp', 'Get up to speed on MISMO, the first step to AMSP'],
+  ['Business Glossary', '/glossary', 'Terms used across the mortgage industry'],
+  ['Business Process Model', '/standards-resources/business-process-model', 'MISMO Life of Loan, the mortgage life cycle tied to the standards'],
   ['MISMO FRAME', '/mismo-frame', 'The Framework for Responsible AI in the Mortgage Ecosystem'],
+  ['MISMO Link', '/standards-resources/mismo-link', 'MISMO\u2019s AI for the standards'],
+  ['Boot Camp', '/events/boot-camp', 'Get up to speed on MISMO, the first step to AMSP'],
   ['Contributor Awards', '/about-mismo/contributor-awards', 'Honoring the volunteers behind the standards']
 ];
-var NEWS = null, MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null, FACES = null;
+var CONNECT = null, NEWS = null, MM = null, WEB = null, CERT = null, PROS = null, TAGS = null, FP = null, PRV = null, PRG = null, PEEKS = null, WG = null, LOGOBG = null, AIW = null, FACES = null;
 /* ---------- Floor map (the hotel's map from Summit HQ, with the summit's rooms pinned) ---------- */
 function rkey(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]/g, ''); }
 function floorMap() { return FP && S.summit && rkey(FP.dates) === rkey(S.summit.dates) ? FP : null; }
@@ -5397,6 +5443,7 @@ function loadExtras() {
   getJSON('data/providers.json').then(function (p) { PRV = p; }).catch(function () {});
   getJSON('data/peeks/index.json').then(function (p) { PEEKS = p; }).catch(function () {});
   getJSON('data/programs.json').then(function (p) { PRG = p; again(['dash']); }).catch(function () {});
+  getJSON('data/connect.json').then(function (c) { CONNECT = c; }).catch(function () {});
   getJSON('data/news.json').then(function (n) { if (n && n.items && n.items.length) { NEWS = n; again(['dash']); } }).catch(function () {});
   getJSON('data/faces.json').then(function (f) { FACES = f; FACE_IX = null; again(['people']); }).catch(function () {});
 }
@@ -5597,7 +5644,7 @@ var DASH = [
   { id: 'industry', name: 'Membership for Industry', desc: 'Compare membership levels, from Corporate to Chair Champion', icon: 'i-people' },
   { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-banner' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
-  { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
+  { id: 'site', name: 'mismo.org', desc: 'MISMO FRAME, the standards, Boot Camp and more', icon: 'i-globe' },
   { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
   { id: 'merch', name: 'MISMO Merch', desc: 'Hoodies, mugs and more (a mock-up for testers)', icon: 'i-tag' }
 ];
@@ -5634,7 +5681,7 @@ function greetHead(qr) {
 var WX = { busy: false };
 function wxLoc() { var l = load('wx-loc', null); return l && typeof l.lat === 'number' ? l : null; }
 function wxIcon(c) { return c === 0 || c === 1 ? 'wx-clear' : c >= 95 ? 'wx-storm' : (c >= 71 && c <= 77) || c === 85 || c === 86 ? 'wx-snow' : (c >= 51 && c <= 67) || (c >= 80 && c <= 82) ? 'wx-rain' : 'wx-cloud'; }
-function wxWord(c) { return c === 0 ? 'Clear' : c <= 2 ? 'Partly cloudy' : c === 3 ? 'Cloudy' : c <= 48 ? 'Fog' : c <= 57 ? 'Drizzle' : c <= 67 ? 'Rain' : c <= 77 ? 'Snow' : c <= 82 ? 'Showers' : c <= 86 ? 'Snow showers' : 'Thunderstorms'; }
+function wxWord(c) { return c === 0 ? 'Clear' : c === 1 ? 'Mostly clear' : c === 2 ? 'Partly cloudy' : c === 3 ? 'Cloudy' : c <= 48 ? 'Fog' : c <= 57 ? 'Drizzle' : c <= 67 ? 'Rain' : c <= 77 ? 'Snow' : c <= 82 ? 'Showers' : c <= 86 ? 'Snow showers' : 'Thunderstorms'; }
 function wxChip() {
   if (!wxLoc()) return load('wx-off', false) ? '' : '<button type="button" class="dh-wx ask" data-wx-ask>' + icon('wx-clear') + '<span>Show Weather</span></button>';
   var w = load('wx-now', null);
@@ -5665,31 +5712,81 @@ function wxGet() {
 /* Jonna, Nov 28, 2026: tapping the weather opens the forecast where you are (at the summit, the summit city): now,
    the next 24 hours and the week, with The Weather Channel one tap away */
 var DOW3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+/* temperature to color: icy blue, sky, green, gold, orange, magenta */
+function wxTone(f) {
+  var st = [[20, [169, 216, 243]], [40, [116, 191, 235]], [55, [27, 175, 122]], [70, [242, 193, 78]], [85, [235, 104, 52]], [98, [213, 81, 129]]];
+  if (f <= st[0][0]) return 'rgb(' + st[0][1] + ')'; if (f >= st[5][0]) return 'rgb(' + st[5][1] + ')';
+  for (var i = 1; i < st.length; i++) if (f <= st[i][0]) { var a = st[i - 1], b = st[i], k = (f - a[0]) / (b[0] - a[0]); return 'rgb(' + a[1].map(function (v, j) { return Math.round(v + (b[1][j] - v) * k); }) + ')'; }
+}
+/* the sky behind the big number: sun, clouds, rain, snow, lightning or stars, all moving */
+function wxScene(code, day) {
+  var kind = wxIcon(code), cloudy = code >= 2, g = '';
+  if (!day) g += '<g class="sc-stars">' + [[40, 30], [90, 60], [150, 22], [210, 48], [260, 18], [300, 70], [120, 95], [330, 35], [60, 110]].map(function (p, i) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (i % 3 ? 1.2 : 1.8) + '" style="--i:' + i + '"/>'; }).join('') + '</g>' +
+    '<g class="sc-moon"><circle cx="300" cy="62" r="26"/><circle cx="312" cy="54" r="24" class="cut"/></g>';
+  else if (code <= 2) g += '<g class="sc-sun"><circle class="glow" cx="300" cy="60" r="70"/><g class="rays">' + Array.apply(null, Array(12)).map(function (x, i) { return '<path d="M300 ' + (60 - 46) + 'v-14" transform="rotate(' + i * 30 + ' 300 60)"/>'; }).join('') + '</g><circle class="core" cx="300" cy="60" r="28"/></g>';
+  if (cloudy || kind !== 'wx-clear') g += '<g class="sc-clouds' + (code >= 3 ? ' heavy' : '') + '">' +
+    '<g transform="translate(190 40) scale(.85)"><path class="c1" d="M40 92h120a26 26 0 0 0-6-51 36 36 0 0 0-68-6 28 28 0 0 0-46 25 16 16 0 0 0 0 32z"/></g>' +
+    '<path class="c2" d="M200 120h110a22 22 0 0 0-4-43 30 30 0 0 0-58-6 24 24 0 0 0-40 21 14 14 0 0 0-8 28z"/>' +
+    '<g transform="translate(90 -10)"><path class="c3" d="M110 60h70a14 14 0 0 0-2-28 20 20 0 0 0-38-4 16 16 0 0 0-26 14 9 9 0 0 0-4 18z"/></g></g>';
+  if (kind === 'wx-rain' || kind === 'wx-storm') g += '<g class="sc-rain">' + Array.apply(null, Array(28)).map(function (x, i) { return '<path d="M' + (12 + i * 13) + ' 0l-5 14" style="--i:' + (i % 7) + ';--x:' + (i % 5) + '"/>'; }).join('') + '</g>';
+  if (kind === 'wx-snow') g += '<g class="sc-snow">' + Array.apply(null, Array(26)).map(function (x, i) { return '<circle cx="' + (10 + i * 14) + '" cy="0" r="' + (i % 3 ? 2 : 3) + '" style="--i:' + (i % 8) + '"/>'; }).join('') + '</g>';
+  if (kind === 'wx-storm') g += '<path class="sc-bolt" d="M236 70l-18 34h16l-12 30 34-44h-17l14-20z"/>';
+  return '<svg class="wxs-scene" viewBox="0 0 360 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + g + '</svg>';
+}
+/* a smooth line through the hours */
+function wxCurve(pts) {
+  var d = 'M' + pts[0][0] + ' ' + pts[0][1];
+  for (var i = 0; i < pts.length - 1; i++) { var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += ' C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ' ' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ', ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ' ' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ', ' + p2[0] + ' ' + p2[1]; }
+  return d;
+}
 function wxSheet() {
   var l = wxLoc(); if (!l) return;
-  var el = openSheet('Weather', '<div class="wxs"><div class="wxs-load">' + icon('wx-cloud') + '<span>Getting the forecast\u2026</span></div></div>', { plain: true });
-  fetch('https://api.open-meteo.com/v1/forecast?latitude=' + l.lat + '&longitude=' + l.lon + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,is_day&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7')
+  var el = openSheet('Weather', '<div class="wxs"><div class="wxs-load">' + icon('wx-cloud') + '<span>Getting the forecast…</span></div></div>', { plain: true });
+  var fail = function () { var box = el.querySelector('.wxs'); if (box) box.innerHTML = '<div class="wxs-load">' + icon('wx-cloud') + '<span>The forecast didn\'t load. Try again in a minute.</span></div>'; };
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=' + l.lat + '&longitude=' + l.lon + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,is_day&hourly=temperature_2m,weather_code,precipitation_probability,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7')
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (j) {
       var box = el.querySelector('.wxs'); if (!box) return;
-      if (!j || !j.current || !j.hourly || !j.daily) { box.innerHTML = '<div class="wxs-load">' + icon('wx-cloud') + '<span>The forecast didn\'t load. Try again in a minute.</span></div>'; return; }
-      var c = j.current, D = j.daily, H = j.hourly;
+      if (!j || !j.current || !j.hourly || !j.daily) return fail();
+      var c = j.current, D = j.daily, H = j.hourly, day = !!c.is_day;
       var now = c.time.slice(0, 13), start = Math.max(0, H.time.findIndex(function (t) { return t.slice(0, 13) >= now; }));
-      var hrs = H.time.slice(start, start + 24).map(function (t, i) { var k = start + i, h = +t.slice(11, 13);
-        return '<div class="wxs-h' + (i ? '' : ' now') + '"><span>' + (i ? (h % 12 || 12) + (h < 12 ? ' AM' : ' PM') : 'Now') + '</span>' + icon(wxIcon(H.weather_code[k])) + '<b>' + Math.round(H.temperature_2m[k]) + '\u00b0</b><em>' + (H.precipitation_probability[k] >= 20 ? H.precipitation_probability[k] + '%' : '') + '</em></div>'; }).join('');
+      var idx = []; for (var q = start; q < Math.min(H.time.length, start + 24); q++) idx.push(q);
+      /* the next 24 hours: a temperature line with the hours under it */
+      var W = 56, top = 34, bot = 86, temps = idx.map(function (k) { return H.temperature_2m[k]; }), tmin = Math.min.apply(null, temps), tmax = Math.max.apply(null, temps), tr = Math.max(1, tmax - tmin);
+      var pts = idx.map(function (k, i) { return [i * W + W / 2, Math.round(bot - (H.temperature_2m[k] - tmin) / tr * (bot - top))]; });
+      var line = wxCurve(pts), area = line + ' L' + pts[pts.length - 1][0] + ' 120 L' + pts[0][0] + ' 120 Z', w = idx.length * W;
+      var graph = '<svg class="wxs-graph" width="' + w + '" height="120" viewBox="0 0 ' + w + ' 120" aria-hidden="true"><defs><linearGradient id="wxg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f2c14e" stop-opacity=".45"/><stop offset="1" stop-color="#74bfeb" stop-opacity="0"/></linearGradient>' +
+        '<linearGradient id="wxl" x1="0" x2="1" y1="0" y2="0">' + idx.map(function (k, i) { return '<stop offset="' + (i / Math.max(1, idx.length - 1)).toFixed(3) + '" stop-color="' + wxTone(H.temperature_2m[k]) + '"/>'; }).join('') + '</linearGradient></defs>' +
+        '<path class="ar" d="' + area + '" fill="url(#wxg)"/><path class="ln" d="' + line + '" stroke="url(#wxl)"/>' +
+        pts.map(function (p, i) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (i ? 3 : 5) + '" class="' + (i ? 'pt' : 'pt now') + '"/><text x="' + p[0] + '" y="' + (p[1] - 10) + '">' + Math.round(temps[i]) + '°</text>'; }).join('') + '</svg>';
+      var hrs = idx.map(function (k, i) { var h = +H.time[k].slice(11, 13), pr = H.precipitation_probability[k];
+        return '<div class="wxs-h' + (i ? '' : ' now') + '"><span>' + (i ? (h % 12 || 12) + (h < 12 ? 'a' : 'p') : 'Now') + '</span>' + icon(H.is_day && !H.is_day[k] && wxIcon(H.weather_code[k]) === 'wx-clear' ? 'wx-moon' : wxIcon(H.weather_code[k])) + '<i style="--p:' + (pr || 0) + '%"></i><em>' + (pr >= 10 ? pr + '%' : '') + '</em></div>'; }).join('');
+      /* the week: each day's range on one shared scale, colored by temperature */
       var lo = Math.min.apply(null, D.temperature_2m_min), hi = Math.max.apply(null, D.temperature_2m_max), span = Math.max(1, hi - lo);
-      var days = D.time.map(function (t, i) { var d = new Date(t + 'T12:00:00');
-        return '<div class="wxs-d"><b>' + (i ? DOW3[d.getDay()] : 'Today') + '</b>' + icon(wxIcon(D.weather_code[i])) + '<em>' + (D.precipitation_probability_max[i] >= 20 ? D.precipitation_probability_max[i] + '%' : '') + '</em><span class="wxs-lo">' + Math.round(D.temperature_2m_min[i]) + '\u00b0</span>' +
-          '<span class="wxs-bar"><i style="left:' + ((D.temperature_2m_min[i] - lo) / span * 100).toFixed(1) + '%;right:' + ((hi - D.temperature_2m_max[i]) / span * 100).toFixed(1) + '%"></i></span><span class="wxs-hi">' + Math.round(D.temperature_2m_max[i]) + '\u00b0</span></div>'; }).join('');
-      var tm = function (x) { var h = +x.slice(11, 13), m = x.slice(14, 16); return (h % 12 || 12) + ':' + m + (h < 12 ? ' AM' : ' PM'); };
-      box.innerHTML = '<section class="wxs-now ' + (c.is_day ? 'day' : 'night') + '"><span class="wxs-where">' + icon('i-pin') + 'Where you are now</span><div class="wxs-big">' + icon(wxIcon(c.weather_code)) + '<b>' + Math.round(c.temperature_2m) + '\u00b0</b></div>' +
-          '<div class="wxs-say"><b>' + esc(wxWord(c.weather_code)) + '</b><span>Feels like ' + Math.round(c.apparent_temperature) + '\u00b0 \u2022 H ' + Math.round(D.temperature_2m_max[0]) + '\u00b0 L ' + Math.round(D.temperature_2m_min[0]) + '\u00b0</span></div>' +
-          '<div class="wxs-facts"><span><b>' + Math.round(c.wind_speed_10m) + ' mph</b>Wind</span><span><b>' + Math.round(c.relative_humidity_2m) + '%</b>Humidity</span><span><b>' + tm(D.sunrise[0]) + '</b>Sunrise</span><span><b>' + tm(D.sunset[0]) + '</b>Sunset</span></div></section>' +
-        '<div class="d-h">Next 24 Hours</div><div class="wxs-hrs">' + hrs + '</div>' +
+      var days = D.time.map(function (t, i) { var d = new Date(t + 'T12:00:00'), mn = D.temperature_2m_min[i], mx = D.temperature_2m_max[i];
+        return '<div class="wxs-d" style="--i:' + i + '"><b>' + (i ? DOW3[d.getDay()] : 'Today') + '</b>' + icon(wxIcon(D.weather_code[i])) + '<em>' + (D.precipitation_probability_max[i] >= 20 ? D.precipitation_probability_max[i] + '%' : '') + '</em><span class="wxs-lo">' + Math.round(mn) + '°</span>' +
+          '<span class="wxs-bar"><i style="left:' + ((mn - lo) / span * 100).toFixed(1) + '%;right:' + ((hi - mx) / span * 100).toFixed(1) + '%;background:linear-gradient(90deg,' + wxTone(mn) + ',' + wxTone(mx) + ')"></i>' + (i ? '' : '<u style="left:' + Math.min(100, Math.max(0, (c.temperature_2m - lo) / span * 100)).toFixed(1) + '%"></u>') + '</span><span class="wxs-hi">' + Math.round(mx) + '°</span></div>'; }).join('');
+      /* the sun's path today */
+      var ts = function (x) { var h = +x.slice(11, 13), m = +x.slice(14, 16); return h * 60 + m; }, tm = function (x) { var h = +x.slice(11, 13), m = x.slice(14, 16); return (h % 12 || 12) + ':' + m + (h < 12 ? ' AM' : ' PM'); };
+      var sr = ts(D.sunrise[0]), ss = ts(D.sunset[0]), nw = ts(c.time), f = Math.min(1, Math.max(0, (nw - sr) / Math.max(1, ss - sr))), ang = Math.PI * (1 - f), sx = 160 + 130 * Math.cos(ang), sy = 96 - 80 * Math.sin(ang);
+      var arc = '<svg class="wxs-arc" viewBox="0 0 320 110" aria-hidden="true"><path class="base" d="M30 96 A130 80 0 0 1 290 96"/><path class="done" pathLength="1" d="M30 96 A130 80 0 0 1 290 96" style="--f:' + f.toFixed(3) + '"/><line x1="14" y1="96" x2="306" y2="96"/>' +
+        (nw > sr && nw < ss ? '<circle class="sun" cx="' + sx.toFixed(1) + '" cy="' + sy.toFixed(1) + '" r="9"/>' : '') + '</svg>';
+      var uv = D.uv_index_max ? Math.round(D.uv_index_max[0]) : null;
+      box.innerHTML = '<section class="wxs-now k-' + wxIcon(c.weather_code).slice(3) + (day ? ' day' : ' night') + '">' + wxScene(c.weather_code, day) +
+          '<div class="wxs-in"><span class="wxs-where">' + icon('i-pin') + 'Where you are now</span>' +
+          '<div class="wxs-big"><b data-wx-count="' + Math.round(c.temperature_2m) + '">' + Math.round(c.temperature_2m) + '</b><sup>°F</sup></div>' +
+          '<div class="wxs-say"><b>' + esc(wxWord(c.weather_code)) + '</b><span>Feels like ' + Math.round(c.apparent_temperature) + '° • H ' + Math.round(D.temperature_2m_max[0]) + '° L ' + Math.round(D.temperature_2m_min[0]) + '°</span></div>' +
+          '<div class="wxs-facts"><span>' + icon('wx-wind') + '<b>' + Math.round(c.wind_speed_10m) + ' mph</b>Wind</span><span>' + icon('wx-drop') + '<b>' + Math.round(c.relative_humidity_2m) + '%</b>Humidity</span>' + (uv !== null ? '<span>' + icon('wx-clear') + '<b>' + uv + '</b>UV Index</span>' : '') + '</div></div></section>' +
+        '<div class="d-h">Next 24 Hours</div><div class="wxs-hours"><div class="wxs-hscroll" style="--w:' + w + 'px">' + graph + '<div class="wxs-hrs">' + hrs + '</div></div></div>' +
         '<div class="d-h">This Week</div><div class="wxs-days">' + days + '</div>' +
+        '<div class="wxs-sunbox">' + arc + '<div class="wxs-sunt"><span><b>' + tm(D.sunrise[0]) + '</b>Sunrise</span><span><b>' + tm(D.sunset[0]) + '</b>Sunset</span></div></div>' +
         '<a class="btn primary wxs-twc" href="https://weather.com/weather/today/l/' + l.lat + ',' + l.lon + '" target="_blank" rel="noopener">' + icon('i-link') + 'Open The Weather Channel</a>' +
         '<p class="wxs-fine">Forecast from Open-Meteo. The Weather Channel opens in its app if you have it.</p>';
-    }, function () { var box = el.querySelector('.wxs'); if (box) box.innerHTML = '<div class="wxs-load">' + icon('wx-cloud') + '<span>The forecast didn\'t load. Try again in a minute.</span></div>'; });
+      /* the big number counts up */
+      var big = box.querySelector('[data-wx-count]'), to = +big.getAttribute('data-wx-count');
+      if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) { var t0 = null, from = to - Math.min(20, Math.max(8, Math.abs(to))); (function step(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 900), e = 1 - Math.pow(1 - k, 3); big.textContent = Math.round(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); })(performance.now()); }
+    }, fail);
 }
 /* the date line is on My Dashboard and the summit Home: refresh every copy */
 function wxPaint() { document.querySelectorAll('[data-wx-slot], [data-wx-ask]').forEach(function (el) { el.outerHTML = wxChip(); }); }
@@ -5974,7 +6071,8 @@ function wgDetail(key) {
     (ag && ag.items && ag.items.length ? '<h3 class="wg-h">Working On Now</h3><div class="wgd-ag">' + ag.items.map(function (it) { return '<div><span class="wgd-st">' + esc(it[0]) + '</span><b>' + esc(it[1]) + '</b><p>' + esc(it[2] || '') + '</p></div>'; }).join('') + '</div>' +
       (ag.date ? '<p class="wgd-from">From the agenda for ' + esc(longDate(ag.date)) + '</p>' : '') : '') +
     (lead.length ? '<h3 class="wg-h">Who Leads It</h3><div class="wgd-lead">' + lead.map(function (l) { return '<div>' + avatarHtml({ id: 'wg:' + l.name, name: l.name, photo: 0 }) + '<span><b>' + esc(l.name) + '</b><span>' + esc(l.role) + (l.company ? ', ' + esc(l.company) : '') + '</span></span></div>'; }).join('') + '</div>' : '') +
-    (g.site && g.site.url ? '<a class="btn wgd-page" href="' + esc(g.site.url) + '" target="_blank" rel="noopener">' + icon('i-globe') + 'Visit the Group\'s Page on mismo.org</a>' : '') + '</div>';
+    (connectFor(g.site) ? '<a class="btn wgd-page" href="' + esc(connectFor(g.site)) + '" target="_blank" rel="noopener">' + icon('i-people') + 'Open the Group in MISMO Connect</a><span class="wgd-mc">MISMO Connect is for members: sign in with your mismo.org account.</span>' :
+      g.site && g.site.url ? '<a class="btn wgd-page" href="' + esc(g.site.url) + '" target="_blank" rel="noopener">' + icon('i-globe') + 'Visit the Group\'s Page on mismo.org</a>' : '') + '</div>';
   var el = openSheet(g.name, h, { plain: true });
   el.addEventListener('click', function (e) {
     if (e.target.closest('[data-wg-cal]')) { var b = el.querySelector('.wgd-cals'); if (b) b.hidden = !b.hidden; return; }
@@ -7070,11 +7168,11 @@ function widget(id) {
       '<span class="mx-go">Shop Now' + icon('i-chev') + '</span></button>';
   }
   if (id === 'news') return newsTile();
-  if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">Standards, library and more</span><span class="w-more">' + SITE_LINKS.slice(0, 5).map(function (l) { return '<span class="wm-li">' + esc(l[0]) + '</span>'; }).join('') + '</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
+  if (id === 'site') return '<button type="button" class="wd w-site" data-sitelinks>' + head() + '<span class="w-t">MISMO FRAME, Standards, and more</span><span class="w-more">' + SITE_LINKS.slice(0, 5).map(function (l) { return '<span class="wm-li">' + esc(l[0]) + '</span>'; }).join('') + '</span><span class="w-sub">' + SITE_LINKS.length + ' places to go</span></button>';
   return '';
 }
 /* turning the phone or resizing the window changes how many tiles fit across */
-if (window.matchMedia) ['(min-width:760px)', '(orientation:landscape) and (max-height:540px)'].forEach(function (q) { var m = window.matchMedia(q), f = function () { if (S.page === 'dash' && !stack.length) renderPage('dash'); }; if (m.addEventListener) m.addEventListener('change', f); else if (m.addListener) m.addListener(f); });
+if (window.matchMedia) ['(min-width:760px) and (min-height:541px)', '(orientation:landscape) and (max-height:540px)'].forEach(function (q) { var m = window.matchMedia(q), f = function () { if (S.page === 'dash' && !stack.length) renderPage('dash'); }; if (m.addEventListener) m.addEventListener('change', f); else if (m.addListener) m.addListener(f); });
 function renderDash() {
   var picks = dashPicks() || [];
   var h = greetHead(true) + wgSoonBanner();
@@ -7087,8 +7185,8 @@ function renderDash() {
   /* four across (tablets, computers, a phone on its side): count the columns used and widen the last squares so the
      final row has no empty space beside it (Jonna, Nov 26, 2026) */
   var mq = function (q) { return window.matchMedia && window.matchMedia(q).matches; };
-  if (mq('(min-width:760px)') || mq('(orientation:landscape) and (max-height:540px)')) {
-    var units = 0, big = mq('(min-width:760px)') && !mq('(orientation:landscape) and (max-height:540px)');   /* on a phone on its side the Summit tile spans two, not four */
+  if (mq('(min-width:760px) and (min-height:541px)')) {
+    var units = 0, big = true;   /* on a phone on its side the Summit tile spans two, not four */
     ws.forEach(function (w) { (w.match(/class="(?:wd|nextsum) [^"]*"|class="nextsum[^"]*"/g) || []).forEach(function (c) {
       units += /in-duo/.test(c) ? 0 : /\bduo\b/.test(c) ? 4 : /w-summit/.test(c) ? 4 : (!big && /w-mat|w-wg/.test(c)) ? 2 : /\bwide\b/.test(c) ? 2 : 1; }); });
     var rem = (4 - units % 4) % 4, last = ws.length - 1;
@@ -7502,9 +7600,9 @@ function micdupSheet(startId) {
 }
 function episodeSheet(id) { micdupSheet(id); }
 var SITE_ICON = { '/standards-resources': ['i-file', '#2477b8'], '/mismolibraries': ['i-agenda', '#1baf7a'], '/glossary': ['i-search', '#eda100'], '/standards-resources/certification': ['i-cert', '#eb6834'], '/standards-resources/mismo-link': ['i-bulb', '#74bfeb'], '/get-involved/workgroups': ['i-people', '#e87ba4'], '/membership': ['i-handshake', '#008300'], '/about-mismo/news': ['i-mail', '#7f93a6'],
-  '/standards-resources/digital-mortgage-resource-center': ['i-chart', '#eb6834'], '/events/boot-camp': ['i-cert', '#e87ba4'], '/mismo-frame': ['i-lock', '#008300'], '/about-mismo/contributor-awards': ['i-star', '#7f93a6'] };
+  '/standards-resources/digital-mortgage-resource-center': ['i-chart', '#eb6834'], '/events/boot-camp': ['i-cert', '#e87ba4'], '/mismo-frame': ['i-lock', '#008300'], '/about-mismo/contributor-awards': ['i-star', '#7f93a6'], '/standards-resources/business-process-model': ['i-grid', '#1baf7a'] };
 function siteSheet() {
-  var h = '<section class="site-hero">' + heroArt() + '<div class="site-in"><span class="site-k">' + icon('i-globe') + 'www.mismo.org</span><h2>Everything MISMO, One Tap Away</h2><p>The standards, the library, FRAME, Boot Camp and more.</p></div></section>' +
+  var h = '<section class="site-hero">' + heroArt() + '<div class="site-in"><span class="site-k">' + icon('i-globe') + 'www.mismo.org</span><h2>Everything MISMO, One Tap Away</h2><p>The standards, FRAME, Boot Camp and more.</p></div></section>' +
     '<div class="sheet-pad"><div class="site-grid">' + SITE_LINKS.map(function (l, i) {
       var ic = SITE_ICON[l[1]] || ['i-link', '#2477b8'];
       return '<a class="site-tile" href="' + SITE + l[1] + '" target="_blank" rel="noopener" style="--c:' + ic[1] + ';--i:' + i + '"><span class="st-ic">' + icon(ic[0]) + '</span><b>' + esc(l[0]) + '</b><span>' + esc(l[2]) + '</span><span class="st-go">' + icon('i-link') + '</span></a>';
@@ -7714,9 +7812,10 @@ function sessionSheet(id) {
   var gps = groupPages(x);
   if (gv || gps.length) h += '<div class="d-h">Meet the Group' + (gps.length > 1 ? 's' : '') + '</div>' + (gv ? player(gv.youtube, x.title) : '');
   gps.forEach(function (gp) {
-    h += '<a class="grp-card" href="' + esc(gp.url) + '" target="_blank" rel="noopener"><span class="grp-ic">' + icon('i-people') + '</span><span class="grp-tx"><b>' + esc(gp.name) + '</b>' +
+    var mc = connectFor(gp);
+    h += '<a class="grp-card" href="' + esc(mc || gp.url) + '" target="_blank" rel="noopener"><span class="grp-ic">' + icon('i-people') + '</span><span class="grp-tx"><b>' + esc(gp.name) + '</b>' +
       (gp.about ? '<span>' + esc(gp.about) + '</span>' : '') + (gp.meets && /^Meets (every|\d|1st|2nd|3rd|4th|monthly|weekly)/i.test(gp.meets) ? '<em>' + icon('i-clock') + esc(gp.meets) + '</em>' : '') +
-      '<strong>Visit the Group\'s Page on mismo.org' + icon('i-link') + '</strong></span></a>';
+      '<strong>' + (mc ? 'Open the Group in MISMO Connect' : 'Visit the Group\'s Page on mismo.org') + icon('i-link') + '</strong></span></a>';
   });
   if (x.type === 'General Session' && S.gs && S.gs.items.length) {
     h += '<div class="d-h">Running Order</div><div class="ro">' + S.gs.items.map(function (g) {

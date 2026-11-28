@@ -1,5 +1,9 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: Phones turn again: on its side a phone shows the same layout as upright, in one phone-width column (no stretched tiles or side rail).
+- Nov 28, 2026: The weather pop-up comes alive: a moving sky for the current conditions (sun, clouds, rain, snow, lightning or stars), the next 24 hours as a temperature line, the week's ranges colored by temperature, and today's sun path. On a computer the date line shows just the temperature.
+- Nov 28, 2026: A workgroup's page now opens its MISMO Connect community (Open the Group in MISMO Connect), for every group that has one.
+- Nov 28, 2026: mismo.org tile reads "MISMO FRAME, Standards, and more"; its places are Standards and Resources, Digital Mortgage Resource Center, Business Glossary, Business Process Model, MISMO FRAME, MISMO Link, Boot Camp and Contributor Awards.
 - Nov 28, 2026: News tile redone in its own press look (magenta): one release at a time rolling up, with a calm Press ticker along the bottom; the News page is a white front page with the same ticker. MISMO Merch is always the last tile.
 - Nov 28, 2026: Tap the weather for the forecast where you are (at the summit, the summit city): now, the next 24 hours and the week, plus Open The Weather Channel.
 - Nov 28, 2026: Weather by the date now shows on every copy of the date line (it could land on the hidden summit Home instead), and offers Try Again if the forecast can't load. The Lenders tile's words wrap clear of the coin. Privacy wording for the weather added for the website.
