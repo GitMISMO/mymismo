@@ -1874,6 +1874,35 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .chg-row{display:grid; gap:2px; text-align:left; border:0; background:none; padding:6px 0; border-top:1px solid var(--rule); color:var(--ink); font:inherit; cursor:pointer} .chg-row b{font-size:15px} .chg-row span{font-size:13.5px; color:var(--ink-2)}
 .chg-ok{justify-self:start}
 .picks{display:grid; gap:4px} .pick-why{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:#a2701a; margin:4px 0 -2px 72px} .pick-why svg{width:13px; height:13px}
+.rc-hero{position:relative; overflow:hidden; isolation:isolate; display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:12px; align-items:center; width:100%; margin:14px 0 4px; padding:18px 16px 18px 18px; border:1px solid rgba(242,193,78,.45); border-radius:18px; text-align:left; font:inherit; color:#fff; cursor:pointer; background:radial-gradient(80% 120% at 100% 0%, rgba(242,193,78,.38), transparent 60%), radial-gradient(70% 90% at 0% 100%, rgba(116,191,235,.25), transparent 60%), linear-gradient(150deg, #14486e, #0d314c 55%, #06202f); box-shadow:0 14px 30px -16px rgba(6,32,47,.7)}
+.rc-hero.dash{margin:0 0 14px}
+.rc-sparks{position:absolute; inset:0; z-index:-1; pointer-events:none}
+.rc-sparks i{position:absolute; width:4px; height:4px; border-radius:50%; background:#f2c14e; left:calc(4% + var(--i) * 6.6%); top:calc(12% + var(--t) * 1%); opacity:.0; animation:rc-twinkle 3.2s ease-in-out infinite; animation-delay:calc(var(--i) * .23s)}
+.rc-sparks i:nth-child(3n){background:#74bfeb} .rc-sparks i:nth-child(4n){width:3px; height:3px; background:#fff}
+@keyframes rc-twinkle{0%,100%{opacity:0; transform:scale(.6)}50%{opacity:.9; transform:scale(1.3)}}
+.rc-h-tx{display:grid; gap:8px; justify-items:start; min-width:0}
+.rc-h-eye{display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:6px; background:#f2c14e; color:#0d314c; font-size:12.5px; font-weight:800} .rc-h-eye svg{width:14px; height:14px; --star-fill:#0d314c}
+.rc-h-tx > b{font-family:var(--cond); font-size:clamp(22px, 6vw, 28px); line-height:1.05}
+.rc-h-stats{display:flex; gap:14px; flex-wrap:wrap} .rc-h-stats span{display:grid; font-size:11.5px; font-weight:600; color:#cfe3f1; line-height:1.15} .rc-h-stats b{font-family:var(--cond); font-size:26px; color:#fff}
+.rc-h-stats span:nth-child(1) b{color:#a9d8f3} .rc-h-stats span:nth-child(2) b{color:#7fe0b8} .rc-h-stats span:nth-child(3) b{color:#ffb38f}
+.rc-h-go{display:inline-flex; align-items:center; gap:4px; margin-top:2px; padding:9px 12px 9px 14px; border-radius:9px; background:#f2c14e; color:#0d314c; font-weight:800; font-size:14.5px; box-shadow:0 8px 18px -8px rgba(242,193,78,.8)} .rc-h-go svg{width:16px; height:16px}
+.rc-thumb{width:clamp(104px, 30vw, 150px); margin-right:4px; aspect-ratio:4 / 5; padding:6px 6px 16px; background:#fbfaf6; border-radius:4px; transform:rotate(4deg); box-shadow:0 16px 28px -10px rgba(0,0,0,.6); transition:transform .3s ease}
+.rc-thumb img{display:block; width:100%; height:100%; object-fit:cover; background:#0b2c46}
+.rc-hero:hover .rc-thumb, .rc-hero:active .rc-thumb{transform:rotate(0) scale(1.04)}
+@media (min-width:760px){
+  .rc-hero{padding:20px 24px}
+  .rc-h-tx{grid-template-columns:auto minmax(0, 1fr); grid-template-areas:"eye stats" "title stats" "go stats"; column-gap:28px; align-items:center}
+  .rc-h-eye{grid-area:eye} .rc-h-tx > b{grid-area:title; font-size:30px} .rc-h-go{grid-area:go}
+  .rc-h-stats{grid-area:stats; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; align-self:stretch; justify-self:stretch}
+  .rc-h-stats span{align-content:center; padding:12px 16px; border-radius:14px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); font-size:14px}
+  .rc-h-stats b{font-size:48px; line-height:1}
+}
+.rc-nums{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px}
+.rc-nums div{display:grid; gap:2px; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--c)}
+.rc-nums b{font-family:var(--cond); font-size:30px; line-height:1} .rc-nums span{font-size:12.5px; color:var(--ink-2); font-weight:600}
+.rc{position:relative}
+.rc-conf{inset:-10px 0 auto}
+@media (prefers-reduced-motion: reduce){ .rc-sparks i{animation:none; opacity:.6} .rc-thumb{transition:none} .rc-conf{display:none} }
 .rc-card{display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px; align-items:center; width:100%; margin:14px 0 4px; padding:14px; border:0; border-radius:16px; text-align:left; font:inherit; color:#fff; cursor:pointer; background:radial-gradient(90% 120% at 100% 0%, rgba(243,198,79,.45), transparent 60%), linear-gradient(150deg, #14486e, #0d314c 60%, #071d2e)}
 .rc-ic{width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:#f3c64f; color:#0d314c} .rc-ic svg{width:24px; height:24px}
 .rc-tx{display:grid; gap:3px} .rc-tx b{font-family:var(--cond); font-size:19px} .rc-tx span{font-size:13.5px; color:#cfe3f1} .rc-card > svg.go{width:20px; height:20px}
@@ -2835,8 +2864,30 @@ function picksBlock(limit) {
    them all to your contacts), your photos and the Photo Challenge, and a recap picture to save or share. All from this
    phone. App testers can preview it any time from the bottom of the Summit page. */
 function recapReady() { var n = nowAt(); return !!S.summit && n.date >= S.last; }
-function recapCard() {
-  return '<button type="button" class="rc-card" data-recap>' + '<span class="rc-ic">' + icon('i-star') + '</span><span class="rc-tx"><b>Your ' + esc(S.summit.name) + ' Recap</b><span>The sessions you starred, the people you met and your photos, in one place.</span></span>' + icon('i-chev', 'go') + '</button>';
+/* Jonna, Nov 27, 2026: "it should be a very cool thing": the recap card shows their own recap picture as a print, their
+   numbers, and a gold See My Recap. Everyone sees it from the summit's last day, on the Summit page and (for 30 days)
+   at the top of My Dashboard. */
+var RC_HERO = { key: '', url: '', n: null, busy: false };
+function recapOnDash() { if (!S.summit || !recapReady()) return false; var l = dparts(S.last), e = new Date(l.y, l.m - 1, l.d + 30), n = dparts(nowAt().date); return new Date(n.y, n.m - 1, n.d) <= e; }
+function recapCard(where) {
+  var n = RC_HERO.n;
+  setTimeout(recapHeroFill, 0);
+  return '<button type="button" class="rc-hero' + (where === 'dash' ? ' dash' : '') + '" data-recap><span class="rc-sparks" aria-hidden="true">' + Array.apply(null, Array(14)).map(function (z, i) { return '<i style="--i:' + i + ';--t:' + (i * 37 % 76) + '"></i>'; }).join('') + '</span>' +
+    '<span class="rc-h-tx"><span class="rc-h-eye">' + icon('i-star') + 'Your Recap Is Ready</span><b>My ' + esc(S.summit.name) + '</b>' +
+    '<span class="rc-h-stats">' + [['ses', 'Sessions'], ['met', 'People Met'], ['ph', 'Photos']].map(function (k) { return '<span><b data-rch="' + k[0] + '">' + (n ? n[k[0]] : '–') + '</b>' + k[1] + '</span>'; }).join('') + '</span>' +
+    '<span class="rc-h-go">See My Recap' + icon('i-chev') + '</span></span>' +
+    '<span class="rc-thumb" aria-hidden="true"><img alt=""' + (RC_HERO.url ? ' src="' + RC_HERO.url + '"' : '') + '></span></button>';
+}
+function recapHeroFill() {
+  if (RC_HERO.busy || !document.querySelector('.rc-hero')) return;
+  RC_HERO.busy = true;
+  recapData(function (d) {
+    var n = { ses: d.ses.length, met: d.met.length, ph: d.ph.length }, key = S.sid + ':' + n.ses + ':' + n.met + ':' + n.ph + ':' + d.ch;
+    function paint() { RC_HERO.busy = false; document.querySelectorAll('.rc-hero').forEach(function (c) { c.querySelectorAll('[data-rch]').forEach(function (b) { b.textContent = n[b.getAttribute('data-rch')]; }); var im = c.querySelector('.rc-thumb img'); if (im && RC_HERO.url && im.getAttribute('src') !== RC_HERO.url) im.src = RC_HERO.url; }); }
+    RC_HERO.n = n;
+    if (RC_HERO.key === key && RC_HERO.url) { paint(); return; }
+    recapPicture(d, function (b) { if (RC_HERO.url) URL.revokeObjectURL(RC_HERO.url); RC_HERO.url = URL.createObjectURL(b); RC_HERO.key = key; paint(); }, d.ph.slice(0, 3).map(function (p) { return p.blob; }));
+  });
 }
 function recapData(cb) {
   phAll(function (ph) {
@@ -2977,14 +3028,17 @@ function recapSheet() {
   function draw() { var im = box.querySelector('.rc-pic img'); if (im) im.style.opacity = '.55'; recapPicture(D, function (b) { pic = b; var im2 = box.querySelector('.rc-pic img'); if (im2) { im2.src = URL.createObjectURL(b); im2.style.opacity = ''; } }, sel.map(function (i) { return D.ph[i] && D.ph[i].blob; }).filter(Boolean)); }
   function build() { recapData(function (d) {
     D = d; sel = d.ph.slice(0, 3).map(function (p, i) { return i; });
-    box.innerHTML = '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
+    var first = !load('recap-seen:' + S.sid, false); save('recap-seen:' + S.sid, true);
+    box.innerHTML = (first ? '<div class="tg-confetti rc-conf" aria-hidden="true">' + Array.apply(null, Array(36)).map(function (x, n) { return '<i style="--x:' + (Math.random() * 100).toFixed(1) + '%;--d:' + (Math.random() * .9).toFixed(2) + 's;--c:' + ['#f2c14e', '#74bfeb', '#eb6834', '#4fc79b', '#ffffff'][n % 5] + '"></i>'; }).join('') + '</div>' : '') +
+      '<div class="rc-nums">' + [[d.ses.length, 'Sessions', '#74bfeb'], [d.met.length, 'People Met', '#4fc79b'], [d.ph.length, 'Photos', '#eb6834']].map(function (k) { return '<div style="--c:' + k[2] + '"><b data-count="' + k[0] + '">' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>' +
+      '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
       '<div class="ph-acts"><button type="button" class="btn primary rc-li" data-rc-li>' + icon('i-send') + 'Share on LinkedIn</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
       '<h3 class="wg-h">Sessions You Starred</h3>' + (d.ses.length ? slots(d.ses, { withDay: true }) : '<div class="note">You didn\'t star any sessions this time.</div>') +
       (canScan() ? '<div class="sct-h"><h3 class="wg-h">People You Met</h3>' + (d.met.length ? '<button type="button" class="linkbtn" data-rc-vcf>' + icon('i-download') + 'Save All to Contacts</button>' : '') + '</div>' +
         (d.met.length ? '<div class="rc-met">' + d.met.map(function (p) { return '<div class="rc-p' + (p.pic ? ' has-pic' : '') + '">' + metThumb(p, 'met-row') + '<b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span>' + (p.note ? '<i>' + esc(p.note) + '</i>' : '') + '</div>'; }).join('') + '</div>' : '<div class="note">Nobody scanned this time.</div>') : '') +
       '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<p class="rc-hint">Tap up to three to put them on your recap picture as little prints. Tap again to take one off.</p><div class="ph-grid rc-pick">' + d.ph.slice(0, 12).map(function (p, i) { return '<button type="button" class="ph-tile' + (sel.indexOf(i) >= 0 ? ' on' : '') + '" data-rc-ph="' + i + '" aria-pressed="' + (sel.indexOf(i) >= 0) + '"><img alt="" src="' + phThumb(p) + '"><i>' + (sel.indexOf(i) + 1 || '') + '</i></button>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
       '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
-    draw();
+    countUp(box); draw();
   }); }
   el.addEventListener('click', function (e) {
     var name = 'my-' + slug(S.summit.name), tp = e.target.closest('[data-rc-ph]');
@@ -3078,7 +3132,7 @@ function renderHome() {
     (during ? photosCard() : '') +   /* Jonna, Nov 27, 2026: once the summit starts, photos sit right under the four cards */
     nextCard('home');
 
-  if (recapReady()) h += recapCard();
+  if (recapReady()) h += recapCard('home');
   h += changesCard();
   var gsl = gsSession();
   if (gsl && liveWindow(gsl)) h += liveCard(gsl);
@@ -3108,10 +3162,8 @@ function renderHome() {
   if (!during) h += photosCard();
   if (A.ready && !A.token) h += '<div class="section-h"><h2>Meet Other Attendees</h2></div>' + joinCard();
   h += sponsorBand();
-  /* Jonna, Nov 26, 2026: when the agenda last changed in Summit HQ, and when this phone last got it (the server's time
-     on the copy it has, so an offline phone shows the true age of what it's showing) */
   if (!recapReady() && appTester()) h += '<div class="foot"><button type="button" class="linkbtn" data-recap>Preview: Your Summit Recap</button></div>';
-  if (S.updated) h += '<div class="foot">Agenda last changed ' + esc(stamp(S.updated)) + (S.checked ? '<br>App last checked ' + esc(stamp(S.checked)) : '') + '</div>';
+  /* Jonna, Nov 27, 2026: when the agenda last changed moved to Settings, as Last Update */
   return h;
 }
 /* The website's home hero (the skyline and its light trails), drawn behind the big headers, with the sign-in page's
@@ -6570,6 +6622,7 @@ if (window.matchMedia) ['(min-width:760px)', '(orientation:landscape) and (max-h
 function renderDash() {
   var picks = dashPicks() || [];
   var h = greetHead() + wgSoonBanner();
+  if (recapOnDash()) h += recapCard('dash');
   if (window.ResourcesSession && !staffSession() && load('staff-was', '')) h += '<div class="re-sign">' + icon('i-lock') + '<span><b>Your MISMO staff sign-in ended</b>Sign-ins last 8 hours. Sign in again to keep testing.</span><button type="button" class="btn small primary" data-staff-again>Sign In</button></div>';
   var ws = picks.map(widget).filter(Boolean);
     /* squares come in pairs; a square left on its own goes full width so there's no gap */
@@ -7361,7 +7414,10 @@ function settingsSheet() {
     setRow('i-file', 'Clear Saved Data', 'Signs you out and removes your schedule and settings from this phone.', '<button type="button" class="btn small" data-set="clear-all">Clear</button>') +
     '<a class="set-row link" href="https://www.mismo.org/privacy-policy#mymismo" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-lock') + '</span><div class="set-tx"><b>Privacy Policy</b><span>What MyMISMO collects, why, and how to delete it</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="delete-account/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-x') + '</span><div class="set-tx"><b>Delete Your Data</b><span>How to delete a MyMISMO account and its data</span></div>' + icon('i-chev') + '</a></div>';
-  h += '<div class="d-h">About</div><div class="set-card">' + setRow('i-s', 'MyMISMO', 'Version ' + esc(APP_VERSION) + (S.updated ? '. Agenda updated ' + esc(stamp(S.updated)) : '') + '.') +
+  h += '<div class="d-h">About</div><div class="set-card">' + setRow('i-s', 'MyMISMO', 'Version ' + esc(APP_VERSION) + '.') +
+    /* Jonna, Nov 27, 2026: when the agenda last changed in Summit HQ, and when this phone last got it (the server's time
+       on the copy it has, so an offline phone shows the true age of what it's showing) */
+    (S.updated || S.checked ? setRow('i-clock', 'Last Update', (S.updated ? 'Agenda last changed ' + esc(stamp(S.updated)) + '.' : '') + (S.checked ? (S.updated ? '<br>' : '') + 'App last checked ' + esc(stamp(S.checked)) + '.' : '')) : '') +
     (standalone() ? '' : setRow('i-link', 'Install MyMISMO', IOS ? 'Tap Share, then Add to Home Screen, to open it like an app.' : 'Use Install in your browser\'s menu to open it like an app.')) +
     '<a class="set-row link" href="support/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-chat') + '</span><div class="set-tx"><b>Help and Support</b><span>Answers to common questions</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="mailto:info@mismo.org?subject=MyMISMO"><span class="set-ic">' + icon('i-mail') + '</span><div class="set-tx"><b>Contact MISMO</b><span>info@mismo.org</span></div>' + icon('i-chev') + '</a>' +
