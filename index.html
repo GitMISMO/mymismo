@@ -2696,8 +2696,10 @@ function build(feed, spons) {
     S.sessions.push({ id: 'lunch-' + l.date, day: DOW[dparts(l.date).dow], date: l.date, a: g.a, b: g.b, type: 'Lunch', title: 'Lunch', room: '', desc: g.desc, sponsor: '', menu: '', gsItem: g });
   });
   /* Jonna, Nov 27, 2026: every break is on the Agenda too, as on the website, since food and drinks are often served */
+  var feedBrk = {}; S.sessions.forEach(function (x) { if (x.type === 'Break') feedBrk[x.date] = 1; });
   (((XTRA && XTRA.summits && XTRA.summits[pick.id]) || {}).breaks || []).forEach(function (k) {
-    if (!k || !k.date || S.sessions.some(function (x) { return x.date === k.date && x.type === 'Break' && x.a === mins(k.start); })) return;
+    /* once Summit HQ's feed carries a day's breaks (CN-069), the feed's own rows win for that day and this copy steps aside */
+    if (!k || !k.date || feedBrk[k.date]) return;
     S.sessions.push({ id: 'break-' + k.date + '-' + String(k.start).replace(/\W/g, ''), day: DOW[dparts(k.date).dow], date: k.date, a: mins(k.start), b: mins(k.end), type: 'Break', title: k.title || 'Break', room: k.room || '', desc: k.desc || '', sponsor: k.sponsor || '', menu: k.menu || '' });
   });
   S.sessions.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.a - b.a) || (a.b - b.b) || a.title.localeCompare(b.title); });

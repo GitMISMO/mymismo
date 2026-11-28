@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Agenda breaks: once Summit HQ's feed carries a day's breaks (CN-069), the feed's rows are used for that day and MyMISMO's own copy steps aside, so a break never shows twice.
 - Nov 27, 2026: Sponsor a Summit (CN-072): a dashboard tile and a button beside See All Sponsors open the Sponsorship Portal's phone prospectus (resources.mismo.org/Sponsorship-Prospectus/app/?from=mymismo) in the same window, so Back returns to MyMISMO. They show while any program is published on MyMISMO in /sponsors/prospectus-app.json, and until that file exists (Series + Winter is on).
 - Nov 27, 2026: Champions Lounge: Find on Map and Walk There work. The hotel's Elevator Prefunction is the Prefunction by the Floor 2 elevators, next to the Business Center (per Jonna).
 - Nov 27, 2026: Champions Lounge pop-up: the levels run Chair, Executive, Associate, each in its own color (gold, blue, green).
