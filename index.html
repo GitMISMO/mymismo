@@ -1896,6 +1896,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .rc{position:relative}
 .rc-fw-go{width:100%; justify-content:center; gap:10px; border:1px solid #6d3ba8; color:#fff; background:linear-gradient(100deg, #4b1f72, #6d3ba8 40%, #1d7a45 75%, #b8891f); font-weight:800}
 .rc-fw-dots{display:inline-flex; gap:3px} .rc-fw-dots i{width:7px; height:7px; border-radius:50%; background:#f2c14e} .rc-fw-dots i:nth-child(1){background:#b36bff} .rc-fw-dots i:nth-child(2){background:#3ddc84}
+.lg-here{list-style:none; margin:0 0 6px; padding:0; display:grid; gap:8px} .lg-here li{display:grid; grid-template-columns:20px 1fr; gap:10px; align-items:start; font-size:14px; line-height:1.45} .lg-here svg{width:18px; height:18px; margin-top:2px; color:var(--link)}
 .rc-fw-btn{display:inline-flex; align-items:center; gap:6px; justify-self:start; margin-top:8px} .rc-fw-btn svg{width:15px; height:15px}
 .rc-fw{position:absolute; left:0; top:0; width:100%; z-index:5; pointer-events:none; transition:opacity .4s ease}
 .rc-conf{position:absolute; inset:-10px 0 auto; height:0; z-index:5; pointer-events:none}
@@ -3489,6 +3490,9 @@ function loungeSheet(title, day) {
     '<div class="cv-foot">' + (x.room && roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">' + icon('i-pin') + 'Find on Map</button>' + (walkData() ? '<button type="button" class="findmap" data-walk="' + esc(x.room) + '">' + icon('i-walk') + 'Walk There</button>' : '') : '') + '</div>' +
     '</div><div class="sheet-pad">';
   h += '<p class="lg-lead">' + esc(x.desc || '') + ' Stop by any time during the day to sit down, meet up or catch your breath between sessions.</p>';
+  /* Jonna, Nov 27, 2026: the Elevator Prefunction on Floor 3: central, with the Pelican foyer to the left as you come in and
+     the La Salle Ballroom foyer to the right; lounge seating, outlets all around the room and bottled water (hotel resume) */
+  if (/champion/i.test(x.title)) h += '<div class="d-h">What\'s There</div><ul class="lg-here">' + [['i-pin', 'Right off the Floor 3 elevators, between the Pelican foyer (to your left) and the La Salle Ballroom foyer (to your right)'], ['i-people', 'Lounge seating to sit down, meet up or take a call'], ['i-bulb', 'Power outlets all around the room to charge your phone or laptop'], ['i-fork', 'Bottled water']].map(function (k) { return '<li>' + icon(k[0]) + '<span>' + k[1] + '</span></li>'; }).join('') + '</ul>';
   if (m && m.levels && m.levels.length) {
     h += '<div class="d-h">Become a MISMO Champion</div><p class="lg-p">Champion membership is for companies that want to support MISMO at a higher level than Corporate membership. Every level includes all the core member benefits, the Champions Lounge at every summit, and more:</p>' +
       '<div class="lg-levels">' + m.levels.map(function (l, i) {
@@ -3774,6 +3778,8 @@ function usedRooms() {
 }
 function floorView(f, fl, pick, thumb) {
   var band = fl.y1 - fl.y0, used = usedRooms().filter(function (u) { return u.pin.floor === fl.floor; });
+  /* a picked place no session uses (the Champions Lounge) still gets its pin */
+  var pp = pick && roomPin(pick); if (pp && pp.floor === fl.floor && !used.some(function (u) { return rkey(u.room) === rkey(pick); })) used = used.concat([{ room: pick, pin: pp, n: 0 }]);
   var pins = used.map(function (u) {
     var on = pick && rkey(pick) === rkey(u.room);
     // the thumbnail sits inside a button, so its pins are plain dots (a button can't hold another button)
