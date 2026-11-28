@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Opening screen and iPhone launch screens: the My is the same size next to MISMO as in the top bar (it was a little bigger).
 - Nov 27, 2026: MyMISMO reads as one word: the MISMO logo is white with its blue S and no white box, right up against the Speed "My", which is sized and lined up to sit on the same line, in the top bar, the opening screen and the iPhone launch screens.
 - Nov 27, 2026: New home screen icon (Jonna's pick, A): the Speed "My" on top and the MISMO wordmark (white, blue S) running off the right edge of the icon.
 - Nov 27, 2026: The MyMISMO brand, Speed style (Jonna's pick): a bold slanted white "My" with blue speed lines and a soft glow, right before the MISMO logo plate, in the top bar (the lines streak in when the app opens) and on the opening screen. New home screen icon (the Speed "My" above the blue S) for Android, iPhone and the install banner, and new iPhone launch screens with the lockup. The MISMO logo itself is unchanged.
