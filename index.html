@@ -559,11 +559,18 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-mat .w-t{font-size:15.5px; line-height:1.22; color:#0d314c; -webkit-line-clamp:3}
 .wm-paper .wm-p{color:#456179} .wm-paper .wm-k{color:#7794aa} .wm-paper .wm-li{color:#14486e; border-top-color:#e5eef5}
 @media (prefers-reduced-motion: reduce){ .wm-paper{transition:none} }
-.lounge{display:flex; align-items:center; gap:12px; margin:0 0 12px; padding:12px 14px; border-radius:12px; background:linear-gradient(100deg, #0d314c, #14486e); color:#fff; border:1px solid #f2c14e55}
+.lounge{width:100%; text-align:left; font:inherit; cursor:pointer; display:flex; align-items:center; gap:12px; margin:0 0 12px; padding:12px 14px; border-radius:12px; background:linear-gradient(100deg, #0d314c, #14486e); color:#fff; border:1px solid #f2c14e55}
 .lg-ic{flex:none; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:#f2c14e; color:#0d314c} .lg-ic svg{width:19px; height:19px; --star-fill:#0d314c}
 .lg-tx{flex:1; min-width:0; display:grid; gap:2px} .lg-tx b{font-size:15.5px} .lg-tx > span{font-size:13px; color:rgba(255,255,255,.8); line-height:1.35}
 .lg-tx .lg-rm{display:inline-flex; align-items:center; gap:4px; font-weight:700; color:#f2c14e; margin-top:2px} .lg-rm svg{width:14px; height:14px}
-.lounge .btn{flex:none; background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.3); color:#fff}
+.lounge .lg-go{flex:none; width:18px; height:18px; color:rgba(255,255,255,.7)}
+.lg-lead{margin:0 0 4px; font-size:15px; line-height:1.5} .lg-p{margin:0 0 12px; color:var(--ink-2); font-size:14px; line-height:1.5}
+.lg-levels{display:grid; gap:10px} @media (min-width:700px){ .lg-levels{grid-template-columns:repeat(3, minmax(0, 1fr))} }
+.lg-lv{border:1px solid var(--border); border-top:4px solid #f2c14e; border-radius:12px; background:var(--surface); padding:12px 14px}
+.lg-lv:nth-child(2){border-top-color:#e0a83c} .lg-lv:nth-child(3){border-top-color:#c98500}
+.lg-lv-h{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px} .lg-lv-h b{font-size:15.5px} .lg-lv-h span{font-family:var(--cond); font-weight:700; font-size:17px; color:var(--ink-2)}
+.lg-lv ul{list-style:none; margin:0; padding:0; display:grid; gap:6px} .lg-lv li{display:grid; grid-template-columns:16px 1fr; gap:7px; font-size:13.5px; line-height:1.4} .lg-lv li svg{width:15px; height:15px; margin-top:2px; color:#1baf7a}
+.lg-fine{margin:12px 0 0; font-size:13px; color:var(--ink-2)} .lg-fine a{color:var(--link)}
 /* the mini MISMO Matters */
 .wm-paper.nl{padding:0; border-radius:5px; container-type:inline-size}
 @container (max-width:200px){ .nl-vp .pre{display:none} }
@@ -3292,13 +3299,34 @@ function renderAgenda() {
   if (!q && !S.type) h += lounges(S.day);
   return h + slots(list, { withDay: !!q });
 }
+function loungeList(day) { return (((XTRA && XTRA.summits && XTRA.summits[S.sid]) || {}).lounges || []).filter(function (x) { return x && (!day || !x.days || x.days.indexOf(day) >= 0); }); }
 function lounges(day) {
-  var l = (((XTRA && XTRA.summits && XTRA.summits[S.sid]) || {}).lounges || []).filter(function (x) { return x && (!x.days || x.days.indexOf(day) >= 0); });
-  return l.map(function (x) {
-    return '<div class="lounge"><span class="lg-ic">' + icon('i-star') + '</span><div class="lg-tx"><b>' + esc(x.title) + '</b><span>' + esc(x.desc || '') + '</span>' +
-      (x.room ? '<span class="lg-rm">' + icon('i-pin') + esc(x.room) + '</span>' : '') + '</div>' +
-      (x.room && roomPin(x.room) ? '<button type="button" class="btn small" data-map="' + esc(x.room) + '">Find on Map</button>' : '') + '</div>';
+  return loungeList(day).map(function (x) {
+    return '<button type="button" class="lounge" data-lounge="' + esc(x.title) + '"><span class="lg-ic">' + icon('i-star') + '</span><span class="lg-tx"><b>' + esc(x.title) + '</b><span>' + esc(x.desc || '') + '</span>' +
+      (x.room ? '<span class="lg-rm">' + icon('i-pin') + esc(x.room) + '</span>' : '') + '</span>' + icon('i-chev', 'lg-go') + '</button>';
   }).join('');
+}
+/* Jonna, Nov 27, 2026: the Champions Lounge pop-up, like a session's: where it is, Find on Map and Walk There, and how a
+   company becomes a MISMO Champion (from mismo.org/membership, kept in data/agenda-extras.json) */
+function loungeSheet(title) {
+  var x = loungeList('').filter(function (l) { return l.title === title; })[0]; if (!x) return;
+  var ds = (x.days || []).slice().sort(), m = (XTRA && XTRA.membership) || null;
+  var when = ds.length ? (ds.length > 1 ? DOW[dparts(ds[0]).dow] + ' to ' + DOW[dparts(ds[ds.length - 1]).dow] + ', ' + (function (a, b) { return MONTH[a.m - 1] + ' ' + a.d + ' to ' + (b.m !== a.m ? MONTH[b.m - 1] + ' ' : '') + b.d; })(dparts(ds[0]), dparts(ds[ds.length - 1])) : longDate(ds[0])) : '';
+  var h = '<div class="cover"><span class="k">For MISMO Champions</span><h2>' + esc(x.title) + '</h2>' +
+    '<div class="w">' + (when ? '<div>' + icon('i-agenda') + esc(when) + '</div>' : '') + (x.room ? '<div>' + icon('i-pin') + esc(x.room) + '</div>' : '') + '</div>' +
+    '<div class="cv-foot">' + (x.room && roomPin(x.room) ? '<button type="button" class="findmap" data-map="' + esc(x.room) + '">' + icon('i-pin') + 'Find on Map</button>' + (walkData() ? '<button type="button" class="findmap" data-walk="' + esc(x.room) + '">' + icon('i-walk') + 'Walk There</button>' : '') : '') + '</div>' +
+    '</div><div class="sheet-pad">';
+  h += '<p class="lg-lead">' + esc(x.desc || '') + ' Stop by any time during the day to sit down, meet up or catch your breath between sessions.</p>';
+  if (m && m.levels && m.levels.length) {
+    h += '<div class="d-h">Become a MISMO Champion</div><p class="lg-p">Champion membership is for companies that want to support MISMO at a higher level than Corporate membership. Every level includes all the core member benefits, the Champions Lounge at every summit, and more:</p>' +
+      '<div class="lg-levels">' + m.levels.map(function (l, i) {
+        return '<section class="lg-lv" style="--i:' + i + '"><div class="lg-lv-h"><b>' + esc(l.name) + '</b><span>' + esc(l.price) + '</span></div><ul>' + l.perks.map(function (p) { return '<li>' + icon('i-check') + '<span>' + esc(p) + '</span></li>'; }).join('') + '</ul></section>';
+      }).join('') + '</div>' +
+      '<div class="d-actions two" style="margin-top:14px">' + (m.apply ? '<a class="btn primary" href="' + esc(m.apply) + '" target="_blank" rel="noopener">' + icon('i-edit') + 'Apply for Membership</a>' : '') +
+      (m.compare ? '<a class="btn" href="' + esc(m.compare) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Compare All Levels</a>' : '') + '</div>' +
+      '<p class="lg-fine">' + (m.lenders ? 'Lenders join through the <a href="' + esc(m.lenders) + '" target="_blank" rel="noopener">Innovation Investment Fund</a>. ' : '') + (m.email ? 'Questions? Email <a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a>.' : '') + '</p>';
+  }
+  openSheet(x.title, h + '</div>', { color: '#14486e' });
 }
 
 /* ---------- My Schedule ---------- */
@@ -7619,6 +7647,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-slide')) { downloadSlide(t); return; }
   if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
+  if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge')); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
   if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }
   if (t.hasAttribute('data-ph-take')) { phTake(t.getAttribute('data-ph-take'), t.getAttribute('data-ph-prompt') || ''); return; }
