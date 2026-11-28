@@ -1,5 +1,9 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Agenda: picking a filter (Networking, Invite Only) keeps the row of filters where it was, with the one you picked in view, instead of jumping back to the start.
+- Nov 27, 2026: Pop-up headers with no Find on Map buttons (the Champions Lounge, and sessions with no room on the map) fill the header with the skyline instead of leaving a gap under it.
+- Nov 27, 2026: Recap: Play the Fireworks Again is a Mardi Gras button under Share on LinkedIn and Save Picture, for everyone after the summit.
+- Nov 27, 2026: MISMO Merch on small phones: the bag button no longer pushes past the edge (the pop-up could scroll sideways).
 - Nov 27, 2026: The MISMO Trivia star and the Mic'd Up mic on their dashboard tiles are white, so they stand out on the dark tiles in light mode.
 - Nov 27, 2026: Recap: See the Fireworks in the preview (under Example and Mine So Far) plays the fireworks any time, and after the summit Play the Fireworks Again at the bottom of the recap lets anyone see them again.
 - Nov 27, 2026: The recap's first-time celebration is fireworks instead of confetti: eight rockets that climb and burst over the recap picture in Mardi Gras purple, green and gold for New Orleans (MISMO's blues, gold and orange for other cities), gone in about five seconds. Still only the first time after the summit, never in the preview, and off for phones set to reduce motion.

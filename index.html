@@ -871,7 +871,7 @@ html[data-theme="dark"] .w-merch{background:linear-gradient(115deg, #123143 0%, 
 .mx{--mx-ink:var(--ink)}
 .mx-top{position:sticky; top:0; z-index:5; display:flex; gap:10px; align-items:center; padding:10px 14px; background:color-mix(in srgb, var(--ground) 88%, transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--rule)}
 .mx-top-i{justify-content:space-between}
-.mx-search{flex:1; display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border-strong); border-radius:10px; padding:0 12px; height:42px}
+.mx-search{flex:1; min-width:0; display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border-strong); border-radius:10px; padding:0 12px; height:42px}
 .mx-search svg{width:18px; height:18px; color:var(--ink-3)} .mx-search input{flex:1; min-width:0; border:0; background:transparent; font:inherit; font-size:15px; color:var(--ink); outline:0}
 .mx-bagbtn{position:relative; flex:none; width:46px; height:42px; display:grid; place-items:center; border-radius:10px; border:0; background:#0d314c; color:#fff; cursor:pointer}
 .mx-bagbtn svg{width:21px; height:21px}
@@ -1901,6 +1901,8 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .rc-nums div{display:grid; gap:2px; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--c)}
 .rc-nums b{font-family:var(--cond); font-size:30px; line-height:1} .rc-nums span{font-size:12.5px; color:var(--ink-2); font-weight:600}
 .rc{position:relative}
+.rc-fw-go{width:100%; justify-content:center; gap:10px; border:1px solid #6d3ba8; color:#fff; background:linear-gradient(100deg, #4b1f72, #6d3ba8 40%, #1d7a45 75%, #b8891f); font-weight:800}
+.rc-fw-dots{display:inline-flex; gap:3px} .rc-fw-dots i{width:7px; height:7px; border-radius:50%; background:#f2c14e} .rc-fw-dots i:nth-child(1){background:#b36bff} .rc-fw-dots i:nth-child(2){background:#3ddc84}
 .rc-fw-btn{display:inline-flex; align-items:center; gap:6px; justify-self:start; margin-top:8px} .rc-fw-btn svg{width:15px; height:15px}
 .rc-fw{position:absolute; left:0; top:0; width:100%; z-index:5; pointer-events:none; transition:opacity .4s ease}
 .rc-conf{position:absolute; inset:-10px 0 auto; height:0; z-index:5; pointer-events:none}
@@ -1995,7 +1997,7 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .roomrow .fl{width:28px; height:28px; border-radius:7px; display:grid; place-items:center; background:#c99a2e; color:#fff; font-family:var(--cond); font-weight:700}
 .roomrow > span:not(.fl){color:var(--ink-2); font-size:13px}
 .roomrow svg{width:17px; height:17px; color:var(--ink-3)}
-.cv-foot{display:flex; align-items:flex-end; gap:10px 12px; flex-wrap:wrap; margin-top:14px}
+.cv-foot{display:flex; align-items:flex-end; gap:10px 12px; flex-wrap:wrap; margin-top:14px} .cv-foot:empty{display:none}
 .cv-foot:empty{display:none}
 .cv-foot .spline{margin-top:0}
 .sheet .cover .cv-foot{display:grid; grid-template-columns:1fr 1fr; gap:8px; max-width:340px} .sheet .cover .cv-foot .findmap{margin:0; justify-content:center; padding:9px 11px; font-size:14px} .sheet .cover .cv-foot .findmap:only-child{grid-column:1}
@@ -2261,7 +2263,7 @@ nav.tabbar .badge.on{display:grid}
 .cover.sum > svg, .cover.sum > .hero-art{position:absolute; inset:0; z-index:0; opacity:.9}
 .cover.sum > .art-fade{position:absolute; z-index:0}
 /* Jonna, Nov 27, 2026: the skyline (and its streetcar) ends just above Find on Map and Walk There */
-.cover.sum:has(.cv-foot) > svg{inset:0 0 auto 0; height:calc(100% - 68px)}
+.cover.sum:has(.cv-foot:not(:empty)) > svg{inset:0 0 auto 0; height:calc(100% - 68px)}
 .cover.sum .k{background:var(--tagc, rgba(255,255,255,.16)); border-color:color-mix(in srgb, var(--tagc, #fff) 70%, #fff)}
 
 .cover .k{display:inline-block; font-size:12.5px; font-weight:700; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:4px; padding:3px 8px}
@@ -3074,12 +3076,13 @@ function recapSheet() {
       '<div class="rc-nums">' + [[d.ses.length, 'Sessions', '#74bfeb'], [d.met.length, 'People Met', '#4fc79b'], [d.ph.length, 'Photos', '#eb6834']].map(function (k) { return '<div style="--c:' + k[2] + '"><b data-count="' + k[0] + '">' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>' +
       '<div class="rc-pic"><img alt="Your summit recap picture"></div>' +
       '<div class="ph-acts"><button type="button" class="btn primary rc-li" data-rc-li>' + icon('i-send') + 'Share on LinkedIn</button><button type="button" class="btn" data-rc-save>' + icon('i-download') + 'Save Picture</button></div>' +
+      /* Jonna, Nov 27, 2026: the fireworks are a feature: anyone can play them again, any time */
+      (recapReady() ? '<button type="button" class="btn rc-fw-go" data-rc-fw><span class="rc-fw-dots" aria-hidden="true"><i></i><i></i><i></i></span>Play the Fireworks Again</button>' : '') +
       '<h3 class="wg-h">Sessions You Starred</h3>' + (d.ses.length ? slots(d.ses, { withDay: true }) : '<div class="note">You didn\'t star any sessions this time.</div>') +
       (canScan() ? '<div class="sct-h"><h3 class="wg-h">People You Met</h3>' + (d.met.length ? '<button type="button" class="linkbtn" data-rc-vcf>' + icon('i-download') + 'Save All to Contacts</button>' : '') + '</div>' +
         (d.met.length ? '<div class="rc-met">' + d.met.map(function (p) { return '<div class="rc-p' + (p.pic ? ' has-pic' : '') + '">' + metThumb(p, 'met-row') + '<b>' + esc(p.name) + '</b><span>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</span>' + (p.note ? '<i>' + esc(p.note) + '</i>' : '') + '</div>'; }).join('') + '</div>' : '<div class="note">Nobody scanned this time.</div>') : '') +
       '<h3 class="wg-h">Your Photos</h3>' + (d.ph.length ? '<p class="rc-hint">Tap up to three to put them on your recap picture as little prints. Tap again to take one off.</p><div class="ph-grid rc-pick">' + d.ph.slice(0, 12).map(function (p, i) { return '<button type="button" class="ph-tile' + (sel.indexOf(i) >= 0 ? ' on' : '') + '" data-rc-ph="' + i + '" aria-pressed="' + (sel.indexOf(i) >= 0) + '"><img alt="" src="' + phThumb(p) + '"><i>' + (sel.indexOf(i) + 1 || '') + '</i></button>'; }).join('') + '</div>' : '<div class="note">No photos this time. Next summit, try the Photo Challenge.</div>') +
-      '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>' +
-      (recapReady() ? '<button type="button" class="linkbtn rc-fw-btn" data-rc-fw>' + icon('i-star') + 'Play the Fireworks Again</button>' : '');
+      '<p class="sc-fine">Your recap is made on this phone from what you saved here.</p>';
     countUp(box); draw();
     if (first) recapFireworks(box);
   }); }
@@ -6931,7 +6934,11 @@ function siteSheet() {
 var RENDER = { dash: renderDash, home: renderHome, agenda: renderAgenda, mine: renderMine, people: renderPeople, explore: renderExplore };
 function renderPage(p) {
   var el = $('#pg-' + p), act = document.activeElement, keep = act && act.id, caret = act && act.selectionStart;
+  /* Jonna, Nov 27, 2026: picking a filter (Networking, Invite Only) kept jumping the row of filters back to the start;
+     each sideways-scrolling row keeps its place, and the picked filter stays in view */
+  var rows = Array.prototype.map.call(el.querySelectorAll('.chips, .days'), function (r) { return r.scrollLeft; });
   el.innerHTML = RENDER[p]() + (p === 'agenda' || p === 'mine' || p === 'people' ? sponsorBand() : '');
+  Array.prototype.forEach.call(el.querySelectorAll('.chips, .days'), function (r, i) { if (rows[i]) r.scrollLeft = rows[i]; var on = r.querySelector('[aria-pressed="true"]'); if (on) { var a = on.getBoundingClientRect(), b = r.getBoundingClientRect(); if (a.left < b.left) r.scrollLeft -= b.left - a.left + 12; else if (a.right > b.right) r.scrollLeft += a.right - b.right + 12; } });
   paintScanBtn();
   if (keep && /-q$/.test(keep)) { var i = $('#' + keep); if (i) { i.focus(); try { i.setSelectionRange(caret, caret); } catch (e) {} } }
   if (p === 'home') S.flipped = true;
