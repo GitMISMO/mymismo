@@ -5646,6 +5646,7 @@ try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', func
 function darkNow() { var t = document.documentElement.getAttribute('data-theme'); return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
 try { if (/^android-app:\/\/org\.mismo\.mymismo/.test(document.referrer)) save('twa', true); } catch (e) {}
 function triviaTester() {
+  if (TRIVIA_LIVE) return true;   /* once MISMO's server is live, Solo and Head to Head are open to everyone (the store build included) */
   if (STORE_RELEASE) return false;
   if (/[?&]trivia=test\b/.test(location.search)) save('trivia-tester', true);   /* the test link is remembered on this phone */
   return appTester() || load('trivia-tester', false);
