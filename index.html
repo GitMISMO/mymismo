@@ -1924,6 +1924,126 @@ a.be-spon.foot .bs-tx > b{color:#f2c14e}
 .rc-nums div{display:grid; gap:2px; padding:10px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--c)}
 .rc-nums b{font-family:var(--cond); font-size:30px; line-height:1} .rc-nums span{font-size:12.5px; color:var(--ink-2); font-weight:600}
 .rc{position:relative}
+/* ==== Membership pages (Jonna, Nov 28, 2026) ==== */
+.mm{display:grid; gap:26px; padding:14px 14px 18px}
+.mm section{position:relative}
+.mm-rails{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0}
+.mm-rails path{fill:none; stroke:#74bfeb; stroke-width:1.2; opacity:.28; stroke-dasharray:6 14; animation:mm-flow 6s linear infinite; animation-delay:calc(var(--i) * -.9s)}
+.mm-rails path:nth-child(3n){stroke:#f2c14e; opacity:.22}
+@keyframes mm-flow{to{stroke-dashoffset:-200}}
+.mm-hero{overflow:hidden; isolation:isolate; padding:22px 18px 20px; border-radius:18px; color:#fff; background:radial-gradient(90% 70% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.mm-hero.gold{background:radial-gradient(90% 70% at 100% 0%, rgba(242,193,78,.38), transparent 60%), linear-gradient(160deg, #14486e 0%, #0d314c 55%, #06202f 100%)}
+.mm-hero > *:not(svg){position:relative; z-index:1}
+.mm-kick{display:inline-flex; align-items:center; gap:7px; padding:5px 10px; border-radius:7px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); font-size:12.5px; font-weight:700; color:#cfe3f1}
+.mm-kick svg{width:15px; height:15px; color:#f2c14e}
+.mm-hero h2{margin:14px 0 8px; font-family:var(--cond); font-size:clamp(34px, 10vw, 46px); line-height:.98; letter-spacing:-.01em}
+.mm-lead{margin:0; font-size:16.5px; line-height:1.45; color:#e4f2fb; font-weight:600}
+.mm-sub{margin:12px 0 0; font-size:14px; line-height:1.5; color:#a9d8f3}
+.mm-price{display:flex; align-items:center; gap:12px; margin:16px 0 4px}
+.mm-price b{font-family:var(--cond); font-size:clamp(60px, 19vw, 84px); line-height:.9; color:#f2c14e; text-shadow:0 0 28px rgba(242,193,78,.45)}
+.mm-price span{font-size:14px; line-height:1.25; font-weight:700; color:#fff}
+.mm-words{display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:16px}
+.mm-words span{font-family:var(--cond); font-weight:700; font-size:15px; color:rgba(255,255,255,.35); animation:mm-word 6s ease-in-out infinite; animation-delay:calc(var(--k, 0) * 1.5s)}
+.mm-words span:nth-child(1){--k:0} .mm-words span:nth-child(2){--k:1} .mm-words span:nth-child(3){--k:2} .mm-words span:nth-child(4){--k:3}
+@keyframes mm-word{0%,30%,100%{color:rgba(255,255,255,.35)} 8%,22%{color:#74bfeb; text-shadow:0 0 14px rgba(116,191,235,.6)}}
+.mm-goal{margin:6px 0 0; font-size:13px; font-weight:700; color:#f2c14e}
+.mm-h{margin:0 0 6px; font-family:var(--cond); font-size:24px; line-height:1.1}
+.mm-p{margin:0 0 12px; color:var(--ink-2); font-size:14.5px; line-height:1.5}
+.mm-card{padding:16px; border-radius:16px; background:var(--surface); border:1px solid var(--border); box-shadow:0 10px 26px -18px rgba(13,49,76,.45)}
+.mm-card h3{margin:0 0 6px; font-family:var(--cond); font-size:22px}
+.mm-in{display:grid; gap:6px; font-size:13px; font-weight:700; color:var(--ink-2)}
+.mm-in input{font:inherit; font-family:var(--cond); font-size:26px; font-weight:700; color:var(--ink); padding:10px 12px; border-radius:10px; border:1.5px solid var(--border-strong); background:var(--surface-2); width:100%; box-sizing:border-box}
+.mm-in input:focus{outline:none; border-color:var(--link); box-shadow:0 0 0 3px rgba(116,191,235,.35)}
+.mm-chips{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 14px}
+.mm-chips .chip{border-radius:8px}
+.mm-chips .chip[aria-pressed="true"]{background:var(--navy-mid, #14486e); color:#fff; border-color:transparent}
+.mm-due{display:grid; justify-items:start; gap:2px; padding:14px 16px; border-radius:12px; background:linear-gradient(135deg, #0d314c, #14486e); color:#fff}
+.mm-due span{font-size:13.5px; color:#a9d8f3; font-weight:600}
+.mm-due b{font-family:var(--cond); font-size:48px; line-height:1; color:#f2c14e; font-variant-numeric:tabular-nums}
+.mm-due em{font-style:normal; font-size:13px; font-weight:700}
+.mm-ok{display:flex; gap:8px; align-items:flex-start; margin:10px 0 0; font-size:13.5px; line-height:1.4; color:var(--ink-2)}
+.mm-ok svg{flex:none; width:17px; height:17px; margin-top:1px; color:var(--link)} .mm-ok.yes{color:var(--good)} .mm-ok.yes svg{color:var(--good)}
+.mm-stat{display:grid; gap:6px; padding:16px; border-radius:16px; background:color-mix(in srgb, #74bfeb 20%, var(--surface)); border:1px solid var(--border)}
+.mm-stat div{display:flex; align-items:flex-start} .mm-stat b{font-family:var(--cond); font-size:54px; line-height:.95; color:var(--ink); font-variant-numeric:tabular-nums} .mm-stat i{font-style:normal; font-family:var(--cond); font-size:34px; font-weight:800; color:#2477b8}
+.mm-stat p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-2)}
+.mm-why{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px}
+.mm-w{padding:14px 13px; border-radius:14px; background:var(--surface); border:1px solid var(--border); display:grid; gap:6px; align-content:start}
+.mm-w > span{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, #74bfeb, #2477b8); color:#fff} .mm-w > span svg{width:19px; height:19px}
+.mm-w b{font-size:14.5px; line-height:1.25} .mm-w p{margin:0; font-size:13px; line-height:1.45; color:var(--ink-2)}
+.mm-how{list-style:none; margin:0; padding:0 0 0 4px; display:grid; gap:0; position:relative}
+.mm-how::before{content:""; position:absolute; left:20px; top:18px; bottom:18px; width:3px; border-radius:2px; background:linear-gradient(#74bfeb, #2477b8, #f2c14e)}
+.mm-how li{display:grid; grid-template-columns:34px 1fr; gap:12px; padding:8px 0; position:relative}
+.mm-dot{width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:var(--surface); border:3px solid #2477b8; font-weight:800; color:var(--ink); position:relative; z-index:1}
+.mm-how b{font-size:15px} .mm-how p{margin:2px 0 0; font-size:13.5px; line-height:1.45; color:var(--ink-2)}
+.mm-ex{display:flex; gap:8px; margin:10px 0 0; padding:10px 12px; border-radius:10px; background:var(--surface-2); border:1px dashed var(--border-strong); font-size:13.5px; line-height:1.4}
+.mm-ex svg{flex:none; width:17px; height:17px; color:var(--link); margin-top:1px}
+.mm-acc{display:grid; gap:8px}
+.mm-acc details{border-radius:12px; background:var(--surface); border:1px solid var(--border); overflow:hidden}
+.mm-acc summary{list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; padding:13px 14px; font-weight:700; font-size:14.5px; line-height:1.3}
+.mm-acc summary::-webkit-details-marker{display:none}
+.mm-acc summary svg{flex:none; width:18px; height:18px; color:var(--link); transition:transform .25s} .mm-acc details[open] summary svg{transform:rotate(45deg)}
+.mm-acc details[open]{border-color:#74bfeb; box-shadow:inset 4px 0 0 #74bfeb}
+.mm-acc ul{list-style:none; margin:0; padding:0 14px 13px; display:grid; gap:7px}
+.mm-acc li, .mm-core li{display:grid; grid-template-columns:18px 1fr; gap:8px; font-size:13.5px; line-height:1.45}
+.mm-acc li svg, .mm-core li svg{width:16px; height:16px; margin-top:2px; color:#1baf7a}
+.mm-next{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.mm-next li{display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; padding:12px 14px; border-radius:12px; background:var(--surface); border:1px solid var(--border)}
+.mm-num{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; background:linear-gradient(135deg, #f2c14e, #c98500); color:#0d314c; font-family:var(--cond); font-weight:800; font-size:18px}
+.mm-next b{font-size:15px} .mm-next p{margin:2px 0 0; font-size:13.5px; line-height:1.45; color:var(--ink-2)} .mm-next a{color:var(--link); font-weight:700}
+.mm-res{display:grid; gap:8px}
+.mm-r{display:grid; grid-template-columns:22px 1fr 18px; gap:12px; align-items:center; padding:13px 14px; border-radius:12px; background:var(--surface); border:1px solid var(--border); color:var(--ink); text-decoration:none; font-size:13px; line-height:1.4}
+.mm-r b{display:block; font-size:14.5px; margin-bottom:1px} .mm-r span{color:var(--ink-2)} .mm-r span b{color:var(--ink)} .mm-r > svg{width:20px; height:20px; color:var(--link)} .mm-r > svg:last-child{width:16px; height:16px}
+.mm-cta{overflow:hidden; isolation:isolate; display:grid; gap:10px; justify-items:start; padding:22px 18px; border-radius:18px; color:#fff; background:linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
+.mm-cta > *:not(svg){position:relative; z-index:1}
+.mm-cta h3{margin:0; font-family:var(--cond); font-size:26px; line-height:1.05} .mm-cta p{margin:0; font-size:14px; line-height:1.5; color:#cfe3f1} .mm-cta a:not(.mm-go){color:#f2c14e}
+.mm-go{display:inline-flex; align-items:center; gap:6px; padding:12px 16px 12px 18px; border-radius:10px; background:#f2c14e; color:#0d314c; font-weight:800; font-size:15.5px; text-decoration:none; box-shadow:0 10px 22px -10px rgba(242,193,78,.85)}
+.mm-go svg{width:17px; height:17px}
+.mm-alt{background:none; border:0; padding:4px 0; color:#a9d8f3; font:inherit; font-size:13.5px; font-weight:700; text-decoration:underline; text-underline-offset:3px; cursor:pointer}
+/* Compare Levels */
+.mm-lv{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px}
+.mm-l{position:relative; display:grid; gap:2px; justify-items:start; text-align:left; padding:12px 12px 11px; border-radius:12px; border:1.5px solid var(--border); border-top:5px solid var(--lc); background:var(--surface); color:var(--ink); font:inherit; cursor:pointer; transition:transform .15s, box-shadow .2s, background .2s}
+.mm-l span{font-size:11.5px; font-weight:700; color:var(--ink-3)} .mm-l b{font-size:14.5px; line-height:1.2} .mm-l i{font-style:normal; font-family:var(--cond); font-weight:800; font-size:20px; color:var(--lc)}
+.mm-l em{position:absolute; top:-12px; right:8px; font-style:normal; font-size:10.5px; font-weight:800; padding:3px 7px; border-radius:5px; background:var(--lc); color:#fff}
+.mm-l[aria-selected="true"]{background:color-mix(in srgb, var(--lc) 14%, var(--surface)); border-color:var(--lc); box-shadow:0 10px 22px -14px var(--lc); transform:translateY(-2px)}
+.mm-sel{border-radius:16px; overflow:hidden; border:1.5px solid var(--lc); background:var(--surface)}
+.mm-sel-h{display:grid; gap:1px; padding:14px 16px; color:#fff; background:linear-gradient(135deg, var(--lc), color-mix(in srgb, var(--lc) 55%, #0d314c))}
+.mm-sel-h span{font-size:12px; font-weight:700; opacity:.9} .mm-sel-h b{font-family:var(--cond); font-size:26px; line-height:1.05} .mm-sel-h em{font-style:normal; font-family:var(--cond); font-size:20px; font-weight:800}
+.mm-row{display:grid; grid-template-columns:1fr auto; gap:6px 12px; align-items:center; padding:12px 16px; border-top:1px solid var(--rule)}
+.mm-row-t b{display:block; font-size:14px; line-height:1.3} .mm-row-t span{display:block; font-size:12px; color:var(--ink-3); margin-top:1px}
+.mm-row-v{justify-self:end} .mm-val{font-family:var(--cond); font-weight:800; font-size:26px; color:var(--lc)} .mm-yes svg{width:26px; height:26px; color:var(--lc)} .mm-none{font-size:12.5px; font-weight:700; color:var(--ink-3)}
+.mm-bars{grid-column:1 / -1; display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; margin-top:2px}
+.mm-bars i{position:relative; display:grid; gap:1px; justify-items:center; padding:6px 2px 8px; border-radius:7px; background:var(--surface-2); border:1px solid var(--rule); font-style:normal; overflow:hidden; cursor:pointer}
+.mm-bars i::after{content:""; position:absolute; left:0; bottom:0; height:4px; width:var(--w); background:var(--bc); border-radius:0 2px 2px 0; animation:mm-grow .6s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(var(--i, 0) * 50ms)}
+.mm-bars i small{font-size:10px; font-weight:700; color:var(--ink-3); line-height:1.1}
+.mm-bars i b{font-size:12.5px; white-space:nowrap; font-weight:800; color:var(--ink); line-height:1.2; min-height:16px; display:grid; place-items:center}
+.mm-bars i b svg{width:15px; height:15px; color:var(--bc)}
+.mm-bars i.off b{color:var(--ink-3); font-weight:600}
+.mm-bars i.on{background:color-mix(in srgb, var(--bc) 16%, var(--surface)); border-color:var(--bc)}
+.mm-bars i.on small{color:var(--ink)}
+@keyframes mm-grow{from{width:0}}
+.mm-core{list-style:none; margin:0; padding:14px 16px; display:grid; gap:9px; border-radius:14px; background:var(--surface); border:1px solid var(--border)}
+/* tiles */
+.w-mem{position:relative; overflow:hidden; isolation:isolate; color:#fff; border:0; text-align:left}
+.w-mem.lend{background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.4), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
+.w-mem.ind{background:radial-gradient(90% 90% at 100% 0%, rgba(242,193,78,.4), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
+.w-mem .w-head, .w-mem .w-head svg{color:#a9d8f3} .w-mem.ind .w-head svg{color:#f2c14e}
+.w-mem > *:not(svg){position:relative; z-index:1}
+.w-mem .mm-rails{opacity:.8}
+.w-mem .wm-big{font-family:var(--cond); font-weight:800; font-size:44px; line-height:.95; color:#f2c14e; margin-top:6px; text-shadow:0 0 20px rgba(242,193,78,.4)}
+.w-mem .wm-unit{font-size:13px; font-weight:700; color:#fff}
+.w-mem .w-s{color:#cfe3f1; font-size:12.5px; line-height:1.35; margin-top:auto}
+.w-mem .w-t{color:#fff}
+.wm-bars{display:flex; align-items:flex-end; gap:5px; height:46px; margin:8px 0 6px}
+.wm-bars i{width:16px; height:var(--h); border-radius:4px 4px 2px 2px; background:var(--bc); animation:wm-rise .8s cubic-bezier(.2,.8,.2,1) both} .wm-bars i:nth-child(2){animation-delay:.08s} .wm-bars i:nth-child(3){animation-delay:.16s} .wm-bars i:nth-child(4){animation-delay:.24s; box-shadow:0 0 14px rgba(242,193,78,.6)}
+@keyframes wm-rise{from{height:0}}
+/* Champions Lounge: the two paths */
+.lg-paths{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.lg-path{display:grid; gap:4px; justify-items:start; align-content:start; text-align:left; padding:14px 13px; border-radius:14px; border:0; color:#fff; font:inherit; cursor:pointer; background:radial-gradient(90% 90% at 100% 0%, rgba(116,191,235,.35), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
+.lg-path.ind{background:radial-gradient(90% 90% at 100% 0%, rgba(242,193,78,.38), transparent 60%), linear-gradient(160deg, #14486e, #0d314c 60%, #06202f)}
+.lg-path > svg{width:22px; height:22px; color:#f2c14e} .lg-path b{font-size:15px; line-height:1.2} .lg-path span{font-size:12.5px; color:#cfe3f1; line-height:1.35}
+.lg-path em{display:inline-flex; align-items:center; gap:3px; margin-top:6px; font-style:normal; font-size:13px; font-weight:800; color:#f2c14e} .lg-path em svg{width:14px; height:14px}
+@media (max-width:359px){ .lg-paths, .mm-why{grid-template-columns:1fr} }
+@media (prefers-reduced-motion: reduce){ .mm-rails path, .mm-words span, .mm-bars i::before, .wm-bars i{animation:none} }
 .rc-fw-go{width:100%; justify-content:center; gap:10px; border:1px solid #6d3ba8; color:#fff; background:linear-gradient(100deg, #4b1f72, #6d3ba8 40%, #1d7a45 75%, #b8891f); font-weight:800}
 .rc-fw-dots{display:inline-flex; gap:3px} .rc-fw-dots i{width:7px; height:7px; border-radius:50%; background:#f2c14e} .rc-fw-dots i:nth-child(1){background:#b36bff} .rc-fw-dots i:nth-child(2){background:#3ddc84}
 .lg-here{list-style:none; margin:0 0 6px; padding:0; display:grid; gap:8px} .lg-here li{display:grid; grid-template-columns:20px 1fr; gap:10px; align-items:start; font-size:14px; line-height:1.45} .lg-here svg{width:18px; height:18px; margin-top:2px; color:var(--link)}
@@ -3524,15 +3644,10 @@ function loungeSheet(title, day) {
   /* Jonna, Nov 27, 2026: the Elevator Prefunction on Floor 3: central, with the Pelican foyer to the left as you come in and
      the La Salle Ballroom foyer to the right; lounge seating, outlets all around the room and bottled water (hotel resume) */
   if (/champion/i.test(x.title)) h += '<div class="d-h">What\'s There</div><ul class="lg-here">' + [['i-pin', 'Right off the Floor 3 elevators, between the Pelican foyer (to your left) and the La Salle Ballroom foyer (to your right)'], ['i-people', 'Lounge seating to sit down, meet up or take a call'], ['i-bulb', 'Power outlets all around the room to charge your phone or laptop'], ['i-fork', 'Bottled water']].map(function (k) { return '<li>' + icon(k[0]) + '<span>' + k[1] + '</span></li>'; }).join('') + '</ul>';
-  if (m && m.levels && m.levels.length) {
-    h += '<div class="d-h">Become a MISMO Champion</div><p class="lg-p">Champion membership is for companies that want to support MISMO at a higher level than Corporate membership. Every level includes all the core member benefits, the Champions Lounge at every summit, and more:</p>' +
-      '<div class="lg-levels">' + m.levels.map(function (l, i) {
-        return '<section class="lg-lv" style="--i:' + i + ';--lc:' + esc(l.color || '#f2c14e') + '"><div class="lg-lv-h"><b>' + esc(l.name) + '</b><span>' + esc(l.price) + '</span></div><ul>' + l.perks.map(function (p) { return '<li>' + icon('i-check') + '<span>' + esc(p) + '</span></li>'; }).join('') + '</ul></section>';
-      }).join('') + '</div>' +
-      '<div class="d-actions two" style="margin-top:14px">' + (m.apply ? '<a class="btn primary" href="' + esc(m.apply) + '" target="_blank" rel="noopener">' + icon('i-edit') + 'Apply for Membership</a>' : '') +
-      (m.compare ? '<a class="btn" href="' + esc(m.compare) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Compare All Levels</a>' : '') + '</div>' +
-      '<p class="lg-fine">' + (m.lenders ? 'Lenders join through the <a href="' + esc(m.lenders) + '" target="_blank" rel="noopener">Innovation Investment Fund</a>. ' : '') + (m.email ? 'Questions? Email <a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a>.' : '') + '</p>';
-  }
+  /* Jonna, Nov 28, 2026: the two ways to become a member, each opening its own phone page */
+  h += '<div class="d-h">Become a MISMO Champion</div><p class="lg-p">Champions support MISMO at a higher level than Corporate membership. Lenders join through the Innovation Investment Fund; every other organization picks a membership level.</p>' +
+    '<div class="lg-paths"><button type="button" class="lg-path lend" data-mem-open="iif">' + icon('i-handshake') + '<b>Membership for Lenders</b><span>The Innovation Investment Fund, $0.75 per loan</span><em>See How It Works' + icon('i-chev') + '</em></button>' +
+    '<button type="button" class="lg-path ind" data-mem-open="ind">' + icon('i-people') + '<b>Membership for Industry</b><span>Compare Corporate to Chair Champion</span><em>Compare Levels' + icon('i-chev') + '</em></button></div>';
   openSheet(x.title, h + '</div>', { color: '#14486e' });
 }
 
@@ -5341,6 +5456,8 @@ var DASH = [
   { id: 'certs', name: 'Certifications', desc: 'Newly certified products and MISMO professionals', icon: 'i-cert' },
   { id: 'webinars', name: 'Webinars', desc: 'Upcoming MISMO webinars and how to register', icon: 'i-webinar' },
   { id: 'trivia', name: 'MISMO Trivia', desc: 'Play the Board, take on your colleagues and climb the leaderboard', icon: 'i-star' },
+  { id: 'lenders', name: 'Membership for Lenders', desc: 'The Innovation Investment Fund: $0.75 per loan', icon: 'i-handshake' },
+  { id: 'industry', name: 'Membership for Industry', desc: 'Compare membership levels, from Corporate to Chair Champion', icon: 'i-people' },
   { id: 'sponsor', name: 'Sponsor a Summit', desc: 'Put your company in front of the people who build the standards', icon: 'i-banner' },
   { id: 'idea', name: 'Submit an Idea', desc: 'Suggest a new standard or an improvement', icon: 'i-bulb' },
   { id: 'site', name: 'mismo.org', desc: 'Standards, the Resource Library, membership', icon: 'i-globe' },
@@ -6728,6 +6845,8 @@ function widget(id) {
       (CERT ? '<span class="w-new"><b>' + fresh.length + ' new</b> in ' + MONTH[now.getMonth()] + (fo.length ? ': ' + esc(fo.slice(0, 3).join(', ')) + (fo.length > 3 ? ' and ' + (fo.length - 3) + ' more' : '') : '') + '</span>' : '') + '</button>';
   }
   if (id === 'groups') return wgTile();
+  if (id === 'lenders') return '<button type="button" class="wd w-mem lend" data-mem-open="iif">' + head() + '<span class="wm-big">$0.75</span><span class="wm-unit">per loan</span><span class="w-s">The Innovation Investment Fund is the lender path to membership.</span>' + memRails() + '</button>';
+  if (id === 'industry') return '<button type="button" class="wd w-mem ind" data-mem-open="ind">' + head() + '<span class="wm-bars" aria-hidden="true">' + MEM.levels.map(function (l, i) { return '<i style="--h:' + [30, 48, 70, 100][i] + '%;--bc:' + l.c + '"></i>'; }).join('') + '</span><span class="w-t">Compare 4 Levels</span><span class="w-s">Corporate to Chair Champion.</span></button>';
   if (id === 'sponsor') return '<a class="wd w-spon wide" href="' + PROSP_URL + '">' + head() + '<span class="w-t">Sponsor a MISMO Summit</span><span class="wsp-sub">Put your company in front of the people who build the mortgage industry\'s standards.</span><span class="wsp-go">See the Opportunities' + icon('i-chev') + '</span><span class="wsp-art" aria-hidden="true">' + icon('i-banner') + '</span></a>';
   if (id === 'idea') return '<button type="button" class="wd w-idea" data-web="/submit-an-idea/" data-web-title="Submit an Idea">' + head() + '<span class="w-t">Have an idea for a standard?</span><span class="w-more"><span class="wm-p">Suggest a new standard or a change to an existing one, in a few sentences.</span><span class="wm-art" aria-hidden="true">' + icon('i-bulb') + '</span></span><span class="w-sub">Tell the community</span></button>';
   if (id === 'merch') {   /* a mock-up, for testers only (dashPicks leaves it out for everyone else) */
@@ -6805,6 +6924,154 @@ function webinarsSheet() {
 }
 function sameSite(u) { return /^https:\/\/resources\.mismo\.org\//.test(u) || /^\//.test(u); }
 function readLink(u, title) { return sameSite(u) ? '<button type="button" class="btn primary" data-web="' + esc(u) + '" data-web-title="' + esc(title) + '">' + icon('i-mail') + 'Read It</button>' : '<a class="btn primary" href="' + esc(u) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Read It</a>'; }
+
+/* ==== Membership: Jonna, Nov 28, 2026 ====
+   Two ways in, each a phone version of a mismo.org page, word for word where it states a fact (read Nov 28, 2026):
+   Membership for Lenders = the Innovation Investment Fund (mismo.org/membership/iif);
+   Membership for Industry = Compare Levels (mismo.org/membership). Apply goes to Member 360's membership application. */
+var MEM = {
+  apply: 'https://resources.mismo.org/member-360/apply/?from=mymismo',
+  pay: 'https://www.mismo.org/membership/payment-remittance',
+  vendor: 'https://www.mismo.org/membership/payment-remittance#vendor-setup',
+  iifVideo: 'Pif-M9WwBBw',
+  levels: [
+    { k: 'corp', name: 'Corporate', tier: 'Standard', price: 5000, c: '#7a9db4' },
+    { k: 'assoc', name: 'Associate Champion', tier: 'Champion', price: 10000, c: '#1baf7a' },
+    { k: 'exec', name: 'Executive Champion', tier: 'Champion', price: 20000, c: '#2477b8' },
+    { k: 'chair', name: 'Chair Champion', tier: 'Champion', price: 55000, c: '#c98500', top: 'Most Benefits' }],
+  rows: [
+    { t: 'Core member benefits', note: 'All eight, listed below', v: ['check', 'check', 'check', 'check'] },
+    { t: 'MISMO Summit registrations', note: 'Complimentary per Summit, discounted for Corporate', v: ['Discounted', 2, 3, 6], n: [0, 2, 3, 6] },
+    { t: 'Complimentary Boot Camp registrations', note: 'Per year', v: [1, 3, 5, 10], n: [1, 3, 5, 10] },
+    { t: 'Complimentary CMSP and AMSP certifications and renewals', v: ['none', 3, 5, 10], n: [0, 3, 5, 10] },
+    { t: 'Corporate membership for wholly owned subsidiaries', v: ['none', 'none', 1, 'Up to 3'], n: [0, 0, 1, 3] },
+    { t: 'Guest spot on MISMO Mic’d Up with MISMO President Brian Vieaux', v: ['none', 'none', 'check', 'check'] }],
+  core: ['Build a stronger AI governance program with access to FRAME, the industry’s Framework for Responsible Artificial Intelligence in the Mortgage Ecosystem.',
+    'Connect with mortgage industry experts and peers through MISMO Connect, MISMO’s member-only collaboration portal.',
+    'Stay ahead of industry change with exclusive access to works in progress before they are approved and released publicly.',
+    'Strengthen your team’s MISMO knowledge with complimentary registration(s) for MISMO Boot Camp (the path to MISMO’s Associate MISMO Standards Professional certification).',
+    'Save on high-value industry education and networking with discounted or complimentary MISMO Summit registrations.',
+    'Elevate your organization’s voice and visibility by serving as a MISMO workgroup leader or official representative.',
+    'Help shape the standards that affect your business by voting in more than 30 MISMO workgroups.',
+    'Put MISMO resources to work within your organization by downloading member-only products, including the MISMO API Toolkit.'],
+  why: [['i-file', 'Standardized Data and Documents', 'Common definitions and formats, so information means the same thing everywhere it travels.'],
+    ['i-share', 'Seamless Information Exchange', 'Technology that moves data between systems and partners without rework or translation.'],
+    ['i-walk', 'Less Friction Across the Loan', 'Fewer exceptions and handoffs for lenders, servicers, and the consumers they serve.'],
+    ['i-chart', 'Reduced Costs', 'A durable base for digital mortgage processes that reduces cost over the long term.']],
+  how: [['Billing Agent', 'MERSCORP calculates the amount due and sends the invoice on MISMO’s behalf.'],
+    ['Calculation', 'The invoice is based on the prior year’s MERS® System registrations.'],
+    ['Invoice', 'MERS acts as MISMO’s billing agent. Look for your invoice from MERS.'],
+    ['Payment Remittance', 'Payment is remitted to MISMO and membership is granted.']],
+  unlocks: [['Influence and Visibility in the Standards That Shape the Industry', ['Full eligibility to participate in MISMO workgroups and collaborate with peers, technology providers, GSEs, regulators, and investors', 'Opportunities to shape standards, best practices, and key industry initiatives', 'Voting rights on standards proposed for public comment and final approval']],
+    ['Access to Member-Only Knowledge and Resources', ['Exclusive research, work products, and draft standards', 'Access to technical documentation, implementation guides, and tools not available to non-members']],
+    ['Professional Development and Training', ['Complimentary or discounted registration for MISMO events, educational webinars, and certification programs', 'Opportunities for staff to build recognized industry expertise', 'Access to member-only community forums and learning resources']],
+    ['Networking and Leadership Opportunities', ['Ability to join leadership committees and serve in volunteer roles', 'Priority access at MISMO Summits and collaborative industry workshops', 'Direct engagement with industry leaders driving modernization']],
+    ['Recognition and Brand Value', ['Your organization listed publicly as a MISMO member', 'Demonstrates commitment to industry excellence, compliance, and modernization', 'Strengthens your reputation with investors, regulators, partners, and consumers', 'Thought leadership opportunities within the MISMO community and the industry at large']]],
+  next: [['Budget for 2027', 'Plan to pay the Innovation Investment Fund in 2027. Invoices will be sent in February 2027.'],
+    ['Add MISMO as a Vendor', 'Set up MISMO as an approved vendor in your vendor management system.'],
+    ['Route the Invoice', 'Create an internal process so the annual invoice reaches your decision-makers.'],
+    ['Ask Us Anything', 'Contact InvFee@mismo.org for assistance or additional information.']],
+  steps: [['Apply', 'Choose the level that fits your organization and submit the membership application.'],
+    ['Join MISMO Connect', 'Your team gets access to MISMO’s member-only collaboration portal, where the work happens.'],
+    ['Join Workgroups', 'Pick from 30+ workgroups, bring real-world expertise to the table, and vote on what gets adopted.'],
+    ['Shape What’s Next', 'Lead initiatives, contribute to standards development, and grow through Summits, Boot Camp, webinars, and certifications.']]
+};
+function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+/* data streams flowing across a membership hero or tile */
+function memRails() {
+  return '<svg class="mm-rails" viewBox="0 0 400 220" preserveAspectRatio="none" aria-hidden="true">' + [30, 62, 96, 132, 170, 204].map(function (y, i) {
+    return '<path d="M-20 ' + y + ' C 90 ' + (y - 22 + i * 7) + ', 210 ' + (y + 26 - i * 5) + ', 420 ' + (y - 8) + '" style="--i:' + i + '"/>'; }).join('') + '</svg>';
+}
+function memSteps(list) { return '<ol class="mm-next">' + list.map(function (x, i) { return '<li style="--i:' + i + '"><span class="mm-num">' + (i + 1) + '</span><div><b>' + x[0] + '</b><p>' + x[1].replace(/(InvFee@mismo\.org)/, '<a href="mailto:$1">$1</a>') + '</p></div></li>'; }).join('') + '</ol>'; }
+function countUpComma(root) {
+  root.querySelectorAll('[data-count][data-comma]').forEach(function (el) {
+    var to = +el.getAttribute('data-count'), t0 = null;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    (function step(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e).toLocaleString('en-US'); if (k < 1) requestAnimationFrame(step); })(performance.now());
+  });
+}
+function iifSheet() {
+  var h = '<div class="mm iif">' +
+    '<section class="mm-hero">' + memRails() + '<span class="mm-kick">' + icon('i-handshake') + 'Membership for Lenders</span>' +
+      '<h2>Innovation<br>Investment Fund</h2><p class="mm-lead">For lenders, the Innovation Investment Fund is the path to MISMO membership.</p>' +
+      '<div class="mm-price"><b>$0.75</b><span>per loan<br>origination</span></div>' +
+      '<p class="mm-sub">A model endorsed by both the MBA and the MISMO Boards of Directors to accelerate the development and adoption of industry standards.</p>' +
+      '<div class="mm-words" aria-hidden="true"><span>People</span><span>Standards</span><span>Collaboration</span><span>Progress</span></div>' +
+      '<p class="mm-goal">A more efficient mortgage industry</p></section>' +
+    '<section class="mm-card mm-calc"><h3>What Would Your Organization Pay?</h3><p class="mm-p">The fee is $0.75 per loan registered on the MERS® System, based on the prior year’s registrations.</p>' +
+      '<label class="mm-in"><span>MERS® System registrations last year</span><input type="text" inputmode="numeric" data-iif-n value="2,000"></label>' +
+      '<div class="mm-chips">' + [500, 2000, 10000, 50000].map(function (n) { return '<button type="button" class="chip" data-iif-pick="' + n + '">' + n.toLocaleString('en-US') + '</button>'; }).join('') + '</div>' +
+      '<div class="mm-due"><span data-iif-eq>2,000 × $0.75 =</span><b data-iif-due>$1,500</b><em>due this year</em></div>' +
+      '<p class="mm-ok" data-iif-ok></p></section>' +
+    '<section class="mm-stat"><div><b data-count="3000" data-comma="1">3,000</b><i>+</i></div><p>lenders, from small firms to the largest institutions in the country, have invested in MISMO’s work since the Fund launched in February 2021.</p></section>' +
+    '<section><h3 class="mm-h">Why Your Investment as a Lender Matters</h3><p class="mm-p">The mortgage industry is rapidly evolving. Staying ahead takes a shared foundation.</p><div class="mm-why">' +
+      MEM.why.map(function (w, i) { return '<div class="mm-w" style="--i:' + i + '"><span>' + icon(w[0]) + '</span><b>' + w[1] + '</b><p>' + w[2] + '</p></div>'; }).join('') + '</div>' +
+      '<p class="mm-p">MISMO’s work addresses these challenges directly, but it requires sustained, industry-wide support.</p></section>' +
+    '<section><h3 class="mm-h">Hear From MISMO’s President</h3><p class="mm-p">Brian Vieaux on the Innovation Investment Fund, a two-minute watch.</p>' + player(MEM.iifVideo, 'The Innovation Investment Fund') + '</section>' +
+    '<section><h3 class="mm-h">How the Fund Works</h3><ol class="mm-how">' + MEM.how.map(function (x, i) { return '<li style="--i:' + i + '"><span class="mm-dot">' + (i + 1) + '</span><div><b>' + x[0] + '</b><p>' + x[1] + '</p></div></li>'; }).join('') + '</ol>' +
+      '<p class="mm-ex">' + icon('i-info') + '<span>Example: 2,000 MERS® System registrations last year × $0.75 = $1,500 due this year.</span></p></section>' +
+    '<section><h3 class="mm-h">What Membership Unlocks</h3><p class="mm-p">By paying your Innovation Investment Fund invoice, your organization receives MISMO membership, unlocking benefits that support operational efficiency, risk management, staff development and industry influence.</p><div class="mm-acc">' +
+      MEM.unlocks.map(function (u, i) { return '<details' + (i ? '' : ' open') + '><summary><span>' + u[0] + '</span>' + icon('i-plus') + '</summary><ul>' + u[1].map(function (b) { return '<li>' + icon('i-check') + '<span>' + b + '</span></li>'; }).join('') + '</ul></details>'; }).join('') + '</div></section>' +
+    '<section><h3 class="mm-h">What Lenders Should Do Next</h3>' + memSteps(MEM.next) + '</section>' +
+    '<section class="mm-res"><a class="mm-r" href="' + MEM.pay + '" target="_blank" rel="noopener">' + icon('i-file') + '<span><b>Payment Remittance Information</b>ACH instructions and everything your accounts payable team needs to remit payment.</span>' + icon('i-chev') + '</a>' +
+      '<a class="mm-r" href="' + MEM.vendor + '" target="_blank" rel="noopener">' + icon('i-list') + '<span><b>Vendor Management Resources</b>MISMO’s W-9 and account information sheet for your vendor management system.</span>' + icon('i-chev') + '</a></section>' +
+    '<section class="mm-cta">' + memRails() + '<h3>Your Support Powers Industry Progress</h3><p>Your investment funds the standards that shape a faster, more reliable and more modern mortgage market.</p>' +
+      '<a class="mm-go" href="' + MEM.pay + '" target="_blank" rel="noopener">Pay the Fund' + icon('i-chev') + '</a><button type="button" class="mm-alt" data-mem-ind>Not a lender? See Membership for Industry</button></section></div>';
+  var el = openSheet('Membership for Lenders', h, { plain: true });
+  countUpComma(el);
+  var inp = el.querySelector('[data-iif-n]'), due = el.querySelector('[data-iif-due]'), eq = el.querySelector('[data-iif-eq]'), ok = el.querySelector('[data-iif-ok]'), shown = 1500;
+  function calc(animate) {
+    var n = Math.max(0, parseInt(String(inp.value).replace(/[^0-9]/g, ''), 10) || 0), d = n * .75, yes = d >= 1000;
+    eq.textContent = n.toLocaleString('en-US') + ' × $0.75 =';
+    ok.innerHTML = icon(yes ? 'i-check' : 'i-info') + '<span>Paying $1,000 or more unlocks MISMO membership.</span>';
+    ok.classList.toggle('yes', yes);
+    el.querySelectorAll('[data-iif-pick]').forEach(function (c) { c.setAttribute('aria-pressed', String(+c.getAttribute('data-iif-pick') === n)); });
+    var from = shown, t0 = null; shown = d;
+    if (!animate || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) { due.textContent = money(d); return; }
+    (function step(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - k, 3); due.textContent = money(from + (d - from) * e); if (k < 1) requestAnimationFrame(step); })(performance.now());
+  }
+  inp.addEventListener('input', function () { calc(true); });
+  inp.addEventListener('blur', function () { inp.value = (parseInt(String(inp.value).replace(/[^0-9]/g, ''), 10) || 0).toLocaleString('en-US'); });
+  el.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-iif-pick]'); if (c) { inp.value = (+c.getAttribute('data-iif-pick')).toLocaleString('en-US'); calc(true); return; }
+    if (e.target.closest('[data-mem-ind]')) industrySheet();
+  });
+  calc(false);
+}
+function industrySheet() {
+  var sel = 'chair';
+  function cell(v) { return v === 'check' ? '<span class="mm-yes">' + icon('i-check') + '</span>' : v === 'none' ? '<span class="mm-none">Not included</span>' : '<span class="mm-val">' + esc(String(v)) + '</span>'; }
+  function render() {
+    var li = MEM.levels.map(function (l) { return l.k; }).indexOf(sel), L = MEM.levels[li];
+    return '<div class="mm-sel" style="--lc:' + L.c + '"><div class="mm-sel-h"><span>' + esc(L.tier) + (L.top ? ', ' + esc(L.top) : '') + '</span><b>' + esc(L.name) + '</b><em>' + money(L.price) + '</em></div>' +
+      MEM.rows.map(function (r, ri) {
+        var mx = r.n ? Math.max.apply(null, r.n) : 0;
+        return '<div class="mm-row" style="--i:' + ri + '"><div class="mm-row-t"><b>' + esc(r.t) + '</b>' + (r.note ? '<span>' + esc(r.note) + '</span>' : '') + '</div><div class="mm-row-v">' + cell(r.v[li]) + '</div>' +
+          '<div class="mm-bars">' + MEM.levels.map(function (l, j) {
+            var w = r.n ? (mx ? Math.max(r.n[j] / mx * 100, r.n[j] ? 8 : 0) : 0) : (r.v[j] === 'check' ? 100 : 0);
+            var v = r.v[j], tx = v === 'check' ? icon('i-check') : v === 'none' ? '\u2014' : esc(String(v));
+            return '<i class="' + (j === li ? 'on' : '') + (v === 'none' ? ' off' : '') + '" data-mem-lv="' + l.k + '" style="--w:' + w.toFixed(0) + '%;--bc:' + l.c + '"><small>' + esc(l.name.replace(' Champion', '')) + '</small><b>' + tx + '</b></i>'; }).join('') + '</div></div>';
+      }).join('') + '</div>';
+  }
+  var h = '<div class="mm ind">' +
+    '<section class="mm-hero gold">' + memRails() + '<span class="mm-kick">' + icon('i-people') + 'Membership for Industry</span>' +
+      '<h2>Take Your Seat<br>at the Table</h2><p class="mm-lead">Membership gives you a voice in what comes next for the industry.</p>' +
+      '<p class="mm-sub">For technology providers, servicers, agencies, investors and every other organization across mortgage finance. Members do more than follow the standards. They decide what goes into them.</p>' +
+      '<div class="mm-words" aria-hidden="true"><span>Influence</span><span>Access</span><span>Collaboration</span><span>Recognition</span></div></section>' +
+    '<section><h3 class="mm-h">Compare Levels</h3><p class="mm-p">Pick a level to see what it includes, and how it stacks up.</p><div class="mm-lv" role="tablist">' +
+      MEM.levels.map(function (l) { return '<button type="button" role="tab" class="mm-l" data-mem-lv="' + l.k + '" aria-selected="' + (l.k === sel) + '" style="--lc:' + l.c + '">' + (l.top ? '<em>' + esc(l.top) + '</em>' : '') + '<span>' + esc(l.tier) + '</span><b>' + esc(l.name) + '</b><i>' + money(l.price) + '</i></button>'; }).join('') + '</div>' +
+      '<div data-mem-view>' + render() + '</div></section>' +
+    '<section><h3 class="mm-h">Core Benefits Included at Every Level</h3><ul class="mm-core">' + MEM.core.map(function (c, i) { return '<li style="--i:' + i + '">' + icon('i-check') + '<span>' + esc(c) + '</span></li>'; }).join('') + '</ul></section>' +
+    '<section><h3 class="mm-h">From Application to Influence</h3>' + memSteps(MEM.steps) + '</section>' +
+    '<section class="mm-cta gold">' + memRails() + '<h3>Ready to Join?</h3><p>Choose the level that fits your organization and submit the membership application. Questions? Email <a href="mailto:info@mismo.org">info@mismo.org</a>.</p>' +
+      '<a class="mm-go" href="' + MEM.apply + '">Apply for Membership' + icon('i-chev') + '</a><button type="button" class="mm-alt" data-mem-iif>Lenders: see the Innovation Investment Fund</button></section></div>';
+  var el = openSheet('Membership for Industry', h, { plain: true });
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mem-lv]');
+    if (b) { sel = b.getAttribute('data-mem-lv'); el.querySelectorAll('.mm-l[data-mem-lv]').forEach(function (x) { x.setAttribute('aria-selected', String(x.getAttribute('data-mem-lv') === sel)); }); el.querySelector('[data-mem-view]').innerHTML = render(); return; }
+    if (e.target.closest('[data-mem-iif]')) iifSheet();
+  });
+}
 /* Brian's photo, as MISMO Matters runs it beside The Vieaux Point */
 var BV_PHOTO = 'https://higherlogicdownload.s3.amazonaws.com/MISMO/02543d2e-502a-4e6e-91e0-38c2c168f75a/UploadedImages/MISMO_Brand_2026/BrianImageForMM.jpg';
 function mattersSheet() {
@@ -7921,6 +8188,7 @@ document.addEventListener('click', function (e) {
   if (t.hasAttribute('data-prov')) { providerSheet(t.getAttribute('data-prov')); return; }
   if (t.hasAttribute('data-map')) { mapSheet(t.getAttribute('data-map')); return; }
   if (t.hasAttribute('data-lounge')) { loungeSheet(t.getAttribute('data-lounge'), t.getAttribute('data-lounge-day')); return; }
+  if (t.hasAttribute('data-mem-open')) { if (t.getAttribute('data-mem-open') === 'iif') iifSheet(); else industrySheet(); return; }
   if (t.hasAttribute('data-walk')) { walkSheet(t.getAttribute('data-walk')); return; }
   if (t.hasAttribute('data-scan')) { scanHub(null, t.getAttribute('data-scan')); return; }
   if (t.hasAttribute('data-ph-take')) { phTake(t.getAttribute('data-ph-take'), t.getAttribute('data-ph-prompt') || ''); return; }
