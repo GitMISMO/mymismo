@@ -92,13 +92,16 @@
     "lenders": "https://www.mismo.org/iif",
     "levels": [
       {
-        "name": "Associate Champion",
-        "price": "$10,000",
+        "name": "Chair Champion",
+        "price": "$55,000",
         "perks": [
-          "2 complimentary registrations for every MISMO Summit",
-          "3 complimentary Boot Camp registrations a year",
-          "3 complimentary CMSP and AMSP certifications and renewals"
-        ]
+          "6 complimentary registrations for every MISMO Summit",
+          "10 complimentary Boot Camp registrations a year",
+          "10 complimentary CMSP and AMSP certifications and renewals",
+          "Corporate membership for up to 3 wholly owned subsidiaries",
+          "A guest spot on MISMO Mic'd Up with MISMO President Brian Vieaux"
+        ],
+        "color": "#c98500"
       },
       {
         "name": "Executive Champion",
@@ -109,18 +112,18 @@
           "5 complimentary CMSP and AMSP certifications and renewals",
           "Corporate membership for 1 wholly owned subsidiary",
           "A guest spot on MISMO Mic'd Up with MISMO President Brian Vieaux"
-        ]
+        ],
+        "color": "#2477b8"
       },
       {
-        "name": "Chair Champion",
-        "price": "$55,000",
+        "name": "Associate Champion",
+        "price": "$10,000",
         "perks": [
-          "6 complimentary registrations for every MISMO Summit",
-          "10 complimentary Boot Camp registrations a year",
-          "10 complimentary CMSP and AMSP certifications and renewals",
-          "Corporate membership for up to 3 wholly owned subsidiaries",
-          "A guest spot on MISMO Mic'd Up with MISMO President Brian Vieaux"
-        ]
+          "2 complimentary registrations for every MISMO Summit",
+          "3 complimentary Boot Camp registrations a year",
+          "3 complimentary CMSP and AMSP certifications and renewals"
+        ],
+        "color": "#1baf7a"
       }
     ]
   }

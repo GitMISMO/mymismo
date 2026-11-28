@@ -566,8 +566,9 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .lounge .lg-go{flex:none; width:18px; height:18px; color:rgba(255,255,255,.7)}
 .lg-lead{margin:0 0 4px; font-size:15px; line-height:1.5} .lg-p{margin:0 0 12px; color:var(--ink-2); font-size:14px; line-height:1.5}
 .lg-levels{display:grid; gap:10px} @media (min-width:700px){ .lg-levels{grid-template-columns:repeat(3, minmax(0, 1fr))} }
-.lg-lv{border:1px solid var(--border); border-top:4px solid #f2c14e; border-radius:12px; background:var(--surface); padding:12px 14px}
-.lg-lv:nth-child(2){border-top-color:#e0a83c} .lg-lv:nth-child(3){border-top-color:#c98500}
+/* Jonna, Nov 27, 2026: Chair, Executive, Associate, each its own color */
+.lg-lv{border:1px solid var(--border); border-top:5px solid var(--lc); border-radius:12px; background:linear-gradient(180deg, color-mix(in srgb, var(--lc) 10%, var(--surface)), var(--surface) 70%); padding:12px 14px}
+.lg-lv .lg-lv-h b{color:var(--lc)} .lg-lv li svg{color:var(--lc) !important}
 .lg-lv-h{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px} .lg-lv-h b{font-size:15.5px} .lg-lv-h span{font-family:var(--cond); font-weight:700; font-size:17px; color:var(--ink-2)}
 .lg-lv ul{list-style:none; margin:0; padding:0; display:grid; gap:6px} .lg-lv li{display:grid; grid-template-columns:16px 1fr; gap:7px; font-size:13.5px; line-height:1.4} .lg-lv li svg{width:15px; height:15px; margin-top:2px; color:#1baf7a}
 .lg-fine{margin:12px 0 0; font-size:13px; color:var(--ink-2)} .lg-fine a{color:var(--link)}
@@ -3479,7 +3480,7 @@ function loungeSheet(title, day) {
   if (m && m.levels && m.levels.length) {
     h += '<div class="d-h">Become a MISMO Champion</div><p class="lg-p">Champion membership is for companies that want to support MISMO at a higher level than Corporate membership. Every level includes all the core member benefits, the Champions Lounge at every summit, and more:</p>' +
       '<div class="lg-levels">' + m.levels.map(function (l, i) {
-        return '<section class="lg-lv" style="--i:' + i + '"><div class="lg-lv-h"><b>' + esc(l.name) + '</b><span>' + esc(l.price) + '</span></div><ul>' + l.perks.map(function (p) { return '<li>' + icon('i-check') + '<span>' + esc(p) + '</span></li>'; }).join('') + '</ul></section>';
+        return '<section class="lg-lv" style="--i:' + i + ';--lc:' + esc(l.color || '#f2c14e') + '"><div class="lg-lv-h"><b>' + esc(l.name) + '</b><span>' + esc(l.price) + '</span></div><ul>' + l.perks.map(function (p) { return '<li>' + icon('i-check') + '<span>' + esc(p) + '</span></li>'; }).join('') + '</ul></section>';
       }).join('') + '</div>' +
       '<div class="d-actions two" style="margin-top:14px">' + (m.apply ? '<a class="btn primary" href="' + esc(m.apply) + '" target="_blank" rel="noopener">' + icon('i-edit') + 'Apply for Membership</a>' : '') +
       (m.compare ? '<a class="btn" href="' + esc(m.compare) + '" target="_blank" rel="noopener">' + icon('i-link') + 'Compare All Levels</a>' : '') + '</div>' +
