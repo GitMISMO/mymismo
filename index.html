@@ -497,7 +497,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 .w-mic .bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; transform:scale(1.02)}
 .w-mic .shade{position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(6,32,47,.55), rgba(6,32,47,.1) 35%, rgba(6,32,47,.92))}
 .w-mic .w-head{position:absolute; top:14px; left:16px; color:#fff}
-.w-mic .w-head svg{color:var(--sky)}
+.w-mic .w-head svg{color:#fff}   /* Jonna, Nov 27, 2026: white so it stands out on the dark tile */
 .w-mic .play{position:absolute; right:16px; top:12px; width:46px; height:46px; border-radius:50%; background:var(--sky); color:#06202f; display:grid; place-items:center; box-shadow:0 0 0 6px rgba(116,191,235,.25)}
 .w-mic .play svg{width:22px; height:22px; margin-left:2px}
 .w-foot .lbl{font-size:12px; font-weight:700; color:var(--sky-soft)}
@@ -850,7 +850,7 @@ body.dash{padding-left:0; padding-bottom:env(safe-area-inset-bottom)}
 
 /* MISMO Trivia */
 .w-trivia{position:relative; overflow:hidden; isolation:isolate; min-height:190px; border:0; color:#fff; background:radial-gradient(120% 140% at 85% 30%, #14486e 0%, #071d2e 55%, #040f18 100%); justify-content:center; padding-right:46%}
-.w-trivia .w-head{color:#a9d8f3}
+.w-trivia .w-head{color:#a9d8f3} .w-trivia .w-head svg{color:#fff}
 /* MISMO Merch (a mock-up for testers) */
 .w-merch{border:0; color:#0d314c; background:linear-gradient(115deg, #e4f2fb 0%, #f6fafd 45%, #fdf3dc 100%); min-height:190px; justify-content:flex-start}
 .w-merch .w-head{color:#14486e}

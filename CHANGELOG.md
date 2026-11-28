@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: The MISMO Trivia star and the Mic'd Up mic on their dashboard tiles are white, so they stand out on the dark tiles in light mode.
 - Nov 27, 2026: Recap: See the Fireworks in the preview (under Example and Mine So Far) plays the fireworks any time, and after the summit Play the Fireworks Again at the bottom of the recap lets anyone see them again.
 - Nov 27, 2026: The recap's first-time celebration is fireworks instead of confetti: eight rockets that climb and burst over the recap picture in Mardi Gras purple, green and gold for New Orleans (MISMO's blues, gold and orange for other cities), gone in about five seconds. Still only the first time after the summit, never in the preview, and off for phones set to reduce motion.
 - Nov 27, 2026: Recap confetti looks like real confetti (thin strips, dots and little flakes in six colors that flutter and drift as they fall) instead of blocks, and it's saved for the real thing: the first time someone opens their recap after the summit, not in the preview.
