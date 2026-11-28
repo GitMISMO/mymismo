@@ -12,7 +12,7 @@ you and doesn't track what you do in the app. Your schedule, settings and the na
 
 - **Summit attendee directory:** your name, title and company from your summit registration, shown to other registered
   attendees who sign in. You can hide yourself in the app at any time.
-- **Attendee sign-in and profile:** what you add to your profile (a headshot, a short bio, LinkedIn,
+- **Attendee sign-in and profile:** what you add to your profile (a headshot, a few sentences about you and your work, LinkedIn,
   phone, website, and your email only if you choose to show it) and people you blocked. Your email address is used to
   send your sign-in code and isn't shown to anyone unless you choose to show it.
 - **Messages and reports:** messages you send and receive in the app, and any report you make about another attendee, so

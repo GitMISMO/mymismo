@@ -13,7 +13,7 @@ This first part is the **summit section**: it replaces what MISMO uses the share
 | Agenda | Every session of the week by day, filtered by type or searched across all four days; a session opens in a panel with its room, time, sponsor, what else is on at the same time, Add to Schedule and Add to Calendar |
 | My Schedule | The sessions a person starred, by day, with overlaps flagged, Add All to Calendar (with a reminder 15 minutes before each), and sessions worth adding |
 | People | Speakers (everyone in the General Sessions running order, with photo, title, company and what they speak on) and, once relay request 13 is live, Attendees: the attendees who chose to be listed, with Message, LinkedIn and Block |
-| Messages and My Profile | Once relay request 13 is live: sign in with the registration email and a 6-digit code, choose whether to be listed, edit title, company, a short bio and LinkedIn, and message other attendees |
+| Messages and My Profile | Once relay request 13 is live: sign in with the registration email and a 6-digit code, choose whether to be listed, edit title, company, a few sentences about you and your work, and LinkedIn, and message other attendees |
 | Explore | The hotel and room block (Book Your Room, Directions), Getting Here and Around, Where to Eat and Things to Do from the website's Hotel and Travel page; the summit's sponsors by tier (logo, website, sponsored sessions and breaks); MISMO Mic'd Up episodes played in the app; MISMO Matters; Submit an Idea; and mismo.org links |
 
 ## Where the Information Comes From
