@@ -1,5 +1,7 @@
 # MyMISMO Changelog
 
+- Nov 28, 2026: One Sign In for everyone: enter your email and MyMISMO picks the sign-in (a MISMO or MBA email gets the MISMO Resources sign-in and the staff chip; attendees get their email code; contractors have a link).
+- Nov 28, 2026: Offline, the attendee list says you're offline (not that you need Summit HQ access) and loads again on its own; speaker headshots are kept on the phone once seen online, and show initials instead of a blank when they can't load.
 - Nov 28, 2026: The weather pop-up no longer links to The Weather Channel; MyMISMO's own forecast covers it.
 - Nov 28, 2026: mismo.org places start with MISMO FRAME and MISMO Link.
 - Nov 28, 2026: My Dashboard's weather shows just the current temperature; tap it for the forecast.

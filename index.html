@@ -3048,6 +3048,7 @@ function build(feed, spons) {
   });
   S.speakers = Object.keys(byName).map(function (k) { return byName[k]; }).sort(function (a, b) { return lastName(a.name).localeCompare(lastName(b.name)) || a.name.localeCompare(b.name); });
   FACE_IX = null;
+  setTimeout(warmHeadshots, 4000);
 }
 function lastName(n) { var p = String(n).replace(/,.*$/, '').trim().split(/\s+/); return p[p.length - 1] || n; }
 function days() { var seen = {}, out = []; S.sessions.forEach(function (x) { if (!seen[x.date]) { seen[x.date] = 1; out.push({ date: x.date, day: x.day }); } }); return out; }
@@ -3460,7 +3461,7 @@ function recapSheet() {
 /* ---------- pieces ---------- */
 function tc(t) { return TYPE_COLOR[t] || 'var(--border-strong)'; }
 function typeTag(t) { return '<span class="tag" style="--tagc:' + tc(t) + '">' + esc(t) + '</span>'; }
-function face(p) { return p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="ini">' + esc(initials(p.name)) + '</span>'; }
+function face(p) { return p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy" data-ini="' + esc(initials(p.name)) + '" data-ini-cls="ini">' : '<span class="ini">' + esc(initials(p.name)) + '</span>'; }
 function isLive(x) { var n = nowAt(); return n.date === x.date && n.min >= x.a && n.min < x.b; }
 function sessCard(x) {
   var sp = sponsorFor(x), live = isLive(x), extra = '';
@@ -3892,7 +3893,7 @@ function renderPeople() {
   h += '<div class="tools"><label class="search">' + icon('i-search') + '<span class="sr">Search speakers</span><input id="speaker-q" type="search" placeholder="Search speakers by name or company" value="' + esc(S.sq) + '" autocomplete="off"></label></div>';
   if (!list.length) { h += '<div class="note">No speaker matches <b>' + esc(S.sq) + '</b>. Here is everyone.</div>'; list = S.speakers; }
   return h + '<div class="faces-grid" style="margin-top:8px">' + list.map(function (p) {
-    return '<button type="button" class="pcard" data-open="p:' + esc(p.key) + '">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="noimg">' + esc(initials(p.name)) + '</span>') +
+    return '<button type="button" class="pcard" data-open="p:' + esc(p.key) + '">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" loading="lazy" data-ini="' + esc(initials(p.name)) + '" data-ini-cls="noimg">' : '<span class="noimg">' + esc(initials(p.name)) + '</span>') +
       '<span class="cap"><b>' + esc(p.name) + '</b><span>' + esc(p.company || p.title) + '</span></span></button>';
   }).join('') + '</div>';
 }
@@ -3942,13 +3943,14 @@ function loadPreviewAttendees() {
       PV.people = Object.keys(keep).map(function (k) { return keep[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
       PV.state = 'ready';
     })
-    .catch(function () { PV.state = 'error'; })
+    .catch(function (e) { PV.state = 'error'; PV.why = !navigator.onLine || typeof e !== 'number' ? 'offline' : (e === 401 || e === 403) ? 'access' : 'server'; })
     .then(function () { if (S.page === 'people') renderPage('people'); });
 }
+window.addEventListener('online', function () { if (PV.state === 'error') { PV.state = ''; if (S.page === 'people') renderPage('people'); } });
 function renderPreviewAttendees() {
   var h = '<div class="note pv-note"><b>Staff Preview.</b> The real attendee list from registration, shown only to MISMO staff until attendee sign-in goes live. Then attendees sign in, add headshots and contact details, and message each other. <button type="button" class="linkbtn" data-pv-profile>Try My Profile&nbsp;→</button></div>';
   if (!PV.state || PV.state === 'loading') { loadPreviewAttendees(); return h + '<div class="note">Loading the attendee list…</div>'; }
-  if (PV.state === 'error') return h + '<div class="note">The attendee list couldn\'t be loaded. You need Summit HQ access to see the preview.</div>';
+  if (PV.state === 'error') return h + '<div class="note">' + (PV.why === 'offline' ? 'You\'re offline, so the attendee list can\'t load right now. It loads on its own as soon as you\'re connected again.' : PV.why === 'access' ? 'The attendee list couldn\'t be loaded. You need Summit HQ access to see the preview.' : 'The attendee list didn\'t load. Try again in a minute.') + '</div>';
   var q = S.aq.trim().toLowerCase();
   var list = PV.people.filter(function (p) { return !q || (p.name + ' ' + p.title + ' ' + p.company).toLowerCase().indexOf(q) >= 0; });
   h += '<div class="tools"><label class="search">' + icon('i-search') + '<span class="sr">Search attendees</span><input id="att-q" type="search" placeholder="Search attendees by name or company" value="' + esc(S.aq) + '" autocomplete="off"></label></div>';
@@ -7823,7 +7825,7 @@ function sessionSheet(id) {
         (g.kind ? '<div class="k">' + typeTag(g.kind) + '</div>' : '') + '<div class="tt">' + esc(g.title) + '</div>' + (g.desc ? '<div class="ds">' + esc(g.desc) + '</div>' : '') +
         (g.sponsor ? '<div class="spline" style="margin-top:8px"><span class="spons" style="color:var(--ink-2);font-size:12.5px">Sponsored by</span>' + (gsp ? '<button type="button" class="spchip" style="cursor:pointer" data-open="sp:' + esc(slug(gsp.name)) + '" aria-label="' + esc(gsp.name) + '">' + (gsp.logo ? '<img src="' + esc(gsp.logo) + '" alt="' + esc(gsp.name) + '">' : '<b>' + esc(gsp.name) + '</b>') + '</button>' : '<b>' + esc(g.sponsor) + '</b>') + '</div>' : '') +
         (g.people.length ? '<div class="ro-people">' + g.people.map(function (p) {
-          return '<button type="button" class="pp" data-open="p:' + esc(slug(p.name)) + '">' + (p.photo ? '<img class="avatar" src="' + esc(p.photo) + '" alt="" loading="lazy">' : '<span class="avatar">' + esc(initials(p.name)) + '</span>') +
+          return '<button type="button" class="pp" data-open="p:' + esc(slug(p.name)) + '">' + (p.photo ? '<img class="avatar" src="' + esc(p.photo) + '" alt="" loading="lazy" data-ini="' + esc(initials(p.name)) + '" data-ini-cls="avatar">' : '<span class="avatar">' + esc(initials(p.name)) + '</span>') +
             '<span><div class="n">' + esc(p.name) + (p.role ? ' <span class="tag">' + esc(p.role) + '</span>' : '') + '</div><div class="r">' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></span></button>';
         }).join('') + '</div>' : '') + '</div></div>';
     }).join('') + '</div>';
@@ -7836,10 +7838,22 @@ function sessionSheet(id) {
   watchPeeks(sel);
   if (SLIDES[x.id] && A.token) paintSlides(sel, x.id);
 }
+/* a headshot that can't load (offline, before it was ever seen) shows the person's initials instead of a blank */
+document.addEventListener('error', function (e) {
+  var im = e.target; if (!im || im.tagName !== 'IMG' || !im.hasAttribute('data-ini')) return;
+  var sp = document.createElement('span'); sp.className = im.getAttribute('data-ini-cls') || 'avatar'; sp.textContent = im.getAttribute('data-ini'); im.replaceWith(sp);
+}, true);
+/* with a connection, the speakers' headshots are fetched once in the background so the phone keeps them for offline */
+var WARMED = {};
+function warmHeadshots() {
+  if (!navigator.onLine || !S.speakers || !S.speakers.length || WARMED[S.sid]) return; WARMED[S.sid] = 1;
+  var urls = S.speakers.map(function (p) { return p.photo; }).filter(Boolean).slice(0, 120), i = 0;
+  (function next() { if (i >= urls.length) return; var im = new Image(); im.decoding = 'async'; im.onload = im.onerror = function () { setTimeout(next, 60); }; im.src = urls[i++]; })();
+}
 function speakerSheet(key) {
   var p = S.speakers.filter(function (s) { return s.key === key; })[0]; if (!p) return;
   var gsx = gsSession();
-  var h = '<div class="cover person-cover">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="">' : '<span class="avatar">' + esc(initials(p.name)) + '</span>') +
+  var h = '<div class="cover person-cover">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="" data-ini="' + esc(initials(p.name)) + '" data-ini-cls="avatar">' : '<span class="avatar">' + esc(initials(p.name)) + '</span>') +
     '<div><span class="k">Speaker</span><h2>' + esc(p.name) + '</h2><div class="w"><div>' + esc([p.title, p.company].filter(Boolean).join(', ')) + '</div></div></div></div><div class="sheet-pad">';
   if (p.bio) {
     var bp = String(p.bio).split(/\n\s*\n|\r\n\r\n/).map(function (x) { return x.trim(); }).filter(Boolean);
@@ -8300,8 +8314,7 @@ function meMenu() {
   var sub = st ? 'MISMO staff' + (st.email ? ', ' + st.email : '') : att ? 'Summit attendee' : 'Not signed in';
   function row(k, ic, t) { return '<button type="button" role="menuitem" class="me-row" data-me="' + k + '">' + icon(ic) + '<span>' + t + '</span></button>'; }
   if (att) rows += row('profile', 'i-user', 'My Profile');
-  else if (S.summit && A.ready) rows += row('att-in', 'i-user', 'Attendee Sign In');
-  if (!st) rows += row('staff-in', 'i-lock', 'MISMO Staff Sign In');
+  else if (!st) rows += row('signin', 'i-user', 'Sign In');
   rows += row('settings', 'i-gear', 'Settings');
   if (st) rows += row('staff-out', 'i-x', 'Sign Out');
   var m = document.createElement('div'); m.id = 'me-menu'; m.className = 'me-menu'; m.setAttribute('role', 'menu');
@@ -8315,6 +8328,7 @@ function meMenu() {
     if (k === 'settings') settingsSheet();
     else if (k === 'profile') profileSheet(false);
     else if (k === 'att-in') signInSheet();
+    else if (k === 'signin') signInStart();
     else if (k === 'staff-in') ResourcesSession.signIn().then(function () { paintStaff(); }, function () {});
     else if (k === 'staff-out') { save('staff-was', ''); ResourcesSession.signOut(); paintStaff(); }
   });
@@ -8334,7 +8348,33 @@ function paintAccount() {
   ab.innerHTML = A.token && A.me ? '<span class="ini-chip">' + esc(initials(A.me.name)) + '</span>' : icon('i-user');
   unreadDot();
 }
-function signInSheet() {
+/* Jonna, Nov 28, 2026: one Sign In for everyone. The email decides: a MISMO or MBA email goes to the MISMO Resources
+   sign-in (staff get their chip and tools); anyone else gets the attendee code (or, outside a summit, MISMO Resources
+   for contractors). Nobody has to pick the right button. */
+function staffSignIn(email) {
+  if (!window.ResourcesSession) return;
+  ResourcesSession.signIn().then(function () { paintStaff(); }, function () {});
+  if (email) setTimeout(function () { var f = document.getElementById('rs-email'); if (f && !f.value) { f.value = email; var pw = document.getElementById('rs-pass') || document.querySelector('.rs-card input[type=password]'); if (pw) pw.focus(); } }, 120);
+}
+function signInStart() {
+  var h = '<div class="cover"><span class="k">MyMISMO</span><h2>Sign In</h2><div class="w"><div>Enter your email. We\'ll take you to the right sign-in.</div></div></div><div class="sheet-pad">' +
+    '<form id="ss-form" autocomplete="on"><div class="field"><label for="ss-email">Email</label><input id="ss-email" type="email" inputmode="email" autocomplete="email" required placeholder="you@company.com"></div>' +
+    '<button class="btn primary" type="submit">Continue</button></form>' +
+    '<p class="foot" style="text-align:left">Summit attendees get a 6-digit code by email. MISMO staff and contractors sign in with their MISMO Resources account.</p></div>';
+  var el = openSheet('Sign In', h, { color: '#14486e', focus: '#ss-email' });
+  $('#ss-form', el).addEventListener('submit', function (e) {
+    e.preventDefault(); var em = $('#ss-email', el).value.trim(); if (!em) return;
+    var staff = /@(mismo|mba)\.org$/i.test(em);
+    if (staff) { closeSheet(false); staffSignIn(em); return; }
+    if (S.summit && A.ready) { closeSheet(false); signInSheet(em); return; }
+    /* attendee sign-in isn't open yet: say so, and keep the door open for contractors */
+    var f = $('#ss-form', el); f.insertAdjacentHTML('afterend', '<div class="note" style="margin-top:12px">Attendee sign-in opens closer to the summit, with the email you register with. Everything else in MyMISMO works without signing in.' +
+      '<br><br>MISMO contractor? <button type="button" class="linkbtn" id="ss-staff">Sign in with your MISMO Resources account</button></div>');
+    f.hidden = true;
+    $('#ss-staff', el).addEventListener('click', function () { closeSheet(false); staffSignIn(em); });
+  });
+}
+function signInSheet(prefill) {
   var started = Date.now(), summitName = S.summit.name;
   var h = '<div class="cover"><span class="k">Attendees</span><h2>Sign In to MyMISMO</h2><div class="w"><div>Use the email you registered for the ' + esc(summitName) + ' with. We\'ll email you a 6-digit code.</div></div></div><div class="sheet-pad">' +
     '<form id="si-form" autocomplete="on"><div class="field"><label for="si-email">Registration Email</label><input id="si-email" type="email" inputmode="email" autocomplete="email" required placeholder="you@company.com"></div>' +
@@ -8342,9 +8382,12 @@ function signInSheet() {
     '<div id="si-msg" role="status"></div><button class="btn primary" type="submit" id="si-send">Email Me a Code</button></form>' +
     '<form id="si-code-form" hidden><div class="field"><label for="si-code">6-Digit Code</label><input id="si-code" class="codebox" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required><div class="hint" id="si-hint"></div></div>' +
     '<div id="si-cmsg" role="status"></div><div class="d-actions"><button class="btn primary" type="submit" id="si-verify">Sign In</button><button class="btn quiet" type="button" id="si-again">Use a Different Email</button></div></form>' +
-    '<p class="foot" style="text-align:left">Only people registered for the summit can sign in. Your email is never shown to other attendees.</p></div>';
+    '<p class="foot" style="text-align:left">Only people registered for the summit can sign in. Your email is never shown to other attendees.</p>' +
+    (window.ResourcesSession ? '<p class="foot" style="text-align:left">MISMO staff or contractor? <button type="button" class="linkbtn" id="si-staff">Sign in with your MISMO Resources account</button></p>' : '') + '</div>';
   var el = openSheet('Sign In', h, { color: '#14486e', focus: '#si-email' });
   var email = '';
+  if (prefill) $('#si-email', el).value = prefill;
+  var sb = $('#si-staff', el); if (sb) sb.addEventListener('click', function () { var em = $('#si-email', el).value.trim(); closeSheet(false); staffSignIn(em); });
   $('#si-form', el).addEventListener('submit', function (e) {
     e.preventDefault(); email = $('#si-email', el).value.trim();
     var btn = $('#si-send', el); btn.disabled = true; btn.textContent = 'Sending…'; $('#si-msg', el).innerHTML = '';
