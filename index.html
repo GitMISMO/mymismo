@@ -7522,7 +7522,7 @@ function settingsSheet() {
     /* Jonna, Nov 27, 2026: when the agenda last changed in Summit HQ, and when this phone last got it (the server's time
        on the copy it has, so an offline phone shows the true age of what it's showing) */
     (S.updated || S.checked ? setRow('i-clock', 'Last Update', (S.updated ? 'Agenda last changed ' + esc(stamp(S.updated)) + '.' : '') + (S.checked ? (S.updated ? '<br>' : '') + 'App last checked ' + esc(stamp(S.checked)) + '.' : '')) : '') +
-    (standalone() ? '' : setRow('i-link', 'Install MyMISMO', IOS ? 'Tap Share, then Add to Home Screen, to open it like an app.' : 'Use Install in your browser\'s menu to open it like an app.')) +
+    (standalone() || onComputer() ? '' : setRow('i-link', 'Install MyMISMO', IOS ? 'Tap Share, then Add to Home Screen, to open it like an app.' : 'Use Install in your browser\'s menu to open it like an app.')) +
     '<a class="set-row link" href="support/" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-chat') + '</span><div class="set-tx"><b>Help and Support</b><span>Answers to common questions</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="mailto:info@mismo.org?subject=MyMISMO"><span class="set-ic">' + icon('i-mail') + '</span><div class="set-tx"><b>Contact MISMO</b><span>info@mismo.org</span></div>' + icon('i-chev') + '</a>' +
     '<a class="set-row link" href="https://www.mismo.org" target="_blank" rel="noopener"><span class="set-ic">' + icon('i-globe') + '</span><div class="set-tx"><b>mismo.org</b><span>The MISMO website</span></div>' + icon('i-chev') + '</a></div>';
@@ -7869,8 +7869,11 @@ function ics(list) {
 /* ---------- install hint ---------- */
 var deferred = null;
 function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+/* Jonna, Nov 27, 2026: on a computer there's nothing to install: the dashboard's QR code takes people to MyMISMO on their
+   phone instead. Phones still get the install hint until MyMISMO is in the app stores. */
+function onComputer() { return !!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches && innerWidth >= 900); }
 function installHint() {
-  if (standalone() || load('install-dismissed', false)) return;
+  if (standalone() || onComputer() || load('install-dismissed', false)) return;
   var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   var box = $('#install'), txt = $('#install-text'), go = $('#install-go');
   if (ios) { txt.innerHTML = '<b>Put MyMISMO on your Home Screen.</b> Tap <svg width="16" height="16" style="vertical-align:-3px" aria-label="Share"><use href="#i-share"/></svg> Share, then Add to Home Screen.'; box.classList.add('on'); }
