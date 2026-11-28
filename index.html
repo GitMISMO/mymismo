@@ -5262,6 +5262,7 @@ function renderExplore() {
     var bk = '';
     if (co) {
       var pct = Math.max(0, Math.min(1, co.left / 60)), circ = 2 * Math.PI * 26;
+      /* Jonna, Nov 27, 2026: no 'Left to book the MISMO rate.' line */
       /* Jonna, Nov 26, 2026: the countdown card is the Book Your Room button (the whole card, with an arrow like the
          Floor Map card); Directions takes its place on the postcard */
       /* Jonna, Nov 26, 2026: after the cut-off the card still takes people to book, at the hotel's regular rate (a search
@@ -5272,7 +5273,7 @@ function renderExplore() {
         '<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="tr"/><circle cx="32" cy="32" r="26" class="fg" style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + (circ * (1 - pct)).toFixed(1) + '"/></svg>' +
         '<div class="bk-n"><b>' + (co.left > 0 ? co.left : 0) + '</b><span>' + (co.left === 1 ? 'Day' : 'Days') + '</span></div>' +
         '<div class="bk-tx">' + (go ? '<b class="bk-h">' + icon('i-hotel') + (shut ? 'Book a Room' : 'Book Your Room') + '</b>' : '') +
-        (co.left > 0 ? (go ? '' : '<b>') + 'Left to book the MISMO rate.' + (go ? ' ' : '</b> ') + 'The room block closes ' + esc(co.label) + ', or sooner if it fills.' : co.left === 0 ? (go ? 'The room block closes today.' : '<b>The room block closes today.</b>') : (go ? '' : '<b>') + 'The room block closed on ' + esc(co.label) + '.' + (go ? ' ' : '</b> ') + 'You can still book a room at the regular rate.') + '</div>' +
+        (co.left > 0 ? 'The room block closes ' + esc(co.label) + ', or sooner if it fills.' : co.left === 0 ? (go ? 'The room block closes today.' : '<b>The room block closes today.</b>') : (go ? '' : '<b>') + 'The room block closed on ' + esc(co.label) + '.' + (go ? ' ' : '</b> ') + 'You can still book a room at the regular rate.') + '</div>' +
         (go ? icon('i-chev') + '</a>' : '</div>');
     }
     h += '<div class="d-actions"><a class="btn primary sky" href="' + esc(mapUrl(g.venue, g.address)) + '" target="_blank" rel="noopener">' + icon('i-pin') + 'Directions</a>' +

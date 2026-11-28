@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Book Your Room no longer says "Left to book the MISMO rate." It says when the room block closes.
 - Nov 27, 2026: The banner on the Sponsor a Summit button beside See All Sponsors is gold, to match its gold outline and words.
 - Nov 27, 2026: Sponsor a Summit has its own symbol: an event banner on two poles with a star (Jonna tried a spotlight and preferred the banner), on the dashboard tile, in the tile list and on the Sponsor a Summit button by the sponsors.
 - Nov 27, 2026: Sponsors page: Your Company Could Be Here now opens the phone prospectus (See the Sponsorship Opportunities) in the same window, so Back returns to MyMISMO, instead of the full prospectus in a new tab.
