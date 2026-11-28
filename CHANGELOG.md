@@ -1,5 +1,6 @@
 # MyMISMO Changelog
 
+- Nov 27, 2026: Champions Lounge: Find on Map and Walk There work. The hotel's Elevator Prefunction is the Prefunction by the Floor 2 elevators, next to the Business Center (per Jonna).
 - Nov 27, 2026: Champions Lounge pop-up: the levels run Chair, Executive, Associate, each in its own color (gold, blue, green).
 - Nov 27, 2026: Recap strip: always right under Summit Photos on the Summit page; on My Dashboard only once the recap is ready (the summit's last day), for 14 days.
 - Nov 27, 2026: Your Summit Recap is for everyone, the whole time, as a strip the size of the Summit Photos card, on the Summit page (beside Summit Photos) and on My Dashboard until 30 days after the summit. Before the summit ends it shows the Example as a little print and opens on Example and Mine So Far, with See the Fireworks; from the last day it shows your own recap and Play the Fireworks Again. The big card is gone.

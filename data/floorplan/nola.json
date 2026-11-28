@@ -6,7 +6,7 @@
  "image": "data/floorplan/nola.webp",
  "width": 1079,
  "height": 2156,
- "note": "Everything this summit uses is on Floor 3, apart from the Frenchmen rooms, Algiers C and Treme / Marigny on Floor 2.",
+ "note": "Everything this summit uses is on Floor 3, apart from the Frenchmen rooms, Algiers C and Treme / Marigny on Floor 2. Elevator Prefunction (the Champions Lounge) is the Prefunction by the Floor 2 elevators, per Jonna, Nov 27, 2026.",
  "floors": [
   {
    "floor": 3,
@@ -242,6 +242,16 @@
    "floor": 2,
    "x": 607,
    "y": 926
+  },
+  {
+   "names": [
+    "Elevator Prefunction",
+    "Prefunction, 2nd Floor",
+    "Champions Lounge"
+   ],
+   "floor": 2,
+   "x": 707,
+   "y": 932
   }
  ],
  "landmarks": [
