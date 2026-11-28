@@ -7024,7 +7024,7 @@ function iifSheet() {
     '<section><h3 class="mm-h">What Lenders Should Do Next</h3>' + memSteps(MEM.next) + '</section>' +
     '<section class="mm-res"><a class="mm-r" href="' + MEM.pay + '" target="_blank" rel="noopener">' + icon('i-file') + '<span><b>Payment Remittance Information</b>ACH instructions and everything your accounts payable team needs to remit payment.</span>' + icon('i-chev') + '</a>' +
       '<a class="mm-r" href="' + MEM.vendor + '" target="_blank" rel="noopener">' + icon('i-list') + '<span><b>Vendor Management Resources</b>MISMO’s W-9 and account information sheet for your vendor management system.</span>' + icon('i-chev') + '</a></section>' +
-    '<section class="mm-cta">' + memRails() + '<h3>Your Support Powers Industry Progress</h3><p>Your investment funds the standards that shape a faster, more reliable and more modern mortgage market.</p>' +
+    '<section class="mm-cta">' + memRails() + '<h3>Your Support Powers Industry Progress</h3><p>Your investment funds the standards that shape a faster, more reliable and more modern mortgage market. Membership questions? Email <a href="mailto:membership@mismo.org">membership@mismo.org</a>.</p>' +
       '<a class="mm-go" href="' + MEM.pay + '" target="_blank" rel="noopener">Pay the Fund' + icon('i-chev') + '</a><button type="button" class="mm-alt" data-mem-ind>Not a lender? See Membership for Industry</button></section></div>';
   var el = openSheet('Membership for Lenders', h, { plain: true });
   countUpComma(el);
@@ -7072,7 +7072,7 @@ function industrySheet() {
       '<div data-mem-view>' + render() + '</div></section>' +
     '<section><h3 class="mm-h">Core Benefits Included at Every Level</h3><ul class="mm-core">' + MEM.core.map(function (c, i) { return '<li style="--i:' + i + '">' + icon('i-check') + '<span>' + esc(c) + '</span></li>'; }).join('') + '</ul></section>' +
     '<section><h3 class="mm-h">From Application to Influence</h3>' + memSteps(MEM.steps) + '</section>' +
-    '<section class="mm-cta gold">' + memRails() + '<h3>Ready to Join?</h3><p>Choose the level that fits your organization and submit the membership application. Questions? Email <a href="mailto:info@mismo.org">info@mismo.org</a>.</p>' +
+    '<section class="mm-cta gold">' + memRails() + '<h3>Ready to Join?</h3><p>Choose the level that fits your organization and submit the membership application. Questions? Email <a href="mailto:membership@mismo.org">membership@mismo.org</a>.</p>' +
       '<a class="mm-go" href="' + MEM.apply + '">Apply for Membership' + icon('i-chev') + '</a><button type="button" class="mm-alt" data-mem-iif>Lenders: see the Innovation Investment Fund</button></section></div>';
   var el = openSheet('Membership for Industry', h, { plain: true });
   el.addEventListener('click', function (e) {
